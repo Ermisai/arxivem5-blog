@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LIMBO: como um robô humanoide aprende a ser seguro sem filtros externos, fazendo limbo e desviando de bolas — arXiv em 5</title>
+<meta name="description" content="Framework sintetiza certificados de segurança a partir de transições opacas e os destila em políticas de controle, permitindo que um humanoide de 29 graus de liberdade execute manobras ágeis em hardware sem supervisão em tempo real.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LIMBO: como um robô humanoide aprende a ser seguro sem filtros externos, fazendo limbo e desviando de bolas">
+<meta property="og:description" content="Framework sintetiza certificados de segurança a partir de transições opacas e os destila em políticas de controle, permitindo que um humanoide de 29 graus de liberdade execute manobras ágeis em hardware sem supervisão em tempo real.">
+<meta property="og:image" content="../../assets/papers/2609.22075/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Robótica</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2609.22075" rel="noopener">arXiv:2609.22075</a>
+    </div>
+    <h1><span class="s" data-s="t">LIMBO: como um robô humanoide aprende a ser seguro sem filtros externos, fazendo limbo e desviando de bolas</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Framework sintetiza certificados de segurança a partir de transições opacas e os destila em políticas de controle, permitindo que um humanoide de 29 graus de liberdade execute manobras ágeis em hardware sem supervisão em tempo real.</span></p>
+    <p class="byline">
+      <span>Gonzales et al.</span>
+      <span>12 min de leitura</span>
+<span>18/09/2026</span>    </p>
+    <div class="listen" data-article="2609.22075" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=X2I6mEuMZXU" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema: segurança em robôs complexos não escala</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Robôs humanoides modernos têm dezenas de articulações e precisam coordenar equilíbrio, contato e dinâmica não linear para executar movimentos ágeis.</span> <span class="s" data-s="b0-p0-s1">Garantir segurança nesse cenário é difícil: um movimento que evita colisão pode desestabilizar o robô, criar contato em outra parte do corpo ou deixar o sistema em um estado irrecuperável.</span> <span class="s" data-s="b0-p0-s2">Segurança de corpo inteiro exige raciocinar sobre o sistema completo, não sobre subsistemas isolados.</span></p><p><span class="s" data-s="b0-p1-s0">Control Barrier Functions (CBFs) oferecem uma forma principiada de impor segurança ao restringir ações que preservam um conjunto seguro invariante.</span> <span class="s" data-s="b0-p1-s1">O problema central, porém, é a síntese da função de barreira.</span> <span class="s" data-s="b0-p1-s2">Abordagens clássicas dependem de barreiras analíticas projetadas para restrições específicas, conhecimento suficiente da dinâmica do sistema e, muitas vezes, representações simplificadas que omitem dinâmica relevante para movimentos ágeis.</span> <span class="s" data-s="b0-p1-s3">Essas barreiras exigem conhecimento especializado, informação geométrica privilegiada e escolhas cuidadosas de representação, tornando-as difíceis de escalar ou transferir entre tarefas.</span></p><p><span class="s" data-s="b0-p2-s0">Métodos baseados em aprendizado tentam contornar essas limitações.</span> <span class="s" data-s="b0-p2-s1">Q-CBFs elevam a barreira para o espaço estado-ação e aprendem uma função de valor de segurança que captura as consequências futuras de ações candidatas a partir de transições opacas do sistema.</span> <span class="s" data-s="b0-p2-s2">Dado um critério de falha baseado em estado, a Q-CBF identifica ações a partir das quais a segurança pode continuar a ser mantida.</span> <span class="s" data-s="b0-p2-s3">Outra linha de trabalho busca internalizar segurança na política de tarefa: CBF-RL incorpora uma CBF analítica no treinamento via rollouts filtrados e objetivos guiados por CBF, permitindo que a política satisfaça restrições sem precisar do filtro em tempo de execução.</span></p><p><span class="s" data-s="b0-p3-s0">Essas abordagens atacam partes complementares do problema: Q-CBFs aprendem o certificado de segurança mas têm sido usadas principalmente como filtros em tempo real; CBF-RL transfere segurança para a política mas depende de uma barreira analítica especificada a priori.</span> <span class="s" data-s="b0-p3-s1">Falta um framework que escale certificados de segurança aprendidos para controle de alta dimensão e depois destile essa estrutura de segurança em uma política de tarefa.</span></p>        <h2><span class="s" data-s="b1-h">A ideia: aprender a barreira e ensinar a política</span></h2>
+<p><span class="s" data-s="b1-p0-s0">LIMBO (Learning and Internalizing Model-free Barrier Objectives) preenche essa lacuna.</span> <span class="s" data-s="b1-p0-s1">O framework tem dois estágios.</span> <span class="s" data-s="b1-p0-s2">No primeiro, sintetiza uma Q-CBF a partir de transições opacas do sistema e de uma especificação de falha baseada em estado.</span> <span class="s" data-s="b1-p0-s3">No segundo, usa o certificado aprendido como professor que fornece feedback de segurança no nível de ação, moldando o treinamento da política de tarefa para que ela internalize a segurança sem precisar de um filtro online durante a execução.</span></p><p><span class="s" data-s="b1-p1-s0">A formulação central é a Q-CBF residual: o certificado aprendido opera sobre ações residuais em torno de um controlador base congelado, que fornece estabilização nominal ou locomoção.</span> <span class="s" data-s="b1-p1-s1">Isso coloca o certificado no mesmo espaço de controle da política de tarefa e torna a síntese tratável na dimensão de controle completa, usando apenas transições opacas e uma especificação de falha baseada em estado.</span> <span class="s" data-s="b1-p1-s2">Durante a síntese, o valor de segurança aprendido guia amostragem próxima à fronteira estimada de recuperabilidade; durante o aprendizado de tarefa, serve como professor que fornece violações de Q-CBF e correções contrafactuais, produzindo uma política robusta e eliminando a necessidade de um filtro de segurança online na implantação.</span></p><p><span class="s" data-s="b1-p2-s0">Os autores demonstram LIMBO em um humanoide Unitree G1 de 29 graus de liberdade executando duas tarefas: desvio de bolas e locomoção sob obstáculos baixos.</span> <span class="s" data-s="b1-p2-s1">Além de escalar Q-CBFs aprendidas para controle de corpo inteiro, mostram que amostragem guiada por risco na fronteira fornece uma forma teoricamente fundamentada de explorar a borda da recuperabilidade.</span> <span class="s" data-s="b1-p2-s2">Sob a mesma especificação de segurança, variando apenas a concentração de amostragem, o sistema produz estratégias que vão de agachamento a uma manobra de limbo inclinada para trás.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.22075/figure1.webp" alt="Humanoide de 29 graus de liberdade executando limbo inclinado para trás (acima) e desvio de bolas (abaixo) usando políticas treinadas a partir de uma Q-CBF sintetizada automaticamente e posterior destilação de política segura, sem filtros em tempo real." loading="lazy">
+          <figcaption>
+            Humanoide de 29 graus de liberdade executando limbo inclinado para trás (acima) e desvio de bolas (abaixo) usando políticas treinadas a partir de uma Q-CBF sintetizada automaticamente e posterior destilação de política segura, sem filtros em tempo real.
+            <span class="source">Figura 1 do paper · Gonzales et al., arXiv:2609.22075</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Como funciona: síntese residual e destilação</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O framework LIMBO opera em dois estágios distintos.</span> <span class="s" data-s="b3-p0-s1">O Estágio I é a síntese da Q-CBF.</span> <span class="s" data-s="b3-p0-s2">O sistema coleta transições opacas executando um controlador de segurança em torno do controlador base congelado.</span> <span class="s" data-s="b3-p0-s3">A especificação de segurança é dada por uma margem de segurança baseada em estado g(x), que combina evitação de colisão de corpo inteiro, orientação da pelve e altura do tronco acima do solo.</span> <span class="s" data-s="b3-p0-s4">Cada termo é normalizado de forma que zero denota a fronteira de falha e g(x) &lt; 0 indica violação de qualquer condição de segurança.</span></p><p><span class="s" data-s="b3-p1-s0">A Q-CBF residual é aprendida sobre ações residuais em torno do controlador base, colocando o certificado no mesmo espaço de controle que a política de tarefa.</span> <span class="s" data-s="b3-p1-s1">Isso torna a síntese tratável na dimensão de controle completa (29 dimensões no caso do G1) enquanto mantém o controlador base para estabilização ou locomoção nominal.</span> <span class="s" data-s="b3-p1-s2">A função de valor de segurança Qϕ(x, a) é treinada para prever se, a partir do estado x e tomando a ação residual a, o sistema pode manter g(x) ≥ 0 indefinidamente.</span></p><p><span class="s" data-s="b3-p2-s0">Um componente crítico é a amostragem guiada por risco.</span> <span class="s" data-s="b3-p2-s1">Durante a síntese, o sistema concentra a coleta de dados perto da fronteira estimada de recuperabilidade, onde g(x) está próximo de zero.</span> <span class="s" data-s="b3-p2-s2">Isso é feito através de um replay buffer que prioriza transições com base em uma distribuição de Gibbs parametrizada por β: transições com valores de segurança mais baixos são amostradas com maior probabilidade.</span> <span class="s" data-s="b3-p2-s3">Essa concentração permite explorar sistematicamente a borda entre estados seguros e inseguros, onde o certificado de segurança é mais informativo.</span></p><p><span class="s" data-s="b3-p3-s0">O Estágio II é a destilação da política.</span> <span class="s" data-s="b3-p3-s1">A Q-CBF aprendida serve como professor durante o treinamento da política de tarefa.</span> <span class="s" data-s="b3-p3-s2">Em vez de usar a Q-CBF como filtro em tempo real, o sistema fornece feedback de segurança durante o treinamento: quando a política propõe uma ação que viola a Q-CBF, o sistema calcula uma correção contrafactual (a ação segura mais próxima) e penaliza a política proporcionalmente à violação.</span> <span class="s" data-s="b3-p3-s3">A política é treinada com PPO usando recompensas de tarefa, recompensas de controle e feedback de Q-CBF, além de um prior de movimento adversarial (AMP) para naturalidade.</span></p><p><span class="s" data-s="b3-p4-s0">A formulação residual é crucial: tanto a Q-CBF quanto a política de tarefa operam sobre o mesmo espaço de ações residuais em torno do controlador base.</span> <span class="s" data-s="b3-p4-s1">Isso significa que o feedback de segurança está diretamente alinhado com o espaço de decisão da política, facilitando a transferência de conhecimento de segurança.</span> <span class="s" data-s="b3-p4-s2">Durante a implantação em hardware, a política aprendida é composta com o mesmo controlador base usado no treinamento, via a mesma interface residual.</span> <span class="s" data-s="b3-p4-s3">Nenhum crítico Qϕ aprendido, nenhum controlador de segurança do Estágio I e nenhuma adaptação adicional são usados na execução.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.22075/figure2.webp" alt="Pipeline LIMBO: Estágio I sintetiza Q-CBF via transições opacas usando formulação residual e replay guiado por risco na fronteira; Estágio II usa Q-CBF como professor de segurança, moldando recompensas via violações e correções; implantação compõe política com controlador base, sem filtros." loading="lazy">
+          <figcaption>
+            Pipeline LIMBO: Estágio I sintetiza Q-CBF via transições opacas usando formulação residual e replay guiado por risco na fronteira; Estágio II usa Q-CBF como professor de segurança, moldando recompensas via violações e correções; implantação compõe política com controlador base, sem filtros.
+            <span class="source">Figura 2 do paper · Gonzales et al., arXiv:2609.22075</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Experimento 1: desvio de bolas, da simulação ao hardware</span></h2>
+<p><span class="s" data-s="b5-p0-s0">O primeiro experimento é desvio de bolas (dodgeball): o robô precisa evitar bolas que chegam enquanto mantém equilíbrio e permanece próximo à posição inicial.</span> <span class="s" data-s="b5-p0-s1">A tarefa é uma comparação quantitativa entre LIMBO e CBF-RL, e testa transferência sim-para-real sob evitação dinâmica de colisão.</span> <span class="s" data-s="b5-p0-s2">A política de tarefa recebe um histórico de observações proprioceptivas e posições de bola (mas não velocidade explícita da bola) e produz um resíduo de corpo inteiro de 29 dimensões.</span></p><p><span class="s" data-s="b5-p1-s0">O treinamento é feito inteiramente em simulação usando 4096 ambientes paralelos, com políticas operando a 50 Hz.</span> <span class="s" data-s="b5-p1-s1">A distribuição de treinamento inclui pontos de lançamento em um cone frontal de ±25°, com variação em posição de lançamento e tempo de voo.</span> <span class="s" data-s="b5-p1-s2">O treinamento visa cabeça e ombros e inclui 15% de erros.</span> <span class="s" data-s="b5-p1-s3">A mesma especificação de segurança baseada em estado é usada, medindo colisão em relação à geometria do corpo do robô.</span></p><p><span class="s" data-s="b5-p2-s0">Os autores primeiro testam se o valor de estado aprendido Vϕ captura a dificuldade do encontro.</span> <span class="s" data-s="b5-p2-s1">A Figura 4 avalia Vϕ no momento do lançamento da bola.</span> <span class="s" data-s="b5-p2-s2">As distribuições condicionadas ao resultado são claramente separadas: aproximadamente 65% dos lançamentos que resultam em acerto têm Vϕ ≤ 0.2, em contraste com 24% dos lançamentos evitados.</span> <span class="s" data-s="b5-p2-s3">Além disso, a probabilidade de acerto condicionada ao valor de segurança no lançamento aumenta monotonicamente à medida que Vϕ diminui: valores mais altos de Vϕ correspondem a taxas de acerto mais baixas, e a política destilada tem taxas de acerto mais baixas que a política base.</span></p><p><span class="s" data-s="b5-p3-s0">Na transferência para hardware, a política aprendida é executada sem qualquer filtro de segurança online, usando apenas a mesma composição residual com o controlador base.</span> <span class="s" data-s="b5-p3-s1">Os resultados mostram que a política transfere com sucesso, executando desvios de corpo inteiro ágeis enquanto mantém equilíbrio.</span> <span class="s" data-s="b5-p3-s2">A taxa de acerto e a taxa de queda são as principais métricas de segurança.</span> <span class="s" data-s="b5-p3-s3">Em simulação, os autores também medem saturação de torque; em hardware, medem desvio de estação e inclinação máxima do corpo para quantificar a magnitude da resposta evasiva de corpo inteiro.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.22075/figure4.webp" alt="Esquerda: distribuições cumulativas de valores de segurança no lançamento; acertos tendem a originar de estados com valor de segurança mais baixo. Direita: probabilidade de acerto condicionada a Vϕ em dez bins; valores mais altos de Vϕ correspondem a taxas de acerto menores." loading="lazy">
+          <figcaption>
+            Esquerda: distribuições cumulativas de valores de segurança no lançamento; acertos tendem a originar de estados com valor de segurança mais baixo. Direita: probabilidade de acerto condicionada a Vϕ em dez bins; valores mais altos de Vϕ correspondem a taxas de acerto menores.
+            <span class="source">Figura 4 do paper · Gonzales et al., arXiv:2609.22075</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Experimento 2: limbo sob obstáculos e descoberta de comportamento</span></h2>
+<p><span class="s" data-s="b7-p0-s0">O segundo experimento avalia segurança coordenada de corpo inteiro e isola o mecanismo pelo qual a concentração de replay induz estratégias.</span> <span class="s" data-s="b7-p0-s1">A tarefa é locomoção sob obstáculos baixos: o robô precisa passar por baixo de paredes suspensas enquanto mantém equilíbrio e evita colisão.</span> <span class="s" data-s="b7-p0-s2">A mesma especificação de segurança baseada em estado é usada, mas agora hcollision mede colisão em relação ao obstáculo superior.</span></p><p><span class="s" data-s="b7-p1-s0">O insight crítico é que, sob a mesma especificação de segurança, variando apenas o parâmetro de concentração de amostragem β, o sistema produz estratégias qualitativamente diferentes.</span> <span class="s" data-s="b7-p1-s1">Valores baixos de β produzem amostragem mais uniforme e resultam em uma estratégia de agachamento: o robô abaixa a pelve mas mantém o tronco relativamente vertical.</span> <span class="s" data-s="b7-p1-s2">Valores altos de β concentram fortemente a amostragem perto da fronteira de segurança e resultam em uma manobra de limbo inclinada para trás: o robô inclina o tronco para trás enquanto mantém a pelve mais alta.</span></p><p><span class="s" data-s="b7-p2-s0">A Figura 8 mostra como a concentração de amostragem β controla a estratégia.</span> <span class="s" data-s="b7-p2-s1">O painel (a) mostra queda da pelve e inclinação do tronco versus β; a faixa sombreada marca onde o mecanismo dominante inverte.</span> <span class="s" data-s="b7-p2-s2">O painel (b) mostra queda da pelve por parede versus inclinação do tronco, um ponto por parede pontuada, com marcadores grandes indicando as medianas por β. O painel (c) mostra que o ponto mais alto do robô pousa em alturas diferentes dependendo da estratégia.</span></p><p><span class="s" data-s="b7-p3-s0">Esse resultado demonstra que a amostragem guiada por risco na fronteira fornece uma forma teoricamente fundamentada de explorar a borda da recuperabilidade e descobrir comportamentos.</span> <span class="s" data-s="b7-p3-s1">Não é apenas uma questão de eficiência de amostragem: a concentração de replay molda fundamentalmente quais estratégias o sistema descobre, mesmo sob a mesma especificação de segurança.</span> <span class="s" data-s="b7-p3-s2">Valores altos de β forçam o sistema a explorar estados mais próximos da fronteira de falha, onde estratégias mais agressivas (como o limbo inclinado) são necessárias para manter segurança.</span></p><p><span class="s" data-s="b7-p4-s0">Em ambos os cenários (dodgeball e limbo), as políticas aprendidas transferem para hardware sem filtragem de segurança online.</span> <span class="s" data-s="b7-p4-s1">Isso mostra que a síntese de segurança aprendida escala para controle ágil de corpo inteiro e que a destilação de política é eficaz: a política internaliza suficientemente a estrutura de segurança durante o treinamento para não precisar de supervisão em tempo real durante a execução.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.22075/figure8.webp" alt="Concentração de valor β controla comportamento de evitação. (a): queda de pelve e inclinação de tronco vs. β; faixa sombreada marca inversão do mecanismo dominante. (b): queda de pelve por parede vs. inclinação de tronco. (c): ponto mais alto do robô em diferentes alturas conforme estratégia." loading="lazy">
+          <figcaption>
+            Concentração de valor β controla comportamento de evitação. (a): queda de pelve e inclinação de tronco vs. β; faixa sombreada marca inversão do mecanismo dominante. (b): queda de pelve por parede vs. inclinação de tronco. (c): ponto mais alto do robô em diferentes alturas conforme estratégia.
+            <span class="source">Figura 8 do paper · Gonzales et al., arXiv:2609.22075</span>
+          </figcaption>
+        </figure>
+        <aside class="callout">
+          <h3><span class="s" data-s="b9-t">Garantias teóricas sob aproximação e destilação</span></h3>
+          <p><span class="s" data-s="b9-c-s0">Os autores caracterizam condições para transferência de segurança sob erros de aproximação e destilação, fornecendo garantias de horizonte finito e alta probabilidade para ambos os estágios.</span> <span class="s" data-s="b9-c-s1">A análise mostra que, se a Q-CBF aprendida aproxima suficientemente bem a Q-CBF verdadeira e se a política destilada viola a Q-CBF aprendida com probabilidade suficientemente baixa, então a política resultante mantém segurança com alta probabilidade durante a execução.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b10-h">O que o paper não mostra e o que fica em aberto</span></h2>
+<p><span class="s" data-s="b10-p0-s0">LIMBO demonstra síntese de segurança escalável e destilação de política em duas tarefas específicas: desvio de bolas e locomoção sob obstáculos.</span> <span class="s" data-s="b10-p0-s1">Ambas são executadas em um único tipo de robô (Unitree G1) e em ambientes relativamente estruturados.</span> <span class="s" data-s="b10-p0-s2">O paper não avalia transferência para outras morfologias de robô, outras tarefas de manipulação ou ambientes menos estruturados onde a especificação de segurança pode ser mais complexa ou ambígua.</span></p><p><span class="s" data-s="b10-p1-s0">A especificação de segurança usada é baseada em estado e relativamente simples: combina evitação de colisão, orientação da pelve e altura do tronco.</span> <span class="s" data-s="b10-p1-s1">Não está claro como o framework escala para especificações de segurança mais complexas que envolvem múltiplas restrições acopladas, restrições temporais ou restrições que dependem de histórico de estados.</span> <span class="s" data-s="b10-p1-s2">A formulação residual depende de um controlador base congelado que fornece estabilização ou locomoção nominal; não está claro como escolher ou projetar esse controlador base para novas tarefas.</span></p><p><span class="s" data-s="b10-p2-s0">O treinamento é feito inteiramente em simulação com randomização de domínio padrão, e as políticas transferem para hardware sem adaptação adicional.</span> <span class="s" data-s="b10-p2-s1">No entanto, o paper não quantifica sistematicamente a lacuna sim-para-real ou avalia robustez a perturbações não vistas durante o treinamento.</span> <span class="s" data-s="b10-p2-s2">Os experimentos em hardware são demonstrações qualitativas; não há avaliação estatística de taxa de sucesso, taxa de falha ou outras métricas de desempenho em um grande número de tentativas em hardware.</span></p><p><span class="s" data-s="b10-p3-s0">A descoberta de comportamento via concentração de amostragem β é demonstrada apenas na tarefa de limbo.</span> <span class="s" data-s="b10-p3-s1">Não está claro se esse mecanismo generaliza para outras tarefas onde múltiplas estratégias são viáveis sob a mesma especificação de segurança.</span> <span class="s" data-s="b10-p3-s2">Além disso, a escolha de β é um hiperparâmetro: não há orientação automática sobre como escolher β para descobrir uma estratégia desejada ou explorar sistematicamente o espaço de estratégias viáveis.</span></p><p><span class="s" data-s="b10-p4-s0">Finalmente, o framework assume que a especificação de falha baseada em estado g(x) é fornecida.</span> <span class="s" data-s="b10-p4-s1">Em muitos cenários práticos, especificar g(x) pode exigir conhecimento especializado ou engenharia cuidadosa.</span> <span class="s" data-s="b10-p4-s2">Trabalho futuro poderia explorar aprendizado de especificações de segurança a partir de demonstrações, preferências ou outros sinais de supervisão mais fracos.</span></p>        <h2><span class="s" data-s="b11-h">Contexto e direções futuras</span></h2>
+<p><span class="s" data-s="b11-p0-s0">LIMBO se insere em uma linha crescente de trabalho que combina aprendizado por reforço com garantias de segurança formais ou aprendidas.</span> <span class="s" data-s="b11-p0-s1">A abordagem é complementar a métodos que aprendem modelos de dinâmica (que podem ser usados para síntese de CBF analítica) e a métodos que aprendem restrições diretamente de dados (que podem não fornecer garantias de invariância).</span> <span class="s" data-s="b11-p0-s2">A formulação residual é particularmente relevante para robótica de corpo inteiro, onde controladores base para estabilização ou locomoção são amplamente disponíveis e bem compreendidos.</span></p><p><span class="s" data-s="b11-p1-s0">Os autores mencionam que trabalho futuro inclui estender LIMBO para outras incorporações, como manipulação destra, e investigar mais profundamente como a amostragem guiada por risco na fronteira molda aprendizado seguro e descoberta de comportamento.</span> <span class="s" data-s="b11-p1-s1">Outra direção promissora é combinar LIMBO com métodos de aprendizado de especificações de segurança, permitindo que o sistema aprenda tanto o certificado quanto a especificação a partir de dados.</span></p><p><span class="s" data-s="b11-p2-s0">A demonstração de que políticas aprendidas podem internalizar segurança suficientemente para dispensar filtros online é significativa para implantação prática: filtros de segurança em tempo real podem adicionar latência, complexidade computacional e pontos de falha adicionais.</span> <span class="s" data-s="b11-p2-s1">Se a política pode ser treinada para ser intrinsecamente segura, a arquitetura de controle resultante é mais simples e potencialmente mais robusta.</span> <span class="s" data-s="b11-p2-s2">No entanto, isso depende criticamente da qualidade da destilação e da cobertura do treinamento: a política só pode ser tão segura quanto os dados e o feedback que recebeu durante o treinamento.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">LIMBO sintetiza Q-CBFs residuais a partir de transições opacas em 29 dimensões e destila segurança em políticas de tarefa, eliminando filtros online em hardware.</span></li><li><span class="s" data-s="k1">Amostragem guiada por risco na fronteira de recuperabilidade não só melhora eficiência: molda quais estratégias emergem sob a mesma especificação de segurança.</span></li><li><span class="s" data-s="k2">Políticas treinadas com feedback de Q-CBF transferem para hardware sem supervisão em tempo real, executando dodgeball e limbo inclinado em um humanoide real.</span></li><li><span class="s" data-s="k3">O framework depende de especificação de falha baseada em estado e controlador base congelado; generalização para outras morfologias e tarefas fica em aberto.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2609.22075" rel="noopener">LIMBO: Learning and Internalizing Model-Free Barrier Objectives for Agile and Safe Whole-Body Control</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2609.22075" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

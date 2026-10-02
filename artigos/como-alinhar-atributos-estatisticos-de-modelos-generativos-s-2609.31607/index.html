@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Como alinhar atributos estatísticos de modelos generativos sem mexer no treinamento: pós-processamento de saídas — arXiv em 5</title>
+<meta name="description" content="Pesquisadores propõem algoritmos que ajustam a distribuição de atributos categóricos em outputs de IA generativa — como gênero ou raça em imagens — usando apenas acesso black-box ao modelo, minimizando o número de queries necessárias.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Como alinhar atributos estatísticos de modelos generativos sem mexer no treinamento: pós-processamento de saídas">
+<meta property="og:description" content="Pesquisadores propõem algoritmos que ajustam a distribuição de atributos categóricos em outputs de IA generativa — como gênero ou raça em imagens — usando apenas acesso black-box ao modelo, minimizando o número de queries necessárias.">
+<meta property="og:image" content="../../assets/papers/2609.31607/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>IA</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2609.31607" rel="noopener">arXiv:2609.31607</a>
+    </div>
+    <h1><span class="s" data-s="t">Como alinhar atributos estatísticos de modelos generativos sem mexer no treinamento: pós-processamento de saídas</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Pesquisadores propõem algoritmos que ajustam a distribuição de atributos categóricos em outputs de IA generativa — como gênero ou raça em imagens — usando apenas acesso black-box ao modelo, minimizando o número de queries necessárias.</span></p>
+    <p class="byline">
+      <span>Jiang et al.</span>
+      <span>11 min de leitura</span>
+<span>25/09/2026</span>    </p>
+    <div class="listen" data-article="2609.31607" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=0_wamBdM7jY" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema: outputs de IA nem sempre refletem a distribuição que você precisa</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Modelos generativos de IA aprenderam vieses históricos e representacionais presentes em seus dados de treino.</span> <span class="s" data-s="b0-p0-s1">Isso leva a disparidades sistemáticas em atributos protegidos como raça, gênero e idade.</span> <span class="s" data-s="b0-p0-s2">Mesmo um modelo bem alinhado a instruções gerais pode gerar distribuições de atributos que diferem daquelas exigidas por uma aplicação específica.</span></p><p><span class="s" data-s="b0-p1-s0">Este paper introduz o conceito de statistical attribute alignment (SAA): garantir que a distribuição de atributos categóricos designados nos outputs gerados concorde com uma distribuição-alvo especificada pelo usuário.</span> <span class="s" data-s="b0-p1-s1">Dois casos de uso motivam o trabalho.</span> <span class="s" data-s="b0-p1-s2">Primeiro, fairness: os atributos são covariáveis protegidas e o alvo especifica a representação desejada.</span> <span class="s" data-s="b0-p1-s3">Segundo, geração de dados sintéticos: quando você precisa que os dados gerados sejam representativos de uma população-alvo — por exemplo, um dataset sintético para auditar um sistema de reconhecimento facial deve refletir a população auditada.</span></p><p><span class="s" data-s="b0-p2-s0">A abordagem do paper é pós-processamento com acesso black-box: o usuário pode apenas fazer queries repetidas ao modelo generativo, sem acesso aos pesos, arquitetura ou procedimento de treino.</span> <span class="s" data-s="b0-p2-s1">O objetivo é retornar m ≥ 1 outputs cuja distribuição conjunta de atributos seja o mais próxima possível do alvo, minimizando o número esperado de queries.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.31607/figure1.webp" alt="Visão geral do método: o usuário faz queries a um gerador black-box para formar um batch de candidatos anotados. Um algoritmo de pós-processamento filtra esse batch para alinhar a distribuição de atributos com o alvo especificado." loading="lazy">
+          <figcaption>
+            Visão geral do método: o usuário faz queries a um gerador black-box para formar um batch de candidatos anotados. Um algoritmo de pós-processamento filtra esse batch para alinhar a distribuição de atributos com o alvo especificado.
+            <span class="source">Figura 1 do paper · Jiang et al., arXiv:2609.31607</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">Formulação: custo de queries versus discrepância estatística</span></h2>
+<p><span class="s" data-s="b2-p0-s0">O setup é o seguinte.</span> <span class="s" data-s="b2-p0-s1">Um modelo generativo recebe um prompt x e produz um output Y ~ P(· | x).</span> <span class="s" data-s="b2-p0-s2">Cada output tem um atributo categórico A = ϕ(Y) ∈ [k], onde ϕ é um anotador (humano ou automático).</span> <span class="s" data-s="b2-p0-s3">A distribuição de atributos na fonte é p = (p₁, ..., pₖ), onde pᵢ = Pr(A = i).</span> <span class="s" data-s="b2-p0-s4">O usuário especifica uma distribuição-alvo q e quer gerar m outputs cuja distribuição conjunta de atributos siga uma lei ν.</span></p><p><span class="s" data-s="b2-p1-s0">Os autores definem dois tipos de algoritmos de pós-processamento.</span> <span class="s" data-s="b2-p1-s1">Algoritmos universalmente exatos garantem que a distribuição conjunta dos atributos dos m outputs é exatamente ν, independentemente das taxas da fonte p. Algoritmos aproximados permitem uma discrepância controlada, medida por f-divergências (como KL, chi-quadrado ou variação total).</span></p><p><span class="s" data-s="b2-p2-s0">O custo de um algoritmo é o número esperado de queries ao modelo, chamado M-cost.</span> <span class="s" data-s="b2-p2-s1">O trade-off fundamental é: quanto você está disposto a gastar em queries para reduzir a discrepância estatística?</span> <span class="s" data-s="b2-p2-s2">O paper desenvolve algoritmos que minimizam o M-cost para um dado nível de discrepância e demonstra sua otimalidade assintótica quando m → ∞.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b3-t">Acesso black-box: por que isso importa</span></h3>
+          <p><span class="s" data-s="b3-c-s0">A restrição de acesso black-box é prática.</span> <span class="s" data-s="b3-c-s1">Muitos modelos generativos são servidos via API (GPT-4, DALL-E, Stable Diffusion em serviços comerciais).</span> <span class="s" data-s="b3-c-s2">Você não tem acesso aos pesos, não pode retreinar, não pode modificar a arquitetura.</span> <span class="s" data-s="b3-c-s3">O pós-processamento é a única alavanca disponível.</span> <span class="s" data-s="b3-c-s4">Além disso, conforme os custos de query caem, gerar batches maiores fica mais viável, tornando esses métodos cada vez mais aplicáveis.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b4-h">Algoritmo RDC: random demand coupon collector</span></h2>
+<p><span class="s" data-s="b4-p0-s0">O algoritmo central para alinhamento exato é o random demand coupon collector (RDC), apresentado no Algoritmo 1 do paper.</span> <span class="s" data-s="b4-p0-s1">A ideia é inspirada no problema clássico do colecionador de cupons, mas com demandas aleatórias.</span></p><p><span class="s" data-s="b4-p1-s0">Primeiro, o RDC amostra uma sequência-alvo ordenada: sorteia um vetor de contagens L ~ Mult(m, q), onde cada componente Lᵢ é o número de outputs desejados com atributo i. Depois, faz queries ao modelo até que cada demanda seja atendida: para cada i, precisa coletar pelo menos Lᵢ outputs com atributo i. O algoritmo para no tempo T⋆ = inf{t : C(t) ≥ L}, onde C(t) é o histograma dos atributos observados até o tempo t.</span></p><p><span class="s" data-s="b4-p2-s0">O RDC é universalmente exato: a distribuição dos atributos dos m outputs retornados é exatamente q⊗ᵐ (produto de m cópias independentes de q), independentemente de p. O Teorema 4 garante isso.</span> <span class="s" data-s="b4-p2-s1">O Teorema 6 mostra que, para m = 1, o RDC é admissível: nenhum outro algoritmo pode dominá-lo simultaneamente em custo e discrepância sobre todo o simplex de taxas fonte.</span></p><p><span class="s" data-s="b4-p3-s0">Para m grande, o Teorema 7 caracteriza o M-cost assintótico.</span> <span class="s" data-s="b4-p3-s1">Sob condições regulares, o custo normalizado Eₚ[T⋆]/m converge para ρ⋆(p, q) = Σᵢ (qᵢ/pᵢ) quando m → ∞.</span> <span class="s" data-s="b4-p3-s2">Essa é a taxa ótima: nenhum algoritmo universalmente exato pode fazer melhor assintoticamente.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.31607/figure2.webp" alt="Ilustração do algoritmo A-RDC com k=2 atributos e m=4 outputs. O processo C(t) registra o histograma dos atributos amostrados. O algoritmo para quando o conjunto de contagens viáveis (região azul) atinge o alvo." loading="lazy">
+          <figcaption>
+            Ilustração do algoritmo A-RDC com k=2 atributos e m=4 outputs. O processo C(t) registra o histograma dos atributos amostrados. O algoritmo para quando o conjunto de contagens viáveis (região azul) atinge o alvo.
+            <span class="source">Figura 2 do paper · Jiang et al., arXiv:2609.31607</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b6-h">Alinhamento aproximado: certificados e fronteiras ótimas</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Nem sempre é necessário alinhamento exato.</span> <span class="s" data-s="b6-p0-s1">O paper desenvolve algoritmos aproximados que trocam discrepância por custo de queries.</span> <span class="s" data-s="b6-p0-s2">A discrepância é medida por f-divergências separáveis: Dₓ(P‖ν) = Σₜ₌₁ᵐ Dₓ(Pₜ‖νₜ), onde Pₜ é a distribuição marginal do t-ésimo output.</span></p><p><span class="s" data-s="b6-p1-s0">O Teorema 9 mostra que direct-sampling (DS) — simplesmente fazer m queries e retornar os outputs — tem discrepância positiva sempre que p ≠ q. O custo é mínimo (exatamente m queries), mas não há controle sobre a distribuição resultante.</span></p><p><span class="s" data-s="b6-p2-s0">O Teorema 20 caracteriza a fronteira custo-discrepância ótima de primeira ordem.</span> <span class="s" data-s="b6-p2-s1">Para KL divergência, a taxa ótima assintótica é ρ⋆(p, q; d) = Σᵢ qᵢ · h(pᵢ/qᵢ, d/qᵢ), onde h é uma função auxiliar que resolve um problema de otimização local.</span> <span class="s" data-s="b6-p2-s2">Essa fronteira descreve o melhor trade-off possível entre custo normalizado e discrepância normalizada quando m → ∞.</span></p><p><span class="s" data-s="b6-p3-s0">O algoritmo TA-RDC (thresholded anytime RDC) implementa essa fronteira.</span> <span class="s" data-s="b6-p3-s1">Ele roda uma versão anytime do RDC até atingir o tempo de parada T⋆ ou até que um certificado de f-divergência em um nível ε ≥ 0 seja alcançado.</span> <span class="s" data-s="b6-p3-s2">O Teorema 18 garante que o certificado é válido: a discrepância incondicional real é no máximo ε. O Teorema 19 mostra que TA-RDC atinge a taxa ótima de primeira ordem.</span></p>        <h2><span class="s" data-s="b7-h">Experimentos em simulação: validando a teoria</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Os autores testam os algoritmos em um cenário sintético com k=8 atributos, taxas fonte p = (0.03, 0.05, 0.08, 0.12, 0.16, 0.18, 0.18, 0.20) e alvo q = (0.14, 0.12, 0.13, 0.15, 0.14, 0.12, 0.11, 0.09), variando o tamanho do output m ∈ {100, 500, 1000}.</span></p><p><span class="s" data-s="b7-p1-s0">Cinco métodos são comparados.</span> <span class="s" data-s="b7-p1-s1">DS (direct-sampling) faz m queries e tem discrepância positiva.</span> <span class="s" data-s="b7-p1-s2">RDC é universalmente exato e tem discrepância zero, mas custo maior.</span> <span class="s" data-s="b7-p1-s3">Oracle RS (oracle rejection sampling) também tem discrepância zero e minimiza o M-cost entre algoritmos exatos que conhecem as taxas fonte, mas não é prático porque requer conhecimento de p. TA-RDC e CA-RDC (capped anytime RDC) são aproximados e traçam perfis custo-discrepância.</span></p><p><span class="s" data-s="b7-p2-s0">A Figura 3 mostra os perfis custo-discrepância normalizados.</span> <span class="s" data-s="b7-p2-s1">O eixo horizontal é a discrepância KL normalizada, o vertical é o M-cost normalizado.</span> <span class="s" data-s="b7-p2-s2">RDC e Oracle RS ficam no ponto (0, custo), com discrepância zero.</span> <span class="s" data-s="b7-p2-s3">DS fica em (discrepância positiva, 1), custo mínimo.</span> <span class="s" data-s="b7-p2-s4">TA-RDC traça uma curva entre esses extremos, aproximando-se da fronteira ótima de primeira ordem conforme m cresce.</span></p><p><span class="s" data-s="b7-p3-s0">Os resultados confirmam a teoria: para m=1000, o perfil realizado de TA-RDC está muito próximo da fronteira ótima teórica.</span> <span class="s" data-s="b7-p3-s1">Conforme m aumenta, a convergência para a taxa assintótica fica mais evidente.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.31607/figure3.webp" alt="Perfis custo-discrepância para k=8 atributos não-uniformes e três tamanhos de output (m=100, 500, 1000). TA-RDC aproxima a fronteira ótima de primeira ordem, especialmente para m grande. RDC atinge discrepância zero com custo maior que DS." loading="lazy">
+          <figcaption>
+            Perfis custo-discrepância para k=8 atributos não-uniformes e três tamanhos de output (m=100, 500, 1000). TA-RDC aproxima a fronteira ótima de primeira ordem, especialmente para m grande. RDC atinge discrepância zero com custo maior que DS.
+            <span class="source">Figura 3 do paper · Jiang et al., arXiv:2609.31607</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Aplicação 1: geração texto-para-imagem com atributos demográficos</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Os autores aplicam o método a modelos texto-para-imagem (DALL-E 3, Stable Diffusion XL, Flux.1 Pro).</span> <span class="s" data-s="b9-p0-s1">O prompt pede uma foto de grupo com uma contagem-alvo de atributos demográficos (gênero × idade × raça, totalizando 12 categorias).</span> <span class="s" data-s="b9-p0-s2">Um anotador automático (baseado em FairFace) classifica cada pessoa gerada.</span></p><p><span class="s" data-s="b9-p1-s0">O desafio aqui é que nem toda imagem gerada é compliant: pode conter número errado de pessoas, rostos não detectáveis, etc. Os autores estendem o framework para lidar com outputs off-support: aqueles que não podem ser usados porque violam restrições estruturais.</span></p><p><span class="s" data-s="b9-p2-s0">A Figura 15 mostra exemplos de gerações compliant (número correto de pessoas), não-compliant on-support (número errado mas rostos detectáveis) e off-support (rostos não detectáveis).</span> <span class="s" data-s="b9-p2-s1">O método filtra apenas as gerações compliant para formar o batch final.</span></p><p><span class="s" data-s="b9-p3-s0">Os resultados mostram que o pós-processamento melhora significativamente o alinhamento.</span> <span class="s" data-s="b9-p3-s1">Por exemplo, para DALL-E 3 com m=8 outputs, o método reduz a discrepância KL de ~0.5 (direct-sampling) para ~0.05 (RDC), com um custo de ~2.5 queries por output aceito.</span> <span class="s" data-s="b9-p3-s2">Isso complementa intervenções baseadas em prompting: mesmo com prompts cuidadosamente elaborados, a distribuição resultante raramente é exata.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.31607/figure15.webp" alt="Exemplos de gerações de fotos de grupo para cada modelo sob prompts demográficos. Legendas mostram a contagem-alvo (T) e a contagem observada (O). Gerações off-support (rostos não detectáveis) são filtradas." loading="lazy">
+          <figcaption>
+            Exemplos de gerações de fotos de grupo para cada modelo sob prompts demográficos. Legendas mostram a contagem-alvo (T) e a contagem observada (O). Gerações off-support (rostos não detectáveis) são filtradas.
+            <span class="source">Figura 15 do paper · Jiang et al., arXiv:2609.31607</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b11-h">Aplicação 2: geração de personas geocodificadas</span></h2>
+<p><span class="s" data-s="b11-p0-s0">A segunda aplicação é geração de personas sintéticas para pesquisa de opinião.</span> <span class="s" data-s="b11-p0-s1">O objetivo é criar um conjunto de personas cujas características demográficas (idade, gênero, raça, educação, região) sigam a distribuição da população dos EUA, conforme dados do censo.</span></p><p><span class="s" data-s="b11-p1-s0">Os autores usam um pipeline que combina um LLM (GPT-4) para gerar biografias e um modelo de geocodificação para atribuir localizações.</span> <span class="s" data-s="b11-p1-s1">O atributo composto tem k=480 categorias (combinando 5 variáveis demográficas).</span> <span class="s" data-s="b11-p1-s2">O alvo é a distribuição conjunta empírica do censo.</span></p><p><span class="s" data-s="b11-p2-s0">Aqui, o desafio é a alta dimensionalidade e a esparsidade: muitas combinações de atributos são raras.</span> <span class="s" data-s="b11-p2-s1">O método RDC ainda funciona, mas o custo cresce.</span> <span class="s" data-s="b11-p2-s2">Os autores comparam com direct-sampling e mostram que o pós-processamento reduz a discrepância KL de ~0.08 para ~0.01, com um custo de ~1.8 queries por output aceito.</span></p><p><span class="s" data-s="b11-p3-s0">Essa aplicação ilustra um caso onde retreinar ou ajustar o modelo seria impraticável: a distribuição-alvo é específica de uma aplicação (um estudo de opinião particular) e muda de projeto para projeto.</span> <span class="s" data-s="b11-p3-s1">O pós-processamento black-box permite adaptar o modelo a cada novo alvo sem redesenhar o pipeline de treino.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b12-t">Limitação: o anotador precisa ser confiável</span></h3>
+          <p><span class="s" data-s="b12-c-s0">Todo o método assume que o anotador ϕ classifica corretamente os atributos.</span> <span class="s" data-s="b12-c-s1">Se ϕ é ruidoso (por exemplo, um classificador de gênero com 10% de erro), a distribuição final será enviesada.</span> <span class="s" data-s="b12-c-s2">O paper discute brevemente como modelar erros de anotação via matriz de confusão, mas não desenvolve algoritmos robustos a ruído.</span> <span class="s" data-s="b12-c-s3">Isso fica como trabalho futuro.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b13-h">O que o paper NÃO resolve</span></h2>
+<p><span class="s" data-s="b13-p0-s0">Primeiro, o método só alinha a distribuição de atributos, não garante outras formas de fairness.</span> <span class="s" data-s="b13-p0-s1">Por exemplo, não controla a qualidade individual dos outputs nem garante paridade de performance em tarefas downstream.</span> <span class="s" data-s="b13-p0-s2">A escolha de quais atributos proteger e qual distribuição-alvo usar é uma decisão normativa, fora do escopo técnico do paper.</span></p><p><span class="s" data-s="b13-p1-s0">Segundo, o framework assume que os atributos são categóricos e observáveis (ou anotáveis).</span> <span class="s" data-s="b13-p1-s1">Atributos contínuos ou latentes exigiriam extensões não desenvolvidas aqui.</span> <span class="s" data-s="b13-p1-s2">Além disso, o método não lida com dependências complexas entre atributos e conteúdo: se a qualidade dos outputs varia sistematicamente com o atributo, o pós-processamento pode inadvertidamente amplificar esses vieses.</span></p><p><span class="s" data-s="b13-p2-s0">Terceiro, os resultados de otimalidade são assintóticos (m → ∞).</span> <span class="s" data-s="b13-p2-s1">Para m pequeno, os algoritmos propostos podem não ser admissíveis: pode haver outros métodos que melhorem simultaneamente custo e discrepância.</span> <span class="s" data-s="b13-p2-s2">O paper reconhece isso e sugere que desenvolver algoritmos admissíveis para m finito é uma direção futura.</span></p><p><span class="s" data-s="b13-p3-s0">Quarto, os experimentos com modelos reais são limitados a dois domínios (imagens e personas).</span> <span class="s" data-s="b13-p3-s1">Não há garantias de que o método funcione igualmente bem em outros contextos (vídeo, áudio, código) ou com outros tipos de anotadores.</span> <span class="s" data-s="b13-p3-s2">A validação empírica é promissora, mas não exaustiva.</span></p>        <h2><span class="s" data-s="b14-h">Contexto: por que pós-processamento, não retreinamento?</span></h2>
+<p><span class="s" data-s="b14-p0-s0">Métodos de alinhamento tradicionais intervêm nos dados de treino, na arquitetura, no procedimento de treino (RLHF, DPO, constitutional AI) ou nos prompts.</span> <span class="s" data-s="b14-p0-s1">Cada um tem vantagens e limitações.</span> <span class="s" data-s="b14-p0-s2">Retreinar é caro e requer acesso aos pesos.</span> <span class="s" data-s="b14-p0-s3">Prompting é flexível, mas não oferece garantias estatísticas precisas.</span></p><p><span class="s" data-s="b14-p1-s0">O pós-processamento black-box é complementar.</span> <span class="s" data-s="b14-p1-s1">Ele permite ajustar a distribuição de outputs de um modelo já treinado e alinhado, sem retreinar.</span> <span class="s" data-s="b14-p1-s2">Isso é especialmente útil quando o modelo é servido via API, quando a distribuição-alvo muda frequentemente, ou quando você quer compor múltiplas formas de alinhamento (por exemplo, alinhar primeiro a preferências via RLHF, depois a uma distribuição demográfica via pós-processamento).</span></p><p><span class="s" data-s="b14-p2-s0">Além disso, conforme os custos de query caem (como documentado em Maslej et al., 2025, citado no paper), gerar batches maiores fica mais barato.</span> <span class="s" data-s="b14-p2-s1">Isso torna algoritmos como RDC e TA-RDC cada vez mais práticos.</span> <span class="s" data-s="b14-p2-s2">O custo adicional de queries é compensado pela flexibilidade e pela garantia estatística.</span></p>        <h2><span class="s" data-s="b15-h">Direções futuras: admissibilidade e anotadores ruidosos</span></h2>
+<p><span class="s" data-s="b15-p0-s0">Os autores apontam várias direções de pesquisa.</span> <span class="s" data-s="b15-p0-s1">Primeira, caracterizar algoritmos admissíveis para m finito: métodos que não são dominados por nenhum outro em custo e discrepância.</span> <span class="s" data-s="b15-p0-s2">O RDC é admissível para m=1, mas para m&gt;1 a questão fica em aberto.</span></p><p><span class="s" data-s="b15-p1-s0">Segunda, estender o framework para anotadores ruidosos.</span> <span class="s" data-s="b15-p1-s1">O paper modela brevemente o erro de anotação via matriz de confusão, mas não desenvolve algoritmos que corrijam esse erro.</span> <span class="s" data-s="b15-p1-s2">Uma abordagem seria estimar a matriz de confusão e ajustar as taxas-alvo, mas isso requer amostras rotuladas de alta qualidade.</span></p><p><span class="s" data-s="b15-p2-s0">Terceira, explorar outras f-divergências além de KL.</span> <span class="s" data-s="b15-p2-s1">O paper foca em KL porque ela tem propriedades analíticas convenientes, mas outras divergências (chi-quadrado, Hellinger, variação total) podem ser mais apropriadas em certos contextos.</span> <span class="s" data-s="b15-p2-s2">A fronteira ótima muda com a escolha da divergência.</span></p><p><span class="s" data-s="b15-p3-s0">Quarta, aplicar o método a outros domínios e modalidades.</span> <span class="s" data-s="b15-p3-s1">Os experimentos cobrem imagens e personas textuais, mas não vídeo, áudio, código ou outros tipos de outputs estruturados.</span> <span class="s" data-s="b15-p3-s2">Cada domínio pode apresentar desafios específicos (por exemplo, atributos temporais em vídeo).</span></p>        <h2><span class="s" data-s="b16-h">Conclusão: alinhamento estatístico como peça do quebra-cabeça</span></h2>
+<p><span class="s" data-s="b16-p0-s0">O paper oferece uma formulação matemática rigorosa para um problema prático: ajustar a distribuição de atributos de outputs generativos sem retreinar o modelo.</span> <span class="s" data-s="b16-p0-s1">Os algoritmos propostos (RDC, TA-RDC, CA-RDC) são teoricamente ótimos no limite assintótico e empiricamente eficazes em experimentos com modelos reais.</span></p><p><span class="s" data-s="b16-p1-s0">A contribuição principal é mostrar que, sob acesso black-box, é possível obter alinhamento estatístico exato ou aproximado com custo de queries próximo do ótimo.</span> <span class="s" data-s="b16-p1-s1">Isso complementa métodos de alinhamento baseados em treino ou prompting, oferecendo uma alavanca adicional para ajustar modelos a requisitos específicos de aplicação.</span></p><p><span class="s" data-s="b16-p2-s0">As limitações são claras: o método não resolve todos os aspectos de fairness, assume anotadores confiáveis, e os resultados de otimalidade são assintóticos.</span> <span class="s" data-s="b16-p2-s1">Mas, dentro de seu escopo, o trabalho é sólido e abre caminho para pesquisa futura em pós-processamento adaptativo de modelos generativos.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">O paper introduz statistical attribute alignment (SAA): ajustar a distribuição de atributos categóricos em outputs de IA generativa via pós-processamento black-box, sem retreinar o modelo.</span></li><li><span class="s" data-s="k1">O algoritmo RDC (random demand coupon collector) garante alinhamento exato e é assintoticamente ótimo em custo de queries quando o número de outputs m → ∞.</span></li><li><span class="s" data-s="k2">Experimentos com DALL-E 3, Stable Diffusion e GPT-4 mostram que o método reduz discrepância KL de ~0.5 para ~0.05 em tarefas de geração demográfica, complementando prompting.</span></li><li><span class="s" data-s="k3">Limitações: assume anotadores confiáveis, só alinha distribuições (não qualidade individual), e otimalidade é assintótica — para m pequeno, pode haver métodos melhores.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2609.31607" rel="noopener">Statistical attribute alignment for black-box generative AI via output post-processing</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2609.31607" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

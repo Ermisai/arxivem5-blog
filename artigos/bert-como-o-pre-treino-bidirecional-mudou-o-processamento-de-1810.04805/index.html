@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BERT: como o pré-treino bidirecional mudou o processamento de linguagem natural — arXiv em 5</title>
+<meta name="description" content="O paper de 2018 do Google apresenta um modelo de linguagem que lê texto nas duas direções ao mesmo tempo, usando máscaras aleatórias para aprender contexto completo antes de ser ajustado para tarefas específicas.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BERT: como o pré-treino bidirecional mudou o processamento de linguagem natural">
+<meta property="og:description" content="O paper de 2018 do Google apresenta um modelo de linguagem que lê texto nas duas direções ao mesmo tempo, usando máscaras aleatórias para aprender contexto completo antes de ser ajustado para tarefas específicas.">
+<meta property="og:image" content="../../assets/papers/1810.04805/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>LLMs</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/1810.04805" rel="noopener">arXiv:1810.04805</a>
+    </div>
+    <h1><span class="s" data-s="t">BERT: como o pré-treino bidirecional mudou o processamento de linguagem natural</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">O paper de 2018 do Google apresenta um modelo de linguagem que lê texto nas duas direções ao mesmo tempo, usando máscaras aleatórias para aprender contexto completo antes de ser ajustado para tarefas específicas.</span></p>
+    <p class="byline">
+      <span>Devlin et al.</span>
+      <span>8 min de leitura</span>
+<span>11/10/2018</span>    </p>
+    <div class="listen" data-article="1810.04805" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=-4X93nCg09I" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema da unidirecionalidade</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Antes do BERT, os modelos de linguagem pré-treinados tinham uma limitação fundamental: eles liam texto em uma direção só.</span> <span class="s" data-s="b0-p0-s1">O GPT da OpenAI, por exemplo, processava cada palavra olhando apenas para as palavras anteriores, da esquerda para a direita.</span> <span class="s" data-s="b0-p0-s2">Isso funcionava razoavelmente bem para gerar texto, mas criava um problema sério para tarefas de compreensão.</span></p><p><span class="s" data-s="b0-p1-s0">A questão é que muitas tarefas de processamento de linguagem natural exigem contexto completo.</span> <span class="s" data-s="b0-p1-s1">Em perguntas e respostas, por exemplo, você precisa entender tanto o que vem antes quanto o que vem depois de cada palavra para identificar a resposta correta em um parágrafo.</span> <span class="s" data-s="b0-p1-s2">Modelos unidirecionais perdiam metade da informação disponível.</span></p><p><span class="s" data-s="b0-p2-s0">Existiam tentativas de contornar isso.</span> <span class="s" data-s="b0-p2-s1">O ELMo treinava dois modelos separados — um lendo da esquerda para direita, outro da direita para esquerda — e depois concatenava as representações.</span> <span class="s" data-s="b0-p2-s2">Mas essa concatenação era superficial: os dois modelos nunca realmente conversavam entre si durante o treinamento.</span> <span class="s" data-s="b0-p2-s3">O BERT propõe uma solução diferente: treinar um único modelo que olha para ambas as direções simultaneamente, desde o início.</span></p>        <h2><span class="s" data-s="b1-h">A arquitetura: Transformer bidirecional</span></h2>
+<p><span class="s" data-s="b1-p0-s0">O BERT usa a arquitetura Transformer, a mesma apresentada no paper &#39;Attention is All You Need&#39; de 2017.</span> <span class="s" data-s="b1-p0-s1">A diferença crucial está no mecanismo de atenção: enquanto o GPT usa atenção causal (cada token só pode olhar para tokens anteriores), o BERT usa atenção bidirecional completa.</span> <span class="s" data-s="b1-p0-s2">Cada token pode atender a todos os outros tokens da sequência, tanto à esquerda quanto à direita.</span></p><p><span class="s" data-s="b1-p1-s0">O paper apresenta dois tamanhos de modelo.</span> <span class="s" data-s="b1-p1-s1">O BERT-BASE tem 12 camadas (blocos Transformer), 768 dimensões de hidden state e 12 cabeças de atenção, totalizando 110 milhões de parâmetros.</span> <span class="s" data-s="b1-p1-s2">O BERT-LARGE tem 24 camadas, 1024 dimensões e 16 cabeças de atenção, com 340 milhões de parâmetros.</span> <span class="s" data-s="b1-p1-s3">O tamanho do BERT-BASE foi escolhido propositalmente para ser comparável ao GPT.</span></p><p><span class="s" data-s="b1-p2-s0">A representação de entrada combina três tipos de embeddings somados: token embeddings (usando WordPiece com vocabulário de 30 mil tokens), segment embeddings (indicando se o token pertence à sentença A ou B) e position embeddings (indicando a posição na sequência).</span> <span class="s" data-s="b1-p2-s1">Todo input começa com um token especial [CLS], cujo estado final é usado como representação agregada da sequência inteira para tarefas de classificação.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/1810.04805/figure3.webp" alt="A diferença fundamental: BERT processa todas as palavras simultaneamente olhando para ambos os lados, enquanto GPT e ELMo usam estratégias unidirecionais ou concatenação superficial de modelos independentes." loading="lazy">
+          <figcaption>
+            A diferença fundamental: BERT processa todas as palavras simultaneamente olhando para ambos os lados, enquanto GPT e ELMo usam estratégias unidirecionais ou concatenação superficial de modelos independentes.
+            <span class="source">Figura 3 do paper · Devlin et al., arXiv:1810.04805</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Masked Language Model: o truque do pré-treino</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Aqui está o problema: se você simplesmente deixar o modelo ver todas as palavras ao mesmo tempo durante o treinamento, ele pode trapacear.</span> <span class="s" data-s="b3-p0-s1">Em um modelo bidirecional padrão, cada palavra poderia indiretamente &#39;ver a si mesma&#39; através das camadas, e o modelo trivialmente preveria a palavra alvo sem aprender nada útil sobre linguagem.</span></p><p><span class="s" data-s="b3-p1-s0">A solução do BERT é o Masked Language Model (MLM), inspirado no teste Cloze de 1953.</span> <span class="s" data-s="b3-p1-s1">Durante o pré-treino, o modelo mascara aleatoriamente 15% dos tokens de entrada e tenta prever qual era o token original baseando-se apenas no contexto.</span> <span class="s" data-s="b3-p1-s2">É como aqueles exercícios de preencher lacunas, mas em escala massiva.</span></p><p><span class="s" data-s="b3-p2-s0">Há um detalhe importante na implementação: dos 15% de tokens selecionados para mascaramento, 80% são de fato substituídos pelo token especial [MASK], 10% são substituídos por um token aleatório qualquer, e 10% permanecem inalterados.</span> <span class="s" data-s="b3-p2-s1">Isso evita que o modelo se torne dependente demais do token [MASK], que não aparecerá durante o fine-tuning em tarefas reais.</span></p><p><span class="s" data-s="b3-p3-s0">O segundo objetivo de pré-treino é a predição de próxima sentença (Next Sentence Prediction).</span> <span class="s" data-s="b3-p3-s1">O modelo recebe pares de sentenças e precisa prever se a segunda sentença realmente segue a primeira no texto original, ou se foi escolhida aleatoriamente.</span> <span class="s" data-s="b3-p3-s2">Isso ensina o modelo a entender relações entre sentenças, crucial para tarefas como inferência de linguagem natural e perguntas e respostas.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b4-t">Pré-treino vs Fine-tuning</span></h3>
+          <p><span class="s" data-s="b4-c-s0">O BERT é pré-treinado uma vez em grandes volumes de texto não rotulado (Wikipedia + BookCorpus).</span> <span class="s" data-s="b4-c-s1">Depois, para cada tarefa específica, você adiciona apenas uma camada de saída e ajusta todos os parâmetros do modelo com os dados rotulados da tarefa.</span> <span class="s" data-s="b4-c-s2">Esse processo de fine-tuning é rápido: o paper menciona que o modelo para SQuAD pode ser treinado em cerca de 30 minutos em uma única Cloud TPU.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b5-h">Como adaptar o BERT para diferentes tarefas</span></h2>
+<p><span class="s" data-s="b5-p0-s0">A elegância do BERT está na simplicidade do fine-tuning.</span> <span class="s" data-s="b5-p0-s1">Para classificação de sentenças (como análise de sentimento), você usa o estado final do token [CLS] como representação da sentença inteira e adiciona uma camada linear simples para classificação.</span> <span class="s" data-s="b5-p0-s2">Para pares de sentenças (como inferência textual), você empacota as duas sentenças em uma sequência separada por [SEP], e segue o mesmo processo.</span></p><p><span class="s" data-s="b5-p1-s0">Para tarefas de nível de token, como perguntas e respostas, a abordagem é diferente.</span> <span class="s" data-s="b5-p1-s1">No SQuAD, por exemplo, o modelo recebe uma pergunta e um parágrafo que contém a resposta.</span> <span class="s" data-s="b5-p1-s2">Durante o fine-tuning, são introduzidos apenas dois vetores: um vetor de início S e um vetor de fim E. A probabilidade de cada palavra ser o início da resposta é calculada pelo produto escalar entre a representação da palavra e S, seguido de softmax.</span> <span class="s" data-s="b5-p1-s3">O mesmo processo identifica o fim da resposta usando E.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/1810.04805/figure1.webp" alt="O fluxo completo: um único modelo pré-treinado é reutilizado para múltiplas tarefas, mudando apenas a camada de saída. Os mesmos parâmetros do Transformer são ajustados para cada tarefa específica." loading="lazy">
+          <figcaption>
+            O fluxo completo: um único modelo pré-treinado é reutilizado para múltiplas tarefas, mudando apenas a camada de saída. Os mesmos parâmetros do Transformer são ajustados para cada tarefa específica.
+            <span class="source">Figura 1 do paper · Devlin et al., arXiv:1810.04805</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Resultados no benchmark GLUE</span></h2>
+<p><span class="s" data-s="b7-p0-s0">O paper testa o BERT em 11 tarefas do benchmark GLUE (General Language Understanding Evaluation), que cobre classificação de sentenças, similaridade semântica, inferência textual e outras tarefas de compreensão.</span> <span class="s" data-s="b7-p0-s1">Os datasets variam enormemente em tamanho, de 2.500 exemplos (RTE) até 392 mil (MNLI).</span></p><p><span class="s" data-s="b7-p1-s0">O BERT-BASE obteve 79,6% de acurácia média, superando o GPT (75,1%) e o anterior estado da arte (74,0%).</span> <span class="s" data-s="b7-p1-s1">O BERT-LARGE alcançou 82,1%, um aumento de 7 pontos percentuais sobre o melhor resultado anterior.</span> <span class="s" data-s="b7-p1-s2">No MNLI, a maior tarefa do GLUE, o BERT-LARGE obteve 86,7% de acurácia, uma melhoria absoluta de 4,6% sobre o GPT.</span></p><p><span class="s" data-s="b7-p2-s0">Um padrão interessante emerge: o BERT-LARGE supera significativamente o BERT-BASE em todas as tarefas, especialmente naquelas com pouquíssimos dados de treino.</span> <span class="s" data-s="b7-p2-s1">No CoLA, com apenas 8.500 exemplos, o BERT-LARGE alcança 60,5% contra 52,1% do BERT-BASE.</span> <span class="s" data-s="b7-p2-s2">Isso sugere que modelos maiores conseguem transferir conhecimento mais efetivamente de grandes volumes de texto não rotulado para tarefas com poucos exemplos.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/1810.04805/table1.webp" alt="Resultados no GLUE: BERT supera todos os sistemas anteriores em todas as tarefas. Note como a diferença entre BASE e LARGE é maior em datasets pequenos como CoLA (8,5k exemplos) do que em datasets grandes como MNLI (392k)." loading="lazy">
+          <figcaption>
+            Resultados no GLUE: BERT supera todos os sistemas anteriores em todas as tarefas. Note como a diferença entre BASE e LARGE é maior em datasets pequenos como CoLA (8,5k exemplos) do que em datasets grandes como MNLI (392k).
+            <span class="source">Tabela 1 do paper · Devlin et al., arXiv:1810.04805</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Perguntas e respostas: SQuAD</span></h2>
+<p><span class="s" data-s="b9-p0-s0">No Stanford Question Answering Dataset (SQuAD v1.1), com 100 mil pares de perguntas e respostas, a tarefa é identificar o trecho exato de um parágrafo da Wikipedia que responde à pergunta.</span> <span class="s" data-s="b9-p0-s1">O BERT-LARGE alcançou 93,2 de F1 no conjunto de teste, uma melhoria de 1,5 ponto sobre o melhor sistema anterior.</span></p><p><span class="s" data-s="b9-p1-s0">No SQuAD v2.0, que adiciona perguntas sem resposta no texto (exigindo que o modelo identifique quando não há resposta), o BERT-LARGE obteve 83,1 de F1, uma melhoria de 5,1 pontos.</span> <span class="s" data-s="b9-p1-s1">Essa versão é mais difícil porque o modelo precisa não apenas encontrar respostas, mas também reconhecer quando a pergunta não pode ser respondida com base no contexto fornecido.</span></p>        <h2><span class="s" data-s="b10-h">Detalhes de treinamento e hiperparâmetros</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Para o fine-tuning no GLUE, o paper usou batch size de 32 e treinou por 3 épocas.</span> <span class="s" data-s="b10-p0-s1">A taxa de aprendizado foi selecionada entre 5e-5, 4e-5, 3e-5 e 2e-5 baseando-se no desempenho no conjunto de desenvolvimento.</span> <span class="s" data-s="b10-p0-s2">Um detalhe importante: o fine-tuning do BERT-LARGE era às vezes instável em datasets pequenos, então os autores rodaram múltiplos restarts aleatórios e selecionaram o melhor modelo no conjunto de desenvolvimento.</span></p><p><span class="s" data-s="b10-p1-s0">Essa instabilidade em datasets pequenos é uma limitação prática importante.</span> <span class="s" data-s="b10-p1-s1">Ela sugere que, apesar do poder do pré-treino, ainda há desafios em adaptar modelos muito grandes para tarefas com poucos exemplos.</span> <span class="s" data-s="b10-p1-s2">A necessidade de múltiplos restarts também aumenta o custo computacional do fine-tuning, embora ainda seja muito menor que treinar um modelo do zero.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b11-t">O que o paper não mostra</span></h3>
+          <p><span class="s" data-s="b11-c-s0">O paper não explora sistematicamente quantos dados de pré-treino são necessários, nem quanto tempo e recursos computacionais foram gastos no pré-treino inicial.</span> <span class="s" data-s="b11-c-s1">Também não há análise de quais tipos de conhecimento linguístico o modelo realmente aprende, ou como ele se comporta em línguas além do inglês.</span> <span class="s" data-s="b11-c-s2">Os experimentos focam em benchmarks estabelecidos, mas não testam robustez a perturbações ou vieses.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b12-h">Por que a bidirecionalidade importa</span></h2>
+<p><span class="s" data-s="b12-p0-s0">A contribuição central do paper é demonstrar empiricamente que pré-treino bidirecional profundo supera abordagens unidirecionais ou concatenações superficiais.</span> <span class="s" data-s="b12-p0-s1">Isso contrasta com o GPT, que usa Transformers unidirecionais, e com o ELMo, que treina LSTMs independentes em cada direção e depois concatena as features.</span></p><p><span class="s" data-s="b12-p1-s0">A diferença não é apenas arquitetural, mas fundamental: no BERT, cada camada pode integrar informação de ambas as direções desde o início.</span> <span class="s" data-s="b12-p1-s1">No ELMo, as representações esquerda-para-direita e direita-para-esquerda nunca interagem durante o treinamento, apenas são concatenadas no final.</span> <span class="s" data-s="b12-p1-s2">Isso limita a capacidade do modelo de aprender interações complexas entre contexto passado e futuro.</span></p><p><span class="s" data-s="b12-p2-s0">O Masked Language Model é o que torna isso possível.</span> <span class="s" data-s="b12-p2-s1">Ao mascarar tokens aleatoriamente, o BERT pode treinar um modelo verdadeiramente bidirecional sem permitir que cada palavra veja a si mesma.</span> <span class="s" data-s="b12-p2-s2">É uma solução elegante para um problema que parecia exigir escolher entre bidirecionalidade e treinamento válido.</span></p>        <h2><span class="s" data-s="b13-h">Impacto e limitações</span></h2>
+<p><span class="s" data-s="b13-p0-s0">O BERT estabeleceu um novo paradigma em NLP: pré-treinar um modelo de linguagem grande em texto não rotulado, depois fazer fine-tuning para tarefas específicas.</span> <span class="s" data-s="b13-p0-s1">Esse paradigma dominou a área nos anos seguintes, levando a modelos como RoBERTa, ALBERT, ELECTRA e eventualmente aos modelos de linguagem ainda maiores como GPT-3 e T5.</span></p><p><span class="s" data-s="b13-p1-s0">Mas há limitações importantes.</span> <span class="s" data-s="b13-p1-s1">O paper testa apenas em inglês.</span> <span class="s" data-s="b13-p1-s2">O custo computacional do pré-treino, embora não quantificado no paper, é substancial — treinar o BERT-LARGE do zero exige recursos que poucos grupos de pesquisa têm.</span> <span class="s" data-s="b13-p1-s3">E o Masked Language Model, embora efetivo, tem uma discrepância entre pré-treino e fine-tuning: o token [MASK] aparece durante o pré-treino mas não durante o uso real.</span></p><p><span class="s" data-s="b13-p2-s0">O paper também não explora profundamente o que o modelo aprende.</span> <span class="s" data-s="b13-p2-s1">Trabalhos posteriores mostraram que o BERT captura fenômenos sintáticos e semânticos complexos, mas também pode amplificar vieses presentes nos dados de treino.</span> <span class="s" data-s="b13-p2-s2">A análise de interpretabilidade é limitada no paper original.</span></p><p><span class="s" data-s="b13-p3-s0">Ainda assim, o impacto é inegável.</span> <span class="s" data-s="b13-p3-s1">O BERT mostrou que representações pré-treinadas bidirecionais profundas superam arquiteturas específicas de tarefas cuidadosamente projetadas.</span> <span class="s" data-s="b13-p3-s2">Isso mudou a forma como a comunidade de NLP aborda problemas: menos engenharia de features e arquiteturas, mais foco em pré-treino e transferência de conhecimento.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">O BERT usa atenção bidirecional completa, diferente de modelos anteriores que liam texto em uma direção só ou concatenavam modelos independentes superficialmente.</span></li><li><span class="s" data-s="k1">O Masked Language Model mascara 15% dos tokens e treina o modelo a prevê-los usando contexto completo, permitindo pré-treino bidirecional sem vazamento de informação.</span></li><li><span class="s" data-s="k2">Um único modelo pré-treinado pode ser ajustado para múltiplas tarefas adicionando apenas uma camada de saída, alcançando estado da arte em 11 benchmarks de NLP.</span></li><li><span class="s" data-s="k3">BERT-LARGE supera BERT-BASE especialmente em datasets pequenos, sugerindo que modelos maiores transferem conhecimento mais efetivamente de texto não rotulado.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/1810.04805" rel="noopener">BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="1810.04805" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>
