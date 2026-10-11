@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AdvSim2Real: como treinar agentes web contra injeções de prompt adaptativas usando um modelo de mundo congelado — arXiv em 5</title>
+<meta name="description" content="Pesquisadores da MBZUAI propõem um método que faz co-evoluir tarefas, adversários e agentes dentro de um simulador web, elevando a robustez contra ataques de prompt injection em 33.6% sem sacrificar capacidade.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AdvSim2Real: como treinar agentes web contra injeções de prompt adaptativas usando um modelo de mundo congelado">
+<meta property="og:description" content="Pesquisadores da MBZUAI propõem um método que faz co-evoluir tarefas, adversários e agentes dentro de um simulador web, elevando a robustez contra ataques de prompt injection em 33.6% sem sacrificar capacidade.">
+<meta property="og:image" content="../../assets/papers/2610.08773/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Agentes</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.08773" rel="noopener">arXiv:2610.08773</a>
+    </div>
+    <h1><span class="s" data-s="t">AdvSim2Real: como treinar agentes web contra injeções de prompt adaptativas usando um modelo de mundo congelado</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Pesquisadores da MBZUAI propõem um método que faz co-evoluir tarefas, adversários e agentes dentro de um simulador web, elevando a robustez contra ataques de prompt injection em 33.6% sem sacrificar capacidade.</span></p>
+    <p class="byline">
+      <span>Hashmi et al.</span>
+      <span>9 min de leitura</span>
+<span>06/10/2026</span>    </p>
+    <div class="listen" data-article="2610.08773" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=ZMkGExTqZVQ" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema: agentes web leem instruções de terceiros</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Agentes web autônomos navegam sites reais para completar tarefas: atualizar um registro de cliente, preencher formulários, consultar informações.</span> <span class="s" data-s="b0-p0-s1">A diferença crucial em relação a outros usos de ferramentas é que cada página é escrita por um terceiro e mistura dados necessários à tarefa com controles que agem sobre eles.</span> <span class="s" data-s="b0-p0-s2">Isso abre espaço para indirect prompt injection: uma instrução plantada no conteúdo da página pode desviar o agente da meta original do usuário.</span></p><p><span class="s" data-s="b0-p1-s0">Benchmarks de segurança mostram que esses ataques têm sucesso parcial em até 86% dos casos.</span> <span class="s" data-s="b0-p1-s1">O agente não pode simplesmente ignorar a página, porque ela também contém os valores e controles de que a tarefa precisa.</span> <span class="s" data-s="b0-p1-s2">O desafio é task-preserving robustness: o agente deve completar seu objetivo autorizado apesar de instruções concorrentes na página, sempre que a tarefa permanecer viável.</span></p><p><span class="s" data-s="b0-p2-s0">Defesas atuais fazem fine-tuning do agente em exemplos de injeção fixados antes do treino, às vezes com delimitadores especiais no formato de entrada.</span> <span class="s" data-s="b0-p2-s1">O problema é que essas injeções nunca mudam: o defensor nunca enfrenta um atacante que se adapta a ele.</span> <span class="s" data-s="b0-p2-s2">Trabalhos recentes mostram que adversários otimizados contra o modelo treinado conseguem contornar defesas como StruQ e Meta SecAlign.</span></p>        <h2><span class="s" data-s="b1-h">Treino adversarial em ambientes fixos esgota o currículo</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Uma linha de pesquisa recente treina o atacante junto: métodos como RETA fazem red-teaming de um agente congelado e treinam o defensor nos ataques registrados; ARLAS, DMAST e CoER co-treinam atacante e agente em ambientes de ferramentas ou navegadores executados.</span> <span class="s" data-s="b1-p0-s1">Esses métodos adaptam os ataques, mas mantêm as tarefas de treino fixas.</span></p><p><span class="s" data-s="b1-p1-s0">O resultado é que uma tarefa para de ensinar assim que o agente a resolve.</span> <span class="s" data-s="b1-p1-s1">Além disso, cada nova tarefa exige um site que possa executá-la.</span> <span class="s" data-s="b1-p1-s2">Um web world model remove ambas as limitações: ele prediz a próxima página para qualquer objetivo, página atual e ação, incluindo páginas que um adversário pede para alterar.</span> <span class="s" data-s="b1-p1-s3">O WebWorld-14B, modelo de mundo usado neste trabalho, foi apresentado em trabalho anterior e permanece congelado durante todo o treino.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.08773/figure1.webp" alt="Visão geral do AdvSim2Real: três políticas co-evoluem dentro de um simulador web congelado. O currículo propõe tarefas de dificuldade intermediária (Stage 1), o adversário insere injeções temporais (Stage 2), e um juiz LLM congelado avalia cada execução." loading="lazy">
+          <figcaption>
+            Visão geral do AdvSim2Real: três políticas co-evoluem dentro de um simulador web congelado. O currículo propõe tarefas de dificuldade intermediária (Stage 1), o adversário insere injeções temporais (Stage 2), e um juiz LLM congelado avalia cada execução.
+            <span class="source">Figura 1 do paper · Hashmi et al., arXiv:2610.08773</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">A ideia: co-evolução de três políticas em um simulador</span></h2>
+<p><span class="s" data-s="b3-p0-s0">AdvSim2Real treina três políticas umas contra as outras dentro do modelo de mundo congelado: um currículo C que escreve tarefas como um objetivo e uma página inicial; um adversário A que solicita uma injeção por trajetória; e o executor E, o agente web propriamente dito.</span> <span class="s" data-s="b3-p0-s1">Um juiz baseado em modelo de linguagem, também congelado, avalia cada execução.</span></p><p><span class="s" data-s="b3-p1-s0">O currículo é recompensado por tarefas que o executor atual resolve cerca de metade das vezes.</span> <span class="s" data-s="b3-p1-s1">O adversário é recompensado apenas por success flips: uma execução limpa que o juiz aceitou é reproduzida até o passo escolhido, a injeção é renderizada ali, e o adversário ganha crédito somente se a continuação falhar.</span> <span class="s" data-s="b3-p1-s2">Essa estrutura de recompensa garante que o adversário não é premiado por quebrar tarefas já impossíveis.</span></p><p><span class="s" data-s="b3-p2-s0">O método opera em dois estágios.</span> <span class="s" data-s="b3-p2-s1">No primeiro, currículo e executor alternam atualizações: as tarefas acompanham a competência do executor.</span> <span class="s" data-s="b3-p2-s2">No segundo, o currículo é congelado e adversário e executor alternam, com o executor treinando em tarefas limpas, novos ataques e ataques de rodadas anteriores.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.08773/figure3.webp" alt="Detalhamento das duas etapas. Stage 1: o currículo propõe tarefas, o executor tenta várias vezes, o juiz avalia; currículo é recompensado por tarefas resolvidas cerca de 50% das vezes. Stage 2: adversário é recompensado por virar sucessos em falhas; executor treina em ataques novos e antigos." loading="lazy">
+          <figcaption>
+            Detalhamento das duas etapas. Stage 1: o currículo propõe tarefas, o executor tenta várias vezes, o juiz avalia; currículo é recompensado por tarefas resolvidas cerca de 50% das vezes. Stage 2: adversário é recompensado por virar sucessos em falhas; executor treina em ataques novos e antigos.
+            <span class="source">Figura 3 do paper · Hashmi et al., arXiv:2610.08773</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Como funciona o Stage 1: currículo e capacidade</span></h2>
+<p><span class="s" data-s="b5-p0-s0">No primeiro estágio, o currículo propõe um conjunto de tarefas e o executor tenta cada uma várias vezes.</span> <span class="s" data-s="b5-p0-s1">Para avaliar uma proposta, o método executa K trajetórias sob o executor atual e estima sua taxa de sucesso a partir dos veredictos do juiz.</span> <span class="s" data-s="b5-p0-s2">A recompensa do currículo é definida para favorecer tarefas com taxa de sucesso próxima de 50%.</span></p><p><span class="s" data-s="b5-p1-s0">Um grupo de rollouts em que todas as trajetórias recebem a mesma recompensa tem vantagem relativa ao grupo igual a zero, então uma tarefa que o executor sempre resolve ou sempre falha não contribui para sua atualização.</span> <span class="s" data-s="b5-p1-s1">Isso implementa um currículo automático: tarefas muito fáceis ou muito difíceis são descartadas, e o treinamento se concentra na fronteira de competência.</span></p><p><span class="s" data-s="b5-p2-s0">Após o currículo ser atualizado, o executor treina em tarefas frescas do currículo atualizado.</span> <span class="s" data-s="b5-p2-s1">Esse ciclo se repete por três rodadas.</span> <span class="s" data-s="b5-p2-s2">O resultado é que a conclusão limpa sobe de 74.89% (modelo base) para 79.33% após três rodadas, um ganho de 4.44 pontos percentuais.</span> <span class="s" data-s="b5-p2-s3">Importante: sem nunca ver uma injeção, o Stage 1 também eleva a média sob ataque de 48.07% para cerca de 55%.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b6-t">Transferência sim-to-real sem chamadas ao modelo de mundo</span></h3>
+          <p><span class="s" data-s="b6-c-s0">Os checkpoints de capacidade foram executados nas mesmas 150 tarefas em um navegador Chromium real, com a página inicial renderizada como HTML, observações DOM ao vivo e nenhuma chamada ao modelo de mundo.</span> <span class="s" data-s="b6-c-s1">Sucesso estrito no formulário submetido sobe de 25.56% para 44.44%, e valores corretos nos campos finais de 52.50% para 73.24%.</span> <span class="s" data-s="b6-c-s2">O ganho medido no simulador se traduz em ganho real de conclusão de tarefas.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b7-h">Stage 2: adversário adaptativo e robustez</span></h2>
+<p><span class="s" data-s="b7-p0-s0">No segundo estágio, o currículo é congelado e o executor continua do último checkpoint do Stage 1.</span> <span class="s" data-s="b7-p0-s1">O adversário começa do modelo base.</span> <span class="s" data-s="b7-p0-s2">Em tarefas que o executor resolve pelo menos metade das vezes, o método salva várias execuções limpas bem-sucedidas.</span></p><p><span class="s" data-s="b7-p1-s0">O adversário propõe uma injeção e o passo em que inseri-la.</span> <span class="s" data-s="b7-p1-s1">Cada execução limpa salva é reproduzida até aquele passo com a injeção renderizada, e o adversário é recompensado apenas quando a injeção é renderizada e uma execução que o juiz aceitou sem ela agora falha.</span> <span class="s" data-s="b7-p1-s2">Essa é a definição precisa de success flip.</span></p><p><span class="s" data-s="b7-p2-s0">O executor então treina em uma mistura dos novos ataques, dos ataques de rodadas anteriores e de tarefas limpas.</span> <span class="s" data-s="b7-p2-s1">Essa estratégia de replay evita o esquecimento catastrófico: o agente mantém capacidade em tarefas limpas enquanto aprende a resistir a injeções adaptativas.</span> <span class="s" data-s="b7-p2-s2">Três rodadas são executadas no Stage 2.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.08773/figure2.webp" alt="Exemplo concreto: a mesma injeção desvia o agente base mas não o treinado. Um aviso plantado ordena clicar no botão Reset proibido; o base obedece e falha, o Robust iter 3 completa a tarefa corretamente. Marcadores numerados mostram as ações de cada agente em ordem." loading="lazy">
+          <figcaption>
+            Exemplo concreto: a mesma injeção desvia o agente base mas não o treinado. Um aviso plantado ordena clicar no botão Reset proibido; o base obedece e falha, o Robust iter 3 completa a tarefa corretamente. Marcadores numerados mostram as ações de cada agente em ordem.
+            <span class="source">Figura 2 do paper · Hashmi et al., arXiv:2610.08773</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Resultados: robustez sem trade-off de capacidade</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Os autores avaliaram um executor Qwen3.5-4B nas 150 tarefas do benchmark dentro do modelo de mundo WebWorld-14B congelado, com três sementes de rollout por checkpoint.</span> <span class="s" data-s="b9-p0-s1">Cinquenta das tarefas são variantes próximas de oito tarefas-pai.</span> <span class="s" data-s="b9-p0-s2">Checkpoints são nomeados pela rodada do algoritmo que os produziu.</span></p><p><span class="s" data-s="b9-p1-s0">Do Capability iter 3 para o Robust iter 3, a conclusão média sob ataque sobe de 54.34% para 57.48%, um ganho de 3.14 pontos percentuais.</span> <span class="s" data-s="b9-p1-s1">Ao mesmo tempo, a conclusão limpa sobe de 79.33% para 81.33%, um ganho de 2.00 pontos.</span> <span class="s" data-s="b9-p1-s2">Não há trade-off: o agente fica mais robusto e mais capaz simultaneamente.</span></p><p><span class="s" data-s="b9-p2-s0">O ganho sob ataque é concentrado no primeiro adversário: +5.78 pontos contra Adv v1, +2.54 contra Adv v2, +1.11 contra Adv v3.</span> <span class="s" data-s="b9-p2-s1">Por estrato de habilidade, o Robust iter 3 ganha mais sobre o base em tarefas de conditional-policy (+14.3 pontos) e conjunctive-selection (+12.8), e menos em relational joins (+1.6).</span> <span class="s" data-s="b9-p2-s2">Tarefas de seleção conjuntiva permanecem as mais difíceis, com 40.6% de conclusão.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.08773/table1.webp" alt="Resultados principais no modelo de mundo: conclusão limpa atinge 81.33% e média sob três adversários aprendidos 57.48%. Cada adversário Adv vX é treinado contra o executor da rodada anterior. Números são médias sobre três sementes de rollout." loading="lazy">
+          <figcaption>
+            Resultados principais no modelo de mundo: conclusão limpa atinge 81.33% e média sob três adversários aprendidos 57.48%. Cada adversário Adv vX é treinado contra o executor da rodada anterior. Números são médias sobre três sementes de rollout.
+            <span class="source">Tabela 1 do paper · Hashmi et al., arXiv:2610.08773</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b11-h">Generalização para adversário não visto</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Um teste crítico de robustez é a generalização para um adversário que não participou do treino.</span> <span class="s" data-s="b11-p0-s1">Os autores substituíram o adversário aprendido por Kimi-K3, um modelo de fronteira hospedado, com o mesmo prompt, observações e orçamento de uma injeção.</span></p><p><span class="s" data-s="b11-p1-s0">Contra Kimi-K3, a conclusão sobe de 23.00% (base) para 30.72% (Robust iter 3), um ganho relativo de 33.6%.</span> <span class="s" data-s="b11-p1-s1">Esse resultado mostra que o método não apenas sobreajusta aos adversários vistos: a robustez transfere para um atacante mais poderoso e desconhecido.</span> <span class="s" data-s="b11-p1-s2">O Kimi-K3 é significativamente mais forte que os adversários aprendidos, derrubando a taxa de conclusão mesmo do agente treinado para cerca de 31%.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b12-t">Gap limpo-atacado de 23.85 pontos permanece</span></h3>
+          <p><span class="s" data-s="b12-c-s0">No checkpoint final Robust iter 3, a diferença entre conclusão limpa (81.33%) e sob ataque médio (57.48%) é de 23.85 pontos percentuais.</span> <span class="s" data-s="b12-c-s1">Isso indica que, embora o método melhore substancialmente a robustez, ainda há espaço considerável para progresso.</span> <span class="s" data-s="b12-c-s2">Todo número de robustez é um julgamento de modelo dentro de um único modelo de mundo.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b13-h">Detalhes de implementação e escopo</span></h2>
+<p><span class="s" data-s="b13-p0-s0">O executor é um Qwen3.5-4B, o modelo de mundo é WebWorld-14B, e o juiz é Qwen3.8-27B, todos congelados exceto o executor em treino.</span> <span class="s" data-s="b13-p0-s1">Cada estágio executa três rodadas, com o currículo e o executor alternando no Stage 1 e o adversário e o executor alternando no Stage 2.</span> <span class="s" data-s="b13-p0-s2">O benchmark contém 150 tarefas web sintéticas.</span></p><p><span class="s" data-s="b13-p1-s0">As injeções são renderizadas no contexto da página pelo modelo de mundo, não simplesmente concatenadas ao prompt.</span> <span class="s" data-s="b13-p1-s1">Isso é importante porque a renderização determina onde e como a injeção aparece visualmente, afetando sua eficácia.</span> <span class="s" data-s="b13-p1-s2">Continuações atacadas compartilham o prefixo e a semente da execução de controle, mas não o estado aleatório dos servidores de modelo.</span></p><p><span class="s" data-s="b13-p2-s0">O método envolve modelos de linguagem como componentes: as políticas de currículo, adversário e executor, o modelo de mundo, o juiz e o adversário de avaliação Kimi-K3.</span> <span class="s" data-s="b13-p2-s1">Os autores usaram assistentes de IA generativa para design experimental, auditoria qualitativa de trajetórias, interpretação de resultados, busca de literatura e redação, mas revisaram todo conteúdo assistido por IA.</span></p>        <h2><span class="s" data-s="b14-h">O que o paper não mostra</span></h2>
+<p><span class="s" data-s="b14-p0-s0">Primeiro, todo treinamento e avaliação de robustez acontecem dentro do WebWorld-14B.</span> <span class="s" data-s="b14-p0-s1">As injeções são renderizadas pelo modelo de mundo, não testadas contra agentes implantados ou sites reais.</span> <span class="s" data-s="b14-p0-s2">A transferência sim-to-real é demonstrada apenas para capacidade limpa em navegador Chromium, não para robustez sob ataque.</span></p><p><span class="s" data-s="b14-p1-s0">Segundo, um gap de 23.85 pontos entre conclusão limpa e atacada permanece no checkpoint final.</span> <span class="s" data-s="b14-p1-s1">O método melhora a robustez, mas não a resolve.</span> <span class="s" data-s="b14-p1-s2">Terceiro, o ganho de robustez é desigual entre adversários: forte contra Adv v1 (+5.78 pontos), mais fraco contra Adv v3 (+1.11 pontos), sugerindo que adversários posteriores encontram modos de ataque mais difíceis de defender.</span></p><p><span class="s" data-s="b14-p2-s0">Quarto, o benchmark contém 150 tarefas sintéticas, cinquenta delas variantes próximas de oito pais.</span> <span class="s" data-s="b14-p2-s1">A diversidade de tarefas é limitada em comparação com a web real.</span> <span class="s" data-s="b14-p2-s2">Quinto, o método requer um modelo de mundo de qualidade; a eficácia depende de quão bem o WebWorld-14B simula transições de página reais.</span> <span class="s" data-s="b14-p2-s3">Finalmente, os adversários treinados são adaptadores de baixo rank em um modelo 4B, não testados em produção.</span></p>        <h2><span class="s" data-s="b15-h">Por que isso importa</span></h2>
+<p><span class="s" data-s="b15-p0-s0">AdvSim2Real mostra que é possível treinar agentes web simultaneamente mais capazes e mais robustos, sem o trade-off usual entre capacidade e defesa.</span> <span class="s" data-s="b15-p0-s1">A co-evolução de tarefas, adversário e executor dentro de um simulador remove duas limitações: tarefas param de ensinar quando resolvidas, e cada nova tarefa exige infraestrutura de execução.</span></p><p><span class="s" data-s="b15-p1-s0">A transferência sim-to-real de capacidade, com sucesso estrito subindo de 25.56% para 44.44% em navegador real sem chamadas ao modelo de mundo, valida que o ganho medido no simulador se traduz em desempenho executável.</span> <span class="s" data-s="b15-p1-s1">A generalização para Kimi-K3, um modelo de fronteira não visto, com ganho relativo de 33.6%, indica que a robustez não é mero overfitting aos adversários de treino.</span></p><p><span class="s" data-s="b15-p2-s0">Os autores liberam código, benchmark, e todos os resultados de checkpoints para que defesas contra injeção possam ser avaliadas contra adversários treinados no agente defendido.</span> <span class="s" data-s="b15-p2-s1">Isso estabelece um padrão mais realista de avaliação: defesas devem resistir a atacantes que se adaptam a elas, não apenas a injeções fixas pré-treino.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">AdvSim2Real co-evolui tarefas, adversário e agente em um simulador web, elevando conclusão limpa de 74.89% para 81.33% e sob ataque de 48.07% para 57.48%.</span></li><li><span class="s" data-s="k1">Contra Kimi-K3, modelo de fronteira não visto no treino, a robustez sobe 33.6% relativamente, mostrando generalização além dos adversários aprendidos.</span></li><li><span class="s" data-s="k2">Ganho de capacidade transfere para navegador real: sucesso estrito sobe de 25.56% para 44.44% sem chamadas ao modelo de mundo.</span></li><li><span class="s" data-s="k3">Gap de 23.85 pontos entre conclusão limpa e atacada permanece; todo resultado de robustez é julgamento de modelo dentro de um único simulador.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.08773" rel="noopener">AdvSim2Real : Training Web Agents Against Adaptive Prompt Injection in a Web World Model</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.08773" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

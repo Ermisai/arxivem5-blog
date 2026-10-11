@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Generate, Track, Improve: robô humanoide aprende múltiplas habilidades com RL em duas camadas e ajuste fino off-policy — arXiv em 5</title>
+<meta name="description" content="Pesquisadores combinam gerador de trajetórias e política de rastreamento para ensinar um humanoide a andar, correr, subir escadas e pular obstáculos — e mostram que ajuste fino off-policy melhora a escolha de habilidades em até 80 pontos percentuais.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Generate, Track, Improve: robô humanoide aprende múltiplas habilidades com RL em duas camadas e ajuste fino off-policy">
+<meta property="og:description" content="Pesquisadores combinam gerador de trajetórias e política de rastreamento para ensinar um humanoide a andar, correr, subir escadas e pular obstáculos — e mostram que ajuste fino off-policy melhora a escolha de habilidades em até 80 pontos percentuais.">
+<meta property="og:image" content="../../assets/papers/2609.31577/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Robótica</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2609.31577" rel="noopener">arXiv:2609.31577</a>
+    </div>
+    <h1><span class="s" data-s="t">Generate, Track, Improve: robô humanoide aprende múltiplas habilidades com RL em duas camadas e ajuste fino off-policy</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Pesquisadores combinam gerador de trajetórias e política de rastreamento para ensinar um humanoide a andar, correr, subir escadas e pular obstáculos — e mostram que ajuste fino off-policy melhora a escolha de habilidades em até 80 pontos percentuais.</span></p>
+    <p class="byline">
+      <span>Olkin et al.</span>
+      <span>12 min de leitura</span>
+<span>25/09/2026</span>    </p>
+    <div class="listen" data-article="2609.31577" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=ZiKCk2nASvQ" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema: robôs humanoides ainda não vão a qualquer lugar</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Robôs humanoides já demonstraram habilidades impressionantes em laboratório: caminhar, correr, fazer parkour, subir escadas.</span> <span class="s" data-s="b0-p0-s1">Mas a maioria dos controladores é especializada em uma única tarefa ou depende de mapas de altura e odometria precisa, o que dificulta a operação em ambientes reais e externos.</span> <span class="s" data-s="b0-p0-s2">Controladores multi-propósito existem, mas costumam ignorar percepção e terreno.</span> <span class="s" data-s="b0-p0-s3">Controladores perceptivos existem, mas raramente cobrem múltiplas habilidades ou velocidades comandadas.</span></p><p><span class="s" data-s="b0-p1-s0">Este paper apresenta uma arquitetura em duas camadas para locomoção humanoide que é multi-habilidade, perceptiva, dinâmica e robusta o suficiente para operar ao ar livre.</span> <span class="s" data-s="b0-p1-s1">A primeira camada é um gerador de movimentos que planeja trajetórias de corpo inteiro a partir de imagens de profundidade brutas.</span> <span class="s" data-s="b0-p1-s2">A segunda camada é uma política de rastreamento treinada com RL que segue essas trajetórias em tempo real.</span> <span class="s" data-s="b0-p1-s3">Ambas as políticas usam câmeras de profundidade diretamente, sem precisar de odometria ou mapas de altura.</span></p><p><span class="s" data-s="b0-p2-s0">A contribuição central é um loop de ajuste fino com RL off-policy que melhora o gerador de movimentos depois que ele já foi treinado.</span> <span class="s" data-s="b0-p2-s1">Esse loop usa busca estruturada para coletar dados e advantage-weighted regression (AWR) para atualizar o gerador.</span> <span class="s" data-s="b0-p2-s2">O resultado é um aumento de até 25 pontos percentuais na taxa de sucesso em terrenos não vistos e até 80 pontos percentuais na escolha correta de habilidades.</span> <span class="s" data-s="b0-p2-s3">Um único par de políticas permite que o robô humanoide Unitree G1 ande, corra, fique parado, pule sobre caixas e suba escadas em ambientes externos.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.31577/figure1.webp" alt="O robô humanoide Unitree G1 executando múltiplas habilidades em ambientes reais: subir escadas de 15 degraus, pular sobre caixas, caminhar ao ar livre com curvas e correr em espaços internos. Todas essas habilidades vêm de um único par de políticas." loading="lazy">
+          <figcaption>
+            O robô humanoide Unitree G1 executando múltiplas habilidades em ambientes reais: subir escadas de 15 degraus, pular sobre caixas, caminhar ao ar livre com curvas e correr em espaços internos. Todas essas habilidades vêm de um único par de políticas.
+            <span class="source">Figura 1 do paper · Olkin et al., arXiv:2609.31577</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">Arquitetura em duas camadas: gerar e rastrear</span></h2>
+<p><span class="s" data-s="b2-p0-s0">A arquitetura separa planejamento e execução.</span> <span class="s" data-s="b2-p0-s1">O gerador de movimentos roda a 4 Hz (uma vez a cada 0,24 segundos) e produz trajetórias de corpo inteiro de 1,24 segundo de duração.</span> <span class="s" data-s="b2-p0-s2">Ele recebe a velocidade desejada, sua ação anterior e imagens de profundidade de duas câmeras.</span> <span class="s" data-s="b2-p0-s3">A política de rastreamento roda a 50 Hz e recebe informação proprioceptiva e uma imagem de profundidade para calcular torques nas juntas.</span></p><p><span class="s" data-s="b2-p1-s0">Essa separação traz modularidade: é fácil adicionar novas habilidades desde que o rastreador seja geral o suficiente.</span> <span class="s" data-s="b2-p1-s1">Também permite dividir a computação: o rastreador é leve e rápido, enquanto o gerador pode ser maior e mais lento.</span> <span class="s" data-s="b2-p1-s2">A abordagem contrasta com métodos que destilam múltiplos especialistas em uma única política ou que produzem trajetória e ação ao mesmo tempo.</span></p><p><span class="s" data-s="b2-p2-s0">Ambas as políticas são perceptivas.</span> <span class="s" data-s="b2-p2-s1">Usar imagens de profundidade brutas elimina a necessidade de mapas de altura ou odometria, facilitando o deployment externo.</span> <span class="s" data-s="b2-p2-s2">Com duas câmeras, a política vê terreno mais à frente e ajusta a velocidade autonomamente para atravessá-lo, mesmo que o comando de velocidade seja diferente.</span></p>        <h2><span class="s" data-s="b3-h">Criando a biblioteca de movimentos: otimização dinâmica de dados humanos</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O método exige clipes de movimento conscientes do terreno para treinar rastreador e gerador.</span> <span class="s" data-s="b3-p0-s1">Os autores partem de dados de captura de movimento humano do dataset bones-seed e criam referências otimizadas dinamicamente, semelhante a trabalhos anteriores que usam otimização de trajetória.</span></p><p><span class="s" data-s="b3-p1-s0">São gerados 252 movimentos de estado estacionário em terreno plano: caminhada reta (frente e trás), diagonal, com giro, giro no lugar, passo lateral, corrida reta e corrida com giro.</span> <span class="s" data-s="b3-p1-s1">Isso dá ao robô capacidade de locomoção omnidirecional.</span> <span class="s" data-s="b3-p1-s2">Além disso, 46 movimentos para pular sobre caixas e subir e descer escadas são criados.</span></p><p><span class="s" data-s="b3-p2-s0">A otimização usa formulação de múltiplos disparos com restrições de estado e MuJoCo como backend de dinâmica.</span> <span class="s" data-s="b3-p2-s1">Isso permite pequenas mudanças no cronograma de contato diferenciando através da dinâmica de contato do MuJoCo, mantendo estabilidade.</span> <span class="s" data-s="b3-p2-s2">As restrições de estado impõem periodicidade (estado final igual ao inicial) e velocidade média, ajustando o movimento para a velocidade exata desejada.</span></p><p><span class="s" data-s="b3-p3-s0">Para movimentos em terreno, o dataset não tem informação de terreno ground truth.</span> <span class="s" data-s="b3-p3-s1">Os autores colocam terreno para combinar com o movimento, rodam a otimização e extraem informação de contato ground truth da simulação, filtrando forças de contato.</span> <span class="s" data-s="b3-p3-s2">Com essa informação, fazem retargeting cinemático do robô para várias dimensões de terreno usando offsets nos pés e cinemática inversa.</span> <span class="s" data-s="b3-p3-s3">Depois, rodam a otimização dinâmica novamente para obter um movimento suave e viável.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b4-t">Por que otimização dinâmica?</span></h3>
+          <p><span class="s" data-s="b4-c-s0">Usar otimização com dinâmica de contato diferenciável garante que os movimentos sejam fisicamente viáveis e suaves.</span> <span class="s" data-s="b4-c-s1">Isso é crítico para treinar políticas de RL que precisam imitar trajetórias: referências ruins levam a políticas ruins.</span> <span class="s" data-s="b4-c-s2">A otimização também permite impor restrições como periodicidade e velocidade média, essenciais para locomoção de estado estacionário.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b5-h">Treinando o rastreador: CLF-RL com mimic e percepção</span></h2>
+<p><span class="s" data-s="b5-p0-s0">A política de rastreamento é treinada com uma variante de RL chamada CLF-RL (Control Lyapunov Function RL), que combina recompensas de imitação (mimic) com recompensas de controle.</span> <span class="s" data-s="b5-p0-s1">A recompensa de imitação penaliza diferenças entre a trajetória do robô e a referência otimizada.</span> <span class="s" data-s="b5-p0-s2">A recompensa de controle penaliza torques altos, contatos indesejados e outras violações.</span></p><p><span class="s" data-s="b5-p1-s0">O rastreador recebe como entrada o estado proprioceptivo (posições e velocidades das juntas, orientação do tronco) e uma imagem de profundidade de uma câmera frontal.</span> <span class="s" data-s="b5-p1-s1">A imagem passa por um encoder convolucional que extrai features visuais.</span> <span class="s" data-s="b5-p1-s2">Essas features são concatenadas com a informação proprioceptiva e alimentam uma rede MLP que produz torques nas juntas.</span></p><p><span class="s" data-s="b5-p2-s0">O treinamento usa PPO (Proximal Policy Optimization), algoritmo on-policy padrão em RL para controle.</span> <span class="s" data-s="b5-p2-s1">A política é treinada em simulação com randomização de domínio: massa, inércia, atrito, atrasos de atuador e ruído de sensor são variados para aumentar robustez na transferência para hardware real.</span></p>        <h2><span class="s" data-s="b6-h">Treinando o gerador: flow matching condicional</span></h2>
+<p><span class="s" data-s="b6-p0-s0">O gerador de movimentos é treinado com flow matching, uma técnica de modelo generativo que aprende a transformar ruído em trajetórias estruturadas.</span> <span class="s" data-s="b6-p0-s1">O modelo é condicionado na velocidade desejada, na ação anterior (para continuidade temporal) e em imagens de profundidade de duas câmeras.</span></p><p><span class="s" data-s="b6-p1-s0">A arquitetura do gerador é um transformer.</span> <span class="s" data-s="b6-p1-s1">Um prefix encoder processa as condições (velocidade, ação anterior, imagens) e produz tokens de contexto.</span> <span class="s" data-s="b6-p1-s2">Esses tokens são concatenados com tokens de ruído que representam a trajetória a ser gerada.</span> <span class="s" data-s="b6-p1-s3">O transformer então processa tudo e produz uma trajetória de corpo inteiro de 1,24 segundo.</span></p><p><span class="s" data-s="b6-p2-s0">O treinamento usa a biblioteca de movimentos otimizados como dados.</span> <span class="s" data-s="b6-p2-s1">Para cada movimento, o modelo aprende a reconstruir a trajetória a partir de ruído, condicionado nas imagens de profundidade sintéticas renderizadas do terreno correspondente.</span> <span class="s" data-s="b6-p2-s2">Isso ensina o gerador a produzir movimentos consistentes com o terreno visível nas câmeras.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.31577/figure2.webp" alt="Visão geral do método: dados humanos são otimizados para criar biblioteca de movimentos. A política de rastreamento é treinada com CLF-RL para seguir esses movimentos. O gerador é treinado com flow matching e depois ajustado com RL off-policy usando AWR." loading="lazy">
+          <figcaption>
+            Visão geral do método: dados humanos são otimizados para criar biblioteca de movimentos. A política de rastreamento é treinada com CLF-RL para seguir esses movimentos. O gerador é treinado com flow matching e depois ajustado com RL off-policy usando AWR.
+            <span class="source">Figura 2 do paper · Olkin et al., arXiv:2609.31577</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">O ajuste fino off-policy: busca estruturada e AWR</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Depois de treinado, o gerador pode produzir movimentos para terrenos vistos no treinamento, mas falha em composições de tarefas não vistas (como pular sobre uma caixa e depois pular para baixo na mesma trajetória) e geometrias fora da distribuição.</span> <span class="s" data-s="b8-p0-s1">O ajuste fino com RL resolve isso.</span></p><p><span class="s" data-s="b8-p1-s0">O loop de ajuste fino tem três etapas.</span> <span class="s" data-s="b8-p1-s1">Primeira: coleta de dados com busca estruturada.</span> <span class="s" data-s="b8-p1-s2">O gerador produz 50 amostras de trajetória para cada configuração de terreno.</span> <span class="s" data-s="b8-p1-s3">O rastreador tenta executar cada trajetória em simulação e coleta recompensas.</span> <span class="s" data-s="b8-p1-s4">Segunda: treinar um crítico (value function) que estima o retorno esperado de cada trajetória.</span> <span class="s" data-s="b8-p1-s5">Terceira: atualizar o gerador com advantage-weighted regression (AWR).</span></p><p><span class="s" data-s="b8-p2-s0">AWR é um algoritmo off-policy que pesa cada amostra pela exponencial da vantagem (advantage).</span> <span class="s" data-s="b8-p2-s1">Amostras com alta vantagem (trajetórias que levaram a alto retorno) recebem peso maior no gradiente.</span> <span class="s" data-s="b8-p2-s2">Isso permite reusar dados coletados, tornando o método muito mais eficiente em amostras do que ajuste fino on-policy residual.</span></p><p><span class="s" data-s="b8-p3-s0">A busca estruturada é crítica.</span> <span class="s" data-s="b8-p3-s1">Em vez de amostragem pura do gerador, os autores usam um método de busca que varia sistematicamente as condições de entrada (velocidade, ruído) para explorar o espaço de trajetórias.</span> <span class="s" data-s="b8-p3-s2">Isso aumenta a diversidade dos dados coletados e melhora a cobertura de comportamentos úteis.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b9-t">Por que off-policy é mais eficiente?</span></h3>
+          <p><span class="s" data-s="b9-c-s0">Ajuste fino on-policy (como adicionar uma rede residual e treinar com PPO) descarta dados antigos a cada iteração.</span> <span class="s" data-s="b9-c-s1">Off-policy com AWR reutiliza todos os dados coletados, pesando-os pela vantagem.</span> <span class="s" data-s="b9-c-s2">Isso reduz drasticamente o número de rollouts necessários, especialmente importante quando cada rollout envolve simular física de contato complexa.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b10-h">Resultados: ajuste fino melhora escolha de habilidades e consistência com terreno</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Os autores testaram o ajuste fino em quatro configurações de terreno: caixas (1-2 caixas de larguras e alturas variadas), escadas (subir e descer com paredes laterais), multi-terreno (combinação de caixas, escadas e entrada de prédio realista com dois lances de escada) e terreno in-distribution (usado no treinamento original).</span></p><p><span class="s" data-s="b10-p1-s0">As três primeiras configurações são out-of-distribution: a política nunca foi treinada para pular sobre uma caixa e depois pular para baixo na mesma trajetória, larguras de caixa foram variadas, paredes foram adicionadas ao redor de escadas, e terrenos inteiramente novos (como a entrada de prédio) foram incluídos.</span></p><p><span class="s" data-s="b10-p2-s0">O ajuste fino aumentou a taxa de sucesso em até 25 pontos percentuais.</span> <span class="s" data-s="b10-p2-s1">Sucesso significa alcançar a área de objetivo sem cair e dentro do tempo limite.</span> <span class="s" data-s="b10-p2-s2">A penalidade média de contato diminuiu, mostrando melhor concordância entre terreno e trajetória.</span> <span class="s" data-s="b10-p2-s3">Mais impressionante: a escolha correta de modo (habilidade) melhorou em até 80 pontos percentuais.</span> <span class="s" data-s="b10-p2-s4">Em um terreno de escadas, a taxa de escolha correta subiu de 0% para cerca de 80%.</span></p><p><span class="s" data-s="b10-p3-s0">Modo aqui se refere à habilidade usada para atravessar o terreno: trajetória de escada, pulo sobre caixa, caminhada, etc. Os autores coletaram 50 amostras por política e por terreno, embaralharam aleatoriamente e pediram a um humano para rotular cada modo escolhido.</span> <span class="s" data-s="b10-p3-s1">Se o humano não conseguia determinar o tipo de modo, contava como incorreto.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.31577/figure3.webp" alt="Arquitetura do ajuste fino com RL: coleta de dados com busca estruturada, treinamento do crítico e atualização do gerador com AWR. O prefix encoder do transformer é congelado durante o treinamento do crítico e atualizado durante a atualização do gerador." loading="lazy">
+          <figcaption>
+            Arquitetura do ajuste fino com RL: coleta de dados com busca estruturada, treinamento do crítico e atualização do gerador com AWR. O prefix encoder do transformer é congelado durante o treinamento do crítico e atualizado durante a atualização do gerador.
+            <span class="source">Figura 3 do paper · Olkin et al., arXiv:2609.31577</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b12-h">Percepção com duas câmeras: o robô vê o que vem e ajusta a velocidade</span></h2>
+<p><span class="s" data-s="b12-p0-s0">Usar duas câmeras de profundidade permite que o robô veja terreno mais à frente e ajuste sua velocidade autonomamente.</span> <span class="s" data-s="b12-p0-s1">Os autores testaram isso comparando políticas com uma câmera versus duas câmeras em terrenos de caixas e escadas.</span></p><p><span class="s" data-s="b12-p1-s0">Com duas câmeras, a taxa de sucesso em caixas aumentou de 94% para 100% e em escadas de 76% para 88%.</span> <span class="s" data-s="b12-p1-s1">Mais importante: o robô desacelera ao se aproximar de terreno desafiador, mesmo quando comandado a manter velocidade constante.</span> <span class="s" data-s="b12-p1-s2">Isso mostra que a política aprendeu a modular velocidade com base no que vê à frente, não apenas no comando.</span></p><p><span class="s" data-s="b12-p2-s0">Esse comportamento é crítico para robustez no mundo real.</span> <span class="s" data-s="b12-p2-s1">Terrenos inesperados aparecem, e o robô precisa reagir.</span> <span class="s" data-s="b12-p2-s2">Com uma câmera, ele só vê o terreno quando está muito perto.</span> <span class="s" data-s="b12-p2-s3">Com duas câmeras, ele antecipa e ajusta.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.31577/figure6.webp" alt="Demonstração da capacidade de travessia de terreno: o robô desacelera autonomamente ao se aproximar de obstáculos, mesmo quando comandado a manter velocidade. A política mostra rastreamento preciso de velocidade em terreno plano e ajuste adaptativo em terreno complexo." loading="lazy">
+          <figcaption>
+            Demonstração da capacidade de travessia de terreno: o robô desacelera autonomamente ao se aproximar de obstáculos, mesmo quando comandado a manter velocidade. A política mostra rastreamento preciso de velocidade em terreno plano e ajuste adaptativo em terreno complexo.
+            <span class="source">Figura 6 do paper · Olkin et al., arXiv:2609.31577</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b14-h">Deployment em hardware: Unitree G1 no mundo real</span></h2>
+<p><span class="s" data-s="b14-p0-s0">As políticas foram deployadas no robô humanoide Unitree G1 em ambientes internos e externos.</span> <span class="s" data-s="b14-p0-s1">O robô subiu uma escada real de 15 degraus, incluindo transições para entrar e sair da escada.</span> <span class="s" data-s="b14-p0-s2">Pulou sobre uma caixa, caminhou sobre ela e pulou para baixo.</span> <span class="s" data-s="b14-p0-s3">Caminhou ao ar livre com curvas.</span> <span class="s" data-s="b14-p0-s4">Correu em espaços internos.</span> <span class="s" data-s="b14-p0-s5">Desceu escadas reais.</span></p><p><span class="s" data-s="b14-p1-s0">Todas essas habilidades vêm de um único par de políticas: o gerador ajustado com RL multi-terreno e o rastreador perceptivo.</span> <span class="s" data-s="b14-p1-s1">Não há troca de controlador entre habilidades.</span> <span class="s" data-s="b14-p1-s2">O gerador escolhe a trajetória apropriada com base na velocidade comandada e nas imagens de profundidade, e o rastreador executa.</span></p><p><span class="s" data-s="b14-p2-s0">Os autores reportam que as políticas criaram movimentos humanos, dinâmicos e robustos o suficiente para deployment.</span> <span class="s" data-s="b14-p2-s1">O robô foi capaz de atravessar escadas longas no mundo real, pular sobre, caminhar e pular de caixas, andar e correr.</span> <span class="s" data-s="b14-p2-s2">A arquitetura é facilmente extensível a mais habilidades, tornando-a adequada para humanoides de propósito geral.</span></p>        <h2><span class="s" data-s="b15-h">Comparação de algoritmos: AWR vence PPO em ajuste fino</span></h2>
+<p><span class="s" data-s="b15-p0-s0">Os autores compararam AWR com PPO para o ajuste fino do gerador.</span> <span class="s" data-s="b15-p0-s1">AWR superou PPO em todas as métricas: taxa de sucesso, penalidade de contato e escolha de modo.</span> <span class="s" data-s="b15-p0-s2">PPO, sendo on-policy, descarta dados antigos e precisa de muito mais rollouts para convergir.</span></p><p><span class="s" data-s="b15-p1-s0">Também testaram usar apenas o rastreador sem gerador, treinando-o diretamente com PPO para produzir ações.</span> <span class="s" data-s="b15-p1-s1">Essa abordagem falhou: a taxa de sucesso foi muito menor e a política não conseguiu generalizar para terrenos complexos.</span> <span class="s" data-s="b15-p1-s2">Isso valida a escolha da arquitetura em duas camadas.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b16-t">Números do ajuste fino</span></h3>
+          <p><span class="s" data-s="b16-c-s0">Em terreno de caixas, a taxa de sucesso subiu de 75% para 100% após ajuste fino.</span> <span class="s" data-s="b16-c-s1">Em escadas com paredes, a escolha correta de modo subiu de 0% para 80%.</span> <span class="s" data-s="b16-c-s2">A penalidade média de contato caiu em todos os terrenos, indicando trajetórias mais consistentes com a geometria.</span> <span class="s" data-s="b16-c-s3">Esses ganhos vêm de um loop off-policy simples, sem precisar retreinar do zero.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b17-h">Ablations: o que importa no pipeline de dados?</span></h2>
+<p><span class="s" data-s="b17-p0-s0">Os autores fizeram ablations para entender o que importa na criação da biblioteca de movimentos.</span> <span class="s" data-s="b17-p0-s1">Testaram usar dados humanos brutos sem otimização dinâmica, usar apenas otimização sem retargeting cinemático para múltiplas geometrias, e usar a pipeline completa.</span></p><p><span class="s" data-s="b17-p1-s0">A pipeline completa (otimização dinâmica + retargeting cinemático + variação de geometrias) teve melhor desempenho.</span> <span class="s" data-s="b17-p1-s1">Sem otimização, as trajetórias não eram fisicamente viáveis e o rastreador falhava.</span> <span class="s" data-s="b17-p1-s2">Sem retargeting para múltiplas geometrias, a política não generalizava para alturas de caixa ou degraus não vistos.</span></p><p><span class="s" data-s="b17-p2-s0">Também testaram o efeito de adicionar transições suaves entre movimentos na biblioteca.</span> <span class="s" data-s="b17-p2-s1">Transições melhoraram a taxa de sucesso em composições de tarefas (como pular sobre uma caixa e depois pular para baixo), mas não foram críticas para habilidades isoladas.</span></p>        <h2><span class="s" data-s="b18-h">Limitações: recompensas manuais, falta de semântica e escala</span></h2>
+<p><span class="s" data-s="b18-p0-s0">Os autores são honestos sobre limitações.</span> <span class="s" data-s="b18-p0-s1">O ajuste fino com RL usa recompensas desenhadas à mão.</span> <span class="s" data-s="b18-p0-s2">Embora sejam bastante gerais, podem não se estender a qualquer movimento possível.</span> <span class="s" data-s="b18-p0-s3">Usar apenas informação de profundidade limita a informação semântica: pode haver objetos em forma de caixa que não queremos pular, e a política não tem como saber.</span></p><p><span class="s" data-s="b18-p1-s0">O pipeline de dados ainda requer ajuste manual de hiperparâmetros de transição e escolha de movimentos de referência humanos, feita por heurística ou por um humano.</span> <span class="s" data-s="b18-p1-s1">Essas limitações precisam ser resolvidas antes que o método possa realmente escalar para qualquer movimento.</span></p><p><span class="s" data-s="b18-p2-s0">Finalmente, os experimentos foram feitos em um único robô (Unitree G1) e em um conjunto limitado de terrenos.</span> <span class="s" data-s="b18-p2-s1">Não está claro como o método se transfere para outros humanoides com cinemática ou dinâmica diferentes, ou para terrenos muito mais complexos como escadas em espiral, terreno irregular natural ou superfícies escorregadias.</span></p>        <h2><span class="s" data-s="b19-h">O que vem depois: busca, dados reais e autonomia</span></h2>
+<p><span class="s" data-s="b19-p0-s0">Os autores apontam direções futuras.</span> <span class="s" data-s="b19-p0-s1">Melhorar a busca no ajuste fino do gerador poderia não apenas melhorar a qualidade dos movimentos, mas também levar à descoberta de novos movimentos, similar ao trabalho em PARC.</span> <span class="s" data-s="b19-p0-s2">Mas encontrar um método de busca eficiente e estruturado será crítico.</span></p><p><span class="s" data-s="b19-p1-s0">O método proposto poderia ser estendido para aprender de dados de hardware real, permitindo que melhore com deployments reais.</span> <span class="s" data-s="b19-p1-s1">Gerar movimentos conscientes de terreno em escala usando pipeline de imitação geralmente usa dados humanos, mas os dados atuais não têm informação de terreno ground truth.</span> <span class="s" data-s="b19-p1-s2">Incluir objetos e terreno no dataset poderia tornar o problema muito mais escalável.</span></p><p><span class="s" data-s="b19-p2-s0">Desenvolver melhores métodos para transições e novos modelos para gerar movimentos conscientes de terreno offline será crítico.</span> <span class="s" data-s="b19-p2-s1">Além disso, integrar esses controladores em um stack de autonomia de navegação e adicionar segurança e desvio de obstáculos será necessário para deployment no mundo real mais amplo.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Arquitetura em duas camadas separa geração de trajetórias (4 Hz, perceptiva) e rastreamento (50 Hz), permitindo modularidade e fácil adição de novas habilidades.</span></li><li><span class="s" data-s="k1">Ajuste fino off-policy com AWR melhora escolha de habilidades em até 80 pontos percentuais e taxa de sucesso em até 25 pontos, sendo muito mais eficiente que métodos on-policy.</span></li><li><span class="s" data-s="k2">Usar duas câmeras de profundidade permite que o robô veja terreno à frente e ajuste velocidade autonomamente, sem precisar de odometria ou mapas de altura.</span></li><li><span class="s" data-s="k3">Pipeline completa vai de dados humanos a deployment real: otimização dinâmica, retargeting cinemático, treinamento de rastreador e gerador, e ajuste fino com RL estruturado.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2609.31577" rel="noopener">Generate, Track, Improve: Perceptive Multi-Skill Humanoid Locomotion with RL-Fine-Tuned Motion Generators</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2609.31577" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

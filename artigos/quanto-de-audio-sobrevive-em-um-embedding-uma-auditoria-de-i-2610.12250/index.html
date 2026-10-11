@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quanto de áudio sobrevive em um embedding? Uma auditoria de inversão de encoders de áudio — arXiv em 5</title>
+<meta name="description" content="Pesquisadores da NYU reconstroem música a partir de embeddings congelados de diferentes encoders de áudio para medir quanta informação da gravação original sobrevive em representações comprimidas.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Quanto de áudio sobrevive em um embedding? Uma auditoria de inversão de encoders de áudio">
+<meta property="og:description" content="Pesquisadores da NYU reconstroem música a partir de embeddings congelados de diferentes encoders de áudio para medir quanta informação da gravação original sobrevive em representações comprimidas.">
+<meta property="og:image" content="../../assets/papers/2610.12250/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Áudio</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.12250" rel="noopener">arXiv:2610.12250</a>
+    </div>
+    <h1><span class="s" data-s="t">Quanto de áudio sobrevive em um embedding? Uma auditoria de inversão de encoders de áudio</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Pesquisadores da NYU reconstroem música a partir de embeddings congelados de diferentes encoders de áudio para medir quanta informação da gravação original sobrevive em representações comprimidas.</span></p>
+    <p class="byline">
+      <span>Glytsos et al.</span>
+      <span>9 min de leitura</span>
+<span>08/10/2026</span>    </p>
+    <div class="listen" data-article="2610.12250" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=A_dKNLdEeI8" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema da caixa-preta</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Encoders de áudio pré-treinados viraram peças de Lego da inteligência artificial: você pega um modelo treinado para uma tarefa, congela seus pesos e reutiliza suas representações em problemas completamente diferentes.</span> <span class="s" data-s="b0-p0-s1">VGGish classifica sons, CLAP alinha áudio com texto, EnCodec comprime formas de onda.</span> <span class="s" data-s="b0-p0-s2">Mas o que exatamente sobrevive dentro desses embeddings?</span> <span class="s" data-s="b0-p0-s3">Quanta informação da gravação original ainda está lá, acessível, mesmo que o modelo não tenha sido treinado para preservá-la?</span></p><p><span class="s" data-s="b0-p1-s0">A pergunta importa por dois motivos práticos.</span> <span class="s" data-s="b0-p1-s1">Primeiro, quando você reutiliza um encoder em uma tarefa desconhecida durante o treinamento, precisa saber quais propriedades do sinal ele consegue carregar.</span> <span class="s" data-s="b0-p1-s2">Segundo, em contextos sensíveis — licenciamento musical, privacidade — é comum distribuir embeddings em vez do áudio original.</span> <span class="s" data-s="b0-p1-s3">A suposição implícita é que a representação abstrai o suficiente para proteger a fonte.</span> <span class="s" data-s="b0-p1-s4">Mas será?</span></p><p><span class="s" data-s="b0-p2-s0">Marios Glytsos e Brian McFee, do Music and Audio Research Laboratory da New York University, propõem uma auditoria de inversão: treinar um decoder para reconstruir a gravação original a partir do embedding congelado.</span> <span class="s" data-s="b0-p2-s1">Se a reconstrução funciona, é evidência de que informação específica da fonte sobreviveu.</span> <span class="s" data-s="b0-p2-s2">Se falha, pode ser limitação do decoder — mas já diz algo sobre o que é acessível.</span></p>        <h2><span class="s" data-s="b1-h">Quatro encoders, três objetivos de treinamento</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Os autores comparam quatro encoders representativos.</span> <span class="s" data-s="b1-p0-s1">VGGish é um classificador clássico, treinado no AudioSet há anos e ainda amplamente usado como baseline.</span> <span class="s" data-s="b1-p0-s2">ConvNeXt é um classificador mais recente, também treinado no AudioSet, que virou representação de propósito geral.</span> <span class="s" data-s="b1-p0-s3">CLAP é um modelo contrastivo audio-texto, treinado para alinhar embeddings de áudio e linguagem.</span> <span class="s" data-s="b1-p0-s4">EnCodec é um codec neural, treinado explicitamente para reconstruir formas de onda com alta fidelidade.</span></p><p><span class="s" data-s="b1-p1-s0">Esses objetivos de treinamento impõem pressões diferentes sobre o que preservar.</span> <span class="s" data-s="b1-p1-s1">Classificação recompensa informação discriminativa: o modelo precisa separar classes, não necessariamente guardar detalhes locais do sinal.</span> <span class="s" data-s="b1-p1-s2">Aprendizado contrastivo enfatiza semântica alinhada com linguagem: o embedding deve capturar o que pode ser descrito em palavras.</span> <span class="s" data-s="b1-p1-s3">Reconstrução exige detalhe local: pitch, timbre, ritmo, estrutura temporal fina.</span></p><p><span class="s" data-s="b1-p2-s0">As interfaces expostas também variam drasticamente.</span> <span class="s" data-s="b1-p2-s1">VGGish produz um único vetor de 128 dimensões para cada clipe de áudio.</span> <span class="s" data-s="b1-p2-s2">ConvNeXt expõe 2048 dimensões por clipe.</span> <span class="s" data-s="b1-p2-s3">CLAP gera 512 dimensões.</span> <span class="s" data-s="b1-p2-s4">EnCodec, por outro lado, produz uma sequência densa de 128 tokens por segundo, cada um com 128 dimensões — uma representação muito mais rica em resolução temporal.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.12250/table1.webp" alt="Interfaces dos encoders testados para um clipe de 5 segundos. EnCodec expõe 640 tokens de condicionamento; os demais produzem vetores únicos ou sequências curtas. A resolução temporal e a dimensionalidade variam em ordens de grandeza." loading="lazy">
+          <figcaption>
+            Interfaces dos encoders testados para um clipe de 5 segundos. EnCodec expõe 640 tokens de condicionamento; os demais produzem vetores únicos ou sequências curtas. A resolução temporal e a dimensionalidade variam em ordens de grandeza.
+            <span class="source">Tabela 1 do paper · Glytsos et al., arXiv:2610.12250</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Reconstrução como auditoria padronizada</span></h2>
+<p><span class="s" data-s="b3-p0-s0">A ideia central é treinar um decoder condicional que recebe o embedding e tenta gerar o áudio original correspondente.</span> <span class="s" data-s="b3-p0-s1">Como o encoder não precisa ser injetivo — múltiplas entradas podem produzir o mesmo embedding — inversão determinística exata nem sempre está bem definida.</span> <span class="s" data-s="b3-p0-s2">Por isso, um decoder generativo condicional faz sentido: ele usa o embedding para estrutura preservada e recorre a um prior aprendido de áudio para detalhes ambíguos.</span></p><p><span class="s" data-s="b3-p1-s0">Os autores escolheram usar o Stable Audio Open, um modelo de difusão latente pré-treinado para sintetizar áudio a partir de condicionamento textual altamente abstrato.</span> <span class="s" data-s="b3-p1-s1">Esse decoder já tem um prior expressivo sobre como áudio natural soa, o que o torna uma sonda forte para investigar o que um embedding consegue suportar.</span> <span class="s" data-s="b3-p1-s2">Importante: não é um ataque adaptativo de pior caso.</span> <span class="s" data-s="b3-p1-s3">Não tentam explorar a estrutura específica de cada encoder para extrair o máximo de informação.</span> <span class="s" data-s="b3-p1-s4">É uma auditoria padronizada, que permite comparações justas entre representações.</span></p><p><span class="s" data-s="b3-p2-s0">O procedimento é o seguinte: congelam o encoder, pegam o embedding de um clipe de 5 segundos de música estéreo a 44.1 kHz, e treinam o decoder do Stable Audio Open para reconstruir o áudio original a partir desse embedding.</span> <span class="s" data-s="b3-p2-s1">O decoder já vem com um autoencoder variacional (VAE) que comprime áudio para um espaço latente; o modelo de difusão opera nesse espaço.</span> <span class="s" data-s="b3-p2-s2">Os autores adaptam o mecanismo de condicionamento do decoder para aceitar os embeddings dos encoders testados, mantendo o resto da arquitetura congelada.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b4-t">Por que música?</span></h3>
+          <p><span class="s" data-s="b4-c-s0">Reconstruir uma gravação musical exige preservar pitch fino, timbre, ritmo e estrutura temporal — um teste exigente de quanta informação da fonte sobrevive.</span> <span class="s" data-s="b4-c-s1">Música também é relevante na prática: restrições de licenciamento motivam compartilhar representações derivadas em vez de gravações originais.</span> <span class="s" data-s="b4-c-s2">E música instrumental já está dentro do domínio do decoder pré-treinado, reduzindo o deslocamento de distribuição.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b5-h">Testando no Million Song Dataset</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os experimentos usam o Million Song Dataset (MSD), uma coleção massiva de metadados e características de áudio de um milhão de músicas contemporâneas.</span> <span class="s" data-s="b5-p0-s1">Os autores treinam os decoders em clipes de 5 segundos extraídos desse conjunto e avaliam em um conjunto de teste separado.</span></p><p><span class="s" data-s="b5-p1-s0">A avaliação combina métricas objetivas e subjetivas.</span> <span class="s" data-s="b5-p1-s1">Para qualidade perceptual, usam o ViSQOL, que estima a qualidade de áudio percebida.</span> <span class="s" data-s="b5-p1-s2">Para similaridade espectral, calculam distâncias de Fréchet no espaço latente do próprio VAE do Stable Audio Open e também no espaço de um encoder PANNs treinado no AudioSet.</span> <span class="s" data-s="b5-p1-s3">Para verificar se a reconstrução preserva identidade da fonte, fazem recuperação pareada: dado o áudio reconstruído, conseguem encontrar o áudio original entre milhares de candidatos?</span> <span class="s" data-s="b5-p1-s4">Medem recall@1 e recall@10.</span></p><p><span class="s" data-s="b5-p2-s0">Também avaliam se características musicais de alto nível sobrevivem.</span> <span class="s" data-s="b5-p2-s1">Usam o MusicNN, um tagger automático de música, para extrair as 10 tags principais do áudio original e da reconstrução, e medem a sobreposição.</span> <span class="s" data-s="b5-p2-s2">Isso captura se gênero, instrumentação e mood são preservados, mesmo que detalhes espectrais mudem.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.12250/table2.webp" alt="Métricas de reconstrução no conjunto de teste do MSD. EnCodec nativo usa seu decoder original. EnCodec com o decoder compartilhado já supera todos os outros encoders em quase todas as métricas. VGGish e ConvNeXt ficam atrás, mas ainda preservam identidade mensurável." loading="lazy">
+          <figcaption>
+            Métricas de reconstrução no conjunto de teste do MSD. EnCodec nativo usa seu decoder original. EnCodec com o decoder compartilhado já supera todos os outros encoders em quase todas as métricas. VGGish e ConvNeXt ficam atrás, mas ainda preservam identidade mensurável.
+            <span class="source">Tabela 2 do paper · Glytsos et al., arXiv:2610.12250</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Diferenças claras entre famílias de encoders</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Os resultados mostram diferenças nítidas.</span> <span class="s" data-s="b7-p0-s1">EnCodec, treinado para reconstrução, permite recuperação muito superior em todas as métricas.</span> <span class="s" data-s="b7-p0-s2">Usando seu decoder nativo, atinge ViSQOL de 3.91 (em uma escala onde 5 é transparente).</span> <span class="s" data-s="b7-p0-s3">Mesmo usando o decoder compartilhado do Stable Audio Open, EnCodec alcança ViSQOL de 3.02, muito acima dos classificadores.</span></p><p><span class="s" data-s="b7-p1-s0">VGGish e ConvNeXt, ambos treinados para classificação no AudioSet, ficam atrás.</span> <span class="s" data-s="b7-p1-s1">VGGish atinge ViSQOL de 1.86, ConvNeXt 2.06.</span> <span class="s" data-s="b7-p1-s2">CLAP, o modelo contrastivo, fica em 2.23.</span> <span class="s" data-s="b7-p1-s3">As diferenças são consistentes em distâncias de Fréchet: EnCodec produz reconstruções muito mais próximas do original no espaço latente do VAE e no espaço do PANNs.</span></p><p><span class="s" data-s="b7-p2-s0">Mas mesmo os embeddings altamente comprimidos e orientados a tarefas preservam especificidade mensurável da fonte.</span> <span class="s" data-s="b7-p2-s1">VGGish, com apenas 128 dimensões por clipe, ainda permite recall@1 de 0.34: em 34% dos casos, a reconstrução é suficientemente específica para recuperar o áudio original entre milhares de candidatos.</span> <span class="s" data-s="b7-p2-s2">ConvNeXt atinge 0.50, CLAP 0.59, EnCodec 0.81.</span> <span class="s" data-s="b7-p2-s3">Nenhum deles foi treinado para preservar identidade da gravação, mas a informação está lá.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.12250/figure2.webp" alt="Distribuição de similaridade cosseno entre fonte original e reconstrução no espaço latente do VAE. EnCodec produz reconstruções muito mais próximas do original que os outros encoders. A linha pontilhada mostra similaridade entre pares de fontes distintas aleatórias." loading="lazy">
+          <figcaption>
+            Distribuição de similaridade cosseno entre fonte original e reconstrução no espaço latente do VAE. EnCodec produz reconstruções muito mais próximas do original que os outros encoders. A linha pontilhada mostra similaridade entre pares de fontes distintas aleatórias.
+            <span class="source">Figura 2 do paper · Glytsos et al., arXiv:2610.12250</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Resolução temporal e espectral importam</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Dentro de cada família de encoder, os autores observam que expor estrutura temporal ou espectral mais fina melhora consistentemente a recuperação.</span> <span class="s" data-s="b9-p0-s1">EnCodec expõe 640 tokens de condicionamento para um clipe de 5 segundos — 128 tokens por segundo.</span> <span class="s" data-s="b9-p0-s2">VGGish, ConvNeXt e CLAP expõem vetores únicos ou sequências muito curtas.</span></p><p><span class="s" data-s="b9-p1-s0">Essa diferença na interface não é apenas sobre dimensionalidade total.</span> <span class="s" data-s="b9-p1-s1">É sobre granularidade: EnCodec permite que o decoder acesse informação localizada no tempo, frame a frame.</span> <span class="s" data-s="b9-p1-s2">Os classificadores colapsam toda a informação em um vetor global, perdendo estrutura temporal fina.</span> <span class="s" data-s="b9-p1-s3">Mesmo que esse vetor tenha milhares de dimensões, ele não pode dizer ao decoder o que acontece em cada instante.</span></p><p><span class="s" data-s="b9-p2-s0">Os autores não testam variantes com resolução intermediária no mesmo encoder, mas a comparação entre encoders sugere fortemente que interfaces mais ricas em resolução temporal facilitam a reconstrução.</span> <span class="s" data-s="b9-p2-s1">Isso tem implicações para o design de representações: se você quer reutilizar um encoder em tarefas que exigem estrutura temporal, vale a pena expor sequências em vez de vetores globais.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.12250/figure1.webp" alt="Espectrogramas de uma faixa do MTG-Jamendo: original e reconstruções usando as interfaces padrão de cada encoder. EnCodec preserva muito mais estrutura espectral fina; os classificadores perdem detalhes de alta frequência e textura temporal." loading="lazy">
+          <figcaption>
+            Espectrogramas de uma faixa do MTG-Jamendo: original e reconstruções usando as interfaces padrão de cada encoder. EnCodec preserva muito mais estrutura espectral fina; os classificadores perdem detalhes de alta frequência e textura temporal.
+            <span class="source">Figura 1 do paper · Glytsos et al., arXiv:2610.12250</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b11-h">Conteúdo musical de alto nível sobrevive</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Mesmo quando a qualidade perceptual cai, características musicais de alto nível são preservadas.</span> <span class="s" data-s="b11-p0-s1">A métrica de sobreposição de tags do MusicNN mostra que VGGish atinge 0.49, ConvNeXt 0.53, CLAP 0.56, EnCodec 0.64.</span> <span class="s" data-s="b11-p0-s2">Isso significa que cerca de metade das 10 tags principais — gênero, instrumentação, mood — são compartilhadas entre original e reconstrução, mesmo para os classificadores comprimidos.</span></p><p><span class="s" data-s="b11-p1-s0">Isso faz sentido: esses modelos foram treinados para capturar exatamente esse tipo de informação semântica.</span> <span class="s" data-s="b11-p1-s1">VGGish e ConvNeXt aprenderam a discriminar entre classes de som; CLAP aprendeu a alinhar áudio com descrições textuais.</span> <span class="s" data-s="b11-p1-s2">Gênero, instrumentos e mood são discriminativos e descritíveis.</span> <span class="s" data-s="b11-p1-s3">O que eles perdem é detalhe espectral fino, textura temporal, nuances de timbre — informação que não era necessária para suas tarefas de treinamento.</span></p><p><span class="s" data-s="b11-p2-s0">Mas o fato de que essa informação de alto nível sobrevive tem implicações.</span> <span class="s" data-s="b11-p2-s1">Se você compartilha um embedding de VGGish em vez do áudio original, achando que está protegendo a fonte, um adversário ainda pode reconstruir algo que soa como a mesma música, no mesmo gênero, com instrumentação similar.</span> <span class="s" data-s="b11-p2-s2">Não será uma cópia perfeita, mas pode ser suficiente para violar privacidade ou direitos autorais em alguns contextos.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b12-t">Não é o pior caso</span></h3>
+          <p><span class="s" data-s="b12-c-s0">A auditoria usa um decoder padronizado, não um ataque adaptativo.</span> <span class="s" data-s="b12-c-s1">Inversões que exploram a estrutura específica de cada encoder podem recuperar ainda mais informação.</span> <span class="s" data-s="b12-c-s2">Os resultados aqui são um limite inferior do que é reconstruível, não um limite superior.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b13-h">O que o paper não mostra</span></h2>
+<p><span class="s" data-s="b13-p0-s0">Os autores são claros sobre o escopo.</span> <span class="s" data-s="b13-p0-s1">Primeiro, focam em música.</span> <span class="s" data-s="b13-p0-s2">Música instrumental já está dentro do domínio do decoder pré-treinado, o que reduz o deslocamento de distribuição.</span> <span class="s" data-s="b13-p0-s3">Fala, sons ambientes, áudio de vídeo podem se comportar diferente.</span> <span class="s" data-s="b13-p0-s4">Segundo, usam um decoder específico, o Stable Audio Open.</span> <span class="s" data-s="b13-p0-s5">Decoders mais fortes, ou decoders treinados especificamente para cada encoder, podem recuperar mais informação.</span></p><p><span class="s" data-s="b13-p1-s0">Terceiro, não medem vazamento de privacidade diretamente.</span> <span class="s" data-s="b13-p1-s1">Mostram que reconstrução é possível, mas não quantificam o risco em aplicações específicas.</span> <span class="s" data-s="b13-p1-s2">Se você compartilha embeddings de conversas privadas, o risco pode ser diferente do que compartilhar embeddings de música licenciada.</span> <span class="s" data-s="b13-p1-s3">Quarto, não exploram o espaço completo de encoders.</span> <span class="s" data-s="b13-p1-s4">Há muitos outros modelos, muitas outras arquiteturas, muitos outros objetivos de treinamento.</span></p><p><span class="s" data-s="b13-p2-s0">Quinto, a auditoria é passiva: treina um decoder em pares fonte-embedding, mas não tenta ataques adversariais ativos.</span> <span class="s" data-s="b13-p2-s1">Um adversário com acesso ao encoder pode gerar embeddings sintéticos, explorar gradientes, ou usar técnicas de inversão de modelo mais sofisticadas.</span> <span class="s" data-s="b13-p2-s2">Os resultados aqui são um piso, não um teto, do que é reconstruível.</span></p>        <h2><span class="s" data-s="b14-h">Utilidade downstream não revela o que sobrevive</span></h2>
+<p><span class="s" data-s="b14-p0-s0">O ponto central do paper é que utilidade downstream não diz tudo.</span> <span class="s" data-s="b14-p0-s1">VGGish é útil para classificação de áudio, CLAP é útil para busca audio-texto, mas nenhum deles foi avaliado quanto a quanta informação da fonte eles carregam além do necessário para suas tarefas.</span> <span class="s" data-s="b14-p0-s2">A auditoria de inversão revela essa informação residual.</span></p><p><span class="s" data-s="b14-p1-s0">Isso importa para duas comunidades.</span> <span class="s" data-s="b14-p1-s1">Para quem projeta encoders e quer reutilizá-los, saber o que sobrevive ajuda a escolher a representação certa para cada tarefa.</span> <span class="s" data-s="b14-p1-s2">Para quem compartilha embeddings em vez de áudio, saber o que é reconstruível ajuda a avaliar riscos de privacidade e direitos autorais.</span> <span class="s" data-s="b14-p1-s3">A abstração não é proteção automática.</span></p><p><span class="s" data-s="b14-p2-s0">Os autores sugerem que trabalho futuro deve estender a análise além de música, para famílias mais amplas de encoders e medidas mais diretas de vazamento de privacidade.</span> <span class="s" data-s="b14-p2-s1">Mas o método — auditoria de inversão com decoder padronizado — é geral e pode ser aplicado a qualquer encoder de áudio.</span> <span class="s" data-s="b14-p2-s2">É uma ferramenta de diagnóstico, não uma solução, mas uma ferramenta útil.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Embeddings de classificação (VGGish, ConvNeXt) e contrastivos (CLAP) preservam informação suficiente para reconstruir características musicais de alto nível, mesmo sendo altamente comprimidos.</span></li><li><span class="s" data-s="k1">EnCodec, treinado para reconstrução, permite recuperar muito mais detalhes da fonte original que modelos orientados a tarefas específicas.</span></li><li><span class="s" data-s="k2">Maior resolução temporal ou espectral na interface do encoder melhora consistentemente a qualidade da reconstrução.</span></li><li><span class="s" data-s="k3">A auditoria padronizada não busca o pior caso: reconstruções adaptativas podem extrair ainda mais informação dos embeddings.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.12250" rel="noopener">How Much Audio Is Left In An Embedding? An Inversion Audit Of Audio Encoders</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.12250" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

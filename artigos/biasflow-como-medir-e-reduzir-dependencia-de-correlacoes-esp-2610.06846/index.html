@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BiasFlow: como medir e reduzir dependência de correlações espúrias em redes neurais — e por que WGA não basta — arXiv em 5</title>
+<meta name="description" content="BiasFlow propõe métricas geométricas e uma penalidade de regularização para diminuir a dependência de atributos espúrios em classificadores visuais, mas mostra que melhorar worst-group accuracy não garante que a representação aprendida resista ao retreinamento enviesado.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BiasFlow: como medir e reduzir dependência de correlações espúrias em redes neurais — e por que WGA não basta">
+<meta property="og:description" content="BiasFlow propõe métricas geométricas e uma penalidade de regularização para diminuir a dependência de atributos espúrios em classificadores visuais, mas mostra que melhorar worst-group accuracy não garante que a representação aprendida resista ao retreinamento enviesado.">
+<meta property="og:image" content="../../assets/papers/2610.06846/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Redes neurais</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.06846" rel="noopener">arXiv:2610.06846</a>
+    </div>
+    <h1><span class="s" data-s="t">BiasFlow: como medir e reduzir dependência de correlações espúrias em redes neurais — e por que WGA não basta</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">BiasFlow propõe métricas geométricas e uma penalidade de regularização para diminuir a dependência de atributos espúrios em classificadores visuais, mas mostra que melhorar worst-group accuracy não garante que a representação aprendida resista ao retreinamento enviesado.</span></p>
+    <p class="byline">
+      <span>Deng et al.</span>
+      <span>11 min de leitura</span>
+<span>05/10/2026</span>    </p>
+    <div class="listen" data-article="2610.06846" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema: correlações espúrias e a ilusão de robustez</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Redes neurais treinadas com Empirical Risk Minimization (ERM) — o método padrão que minimiza o erro médio — costumam explorar correlações espúrias: atributos irrelevantes para a tarefa que aparecem junto com o rótulo nos dados de treino.</span> <span class="s" data-s="b0-p0-s1">Um exemplo clássico é o dataset CelebA, onde o atributo &#39;cabelo loiro&#39; correlaciona fortemente com &#39;gênero feminino&#39;.</span> <span class="s" data-s="b0-p0-s2">Um classificador pode aprender a prever &#39;cabelo loiro&#39; usando &#39;gênero&#39; como atalho, falhando quando essa correlação muda no mundo real.</span></p><p><span class="s" data-s="b0-p1-s0">A métrica mais usada para avaliar esse problema é a Worst-Group Accuracy (WGA): a acurácia mínima entre todos os grupos definidos pelo cruzamento de classe e atributo espúrio.</span> <span class="s" data-s="b0-p1-s1">Métodos como GroupDRO, LfF, JTT e DFR reportam ganhos expressivos em WGA.</span> <span class="s" data-s="b0-p1-s2">Mas os autores deste paper fazem uma pergunta incômoda: WGA alta significa que o modelo realmente parou de depender do atributo espúrio, ou apenas que o classificador final (a última camada) compensa o viés codificado nas camadas anteriores?</span></p><p><span class="s" data-s="b0-p2-s0">A distinção é importante.</span> <span class="s" data-s="b0-p2-s1">Se a representação interna — o backbone congelado — ainda codifica o atributo espúrio de forma separável, um novo classificador treinado sobre ela pode voltar a explorar o atalho.</span> <span class="s" data-s="b0-p2-s2">DFR já mostrou que retreinar apenas a última camada com dados balanceados melhora WGA sem alterar o backbone.</span> <span class="s" data-s="b0-p2-s3">Mas o que acontece se retreinarmos a cabeça com dados enviesados, como os originais?</span> <span class="s" data-s="b0-p2-s4">O backbone resiste ou volta a permitir exploração?</span></p>        <h2><span class="s" data-s="b1-h">A proposta: BiasFlow e suas duas faces</span></h2>
+<p><span class="s" data-s="b1-p0-s0">BiasFlow é um toolkit que combina diagnóstico geométrico e regularização.</span> <span class="s" data-s="b1-p0-s1">A parte de diagnóstico introduz duas métricas: IBMI (Inter-class Bias-alignment Metric Index) e W-IBMI (Within-class IBMI).</span> <span class="s" data-s="b1-p0-s2">IBMI mede o alinhamento dos centróides de classe com a direção média do atributo espúrio no espaço de features.</span> <span class="s" data-s="b1-p0-s3">Um IBMI alto indica que as classes estão organizadas ao longo do eixo do atributo — mas isso pode acontecer simplesmente porque a composição das classes já está correlacionada com o atributo, sem que o modelo tenha aprendido a usá-lo causalmente.</span></p><p><span class="s" data-s="b1-p1-s0">Por isso, os autores propõem W-IBMI, que mede a separação dos centróides de subgrupos dentro de cada classe.</span> <span class="s" data-s="b1-p1-s1">Se, para uma mesma classe, os exemplos com e sem o atributo espúrio formam centróides distantes, isso indica que o backbone codifica o atributo de forma separável dentro da classe.</span> <span class="s" data-s="b1-p1-s2">W-IBMI é sensível à escala das features e não estabelece, por si só, que o atributo foi removido — mas verifica se a quantidade que a regularização otimiza de fato diminuiu.</span></p><p><span class="s" data-s="b1-p2-s0">A segunda parte é BiasFlow Regularization (BFR), uma penalidade supervisionada que força os centróides de subgrupos dentro de cada classe a se alinharem.</span> <span class="s" data-s="b1-p2-s1">BFR usa as anotações de atributo espúrio durante o treino e adiciona um termo de perda que minimiza a distância entre os centróides condicionais de cada classe.</span> <span class="s" data-s="b1-p2-s2">O hiperparâmetro λ controla a força da penalidade; o paper usa λ=20 por padrão e λ=1 para JTT, que já aplica upweighting agressivo de 50× nas amostras raras.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.06846/figure1.webp" alt="t-SNE das features de um ResNet-18 no CelebA. À esquerda, o baseline ERM separa subgrupos dentro de cada classe (cores = classe+gênero). À direita, BFR aproxima os centróides, mas essa mistura bidimensional não prova remoção causal do atributo." loading="lazy">
+          <figcaption>
+            t-SNE das features de um ResNet-18 no CelebA. À esquerda, o baseline ERM separa subgrupos dentro de cada classe (cores = classe+gênero). À direita, BFR aproxima os centróides, mas essa mistura bidimensional não prova remoção causal do atributo.
+            <span class="source">Figura 1 do paper · Deng et al., arXiv:2610.06846</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Como funciona a regularização BFR</span></h2>
+<p><span class="s" data-s="b3-p0-s0">BFR calcula, para cada classe, os centróides das features dos exemplos com e sem o atributo espúrio.</span> <span class="s" data-s="b3-p0-s1">A penalidade é a distância euclidiana entre esses centróides, somada sobre todas as classes.</span> <span class="s" data-s="b3-p0-s2">Durante o treino, o modelo é incentivado a produzir representações onde subgrupos de uma mesma classe fiquem próximos no espaço de features, independentemente do valor do atributo.</span></p><p><span class="s" data-s="b3-p1-s0">Os centróides são estimados com uma média móvel exponencial (EMA) com α=0.9, para estabilizar o cálculo ao longo dos minibatches.</span> <span class="s" data-s="b3-p1-s1">A regularização tem um warmup de cinco épocas por padrão, e o toolkit permite configurar rampas e paradas fracionais.</span> <span class="s" data-s="b3-p1-s2">A implementação usa hooks do PyTorch para monitorar as features intermediárias sem modificar a arquitetura do modelo.</span></p><p><span class="s" data-s="b3-p2-s0">BFR é supervisionado: exige anotações de atributo espúrio no treino, assim como GroupDRO.</span> <span class="s" data-s="b3-p2-s1">Isso o coloca em desvantagem frente a métodos não supervisionados como LfF ou JTT, que tentam descobrir o viés automaticamente.</span> <span class="s" data-s="b3-p2-s2">Mas a supervisão permite um controle geométrico direto, e os autores argumentam que a comparação justa é com outros métodos supervisionados, não com baselines que operam sob restrições diferentes.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b4-t">IBMI não é medida causal</span></h3>
+          <p><span class="s" data-s="b4-c-s0">IBMI mede alinhamento entre centróides de classe e a direção do atributo espúrio, mas pode ser alto mesmo sem que o modelo use o atributo causalmente.</span> <span class="s" data-s="b4-c-s1">A composição de classe já induz correlação.</span> <span class="s" data-s="b4-c-s2">W-IBMI é mais informativo porque mede separação dentro de cada classe, mas ainda depende da escala das features e não estabelece remoção completa do atributo.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b5-h">Resultados: WGA melhora, mas o backbone resiste?</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os experimentos cobrem CelebA-Std (Blond Hair/Male, ResNet-18 e ResNet-50), CelebA-MB (Smiling com dois atributos espúrios, Male e Young), UrbanCars (urbano/rural com fundo e objetos correlacionados) e Waterbirds (tipo de pássaro/fundo).</span> <span class="s" data-s="b5-p0-s1">Cada configuração roda com três seeds, e a seleção de checkpoint usa WGA de validação para CelebA-Std, mas acurácia média para CelebA-MB e UrbanCars — uma inconsistência que os autores reconhecem e preservam, mas que dificulta comparações diretas.</span></p><p><span class="s" data-s="b5-p1-s0">No CelebA-Std ResNet-18, BFR+ERM melhora WGA de 47.3% para 70.8% (+23.5 pontos percentuais).</span> <span class="s" data-s="b5-p1-s1">BFR+LfF sobe de 78.9% para 81.2% (+2.3 pp), BFR+DFR de 81.2% para 88.9% (+7.7 pp), e BFR+GroupDRO de 86.3% para 88.3% (+2.0 pp).</span> <span class="s" data-s="b5-p1-s2">No ResNet-50, os ganhos são menores mas consistentes: BFR+LfF +6.7 pp, BFR+DFR +4.1 pp.</span> <span class="s" data-s="b5-p1-s3">GroupDRO atinge 88.5%, abaixo dos 90.4% reportados por HierDRO em outro trabalho — uma diferença de implementação que os autores documentam.</span></p><p><span class="s" data-s="b5-p2-s0">UrbanCars mostra o maior ganho: BFR+ERM salta de 35.7% para 61.7% (+26.0 pp).</span> <span class="s" data-s="b5-p2-s1">Waterbirds tem ganhos positivos, mas BFR+JTT é praticamente neutro (80.9% vs 80.8%).</span> <span class="s" data-s="b5-p2-s2">No CelebA-MB, BFR+GroupDRO adiciona +12.5 pp sobre GroupDRO sozinho.</span> <span class="s" data-s="b5-p2-s3">Os autores enfatizam que esses ganhos descrevem as pipelines testadas, não uma garantia universal de melhoria.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.06846/figure4.webp" alt="Evolução de IBMI e W-IBMI durante o treino no CelebA. IBMI pode subir (artefato de rotação do eixo espúrio), mas W-IBMI cai, mostrando que BFR de fato reduz a separação de centróides dentro de cada classe — a quantidade que a penalidade otimiza." loading="lazy">
+          <figcaption>
+            Evolução de IBMI e W-IBMI durante o treino no CelebA. IBMI pode subir (artefato de rotação do eixo espúrio), mas W-IBMI cai, mostrando que BFR de fato reduz a separação de centróides dentro de cada classe — a quantidade que a penalidade otimiza.
+            <span class="source">Figura 4 do paper · Deng et al., arXiv:2610.06846</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">O teste de estresse: retreinar a cabeça com dados enviesados</span></h2>
+<p><span class="s" data-s="b7-p0-s0">O experimento mais revelador congela o backbone e retreina apenas a última camada (a &#39;cabeça&#39;) com dados enviesados, simulando o cenário onde um modelo pré-treinado é adaptado a uma nova tarefa com viés.</span> <span class="s" data-s="b7-p0-s1">No CelebA-Std, GroupDRO atinge 86.3% WGA end-to-end, mas quando sua representação congelada recebe uma nova cabeça treinada com dados enviesados, a WGA cai para 40.7% — quase igual ao ERM puro (40.0%).</span> <span class="s" data-s="b7-p0-s2">Isso indica que o backbone de GroupDRO ainda codifica o atributo Male de forma explorável.</span></p><p><span class="s" data-s="b7-p1-s0">Aplicar BFR+GroupDRO melhora esse cenário: a WGA sob retreinamento enviesado sobe de 40.7% para 64.1%.</span> <span class="s" data-s="b7-p1-s1">Simultaneamente, a acurácia de um probe linear para o atributo Male cai de 92.5% para 72.2%.</span> <span class="s" data-s="b7-p1-s2">Esses são dois fatos distintos: a nova cabeça enviesada tem desempenho melhor, e um probe separado ainda consegue recuperar o atributo, embora com mais dificuldade.</span> <span class="s" data-s="b7-p1-s3">Nenhum dos dois estabelece que a cabeça original de GroupDRO usava Male causalmente — mas juntos sugerem que BFR torna a representação mais resistente à exploração por um novo classificador enviesado.</span></p><p><span class="s" data-s="b7-p2-s0">Os autores são explícitos: &#39;Attribute information remains recoverable, and cross-task results are mixed.&#39; A informação do atributo não foi apagada; ela apenas ficou menos separável linearmente.</span> <span class="s" data-s="b7-p2-s1">Isso é consistente com a literatura de concept erasure, que mostra que remover direções lineares raramente elimina completamente a informação de um conceito em redes profundas.</span></p>        <h2><span class="s" data-s="b8-h">Auditoria geométrica: IBMI não garante descontaminação</span></h2>
+<p><span class="s" data-s="b8-p0-s0">A auditoria de IBMI nos backbones treinados revela que nenhum método de saída (output-level) reduz sistematicamente o IBMI abaixo do ERM.</span> <span class="s" data-s="b8-p0-s1">Pior: LfF e DebiAN frequentemente aumentam o IBMI.</span> <span class="s" data-s="b8-p0-s2">No CelebA ResNet-50, LfF tem IBMI de 0.881 e DebiAN de 0.896, contra 0.559 do ERM.</span> <span class="s" data-s="b8-p0-s3">Isso não significa que LfF e DebiAN pioraram o modelo — significa que o alinhamento dos centróides de classe com o eixo do atributo aumentou, possivelmente porque a composição de classe mudou durante o treino.</span></p><p><span class="s" data-s="b8-p1-s0">JTT mostra IBMI muito baixo em Waterbirds (0.060 vs 0.357 do ERM) e CelebA-MB (0.013 vs 0.274).</span> <span class="s" data-s="b8-p1-s1">Os autores resistem à tentação de interpretar isso como evidência de que JTT remove o atributo: &#39;These are dataset-specific alignment outcomes, not anomalies to discard or evidence that JTT universally removes attribute information.&#39; Sem eixos controlados ou intervenções causais, IBMI é apenas uma medida observacional.</span></p><p><span class="s" data-s="b8-p2-s0">A confusão sobre DFR merece nota: a versão inicial do paper afirmava que a linha DFR na tabela de IBMI seria idêntica ao ERM por construção, já que DFR congela o backbone de ERM.</span> <span class="s" data-s="b8-p2-s1">Mas a implementação salva na verdade treina DFR do zero em seu primeiro estágio, então os valores de IBMI diferem (0.404 ERM vs 0.502 DFR no CelebA-R18).</span> <span class="s" data-s="b8-p2-s2">Os autores corrigiram a afirmação, documentaram a fonte da discrepância e mantiveram os números — um exemplo de transparência metodológica rara.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.06846/figure5.webp" alt="t-SNE no CelebA-MB, onde há dois atributos espúrios (Male e Young). Cor codifica classe+Male, forma codifica Young. BFR mistura subgrupos dentro de cada classe, mas a mistura bidimensional não prova que os conceitos foram apagados." loading="lazy">
+          <figcaption>
+            t-SNE no CelebA-MB, onde há dois atributos espúrios (Male e Young). Cor codifica classe+Male, forma codifica Young. BFR mistura subgrupos dentro de cada classe, mas a mistura bidimensional não prova que os conceitos foram apagados.
+            <span class="source">Figura 5 do paper · Deng et al., arXiv:2610.06846</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">W-IBMI: a métrica que rastreia o objetivo</span></h2>
+<p><span class="s" data-s="b10-p0-s0">W-IBMI mede a distância entre centróides de subgrupos dentro de cada classe — exatamente a quantidade que BFR penaliza (a formulação BFR-inv difere apenas em detalhes de estimação).</span> <span class="s" data-s="b10-p0-s1">Por isso, W-IBMI não é evidência independente de remoção de atributo; é uma verificação de que a regularização fez o que deveria fazer.</span> <span class="s" data-s="b10-p0-s2">A Figura 4 ilustra a diferença: IBMI pode subir enquanto W-IBMI cai, porque o eixo do atributo espúrio é dominado pela composição de classe.</span></p><p><span class="s" data-s="b10-p1-s0">Na maioria das configurações, BFR reduz W-IBMI substancialmente.</span> <span class="s" data-s="b10-p1-s1">Há exceções explícitas: BFR+GroupDRO ResNet-50 e um resíduo de 0.004 no Waterbirds JTT.</span> <span class="s" data-s="b10-p1-s2">Os autores preservam esses números e os interpretam como mudanças de primeiro momento sob uma convenção de features fixa, não como prova de que todas as distribuições de subgrupo ficaram idênticas.</span></p><p><span class="s" data-s="b10-p2-s0">A dependência de escala é importante: W-IBMI usa features não normalizadas, então arquiteturas ou inicializações diferentes podem produzir valores incomparáveis.</span> <span class="s" data-s="b10-p2-s1">Os autores não normalizam porque querem rastrear a penalidade real aplicada durante o treino, mas isso limita comparações entre modelos.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b11-t">BFR é supervisionado</span></h3>
+          <p><span class="s" data-s="b11-c-s0">BFR exige anotações de atributo espúrio no treino, assim como GroupDRO.</span> <span class="s" data-s="b11-c-s1">Isso o coloca na mesma categoria de métodos supervisionados e torna comparações com LfF ou JTT (que descobrem viés automaticamente) menos diretas.</span> <span class="s" data-s="b11-c-s2">A comparação justa é BFR+GroupDRO vs GroupDRO, onde BFR adiciona +12.5 pp no CelebA-MB e +13.3 pp no UrbanCars.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b12-h">Experimento sintético: marca d&#39;água no ImageNet</span></h2>
+<p><span class="s" data-s="b12-p0-s0">Para testar BFR em um cenário controlado, os autores introduziram uma marca d&#39;água sintética em um subconjunto do ImageNet-1K.</span> <span class="s" data-s="b12-p0-s1">Durante o treino, 90% das imagens de certas classes recebem a marca; no teste de shift, as proporções invertem.</span> <span class="s" data-s="b12-p0-s2">Esse setup isola o efeito da correlação espúria de confundidores naturais presentes em datasets reais.</span></p><p><span class="s" data-s="b12-p1-s0">BFR melhora a acurácia no grupo com shift de marca d&#39;água em +23.0 pontos percentuais sob treino pareado (matched training).</span> <span class="s" data-s="b12-p1-s1">Esse ganho é expressivo, mas os autores não o extrapolam: &#39;These results support evaluating centroid geometry and resistance to biased head retraining alongside WGA, within the tested protocols.&#39; O experimento valida o mecanismo em condições controladas, mas não estabelece que BFR funcionará igualmente bem em todos os tipos de viés natural.</span></p>        <h2><span class="s" data-s="b13-h">Limitações e o que o paper não mostra</span></h2>
+<p><span class="s" data-s="b13-p0-s0">Os autores são diretos sobre as limitações.</span> <span class="s" data-s="b13-p0-s1">Primeiro, BFR requer anotações de atributo espúrio no treino, o que nem sempre está disponível.</span> <span class="s" data-s="b13-p0-s2">Segundo, W-IBMI rastreia o objetivo de BFR, não é uma medida independente de descontaminação.</span> <span class="s" data-s="b13-p0-s3">Terceiro, a informação do atributo permanece recuperável por probes: no teste de estresse do CelebA, o probe Male ainda atinge 72.2% de acurácia mesmo após BFR, contra 92.5% no baseline.</span></p><p><span class="s" data-s="b13-p1-s0">A seleção de checkpoint é inconsistente entre datasets (WGA para CelebA-Std, acurácia média para CelebA-MB e UrbanCars), o que distorce comparações de WGA.</span> <span class="s" data-s="b13-p1-s1">Os autores preservam os resultados originais em vez de refazer experimentos retrospectivamente, mas reconhecem que &#39;this difference can distort WGA comparisons and does not arise from a principled lack of group labels.&#39;</span></p><p><span class="s" data-s="b13-p2-s0">Os resultados são específicos aos protocolos testados: datasets pequenos, ResNets, três seeds.</span> <span class="s" data-s="b13-p2-s1">Não há garantia de que BFR preserve acurácia média em todos os cenários — o paper reporta que &#39;cross-task results are mixed&#39;.</span> <span class="s" data-s="b13-p2-s2">A sensibilidade a λ é estudada no material suplementar, mas não há uma regra de otimalidade geral; λ=20 é um padrão empírico, reduzido para λ=1 no JTT para evitar conflito com o upweighting de 50×.</span></p><p><span class="s" data-s="b13-p3-s0">Finalmente, a mistura visual em t-SNE (Figuras 1 e 5) não estabelece remoção causal.</span> <span class="s" data-s="b13-p3-s1">Duas dimensões projetadas podem esconder separação em dimensões superiores, e a própria legenda da Figura 1 avisa: &#39;two-dimensional mixing does not establish concept erasure or causal feature use.&#39; O teste de retreinamento enviesado é mais informativo, mas mesmo ele não prova que a cabeça original usava o atributo causalmente — apenas que a nova cabeça tem mais dificuldade em explorá-lo.</span></p>        <h2><span class="s" data-s="b14-h">Por que isso importa</span></h2>
+<p><span class="s" data-s="b14-p0-s0">BiasFlow faz uma contribuição metodológica importante: separa a avaliação do classificador final (WGA) da avaliação da representação subjacente (geometria de centróides e resistência a retreinamento).</span> <span class="s" data-s="b14-p0-s1">Essa distinção é prática: modelos pré-treinados são frequentemente adaptados a novas tarefas com fine-tuning ou retreinamento de cabeça, e um backbone que codifica viés de forma separável pode permitir que esse viés ressurja.</span></p><p><span class="s" data-s="b14-p1-s0">O paper também exemplifica honestidade científica.</span> <span class="s" data-s="b14-p1-s1">Os autores documentam discrepâncias de implementação (DFR/ERM), preservam resultados negativos ou neutros (BFR+JTT no Waterbirds), e resistem a interpretações causais de medidas observacionais (IBMI).</span> <span class="s" data-s="b14-p1-s2">Eles não vendem BFR como solução universal, mas como uma ferramenta supervisionada que melhora WGA e geometria de centróides na maioria dos casos testados, dentro de protocolos específicos.</span></p><p><span class="s" data-s="b14-p2-s0">Para quem trabalha com fairness ou robustez, a mensagem é clara: WGA alta não garante que a representação seja robusta a retreinamento enviesado.</span> <span class="s" data-s="b14-p2-s1">Avaliar geometria interna e testar o backbone congelado sob novas cabeças enviesadas fornece informação complementar.</span> <span class="s" data-s="b14-p2-s2">BiasFlow oferece um toolkit para fazer isso, mas a interpretação dos resultados exige cuidado: centróides alinhados não provam uso causal, e informação recuperável por probes não contradiz melhoria de WGA.</span> <span class="s" data-s="b14-p2-s3">São aspectos diferentes de um problema multifacetado.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">BiasFlow mede alinhamento de centróides (IBMI, W-IBMI) e aplica regularização supervisionada (BFR) para reduzir dependência de atributos espúrios, melhorando WGA em até +26 pp no UrbanCars.</span></li><li><span class="s" data-s="k1">WGA alta não garante backbone robusto: GroupDRO atinge 86.3% end-to-end no CelebA, mas cai para 40.7% quando a cabeça é retreinada com dados enviesados; BFR+GroupDRO sobe isso para 64.1%.</span></li><li><span class="s" data-s="k2">IBMI não é medida causal — pode subir por composição de classe. W-IBMI rastreia a penalidade de BFR, mas não prova remoção do atributo; probes ainda recuperam informação (72.2% vs 92.5%).</span></li><li><span class="s" data-s="k3">BFR é supervisionado (exige anotações de atributo espúrio) e os ganhos são específicos aos protocolos testados; resultados cross-task são mistos e a seleção de checkpoint varia entre datasets.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.06846" rel="noopener">BiasFlow: Geometric Monitoring and Backbone Regularization for Spurious Feature Reliance</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.06846" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

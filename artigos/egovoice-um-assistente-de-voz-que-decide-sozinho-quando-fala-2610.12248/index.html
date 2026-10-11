@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EgoVoice: um assistente de voz que decide sozinho quando falar enquanto você monta um móvel — arXiv em 5</title>
+<meta name="description" content="Pesquisadores da University of Seoul construíram um modelo que assiste o usuário de óculos AR em tempo real, observando vídeo e áudio em primeira pessoa e oferecendo orientação falada proativa — antes mesmo de você pedir ajuda.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="EgoVoice: um assistente de voz que decide sozinho quando falar enquanto você monta um móvel">
+<meta property="og:description" content="Pesquisadores da University of Seoul construíram um modelo que assiste o usuário de óculos AR em tempo real, observando vídeo e áudio em primeira pessoa e oferecendo orientação falada proativa — antes mesmo de você pedir ajuda.">
+<meta property="og:image" content="../../assets/papers/2610.12248/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Agentes</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.12248" rel="noopener">arXiv:2610.12248</a>
+    </div>
+    <h1><span class="s" data-s="t">EgoVoice: um assistente de voz que decide sozinho quando falar enquanto você monta um móvel</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Pesquisadores da University of Seoul construíram um modelo que assiste o usuário de óculos AR em tempo real, observando vídeo e áudio em primeira pessoa e oferecendo orientação falada proativa — antes mesmo de você pedir ajuda.</span></p>
+    <p class="byline">
+      <span>Kim</span>
+      <span>11 min de leitura</span>
+<span>08/10/2026</span>    </p>
+    <div class="listen" data-article="2610.12248" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=5TfGvM-WoNc" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema: assistentes que só respondem quando chamados</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Assistentes de voz como Alexa, Siri ou Google Assistant funcionam num modelo reativo: você faz uma pergunta, o sistema responde.</span> <span class="s" data-s="b0-p0-s1">Esse desenho funciona bem para consultas pontuais, mas falha quando você está com as mãos ocupadas montando um móvel, seguindo uma receita ou consertando algo.</span> <span class="s" data-s="b0-p0-s2">Nesses momentos, você pode não perceber que está prestes a errar, pode estar ocupado demais para parar e pedir ajuda, ou simplesmente não sabe que precisa de orientação.</span></p><p><span class="s" data-s="b0-p1-s0">O EgoVoice ataca esse problema.</span> <span class="s" data-s="b0-p1-s1">A ideia é treinar um modelo multimodal que recebe vídeo e áudio contínuos de uma câmera em primeira pessoa — como a de óculos de realidade aumentada — e decide por conta própria se deve permanecer em silêncio ou intervir com uma dica falada.</span> <span class="s" data-s="b0-p1-s2">O sistema precisa resolver três desafios ao mesmo tempo: processar vídeo, áudio e fala em tempo real; escutar e falar simultaneamente, sem esperar turnos explícitos; e decidir quando vale a pena interromper o usuário.</span></p><p><span class="s" data-s="b0-p2-s0">Apesar do avanço recente em modelos multimodais com saída de fala (como o GPT-4o e o Gemini Live) e em sistemas de diálogo full-duplex, nenhum trabalho anterior combinou essas três capacidades num único modelo treinado para assistência proativa a partir de streams egocêntricos contínuos.</span> <span class="s" data-s="b0-p2-s1">O EgoVoice preenche essa lacuna.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.12248/figure1.webp" alt="Visão geral do sistema: o assistente recebe vídeo e áudio em primeira pessoa, decide se deve intervir e, quando necessário, fornece orientação falada no momento certo." loading="lazy">
+          <figcaption>
+            Visão geral do sistema: o assistente recebe vídeo e áudio em primeira pessoa, decide se deve intervir e, quando necessário, fornece orientação falada no momento certo.
+            <span class="source">Figura 1 do paper · Kim, arXiv:2610.12248</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">Por que não basta sintetizar fala a partir de texto</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Uma abordagem natural seria pegar um dataset de vídeo com instruções textuais anotadas — como os usados em benchmarks de assistência proativa baseada em texto — e simplesmente converter essas instruções em fala com um sistema text-to-speech (TTS).</span> <span class="s" data-s="b2-p0-s1">O problema é que texto e fala têm timelines incompatíveis.</span></p><p><span class="s" data-s="b2-p1-s0">Instruções textuais são anotadas assumindo que o usuário as vê instantaneamente.</span> <span class="s" data-s="b2-p1-s1">Mas fala leva tempo para ser reproduzida.</span> <span class="s" data-s="b2-p1-s2">Se você sintetizar a frase &#39;use o parafuso mais curto&#39; e colocá-la no mesmo timestamp da anotação textual, o usuário já estará agindo antes de ouvir o final da frase.</span> <span class="s" data-s="b2-p1-s3">Se você antecipar a síntese para compensar, corre o risco de colidir com outras instruções ou de falar durante uma ação não relacionada.</span></p><p><span class="s" data-s="b2-p2-s0">Além disso, sintetizar a partir de texto não captura os sons ambientes que acompanham tarefas físicas reais: barulho de ferramentas, objetos caindo, passos.</span> <span class="s" data-s="b2-p2-s1">Esses sons fazem parte do contexto que o modelo precisa aprender a processar.</span></p><p><span class="s" data-s="b2-p3-s0">Por isso, os autores partiram do HoloAssist, um corpus de vídeos egocêntricos em que um usuário executa tarefas físicas enquanto recebe orientação falada de um instrutor humano ao vivo.</span> <span class="s" data-s="b2-p3-s1">As intervenções já estão naturalmente alinhadas com o comportamento do usuário, e os sons de fundo estão preservados.</span> <span class="s" data-s="b2-p3-s2">Mas os áudios brutos não servem diretamente para treinar um modelo.</span></p>        <h2><span class="s" data-s="b3-h">Construindo dados limpos a partir de gravações reais</span></h2>
+<p><span class="s" data-s="b3-p0-s0">As gravações do HoloAssist misturam num único canal a fala do usuário, a fala do instrutor e sons ambientes.</span> <span class="s" data-s="b3-p0-s1">Além disso, as vozes foram anonimizadas com pitch shifting, o que as torna artificiais e inadequadas para treinar um modelo de interação natural.</span></p><p><span class="s" data-s="b3-p1-s0">O pipeline de processamento funciona em duas etapas.</span> <span class="s" data-s="b3-p1-s1">Primeiro, os autores separam o áudio de fundo da mistura usando SAM-Audio, um modelo de separação de fontes guiado por prompt.</span> <span class="s" data-s="b3-p1-s2">Eles isolam as vozes humanas e retêm o resíduo como canal de background.</span> <span class="s" data-s="b3-p1-s3">Em seguida, aplicam Silero VAD para verificar que nenhuma voz residual permaneceu no canal de fundo; sessões onde ainda há atividade vocal são descartadas.</span></p><p><span class="s" data-s="b3-p2-s0">Segundo, eles ressintetizam a fala do usuário e do instrutor.</span> <span class="s" data-s="b3-p2-s1">As transcrições originais do HoloAssist contêm erros de ortografia, pontuação inconsistente e disfluências, que são normalizadas com GPT-4-mini.</span> <span class="s" data-s="b3-p2-s2">Comentários irrelevantes no início e fim das sessões (9% das falas) são removidos.</span> <span class="s" data-s="b3-p2-s3">Cada fala é ressintetizada com IndexTTS2, um sistema de TTS adaptativo, usando falantes de referência amostrados do Multilingual LibriSpeech (2.498 falantes para treino, 340 disjuntos para avaliação).</span></p><p><span class="s" data-s="b3-p3-s0">Cada frase é sintetizada várias vezes.</span> <span class="s" data-s="b3-p3-s1">Candidatos cuja duração excede a original são descartados, para preservar o timing.</span> <span class="s" data-s="b3-p3-s2">O candidato cuja transcrição ASR (verificada com Qwen3-ASR-1.7B) corresponde exatamente ao texto original é selecionado.</span> <span class="s" data-s="b3-p3-s3">Sessões contendo qualquer fala mal pronunciada são descartadas.</span></p><p><span class="s" data-s="b3-p4-s0">No final, o processo gera três canais de áudio sincronizados: fala do usuário, fala do instrutor e sons de fundo.</span> <span class="s" data-s="b3-p4-s1">Isso permite treinar o modelo para escutar o usuário e o ambiente enquanto decide se deve falar.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b4-t">13.676 janelas de treino, 170 sessões de teste</span></h3>
+          <p><span class="s" data-s="b4-c-s0">Após o processamento, o dataset de treino contém 13.676 janelas temporais extraídas de sessões do HoloAssist.</span> <span class="s" data-s="b4-c-s1">O benchmark de avaliação usa 170 sessões completas, com falantes de referência disjuntos do treino.</span> <span class="s" data-s="b4-c-s2">Cada sessão dura em média alguns minutos e contém múltiplas intervenções do instrutor.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b5-h">Como o modelo decide quando falar</span></h2>
+<p><span class="s" data-s="b5-p0-s0">O EgoVoice é construído sobre o MiniCPM-o 4.5, um modelo de linguagem multimodal de 9 bilhões de parâmetros que suporta interação full-duplex: ele pode escutar e falar ao mesmo tempo, sem esperar turnos explícitos.</span> <span class="s" data-s="b5-p0-s1">O modelo processa vídeo e áudio em chunks de um segundo e, a cada chunk, decide se permanece em silêncio ou gera uma intervenção falada.</span></p><p><span class="s" data-s="b5-p1-s0">O treinamento tem duas fases.</span> <span class="s" data-s="b5-p1-s1">Na primeira, supervised fine-tuning (SFT), o modelo aprende a imitar o comportamento do instrutor humano.</span> <span class="s" data-s="b5-p1-s2">Os autores aplicam LoRA (rank 32, alpha 64) tanto no backbone LLM quanto no decodificador de tokens de fala, treinando por 5 épocas com learning rate de 2e-4 e batch size de 32.</span> <span class="s" data-s="b5-p1-s3">Essa fase produz o EgoVoice-SFT.</span></p><p><span class="s" data-s="b5-p2-s0">Na segunda fase, direct preference optimization (DPO), o modelo é refinado para melhorar o timing das intervenções.</span> <span class="s" data-s="b5-p2-s1">O DPO é uma técnica de alinhamento que ajusta o modelo usando pares de exemplos preferidos e rejeitados, sem precisar de um modelo de recompensa separado.</span> <span class="s" data-s="b5-p2-s2">Aqui, os autores geram múltiplas versões de cada intervenção com diferentes timings e usam o DPO para ensinar o modelo a preferir intervenções que terminam antes da ação do usuário.</span></p><p><span class="s" data-s="b5-p3-s0">O EgoVoice-DPO treina por 1 época com beta=0.1, learning rate de 5e-6 e batch size de 16.</span> <span class="s" data-s="b5-p3-s1">O checkpoint é selecionado com base em performance de validação.</span> <span class="s" data-s="b5-p3-s2">A granularidade temporal do modelo é herdada do MiniCPM-o 4.5: um segundo por chunk.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.12248/figure2.webp" alt="Pipeline completo: processamento de áudio do HoloAssist (esquerda), fine-tuning supervisionado para aprender comportamento listen-or-speak (topo direito) e refinamento de timing com DPO (base direita)." loading="lazy">
+          <figcaption>
+            Pipeline completo: processamento de áudio do HoloAssist (esquerda), fine-tuning supervisionado para aprender comportamento listen-or-speak (topo direito) e refinamento de timing com DPO (base direita).
+            <span class="source">Figura 2 do paper · Kim, arXiv:2610.12248</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Como avaliar um assistente proativo</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Avaliar assistência proativa é mais complexo que avaliar um chatbot reativo.</span> <span class="s" data-s="b7-p0-s1">Não basta medir a qualidade do texto gerado; é preciso saber se o modelo falou no momento certo, se o conteúdo é relevante e se a ajuda é útil no contexto da tarefa.</span></p><p><span class="s" data-s="b7-p1-s0">Os autores propõem três eixos de avaliação.</span> <span class="s" data-s="b7-p1-s1">Primeiro, timing de intervenção: o modelo deve falar perto do momento em que o instrutor humano falou.</span> <span class="s" data-s="b7-p1-s2">Isso é medido com precision, recall e F1 sobre chunks de um segundo.</span> <span class="s" data-s="b7-p1-s3">Uma intervenção é considerada correta se começa dentro de uma janela de tolerância (T segundos) ao redor do onset do instrutor.</span> <span class="s" data-s="b7-p1-s4">Nos experimentos principais, T=5 segundos.</span></p><p><span class="s" data-s="b7-p2-s0">Segundo, relevância de conteúdo: a fala gerada deve ser semanticamente próxima da fala do instrutor.</span> <span class="s" data-s="b7-p2-s1">Isso é medido com similaridade de cosseno entre embeddings SBERT das transcrições.</span> <span class="s" data-s="b7-p2-s2">Terceiro, qualidade geral da assistência: um LLM judge (GPT-4o) avalia cada intervenção em quatro dimensões — correção, proatividade, eficiência e overall — numa escala de 1 a 5, comparando a saída do modelo com a do instrutor humano.</span></p><p><span class="s" data-s="b7-p3-s0">Além disso, os autores medem end timing: quanto tempo antes (ou depois) da ação do usuário a fala termina.</span> <span class="s" data-s="b7-p3-s1">Valores positivos indicam que o modelo terminou de falar antes do usuário agir, o que é desejável.</span> <span class="s" data-s="b7-p3-s2">Esse número é reportado apenas para intervenções ligadas a ações específicas (subset action-linked).</span></p><p><span class="s" data-s="b7-p4-s0">Finalmente, um subconjunto de 50 sessões é avaliado por humanos, que comparam pares de saídas e escolhem qual assistência preferem.</span> <span class="s" data-s="b7-p4-s1">Isso valida se as melhorias automáticas refletem preferência real.</span></p>        <h2><span class="s" data-s="b8-h">Baselines: APIs comerciais e modelos open-source</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Os autores comparam o EgoVoice contra seis baselines.</span> <span class="s" data-s="b8-p0-s1">Três são APIs comerciais: Gemini Live (gemini-live-2.5-flash-native-audio) e duas versões da OpenAI Realtime API (gpt-realtime e gpt-realtime-2).</span> <span class="s" data-s="b8-p0-s2">Todas aceitam vídeo e áudio streaming e produzem fala.</span> <span class="s" data-s="b8-p0-s3">Como essas APIs dependem de detecção de atividade vocal e raramente respondem sem fala ativa do usuário, os autores removem o áudio de fundo para evitar acionamentos falsos — uma condição de avaliação mais favorável.</span></p><p><span class="s" data-s="b8-p1-s0">O baseline de texto de referência é o ProAssist (8B), o trabalho mais próximo do EgoVoice.</span> <span class="s" data-s="b8-p1-s1">Ele usa os mesmos dados do HoloAssist e o mesmo protocolo de avaliação, mas produz texto em vez de fala.</span> <span class="s" data-s="b8-p1-s2">O ProAssist recebe vídeo streaming e transcrições ground-truth da fala do usuário nos timestamps originais, além de uma pergunta neutra de abertura para sessões onde o usuário nunca fala.</span></p><p><span class="s" data-s="b8-p2-s0">Dois baselines open-source suportam interação por voz.</span> <span class="s" data-s="b8-p2-s1">O primeiro é uma cascata: ProAssist + Qwen3-ASR para transcrever a fala do usuário + IndexTTS2 para sintetizar a fala do assistente.</span> <span class="s" data-s="b8-p2-s2">Os autores assumem latência zero entre os três componentes, de modo que cada fala começa a tocar no chunk onde o ProAssist a gera, e só a duração da síntese afeta quando ela termina.</span></p><p><span class="s" data-s="b8-p3-s0">O segundo baseline open-source é o MiniCPM-o 4.5 (9B) em configuração zero-shot, que também serve como backbone do EgoVoice antes do fine-tuning.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.12248/table1.webp" alt="Resultados em 170 sessões de teste: EgoVoice-DPO supera todos os baselines em F1 de onset, relevância de conteúdo (cosine) e avaliação do LLM judge. End-vs-act positivo significa que o modelo termina de falar antes da ação do usuário." loading="lazy">
+          <figcaption>
+            Resultados em 170 sessões de teste: EgoVoice-DPO supera todos os baselines em F1 de onset, relevância de conteúdo (cosine) e avaliação do LLM judge. End-vs-act positivo significa que o modelo termina de falar antes da ação do usuário.
+            <span class="source">Tabela 1 do paper · Kim, arXiv:2610.12248</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">Resultados: modelos comerciais falham, EgoVoice melhora em todas as métricas</span></h2>
+<p><span class="s" data-s="b10-p0-s0">As APIs comerciais têm desempenho muito fraco.</span> <span class="s" data-s="b10-p0-s1">Gemini Live, gpt-realtime e gpt-realtime-2 alcançam F1 de no máximo 0.03 em onset timing.</span> <span class="s" data-s="b10-p0-s2">Eles dependem de detecção de atividade vocal e raramente intervêm proativamente.</span> <span class="s" data-s="b10-p0-s3">Quando intervêm, o conteúdo é genérico e pouco útil: scores de LLM judge entre 1.94 e 2.14 (numa escala de 1 a 5), bem abaixo do ProAssist (2.06) e do EgoVoice.</span></p><p><span class="s" data-s="b10-p1-s0">O ProAssist, baseline de texto, atinge F1 de 0.195 e cosine similarity de 0.594.</span> <span class="s" data-s="b10-p1-s1">A cascata ProAssist + ASR/TTS mantém o mesmo F1 (0.195) e cosine similar (0.564), mas os scores de LLM judge caem ligeiramente (de 2.06 para 1.92), sugerindo que a conversão para fala introduz pequenas perdas de qualidade.</span></p><p><span class="s" data-s="b10-p2-s0">O MiniCPM-o 4.5 zero-shot tem F1 de apenas 0.113 e cosine de 0.519.</span> <span class="s" data-s="b10-p2-s1">Ele intervém raramente e, quando fala, o conteúdo é menos relevante.</span> <span class="s" data-s="b10-p2-s2">Os scores de LLM judge são os mais baixos de todos (1.41 overall).</span></p><p><span class="s" data-s="b10-p3-s0">O EgoVoice-SFT melhora drasticamente: F1 de 0.274 (recall de 0.235), cosine de 0.684 e scores de LLM judge entre 2.23 e 2.64.</span> <span class="s" data-s="b10-p3-s1">Isso mostra que o fine-tuning supervisionado ensina o modelo a intervir com mais frequência, no momento mais próximo do instrutor, e com conteúdo mais relevante.</span></p><p><span class="s" data-s="b10-p4-s0">O EgoVoice-DPO refina ainda mais o timing: F1 sobe para 0.324 (recall de 0.285), o melhor resultado entre todos os modelos.</span> <span class="s" data-s="b10-p4-s1">O cosine cai ligeiramente para 0.649, e os scores de LLM judge caem um pouco (2.18 overall), indicando que o DPO melhora timing à custa de uma leve queda na qualidade do conteúdo.</span> <span class="s" data-s="b10-p4-s2">Ainda assim, EgoVoice-DPO supera todos os baselines.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b11-t">End timing: EgoVoice termina de falar antes da ação</span></h3>
+          <p><span class="s" data-s="b11-c-s0">No subset action-linked, EgoVoice-SFT termina de falar em média 1.57 segundos antes do usuário agir (mediana 1.52s).</span> <span class="s" data-s="b11-c-s1">EgoVoice-DPO melhora isso para 1.75s (mediana 1.62s).</span> <span class="s" data-s="b11-c-s2">Baselines comerciais terminam vários segundos depois da ação (até -16s no gpt-realtime-2), o que torna a ajuda inútil.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b12-h">Avaliação humana confirma preferência pelo EgoVoice</span></h2>
+<p><span class="s" data-s="b12-p0-s0">Em 50 sessões avaliadas por humanos, o EgoVoice-DPO é preferido em 64% das comparações contra o MiniCPM-o 4.5 zero-shot, e em 58% contra o ProAssist em cascata.</span> <span class="s" data-s="b12-p0-s1">A diferença é estatisticamente significativa (p &lt; 0.01 em ambos os casos, teste de Wilcoxon).</span></p><p><span class="s" data-s="b12-p1-s0">Avaliadores reportam que o EgoVoice intervém no momento certo, diz coisas relevantes e termina de falar antes do usuário agir.</span> <span class="s" data-s="b12-p1-s1">Em contraste, o MiniCPM-o zero-shot frequentemente permanece em silêncio ou fala tarde demais, e a cascata ProAssist + TTS às vezes gera intervenções corretas mas com timing impreciso devido à latência acumulada dos componentes.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.12248/figure10.webp" alt="Dois exemplos de intervenções bem-sucedidas: EgoVoice-DPO fala no mesmo momento que o instrutor humano, diz a mesma coisa e termina antes da ação do usuário (marcada com linha vertical)." loading="lazy">
+          <figcaption>
+            Dois exemplos de intervenções bem-sucedidas: EgoVoice-DPO fala no mesmo momento que o instrutor humano, diz a mesma coisa e termina antes da ação do usuário (marcada com linha vertical).
+            <span class="source">Figura 10 do paper · Kim, arXiv:2610.12248</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b14-h">Limitações: escopo dos dados, artefatos do backbone e avaliação offline</span></h2>
+<p><span class="s" data-s="b14-p0-s0">O dataset é construído a partir do HoloAssist, que cobre tarefas procedurais de montagem.</span> <span class="s" data-s="b14-p0-s1">A capacidade do modelo de generalizar para outros domínios — como culinária, navegação ao ar livre ou interação social — não está garantida.</span> <span class="s" data-s="b14-p0-s2">Além disso, há uma lacuna substancial entre o desempenho do modelo e o do instrutor humano, sugerindo que mais dados e treinamento em maior escala seriam necessários para aproximar-se do nível humano.</span></p><p><span class="s" data-s="b14-p1-s0">O MiniCPM-o 4.5, backbone do EgoVoice, ocasionalmente exibe respostas excessivamente longas, repetição severa e mudanças de idioma (geração de tokens em chinês ou caracteres especiais no meio de falas em inglês).</span> <span class="s" data-s="b14-p1-s1">Embora o fine-tuning reduza esses artefatos, eles ainda ocorrem porque o LoRA adapta apenas um subconjunto pequeno dos parâmetros.</span> <span class="s" data-s="b14-p1-s2">O modelo também herda a granularidade de um segundo por chunk, o que pode limitar a precisão do timing em cenários que exigem responsividade sub-segundo.</span></p><p><span class="s" data-s="b14-p2-s0">A avaliação é conduzida em sessões pré-gravadas: as ações do usuário já estão fixas, então todos os modelos são avaliados contra comportamento independente de seus próprios conselhos.</span> <span class="s" data-s="b14-p2-s1">Os números devem ser lidos como proxy de performance interativa, não como medida direta.</span> <span class="s" data-s="b14-p2-s2">O protocolo também não modela sobreposição entre os dois falantes: cada fala toca até o fim, então não cobre nem o usuário interrompendo o assistente nem o assistente cedendo no meio de uma frase.</span> <span class="s" data-s="b14-p2-s3">Lidar com barge-in em ambas as direções é necessário para deployment e fica para trabalho futuro.</span></p><p><span class="s" data-s="b14-p3-s0">O DPO melhora o timing de intervenção mas introduz leve queda na qualidade do conteúdo, indicando que o sinal de recompensa tem espaço para refinamento.</span> <span class="s" data-s="b14-p3-s1">Finalmente, implantar um assistente always-on em cenários reais levanta riscos de privacidade: gravação egocêntrica contínua pode capturar terceiros sem consentimento, e transmitir áudio e vídeo para servidores externos arrisca expor informações sensíveis.</span> <span class="s" data-s="b14-p3-s2">Mitigar esses riscos exigirá mecanismos de consentimento, processamento on-device e protocolos de redação de áudio.</span></p>        <h2><span class="s" data-s="b15-h">O que fica</span></h2>
+<p><span class="s" data-s="b15-p0-s0">O EgoVoice é o primeiro framework a combinar percepção multimodal, diálogo full-duplex e decisão proativa de intervenção num único modelo treinado para assistência egocêntrica falada.</span> <span class="s" data-s="b15-p0-s1">Ele mostra que é possível ensinar um modelo a decidir quando falar e o que dizer a partir de streams contínuos de vídeo e áudio em primeira pessoa, e que refinar o timing de intervenção com DPO melhora a utilidade da assistência.</span></p><p><span class="s" data-s="b15-p1-s0">Os autores liberam dataset, código e modelos como contribuição open-source.</span> <span class="s" data-s="b15-p1-s1">Com o crescente investimento da indústria em AR e smart glasses, frameworks como o EgoVoice podem servir de base para a próxima geração de assistentes que não esperam você pedir ajuda — eles percebem quando você precisa e falam no momento certo.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">EgoVoice treina um modelo que decide sozinho quando intervir com fala, observando vídeo e áudio em primeira pessoa, sem esperar que o usuário peça ajuda.</span></li><li><span class="s" data-s="k1">Modelos comerciais (Gemini Live, GPT Realtime) falham em assistência proativa: F1 ≤ 0.03. EgoVoice-DPO atinge F1 de 0.324 e termina de falar antes da ação do usuário.</span></li><li><span class="s" data-s="k2">O dataset é construído separando vozes e sons de fundo do HoloAssist e ressintetizando fala limpa, preservando timing natural das intervenções humanas.</span></li><li><span class="s" data-s="k3">Limitações: escopo restrito a tarefas de montagem, avaliação offline, granularidade de 1 segundo e artefatos herdados do backbone MiniCPM-o 4.5.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.12248" rel="noopener">EgoVoice: Proactive Spoken Assistance from Egocentric Multimodal Streams</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.12248" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CeDiRNet-6DoF: como ensinar um robô a desdobrar tecidos prevendo pose completa de preensão em 6 graus de liberdade — arXiv em 5</title>
+<meta name="description" content="Pesquisadores da Universidade de Ljubljana e do Instituto Jožef Stefan desenvolveram uma rede neural que prevê não apenas onde agarrar um tecido pendurado no ar, mas também a orientação completa da pinça robótica para desdobrá-lo com eficiência.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CeDiRNet-6DoF: como ensinar um robô a desdobrar tecidos prevendo pose completa de preensão em 6 graus de liberdade">
+<meta property="og:description" content="Pesquisadores da Universidade de Ljubljana e do Instituto Jožef Stefan desenvolveram uma rede neural que prevê não apenas onde agarrar um tecido pendurado no ar, mas também a orientação completa da pinça robótica para desdobrá-lo com eficiência.">
+<meta property="og:image" content="../../assets/papers/2609.31452/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Robótica</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2609.31452" rel="noopener">arXiv:2609.31452</a>
+    </div>
+    <h1><span class="s" data-s="t">CeDiRNet-6DoF: como ensinar um robô a desdobrar tecidos prevendo pose completa de preensão em 6 graus de liberdade</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Pesquisadores da Universidade de Ljubljana e do Instituto Jožef Stefan desenvolveram uma rede neural que prevê não apenas onde agarrar um tecido pendurado no ar, mas também a orientação completa da pinça robótica para desdobrá-lo com eficiência.</span></p>
+    <p class="byline">
+      <span>Tabernik et al.</span>
+      <span>11 min de leitura</span>
+<span>25/09/2026</span>    </p>
+    <div class="listen" data-article="2609.31452" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=VWszBFQGmkw" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema: tecidos são difíceis de manipular</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Manipular objetos rígidos com robôs é relativamente previsível: você empurra uma caixa e ela se move de forma calculável.</span> <span class="s" data-s="b0-p0-s1">Tecidos são outra história.</span> <span class="s" data-s="b0-p0-s2">Eles têm infinitos graus de liberdade, dinâmica não-linear, dobras que ocluem pontos críticos e aparência que muda radicalmente conforme a configuração.</span> <span class="s" data-s="b0-p0-s3">Tarefas como dobrar ou desdobrar roupas permanecem desafiadoras justamente por isso.</span></p><p><span class="s" data-s="b0-p1-s0">Uma estratégia promissora para desdobrar tecidos é a regrasping-in-the-air: um braço robótico segura o tecido suspenso enquanto o outro escolhe um ponto ótimo para agarrar e esticar.</span> <span class="s" data-s="b0-p1-s1">A competição ICRA 2024 Cloth Competition padronizou essa tarefa como benchmark, criando um ambiente para comparar métodos.</span> <span class="s" data-s="b0-p1-s2">O desafio central é: dado um tecido pendurado, onde e como o segundo braço deve agarrá-lo para maximizar a área desdobrada?</span></p><p><span class="s" data-s="b0-p2-s0">Abordagens anteriores frequentemente dependem de heurísticas artesanais ou preveem apenas a localização 2D do ponto de preensão, deixando a orientação da pinça para planejamento posterior.</span> <span class="s" data-s="b0-p2-s1">Isso funciona mal quando a geometria 3D do tecido importa.</span> <span class="s" data-s="b0-p2-s2">O que falta é um método que preveja diretamente a pose completa de preensão — posição e orientação em seis graus de liberdade (6-DoF) — a partir de uma única imagem RGB.</span></p>        <h2><span class="s" data-s="b1-h">A ideia: regressão densa de pose 6-DoF com CeDiRNet</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Os autores propõem CeDiRNet-6DoF, uma extensão de uma arquitetura anterior chamada CeDiRNet que detectava pontos 2D usando regressão densa de vetores de direção.</span> <span class="s" data-s="b1-p0-s1">A ideia original era simples: para cada pixel da imagem, a rede prevê um vetor que aponta para o centro do objeto de interesse.</span> <span class="s" data-s="b1-p0-s2">Onde esses vetores convergem, ali está o ponto.</span> <span class="s" data-s="b1-p0-s3">Essa formulação evita problemas de detecção baseada em caixas delimitadoras e funciona bem para múltiplos pontos na mesma imagem.</span></p><p><span class="s" data-s="b1-p1-s0">CeDiRNet-6DoF mantém essa base mas adiciona três cabeças de regressão paralelas, uma para cada componente de rotação (roll, pitch, yaw).</span> <span class="s" data-s="b1-p1-s1">Cada cabeça prevê um par seno-cosseno para o ângulo de Euler correspondente.</span> <span class="s" data-s="b1-p1-s2">Essa parametrização trigonométrica elimina descontinuidades em 2π e mapeia valores de ângulo ilimitados para o intervalo [-1, 1], facilitando o aprendizado.</span> <span class="s" data-s="b1-p1-s3">A rede também prevê uma máscara de segmentação do tecido e a distância logarítmica até o ponto de preensão mais próximo.</span></p><p><span class="s" data-s="b1-p2-s0">A entrada é uma imagem RGB do tecido pendurado.</span> <span class="s" data-s="b1-p2-s1">A saída é um conjunto de campos densos: direções para os pontos de preensão, três pares seno-cosseno para orientação, segmentação e distância.</span> <span class="s" data-s="b1-p2-s2">Um segundo estágio, chamado LocNet, extrai máximos locais nos campos de direção para localizar candidatos de preensão.</span> <span class="s" data-s="b1-p2-s3">Para cada candidato, a rede lê os valores de orientação naquele pixel e recupera os ângulos de Euler via atan2(sin, cos).</span> <span class="s" data-s="b1-p2-s4">A profundidade vem de uma câmera RGB-D, completando a pose 6-DoF.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.31452/figure1.webp" alt="Arquitetura do CeDiRNet-6DoF: a rede base (topo) prevê vetores de direção para localizar pontos de preensão em 2D; a extensão 6-DoF (embaixo) adiciona três cabeças que preveem pares seno-cosseno para roll, pitch e yaw, recuperando a orientação completa da pinça." loading="lazy">
+          <figcaption>
+            Arquitetura do CeDiRNet-6DoF: a rede base (topo) prevê vetores de direção para localizar pontos de preensão em 2D; a extensão 6-DoF (embaixo) adiciona três cabeças que preveem pares seno-cosseno para roll, pitch e yaw, recuperando a orientação completa da pinça.
+            <span class="source">Figura 1 do paper · Tabernik et al., arXiv:2609.31452</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Como funciona: da imagem à pose de preensão</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O pipeline começa com a captura de uma imagem RGB-D do tecido pendurado.</span> <span class="s" data-s="b3-p0-s1">A rede densa (DenseRegNet) processa essa imagem e gera seis mapas: dois para direções de centro (Csin, Ccos), seis para orientação (três pares Dsin/Dcos, um por eixo), um para segmentação (S) e um para distância logarítmica (R).</span> <span class="s" data-s="b3-p0-s2">Cada pixel carrega informação sobre o ponto de preensão mais próximo projetado naquele pixel.</span></p><p><span class="s" data-s="b3-p1-s0">A segunda etapa usa LocNet para identificar máximos locais nos campos de direção, produzindo um mapa de probabilidade de localização.</span> <span class="s" data-s="b3-p1-s1">Cada máximo local corresponde a um candidato de preensão.</span> <span class="s" data-s="b3-p1-s2">Como a regressão é densa, a rede pode prever múltiplos pontos na mesma imagem — útil quando há várias opções de preensão viáveis.</span></p><p><span class="s" data-s="b3-p2-s0">Para cada candidato, o sistema lê os valores de Dsin e Dcos naquele pixel e aplica atan2 elemento a elemento para recuperar os três ângulos de Euler (θx, θy, θz).</span> <span class="s" data-s="b3-p2-s1">A posição 2D do pixel é combinada com a profundidade da câmera para obter a posição 3D (X ∈ ℝ³).</span> <span class="s" data-s="b3-p2-s2">Juntos, posição e orientação formam a pose 6-DoF completa.</span> <span class="s" data-s="b3-p2-s3">Essa pose é então filtrada por viabilidade cinemática: o planejador verifica se o braço robótico consegue alcançar aquela configuração sem colisões.</span> <span class="s" data-s="b3-p2-s4">Se múltiplos candidatos são viáveis, o sistema escolhe o de maior confiança.</span></p>        <h2><span class="s" data-s="b4-h">Treinamento: dados reais, sintéticos e fine-tuning</span></h2>
+<p><span class="s" data-s="b4-p0-s0">O treinamento ocorre em duas fases.</span> <span class="s" data-s="b4-p0-s1">Primeiro, pré-treinamento no ViCoS Towel Dataset, que contém 8.000 imagens reais e 12.000 sintéticas de toalhas sobre uma mesa, anotadas com segmentação, cantos e orientação 1D.</span> <span class="s" data-s="b4-p0-s2">Os autores estenderam esse dataset com anotações 6-DoF para preensão de desdobramento, gerando cerca de 5.000 imagens reais adicionais.</span> <span class="s" data-s="b4-p0-s3">Esse pré-treinamento ensina a rede a reconhecer geometria de tecidos e pontos de preensão em configurações variadas.</span></p><p><span class="s" data-s="b4-p1-s0">A segunda fase é fine-tuning no dataset da competição ICRA 2024, fornecido pelos organizadores.</span> <span class="s" data-s="b4-p1-s1">Esse conjunto tem aproximadamente 500 imagens de tecidos pendurados no ar, anotadas com poses de preensão que maximizam a área desdobrada.</span> <span class="s" data-s="b4-p1-s2">As anotações foram feitas manualmente: um anotador humano escolhia o melhor ponto de preensão e a orientação da pinça para cada configuração.</span> <span class="s" data-s="b4-p1-s3">Esse dataset é menor mas específico para a tarefa de regrasping-in-the-air.</span></p><p><span class="s" data-s="b4-p2-s0">A função de perda combina múltiplos termos: perda de regressão para os campos de direção e orientação, perda de segmentação (cross-entropy), e perda de distância logarítmica.</span> <span class="s" data-s="b4-p2-s1">A perda de segmentação atua como supervisão auxiliar, encorajando a rede a aprender features compartilhadas úteis para ambas as tarefas.</span> <span class="s" data-s="b4-p2-s2">Embora a máscara de segmentação não seja usada em inferência, sua presença no treinamento melhora o desempenho — um efeito de regularização observado em estudos anteriores.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b5-t">Por que seno e cosseno para ângulos?</span></h3>
+          <p><span class="s" data-s="b5-c-s0">Ângulos de Euler têm descontinuidades em 2π: 359° e 1° são vizinhos mas numericamente distantes.</span> <span class="s" data-s="b5-c-s1">Prever diretamente ângulos força a rede a lidar com essa descontinuidade.</span> <span class="s" data-s="b5-c-s2">Parametrizar como sin(θ) e cos(θ) mapeia o ângulo para um círculo unitário contínuo, eliminando saltos.</span> <span class="s" data-s="b5-c-s3">A rede prevê dois valores no intervalo [-1, 1] e recupera o ângulo via atan2, que lida corretamente com todos os quadrantes.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b6-h">Integração robótica: da previsão ao movimento</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Prever a pose é apenas metade do problema; executá-la com robôs reais exige planejamento de movimento e controle.</span> <span class="s" data-s="b6-p0-s1">O sistema usa dois robôs Franka FR3 de 7 graus de liberdade, posicionados a 90 cm de distância, replicando a configuração da competição ICRA 2024 (que usava UR5e de 6 graus).</span> <span class="s" data-s="b6-p0-s2">Uma câmera Zed2i RGB-D estéreo passiva captura a cena de trás dos robôs, com leve inclinação para baixo.</span></p><p><span class="s" data-s="b6-p1-s0">O pipeline completo segue quatro etapas: (i) o braço direito pega o tecido pelo ponto mais alto e o levanta; (ii) o braço esquerdo pega o ponto mais baixo do tecido pendurado, formando a configuração inicial; (iii) CeDiRNet-6DoF prevê a pose de preensão ótima para o braço direito; (iv) ambos os braços esticam o tecido no ar.</span> <span class="s" data-s="b6-p1-s1">A etapa crítica é a (iii), onde a rede deve escolher um ponto que maximize a área desdobrada.</span></p><p><span class="s" data-s="b6-p2-s0">Para executar a preensão, o sistema usa cinemática inversa analítica para calcular ângulos das juntas que atingem a pose prevista.</span> <span class="s" data-s="b6-p2-s1">Um planejador RRT-Connect gera uma trajetória livre de colisões até essa configuração.</span> <span class="s" data-s="b6-p2-s2">Se a pose não é cinemáticamente viável (fora do alcance ou em colisão), o sistema tenta o próximo candidato da lista.</span> <span class="s" data-s="b6-p2-s3">Durante o estiramento final, sensores de força nos motores detectam quando o tecido está totalmente tensionado, parando o movimento para evitar rasgar o material.</span></p>        <h2><span class="s" data-s="b7-h">Avaliação: competição ICRA 2024 e itens novos</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Os autores avaliaram o método em dois conjuntos: os oito itens oficiais da competição ICRA 2024 (quatro toalhas, quatro camisetas) e oito itens novos coletados por eles (quatro toalhas, quatro camisetas), totalizando 16 peças.</span> <span class="s" data-s="b7-p0-s1">Cada item foi testado dez vezes, gerando 160 execuções.</span> <span class="s" data-s="b7-p0-s2">A métrica principal é cobertura de área: a razão entre a área do tecido desdobrado pelo robô e a área de referência obtida manualmente em configuração ótima.</span></p><p><span class="s" data-s="b7-p1-s0">Nos itens da competição (vistos no treinamento), CeDiRNet-6DoF alcançou 93,0% de cobertura média e 95,0% de taxa de sucesso de preensão.</span> <span class="s" data-s="b7-p1-s1">Nos itens novos (não vistos), a cobertura caiu para 78,5% e o sucesso de preensão para 70,0%.</span> <span class="s" data-s="b7-p1-s2">Combinando ambos os conjuntos, a cobertura média foi 85,8% e o sucesso de preensão 82,5%.</span> <span class="s" data-s="b7-p1-s3">Esses números mostram generalização razoável mas não perfeita para tecidos não vistos.</span></p><p><span class="s" data-s="b7-p2-s0">A taxa de sucesso de preensão mede se o robô conseguiu agarrar o tecido na posição prevista sem deixá-lo cair.</span> <span class="s" data-s="b7-p2-s1">Falhas ocorreram principalmente em tecidos com texturas muito diferentes das do treinamento (como uma toalha verde quadriculada) ou quando a previsão de orientação estava incorreta, fazendo a pinça errar o ponto.</span> <span class="s" data-s="b7-p2-s2">Quando a preensão teve sucesso, a cobertura foi geralmente alta, indicando que o método escolhe bons pontos quando funciona.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.31452/figure5.webp" alt="Cobertura de área desdobrada em dez execuções para cada item, nos conjuntos ICRA 2024 e próprio. Círculos verdes/vermelhos são execuções individuais; caixas mostram mediana, média (diamante), mínimo/máximo e percentis. Itens vistos no treinamento têm fundo cinza claro; novos, cinza escuro." loading="lazy">
+          <figcaption>
+            Cobertura de área desdobrada em dez execuções para cada item, nos conjuntos ICRA 2024 e próprio. Círculos verdes/vermelhos são execuções individuais; caixas mostram mediana, média (diamante), mínimo/máximo e percentis. Itens vistos no treinamento têm fundo cinza claro; novos, cinza escuro.
+            <span class="source">Figura 5 do paper · Tabernik et al., arXiv:2609.31452</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Comparação com métodos relacionados</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Os autores compararam CeDiRNet-6DoF com dois baselines reproduzíveis da literatura: EconomicGrasp e um método de detecção de cantos seguido por heurística.</span> <span class="s" data-s="b9-p0-s1">EconomicGrasp prevê objectness, graspness, ângulo e profundidade densamente a partir de nuvens de pontos, uma formulação diferente mas também baseada em regressão densa.</span> <span class="s" data-s="b9-p0-s2">O método de cantos detecta os quatro cantos do tecido e escolhe o mais distante do ponto já segurado.</span></p><p><span class="s" data-s="b9-p1-s0">Como não havia código público dos métodos vencedores da competição ICRA 2024, os autores conduziram uma avaliação proxy com juízes humanos.</span> <span class="s" data-s="b9-p1-s1">Mostraram vídeos de execuções dos três métodos (CeDiRNet-6DoF, EconomicGrasp, cantos) e pediram que juízes escolhessem qual desdobrou melhor.</span> <span class="s" data-s="b9-p1-s2">Usando um modelo hierárquico Bayesiano Bradley-Terry, calcularam pontuações tipo ELO.</span> <span class="s" data-s="b9-p1-s3">CeDiRNet-6DoF obteve a maior pontuação, com intervalo de credibilidade de 95% não sobrepondo os outros métodos.</span></p><p><span class="s" data-s="b9-p2-s0">Na competição real ICRA 2024, CeDiRNet-6DoF ficou em segundo lugar entre dez participantes.</span> <span class="s" data-s="b9-p2-s1">O método vencedor não está descrito em publicação acessível, dificultando comparação direta.</span> <span class="s" data-s="b9-p2-s2">Os autores reportam que seu método superou nove competidores e ficou próximo do primeiro colocado, estabelecendo CeDiRNet-6DoF como estado da arte reproduzível para essa tarefa.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.31452/figure8.webp" alt="Avaliação proxy contra dois baselines da literatura, com juízes humanos escolhendo qual método desdobrou melhor. Pontuações tipo ELO do modelo Bradley-Terry mostram CeDiRNet-6DoF superando os outros, com intervalos de credibilidade de 95% não sobrepostos." loading="lazy">
+          <figcaption>
+            Avaliação proxy contra dois baselines da literatura, com juízes humanos escolhendo qual método desdobrou melhor. Pontuações tipo ELO do modelo Bradley-Terry mostram CeDiRNet-6DoF superando os outros, com intervalos de credibilidade de 95% não sobrepostos.
+            <span class="source">Figura 8 do paper · Tabernik et al., arXiv:2609.31452</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b11-h">Ablação: o que realmente importa no design</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Um estudo de ablação detalhado investigou cinco componentes do método: (1) segmentação auxiliar durante treinamento, (2) uso de profundidade como entrada, (3) randomização de fundo, (4) recorte da imagem baseado na posição do robô, e (5) comparação entre orientação 3D (6-DoF) e 1D (3-DoF).</span> <span class="s" data-s="b11-p0-s1">Cada experimento removeu ou alterou um componente, medindo impacto na cobertura e sucesso de preensão.</span></p><p><span class="s" data-s="b11-p1-s0">A segmentação auxiliar melhorou a cobertura em 1,9 pontos percentuais (pp) e o sucesso de preensão em 5,0 pp.</span> <span class="s" data-s="b11-p1-s1">Embora a máscara não seja usada em inferência, sua perda durante treinamento regulariza as features compartilhadas, ajudando a rede a focar no tecido.</span> <span class="s" data-s="b11-p1-s2">Surpreendentemente, adicionar profundidade como entrada não melhorou o desempenho — possivelmente porque o dataset de fine-tuning é pequeno (~500 imagens) e a rede com 88 milhões de parâmetros pode ter sobreajustado no canal de profundidade.</span></p><p><span class="s" data-s="b11-p2-s0">Randomização de fundo (substituir o fundo por imagens aleatórias durante treinamento) trouxe ganho de 5,6 pp em cobertura e 10,0 pp em sucesso de preensão, forçando a rede a ignorar contexto irrelevante.</span> <span class="s" data-s="b11-p2-s1">Recortar a imagem ao redor do tecido, baseado na posição conhecida do robô, deu ganho de 9,7 pp em cobertura e 23,2 pp em sucesso, removendo distrações e focando a rede na região relevante.</span> <span class="s" data-s="b11-p2-s2">Finalmente, usar orientação 3D (três ângulos de Euler) em vez de 1D melhorou a cobertura em 6,4 pp e o sucesso em 15,0 pp, validando a necessidade de pose completa 6-DoF.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b12-t">Por que profundidade não ajudou?</span></h3>
+          <p><span class="s" data-s="b12-c-s0">Intuitivamente, informação 3D deveria melhorar previsão de pose espacial.</span> <span class="s" data-s="b12-c-s1">Os autores sugerem que o dataset de fine-tuning (~500 imagens) é pequeno demais para uma rede de 88M parâmetros aprender features de profundidade úteis sem sobreajustar.</span> <span class="s" data-s="b12-c-s2">Além disso, pré-treinamento ImageNet fornece priors RGB fortes, e pistas visuais (textura perto de cantos) podem bastar.</span> <span class="s" data-s="b12-c-s3">Augmentação de profundidade (ruído, dropout) poderia ajudar mas não foi testada.</span></p>
+        </aside>
+        <figure class="figure">
+          <img src="../../assets/papers/2609.31452/figure4.webp" alt="Exemplos reais de pontos de preensão detectados e poses da pinça (setas coloridas indicam orientação), com o resultado desdobrado no canto inferior esquerdo. Material suplementar em vídeo mostra a sequência completa de execução para cada caso." loading="lazy">
+          <figcaption>
+            Exemplos reais de pontos de preensão detectados e poses da pinça (setas coloridas indicam orientação), com o resultado desdobrado no canto inferior esquerdo. Material suplementar em vídeo mostra a sequência completa de execução para cada caso.
+            <span class="source">Figura 4 do paper · Tabernik et al., arXiv:2609.31452</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b14-h">Limitações e o que fica em aberto</span></h2>
+<p><span class="s" data-s="b14-p0-s0">Apesar dos resultados sólidos, o método tem limitações claras.</span> <span class="s" data-s="b14-p0-s1">A generalização para itens não vistos é imperfeita: cobertura caiu 14,5 pp e sucesso de preensão 25 pp em tecidos novos.</span> <span class="s" data-s="b14-p0-s2">Texturas muito diferentes (como a toalha quadriculada verde) confundem a rede, sugerindo que o dataset de treinamento não cobre suficientemente o espaço de aparências.</span> <span class="s" data-s="b14-p0-s3">Camisetas novas tiveram desempenho melhor que toalhas novas, possivelmente porque variação em camisetas foi limitada a logos centrais, enquanto toalhas tinham texturas radicalmente diferentes.</span></p><p><span class="s" data-s="b14-p1-s0">O método foi avaliado apenas em toalhas e camisetas.</span> <span class="s" data-s="b14-p1-s1">Outras categorias de roupas (calças, vestidos, roupas de cama) permanecem não testadas.</span> <span class="s" data-s="b14-p1-s2">A estratégia de regrasping-in-the-air funciona bem para peças relativamente simples, mas roupas complexas com mangas, bolsos ou múltiplas camadas podem exigir abordagens diferentes.</span> <span class="s" data-s="b14-p1-s3">Além disso, o sistema assume que o tecido está inicialmente pendurado de forma razoável; configurações muito emaranhadas podem falhar.</span></p><p><span class="s" data-s="b14-p2-s0">A dependência de anotações humanas para poses ótimas limita a escalabilidade.</span> <span class="s" data-s="b14-p2-s1">Anotar 6-DoF manualmente é trabalhoso e subjetivo: diferentes anotadores podem escolher pontos ligeiramente diferentes.</span> <span class="s" data-s="b14-p2-s2">Métodos de aprendizado por reforço ou auto-supervisionados poderiam descobrir estratégias de preensão sem supervisão manual, mas introduzem outros desafios (simulação realista, transferência sim-to-real).</span> <span class="s" data-s="b14-p2-s3">Finalmente, o método não lida com falhas de preensão de forma robusta: se todos os candidatos falham, o sistema não tem estratégia de recuperação.</span></p>        <h2><span class="s" data-s="b15-h">Por que isso importa</span></h2>
+<p><span class="s" data-s="b15-p0-s0">Manipulação robótica de tecidos é um problema fundamental com aplicações práticas em automação doméstica, lavanderias industriais, hospitais (troca de lençóis) e manufatura têxtil.</span> <span class="s" data-s="b15-p0-s1">A dificuldade técnica — alta dimensionalidade, dinâmica complexa, oclusões — torna esses ambientes um banco de prova para percepção e controle robótico.</span> <span class="s" data-s="b15-p0-s2">Resolver desdobramento é um passo necessário antes de tarefas mais complexas como dobrar ou vestir.</span></p><p><span class="s" data-s="b15-p1-s0">CeDiRNet-6DoF avança o estado da arte ao prever diretamente pose completa 6-DoF de forma densa, evitando heurísticas frágeis ou planejamento em duas etapas.</span> <span class="s" data-s="b15-p1-s1">A formulação de regressão densa com vetores de direção é elegante e gera múltiplos candidatos naturalmente, útil quando restrições cinemáticas eliminam algumas opções.</span> <span class="s" data-s="b15-p1-s2">A validação em competição real e em itens novos fornece evidência de que o método funciona fora de laboratório controlado.</span></p><p><span class="s" data-s="b15-p2-s0">Os resultados também destacam desafios abertos: generalização para aparências novas, necessidade de mais dados de treinamento, e o papel ainda incerto da informação de profundidade em redes grandes.</span> <span class="s" data-s="b15-p2-s1">O estudo de ablação é particularmente valioso, mostrando que ganhos vêm de detalhes (recorte de imagem, randomização de fundo) tanto quanto de arquitetura.</span> <span class="s" data-s="b15-p2-s2">Para pesquisadores em robótica de manipulação, o paper oferece um método reproduzível e lições práticas sobre o que funciona — e o que ainda precisa melhorar — em percepção para tecidos deformáveis.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">CeDiRNet-6DoF prevê pose completa de preensão (posição e orientação 6-DoF) para desdobrar tecidos pendurados, usando regressão densa de vetores de direção e ângulos de Euler parametrizados com seno-cosseno.</span></li><li><span class="s" data-s="k1">Em avaliação com 16 itens (8 da competição ICRA 2024, 8 novos), o método alcançou 85,8% de cobertura média e 82,5% de sucesso de preensão, ficando em segundo lugar na competição entre dez participantes.</span></li><li><span class="s" data-s="k2">Ablação mostra que recorte de imagem (+9,7 pp cobertura), randomização de fundo (+5,6 pp) e orientação 3D vs. 1D (+6,4 pp) são cruciais; profundidade como entrada não ajudou, possivelmente por dataset pequeno.</span></li><li><span class="s" data-s="k3">Generalização para texturas não vistas cai 14,5 pp em cobertura, indicando que diversidade de treinamento ainda limita robustez do método em ambientes reais não controlados.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2609.31452" rel="noopener">Vision-Based 6-DoF Grasp Pose Estimation for Robot Cloth Unfolding</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2609.31452" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

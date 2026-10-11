@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Modelos de fala para Alzheimer podem estar decidindo pelo ruído de fundo, não pelo que o paciente diz — arXiv em 5</title>
+<meta name="description" content="Pesquisadores mostram que sistemas de detecção de Alzheimer baseados em áudio aprendem a usar fatores acústicos como ruído e reverberação para fazer diagnósticos, mesmo quando há fala disponível — e que alta acurácia não garante robustez clínica.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Modelos de fala para Alzheimer podem estar decidindo pelo ruído de fundo, não pelo que o paciente diz">
+<meta property="og:description" content="Pesquisadores mostram que sistemas de detecção de Alzheimer baseados em áudio aprendem a usar fatores acústicos como ruído e reverberação para fazer diagnósticos, mesmo quando há fala disponível — e que alta acurácia não garante robustez clínica.">
+<meta property="og:image" content="../../assets/papers/2610.01846/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Áudio</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.01846" rel="noopener">arXiv:2610.01846</a>
+    </div>
+    <h1><span class="s" data-s="t">Modelos de fala para Alzheimer podem estar decidindo pelo ruído de fundo, não pelo que o paciente diz</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Pesquisadores mostram que sistemas de detecção de Alzheimer baseados em áudio aprendem a usar fatores acústicos como ruído e reverberação para fazer diagnósticos, mesmo quando há fala disponível — e que alta acurácia não garante robustez clínica.</span></p>
+    <p class="byline">
+      <span>Kopar et al.</span>
+      <span>10 min de leitura</span>
+<span>01/10/2026</span>    </p>
+    <div class="listen" data-article="2610.01846" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema: modelos que ouvem o ambiente, não o paciente</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Sistemas de detecção de Alzheimer baseados em fala prometem escalabilidade e baixo custo.</span> <span class="s" data-s="b0-p0-s1">A ideia é simples: gravar alguém descrevendo uma imagem, extrair padrões da voz e treinar um classificador para separar controles saudáveis de pacientes com Alzheimer.</span> <span class="s" data-s="b0-p0-s2">Nos últimos anos, esses sistemas passaram a usar modelos de self-supervised learning (SSL) pré-treinados em grandes corpora de áudio — como Wav2Vec2, HuBERT e WavLM — que aprendem representações diretamente do áudio bruto, sem transcrição.</span></p><p><span class="s" data-s="b0-p1-s0">O ganho é enorme: esses modelos capturam prosódia, pausas, hesitações e outros sinais que podem indicar declínio cognitivo.</span> <span class="s" data-s="b0-p1-s1">Mas há um problema: eles também capturam tudo o que está no áudio.</span> <span class="s" data-s="b0-p1-s2">Ruído de fundo, reverberação da sala, qualidade do microfone.</span> <span class="s" data-s="b0-p1-s3">E trabalhos recentes mostraram que é possível prever Alzheimer apenas com os trechos de silêncio e ruído ambiente, sem nenhuma fala do paciente.</span></p><p><span class="s" data-s="b0-p2-s0">Este paper, conduzido por pesquisadores do Hertie Institute for AI in Brain Health, Tübingen AI Center, Sony Group Corporation e Friedrich-Alexander-University Erlangen-Nürnberg, vai além: ele pergunta se esses fatores acústicos não apenas estão codificados nas representações, mas se eles de fato influenciam sistematicamente as predições de Alzheimer — mesmo quando há fala disponível.</span> <span class="s" data-s="b0-p2-s1">A diferença é sutil, mas crucial: uma coisa é o modelo poder decodificar ruído; outra é ele usar ruído para decidir o diagnóstico.</span></p>        <h2><span class="s" data-s="b1-h">A ideia: intervir, não apenas observar</span></h2>
+<p><span class="s" data-s="b1-p0-s0">A abordagem clássica para investigar o que um modelo aprendeu é a decodificação linear: você treina um classificador simples em cima das representações internas e vê se consegue recuperar alguma variável de interesse.</span> <span class="s" data-s="b1-p0-s1">Se conseguir, a informação está lá.</span> <span class="s" data-s="b1-p0-s2">Mas isso não prova que o modelo downstream usa essa informação.</span></p><p><span class="s" data-s="b1-p1-s0">Os autores propõem um framework de intervenção controlada.</span> <span class="s" data-s="b1-p1-s1">A ideia é manipular fatores acústicos — ruído e reverberação — de forma sistemática e medir se essas manipulações alteram as predições de Alzheimer.</span> <span class="s" data-s="b1-p1-s2">Se alterarem, e se essas alterações forem estruturadas (não aleatórias), isso indica que o classificador está funcionalmente sensível a esses fatores.</span></p><p><span class="s" data-s="b1-p2-s0">O experimento usa o dataset ADReSSo, que contém gravações de 166 pessoas (79 controles, 87 com Alzheimer) descrevendo a imagem Cookie Theft, com um conjunto de teste separado de 71 pessoas.</span> <span class="s" data-s="b1-p2-s1">Os autores aplicam detecção de atividade de voz (VAD) para separar três fluxos de áudio: PAT (apenas fala do participante), NS (trechos sem fala, só silêncio e ambiente) e FULL (gravação completa).</span></p><p><span class="s" data-s="b1-p3-s0">Eles então geram versões contrafactuais dessas gravações, aplicando ruído e reverberação controlados em quatro níveis de severidade (D1 a D4, de leve a severo).</span> <span class="s" data-s="b1-p3-s1">O ruído é aditivo: real (gravações ambientais do MUSAN) ou sintético (ruído gaussiano com SNR de 20, 10, 5 e 0 dB).</span> <span class="s" data-s="b1-p3-s2">A reverberação é convolutiva: real (respostas de impulso de salas medidas) ou sintética (simulada com pyroomacoustics, T60 de 0.3 a 0.9 segundos).</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b2-t">SNR e SRMR: o que medem?</span></h3>
+          <p><span class="s" data-s="b2-c-s0">SNR (signal-to-noise ratio) quantifica quanto ruído de fundo existe na gravação.</span> <span class="s" data-s="b2-c-s1">SRMR (speech-to-reverberation modulation energy ratio) mede reverberação, que depende da estrutura de modulação da fala.</span> <span class="s" data-s="b2-c-s2">Por isso, SRMR é alto em fala e baixo em silêncio.</span> <span class="s" data-s="b2-c-s3">No dataset original, SNR não difere entre grupos (p=0.489 no treino), mas SRMR é maior em Alzheimer no treino (p&lt;0.001) e não no teste (p=0.216).</span></p>
+        </aside>
+        <h2><span class="s" data-s="b3-h">Experimento 1: o que está codificado nas camadas do modelo</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Antes de intervir, os autores mapeiam o que está codificado em cada camada do HuBERT-Large (24 camadas).</span> <span class="s" data-s="b3-p0-s1">Eles treinam regressões lineares para prever SNR, SRMR e MMSE (o escore cognitivo padrão) e um classificador logístico para Alzheimer, usando validação cruzada aninhada de 5 folds.</span></p><p><span class="s" data-s="b3-p1-s0">O resultado é revelador: SNR é altamente decodificável em todas as camadas e todos os fluxos (R² ≈ 0.8 em FULL), indicando que a informação sobre ruído persiste em toda a profundidade do modelo.</span> <span class="s" data-s="b3-p1-s1">SRMR é decodificável nas camadas iniciais de PAT e FULL (R² ≈ 0.6), mas cai com a profundidade — o que faz sentido, já que reverberação depende de estrutura temporal de fala.</span> <span class="s" data-s="b3-p1-s2">MMSE, o escore cognitivo, aumenta com a profundidade, atingindo R² ≈ 0.5 nas camadas finais.</span></p><p><span class="s" data-s="b3-p2-s0">A classificação de Alzheimer atinge o pico na camada 12 (balanced accuracy de 0.87), que os autores chamam de ℓ*_AD.</span> <span class="s" data-s="b3-p2-s1">Importante: mesmo no fluxo NS (apenas silêncio e ambiente), o modelo consegue classificar Alzheimer acima do acaso, e SNR continua altamente decodificável.</span> <span class="s" data-s="b3-p2-s2">Mas SRMR e MMSE são praticamente não-decodificáveis em NS, o que é esperado: sem fala, não há estrutura de modulação nem conteúdo linguístico.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.01846/figure1.webp" alt="Decodificação linear camada a camada. SNR (ruído) é altamente decodificável em todas as camadas e fluxos. SRMR (reverberação) decai com a profundidade. MMSE e classificação de Alzheimer crescem nas camadas intermediárias e finais." loading="lazy">
+          <figcaption>
+            Decodificação linear camada a camada. SNR (ruído) é altamente decodificável em todas as camadas e fluxos. SRMR (reverberação) decai com a profundidade. MMSE e classificação de Alzheimer crescem nas camadas intermediárias e finais.
+            <span class="source">Figura 1 do paper · Kopar et al., arXiv:2610.01846</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Experimento 2: intervir no áudio e medir o impacto</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Agora vem a parte central: os autores pegam as gravações limpas, aplicam as degradações acústicas controladas e avaliam as mesmas gravações com o classificador congelado treinado no áudio limpo.</span> <span class="s" data-s="b5-p0-s1">A métrica principal é a taxa de flip: quantas predições mudam de classe (HC→AD ou AD→HC) quando o áudio é degradado.</span></p><p><span class="s" data-s="b5-p1-s0">O resultado é claro: intervenções de ruído (SNR) causam muito mais flips do que reverberação (SRMR).</span> <span class="s" data-s="b5-p1-s1">No fluxo FULL, camada 1, ruído sintético severo (D4) causa 51% de flips, contra apenas 8% para reverberação.</span> <span class="s" data-s="b5-p1-s2">A taxa de flip geralmente aumenta com a severidade da degradação (D1→D4).</span> <span class="s" data-s="b5-p1-s3">A exceção é NS sob ruído: mesmo D1 (leve) já causa flips comparáveis a D4, indicando alta sensibilidade ao ruído em regiões sem fala.</span></p><p><span class="s" data-s="b5-p2-s0">Mais importante: os flips não são aleatórios.</span> <span class="s" data-s="b5-p2-s1">Sob reverberação, PAT e FULL mostram predominância de flips AD→HC (o modelo passa a classificar como saudável).</span> <span class="s" data-s="b5-p2-s2">Sob ruído, NS mostra forte predominância de AD→HC, enquanto PAT e FULL mostram um padrão dependente de severidade, com mais flips HC→AD conforme o ruído aumenta.</span></p><p><span class="s" data-s="b5-p3-s0">Os autores então medem o alinhamento geométrico: eles calculam o vetor de mudança na representação (limpo vs. degradado) e medem o cosseno com a direção de decisão do classificador (o vetor de pesos do classificador logístico).</span> <span class="s" data-s="b5-p3-s1">Um cosseno positivo significa que a mudança aponta para AD; negativo, para HC.</span> <span class="s" data-s="b5-p3-s2">Em 44 de 48 condições (91.7%), o alinhamento cai fora do intervalo de 95% de direções aleatórias de mesma magnitude.</span> <span class="s" data-s="b5-p3-s3">Isso mostra que as mudanças são sistematicamente estruturadas, não ruído aleatório.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.01846/figure2.webp" alt="Intervenções no espaço de entrada. Taxa de flip por camada: ruído causa muito mais mudanças que reverberação. Direção dos flips mostra padrões sistemáticos. Alinhamento geométrico cai fora do intervalo de direções aleatórias em 91.7% das condições." loading="lazy">
+          <figcaption>
+            Intervenções no espaço de entrada. Taxa de flip por camada: ruído causa muito mais mudanças que reverberação. Direção dos flips mostra padrões sistemáticos. Alinhamento geométrico cai fora do intervalo de direções aleatórias em 91.7% das condições.
+            <span class="source">Figura 2 do paper · Kopar et al., arXiv:2610.01846</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Experimento 3: intervir diretamente no espaço de representação</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Degradar o áudio e passar pelo encoder é uma forma de intervenção.</span> <span class="s" data-s="b7-p0-s1">Mas os autores vão além: eles intervêm diretamente no espaço de representação.</span> <span class="s" data-s="b7-p0-s2">A ideia é calcular a direção média de mudança causada pela degradação acústica (por exemplo, limpo vs. ruído D4) em uma camada r, e então aplicar essa direção como perturbação em outra camada (onde o classificador opera).</span></p><p><span class="s" data-s="b7-p1-s0">Formalmente: eles extraem representações de áudio limpo e degradado na camada r, calculam o vetor de diferença médio δ_r, normalizam pela magnitude média ρ_r, e então adicionam α·δ_r à representação limpa na camada onde o classificador foi treinado.</span> <span class="s" data-s="b7-p1-s1">Se α=+1, estão aplicando a direção de degradação; se α=−1, estão revertendo.</span></p><p><span class="s" data-s="b7-p2-s0">Os resultados confirmam a sensibilidade: a taxa de flip atinge 42% na camada r*=9 quando aplicam a direção de ruído D4 derivada de FULL.</span> <span class="s" data-s="b7-p2-s1">Isso não é explicado pela magnitude da perturbação, que na verdade diminui com a profundidade (de 83 na camada 0 para 64 na camada 9).</span> <span class="s" data-s="b7-p2-s2">Ou seja, mesmo perturbações menores, se alinhadas com a direção de degradação acústica, causam grandes mudanças na predição.</span></p><p><span class="s" data-s="b7-p3-s0">Os flips são novamente direcionais: em PAT e FULL, tanto ruído quanto reverberação causam predominantemente flips AD→HC.</span> <span class="s" data-s="b7-p3-s1">Em NS, ruído mantém a direção HC, mas reverberação causa poucos flips, principalmente AD.</span> <span class="s" data-s="b7-p3-s2">O alinhamento geométrico replica o padrão: PAT e FULL apontam para HC, frequentemente fora do intervalo de direções aleatórias.</span> <span class="s" data-s="b7-p3-s3">E quando invertem α de +1 para −1, o efeito no logit inverte quase perfeitamente (correlação de Pearson de −0.98), confirmando reversibilidade direcional.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b8-t">Por que ruído tem mais efeito que reverberação?</span></h3>
+          <p><span class="s" data-s="b8-c-s0">SNR não diferia entre grupos no dataset original (p=0.489), mas SRMR sim (p&lt;0.001 no treino).</span> <span class="s" data-s="b8-c-s1">Ainda assim, ruído causa mais flips.</span> <span class="s" data-s="b8-c-s2">Os autores argumentam que ausência de diferença significativa no fator medido não garante robustez: o modelo pode ter aprendido a usar ruído de formas sutis, não capturadas por testes de grupo.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b9-h">Generalização: outros modelos e o conjunto de teste</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Os autores repetem toda a análise com Wav2Vec2-Large e WavLM-Large, e avaliam o conjunto de teste separado (n=71) usando o modelo treinado no conjunto completo de treino, sem reajustar nenhuma escolha de análise.</span></p><p><span class="s" data-s="b9-p1-s0">A generalização é forte.</span> <span class="s" data-s="b9-p1-s1">Eles usam o coeficiente de concordância de Lin (CCC) para medir o acordo entre treino e teste, tanto em associação quanto em magnitude.</span> <span class="s" data-s="b9-p1-s2">Para flips de predição, o CCC médio entre treino e teste é 0.71 para HuBERT, 0.68 para Wav2Vec2 e 0.66 para WavLM.</span> <span class="s" data-s="b9-p1-s3">Para alinhamento geométrico (padronizado por direções aleatórias), o CCC é 0.58, 0.54 e 0.51, respectivamente.</span></p><p><span class="s" data-s="b9-p2-s0">Isso significa que os efeitos de intervenção não são artefatos de overfitting no conjunto de treino: eles se replicam no teste, em múltiplos backbones SSL, e mantêm a estrutura direcional.</span> <span class="s" data-s="b9-p2-s1">Os autores destacam que HuBERT, que teve a melhor performance de classificação (BA=0.87), também mostrou os efeitos de intervenção mais fortes — sugerindo que alta acurácia não implica robustez.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.01846/figure4.webp" alt="Generalização entre backbones e conjunto de teste. As linhas mostram concordância (CCC) entre treino e teste para taxa de flip e alinhamento geométrico. HuBERT, o modelo com melhor acurácia, também mostra os efeitos de intervenção mais fortes." loading="lazy">
+          <figcaption>
+            Generalização entre backbones e conjunto de teste. As linhas mostram concordância (CCC) entre treino e teste para taxa de flip e alinhamento geométrico. HuBERT, o modelo com melhor acurácia, também mostra os efeitos de intervenção mais fortes.
+            <span class="source">Figura 4 do paper · Kopar et al., arXiv:2610.01846</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b11-h">O que isso significa para modelos clínicos</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Os resultados têm implicações diretas para o uso clínico de modelos de fala.</span> <span class="s" data-s="b11-p0-s1">Primeiro: alta performance preditiva e ausência de diferença significativa em um fator acústico medido não são suficientes para garantir robustez.</span> <span class="s" data-s="b11-p0-s2">SNR não diferia entre grupos no dataset original, mas intervenções de ruído causaram os maiores efeitos.</span> <span class="s" data-s="b11-p0-s3">Isso sugere que o modelo aprendeu a usar ruído de formas que não aparecem em testes estatísticos simples.</span></p><p><span class="s" data-s="b11-p1-s0">Segundo: a presença de conteúdo de fala genuíno não elimina a sensibilidade a fatores acústicos.</span> <span class="s" data-s="b11-p1-s1">Mesmo no fluxo PAT (apenas fala do participante), intervenções de ruído e reverberação alteraram sistematicamente as predições.</span> <span class="s" data-s="b11-p1-s2">Isso é preocupante porque, em aplicações reais, variações acústicas são inevitáveis: diferentes microfones, ambientes, dispositivos de gravação.</span></p><p><span class="s" data-s="b11-p2-s0">Terceiro: os efeitos são estruturados, não aleatórios.</span> <span class="s" data-s="b11-p2-s1">As mudanças de representação se alinham sistematicamente com a direção de decisão do classificador, replicam no conjunto de teste e revertem quando a direção de intervenção é invertida.</span> <span class="s" data-s="b11-p2-s2">Isso indica que o modelo está funcionalmente sensível a esses fatores, não apenas codificando-os passivamente.</span></p><p><span class="s" data-s="b11-p3-s0">Os autores argumentam que testes de robustez baseados em intervenção deveriam se tornar padrão para modelos clínicos de fala.</span> <span class="s" data-s="b11-p3-s1">Não basta reportar acurácia em um conjunto de teste; é preciso testar se o modelo resiste a variações acústicas controladas que não deveriam afetar o diagnóstico.</span></p>        <h2><span class="s" data-s="b12-h">Limitações e o que fica em aberto</span></h2>
+<p><span class="s" data-s="b12-p0-s0">O paper tem escopo bem definido, mas também limitações claras.</span> <span class="s" data-s="b12-p0-s1">Primeiro, ele usa apenas um dataset (ADReSSo) e uma tarefa (descrição de imagem).</span> <span class="s" data-s="b12-p0-s2">Não sabemos se os mesmos efeitos aparecem em fala espontânea, entrevistas longas ou outros tipos de avaliação cognitiva.</span></p><p><span class="s" data-s="b12-p1-s0">Segundo, os autores usam classificadores lineares por escolha metodológica: eles precisam de uma direção de decisão explícita para medir alinhamento geométrico.</span> <span class="s" data-s="b12-p1-s1">Mas modelos não-lineares ou end-to-end podem se comportar de forma diferente.</span> <span class="s" data-s="b12-p1-s2">A sensibilidade a fatores acústicos pode ser maior ou menor dependendo da arquitetura downstream.</span></p><p><span class="s" data-s="b12-p2-s0">Terceiro, o paper mostra que intervenções acústicas alteram predições, mas não resolve o problema.</span> <span class="s" data-s="b12-p2-s1">Ele não propõe uma forma de treinar modelos mais robustos, nem testa se técnicas de data augmentation, domain adaptation ou adversarial training conseguem mitigar esses efeitos.</span> <span class="s" data-s="b12-p2-s2">Essa é uma direção clara para trabalho futuro.</span></p><p><span class="s" data-s="b12-p3-s0">Quarto, o paper não investiga quais aspectos específicos do ruído ou reverberação o modelo está usando.</span> <span class="s" data-s="b12-p3-s1">Ruído de fundo pode estar correlacionado com idade, condição socioeconômica, ambiente de gravação — fatores que, por sua vez, podem estar correlacionados com saúde cognitiva.</span> <span class="s" data-s="b12-p3-s2">Desemaranhar essas correlações exigiria experimentos adicionais.</span></p><p><span class="s" data-s="b12-p4-s0">Por fim, o paper não testa o impacto clínico real dessas sensibilidades.</span> <span class="s" data-s="b12-p4-s1">Ele mostra que predições mudam, mas não avalia se essas mudanças afetariam decisões clínicas em um cenário de uso real, onde outros fatores (histórico do paciente, exames complementares) também entram na decisão.</span></p>        <h2><span class="s" data-s="b13-h">Conclusão: robustez exige mais que acurácia</span></h2>
+<p><span class="s" data-s="b13-p0-s0">Este paper é um lembrete importante de que performance preditiva não é sinônimo de confiabilidade clínica.</span> <span class="s" data-s="b13-p0-s1">Modelos SSL para detecção de Alzheimer podem atingir acurácia alta, mas isso não significa que estão tomando decisões pelos motivos certos.</span> <span class="s" data-s="b13-p0-s2">Se um modelo usa ruído de fundo ou reverberação para classificar Alzheimer, ele está vulnerável a variações triviais de ambiente de gravação — e pode falhar exatamente nos cenários onde mais precisamos de robustez.</span></p><p><span class="s" data-s="b13-p1-s0">A contribuição metodológica é clara: o framework de intervenção controlada, combinando manipulações no espaço de entrada e de representação com análise geométrica, oferece uma forma sistemática de testar se um modelo está funcionalmente sensível a fatores que não deveriam importar.</span> <span class="s" data-s="b13-p1-s1">E os resultados são um alerta: ausência de diferença estatística em um fator medido não garante que o modelo não o esteja usando.</span></p><p><span class="s" data-s="b13-p2-s0">O código está disponível publicamente, e a abordagem pode ser aplicada a outros modelos, datasets e fatores de confusão.</span> <span class="s" data-s="b13-p2-s1">Para que sistemas de fala baseados em IA sejam realmente úteis na clínica, eles precisam ser robustos a variações acústicas triviais.</span> <span class="s" data-s="b13-p2-s2">Este paper mostra que ainda não chegamos lá — e oferece ferramentas para medir e, eventualmente, corrigir o problema.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Modelos SSL para Alzheimer são sistematicamente sensíveis a ruído e reverberação, mesmo quando há fala disponível — e alta acurácia não garante robustez a variações acústicas.</span></li><li><span class="s" data-s="k1">Intervenções controladas no espaço de entrada e de representação causam mudanças estruturadas nas predições, que se replicam no teste e revertem quando a direção de intervenção é invertida.</span></li><li><span class="s" data-s="k2">Ausência de diferença significativa em um fator acústico medido (como SNR) não impede que o modelo use esse fator para decidir — testes de robustez por intervenção deveriam ser padrão.</span></li><li><span class="s" data-s="k3">O framework combina decodificação linear, intervenções controladas e análise geométrica para distinguir o que está codificado do que realmente influencia a predição downstream.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.01846" rel="noopener">Beyond Decodability: Do Acoustic Factors Drive Predictions in Speech-Based Alzheimer&#39;s Assessment?</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.01846" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AVSD-Scenes: descrições multimodais de cenas urbanas geradas por LLMs capturam mais que rótulos de categoria — arXiv em 5</title>
+<meta name="description" content="Pesquisadores do IIT Madras e King&#39;s College London criaram um dataset de 12.291 descrições em linguagem natural de cenas urbanas, combinando informações de áudio e vídeo com modelos de linguagem para capturar contexto além de etiquetas como &#39;parque&#39; ou &#39;aeroporto&#39;.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AVSD-Scenes: descrições multimodais de cenas urbanas geradas por LLMs capturam mais que rótulos de categoria">
+<meta property="og:description" content="Pesquisadores do IIT Madras e King&#39;s College London criaram um dataset de 12.291 descrições em linguagem natural de cenas urbanas, combinando informações de áudio e vídeo com modelos de linguagem para capturar contexto além de etiquetas como &#39;parque&#39; ou &#39;aeroporto&#39;.">
+<meta property="og:image" content="../../assets/papers/2610.01861/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Áudio</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.01861" rel="noopener">arXiv:2610.01861</a>
+    </div>
+    <h1><span class="s" data-s="t">AVSD-Scenes: descrições multimodais de cenas urbanas geradas por LLMs capturam mais que rótulos de categoria</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Pesquisadores do IIT Madras e King&#39;s College London criaram um dataset de 12.291 descrições em linguagem natural de cenas urbanas, combinando informações de áudio e vídeo com modelos de linguagem para capturar contexto além de etiquetas como &#39;parque&#39; ou &#39;aeroporto&#39;.</span></p>
+    <p class="byline">
+      <span>Devalraju et al.</span>
+      <span>8 min de leitura</span>
+<span>01/10/2026</span>    </p>
+    <div class="listen" data-article="2610.01861" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=lNgD_B9StFc" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema dos rótulos de cena</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Datasets de cenas urbanas costumam representar ambientes com etiquetas simples: &#39;aeroporto&#39;, &#39;parque&#39;, &#39;estação de metrô&#39;.</span> <span class="s" data-s="b0-p0-s1">Essas categorias são úteis para classificação, mas omitem praticamente tudo que torna uma cena interessante.</span> <span class="s" data-s="b0-p0-s2">Não dizem quais sons estão presentes, o que está visível no ambiente, que atividades acontecem, ou como áudio e vídeo se relacionam.</span></p><p><span class="s" data-s="b0-p1-s0">O dataset TAU Urban Audio-Visual Scenes, criado para benchmarks de classificação de cenas acústicas, captura ambientes urbanos com áudio e vídeo sincronizados.</span> <span class="s" data-s="b0-p1-s1">Mas cada gravação é identificada apenas por um rótulo de categoria.</span> <span class="s" data-s="b0-p1-s2">Para tarefas como recuperação multimodal, geração de linguagem ou compreensão de cena, essa representação é insuficiente.</span></p><p><span class="s" data-s="b0-p2-s0">Datasets de audio captioning existem: Clotho tem cerca de 5 mil clipes de áudio ambiental com legendas escritas por humanos; AudioCaps tem 46 mil pares áudio-texto extraídos do AudioSet.</span> <span class="s" data-s="b0-p2-s1">Mas a anotação manual é cara e não escala.</span> <span class="s" data-s="b0-p2-s2">Datasets automáticos maiores, como WavCaps e LAION-Audio-630K, focam em eventos acústicos isolados, não em cenas completas.</span> <span class="s" data-s="b0-p2-s3">Datasets audio-visuais como VGG-Sound descrevem eventos associados a fontes sonoras visíveis, mas não capturam o contexto holístico de um ambiente urbano.</span></p>        <h2><span class="s" data-s="b1-h">A proposta: descrições multimodais geradas por LLMs</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Os autores apresentam o AVSD-Scenes, um dataset de 12.291 descrições em linguagem natural de cenas urbanas, geradas automaticamente a partir do TAU Urban Audio-Visual Scenes.</span> <span class="s" data-s="b1-p0-s1">A ideia é usar modelos de linguagem especializados para criar descrições ricas que integrem informações de áudio e vídeo, indo além do que cada modalidade captura isoladamente.</span></p><p><span class="s" data-s="b1-p1-s0">O pipeline funciona em três etapas.</span> <span class="s" data-s="b1-p1-s1">Primeiro, um modelo de áudio (Qwen2-Audio-7B) gera descrições textuais a partir do áudio da cena.</span> <span class="s" data-s="b1-p1-s2">Segundo, um modelo de visão (Qwen2.5-VL-7B) gera descrições a partir dos frames de vídeo.</span> <span class="s" data-s="b1-p1-s3">Terceiro, três LLMs diferentes (Qwen3-14B, Mistral-Small-3.2-24B e Gemma-3-27B) recebem as duas descrições e as combinam em uma descrição multimodal unificada.</span></p><p><span class="s" data-s="b1-p2-s0">A motivação é que áudio e vídeo carregam informações complementares.</span> <span class="s" data-s="b1-p2-s1">O áudio captura eventos temporais, atividades e sons ambientes que podem não ter fonte visível.</span> <span class="s" data-s="b1-p2-s2">O vídeo fornece contexto espacial, objetos, pessoas e pistas sobre possíveis fontes sonoras.</span> <span class="s" data-s="b1-p2-s3">Uma descrição que integre ambas as modalidades deveria ser mais informativa que qualquer descrição unimodal.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.01861/figure1.webp" alt="Comparação entre a representação tradicional (apenas o rótulo &#39;park&#39;) e a descrição multimodal gerada pelo AVSD-Scenes. A nova descrição captura movimento, sons específicos, objetos visíveis e contexto espacial da cena." loading="lazy">
+          <figcaption>
+            Comparação entre a representação tradicional (apenas o rótulo &#39;park&#39;) e a descrição multimodal gerada pelo AVSD-Scenes. A nova descrição captura movimento, sons específicos, objetos visíveis e contexto espacial da cena.
+            <span class="source">Figura 1 do paper · Devalraju et al., arXiv:2610.01861</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Como o pipeline de geração funciona</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Todos os modelos são carregados com quantização de 4 bits (NormalFloat) e double quantization, usando computação em FP16 para tornar a inferência viável em hardware limitado.</span> <span class="s" data-s="b3-p0-s1">O Qwen2-Audio-7B recebe o áudio da cena e gera uma descrição textual focada nos eventos sonoros.</span> <span class="s" data-s="b3-p0-s2">O Qwen2.5-VL-7B processa frames do vídeo e descreve o conteúdo visual.</span></p><p><span class="s" data-s="b3-p1-s0">As duas descrições são então passadas para um dos três LLMs de fusão.</span> <span class="s" data-s="b3-p1-s1">Cada LLM recebe um prompt pedindo para combinar as informações de áudio e vídeo em uma descrição coerente que capture a cena como um todo.</span> <span class="s" data-s="b3-p1-s2">Os autores testam três modelos diferentes para verificar se a escolha do LLM de fusão afeta a qualidade das descrições resultantes.</span></p><p><span class="s" data-s="b3-p2-s0">O dataset final contém três versões de cada descrição multimodal, uma para cada LLM de fusão.</span> <span class="s" data-s="b3-p2-s1">Isso permite comparar não só descrições multimodais contra unimodais, mas também avaliar o impacto da arquitetura do modelo de fusão na qualidade final.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.01861/figure2.webp" alt="Pipeline completo de construção do dataset: modelos especializados geram descrições de áudio e vídeo separadamente, depois LLMs combinam essas descrições em texto multimodal. Todos os modelos usam quantização de 4 bits para viabilizar inferência." loading="lazy">
+          <figcaption>
+            Pipeline completo de construção do dataset: modelos especializados geram descrições de áudio e vídeo separadamente, depois LLMs combinam essas descrições em texto multimodal. Todos os modelos usam quantização de 4 bits para viabilizar inferência.
+            <span class="source">Figura 2 do paper · Devalraju et al., arXiv:2610.01861</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Como avaliar descrições multimodais</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os autores usam cinco estratégias de avaliação.</span> <span class="s" data-s="b5-p0-s1">Primeiro, similaridade cross-modal: embeddings das descrições são comparados com embeddings de áudio e vídeo usando modelos CLAP e CLIP.</span> <span class="s" data-s="b5-p0-s2">A hipótese é que descrições multimodais devem ter alta similaridade com ambas as modalidades, enquanto descrições unimodais devem favorecer apenas sua modalidade de origem.</span></p><p><span class="s" data-s="b5-p1-s0">Segundo, recuperação cross-modal: dado um embedding de texto, o sistema tenta recuperar o áudio ou vídeo correto entre todos os exemplos do dataset.</span> <span class="s" data-s="b5-p1-s1">Métricas como Recall@10 e mean Average Precision (mAP@10) medem o desempenho.</span> <span class="s" data-s="b5-p1-s2">Terceiro, classificação de cena: um SVM linear é treinado para prever a categoria da cena urbana (parque, aeroporto, etc.) usando apenas embeddings das descrições textuais.</span></p><p><span class="s" data-s="b5-p2-s0">Quarto, avaliação LLM-as-a-judge: o GPT-4o recebe pares de descrições e julga qual é mais detalhada, coerente e informativa.</span> <span class="s" data-s="b5-p2-s1">Quinto, avaliação humana subjetiva: anotadores humanos classificam as descrições em uma escala de 1 a 5 nas mesmas dimensões avaliadas pelo LLM.</span></p><p><span class="s" data-s="b5-p3-s0">Essa bateria de testes é importante porque não existe métrica única para qualidade de descrições.</span> <span class="s" data-s="b5-p3-s1">Similaridade cross-modal mede alinhamento semântico, mas não garante que a descrição seja útil.</span> <span class="s" data-s="b5-p3-s2">Classificação de cena verifica se a descrição preserva informação discriminativa.</span> <span class="s" data-s="b5-p3-s3">Avaliação humana captura aspectos qualitativos que métricas automáticas podem perder.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b6-t">Por que não usar métricas de captioning tradicionais?</span></h3>
+          <p><span class="s" data-s="b6-c-s0">Métricas como BLEU ou CIDEr comparam texto gerado contra referências humanas.</span> <span class="s" data-s="b6-c-s1">Mas o AVSD-Scenes não tem descrições de referência escritas por humanos, justamente porque o objetivo é gerar descrições automaticamente em escala.</span> <span class="s" data-s="b6-c-s2">Por isso os autores usam avaliações baseadas em alinhamento semântico e utilidade downstream.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b7-h">Descrições multimodais capturam mais informação</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Os resultados de similaridade cross-modal mostram que descrições multimodais têm alta correlação tanto com áudio quanto com vídeo.</span> <span class="s" data-s="b7-p0-s1">Descrições geradas apenas de áudio têm similaridade média de 0.29 com embeddings de áudio e 0.24 com vídeo.</span> <span class="s" data-s="b7-p0-s2">Descrições apenas de vídeo têm 0.24 com áudio e 0.28 com vídeo.</span> <span class="s" data-s="b7-p0-s3">Já descrições multimodais alcançam 0.27 com áudio e 0.27 com vídeo, equilibrando ambas as modalidades.</span></p><p><span class="s" data-s="b7-p1-s0">Na recuperação cross-modal, descrições multimodais superam descrições unimodais.</span> <span class="s" data-s="b7-p1-s1">Para recuperação de áudio, o Recall@10 sobe de 18.8% (descrição de vídeo) e 28.9% (descrição de áudio) para 31.3% com descrições multimodais do Qwen3.</span> <span class="s" data-s="b7-p1-s2">Para recuperação de vídeo, o ganho é de 18.5% e 26.9% para 29.9%.</span></p><p><span class="s" data-s="b7-p2-s0">Esses números indicam que as descrições multimodais não apenas combinam informações de ambas as modalidades, mas capturam relações entre elas que não estão presentes nas descrições unimodais.</span> <span class="s" data-s="b7-p2-s1">A fusão não é uma simples concatenação: os LLMs conseguem integrar pistas de áudio e vídeo de forma complementar.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.01861/table1.webp" alt="Similaridade cross-modal entre descrições e embeddings de áudio/vídeo. Descrições multimodais (linhas inferiores) mantêm alta similaridade com ambas as modalidades, enquanto descrições unimodais favorecem sua modalidade de origem." loading="lazy">
+          <figcaption>
+            Similaridade cross-modal entre descrições e embeddings de áudio/vídeo. Descrições multimodais (linhas inferiores) mantêm alta similaridade com ambas as modalidades, enquanto descrições unimodais favorecem sua modalidade de origem.
+            <span class="source">Tabela 1 do paper · Devalraju et al., arXiv:2610.01861</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Classificação de cena com texto alcança 94.5%</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Um resultado surpreendente é que descrições textuais sozinhas alcançam até 94.5% de acurácia na classificação de cenas urbanas.</span> <span class="s" data-s="b9-p0-s1">Isso é notável porque o classificador (um SVM linear) recebe apenas embeddings de texto, sem acesso direto a áudio ou vídeo.</span> <span class="s" data-s="b9-p0-s2">As descrições preservam informação discriminativa suficiente para separar categorias como &#39;aeroporto&#39;, &#39;parque&#39; e &#39;metrô&#39;.</span></p><p><span class="s" data-s="b9-p1-s0">Quando embeddings de áudio, vídeo e descrição multimodal são concatenados, a acurácia sobe para 95.4%.</span> <span class="s" data-s="b9-p1-s1">Isso mostra que as descrições não substituem completamente as modalidades originais, mas adicionam informação semântica de alto nível que complementa features de baixo nível extraídas de áudio e vídeo.</span></p><p><span class="s" data-s="b9-p2-s0">Os autores também testam o pipeline sem fornecer o rótulo de cena nas instruções dos modelos.</span> <span class="s" data-s="b9-p2-s1">Mesmo sem saber que estão descrevendo um &#39;parque&#39; ou &#39;aeroporto&#39;, as descrições geradas ainda alcançam 89.7% de acurácia em classificação.</span> <span class="s" data-s="b9-p2-s2">Isso sugere que os modelos capturam informação semântica derivada do conteúdo audio-visual, não apenas repetem rótulos fornecidos no prompt.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.01861/figure3.webp" alt="Acurácia de classificação de cenas urbanas usando diferentes combinações de modalidades. Descrições multimodais (D) sozinhas alcançam até 94.5%, e a combinação de áudio (A), vídeo (V) e descrição chega a 95.4%." loading="lazy">
+          <figcaption>
+            Acurácia de classificação de cenas urbanas usando diferentes combinações de modalidades. Descrições multimodais (D) sozinhas alcançam até 94.5%, e a combinação de áudio (A), vídeo (V) e descrição chega a 95.4%.
+            <span class="source">Figura 3 do paper · Devalraju et al., arXiv:2610.01861</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b11-h">Avaliação humana e LLM-as-a-judge</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Na avaliação LLM-as-a-judge, o GPT-4o prefere descrições multimodais em 73% dos casos quando comparadas a descrições apenas de áudio, e em 68% dos casos contra descrições apenas de vídeo.</span> <span class="s" data-s="b11-p0-s1">A avaliação humana subjetiva confirma essa preferência: anotadores humanos atribuem notas mais altas para descrições multimodais em todas as dimensões avaliadas.</span></p><p><span class="s" data-s="b11-p1-s0">Entre os três LLMs de fusão testados, Qwen3-14B e Mistral-Small-3.2-24B produzem descrições ligeiramente preferidas sobre Gemma-3-27B, mas as diferenças são pequenas.</span> <span class="s" data-s="b11-p1-s1">Isso sugere que a arquitetura do modelo de fusão tem impacto moderado na qualidade final, desde que o modelo seja suficientemente capaz.</span></p><p><span class="s" data-s="b11-p2-s0">A concordância entre avaliação automática (LLM-as-a-judge) e humana valida o uso de LLMs para avaliação de qualidade em escala.</span> <span class="s" data-s="b11-p2-s1">Mas os autores reconhecem que avaliação humana captura nuances que modelos podem perder, especialmente em aspectos como coerência narrativa e naturalidade da linguagem.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b12-t">Limitação: alucinações e ancoragem em rótulos</span></h3>
+          <p><span class="s" data-s="b12-c-s0">Os autores apontam que modelos de linguagem podem alucinar detalhes não presentes no áudio ou vídeo.</span> <span class="s" data-s="b12-c-s1">Experimentos sem rótulos de cena reduzem esse risco, mas não o eliminam.</span> <span class="s" data-s="b12-c-s2">Trabalho futuro deve focar em melhorar grounding semântico e reduzir alucinações nas descrições geradas.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b13-h">O que o dataset não resolve</span></h2>
+<p><span class="s" data-s="b13-p0-s0">O AVSD-Scenes cobre apenas cenas urbanas do dataset TAU, que foram gravadas com protocolos padronizados.</span> <span class="s" data-s="b13-p0-s1">Isso garante consistência, mas limita a diversidade de ambientes.</span> <span class="s" data-s="b13-p0-s2">Cenas rurais, interiores domésticos ou ambientes naturais não estão representados.</span> <span class="s" data-s="b13-p0-s3">A generalização para outros domínios não foi testada.</span></p><p><span class="s" data-s="b13-p1-s0">Todas as descrições são geradas automaticamente.</span> <span class="s" data-s="b13-p1-s1">Não há descrições de referência escritas por humanos para comparação direta.</span> <span class="s" data-s="b13-p1-s2">Isso torna impossível medir a &#39;correção&#39; absoluta das descrições, apenas sua utilidade em tarefas downstream e sua preferência em avaliações subjetivas.</span></p><p><span class="s" data-s="b13-p2-s0">O pipeline depende de modelos proprietários ou de código aberto específicos.</span> <span class="s" data-s="b13-p2-s1">Qwen2-Audio-7B e Qwen2.5-VL-7B são modelos relativamente grandes que exigem quantização para rodar em hardware acessível.</span> <span class="s" data-s="b13-p2-s2">A reprodutibilidade do dataset depende da disponibilidade contínua desses modelos.</span></p><p><span class="s" data-s="b13-p3-s0">Finalmente, o paper não explora como as descrições se comportam em tarefas de geração multimodal ou em sistemas de diálogo.</span> <span class="s" data-s="b13-p3-s1">A utilidade do dataset para aplicações além de classificação e recuperação ainda precisa ser demonstrada.</span></p>        <h2><span class="s" data-s="b14-h">Por que isso importa</span></h2>
+<p><span class="s" data-s="b14-p0-s0">O AVSD-Scenes mostra que é possível gerar descrições multimodais ricas em escala, usando modelos de linguagem para integrar informações de áudio e vídeo.</span> <span class="s" data-s="b14-p0-s1">Isso abre caminho para datasets maiores que representem ambientes complexos em linguagem natural, sem depender de anotação humana custosa.</span></p><p><span class="s" data-s="b14-p1-s0">As descrições geradas preservam informação discriminativa suficiente para classificação de cena, mas adicionam contexto semântico que rótulos categóricos não capturam.</span> <span class="s" data-s="b14-p1-s1">Isso é útil para sistemas que precisam raciocinar sobre ambientes, não apenas classificá-los.</span></p><p><span class="s" data-s="b14-p2-s0">A bateria de avaliações proposta (similaridade cross-modal, recuperação, classificação, LLM-as-a-judge, avaliação humana) oferece um framework para medir qualidade de descrições multimodais mesmo sem referências humanas.</span> <span class="s" data-s="b14-p2-s1">Isso pode ser aplicado a outros datasets gerados automaticamente.</span></p><p><span class="s" data-s="b14-p3-s0">O código e o dataset serão disponibilizados publicamente, permitindo que outros pesquisadores usem as descrições para treinar modelos de linguagem multimodal, avaliar sistemas de captioning ou explorar representações semânticas de cenas urbanas.</span> <span class="s" data-s="b14-p3-s1">O impacto dependerá de quão bem o dataset se integra a pipelines de treinamento existentes e se a comunidade adota as descrições como benchmark.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">AVSD-Scenes contém 12.291 descrições multimodais de cenas urbanas geradas por LLMs, combinando informações de áudio e vídeo em texto rico.</span></li><li><span class="s" data-s="k1">Descrições multimodais alcançam 94.5% de acurácia em classificação de cena usando apenas embeddings de texto, subindo para 95.4% quando combinadas com áudio e vídeo.</span></li><li><span class="s" data-s="k2">Avaliação cross-modal mostra que descrições multimodais capturam informações complementares de ambas as modalidades, superando descrições unimodais em recuperação.</span></li><li><span class="s" data-s="k3">Mesmo sem rótulos de cena no prompt, descrições geradas mantêm 89.7% de acurácia, indicando que capturam semântica do conteúdo, não apenas repetem etiquetas.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.01861" rel="noopener">AVSD-Scenes: A Dataset for Audio-Visual Description of Urban Scenes</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.01861" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

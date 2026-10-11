@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CALM: modelos de áudio contínuos que evitam quantização e rodam mais rápido que tempo real — arXiv em 5</title>
+<meta name="description" content="Pesquisadores do Kyutai e IRCAM-CNRS propõem gerar áudio direto no espaço latente de um VAE, sem comprimir em tokens discretos. O resultado é síntese de fala e música mais rápida e com menos perda de qualidade.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CALM: modelos de áudio contínuos que evitam quantização e rodam mais rápido que tempo real">
+<meta property="og:description" content="Pesquisadores do Kyutai e IRCAM-CNRS propõem gerar áudio direto no espaço latente de um VAE, sem comprimir em tokens discretos. O resultado é síntese de fala e música mais rápida e com menos perda de qualidade.">
+<meta property="og:image" content="../../assets/papers/2509.06926/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Áudio</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2509.06926" rel="noopener">arXiv:2509.06926</a>
+    </div>
+    <h1><span class="s" data-s="t">CALM: modelos de áudio contínuos que evitam quantização e rodam mais rápido que tempo real</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Pesquisadores do Kyutai e IRCAM-CNRS propõem gerar áudio direto no espaço latente de um VAE, sem comprimir em tokens discretos.</span> <span class="s" data-s="d-s1">O resultado é síntese de fala e música mais rápida e com menos perda de qualidade.</span></p>
+    <p class="byline">
+      <span>Rouard et al.</span>
+      <span>9 min de leitura</span>
+<span>08/09/2025</span>    </p>
+    <div class="listen" data-article="2509.06926" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=k77x3ob34NU" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema da quantização em modelos de áudio</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Modelos de linguagem para áudio (Audio Language Models, ALM) dominam hoje a geração de fala e música.</span> <span class="s" data-s="b0-p0-s1">A estratégia é simples: pegar um sinal contínuo, comprimi-lo em tokens discretos com um codec neural e treinar um Transformer autoregressivo para prever o próximo token, exatamente como se faz com texto.</span> <span class="s" data-s="b0-p0-s2">Funciona, mas tem um preço.</span></p><p><span class="s" data-s="b0-p1-s0">Diferente de texto, onde cada token é invertível e não perde informação, tokens de áudio vêm de codecs com perdas.</span> <span class="s" data-s="b0-p1-s1">Quanto melhor a qualidade desejada, mais tokens por segundo você precisa gerar.</span> <span class="s" data-s="b0-p1-s2">Isso cria um trade-off inevitável: fidelidade versus custo computacional.</span> <span class="s" data-s="b0-p1-s3">Para gerar áudio de alta qualidade, você precisa de hierarquias profundas de tokens (geralmente via Residual Vector Quantization, RVQ), e isso torna a geração cara e lenta.</span></p><p><span class="s" data-s="b0-p2-s0">O paper apresenta Continuous Audio Language Models (CALM), uma alternativa que abandona a quantização.</span> <span class="s" data-s="b0-p2-s1">Em vez de comprimir áudio em tokens discretos, os autores treinam um modelo autoregressivo que opera diretamente no espaço latente contínuo de um Variational Autoencoder (VAE).</span> <span class="s" data-s="b0-p2-s2">A promessa: áudio de melhor qualidade, gerado mais rápido e com menos parâmetros.</span></p>        <h2><span class="s" data-s="b1-h">Por que quantização é um gargalo</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Codecs neurais como SoundStream e Mimi usam RVQ para representar cada frame de áudio como uma pilha de tokens, do mais grosseiro ao mais fino.</span> <span class="s" data-s="b1-p0-s1">Essa hierarquia captura progressivamente mais detalhes, mas introduz perdas a cada camada.</span> <span class="s" data-s="b1-p0-s2">Para compensar, você aumenta a taxa de bits — mais tokens por segundo — e o modelo precisa gerar todos eles.</span></p><p><span class="s" data-s="b1-p1-s0">O problema é que tokens do mesmo frame têm dependências fortes entre si.</span> <span class="s" data-s="b1-p1-s1">Você não pode simplesmente gerá-los em paralelo sem perder qualidade.</span> <span class="s" data-s="b1-p1-s2">Técnicas como delay patterns (usadas no MusicGen) ajudam, mas não resolvem o custo fundamental: quanto mais tokens, mais passos de inferência.</span></p><p><span class="s" data-s="b1-p2-s0">VAEs tradicionais, por outro lado, não sofrem desse problema.</span> <span class="s" data-s="b1-p2-s1">Eles comprimem áudio em vetores contínuos, sem quantização.</span> <span class="s" data-s="b1-p2-s2">São mais fáceis de treinar, não têm problemas de codebook collapse e reconstroem áudio com maior fidelidade para a mesma dimensionalidade latente.</span> <span class="s" data-s="b1-p2-s3">A questão é: dá para treinar um modelo autoregressivo de linguagem diretamente sobre esses vetores contínuos?</span></p>        <h2><span class="s" data-s="b2-h">A arquitetura CALM: Transformers e consistency models</span></h2>
+<p><span class="s" data-s="b2-p0-s0">CALM combina três componentes principais.</span> <span class="s" data-s="b2-p0-s1">Primeiro, um VAE-GAN que codifica áudio em vetores contínuos.</span> <span class="s" data-s="b2-p0-s2">Diferente de codecs RVQ, esse VAE usa um bottleneck gaussiano regularizado por divergência KL, sem quantização.</span> <span class="s" data-s="b2-p0-s3">Para fala, os autores aplicam destilação semântica com WavLM; para música, deixam isso para trabalho futuro.</span></p><p><span class="s" data-s="b2-p1-s0">Segundo, um Transformer causal que processa a sequência de vetores latentes.</span> <span class="s" data-s="b2-p1-s1">Aqui entra uma inovação importante: noise injection durante o treinamento.</span> <span class="s" data-s="b2-p1-s2">A cada passo, o modelo recebe uma versão ruidosa do vetor anterior, misturando o latente real com ruído gaussiano.</span> <span class="s" data-s="b2-p1-s3">Isso força o backbone a capturar estrutura de longo prazo e previne acúmulo de erro durante inferência autoregressiva.</span></p><p><span class="s" data-s="b2-p2-s0">Terceiro, uma cabeça de geração baseada em consistency models.</span> <span class="s" data-s="b2-p2-s1">Em vez de prever diretamente o próximo vetor ou usar difusão (que exige múltiplos passos), os autores adaptam consistency distillation: a cabeça aprende a mapear qualquer ponto ruidoso diretamente para o vetor limpo em um único passo.</span> <span class="s" data-s="b2-p2-s2">Isso é condicionado no contexto do Transformer, permitindo geração rápida sem sacrificar qualidade.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2509.06926/figure1.webp" alt="Arquitetura do CALM: o Transformer backbone processa vetores latentes ruidosos (para capturar estrutura de longo prazo), enquanto a cabeça de consistency gera o próximo frame contínuo condicionada no contexto. Sem quantização, sem tokens discretos." loading="lazy">
+          <figcaption>
+            Arquitetura do CALM: o Transformer backbone processa vetores latentes ruidosos (para capturar estrutura de longo prazo), enquanto a cabeça de consistency gera o próximo frame contínuo condicionada no contexto. Sem quantização, sem tokens discretos.
+            <span class="source">Figura 1 do paper · Rouard et al., arXiv:2509.06926</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b4-h">Dual-context: contexto longo ruidoso, contexto curto limpo</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Uma decisão de design crucial: CALM usa dois Transformers.</span> <span class="s" data-s="b4-p0-s1">O backbone principal (T_long) vê a sequência inteira com ruído, capturando dependências de longo prazo.</span> <span class="s" data-s="b4-p0-s2">Mas para gerar detalhes finos do próximo frame, o modelo precisa de informação local precisa.</span></p><p><span class="s" data-s="b4-p1-s0">Por isso, um segundo Transformer menor (T_short) processa os últimos K vetores sem ruído.</span> <span class="s" data-s="b4-p1-s1">Esse contexto curto e limpo é concatenado com a saída do backbone longo e alimenta a cabeça de consistency.</span> <span class="s" data-s="b4-p1-s2">Ablations mostram que essa combinação é essencial: só ruído degrada qualidade local, só contexto limpo não generaliza bem.</span></p><p><span class="s" data-s="b4-p2-s0">A cabeça de consistency é um MLP pequeno que implementa consistency distillation.</span> <span class="s" data-s="b4-p2-s1">Durante treinamento, ela aprende a mapear pares (vetor ruidoso, nível de ruído) para o vetor limpo correspondente, condicionada no contexto dos Transformers.</span> <span class="s" data-s="b4-p2-s2">Na inferência, basta um passo: sample ruído, passe pela cabeça, obtenha o próximo frame.</span> <span class="s" data-s="b4-p2-s3">Opcionalmente, você pode usar Langevin Sampling Dynamics (LSD) — alguns passos de refinamento que melhoram qualidade com custo controlado.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b5-t">Consistency models vs. difusão</span></h3>
+          <p><span class="s" data-s="b5-c-s0">Modelos de difusão exigem dezenas de passos para gerar uma amostra de qualidade.</span> <span class="s" data-s="b5-c-s1">Consistency models aprendem um atalho: mapear diretamente ruído para dado limpo em um único passo.</span> <span class="s" data-s="b5-c-s2">Isso torna CALM muito mais rápido que alternativas baseadas em difusão, como SALAD e DiTAR, sem perda de qualidade.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b6-h">Melhorias práticas: temperatura e batch multiplier</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Os autores introduzem duas técnicas simples mas eficazes.</span> <span class="s" data-s="b6-p0-s1">Primeiro, temperature sampling: em vez de sempre amostrar do prior gaussiano padrão, você pode escalar a variância do ruído inicial.</span> <span class="s" data-s="b6-p0-s2">Temperatura mais alta (σ &gt; 1) aumenta diversidade; mais baixa (σ &lt; 1) torna a geração mais determinística.</span> <span class="s" data-s="b6-p0-s3">Isso permite controlar o trade-off exploração-exploração sem retreinar o modelo.</span></p><p><span class="s" data-s="b6-p1-s0">Segundo, head batch multiplier: durante treinamento, a cabeça de consistency vê múltiplas versões ruidosas do mesmo vetor latente no mesmo batch.</span> <span class="s" data-s="b6-p1-s1">Isso aumenta a eficiência do gradiente sem custo extra no backbone Transformer, que processa cada sequência uma única vez.</span> <span class="s" data-s="b6-p1-s2">Na prática, isso acelera convergência e melhora qualidade final.</span></p>        <h2><span class="s" data-s="b7-h">Resultados em text-to-speech: Pocket TTS</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Os autores treinam modelos de text-to-speech (TTS) em LibriSpeech e Libri-Light, comparando CALM com baselines discretos (RQ-Transformer) e contínuos (DiTAR).</span> <span class="s" data-s="b7-p0-s1">CALM com 1-step LSD supera todos os baselines em Word Error Rate (WER), Character Error Rate (CER) e qualidade acústica medida por similarity com ground truth.</span></p><p><span class="s" data-s="b7-p1-s0">Mais impressionante: Pocket TTS, um modelo CALM de apenas 100 milhões de parâmetros, roda mais rápido que tempo real em uma CPU de laptop.</span> <span class="s" data-s="b7-p1-s1">Especificamente, 1.16× real-time em um único core de CPU (Intel Xeon Gold 6430).</span> <span class="s" data-s="b7-p1-s2">Isso abre a porta para TTS de alta qualidade em dispositivos edge, sem necessidade de GPU.</span></p><p><span class="s" data-s="b7-p2-s0">A tabela de resultados mostra que CALM com 2-step LSD alcança WER de 2.01% e CER de 0.51% em LibriSpeech test-clean, superando o baseline RQ-Transformer (WER 2.14%) e o DiTAR (WER 2.30%).</span> <span class="s" data-s="b7-p2-s1">A qualidade acústica, medida por similarity, também é consistentemente melhor.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2509.06926/table3.webp" alt="Text-to-speech: CALM supera baselines discretos e contínuos em taxa de erro de palavras e qualidade acústica. O modelo com 1-step LSD já bate todos os concorrentes, e 2-step melhora ainda mais." loading="lazy">
+          <figcaption>
+            Text-to-speech: CALM supera baselines discretos e contínuos em taxa de erro de palavras e qualidade acústica. O modelo com 1-step LSD já bate todos os concorrentes, e 2-step melhora ainda mais.
+            <span class="source">Tabela 3 do paper · Rouard et al., arXiv:2509.06926</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Geração de música: velocidade e qualidade</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Para música, os autores treinam em um dataset interno e comparam com MusicGen (baseado em RVQ com 32 níveis).</span> <span class="s" data-s="b9-p0-s1">O modelo CALM com consistency head gera 30 segundos de música 2.2× mais rápido que o baseline, enquanto a cabeça de sampling sozinha é 19.3× mais rápida.</span></p><p><span class="s" data-s="b9-p1-s0">A métrica de qualidade é Fréchet Audio Distance (FAD), que mede quão próximas as distribuições de áudio gerado e real estão.</span> <span class="s" data-s="b9-p1-s1">CALM com 1-step consistency atinge FAD de 1.46, melhor que o baseline RQ-Transformer (1.52).</span> <span class="s" data-s="b9-p1-s2">Com 2-step LSD, cai para 1.42.</span> <span class="s" data-s="b9-p1-s3">O modelo também é avaliado em ViSQOL (Virtual Speech Quality Objective Listener), onde empata com o baseline.</span></p><p><span class="s" data-s="b9-p2-s0">Importante: esses ganhos vêm sem aumentar o tamanho do modelo.</span> <span class="s" data-s="b9-p2-s1">O backbone Transformer é o mesmo; a diferença está na cabeça de geração e no fato de operar em espaço contínuo.</span> <span class="s" data-s="b9-p2-s2">Isso sugere que o overhead da quantização — tanto em qualidade quanto em velocidade — é real e evitável.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2509.06926/table4.webp" alt="Geração de música: CALM com consistency models é 2.2× mais rápido que baseline RVQ mantendo qualidade equivalente ou superior. A cabeça de sampling sozinha é 19.3× mais rápida." loading="lazy">
+          <figcaption>
+            Geração de música: CALM com consistency models é 2.2× mais rápido que baseline RVQ mantendo qualidade equivalente ou superior. A cabeça de sampling sozinha é 19.3× mais rápida.
+            <span class="source">Tabela 4 do paper · Rouard et al., arXiv:2509.06926</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b11-h">Ablations: o que realmente importa</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Os autores conduzem ablations sistemáticos para justificar cada escolha de design.</span> <span class="s" data-s="b11-p0-s1">Primeiro, noise injection no backbone: sem ruído, o modelo de música diverge rapidamente durante inferência autoregressiva.</span> <span class="s" data-s="b11-p0-s2">Com ruído, a geração é estável e de alta qualidade.</span></p><p><span class="s" data-s="b11-p1-s0">Segundo, dual-context (T_long + T_short): usar apenas contexto ruidoso degrada qualidade local; usar apenas contexto limpo não generaliza bem.</span> <span class="s" data-s="b11-p1-s1">A combinação é necessária.</span> <span class="s" data-s="b11-p1-s2">Terceiro, consistency models vs. difusão: consistency é mais rápido e atinge qualidade equivalente ou melhor com menos passos.</span></p><p><span class="s" data-s="b11-p2-s0">Finalmente, temperature sampling e head batch multiplier: ambos melhoram qualidade final.</span> <span class="s" data-s="b11-p2-s1">Temperatura permite controlar diversidade sem retreinar; batch multiplier acelera convergência.</span> <span class="s" data-s="b11-p2-s2">Esses detalhes, embora simples, fazem diferença prática.</span></p>        <h2><span class="s" data-s="b12-h">Continuação de fala e música</span></h2>
+<p><span class="s" data-s="b12-p0-s0">Além de TTS e text-to-music, os autores testam CALM em tarefas de continuação: dado um prompt de áudio, gerar a sequência seguinte sem supervisão textual.</span> <span class="s" data-s="b12-p0-s1">Para fala, isso é útil em aplicações de conversação; para música, em composição assistida.</span></p><p><span class="s" data-s="b12-p1-s0">Os resultados são qualitativos (samples disponíveis online), mas os autores reportam que CALM gera continuações coerentes e de alta fidelidade em ambos os domínios.</span> <span class="s" data-s="b12-p1-s1">Isso demonstra que o modelo não depende de condicionamento textual para capturar estrutura temporal e semântica do áudio.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b13-t">Pocket TTS: TTS de código aberto em CPU</span></h3>
+          <p><span class="s" data-s="b13-c-s0">Os autores liberam Pocket TTS, um modelo de 100M parâmetros que roda mais rápido que tempo real em CPU.</span> <span class="s" data-s="b13-c-s1">Isso é raro: a maioria dos modelos de TTS de alta qualidade exige GPU.</span> <span class="s" data-s="b13-c-s2">O código está disponível em github.com/kyutai-labs/pocket-tts.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b14-h">O que o paper não mostra</span></h2>
+<p><span class="s" data-s="b14-p0-s0">Primeiro, os experimentos de música usam um dataset interno não divulgado.</span> <span class="s" data-s="b14-p0-s1">Isso dificulta reprodução e comparação direta com outros trabalhos.</span> <span class="s" data-s="b14-p0-s2">Para fala, os autores usam LibriSpeech e Libri-Light, que são públicos, mas o VAE de música não é avaliado em benchmarks padrão como MusicCaps.</span></p><p><span class="s" data-s="b14-p1-s0">Segundo, não há destilação semântica para o VAE de música.</span> <span class="s" data-s="b14-p1-s1">Os autores mencionam isso como trabalho futuro, mas significa que o modelo de música pode não capturar estrutura semântica tão bem quanto o de fala.</span> <span class="s" data-s="b14-p1-s2">Terceiro, os resultados de continuação são apenas qualitativos — não há métricas objetivas reportadas.</span></p><p><span class="s" data-s="b14-p2-s0">Finalmente, o paper não compara com modelos de difusão de última geração como Stable Audio ou AudioLDM.</span> <span class="s" data-s="b14-p2-s1">As comparações são principalmente com baselines RVQ e com DiTAR (um trabalho anterior de difusão para TTS).</span> <span class="s" data-s="b14-p2-s2">Seria interessante ver como CALM se sai contra modelos de difusão de larga escala em música.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2509.06926/table12.webp" alt="Pocket TTS com 100M parâmetros roda 1.16× mais rápido que tempo real em CPU (Intel Xeon Gold 6430), mantendo WER competitivo e alta qualidade acústica. Isso é notável para um modelo tão pequeno." loading="lazy">
+          <figcaption>
+            Pocket TTS com 100M parâmetros roda 1.16× mais rápido que tempo real em CPU (Intel Xeon Gold 6430), mantendo WER competitivo e alta qualidade acústica. Isso é notável para um modelo tão pequeno.
+            <span class="source">Tabela 12 do paper · Rouard et al., arXiv:2509.06926</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b16-h">Por que isso importa</span></h2>
+<p><span class="s" data-s="b16-p0-s0">CALM demonstra que quantização não é necessária para modelagem autoregressiva de áudio.</span> <span class="s" data-s="b16-p0-s1">Isso é relevante porque a maioria dos modelos de áudio de última geração — MusicGen, AudioGen, Mimi — depende de RVQ.</span> <span class="s" data-s="b16-p0-s2">Se você pode obter qualidade superior e velocidade maior sem quantização, vale a pena repensar a arquitetura padrão.</span></p><p><span class="s" data-s="b16-p1-s0">A combinação de VAE contínuo, noise injection e consistency models é particularmente elegante.</span> <span class="s" data-s="b16-p1-s1">Cada componente resolve um problema específico: VAE evita perdas de quantização, ruído previne acúmulo de erro, consistency permite geração em um passo.</span> <span class="s" data-s="b16-p1-s2">O resultado é um sistema que é ao mesmo tempo mais simples (sem hierarquias de tokens) e mais eficiente.</span></p><p><span class="s" data-s="b16-p2-s0">Pocket TTS é um exemplo concreto do potencial: TTS de alta qualidade rodando em CPU, sem GPU.</span> <span class="s" data-s="b16-p2-s1">Isso abre aplicações em dispositivos móveis, assistentes offline e cenários onde latência e custo computacional são críticos.</span> <span class="s" data-s="b16-p2-s2">Se a abordagem escalar para modelos maiores e domínios mais complexos, pode mudar a forma como pensamos sobre geração de áudio.</span></p>        <h2><span class="s" data-s="b17-h">Conclusão</span></h2>
+<p><span class="s" data-s="b17-p0-s0">CALM propõe uma alternativa viável aos modelos de áudio baseados em tokens discretos.</span> <span class="s" data-s="b17-p0-s1">Ao operar diretamente no espaço latente contínuo de um VAE e usar consistency models para geração, os autores conseguem melhor qualidade, menor custo computacional e inferência mais rápida que baselines RVQ.</span></p><p><span class="s" data-s="b17-p1-s0">Os resultados em TTS e música são promissores, e a liberação de Pocket TTS como código aberto facilita experimentação.</span> <span class="s" data-s="b17-p1-s1">As limitações — dataset de música não público, falta de destilação semântica para música, comparações limitadas com difusão — deixam perguntas em aberto, mas a direção é clara.</span></p><p><span class="s" data-s="b17-p2-s0">Se você trabalha com geração de áudio, vale acompanhar essa linha de pesquisa.</span> <span class="s" data-s="b17-p2-s1">Modelos contínuos podem ser o próximo passo natural depois da era dos codecs RVQ, especialmente para aplicações que exigem eficiência e qualidade simultâneas.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">CALM gera áudio direto no espaço latente de um VAE, sem quantização em tokens discretos, evitando perdas de compressão e reduzindo custo computacional.</span></li><li><span class="s" data-s="k1">Combinação de noise injection no Transformer e consistency models na cabeça de geração permite síntese em um passo, 2.2× mais rápida que baselines RVQ.</span></li><li><span class="s" data-s="k2">Pocket TTS (100M parâmetros) roda mais rápido que tempo real em CPU, abrindo caminho para TTS de alta qualidade em dispositivos edge sem GPU.</span></li><li><span class="s" data-s="k3">Experimentos em fala e música mostram qualidade superior, mas dataset de música é interno e não há comparação com modelos de difusão de larga escala.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2509.06926" rel="noopener">Continuous Audio Language Models</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2509.06926" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

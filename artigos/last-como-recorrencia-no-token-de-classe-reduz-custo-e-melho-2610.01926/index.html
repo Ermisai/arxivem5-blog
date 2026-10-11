@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LAST: como recorrência no token de classe reduz custo e melhora reconhecimento de áudio em transformers — arXiv em 5</title>
+<meta name="description" content="Pesquisadores de Georgia Tech, UC San Diego e Google DeepMind mostram que processar o áudio uma vez e depois refinar apenas a representação de classe em múltiplas passadas supera transformers mais profundos com metade dos parâmetros.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LAST: como recorrência no token de classe reduz custo e melhora reconhecimento de áudio em transformers">
+<meta property="og:description" content="Pesquisadores de Georgia Tech, UC San Diego e Google DeepMind mostram que processar o áudio uma vez e depois refinar apenas a representação de classe em múltiplas passadas supera transformers mais profundos com metade dos parâmetros.">
+<meta property="og:image" content="../../assets/papers/2610.01926/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Áudio</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.01926" rel="noopener">arXiv:2610.01926</a>
+    </div>
+    <h1><span class="s" data-s="t">LAST: como recorrência no token de classe reduz custo e melhora reconhecimento de áudio em transformers</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Pesquisadores de Georgia Tech, UC San Diego e Google DeepMind mostram que processar o áudio uma vez e depois refinar apenas a representação de classe em múltiplas passadas supera transformers mais profundos com metade dos parâmetros.</span></p>
+    <p class="byline">
+      <span>Al-Tahan et al.</span>
+      <span>8 min de leitura</span>
+<span>01/10/2026</span>    </p>
+    <div class="listen" data-article="2610.01926" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=05U3dJZoycE" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema: profundidade custa caro</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Transformers de áudio funcionam convertendo espectrogramas em centenas de tokens e integrando informação temporal ao longo de camadas sucessivas até produzir uma representação de classe que alimenta o classificador.</span> <span class="s" data-s="b0-p0-s1">Aumentar a profundidade — adicionar mais camadas — melhora o desempenho, mas cada camada nova traz novos parâmetros, mais operações de multiplicação-acumulação (MACs) e maior custo computacional.</span></p><p><span class="s" data-s="b0-p1-s0">O Audio Spectrogram Transformer (AST) segue essa arquitetura sequencial: cada camada processa todos os tokens uma vez e passa o resultado adiante.</span> <span class="s" data-s="b0-p1-s1">Para melhorar a precisão, você precisa empilhar mais blocos.</span> <span class="s" data-s="b0-p1-s2">O modelo de 12 camadas alcança 0,3379 de mean average precision (mAP) no AudioSet, mas usa 86,1 milhões de parâmetros e 48,4 GMACs por clipe.</span> <span class="s" data-s="b0-p1-s3">É eficaz, mas ineficiente.</span></p><p><span class="s" data-s="b0-p2-s0">Os autores partem de uma observação biológica: o sistema auditivo humano resolve integração temporal com processamento recorrente, reutilizando os mesmos neurônios.</span> <span class="s" data-s="b0-p2-s1">A pergunta que orienta o paper é: podemos obter os benefícios de profundidade adicional sem aumentar o número de parâmetros, aplicando recorrência em vez de empilhar camadas distintas?</span></p>        <h2><span class="s" data-s="b1-h">A ideia: recorrência focada no token de classe</span></h2>
+<p><span class="s" data-s="b1-p0-s0">A resposta é o LAST (Looped Audio Spectrogram Transformer), que combina duas estratégias.</span> <span class="s" data-s="b1-p0-s1">Primeiro, reutiliza os mesmos blocos de transformer em múltiplas passadas (recorrência), aumentando a profundidade efetiva sem adicionar parâmetros.</span> <span class="s" data-s="b1-p0-s2">Segundo, e mais importante, aplica essa recorrência de forma assimétrica: processa todos os tokens do espectrograma na primeira passada, depois congela as representações de áudio e refina apenas o token de classe (CLS) nas passadas seguintes.</span></p><p><span class="s" data-s="b1-p1-s0">Essa escolha vem de uma observação empírica: as representações dos tokens de áudio tendem a estabilizar mais rápido que a do token de classe ao longo das passadas recorrentes.</span> <span class="s" data-s="b1-p1-s1">Se as features de áudio já foram computadas de forma informativa, faz mais sentido dedicar processamento adicional a integrar essas features pré-computadas do que recalculá-las repetidamente.</span></p><p><span class="s" data-s="b1-p2-s0">O LAST se diferencia de trabalhos anteriores.</span> <span class="s" data-s="b1-p2-s1">O Perceiver aplica cross-attention iterativa entre um array latente e entradas brutas de imagem ou áudio.</span> <span class="s" data-s="b1-p2-s2">LARM usa recorrência em reconhecimento de fala, mas atualiza todos os tokens a cada passada.</span> <span class="s" data-s="b1-p2-s3">O CaiT também refina um token de classe sobre features fixas, mas usa camadas de atenção separadas que exigem novos parâmetros.</span> <span class="s" data-s="b1-p2-s4">O LAST reutiliza os blocos do próprio encoder, sem adicionar parâmetros.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.01926/figure2.webp" alt="Três arquiteturas: AST sequencial usa blocos distintos uma vez; recorrência em todos os tokens reusa os mesmos blocos mas atualiza tudo; LAST faz uma passada completa e depois refina só o token de classe sobre features fixas." loading="lazy">
+          <figcaption>
+            Três arquiteturas: AST sequencial usa blocos distintos uma vez; recorrência em todos os tokens reusa os mesmos blocos mas atualiza tudo; LAST faz uma passada completa e depois refina só o token de classe sobre features fixas.
+            <span class="source">Figura 2 do paper · Al-Tahan et al., arXiv:2610.01926</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Como funciona: passadas completas e passadas baratas</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O encoder recebe N tokens de espectrograma log-Mel e um token de classe aprendido, todos de largura C. Um AST sequencial aplica D blocos distintos uma vez.</span> <span class="s" data-s="b3-p0-s1">Um encoder recorrente reutiliza os mesmos D blocos por R passadas, resultando em D×R aplicações de blocos a partir de D conjuntos de pesos.</span> <span class="s" data-s="b3-p0-s2">O número de parâmetros é fixado por D, mas sob recorrência ingênua (full-token) todos os tokens são atualizados a cada passada e o custo computacional escala linearmente com R.</span></p><p><span class="s" data-s="b3-p1-s0">O LAST quebra essa simetria.</span> <span class="s" data-s="b3-p1-s1">Na primeira passada, todos os tokens são processados normalmente: cada bloco aplica atenção completa e a rede feed-forward (MLP) a todos os N+1 tokens.</span> <span class="s" data-s="b3-p1-s2">A partir da segunda passada, os tokens de áudio são congelados.</span> <span class="s" data-s="b3-p1-s3">Cada bloco calcula as chaves (keys) e valores (values) dos tokens de áudio uma vez na segunda passada e os armazena em cache para reutilização.</span> <span class="s" data-s="b3-p1-s4">Nas passadas subsequentes, apenas o token de classe é atualizado: a atenção e o MLP operam somente sobre ele, usando as chaves e valores cacheados.</span></p><p><span class="s" data-s="b3-p2-s0">Essa assimetria muda radicalmente o custo.</span> <span class="s" data-s="b3-p2-s1">Uma passada completa custa O(D(NC² + N²C)), onde o termo quadrático em N domina para espectrogramas longos.</span> <span class="s" data-s="b3-p2-s2">Uma passada de classe cacheada custa O(D(C² + NC)): o termo quadrático em N desaparece e a projeção se reduz a uma única query.</span> <span class="s" data-s="b3-p2-s3">A profundidade efetiva cresce com R a custo quase constante.</span> <span class="s" data-s="b3-p2-s4">O treinamento permanece end-to-end: gradientes alcançam a primeira passada através das features de áudio fixas.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b4-t">Custo assimétrico</span></h3>
+          <p><span class="s" data-s="b4-c-s0">Aumentar de 2 para 10 passadas no LAST adiciona apenas 1,2% de computação.</span> <span class="s" data-s="b4-c-s1">Isso acontece porque só a primeira passada processa todos os tokens; as outras nove atualizam apenas o token de classe usando chaves e valores cacheados, eliminando o termo quadrático no número de tokens.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b5-h">Resultados: mais precisão, menos custo</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os autores treinaram três famílias de modelos sob receita idêntica no AudioSet: AST sequencial com D ∈ {3, 6, 9, 12} camadas, e duas variantes recorrentes com D=6 blocos compartilhados e R ∈ {2, 4, 6, 8, 10} passadas — uma atualizando todos os tokens (full-token), outra apenas o token de classe (LAST).</span></p><p><span class="s" data-s="b5-p1-s0">Aumentar profundidade sequencial funciona, mas é caro.</span> <span class="s" data-s="b5-p1-s1">De D=3 para D=12, o mAP sobe de 0,3049 para 0,3379, mas os parâmetros crescem de 22,3M para 86,1M e a computação de 12,1 para 48,4 GMACs.</span> <span class="s" data-s="b5-p1-s2">Contra o baseline sequencial D=6 (mesma contagem de parâmetros), o LAST vence a partir de R≥6, e seu mAP sobe a cada passada testada: de 0,3275 em R=2 para 0,3450 em R=10.</span></p><p><span class="s" data-s="b5-p2-s0">Com R=10, o LAST atinge 0,3450 de mAP contra 0,3379 do sequencial D=12 — melhoria relativa de 2,1% — com 49,4% menos parâmetros, 42% menos MACs e throughput medido 9,8% maior.</span> <span class="s" data-s="b5-p2-s1">A vantagem depende de como a recorrência é aplicada: full-token recurrence com os mesmos seis blocos cai de 0,3247 mAP em R=2 para 0,3099 em R=10, apesar de quintuplicar a computação.</span> <span class="s" data-s="b5-p2-s2">A vantagem do LAST sobre full-token cresce de 0,0028 mAP em R=2 para 0,0350 em R=10, onde full-token requer aproximadamente 8 vezes mais MACs.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.01926/figure1.webp" alt="Custo computacional (eixo x, escala log) versus mAP no AudioSet (eixo y). LAST (D=6, R=2 a 10) melhora com custo quase plano. Full-token loop piora conforme R cresce. AST sequencial melhora, mas a custo linear em profundidade." loading="lazy">
+          <figcaption>
+            Custo computacional (eixo x, escala log) versus mAP no AudioSet (eixo y). LAST (D=6, R=2 a 10) melhora com custo quase plano. Full-token loop piora conforme R cresce. AST sequencial melhora, mas a custo linear em profundidade.
+            <span class="source">Figura 1 do paper · Al-Tahan et al., arXiv:2610.01926</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Robustez: mascaramento temporal e corrupções</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Precisão em condições limpas mede apenas o cenário ideal.</span> <span class="s" data-s="b7-p0-s1">Se as passadas adicionais realmente integram evidência distribuída ao longo do clipe, em vez de apenas afiar a dependência de poucos frames salientes, a representação deveria degradar de forma mais suave quando essa evidência é removida ou distorcida.</span> <span class="s" data-s="b7-p0-s2">Os autores testam isso em duas direções: mascaramento temporal remove informação, e corrupções de forma de onda a alteram mantendo a entrada completa.</span></p><p><span class="s" data-s="b7-p1-s0">No mascaramento temporal, frames do espectrograma normalizado são progressivamente zerados, seja selecionando regiões por atenção decrescente do token de classe, seja uniformemente ao acaso.</span> <span class="s" data-s="b7-p1-s1">O LAST retém mais precisão que o AST sequencial sob ambos os regimes.</span> <span class="s" data-s="b7-p1-s2">Sob mascaramento por atenção, o LAST (D=6, R=10) mantém 0,2885 de mAP com 50% dos frames mascarados, contra 0,2654 do sequencial D=12.</span> <span class="s" data-s="b7-p1-s3">Sob mascaramento aleatório, o LAST mantém 0,2947 versus 0,2821 do sequencial na mesma condição.</span></p><p><span class="s" data-s="b7-p2-s0">Nas corrupções de forma de onda, o LAST melhora desempenho em todas as doze famílias testadas: deslocamento temporal, mudança de velocidade, estiramento temporal, ganho, clipping, reverberação, filtros passa-alta e passa-baixa, pitch shift, e ruídos branco, rosa e marrom.</span> <span class="s" data-s="b7-p2-s1">Cada ponto é a média sobre configurações dentro de uma família; a linha tracejada é a média entre as doze.</span> <span class="s" data-s="b7-p2-s2">A margem do LAST sobre o AST sequencial nas corrupções excede a diferença entre os dois modelos em áudio limpo.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.01926/figure3.webp" alt="LAST degrada mais graciosamente sob mascaramento temporal. Gráfico mostra mAP no AudioSet conforme frames do espectrograma são progressivamente zerados, por atenção ou aleatoriamente. Modelos: sequencial D=12 e LAST D=6, R=10." loading="lazy">
+          <figcaption>
+            LAST degrada mais graciosamente sob mascaramento temporal. Gráfico mostra mAP no AudioSet conforme frames do espectrograma são progressivamente zerados, por atenção ou aleatoriamente. Modelos: sequencial D=12 e LAST D=6, R=10.
+            <span class="source">Figura 3 do paper · Al-Tahan et al., arXiv:2610.01926</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Transferência: features congeladas em oito tarefas</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Para avaliar se as features aprendidas generalizam, os autores congelaram os encoders treinados e usaram apenas um classificador linear em oito tarefas de áudio: Speech Commands V2 (SC-V2) e VoxCeleb (voz), NSynth e FMA (música), ESC-50, UrbanSound8K (US8K), DCASE e VGGSound (ambientais e eventos).</span></p><p><span class="s" data-s="b9-p1-s0">O LAST (D=6, R=10) superou o sequencial D=12 em cinco das oito tarefas, com metade dos parâmetros.</span> <span class="s" data-s="b9-p1-s1">Em FMA (música), o LAST alcançou 50,9% de acurácia contra 43,5% do sequencial — ganho de 7,4 pontos percentuais.</span> <span class="s" data-s="b9-p1-s2">Em ESC-50 (sons ambientais), 85,7% versus 84,1%.</span> <span class="s" data-s="b9-p1-s3">Em VGGSound (eventos), 36,3% versus 34,9%.</span> <span class="s" data-s="b9-p1-s4">Em NSynth (instrumentos), 96,8% versus 96,9%, praticamente empatados.</span></p><p><span class="s" data-s="b9-p2-s0">O full-token recurrence (D=6, R=2) teve desempenho geralmente inferior ao LAST e ao sequencial, reforçando que a vantagem não vem apenas de recorrência, mas de como ela é aplicada.</span> <span class="s" data-s="b9-p2-s1">Vale notar que cada ponto na Figura 1 é um modelo treinado separadamente; esses resultados não estabelecem se um modelo já treinado se beneficia de passadas adicionais em tempo de inferência.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.01926/table1.webp" alt="Acurácia de classificação com features congeladas em oito tarefas. LAST (D=6, R=10) supera o sequencial D=12 em cinco tarefas, usando metade dos parâmetros e menos computação." loading="lazy">
+          <figcaption>
+            Acurácia de classificação com features congeladas em oito tarefas. LAST (D=6, R=10) supera o sequencial D=12 em cinco tarefas, usando metade dos parâmetros e menos computação.
+            <span class="source">Tabela 1 do paper · Al-Tahan et al., arXiv:2610.01926</span>
+          </figcaption>
+        </figure>
+        <aside class="callout">
+          <h3><span class="s" data-s="b11-t">Limitação: modelos separados</span></h3>
+          <p><span class="s" data-s="b11-c-s0">Cada configuração de R foi treinada do zero.</span> <span class="s" data-s="b11-c-s1">O paper não mostra se você pode pegar um modelo LAST já treinado e simplesmente aumentar R em tempo de inferência para ganhar precisão, ou se o benefício depende de treinar com aquele número de passadas desde o início.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b12-h">O que fica em aberto</span></h2>
+<p><span class="s" data-s="b12-p0-s0">O LAST demonstra que recorrência focada no token de classe é mais eficiente e eficaz que recorrência em todos os tokens ou que empilhar camadas distintas, pelo menos no AudioSet e sob a receita de treinamento testada.</span> <span class="s" data-s="b12-p0-s1">Mas várias questões permanecem abertas.</span></p><p><span class="s" data-s="b12-p1-s0">Primeiro, o paper não explora se um modelo LAST treinado com R pequeno pode ser usado em inferência com R maior sem retreinamento.</span> <span class="s" data-s="b12-p1-s1">Isso seria valioso para ajustar o trade-off precisão-latência em tempo de deploy.</span> <span class="s" data-s="b12-p1-s2">Segundo, todos os experimentos usam D=6 blocos compartilhados para os modelos recorrentes; não sabemos como a escolha de D interage com R, ou se existe um ponto ótimo.</span></p><p><span class="s" data-s="b12-p2-s0">Terceiro, o mascaramento temporal e as corrupções de forma de onda testam robustez, mas não cobrem todos os tipos de distribuição shift relevantes em aplicações reais — por exemplo, mudanças de domínio acústico (microfone, sala) ou classes fora da distribuição de treinamento.</span> <span class="s" data-s="b12-p2-s1">Quarto, o paper se concentra em classificação de clipes; não está claro se a mesma estratégia beneficia tarefas de predição densa no tempo, como separação de fontes ou transcrição.</span></p><p><span class="s" data-s="b12-p3-s0">Finalmente, o custo assimétrico do LAST depende de cachear chaves e valores, o que consome memória.</span> <span class="s" data-s="b12-p3-s1">Para clipes muito longos ou lotes grandes, o overhead de memória pode se tornar um gargalo, mesmo que o custo de computação permaneça baixo.</span> <span class="s" data-s="b12-p3-s2">O paper não quantifica esse trade-off memória-computação em diferentes regimes de uso.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">LAST processa o áudio uma vez e depois refina só o token de classe em múltiplas passadas, aumentando profundidade efetiva a custo quase constante.</span></li><li><span class="s" data-s="k1">Com 10 passadas, LAST supera AST sequencial de 12 camadas em 2,1% no AudioSet, usando metade dos parâmetros e 42% menos operações.</span></li><li><span class="s" data-s="k2">LAST é mais robusto a mascaramento temporal e corrupções de áudio, e suas features transferem melhor para tarefas de música, fala e sons ambientais.</span></li><li><span class="s" data-s="k3">Cada configuração foi treinada separadamente; não sabemos se aumentar passadas em inferência funciona sem retreinar o modelo.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.01926" rel="noopener">LAST: Looped Audio Spectrogram Transformer</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.01926" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>StateVC: conversão de voz sem treino usando estados compartilhados entre fonte e referência — arXiv em 5</title>
+<meta name="description" content="Pesquisadores da EURECOM propõem um método de conversão de voz que define regiões locais comuns às representações de áudio de origem e de referência, aplicando transformações específicas a cada região sem precisar treinar redes neurais.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="StateVC: conversão de voz sem treino usando estados compartilhados entre fonte e referência">
+<meta property="og:description" content="Pesquisadores da EURECOM propõem um método de conversão de voz que define regiões locais comuns às representações de áudio de origem e de referência, aplicando transformações específicas a cada região sem precisar treinar redes neurais.">
+<meta property="og:image" content="../../assets/papers/2610.01952/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Áudio</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.01952" rel="noopener">arXiv:2610.01952</a>
+    </div>
+    <h1><span class="s" data-s="t">StateVC: conversão de voz sem treino usando estados compartilhados entre fonte e referência</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Pesquisadores da EURECOM propõem um método de conversão de voz que define regiões locais comuns às representações de áudio de origem e de referência, aplicando transformações específicas a cada região sem precisar treinar redes neurais.</span></p>
+    <p class="byline">
+      <span>Qu et al.</span>
+      <span>11 min de leitura</span>
+<span>01/10/2026</span>    </p>
+    <div class="listen" data-article="2610.01952" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema da conversão de voz one-shot</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Conversão de voz (voice conversion, VC) é a tarefa de modificar as características de um falante em um áudio de origem para que soem como as de um falante de referência, preservando o conteúdo linguístico original.</span> <span class="s" data-s="b0-p0-s1">No cenário one-shot, você tem apenas um único áudio de referência do falante-alvo, e esse áudio pode conter palavras completamente diferentes das que aparecem no áudio de origem.</span> <span class="s" data-s="b0-p0-s2">Isso torna impossível assumir que existe correspondência confiável entre os quadros (frames) de áudio de origem e de referência.</span></p><p><span class="s" data-s="b0-p1-s0">A maioria dos métodos de conversão de voz baseados em representações autossupervisionadas de fala — como WavLM — tenta estabelecer alguma relação entre frames de origem e de referência.</span> <span class="s" data-s="b0-p1-s1">Alguns usam vizinhos mais próximos (nearest neighbors), outros usam transporte ótimo (optimal transport) para parear frames explicitamente.</span> <span class="s" data-s="b0-p1-s2">Há também abordagens que aprendem uma única transformação linear global ou que estimam mapeamentos ao nível de distribuições.</span> <span class="s" data-s="b0-p1-s3">O que essas técnicas têm em comum é que, de uma forma ou de outra, elas primeiro estabelecem correspondências ou estimam componentes separadamente para origem e referência, e só depois aplicam a conversão.</span></p><p><span class="s" data-s="b0-p2-s0">O StateVC, proposto por pesquisadores da EURECOM na França, parte de uma hipótese diferente: frames de origem com representações WavLM similares devem sofrer mudanças parecidas em direção à referência.</span> <span class="s" data-s="b0-p2-s1">Em vez de parear frames individuais, o método define regiões locais no espaço de representações e estima uma transformação específica para cada região.</span> <span class="s" data-s="b0-p2-s2">A novidade central está em definir essas regiões — chamadas de estados — de forma conjunta para origem e referência, sem precisar primeiro parear frames ou componentes.</span></p>        <h2><span class="s" data-s="b1-h">A ideia: estados compartilhados</span></h2>
+<p><span class="s" data-s="b1-p0-s0">O StateVC é um método training-free, ou seja, não requer treino de uma rede neural específica para a tarefa de conversão.</span> <span class="s" data-s="b1-p0-s1">Ele opera diretamente sobre as representações extraídas por um encoder WavLM congelado, que produz vetores de 1024 dimensões para cada frame de áudio.</span> <span class="s" data-s="b1-p0-s2">A partir dessas representações, o método executa dois estágios principais: definição e atribuição de estados compartilhados, e estimativa de deslocamentos (shifts) locais seguida de atualização dos frames.</span></p><p><span class="s" data-s="b1-p1-s0">A ideia central é juntar (pooling) as representações de origem e de referência e ajustar um único modelo de mistura gaussiana (GMM) a esse conjunto combinado.</span> <span class="s" data-s="b1-p1-s1">Cada componente do GMM define um estado compartilhado por ambos os áudios.</span> <span class="s" data-s="b1-p1-s2">Isso significa que origem e referência são descritas pelo mesmo conjunto de regiões locais no espaço de representações, sem precisar de um passo adicional de matching entre componentes separados.</span></p><p><span class="s" data-s="b1-p2-s0">Depois de definir os estados, o método calcula, para cada estado, a média das representações de origem e a média das representações de referência que pertencem àquele estado.</span> <span class="s" data-s="b1-p2-s1">A diferença entre essas médias define um deslocamento (shift) específico para aquele estado.</span> <span class="s" data-s="b1-p2-s2">Cada frame de origem recebe então uma combinação ponderada desses deslocamentos, usando as probabilidades posteriores de pertencer a cada estado.</span> <span class="s" data-s="b1-p2-s3">Frames diferentes podem receber atualizações diferentes, dependendo de quais estados são mais prováveis para eles.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.01952/figure1.webp" alt="Arquitetura do StateVC: as representações WavLM de origem e referência são combinadas para ajustar um GMM que define estados compartilhados. Para cada estado, calcula-se um deslocamento médio no espaço WavLM original, que é aplicado aos frames de origem usando probabilidades posteriores suavizadas temporalmente." loading="lazy">
+          <figcaption>
+            Arquitetura do StateVC: as representações WavLM de origem e referência são combinadas para ajustar um GMM que define estados compartilhados. Para cada estado, calcula-se um deslocamento médio no espaço WavLM original, que é aplicado aos frames de origem usando probabilidades posteriores suavizadas temporalmente.
+            <span class="source">Figura 1 do paper · Qu et al., arXiv:2610.01952</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Como funciona: redução de dimensionalidade e ajuste do GMM</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O encoder WavLM extrai representações de dimensão D=1024 para cada frame.</span> <span class="s" data-s="b3-p0-s1">Ajustar um GMM diretamente nesse espaço de alta dimensão seria custoso e propenso a overfitting.</span> <span class="s" data-s="b3-p0-s2">Para contornar isso, o StateVC primeiro seleciona um subconjunto de dimensões com maior variação temporal.</span> <span class="s" data-s="b3-p0-s3">Especificamente, ele calcula o desvio padrão temporal de cada dimensão no áudio de origem e retém as dc dimensões com maior desvio.</span> <span class="s" data-s="b3-p0-s4">Essas mesmas dimensões são então selecionadas na representação de referência, criando um espaço compacto de dc dimensões onde origem e referência são comparáveis.</span></p><p><span class="s" data-s="b3-p1-s0">Esse espaço reduzido é usado exclusivamente para definir os estados e calcular as probabilidades de roteamento (routing probabilities) de cada frame para cada estado.</span> <span class="s" data-s="b3-p1-s1">Todas as estatísticas dos estados — médias, deslocamentos — e a conversão propriamente dita são estimadas e aplicadas no espaço WavLM original de 1024 dimensões.</span> <span class="s" data-s="b3-p1-s2">Isso preserva a riqueza das representações enquanto torna o ajuste do GMM mais tratável.</span></p><p><span class="s" data-s="b3-p2-s0">O método ajusta GMMs candidatos com número de componentes K variando de 1 até um limite Kmax.</span> <span class="s" data-s="b3-p2-s1">Para cada candidato, frames são temporariamente atribuídos ao componente de maior probabilidade posterior.</span> <span class="s" data-s="b3-p2-s2">Candidatos que resultam em algum estado com menos de nmin frames atribuídos são descartados.</span> <span class="s" data-s="b3-p2-s3">Entre os candidatos restantes, o GMM com menor critério de informação bayesiano (BIC) é selecionado, e seu número de componentes Ke define quantos estados serão usados para aquela conversão específica.</span> <span class="s" data-s="b3-p2-s4">Esse processo de seleção automática adapta a granularidade da modelagem à complexidade de cada par de áudios.</span></p><p><span class="s" data-s="b3-p3-s0">Após selecionar o GMM, cada frame recebe uma probabilidade posterior de pertencer a cada um dos Ke estados.</span> <span class="s" data-s="b3-p3-s1">Para reduzir variações bruscas entre frames consecutivos, essas probabilidades são suavizadas temporalmente usando uma janela de L=2J+1 frames.</span> <span class="s" data-s="b3-p3-s2">As probabilidades suavizadas são então renormalizadas para garantir que somem 1 para cada frame.</span></p>        <h2><span class="s" data-s="b4-h">Estimativa dos deslocamentos locais</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Para cada estado k, o método calcula a massa total de probabilidade posterior e a média ponderada das representações de origem e de referência no espaço WavLM completo.</span> <span class="s" data-s="b4-p0-s1">A massa total é simplesmente a soma das probabilidades posteriores suavizadas de todos os frames de uma dada utterance para aquele estado.</span> <span class="s" data-s="b4-p0-s2">A média ponderada é a média das representações dos frames, ponderada por essas probabilidades.</span></p><p><span class="s" data-s="b4-p1-s0">Se a massa total de um estado for suficientemente grande tanto na origem quanto na referência — ou seja, se ambas as utterances tiverem frames bem representados naquele estado — o deslocamento para aquele estado é definido como a diferença entre a média de referência e a média de origem.</span> <span class="s" data-s="b4-p1-s1">Caso contrário, o método usa um deslocamento global, calculado como a diferença entre as médias globais (não ponderadas) de origem e referência.</span> <span class="s" data-s="b4-p1-s2">Esse fallback garante que estados pouco populados não introduzam ruído na conversão.</span></p><p><span class="s" data-s="b4-p2-s0">Cada frame de origem é então atualizado somando-se a ele uma combinação convexa dos deslocamentos dos Ke estados, ponderada pelas probabilidades posteriores suavizadas daquele frame.</span> <span class="s" data-s="b4-p2-s1">Isso significa que frames com alta probabilidade para um estado específico receberão principalmente o deslocamento daquele estado, enquanto frames com probabilidades distribuídas entre vários estados receberão uma mistura de deslocamentos.</span> <span class="s" data-s="b4-p2-s2">Essa atualização suave permite que diferentes regiões do áudio recebam transformações locais adaptadas, sem transições abruptas.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b5-t">Por que estados compartilhados funcionam melhor?</span></h3>
+          <p><span class="s" data-s="b5-c-s0">Ajustar GMMs separados para origem e referência criaria dois conjuntos independentes de componentes, exigindo um passo adicional de matching (por exemplo, usando o algoritmo húngaro).</span> <span class="s" data-s="b5-c-s1">O StateVC evita isso ao definir um único conjunto de estados para ambos.</span> <span class="s" data-s="b5-c-s2">Nos experimentos controlados, estados compartilhados reduziram o WER de 13.82% para 8.44% e o CER de 6.60% para 3.48%, mantendo similaridade de falante praticamente idêntica.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b6-h">Protocolo de avaliação e métricas</span></h2>
+<p><span class="s" data-s="b6-p0-s0">O StateVC foi avaliado no protocolo one-shot do LibriSpeech, que usa 7.800 pares de áudios cross-speaker (falantes diferentes).</span> <span class="s" data-s="b6-p0-s1">As métricas objetivas incluem word error rate (WER) e character error rate (CER), medidas por reconhecimento automático de fala para verificar se o conteúdo linguístico foi preservado; e similaridade de falante (SIM), medida por um verificador de falante para checar se o áudio convertido soa como o falante de referência.</span></p><p><span class="s" data-s="b6-p1-s0">Além disso, foram coletadas avaliações subjetivas: S-MOS (speaker mean opinion score) para similaridade percebida de falante e N-MOS (naturalness mean opinion score) para naturalidade do áudio convertido.</span> <span class="s" data-s="b6-p1-s1">Essas métricas subjetivas capturam aspectos que as métricas objetivas podem não refletir completamente, como artefatos perceptuais ou qualidade geral do áudio.</span></p><p><span class="s" data-s="b6-p2-s0">O StateVC foi comparado com vários baselines: métodos training-free como LinearVC e MKL-VC, e métodos que requerem treino como NANSY e YourTTS.</span> <span class="s" data-s="b6-p2-s1">Essa comparação permite avaliar o custo-benefício de não precisar treinar uma rede específica para a tarefa.</span></p>        <h2><span class="s" data-s="b7-h">Resultados principais</span></h2>
+<p><span class="s" data-s="b7-p0-s0">O StateVC alcançou 8.01% de WER e 3.22% de CER, os menores valores entre todos os sistemas avaliados, com uma similaridade de falante de 0.9512.</span> <span class="s" data-s="b7-p0-s1">Comparado ao MKL-VC, o método anterior de melhor desempenho entre os training-free, o StateVC reduziu o WER de 8.22% para 8.01% e o CER de 3.37% para 3.22%, ao mesmo tempo que aumentou a similaridade de 0.9456 para 0.9512.</span></p><p><span class="s" data-s="b7-p1-s0">Nas métricas subjetivas, o StateVC obteve o maior S-MOS médio entre todos os sistemas avaliados e o maior N-MOS médio entre os sistemas training-free.</span> <span class="s" data-s="b7-p1-s1">Isso indica que, além de preservar melhor o conteúdo linguístico e alcançar alta similaridade de falante, o áudio convertido é percebido como mais natural e mais parecido com o falante de referência por avaliadores humanos.</span></p><p><span class="s" data-s="b7-p2-s0">Os experimentos controlados mostraram que a definição conjunta de estados é crucial.</span> <span class="s" data-s="b7-p2-s1">Quando os autores ajustaram GMMs separados para origem e referência e depois usaram o algoritmo húngaro para parear os componentes, o WER subiu para 13.82% e o CER para 6.60%, mantendo similaridade praticamente igual (0.9541 vs. 0.9540).</span> <span class="s" data-s="b7-p2-s2">Isso demonstra que o ganho não vem de ter estados locais per se, mas de defini-los de forma compartilhada.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.01952/table1.webp" alt="Resultados objetivos e subjetivos no protocolo LibriSpeech one-shot. StateVC alcança os menores WER (8.01%) e CER (3.22%) entre todos os sistemas, com alta similaridade de falante (0.9512), além do melhor S-MOS geral e melhor N-MOS entre métodos training-free." loading="lazy">
+          <figcaption>
+            Resultados objetivos e subjetivos no protocolo LibriSpeech one-shot. StateVC alcança os menores WER (8.01%) e CER (3.22%) entre todos os sistemas, com alta similaridade de falante (0.9512), além do melhor S-MOS geral e melhor N-MOS entre métodos training-free.
+            <span class="source">Tabela 1 do paper · Qu et al., arXiv:2610.01952</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Roteamento suave vs. atribuição hard</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Outro experimento controlado comparou o uso de probabilidades posteriores suaves (soft routing) com atribuição hard, onde cada frame é atribuído exclusivamente ao estado de maior probabilidade.</span> <span class="s" data-s="b9-p0-s1">Com atribuição hard, o WER subiu de 8.44% para 9.14% e o CER de 3.48% para 3.86%, enquanto a similaridade aumentou ligeiramente de 0.9540 para 0.9556.</span></p><p><span class="s" data-s="b9-p1-s0">Esse trade-off mostra que o roteamento suave preserva melhor o conteúdo linguístico, provavelmente porque evita transições abruptas entre regiões e permite que frames em fronteiras entre estados recebam uma mistura de deslocamentos.</span> <span class="s" data-s="b9-p1-s1">A pequena queda em similaridade sugere que o roteamento hard pode forçar transformações mais agressivas, mas ao custo de maior distorção do conteúdo.</span></p>        <h2><span class="s" data-s="b10-h">Escolha da transformação: deslocamento médio vs. transformações mais complexas</span></h2>
+<p><span class="s" data-s="b10-p0-s0">O StateVC usa apenas o deslocamento médio (diferença entre médias) para cada estado.</span> <span class="s" data-s="b10-p0-s1">Os autores testaram transformações mais flexíveis: Diagonal, que aplica uma transformação afim com matriz diagonal, e Block, que aplica uma transformação afim completa.</span> <span class="s" data-s="b10-p0-s2">Essas transformações mais complexas permitem não apenas deslocar a média, mas também escalar e rotacionar as representações dentro de cada estado.</span></p><p><span class="s" data-s="b10-p1-s0">Os resultados mostraram que transformações mais flexíveis oferecem ganhos muito pequenos em similaridade, mas aumentam o WER.</span> <span class="s" data-s="b10-p1-s1">Com transformação Diagonal, o WER subiu de 8.01% para 8.36%; com Block, para 8.44%.</span> <span class="s" data-s="b10-p1-s2">A transformação de deslocamento médio (Mean) captura a maior parte do ganho em similaridade obtido sobre a baseline sem transformação (None), com o menor aumento em WER.</span> <span class="s" data-s="b10-p1-s3">Por isso, o sistema final usa apenas deslocamentos médios.</span></p><p><span class="s" data-s="b10-p2-s0">Isso sugere que, no espaço WavLM, a mudança de origem para referência pode ser bem aproximada por uma simples translação dentro de cada região local, sem necessidade de transformações mais complexas que introduzem maior risco de distorção do conteúdo.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.01952/figure2.webp" alt="Análises de sensibilidade: (a) força de conversão λ aumenta similaridade mas degrada WER; (b) limite Kmax maior melhora levemente SIM com custo em WER; (c) referências mais longas melhoram principalmente SIM; (d) deslocamento médio (Mean) oferece melhor balanço entre SIM e WER que transformações mais complexas." loading="lazy">
+          <figcaption>
+            Análises de sensibilidade: (a) força de conversão λ aumenta similaridade mas degrada WER; (b) limite Kmax maior melhora levemente SIM com custo em WER; (c) referências mais longas melhoram principalmente SIM; (d) deslocamento médio (Mean) oferece melhor balanço entre SIM e WER que transformações mais complexas.
+            <span class="source">Figura 2 do paper · Qu et al., arXiv:2610.01952</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b12-h">Sensibilidade a hiperparâmetros</span></h2>
+<p><span class="s" data-s="b12-p0-s0">Os autores investigaram o impacto de três hiperparâmetros principais.</span> <span class="s" data-s="b12-p0-s1">A força de conversão λ controla quanto do deslocamento estimado é efetivamente aplicado aos frames de origem.</span> <span class="s" data-s="b12-p0-s2">Aumentar λ de 0.6 para 1.0 aumenta a similaridade de falante, mas também aumenta o WER, indicando que conversões mais agressivas degradam o conteúdo linguístico.</span> <span class="s" data-s="b12-p0-s3">O valor λ=0.8 foi escolhido como um balanço razoável.</span></p><p><span class="s" data-s="b12-p1-s0">O limite Kmax, que define o número máximo de componentes candidatos no GMM, também foi testado.</span> <span class="s" data-s="b12-p1-s1">Aumentar Kmax de 16 para 32 melhora ligeiramente a similaridade, mas aumenta o WER.</span> <span class="s" data-s="b12-p1-s2">Kmax=24 foi escolhido como compromisso.</span> <span class="s" data-s="b12-p1-s3">Isso indica que permitir mais estados locais pode capturar variações mais finas, mas também aumenta o risco de overfitting ou de estados mal estimados.</span></p><p><span class="s" data-s="b12-p2-s0">Por fim, a duração da referência foi variada.</span> <span class="s" data-s="b12-p2-s1">Referências mais longas (de 3 a 10 segundos) melhoram principalmente a similaridade de falante, com impacto menor no WER.</span> <span class="s" data-s="b12-p2-s2">Isso faz sentido: mais áudio de referência fornece estatísticas mais confiáveis para cada estado, permitindo melhor caracterização do falante-alvo sem necessariamente afetar a preservação do conteúdo.</span></p>        <h2><span class="s" data-s="b13-h">Limitações e trabalho futuro</span></h2>
+<p><span class="s" data-s="b13-p0-s0">O paper é claro sobre as limitações do trabalho.</span> <span class="s" data-s="b13-p0-s1">A avaliação foi realizada exclusivamente no LibriSpeech, que contém apenas inglês lido em condições controladas.</span> <span class="s" data-s="b13-p0-s2">Não há evidência de que o método funcione igualmente bem em outras línguas, em fala espontânea, ou em condições acústicas mais desafiadoras (ruído, reverberação).</span> <span class="s" data-s="b13-p0-s3">Essa é uma limitação importante para qualquer aplicação prática.</span></p><p><span class="s" data-s="b13-p1-s0">Além disso, o método depende de representações WavLM congeladas.</span> <span class="s" data-s="b13-p1-s1">Embora o WavLM seja um modelo robusto treinado em grandes volumes de dados, ele foi treinado principalmente em inglês.</span> <span class="s" data-s="b13-p1-s2">Não está claro como o StateVC se comportaria com representações de outros modelos autossupervisionados ou em cenários onde o WavLM não generaliza bem.</span></p><p><span class="s" data-s="b13-p2-s0">Outro ponto é que o método requer ajustar um GMM para cada par de áudios, o que pode ser custoso em cenários de conversão em tempo real ou em larga escala.</span> <span class="s" data-s="b13-p2-s1">Embora o ajuste seja rápido comparado ao treino de uma rede neural, ele ainda representa um overhead computacional que não existe em métodos que aprendem um modelo fixo offline.</span></p><p><span class="s" data-s="b13-p3-s0">Por fim, o paper não discute aspectos éticos ou de privacidade da conversão de voz.</span> <span class="s" data-s="b13-p3-s1">Métodos de conversão de voz podem ser usados para aplicações legítimas (acessibilidade, dublagem, assistentes personalizados), mas também para deepfakes de áudio e outras formas de manipulação.</span> <span class="s" data-s="b13-p3-s2">Os autores não abordam essas questões, embora o projeto tenha sido financiado por uma iniciativa sobre privacidade de fala.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b14-t">Training-free, mas não parameter-free</span></h3>
+          <p><span class="s" data-s="b14-c-s0">O StateVC não treina uma rede neural para a tarefa de conversão, mas depende de um encoder WavLM pré-treinado com centenas de milhões de parâmetros.</span> <span class="s" data-s="b14-c-s1">O método é training-free no sentido de que não requer dados paralelos ou treino específico para cada par de falantes, mas não é livre de dependências de modelos grandes treinados em grandes datasets.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b15-h">Contexto e contribuições</span></h2>
+<p><span class="s" data-s="b15-p0-s0">O StateVC se insere em uma linha de pesquisa que busca aproveitar representações autossupervisionadas de fala para tarefas de conversão de voz sem precisar de grandes volumes de dados paralelos ou de treino específico.</span> <span class="s" data-s="b15-p0-s1">Métodos como LinearVC e MKL-VC já haviam mostrado que é possível fazer conversão razoável sem treinar redes neurais específicas, mas esses métodos ainda dependiam de parear frames ou componentes de origem e referência.</span></p><p><span class="s" data-s="b15-p1-s0">A contribuição central do StateVC é mostrar que é possível definir regiões locais de forma conjunta para origem e referência, sem precisar de matching explícito, e que essa abordagem resulta em melhor preservação do conteúdo linguístico.</span> <span class="s" data-s="b15-p1-s1">A ideia de usar um GMM ajustado ao pooling das representações é simples, mas os experimentos controlados demonstram que ela é eficaz.</span></p><p><span class="s" data-s="b15-p2-s0">Além disso, o método mostra que transformações locais simples — deslocamentos médios — são suficientes para capturar a mudança de origem para referência no espaço WavLM, sem necessidade de transformações afins completas.</span> <span class="s" data-s="b15-p2-s1">Isso sugere que, pelo menos nesse espaço de representações, a estrutura da conversão de voz é relativamente simples, o que é uma observação útil para trabalhos futuros.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">StateVC define estados compartilhados entre origem e referência ajustando um único GMM ao pooling das representações WavLM, evitando matching explícito de frames ou componentes.</span></li><li><span class="s" data-s="k1">O método alcança 8.01% WER e 3.22% CER no LibriSpeech one-shot, os menores valores entre sistemas avaliados, com alta similaridade de falante (0.9512) e melhor naturalidade entre training-free.</span></li><li><span class="s" data-s="k2">Deslocamentos médios simples capturam a maior parte do ganho em similaridade, enquanto transformações mais complexas aumentam WER sem benefício proporcional.</span></li><li><span class="s" data-s="k3">Avaliação limitada a inglês lido (LibriSpeech); generalização para outras línguas, fala espontânea e condições acústicas reais permanece em aberto.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.01952" rel="noopener">Shared-State Local Translations for Training-Free Voice Conversion</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.01952" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

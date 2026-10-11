@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Attention Is All You Need: como o Transformer eliminou recorrência e virou base dos modelos de linguagem atuais — arXiv em 5</title>
+<meta name="description" content="O paper de Vaswani et al. propôs uma arquitetura baseada exclusivamente em mecanismos de atenção, dispensando redes recorrentes e convolucionais. O resultado foi um modelo mais rápido de treinar, mais paralelizável e que estabeleceu novo estado da arte em tradução automática.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Attention Is All You Need: como o Transformer eliminou recorrência e virou base dos modelos de linguagem atuais">
+<meta property="og:description" content="O paper de Vaswani et al. propôs uma arquitetura baseada exclusivamente em mecanismos de atenção, dispensando redes recorrentes e convolucionais. O resultado foi um modelo mais rápido de treinar, mais paralelizável e que estabeleceu novo estado da arte em tradução automática.">
+<meta property="og:image" content="../../assets/papers/1706.03762/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Linguagem</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/1706.03762" rel="noopener">arXiv:1706.03762</a>
+    </div>
+    <h1><span class="s" data-s="t">Attention Is All You Need: como o Transformer eliminou recorrência e virou base dos modelos de linguagem atuais</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">O paper de Vaswani et al. propôs uma arquitetura baseada exclusivamente em mecanismos de atenção, dispensando redes recorrentes e convolucionais.</span> <span class="s" data-s="d-s1">O resultado foi um modelo mais rápido de treinar, mais paralelizável e que estabeleceu novo estado da arte em tradução automática.</span></p>
+    <p class="byline">
+      <span>Vaswani et al.</span>
+      <span>10 min de leitura</span>
+    </p>
+    <div class="listen" data-article="1706.03762" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=PVOcVqnzIV0" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema da recorrência</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Até 2017, os modelos dominantes para tarefas de sequência — tradução automática, modelagem de linguagem, geração de texto — dependiam de redes neurais recorrentes (RNNs) ou convolucionais em configurações encoder-decoder.</span> <span class="s" data-s="b0-p0-s1">As melhores arquiteturas da época, como LSTMs e GRUs, processavam sequências passo a passo: para calcular o estado oculto na posição t, era preciso ter calculado o estado na posição t-1.</span> <span class="s" data-s="b0-p0-s2">Essa dependência sequencial impedia paralelização dentro de um exemplo de treino.</span></p><p><span class="s" data-s="b0-p1-s0">O problema se agravava com sequências longas.</span> <span class="s" data-s="b0-p1-s1">Como cada passo dependia do anterior, o treinamento ficava lento e a memória limitava o tamanho dos batches.</span> <span class="s" data-s="b0-p1-s2">Pior: para relacionar duas palavras distantes na frase, a informação precisava atravessar muitos passos intermediários, dificultando o aprendizado de dependências de longo alcance.</span> <span class="s" data-s="b0-p1-s3">Algumas arquiteturas tentaram contornar isso com convoluções (ByteNet, ConvS2S), mas o número de operações para conectar duas posições crescia linearmente ou logaritmicamente com a distância.</span></p><p><span class="s" data-s="b0-p2-s0">Mecanismos de atenção já eram usados como complemento às RNNs, permitindo que o decoder &#39;olhasse&#39; diretamente para partes relevantes do encoder.</span> <span class="s" data-s="b0-p2-s1">Mas em quase todos os casos, a atenção vinha junto com recorrência.</span> <span class="s" data-s="b0-p2-s2">A questão que o paper coloca é: e se a atenção fosse suficiente sozinha?</span></p>        <h2><span class="s" data-s="b1-h">A proposta: arquitetura baseada só em atenção</span></h2>
+<p><span class="s" data-s="b1-p0-s0">O Transformer dispensa completamente recorrência e convolução.</span> <span class="s" data-s="b1-p0-s1">A arquitetura segue o padrão encoder-decoder, mas usa apenas mecanismos de atenção e redes feed-forward totalmente conectadas, organizadas em camadas empilhadas.</span> <span class="s" data-s="b1-p0-s2">O encoder mapeia uma sequência de entrada (x₁, ..., xₙ) para uma sequência de representações contínuas z = (z₁, ..., zₙ).</span> <span class="s" data-s="b1-p0-s3">O decoder, dado z, gera a sequência de saída (y₁, ..., yₘ) um símbolo por vez, de forma autoregressiva.</span></p><p><span class="s" data-s="b1-p1-s0">Tanto encoder quanto decoder são compostos por N=6 camadas idênticas empilhadas.</span> <span class="s" data-s="b1-p1-s1">Cada camada do encoder tem duas subcamadas: primeiro, um mecanismo de multi-head self-attention; segundo, uma rede feed-forward posicionalmente aplicada (ou seja, a mesma rede é aplicada independentemente a cada posição).</span> <span class="s" data-s="b1-p1-s2">Ao redor de cada subcamada há uma conexão residual seguida de normalização de camada, resultando em LayerNorm(x + Sublayer(x)).</span> <span class="s" data-s="b1-p1-s3">Todas as subcamadas e embeddings produzem vetores de dimensão dₘₒdₑₗ = 512.</span></p><p><span class="s" data-s="b1-p2-s0">O decoder também tem N=6 camadas, mas com três subcamadas.</span> <span class="s" data-s="b1-p2-s1">Além das duas do encoder, ele insere uma terceira que aplica multi-head attention sobre a saída do encoder (a chamada cross-attention).</span> <span class="s" data-s="b1-p2-s2">Crucialmente, a subcamada de self-attention no decoder é modificada com mascaramento: cada posição i só pode atender a posições anteriores (j &lt; i), garantindo que a predição em i dependa apenas de saídas já conhecidas.</span> <span class="s" data-s="b1-p2-s3">Isso preserva a propriedade autoregressiva durante o treinamento.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/1706.03762/figure1.webp" alt="A arquitetura completa do Transformer: encoder à esquerda (6 camadas de self-attention + feed-forward) e decoder à direita (6 camadas de masked self-attention + cross-attention + feed-forward). Conexões residuais e normalização envolvem cada subcamada." loading="lazy">
+          <figcaption>
+            A arquitetura completa do Transformer: encoder à esquerda (6 camadas de self-attention + feed-forward) e decoder à direita (6 camadas de masked self-attention + cross-attention + feed-forward). Conexões residuais e normalização envolvem cada subcamada.
+            <span class="source">Figura 1 do paper · Vaswani et al., arXiv:1706.03762</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Como funciona a atenção escalada por produto escalar</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Uma função de atenção mapeia uma query e um conjunto de pares (key, value) para uma saída, todos vetores.</span> <span class="s" data-s="b3-p0-s1">A saída é uma soma ponderada dos values, onde o peso de cada value vem de uma função de compatibilidade entre a query e a key correspondente.</span> <span class="s" data-s="b3-p0-s2">O Transformer usa &#39;Scaled Dot-Product Attention&#39;: dada uma matriz Q de queries, K de keys e V de values, calcula-se Attention(Q,K,V) = softmax(QKᵀ/√dₖ)V.</span></p><p><span class="s" data-s="b3-p1-s0">O produto escalar QKᵀ mede a compatibilidade entre cada par (query, key).</span> <span class="s" data-s="b3-p1-s1">Dividir por √dₖ (onde dₖ é a dimensão das keys) é essencial: para valores grandes de dₖ, os produtos escalares podem crescer muito em magnitude, empurrando a softmax para regiões de gradiente extremamente pequeno.</span> <span class="s" data-s="b3-p1-s2">O fator de escala 1/√dₖ mitiga esse problema.</span> <span class="s" data-s="b3-p1-s3">A softmax transforma os scores em pesos que somam 1, e a multiplicação por V produz a saída ponderada.</span></p><p><span class="s" data-s="b3-p2-s0">Dot-product attention é muito mais rápido e eficiente em memória que additive attention (que usa uma rede feed-forward para calcular compatibilidade), pois pode ser implementado com multiplicação de matrizes altamente otimizada.</span> <span class="s" data-s="b3-p2-s1">Para valores pequenos de dₖ, ambos os métodos têm desempenho similar, mas sem o scaling, additive attention supera dot-product para dₖ grandes — daí a importância da divisão por √dₖ.</span></p>        <h2><span class="s" data-s="b4-h">Multi-Head Attention: olhando para vários aspectos ao mesmo tempo</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Em vez de aplicar atenção uma única vez com chaves, valores e queries de dimensão dₘₒdₑₗ, o Transformer projeta linearmente Q, K e V para dimensões menores h vezes (com h=8 cabeças), aplica atenção em paralelo nessas h representações de dimensão reduzida, e concatena os resultados.</span> <span class="s" data-s="b4-p0-s1">Cada &#39;cabeça&#39; aprende a atender a aspectos diferentes da entrada.</span></p><p><span class="s" data-s="b4-p1-s0">Formalmente, MultiHead(Q,K,V) = Concat(head₁, ..., headₕ)Wᴼ, onde headᵢ = Attention(QWᵢQ, KWᵢK, VWᵢV).</span> <span class="s" data-s="b4-p1-s1">As matrizes de projeção Wᵢ são aprendidas.</span> <span class="s" data-s="b4-p1-s2">Com h=8 cabeças e dₖ = dᵥ = dₘₒdₑₗ/h = 64, o custo computacional total é similar ao de atenção de cabeça única com dimensão cheia, mas o modelo ganha a capacidade de capturar diferentes tipos de relações simultaneamente.</span></p><p><span class="s" data-s="b4-p2-s0">O Transformer usa multi-head attention de três formas: (1) nas camadas encoder-decoder, as queries vêm da camada anterior do decoder e as keys/values vêm da saída do encoder — isso permite que cada posição do decoder atenda a todas as posições da entrada; (2) no encoder, self-attention onde queries, keys e values vêm da saída da camada anterior; (3) no decoder, self-attention mascarada para preservar autoregressividade.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/1706.03762/figure2.webp" alt="Esquerda: Scaled Dot-Product Attention calcula compatibilidade via produto escalar, escala por √dₖ e aplica softmax. Direita: Multi-Head Attention executa h atenções em paralelo, cada uma aprendendo relações diferentes, e concatena os resultados." loading="lazy">
+          <figcaption>
+            Esquerda: Scaled Dot-Product Attention calcula compatibilidade via produto escalar, escala por √dₖ e aplica softmax. Direita: Multi-Head Attention executa h atenções em paralelo, cada uma aprendendo relações diferentes, e concatena os resultados.
+            <span class="source">Figura 2 do paper · Vaswani et al., arXiv:1706.03762</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b6-h">Redes feed-forward e codificação posicional</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Cada camada contém uma rede feed-forward totalmente conectada aplicada a cada posição separadamente e de forma idêntica.</span> <span class="s" data-s="b6-p0-s1">Essa rede tem duas transformações lineares com uma ReLU no meio: FFN(x) = max(0, xW₁ + b₁)W₂ + b₂.</span> <span class="s" data-s="b6-p0-s2">A dimensão interna é dff = 2048, enquanto entrada e saída têm dₘₒdₑₗ = 512.</span> <span class="s" data-s="b6-p0-s3">Embora a mesma rede seja usada em todas as posições dentro de uma camada, os parâmetros diferem entre camadas.</span></p><p><span class="s" data-s="b6-p1-s0">Como o modelo não tem recorrência nem convolução, ele não tem noção inerente de ordem.</span> <span class="s" data-s="b6-p1-s1">Para injetar informação sobre a posição relativa ou absoluta dos tokens, o Transformer adiciona &#39;positional encodings&#39; aos embeddings de entrada no encoder e decoder.</span> <span class="s" data-s="b6-p1-s2">O paper usa funções seno e cosseno de frequências diferentes: PE(pos, 2i) = sin(pos/10000^(2i/dₘₒdₑₗ)) e PE(pos, 2i+1) = cos(pos/10000^(2i/dₘₒdₑₗ)).</span></p><p><span class="s" data-s="b6-p2-s0">Essa escolha permite que o modelo aprenda a atender a posições relativas, já que para qualquer offset fixo k, PE(pos+k) pode ser representado como função linear de PE(pos).</span> <span class="s" data-s="b6-p2-s1">O paper também testou embeddings posicionais aprendidos e obteve resultados quase idênticos, mas as funções sinusoidais podem permitir extrapolação para sequências mais longas que as vistas no treino.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b7-t">Por que a atenção permite paralelização</span></h3>
+          <p><span class="s" data-s="b7-c-s0">Em uma RNN, calcular h₅ exige ter calculado h₄, que exige h₃, e assim por diante — isso é inerentemente sequencial.</span> <span class="s" data-s="b7-c-s1">Na atenção, todas as posições são processadas simultaneamente: a matriz QKᵀ calcula compatibilidades entre todas as posições de uma vez, em uma única operação de multiplicação de matrizes.</span> <span class="s" data-s="b7-c-s2">Isso permite paralelização massiva em GPUs e reduz drasticamente o tempo de treinamento.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b8-h">Resultados em tradução automática</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Os autores avaliaram o Transformer em duas tarefas de tradução do WMT 2014: inglês-alemão (4.5 milhões de pares de frases) e inglês-francês (36 milhões de pares).</span> <span class="s" data-s="b8-p0-s1">Para inglês-alemão, o modelo grande (Transformer big) alcançou 28.4 BLEU, superando todos os modelos anteriores, incluindo ensembles, por mais de 2 BLEU.</span> <span class="s" data-s="b8-p0-s2">O treinamento levou 3.5 dias em 8 GPUs P100.</span> <span class="s" data-s="b8-p0-s3">Mesmo o modelo base superou todos os modelos publicados anteriormente com uma fração do custo computacional.</span></p><p><span class="s" data-s="b8-p1-s0">Para inglês-francês, o modelo grande atingiu 41.0 BLEU, superando todos os modelos únicos anteriores com menos de 1/4 do custo de treino do então estado da arte.</span> <span class="s" data-s="b8-p1-s1">O modelo base usou média dos últimos 5 checkpoints (salvos a cada 10 minutos); o modelo grande usou média dos últimos 20.</span> <span class="s" data-s="b8-p1-s2">Na inferência, usaram beam search com tamanho 4 e penalidade de comprimento α=0.6.</span></p><p><span class="s" data-s="b8-p2-s0">O paper estima operações de ponto flutuante multiplicando tempo de treino, número de GPUs e capacidade sustentada de cada GPU.</span> <span class="s" data-s="b8-p2-s1">Essa métrica mostra que o Transformer não só é mais preciso, mas também muito mais eficiente computacionalmente que arquiteturas baseadas em recorrência ou convolução para essas tarefas.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/1706.03762/table2.webp" alt="Comparação de BLEU e custo de treino: o Transformer (big) supera modelos anteriores em inglês-alemão e inglês-francês usando muito menos recursos. Note que até o modelo base supera ensembles anteriores." loading="lazy">
+          <figcaption>
+            Comparação de BLEU e custo de treino: o Transformer (big) supera modelos anteriores em inglês-alemão e inglês-francês usando muito menos recursos. Note que até o modelo base supera ensembles anteriores.
+            <span class="source">Tabela 2 do paper · Vaswani et al., arXiv:1706.03762</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">Variações da arquitetura: o que importa</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Para entender quais componentes são essenciais, os autores variaram o modelo base de várias formas, medindo desempenho em inglês-alemão no conjunto de desenvolvimento newstest2013.</span> <span class="s" data-s="b10-p0-s1">Variar o número de cabeças de atenção mostrou que uma única cabeça é 0.9 BLEU pior que o melhor ajuste (h=8), mas muitas cabeças também prejudicam.</span> <span class="s" data-s="b10-p0-s2">A qualidade também cai ao reduzir a dimensão das keys (dₖ), sugerindo que determinar compatibilidade não é trivial.</span></p><p><span class="s" data-s="b10-p1-s0">Modelos maiores são melhores, como esperado: aumentar dₘₒdₑₗ e dff melhora BLEU.</span> <span class="s" data-s="b10-p1-s1">Dropout (com taxa 0.1 no modelo base) é crucial para evitar overfitting — sem ele, o desempenho cai significativamente.</span> <span class="s" data-s="b10-p1-s2">Substituir codificação posicional sinusoidal por embeddings aprendidos produziu resultados quase idênticos, validando a escolha de funções trigonométricas.</span></p><p><span class="s" data-s="b10-p2-s0">Reduzir o número de camadas de 6 para 2 piora significativamente (23.7 BLEU), enquanto 4 camadas dão 25.3 BLEU.</span> <span class="s" data-s="b10-p2-s1">Isso mostra que a profundidade importa, mas 6 camadas parecem suficientes para essa tarefa.</span> <span class="s" data-s="b10-p2-s2">O custo computacional permanece constante ao variar número de cabeças e dimensões, desde que o produto seja mantido, mas a qualidade varia — evidência de que multi-head attention captura algo que atenção de cabeça única não captura.</span></p>        <h2><span class="s" data-s="b11-h">Generalização: parsing sintático em inglês</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Para testar se o Transformer generaliza além de tradução, os autores aplicaram o modelo a parsing de constituintes em inglês, uma tarefa estruturalmente diferente.</span> <span class="s" data-s="b11-p0-s1">Treinaram em Wall Street Journal (WSJ) do Penn Treebank (cerca de 40 mil sentenças) e testaram em Section 23.</span> <span class="s" data-s="b11-p0-s2">Também avaliaram em configuração semi-supervisionada, pré-treinando em um corpus maior (BerkleyParser com 17 milhões de sentenças).</span></p><p><span class="s" data-s="b11-p1-s0">Com apenas dados do WSJ (40 mil sentenças), o Transformer alcançou desempenho competitivo.</span> <span class="s" data-s="b11-p1-s1">Com pré-treinamento no corpus maior, o modelo de 4 camadas superou todos os modelos anteriores exceto o Recurrent Neural Network Grammar, e ficou próximo do melhor resultado.</span> <span class="s" data-s="b11-p1-s2">Isso demonstra que a arquitetura não é específica para tradução — ela aprende representações úteis para tarefas de sequência em geral.</span></p><p><span class="s" data-s="b11-p2-s0">Importante notar que o Transformer não foi desenhado especificamente para parsing.</span> <span class="s" data-s="b11-p2-s1">A mesma arquitetura, com ajustes mínimos de hiperparâmetros, funciona bem em tarefas diferentes.</span> <span class="s" data-s="b11-p2-s2">Isso sugere que mecanismos de atenção são uma primitiva poderosa e geral para modelagem de sequências, não apenas um truque para tradução.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/1706.03762/figure3.webp" alt="Visualização de atenção na camada 5 do encoder: várias cabeças atendem à dependência de longo alcance do verbo &#39;making&#39;, completando a frase &#39;making...more difficult&#39;. A atenção conecta palavras relacionadas mesmo quando distantes." loading="lazy">
+          <figcaption>
+            Visualização de atenção na camada 5 do encoder: várias cabeças atendem à dependência de longo alcance do verbo &#39;making&#39;, completando a frase &#39;making...more difficult&#39;. A atenção conecta palavras relacionadas mesmo quando distantes.
+            <span class="source">Figura 3 do paper · Vaswani et al., arXiv:1706.03762</span>
+          </figcaption>
+        </figure>
+        <aside class="callout">
+          <h3><span class="s" data-s="b13-t">Complexidade computacional por camada</span></h3>
+          <p><span class="s" data-s="b13-c-s0">Self-attention tem complexidade O(n²·d) onde n é o comprimento da sequência e d a dimensão.</span> <span class="s" data-s="b13-c-s1">Para sequências curtas (n &lt; d, comum em tarefas de NLP), isso é mais eficiente que camadas recorrentes O(n·d²).</span> <span class="s" data-s="b13-c-s2">Mas para sequências muito longas, o custo quadrático em n pode ser proibitivo — uma limitação que trabalhos posteriores tentariam resolver.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b14-h">O que o paper não mostra</span></h2>
+<p><span class="s" data-s="b14-p0-s0">Os experimentos cobrem tradução e parsing, mas não testam tarefas de geração de texto longo, classificação de documentos ou outras aplicações de NLP.</span> <span class="s" data-s="b14-p0-s1">Não há análise de como o modelo se comporta com sequências muito mais longas que as vistas no treino, apesar da afirmação sobre extrapolação de codificações posicionais sinusoidais.</span></p><p><span class="s" data-s="b14-p1-s0">O paper não discute em profundidade por que multi-head attention funciona melhor que single-head, além da intuição de que captura &#39;diferentes aspectos&#39;.</span> <span class="s" data-s="b14-p1-s1">Não há análise sistemática de quais padrões linguísticos cada cabeça aprende, embora visualizações mostrem que elas atendem a fenômenos diferentes.</span> <span class="s" data-s="b14-p1-s2">Trabalhos posteriores investigariam isso mais a fundo.</span></p><p><span class="s" data-s="b14-p2-s0">A complexidade O(n²) da atenção para sequências longas é mencionada brevemente, mas não explorada.</span> <span class="s" data-s="b14-p2-s1">Para textos de milhares de tokens, isso se torna um gargalo sério — algo que o paper reconhece ao mencionar planos futuros de investigar &#39;mecanismos de atenção local e restrita&#39; para lidar com entradas e saídas grandes como imagens, áudio e vídeo.</span></p><p><span class="s" data-s="b14-p3-s0">Finalmente, os resultados são em tarefas supervisionadas com datasets grandes.</span> <span class="s" data-s="b14-p3-s1">O paper não explora aprendizado com poucos exemplos, transferência zero-shot entre idiomas ou outras formas de generalização que se tornariam centrais em trabalhos posteriores.</span> <span class="s" data-s="b14-p3-s2">O foco é demonstrar que atenção pura funciona, não explorar todos os seus limites.</span></p>        <h2><span class="s" data-s="b15-h">Por que este paper importa</span></h2>
+<p><span class="s" data-s="b15-p0-s0">Attention Is All You Need não foi o primeiro a usar atenção, nem o primeiro a propor alternativas a RNNs.</span> <span class="s" data-s="b15-p0-s1">Mas foi o primeiro a mostrar que atenção sozinha, sem recorrência ou convolução, é suficiente para estado da arte em tarefas de sequência.</span> <span class="s" data-s="b15-p0-s2">Essa demonstração mudou a trajetória do campo: praticamente todos os modelos de linguagem grandes desde então — BERT, GPT, T5, modelos multimodais — são baseados na arquitetura Transformer.</span></p><p><span class="s" data-s="b15-p1-s0">A paralelização que o Transformer permite foi essencial para a escalabilidade.</span> <span class="s" data-s="b15-p1-s1">Treinar modelos com bilhões de parâmetros em trilhões de tokens só se tornou viável porque a atenção pode ser computada em paralelo, ao contrário da recorrência sequencial.</span> <span class="s" data-s="b15-p1-s2">O salto de GPT-2 para GPT-3, de BERT-base para modelos de centenas de bilhões de parâmetros, depende dessa propriedade.</span></p><p><span class="s" data-s="b15-p2-s0">O mecanismo de self-attention também provou ser mais interpretável que estados ocultos de RNNs.</span> <span class="s" data-s="b15-p2-s1">Visualizar matrizes de atenção revela quais tokens o modelo considera relevantes para cada predição, facilitando análise e debug.</span> <span class="s" data-s="b15-p2-s2">Isso não resolve o problema de interpretabilidade completamente, mas oferece uma janela para o funcionamento interno do modelo.</span></p><p><span class="s" data-s="b15-p3-s0">Sete anos depois, o Transformer permanece a arquitetura dominante em NLP e está se expandindo para visão computacional, áudio, biologia computacional e outras áreas.</span> <span class="s" data-s="b15-p3-s1">O título do paper — &#39;Attention Is All You Need&#39; — foi validado: para uma enorme classe de problemas, atenção realmente é tudo que você precisa.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">O Transformer elimina recorrência e convolução, usando apenas mecanismos de atenção empilhados em camadas encoder-decoder com conexões residuais e normalização.</span></li><li><span class="s" data-s="k1">Multi-head attention permite que o modelo atenda a diferentes aspectos da entrada simultaneamente, e a paralelização reduz drasticamente o tempo de treino comparado a RNNs.</span></li><li><span class="s" data-s="k2">O modelo alcançou 28.4 BLEU em inglês-alemão e 41.0 em inglês-francês, superando todos os modelos anteriores com uma fração do custo computacional.</span></li><li><span class="s" data-s="k3">A complexidade O(n²) da atenção em relação ao comprimento da sequência é uma limitação para textos muito longos, algo que o paper reconhece mas não resolve.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/1706.03762" rel="noopener">Attention Is All You Need</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="1706.03762" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

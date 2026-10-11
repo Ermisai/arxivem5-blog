@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DepthWorld: como adicionar geometria 3D a modelos de mundo para robótica melhora até a predição de imagens RGB — arXiv em 5</title>
+<meta name="description" content="Pesquisadores da Universidade Técnica Checa criaram um modelo de mundo que prevê simultaneamente imagens RGB e profundidade métrica, mostrando que supervisão geométrica melhora qualidade visual em +1.48 dB PSNR enquanto mantém consistência 3D entre múltiplas câmeras.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DepthWorld: como adicionar geometria 3D a modelos de mundo para robótica melhora até a predição de imagens RGB">
+<meta property="og:description" content="Pesquisadores da Universidade Técnica Checa criaram um modelo de mundo que prevê simultaneamente imagens RGB e profundidade métrica, mostrando que supervisão geométrica melhora qualidade visual em +1.48 dB PSNR enquanto mantém consistência 3D entre múltiplas câmeras.">
+<meta property="og:image" content="../../assets/papers/2610.08780/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Robótica</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.08780" rel="noopener">arXiv:2610.08780</a>
+    </div>
+    <h1><span class="s" data-s="t">DepthWorld: como adicionar geometria 3D a modelos de mundo para robótica melhora até a predição de imagens RGB</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Pesquisadores da Universidade Técnica Checa criaram um modelo de mundo que prevê simultaneamente imagens RGB e profundidade métrica, mostrando que supervisão geométrica melhora qualidade visual em +1.48 dB PSNR enquanto mantém consistência 3D entre múltiplas câmeras.</span></p>
+    <p class="byline">
+      <span>Bardhan et al.</span>
+      <span>10 min de leitura</span>
+<span>06/10/2026</span>    </p>
+    <div class="listen" data-article="2610.08780" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=Feq0-5tvmjY" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema: modelos de mundo que parecem bons mas não entendem geometria</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Modelos de mundo (world models) são redes neurais que aprendem a simular o que acontece quando um robô executa uma ação.</span> <span class="s" data-s="b0-p0-s1">Em vez de usar um simulador tradicional baseado em física, esses modelos aprendem diretamente de dados reais: você mostra milhares de vídeos de robôs manipulando objetos, e a rede aprende a prever o que aconteceria se o robô movesse o braço de determinada forma.</span></p><p><span class="s" data-s="b0-p1-s0">O problema é que os modelos atuais são treinados apenas com vídeos RGB.</span> <span class="s" data-s="b0-p1-s1">Eles geram sequências que parecem plausíveis quadro a quadro, mas não formam um mundo 3D consistente.</span> <span class="s" data-s="b0-p1-s2">Se você olhar a mesma cena de dois ângulos diferentes, as predições de profundidade não batem.</span> <span class="s" data-s="b0-p1-s3">Objetos mudam de forma ao longo do rollout (a sequência de quadros gerados autorregressivamente).</span> <span class="s" data-s="b0-p1-s4">O modelo não entende oclusão nem contato físico de verdade.</span></p><p><span class="s" data-s="b0-p2-s0">Isso é um problema sério porque todas as aplicações práticas — avaliar políticas, melhorá-las, fazer planejamento — dependem de geometria confiável.</span> <span class="s" data-s="b0-p2-s1">Se o modelo prevê que o braço do robô vai atravessar uma porta fechada como se fosse um fantasma, o sinal que você extrai dessa simulação não serve para nada.</span></p>        <h2><span class="s" data-s="b1-h">Por que não basta copiar o que funciona em modelos geométricos de propósito geral</span></h2>
+<p><span class="s" data-s="b1-p0-s0">A solução óbvia seria supervisionar geometria diretamente durante o treinamento, como fazem modelos geométricos de fundação recentes.</span> <span class="s" data-s="b1-p0-s1">Mas essa receita não se transfere diretamente para robótica por dois motivos.</span></p><p><span class="s" data-s="b1-p1-s0">Primeiro, datasets de robótica não vêm com anotações 3D de qualidade.</span> <span class="s" data-s="b1-p1-s1">Conjuntos como o DROID capturam aparência e dinâmica de manipulação em escala real, mas as anotações geométricas são subprodutos da coleta, não o foco.</span> <span class="s" data-s="b1-p1-s2">Cenas de manipulação têm superfícies sem textura e especulares.</span> <span class="s" data-s="b1-p1-s3">Mesmo que você consiga calibração interna consistente entre câmeras, ela pode estar desacoplada do sistema de coordenadas do próprio robô — e aí você perde o vínculo crítico com a propriocepção e as ações do efetuador.</span></p><p><span class="s" data-s="b1-p2-s0">Segundo, modelos de mundo atuais dependem de priors delicados vindos de modelos de difusão de imagem e vídeo pré-treinados.</span> <span class="s" data-s="b1-p2-s1">Modificações arquiteturais convencionais para incorporar modalidades espaciais — como expandir os canais de entrada do VAE ou introduzir U-Nets paralelas de dois ramos — exigem reinicialização destrutiva de pesos.</span> <span class="s" data-s="b1-p2-s2">Isso arrisca corromper os priors visuais e de movimento que tornam esses backbones eficazes.</span></p>        <h2><span class="s" data-s="b2-h">DROID-3D: recalibrando um dataset inteiro com um grafo de fatores</span></h2>
+<p><span class="s" data-s="b2-p0-s0">A primeira contribuição do paper é um pipeline de calibração que transforma o DROID — um dataset de teleoperação com mais de 70 mil episódios — em DROID-3D, uma versão com profundidade métrica densa e extrínsecos multi-view recalibrados.</span></p><p><span class="s" data-s="b2-p1-s0">O pipeline combina estimativa de profundidade estéreo aprendida com otimização conjunta via grafo de fatores.</span> <span class="s" data-s="b2-p1-s1">A ideia central é pooling: em vez de calibrar cada cena isoladamente, o sistema agrupa todos os episódios coletados do mesmo robô físico e recupera parâmetros cinemáticos compartilhados — offsets das juntas, calibração hand-eye — junto com extrínsecos por cena.</span></p><p><span class="s" data-s="b2-p2-s0">Concretamente, o pipeline tem dois estágios.</span> <span class="s" data-s="b2-p2-s1">No primeiro, cada par estéreo (câmeras externas e câmera de pulso) gera profundidade métrica via rede de correspondência global.</span> <span class="s" data-s="b2-p2-s2">Correspondências densas entre vistas inicializam extrínsecos relativos.</span> <span class="s" data-s="b2-p2-s3">No segundo estágio, um grafo de fatores une tudo: fatores de projeção entre câmeras, fatores de profundidade do robô (comparando profundidade renderizada do URDF com a observada), fatores de cinemática direta que amarram poses das juntas aos extrínsecos, e fatores de prior que regularizam offsets e hand-eye.</span></p><p><span class="s" data-s="b2-p3-s0">Essa formulação conjunta é crucial.</span> <span class="s" data-s="b2-p3-s1">Ela permite que evidência de milhares de cenas corrija erros sistemáticos — como um offset de junta mal calibrado — que um método por cena jamais detectaria.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.08780/figure2.webp" alt="Pipeline de calibração DROID-3D: combina profundidade estéreo aprendida com grafo de fatores que otimiza parâmetros cinemáticos compartilhados (offsets, hand-eye) e extrínsecos por cena, usando todos os episódios do mesmo robô." loading="lazy">
+          <figcaption>
+            Pipeline de calibração DROID-3D: combina profundidade estéreo aprendida com grafo de fatores que otimiza parâmetros cinemáticos compartilhados (offsets, hand-eye) e extrínsecos por cena, usando todos os episódios do mesmo robô.
+            <span class="source">Figura 2 do paper · Bardhan et al., arXiv:2610.08780</span>
+          </figcaption>
+        </figure>
+        <aside class="callout">
+          <h3><span class="s" data-s="b4-t">Erro de reprojeção abaixo de 0.7 pixels em 90% dos episódios</span></h3>
+          <p><span class="s" data-s="b4-c-s0">Aplicado ao DROID, o pipeline atinge erro de reprojeção menor que 0.7 pixels em 90% dos episódios para câmeras externas.</span> <span class="s" data-s="b4-c-s1">Comparado com uma baseline por cena (modelada no PointWorld), a melhoria é de 23× em reprojeção câmera-câmera, 13× em reprojeção pulso-câmera, 8× em erro de profundidade do robô, e +37 pontos absolutos em IoU de máscara.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b5-h">DepthWorld: predição conjunta de RGB e profundidade sem quebrar o VAE pré-treinado</span></h2>
+<p><span class="s" data-s="b5-p0-s0">A segunda contribuição é a arquitetura DepthWorld, que consome essa supervisão 3D sem destruir os priors do Stable Video Diffusion.</span> <span class="s" data-s="b5-p0-s1">A sacada é spatial latent tiling: RGB e profundidade são codificados independentemente em uma grade latente espacialmente organizada (72 × 80) que alimenta a U-Net de denoising, mas o VAE pré-treinado permanece intocado.</span></p><p><span class="s" data-s="b5-p1-s0">Funciona assim.</span> <span class="s" data-s="b5-p1-s1">Cada frame de cada view (RGB e profundidade) passa pelo VAE encoder original, gerando um latente 9 × 10.</span> <span class="s" data-s="b5-p1-s2">Esses latentes são então arranjados em uma grade espacial que preserva a relação geométrica entre as views.</span> <span class="s" data-s="b5-p1-s3">A U-Net de difusão processa essa grade como uma imagem grande, fazendo denoising conjunto.</span> <span class="s" data-s="b5-p1-s4">Os latentes preditos são decodificados de volta para RGB pelo VAE decoder original.</span></p><p><span class="s" data-s="b5-p2-s0">Para profundidade, os autores adicionam um cabeçalho DPT (Dense Prediction Transformer) leve que opera sobre os latentes preditos e gera mapas de ponto 3D (X, Y, Z) com confiança pixel a pixel.</span> <span class="s" data-s="b5-p2-s1">Esse cabeçalho é treinado com duas perdas: uma perda de profundidade direta e uma perda auxiliar de point-map que supervisiona coordenadas 3D métricas no espaço da câmera.</span></p><p><span class="s" data-s="b5-p3-s0">O modelo é condicionado por ações do robô via cross-attention nas camadas da U-Net, seguindo a arquitetura do Ctrl-World.</span> <span class="s" data-s="b5-p3-s1">Durante o treinamento, o modelo vê context frames (frames iniciais da trajetória) e aprende a prever frames futuros dado um plano de ação.</span> <span class="s" data-s="b5-p3-s2">Durante rollout, ele gera autorregressivamente: a predição de um passo vira contexto para o próximo.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.08780/figure3.webp" alt="Arquitetura DepthWorld: RGB e profundidade são codificados independentemente em grade latente espacial (72 × 80), processados por U-Net de denoising conjunta, e decodificados. Cabeçalho DPT gera point-map 3D com confiança." loading="lazy">
+          <figcaption>
+            Arquitetura DepthWorld: RGB e profundidade são codificados independentemente em grade latente espacial (72 × 80), processados por U-Net de denoising conjunta, e decodificados. Cabeçalho DPT gera point-map 3D com confiança.
+            <span class="source">Figura 3 do paper · Bardhan et al., arXiv:2610.08780</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Resultados de calibração: ordem de grandeza melhor que baseline por cena</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Os autores avaliaram a calibração em 5 laboratórios do DROID (cerca de 1.000 cenas).</span> <span class="s" data-s="b7-p0-s1">A baseline é um procedimento de refinamento por cena modelado no PointWorld: inicialização de extrínsecos via VGGT, seguida de otimização contra profundidade do robô usando S2M2 como fonte de profundidade.</span></p><p><span class="s" data-s="b7-p1-s0">DROID-3D supera a baseline em todas as métricas.</span> <span class="s" data-s="b7-p1-s1">Erro de reprojeção câmera-câmera: 23× melhor.</span> <span class="s" data-s="b7-p1-s2">Erro pulso-câmera: 13× melhor.</span> <span class="s" data-s="b7-p1-s3">Erro de profundidade do robô: 8× melhor.</span> <span class="s" data-s="b7-p1-s4">Mask IoU: +37 pontos absolutos.</span> <span class="s" data-s="b7-p1-s5">Além disso, a baseline falha em convergir em cerca de 18% das cenas (180 de 995), enquanto a otimização acoplada não tem modo de falha análogo por cena.</span></p><p><span class="s" data-s="b7-p2-s0">Em um setup de ground truth montado pelos autores com poses medidas via tabuleiro ChArUco, a abordagem recupera extrínsecos com erro mediano de 4.9 mm / 0.39° e hand-eye com 3 mm / 0.3°, a partir apenas de episódios de teleoperação.</span> <span class="s" data-s="b7-p2-s1">Offsets de juntas são recuperados com erro médio de 0.14° em todas as sete juntas.</span> <span class="s" data-s="b7-p2-s2">A baseline por cena atinge 72 mm / 3.0° — uma ordem de grandeza pior.</span></p><p><span class="s" data-s="b7-p3-s0">Em simulação REALM com poses GT exatas (50 configurações, viewpoints variados), a abordagem recupera extrínsecos com erro mediano de 6.4 mm / 0.3°.</span></p>        <h2><span class="s" data-s="b8-h">Resultados de predição: profundidade melhora RGB em +1.48 dB PSNR</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Os autores avaliaram três variantes em 256 trajetórias held-out do DROID com 10 rollouts autorregressivos consecutivos.</span> <span class="s" data-s="b8-p0-s1">RGB é o backbone Ctrl-World (apenas RGB multi-view).</span> <span class="s" data-s="b8-p0-s2">RGB+D é o modelo conjunto RGB-profundidade.</span> <span class="s" data-s="b8-p0-s3">RGB+D PM-DPT adiciona o cabeçalho auxiliar de point-map.</span></p><p><span class="s" data-s="b8-p1-s0">O resultado central: adicionar profundidade como alvo de predição conjunta melhora a qualidade RGB.</span> <span class="s" data-s="b8-p1-s1">O modelo RGBD supera a baseline RGB-only em todas as três métricas RGB: +1.48 dB PSNR em views externas e +1.02 dB em view de pulso.</span> <span class="s" data-s="b8-p1-s2">SSIM e LPIPS também melhoram consistentemente.</span></p><p><span class="s" data-s="b8-p2-s0">Isso é surpreendente e importante.</span> <span class="s" data-s="b8-p2-s1">Não é apenas que você ganha profundidade de graça — a supervisão geométrica ativamente melhora a predição de aparência, mesmo que você só se importe com RGB.</span> <span class="s" data-s="b8-p2-s2">A hipótese dos autores é que forçar o modelo a manter consistência 3D entre views age como regularização, impedindo que ele gere aparências plausíveis mas geometricamente impossíveis.</span></p><p><span class="s" data-s="b8-p3-s0">A perda auxiliar de point-map (PM-DPT) refina ainda mais a acurácia de profundidade, especialmente em views de pulso, embora o ganho em RGB seja marginal.</span> <span class="s" data-s="b8-p3-s1">Para profundidade, o modelo atinge AbsRel de 0.078 em views externas e 0.105 em pulso, com δ1 (porcentagem de pixels com erro relativo &lt; 1.25) acima de 0.90 em ambas.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.08780/table2.webp" alt="Ablação de qualidade de predição: adicionar profundidade (RGB+D) melhora todas as métricas RGB em ambas as classes de view. Perda auxiliar de point-map (PM-DPT) refina profundidade sem prejudicar RGB." loading="lazy">
+          <figcaption>
+            Ablação de qualidade de predição: adicionar profundidade (RGB+D) melhora todas as métricas RGB em ambas as classes de view. Perda auxiliar de point-map (PM-DPT) refina profundidade sem prejudicar RGB.
+            <span class="source">Tabela 2 do paper · Bardhan et al., arXiv:2610.08780</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">Qualitativo: geometria correta permite raciocínio sobre oclusão e contato</span></h2>
+<p><span class="s" data-s="b10-p0-s0">As diferenças qualitativas são marcantes.</span> <span class="s" data-s="b10-p0-s1">Em um rollout, o modelo RGB-only falha em simular o robô pegando uma xícara vermelha conforme a trajetória ground truth — a geometria da interação simplesmente não fecha.</span> <span class="s" data-s="b10-p0-s2">DepthWorld simula a interação corretamente e produz um mapa de profundidade alinhado.</span></p><p><span class="s" data-s="b10-p1-s0">Em outro exemplo, o modelo RGB-only não consegue distinguir a porta aberta de um armário de uma superfície sólida.</span> <span class="s" data-s="b10-p1-s1">Ele simula o braço colidindo com a porta como se fosse uma parede.</span> <span class="s" data-s="b10-p1-s2">DepthWorld, por levar em conta a profundidade do braço e da porta, gera corretamente o braço entrando no armário.</span></p><p><span class="s" data-s="b10-p2-s0">No exemplo da Figura 1, o baseline RGB-only não mantém a forma de talheres ao longo do rollout — o objeto literalmente desaparece.</span> <span class="s" data-s="b10-p2-s1">DepthWorld preserva a geometria do objeto enquanto produz mapas de profundidade métrica de alta qualidade.</span></p><p><span class="s" data-s="b10-p3-s0">Esses casos ilustram o ponto central: sem supervisão geométrica, o modelo pode gerar pixels plausíveis localmente mas falha em raciocínio espacial básico.</span> <span class="s" data-s="b10-p3-s1">Com profundidade, ele entende oclusão, contato e persistência de objetos — exatamente o que você precisa para usar rollouts em planejamento ou avaliação de política.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.08780/figure1.webp" alt="Comparação de rollouts: modelo RGB-only perde forma de talheres e objeto desaparece. DepthWorld mantém geometria correta ao longo do rollout e produz mapas de profundidade métrica consistentes." loading="lazy">
+          <figcaption>
+            Comparação de rollouts: modelo RGB-only perde forma de talheres e objeto desaparece. DepthWorld mantém geometria correta ao longo do rollout e produz mapas de profundidade métrica consistentes.
+            <span class="source">Figura 1 do paper · Bardhan et al., arXiv:2610.08780</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b12-h">O que o paper não mostra: limitações e questões em aberto</span></h2>
+<p><span class="s" data-s="b12-p0-s0">O paper não demonstra uso downstream real.</span> <span class="s" data-s="b12-p0-s1">Não há experimento de planejamento, avaliação de política ou policy improvement usando os rollouts do DepthWorld.</span> <span class="s" data-s="b12-p0-s2">A avaliação é inteiramente em métricas de predição (PSNR, SSIM, LPIPS, AbsRel) em trajetórias held-out.</span> <span class="s" data-s="b12-p0-s3">Saber se a melhoria de +1.48 dB PSNR se traduz em melhor performance em tarefa real fica em aberto.</span></p><p><span class="s" data-s="b12-p1-s0">A calibração DROID-3D foi validada em 5 laboratórios (cerca de 1.000 cenas) e um setup de ground truth próprio.</span> <span class="s" data-s="b12-p1-s1">Não sabemos como o pipeline se comporta em configurações muito diferentes — robôs de outra morfologia, arranjos de câmera exóticos, ambientes externos.</span> <span class="s" data-s="b12-p1-s2">A baseline falha em 18% das cenas; o método proposto não tem modo de falha por cena, mas pode ter modos de falha globais não explorados.</span></p><p><span class="s" data-s="b12-p2-s0">O modelo foi treinado e avaliado exclusivamente no DROID, que é teleoperação de manipulação em ambientes internos com o robô Franka.</span> <span class="s" data-s="b12-p2-s1">Generalização para outras morfologias, outras tarefas (locomoção, manipulação bimestre) ou outros domínios (outdoor, ambientes desestruturados) não foi testada.</span></p><p><span class="s" data-s="b12-p3-s0">A arquitetura preserva o VAE pré-treinado intocado, o que é uma vantagem para manter priors visuais.</span> <span class="s" data-s="b12-p3-s1">Mas o VAE foi treinado em imagens RGB naturais, não em profundidade.</span> <span class="s" data-s="b12-p3-s2">O paper não discute se treinar um VAE conjunto RGB-D desde o início poderia trazer ganhos adicionais, embora isso quebrasse o prior do Stable Video Diffusion.</span></p><p><span class="s" data-s="b12-p4-s0">Finalmente, o custo computacional não é detalhado.</span> <span class="s" data-s="b12-p4-s1">Processar 70 mil episódios com grafo de fatores e treinar um modelo de difusão multi-view em resolução razoável não é barato.</span> <span class="s" data-s="b12-p4-s2">O paper não reporta tempo de treinamento, número de GPUs ou custo de inferência por rollout.</span></p>        <h2><span class="s" data-s="b13-h">Por que isso importa</span></h2>
+<p><span class="s" data-s="b13-p0-s0">Modelos de mundo são uma aposta importante em robótica: se você consegue simular fielmente o que acontece quando o robô age, pode treinar políticas em simulação, avaliar estratégias sem tocar no robô real, fazer planejamento em tempo real.</span> <span class="s" data-s="b13-p0-s1">Mas até agora, esses modelos eram cegos para geometria — geravam pixels bonitos sem entender o espaço 3D.</span></p><p><span class="s" data-s="b13-p1-s0">DepthWorld mostra que você pode ter os dois: aproveitar priors visuais poderosos de modelos de difusão de vídeo e adicionar consistência geométrica sem quebrar o que já funciona.</span> <span class="s" data-s="b13-p1-s1">E o resultado empírico central — que supervisão de profundidade melhora a predição RGB — sugere que geometria e aparência não são ortogonais, mas se reforçam mutuamente.</span></p><p><span class="s" data-s="b13-p2-s0">DROID-3D, por sua vez, transforma um dataset de teleoperação em um recurso 3D de qualidade.</span> <span class="s" data-s="b13-p2-s1">A abordagem de pooling via grafo de fatores é geral: qualquer dataset multi-view com URDF conhecido pode, em princípio, passar pelo mesmo pipeline.</span> <span class="s" data-s="b13-p2-s2">Isso abre caminho para treinar futuros modelos geométricos de fundação diretamente em dados de robótica real, em vez de depender de datasets sintéticos ou de reconstrução 3D genérica.</span></p><p><span class="s" data-s="b13-p3-s0">Juntos, DROID-3D e DepthWorld representam um passo concreto em direção a modelos de mundo cujos rollouts compõem em uma cena 3D única e coerente — a propriedade de que todas as aplicações downstream dependem.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">DROID-3D recalibra 70 mil episódios do dataset DROID com profundidade métrica densa e extrínsecos multi-view, atingindo erro de reprojeção &lt;0.7 px em 90% dos episódios via grafo de fatores.</span></li><li><span class="s" data-s="k1">DepthWorld prevê simultaneamente RGB e profundidade via spatial latent tiling, preservando o VAE pré-treinado do Stable Video Diffusion e seus priors visuais.</span></li><li><span class="s" data-s="k2">Supervisão de profundidade melhora predição RGB em +1.48 dB PSNR sobre baseline RGB-only, mostrando que geometria e aparência se reforçam mutuamente em modelos de mundo.</span></li><li><span class="s" data-s="k3">Limitação: avaliação apenas em métricas de predição (PSNR, AbsRel), sem demonstração de uso downstream real em planejamento ou policy learning.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.08780" rel="noopener">DepthWorld: 3D World Model for Robot Manipulation</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.08780" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

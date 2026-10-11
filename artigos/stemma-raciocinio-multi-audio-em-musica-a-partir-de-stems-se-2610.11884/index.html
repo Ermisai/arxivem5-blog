@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>STEMMA: raciocínio multi-áudio em música a partir de stems, seções e proveniência de produção — arXiv em 5</title>
+<meta name="description" content="Modelos de áudio-linguagem atuais comparam músicas independentes, mas não exploram relações de produção conhecidas. STEMMA inverte a lógica: parte da relação desejada e busca áudios que a satisfazem, ensinando modelos a raciocinar sobre stems, seções e mixagens.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="STEMMA: raciocínio multi-áudio em música a partir de stems, seções e proveniência de produção">
+<meta property="og:description" content="Modelos de áudio-linguagem atuais comparam músicas independentes, mas não exploram relações de produção conhecidas. STEMMA inverte a lógica: parte da relação desejada e busca áudios que a satisfazem, ensinando modelos a raciocinar sobre stems, seções e mixagens.">
+<meta property="og:image" content="../../assets/papers/2610.11884/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Áudio</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.11884" rel="noopener">arXiv:2610.11884</a>
+    </div>
+    <h1><span class="s" data-s="t">STEMMA: raciocínio multi-áudio em música a partir de stems, seções e proveniência de produção</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Modelos de áudio-linguagem atuais comparam músicas independentes, mas não exploram relações de produção conhecidas.</span> <span class="s" data-s="d-s1">STEMMA inverte a lógica: parte da relação desejada e busca áudios que a satisfazem, ensinando modelos a raciocinar sobre stems, seções e mixagens.</span></p>
+    <p class="byline">
+      <span>Sohn et al.</span>
+      <span>7 min de leitura</span>
+<span>08/10/2026</span>    </p>
+    <div class="listen" data-article="2610.11884" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema: modelos tratam cada gravação como ilha isolada</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Modelos de áudio-linguagem grandes (LALMs) especializados em música já conseguem gerar legendas, responder perguntas sobre teoria musical, estrutura e instrumentação.</span> <span class="s" data-s="b0-p0-s1">Mas quase todos operam sobre gravações isoladas: cada faixa é tratada como um item independente, sem relação conhecida com outras.</span></p><p><span class="s" data-s="b0-p1-s0">Na prática, entender música muitas vezes exige comparar trechos e raciocinar sobre relações: dois excerpts vêm da mesma faixa?</span> <span class="s" data-s="b0-p1-s1">Pertencem à mesma seção?</span> <span class="s" data-s="b0-p1-s2">Qual stem pertence a qual mixagem?</span> <span class="s" data-s="b0-p1-s3">Aplicações emergentes — busca, arranjo, descoberta de samples — dependem exatamente desse tipo de raciocínio cruzado.</span></p><p><span class="s" data-s="b0-p2-s0">Datasets de question-answering em música existentes comparam faixas amostradas de forma independente, sem relação de produção conhecida.</span> <span class="s" data-s="b0-p2-s1">Alguns trabalhos recentes começaram a explorar comparação explícita entre pares de áudios, mas o desempenho cai à medida que o conjunto de candidatos cresce.</span> <span class="s" data-s="b0-p2-s2">Mais importante: nenhum explorou sistematicamente a proveniência conhecida — a hierarquia música–seção–stem — disponível em dados de produção musical.</span></p>        <h2><span class="s" data-s="b1-h">A ideia: inverter a lógica, partir da relação e buscar os áudios</span></h2>
+<p><span class="s" data-s="b1-p0-s0">O STEMMA é um framework de question-answering multi-áudio que constrói perguntas e respostas a partir de proveniência de produção: se dois excerpts compartilham uma faixa ou uma seção, e qual stem pertence a qual mixagem.</span> <span class="s" data-s="b1-p0-s1">A inovação central está na estratégia de construção.</span></p><p><span class="s" data-s="b1-p1-s0">Em vez de amostrar áudios primeiro e depois tentar encontrar relações entre eles — o que resulta em relações raras e esparsas —, o STEMMA adota uma estratégia relation-first: especifica a relação alvo antes de amostrar áudio.</span> <span class="s" data-s="b1-p1-s1">Uma única consulta ao catálogo retorna tanto exemplos que satisfazem a relação quanto near-misses que a violam.</span></p><p><span class="s" data-s="b1-p2-s0">Os rótulos são determinados diretamente pela proveniência do catálogo, não gerados por um modelo de linguagem a partir de metadados.</span> <span class="s" data-s="b1-p2-s1">Isso garante que as respostas sejam objetivamente verificáveis e que o dataset capture relações estruturais reais entre unidades musicais hierárquicas.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.11884/figure1.webp" alt="Pipeline relation-first: o sistema indexa unidades musicais hierárquicas por relações estruturais e de atributos, declara a relação sobre campos do catálogo e recupera tuplas que a satisfazem ou violam antes de renderizar como entrada multi-áudio." loading="lazy">
+          <figcaption>
+            Pipeline relation-first: o sistema indexa unidades musicais hierárquicas por relações estruturais e de atributos, declara a relação sobre campos do catálogo e recupera tuplas que a satisfazem ou violam antes de renderizar como entrada multi-áudio.
+            <span class="source">Figura 1 do paper · Sohn et al., arXiv:2610.11884</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Como funciona: dois componentes, dois papéis</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O STEMMA gera dois tipos de dados de instrução.</span> <span class="s" data-s="b3-p0-s1">O primeiro, Relation MultiQA, cria perguntas sobre relações estruturais e de atributos musicais.</span> <span class="s" data-s="b3-p0-s2">Relações estruturais incluem: dois excerpts vêm da mesma faixa?</span> <span class="s" data-s="b3-p0-s3">Da mesma seção?</span> <span class="s" data-s="b3-p0-s4">Um stem pertence a uma mixagem?</span> <span class="s" data-s="b3-p0-s5">Relações de atributo comparam propriedades musicais: qual áudio tem BPM mais alto?</span> <span class="s" data-s="b3-p0-s6">Qual está em tonalidade maior?</span></p><p><span class="s" data-s="b3-p1-s0">O segundo componente, Coreference, ensina o modelo a resolver referências cruzadas entre múltiplos áudios.</span> <span class="s" data-s="b3-p1-s1">Perguntas como &#39;o segundo áudio tem vocais?&#39; ou &#39;a primeira faixa está em modo maior?&#39; exigem que o modelo localize evidência em cada entrada antes de inferir a relação entre elas.</span> <span class="s" data-s="b3-p1-s2">Isso é o que os autores chamam de cross-audio grounding.</span></p><p><span class="s" data-s="b3-p2-s0">A construção relation-first permite controlar a distribuição de relações no dataset.</span> <span class="s" data-s="b3-p2-s1">Em vez de depender da frequência natural de co-ocorrência no catálogo — que tornaria relações estruturais raríssimas —, o sistema garante cobertura balanceada de relações positivas e negativas.</span> <span class="s" data-s="b3-p2-s2">Hard negatives são recuperados automaticamente: faixas que quase satisfazem a relação mas falham em um aspecto crítico.</span></p>        <h2><span class="s" data-s="b4-h">STEMMA-Bench e STEMMA-Instruct: avaliação e treinamento</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Os autores construíram dois datasets.</span> <span class="s" data-s="b4-p0-s1">O STEMMA-Bench é um benchmark de avaliação held-out, com seções e stems de faixas completas, separado por faixa do conjunto de treino.</span> <span class="s" data-s="b4-p0-s2">Ele mede tanto relações estruturais (mesma faixa, mesma seção, stem-para-mixagem) quanto relações de atributo (BPM, tonalidade, modo, gênero).</span></p><p><span class="s" data-s="b4-p1-s0">O STEMMA-Instruct é o conjunto de treinamento, disjunto por faixa do benchmark.</span> <span class="s" data-s="b4-p1-s1">Os autores fizeram instruction-tuning de dois LALMs — Music Flamingo e MOSS-Music — sobre esse dataset.</span> <span class="s" data-s="b4-p1-s2">A hipótese: treinar explicitamente sobre relações de proveniência melhora raciocínio multi-áudio sem degradar entendimento de áudio único.</span></p><p><span class="s" data-s="b4-p2-s0">Para avaliar retenção de capacidades single-audio, os autores mediram desempenho em quatro benchmarks de música de áudio único: MMAU-Pro, MMAU, MMAR e RUL-MuChoMusic.</span> <span class="s" data-s="b4-p2-s1">Isso permite verificar se o ganho em raciocínio multi-áudio vem às custas de capacidades já adquiridas.</span></p>        <h2><span class="s" data-s="b5-h">Resultados: ganhos grandes em relações estruturais, retenção em áudio único</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Treinar sobre STEMMA-Instruct melhorou todos os benchmarks multi-áudio para ambos os backbones.</span> <span class="s" data-s="b5-p0-s1">No Music Flamingo, os ganhos foram: 28,8 pontos percentuais em MUGEN: Music Analysis, 6,4 em Jamendo-MT-QA, 59,8 nas relações estruturais do STEMMA-Bench e 17,9 nas relações de atributo.</span> <span class="s" data-s="b5-p0-s2">No MOSS-Music, os ganhos foram menores mas consistentes: 0,8, 2,5, 23,6 e 0,6 pontos, respectivamente.</span></p><p><span class="s" data-s="b5-p1-s0">O padrão é claro: backbones com desempenho pré-treinado mais baixo ganham mais.</span> <span class="s" data-s="b5-p1-s1">O MOSS-Music já era o sistema direto pré-treinado mais forte no MUGEN: Music Analysis (0,6240) e se moveu menos; o Music Flamingo partiu de 0,2760 e teve o maior salto.</span></p><p><span class="s" data-s="b5-p2-s0">Importante: o desempenho single-audio foi retido e até melhorou em todos os benchmarks.</span> <span class="s" data-s="b5-p2-s1">O Music Flamingo ganhou 8,1 pontos no RUL-MuChoMusic.</span> <span class="s" data-s="b5-p2-s2">Isso confirma que treinar sobre relações multi-áudio não degrada capacidades de entendimento de áudio único — ao contrário, pode reforçá-las.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.11884/table2.webp" alt="Comparação sistema a sistema: modelos diretos treinados com STEMMA-Instruct superam cascatas (caption + LLM) em relações estruturais, mas cascatas ainda competem em Jamendo-MT-QA. Desempenho single-audio é mantido ou melhora." loading="lazy">
+          <figcaption>
+            Comparação sistema a sistema: modelos diretos treinados com STEMMA-Instruct superam cascatas (caption + LLM) em relações estruturais, mas cascatas ainda competem em Jamendo-MT-QA. Desempenho single-audio é mantido ou melhora.
+            <span class="source">Tabela 2 do paper · Sohn et al., arXiv:2610.11884</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Cascatas versus modelos diretos: onde cada um vence</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Os autores compararam sistemas diretos de áudio-QA com sistemas em cascata.</span> <span class="s" data-s="b7-p0-s1">Nestes últimos, um modelo de áudio-linguagem gera legendas independentes para cada entrada, e um LLM de texto (Qwen3.6-35B-A3B) raciocina sobre as legendas resultantes.</span></p><p><span class="s" data-s="b7-p1-s0">No Jamendo-MT-QA, o melhor sistema da tabela é uma cascata: 0,8716 contra 0,8622 para o melhor modelo treinado.</span> <span class="s" data-s="b7-p1-s1">Isso reflete o próprio relato do Jamendo-MT-QA de que baselines baseados em caption permanecem competitivos.</span> <span class="s" data-s="b7-p1-s2">Comparações entre faixas coletadas de forma independente são em grande parte respondíveis a partir de descrições por faixa.</span></p><p><span class="s" data-s="b7-p2-s0">Mas nas relações estruturais do STEMMA-Bench a ordem se inverte e a margem é ampla: o melhor modelo treinado atinge 0,8189 contra 0,5039 para a melhor cascata.</span> <span class="s" data-s="b7-p2-s1">O Music Flamingo treinado supera sua própria cascata em 33,9 pontos.</span> <span class="s" data-s="b7-p2-s2">Relações entre excerpts que compartilham uma fonte não são respondíveis apenas por descrições independentes — exigem raciocínio direto sobre os áudios.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b8-t">Qwen2.5-Omni: generalista vence especialistas pré-treinados</span></h3>
+          <p><span class="s" data-s="b8-c-s0">Entre sistemas pré-treinados, o mais forte no STEMMA-Bench foi o Qwen2.5-Omni, que não é especializado em música: 0,5354 nas relações estruturais contra 0,3543 para MOSS-Music e 0,2205 para Music Flamingo.</span> <span class="s" data-s="b8-c-s1">Isso sugere que capacidades gerais de raciocínio multi-áudio podem transferir para música, mas especialização via instruction-tuning ainda traz ganhos substanciais.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b9-h">Ablação: perguntas relacionais contribuem mais que correferência</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Para entender o que impulsiona os ganhos, os autores fizeram ablação sobre os dois componentes do STEMMA-Instruct.</span> <span class="s" data-s="b9-p0-s1">Treinar apenas com Coreference trouxe ganhos modestos: 5,55 pontos de média multi-áudio para Music Flamingo, 0,84 para MOSS-Music.</span> <span class="s" data-s="b9-p0-s2">Treinar apenas com Relation MultiQA trouxe ganhos maiores: 18,29 e 3,50 pontos, respectivamente.</span></p><p><span class="s" data-s="b9-p1-s0">Combinar ambos — o STEMMA-Instruct completo — produziu os melhores resultados: 28,24 pontos de ganho médio multi-áudio para Music Flamingo, 6,88 para MOSS-Music.</span> <span class="s" data-s="b9-p1-s1">As médias single-audio também ficaram acima dos níveis pré-treinados em ambos os casos.</span></p><p><span class="s" data-s="b9-p2-s0">Isso indica que perguntas sobre relações estruturais e de atributo são o componente mais valioso, mas que resolver correferências entre áudios adiciona capacidade complementar.</span> <span class="s" data-s="b9-p2-s1">A combinação é sinérgica: cada componente aborda um aspecto diferente do raciocínio multi-áudio.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.11884/table3.webp" alt="Ablação dos dois papéis do STEMMA-Instruct: Relation MultiQA contribui mais para ganhos multi-áudio que Coreference sozinho, mas a combinação (linha final) supera ambos isoladamente." loading="lazy">
+          <figcaption>
+            Ablação dos dois papéis do STEMMA-Instruct: Relation MultiQA contribui mais para ganhos multi-áudio que Coreference sozinho, mas a combinação (linha final) supera ambos isoladamente.
+            <span class="source">Tabela 3 do paper · Sohn et al., arXiv:2610.11884</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b11-h">O que o paper não mostra: limitações e escopo</span></h2>
+<p><span class="s" data-s="b11-p0-s0">O STEMMA depende de catálogos musicais estruturados com metadados de proveniência.</span> <span class="s" data-s="b11-p0-s1">Isso limita sua aplicação a cenários onde stems, seções e hierarquias de produção estão disponíveis.</span> <span class="s" data-s="b11-p0-s2">Música distribuída apenas como mixagem final — a maioria das gravações comerciais — não pode ser usada diretamente.</span></p><p><span class="s" data-s="b11-p1-s0">Os experimentos cobrem dois backbones (Music Flamingo e MOSS-Music) e quatro benchmarks single-audio, mas não exploram outros modelos multi-áudio recentes ou datasets de comparação de áudio fora do domínio musical.</span> <span class="s" data-s="b11-p1-s1">Não está claro como a estratégia relation-first generalizaria para áudio de fala, ambiental ou efeitos sonoros.</span></p><p><span class="s" data-s="b11-p2-s0">O paper não reporta tempos de treinamento, custo computacional ou tamanho final dos datasets.</span> <span class="s" data-s="b11-p2-s1">Também não discute como o sistema lida com relações ambíguas — por exemplo, seções que compartilham material mas não são idênticas, ou stems processados que divergem da fonte original.</span></p><p><span class="s" data-s="b11-p3-s0">Finalmente, os ganhos são assimétricos: Music Flamingo melhora muito mais que MOSS-Music.</span> <span class="s" data-s="b11-p3-s1">Isso sugere que o benefício do STEMMA-Instruct depende do ponto de partida do modelo.</span> <span class="s" data-s="b11-p3-s2">Backbones já fortes em raciocínio multi-áudio podem ter menos a ganhar, ou podem precisar de estratégias de tuning diferentes.</span></p>        <h2><span class="s" data-s="b12-h">Por que isso importa</span></h2>
+<p><span class="s" data-s="b12-p0-s0">O STEMMA mostra que explorar proveniência de produção — informação estruturada sobre como música é construída — melhora raciocínio multi-áudio de forma mensurável.</span> <span class="s" data-s="b12-p0-s1">A estratégia relation-first é generalizável: sempre que você tem relações conhecidas entre itens, pode inverter a lógica de amostragem para garantir cobertura balanceada.</span></p><p><span class="s" data-s="b12-p1-s0">A separação entre relações estruturais e de atributo é reveladora.</span> <span class="s" data-s="b12-p1-s1">Cascatas de caption competem bem em atributos musicais, mas falham em relações estruturais que exigem evidência localizada em múltiplos áudios.</span> <span class="s" data-s="b12-p1-s2">Isso sugere que raciocínio multi-áudio genuíno — não apenas comparação de descrições — requer arquiteturas que processam múltiplas entradas conjuntamente.</span></p><p><span class="s" data-s="b12-p2-s0">Para desenvolvedores construindo agentes conversacionais de música, sistemas de busca por similaridade ou ferramentas de arranjo, o STEMMA oferece um caminho: treinar explicitamente sobre relações de produção melhora capacidades de comparação sem degradar entendimento de áudio único.</span> <span class="s" data-s="b12-p2-s1">O código e os datasets estão disponíveis no GitHub, permitindo reprodução e extensão do trabalho.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">STEMMA inverte a lógica: especifica a relação desejada antes de amostrar áudio, garantindo cobertura de relações estruturais raras entre stems, seções e mixagens.</span></li><li><span class="s" data-s="k1">Modelos treinados com STEMMA-Instruct superam cascatas de caption em 33,9 pontos em relações estruturais, mas cascatas ainda competem em comparações entre faixas independentes.</span></li><li><span class="s" data-s="k2">Treinar sobre relações de produção melhora raciocínio multi-áudio sem degradar entendimento single-audio; ganhos são maiores em modelos com desempenho pré-treinado mais baixo.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.11884" rel="noopener">STEMMA: Song-to-Stem Multi-Audio Reasoning for Large Audio Language Models</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.11884" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

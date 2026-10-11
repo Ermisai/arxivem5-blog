@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Modelos recorrentes com pontos fixos: como treinar, cachear e destilar transformers que reutilizam blocos — arXiv em 5</title>
+<meta name="description" content="Transformers recorrentes aplicam os mesmos blocos várias vezes, mas cada repetição custa caro. Este paper mostra que treinar para convergir a pontos fixos permite cortar o cache em 3×, acelerar prefill em 1.79× e reduzir pela metade o tempo de reinforcement learning.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Modelos recorrentes com pontos fixos: como treinar, cachear e destilar transformers que reutilizam blocos">
+<meta property="og:description" content="Transformers recorrentes aplicam os mesmos blocos várias vezes, mas cada repetição custa caro. Este paper mostra que treinar para convergir a pontos fixos permite cortar o cache em 3×, acelerar prefill em 1.79× e reduzir pela metade o tempo de reinforcement learning.">
+<meta property="og:image" content="../../assets/papers/2610.06833/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Redes neurais</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.06833" rel="noopener">arXiv:2610.06833</a>
+    </div>
+    <h1><span class="s" data-s="t">Modelos recorrentes com pontos fixos: como treinar, cachear e destilar transformers que reutilizam blocos</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Transformers recorrentes aplicam os mesmos blocos várias vezes, mas cada repetição custa caro.</span> <span class="s" data-s="d-s1">Este paper mostra que treinar para convergir a pontos fixos permite cortar o cache em 3×, acelerar prefill em 1.79× e reduzir pela metade o tempo de reinforcement learning.</span></p>
+    <p class="byline">
+      <span>Huang et al.</span>
+      <span>10 min de leitura</span>
+<span>05/10/2026</span>    </p>
+    <div class="listen" data-article="2610.06833" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema: recorrência sai cara em todas as etapas</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Modelos de linguagem com loop (looped language models) reutilizam o mesmo bloco de camadas várias vezes, como se fossem redes recorrentes.</span> <span class="s" data-s="b0-p0-s1">A cada recorrência, o estado passa pelo mesmo conjunto de pesos.</span> <span class="s" data-s="b0-p0-s2">Essa arquitetura promete economizar parâmetros, mas na prática cada repetição adiciona custo: mais ativações para guardar no treino, mais chaves e valores (KV) no cache durante decodificação, mais computação no prefill de cada prompt e mais replay de trajetórias no reinforcement learning.</span></p><p><span class="s" data-s="b0-p1-s0">Existem duas escolas de pensamento.</span> <span class="s" data-s="b0-p1-s1">Uma treina modelos com poucas recorrências fixas, como o Ouro, que usa quatro loops.</span> <span class="s" data-s="b0-p1-s2">Outra, representada pelo Huginn, treina para muitas recorrências e busca que os estados convirjam para pontos fixos — configurações onde aplicar o bloco mais uma vez não muda quase nada.</span> <span class="s" data-s="b0-p1-s3">Este paper, parte II de uma série sobre modelos recorrentes, argumenta que pontos fixos bem formados são a chave para desbloquear ganhos de eficiência em todas as fases: treino, inferência e pós-treino.</span></p><p><span class="s" data-s="b0-p2-s0">A intuição é simples.</span> <span class="s" data-s="b0-p2-s1">A equação de ponto fixo z* = F(z*; x) envolve apenas o estado final, não o caminho até ele.</span> <span class="s" data-s="b0-p2-s2">Se os estados de fato convergem, o endpoint pode substituir a trajetória inteira.</span> <span class="s" data-s="b0-p2-s3">Isso abre quatro atalhos: backpropagation truncada no treino, compartilhamento de KV terminal na decodificação, destilação de um modelo rápido para prefill e reutilização de estados salvos no RL.</span> <span class="s" data-s="b0-p2-s4">Cada atalho remove um custo que cresce com a profundidade, então os ganhos aumentam a cada loop adicionado.</span></p>        <h2><span class="s" data-s="b1-h">Evidência empírica: Huginn converge, Ouro não</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Para testar se pontos fixos importam, os autores aplicam compartilhamento de KV terminal: em vez de cachear as chaves e valores de cada token em cada recorrência, guardam apenas o estado final de cada token do prefixo.</span> <span class="s" data-s="b1-p0-s1">No Huginn, essa mudança quase não afeta a acurácia em GSM8K (tarefa de matemática).</span> <span class="s" data-s="b1-p0-s2">No Ouro, com quatro loops, a acurácia desaba.</span> <span class="s" data-s="b1-p0-s3">A diferença rastreia a convergência: os estados do Huginn se aproximam de pontos fixos; os do Ouro, não.</span></p><p><span class="s" data-s="b1-p1-s0">Essa observação valida a hipótese central.</span> <span class="s" data-s="b1-p1-s1">Se o modelo converge, o KV terminal carrega praticamente toda a informação do contexto.</span> <span class="s" data-s="b1-p1-s2">Se não converge, cada iteração intermediária contribui de forma distinta e descartar essas contribuições quebra a predição.</span> <span class="s" data-s="b1-p1-s3">O mesmo raciocínio se aplica aos outros atalhos: backpropagation truncada aproxima o gradiente de equilíbrio sem warm-up; destilação de prefill substitui os loops por uma rede direta que prevê o ponto fixo; e RL pode pontuar rollouts a partir de estados salvos, sem replay.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b2-t">O que é um ponto fixo</span></h3>
+          <p><span class="s" data-s="b2-c-s0">Um ponto fixo de uma função F é um valor z* tal que F(z*) = z*.</span> <span class="s" data-s="b2-c-s1">Em modelos recorrentes, isso significa que aplicar o bloco mais uma vez não muda o estado.</span> <span class="s" data-s="b2-c-s2">Quando os estados se aproximam de pontos fixos, a trajetória completa importa menos: o estado final resume o que aconteceu.</span> <span class="s" data-s="b2-c-s3">Isso permite cortar custos em treino, cache e inferência.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b3-h">Dois componentes moldam os pontos fixos</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Para que esses atalhos funcionem, o treino precisa moldar pontos fixos que sejam ao mesmo tempo estáveis e informativos.</span> <span class="s" data-s="b3-p0-s1">Dois componentes do treino controlam isso: a distribuição de profundidades (depth prior) e o esquema de injeção de entrada (input injection).</span></p><p><span class="s" data-s="b3-p1-s0">O depth prior decide em quantas recorrências cada token é treinado.</span> <span class="s" data-s="b3-p1-s1">Tokens diferentes convergem em profundidades diferentes.</span> <span class="s" data-s="b3-p1-s2">Se você treina sempre na mesma profundidade fixa, o modelo aprende a prever bem naquela profundidade, mas quebra o compartilhamento de KV: ao forçar KV terminal, a acurácia despenca.</span> <span class="s" data-s="b3-p1-s3">O Huginn usa uma distribuição fixa e ampla (Poisson log-normal), que suporta compartilhamento mas dilui a supervisão na profundidade-alvo mais do que o necessário.</span></p><p><span class="s" data-s="b3-p2-s0">Os autores propõem aprender o prior a partir do feedback de predição: profundidades que predizem bem recebem mais peso.</span> <span class="s" data-s="b3-p2-s1">Para evitar que o prior colapse em uma única profundidade, adicionam um termo de entropia que mantém a distribuição suficientemente ampla.</span> <span class="s" data-s="b3-p2-s2">Dessa forma, o modelo recebe supervisão concentrada onde ela é útil, mas ainda vê diversidade de profundidades suficiente para suportar compartilhamento de KV.</span></p><p><span class="s" data-s="b3-p3-s0">O segundo componente é a injeção de entrada.</span> <span class="s" data-s="b3-p3-s1">A cada recorrência, o modelo adiciona a representação de entrada x ao estado z. Esquemas existentes, incluindo o do Huginn e do Parcae, deixam a componente do estado ao longo de x sem restrição.</span> <span class="s" data-s="b3-p3-s2">Dependendo do sinal dessa componente, ela pode amplificar ou cancelar a injeção.</span> <span class="s" data-s="b3-p3-s3">Os autores introduzem injeção ortogonal (OrthoInj): antes de adicionar x, removem a projeção de z sobre x. Assim, cada recorrência recebe a entrada com a mesma intensidade, sem interferência construtiva ou destrutiva.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.06833/figure1.webp" alt="Visão geral do paper: pontos fixos bem formados permitem quatro atalhos. Backpropagation truncada no treino, compartilhamento de KV terminal na decodificação, destilação de prefill e reutilização de estados no RL. Cada atalho remove um custo que cresce com a profundidade." loading="lazy">
+          <figcaption>
+            Visão geral do paper: pontos fixos bem formados permitem quatro atalhos. Backpropagation truncada no treino, compartilhamento de KV terminal na decodificação, destilação de prefill e reutilização de estados no RL. Cada atalho remove um custo que cresce com a profundidade.
+            <span class="source">Figura 1 do paper · Huang et al., arXiv:2610.06833</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Configuração experimental</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os autores treinam modelos em três escalas: Small (100M parâmetros, 21.5B tokens), Medium (400M, 85.9B tokens) e Large (1.6B, 343.6B tokens).</span> <span class="s" data-s="b5-p0-s1">Cada modelo usa a arquitetura do Llama, com um bloco de prelúdio, um núcleo recorrente de dois blocos e um bloco de coda (layout 1+2×R+1).</span> <span class="s" data-s="b5-p0-s2">Com R=5 recorrências, a profundidade lógica é de 12 blocos, mas o modelo físico tem apenas 4 blocos.</span></p><p><span class="s" data-s="b5-p1-s0">Para comparação, treinam também modelos não-recorrentes: Untied 4, com 4 blocos distintos (mesma contagem de parâmetros e cache KV dos modelos recorrentes), e Untied 12, com 12 blocos distintos (mesma profundidade lógica, mas 3× mais parâmetros e cache).</span> <span class="s" data-s="b5-p1-s1">O treino usa uma mistura multilingual que inclui TxT360, tokenizada com Jais64k, e otimização AdamW com schedule warmup-stable-decay.</span></p><p><span class="s" data-s="b5-p2-s0">A avaliação cobre perplexidade em MixVal e WikiText-103, acurácia downstream em LAMBADA, HellaSwag, PIQA, ARC-Easy/Challenge, OpenBookQA e SciQ, e geração em GSM8K, DROP e MBPP+.</span> <span class="s" data-s="b5-p2-s1">Exceto quando indicado, os modelos são avaliados em R=5 com compartilhamento de KV terminal: o prefill cacheia apenas o KV final de cada token do prompt, e a decodificação procede um token por vez.</span></p>        <h2><span class="s" data-s="b6-h">Resultados: prior aprendido supera fixo e PLN</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Os autores comparam quatro configurações de depth prior, todas com profundidade média 5: treinamento de profundidade fixa (Fixed R=5), prior Poisson log-normal fixo do Huginn (Fixed PLN-5), e dois priors aprendidos, com e sem termo de entropia.</span> <span class="s" data-s="b6-p0-s1">Ambos os priors aprendidos partem de PLN-5 e limitam a profundidade máxima em 64.</span></p><p><span class="s" data-s="b6-p1-s0">Treinamento de profundidade fixa quebra o compartilhamento de KV.</span> <span class="s" data-s="b6-p1-s1">Sob KV terminal forçado, ele tem a perplexidade mais alta e perde mais da metade da acurácia em GSM8K nas escalas M e L. Para atingir seu melhor desempenho, precisa do cache KV completo.</span> <span class="s" data-s="b6-p1-s2">Isso confirma que treinar sempre na mesma profundidade não prepara o modelo para inferência com KV terminal.</span></p><p><span class="s" data-s="b6-p2-s0">O prior aprendido mantém o compartilhamento intacto e supera o Fixed PLN-5.</span> <span class="s" data-s="b6-p2-s1">Com KV terminal, ele reduz a perplexidade de validação em 0.7–1.8% em relação ao PLN fixo, ao custo de no máximo 1.6% mais FLOPs de treino.</span> <span class="s" data-s="b6-p2-s2">Na escala Large, o modelo com prior aprendido e entropia regularizada, usando cache KV 3× menor, iguala a média downstream do Untied 12, que tem 3× mais parâmetros e cache.</span> <span class="s" data-s="b6-p2-s3">Ele também supera amplamente o Untied 4, que tem a mesma contagem de parâmetros e cache.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.06833/table2.webp" alt="Prior aprendido com entropia, na escala Large (1.6B), aproxima o desempenho do Untied 12 (12 blocos, 3× mais parâmetros e cache) usando apenas 4 blocos físicos e cache 3× menor. Supera amplamente o Untied 4, que tem mesma contagem de parâmetros." loading="lazy">
+          <figcaption>
+            Prior aprendido com entropia, na escala Large (1.6B), aproxima o desempenho do Untied 12 (12 blocos, 3× mais parâmetros e cache) usando apenas 4 blocos físicos e cache 3× menor. Supera amplamente o Untied 4, que tem mesma contagem de parâmetros.
+            <span class="source">Tabela 2 do paper · Huang et al., arXiv:2610.06833</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Injeção ortogonal melhora em todas as escalas</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Os autores comparam três esquemas de injeção: sem injeção (None), injeção aditiva padrão (Add, usada no Huginn) e injeção ortogonal (OrthoInj).</span> <span class="s" data-s="b8-p0-s1">A injeção ortogonal remove a componente do estado ao longo da entrada antes de adicionar a entrada, garantindo que cada recorrência receba o input com a mesma intensidade.</span></p><p><span class="s" data-s="b8-p1-s0">OrthoInj atinge a menor perda de treino em todas as três escalas.</span> <span class="s" data-s="b8-p1-s1">Na escala Large, reduz a perplexidade de validação em 1.0% em relação a Add e em 1.6% em relação a None.</span> <span class="s" data-s="b8-p1-s2">Os ganhos são consistentes ao longo do treino, especialmente na fase final, quando a taxa de aprendizado decai.</span> <span class="s" data-s="b8-p1-s3">Isso sugere que a ortogonalização estabiliza a dinâmica de convergência e permite que o modelo aproveite melhor a supervisão.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.06833/figure5.webp" alt="Injeção ortogonal (OrthoInj) termina o treino com a menor perda de cross-entropy nas três escalas (Small, Medium, Large). A faixa cinza marca o decaimento da taxa de aprendizado nos últimos 10% do treino." loading="lazy">
+          <figcaption>
+            Injeção ortogonal (OrthoInj) termina o treino com a menor perda de cross-entropy nas três escalas (Small, Medium, Large). A faixa cinza marca o decaimento da taxa de aprendizado nos últimos 10% do treino.
+            <span class="source">Figura 5 do paper · Huang et al., arXiv:2610.06833</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">Destilação de prefill: 1.79× mais rápido</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Prefill é a fase em que o modelo processa o prompt inteiro antes de gerar o primeiro token.</span> <span class="s" data-s="b10-p0-s1">Em modelos recorrentes, cada token do prompt passa por R recorrências, o que pode ser lento em prompts longos.</span> <span class="s" data-s="b10-p0-s2">Os autores treinam um modelo estudante (student) não-recorrente para prever diretamente o ponto fixo do professor (teacher) recorrente, substituindo os loops por uma passada direta.</span></p><p><span class="s" data-s="b10-p1-s0">O estudante é treinado em um quarto dos tokens de pré-treino do professor.</span> <span class="s" data-s="b10-p1-s1">Em prompts de 8K tokens, ele é até 1.79× mais rápido que o professor com R=5.</span> <span class="s" data-s="b10-p1-s2">A média downstream fica 1.0–4.5 pontos abaixo do professor, mas em latência equivalente (professor com R=2), o estudante pontua 0.5–0.9 pontos acima.</span> <span class="s" data-s="b10-p1-s3">Isso mostra que destilação de prefill é uma troca viável: você perde um pouco de qualidade, mas ganha bastante velocidade.</span></p>        <h2><span class="s" data-s="b11-h">Reutilização de estados no RL: 2× mais rápido</span></h2>
+<p><span class="s" data-s="b11-p0-s0">No reinforcement learning, cada atualização requer pontuar rollouts: o modelo gera sequências e calcula recompensas.</span> <span class="s" data-s="b11-p0-s1">Em modelos recorrentes, isso normalmente exige replay da trajetória completa para backpropagation.</span> <span class="s" data-s="b11-p0-s2">Com pontos fixos, os autores salvam o estado convergido de cada rollout e computam gradientes diretamente a partir desses estados, sem replay.</span></p><p><span class="s" data-s="b11-p1-s0">Esse atalho reduz pela metade o tempo de pontuação e backward de cada atualização de RL, em comparação com replay completo dos loops.</span> <span class="s" data-s="b11-p1-s1">A economia vem de evitar recomputar as recorrências: o estado salvo já carrega a informação necessária.</span> <span class="s" data-s="b11-p1-s2">Isso torna o RL com modelos recorrentes tão rápido quanto com modelos não-recorrentes de mesma profundidade lógica.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.06833/figure4.webp" alt="Prior aprendido equilibra desempenho entre profundidades. Treinamento de profundidade fixa (Fixed R=5) é ótimo em R=5 mas degrada em outras; PLN fixo é mais robusto; prior aprendido estreita a lacuna, mantendo baixa perplexidade em várias profundidades de teste." loading="lazy">
+          <figcaption>
+            Prior aprendido equilibra desempenho entre profundidades. Treinamento de profundidade fixa (Fixed R=5) é ótimo em R=5 mas degrada em outras; PLN fixo é mais robusto; prior aprendido estreita a lacuna, mantendo baixa perplexidade em várias profundidades de teste.
+            <span class="source">Figura 4 do paper · Huang et al., arXiv:2610.06833</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b13-h">O que o paper não mostra</span></h2>
+<p><span class="s" data-s="b13-p0-s0">Os experimentos cobrem apenas três escalas, até 1.6B parâmetros.</span> <span class="s" data-s="b13-p0-s1">Não sabemos se os ganhos se mantêm em modelos maiores, de dezenas de bilhões de parâmetros, onde a dinâmica de convergência pode mudar.</span> <span class="s" data-s="b13-p0-s2">O paper também não explora o comportamento em tarefas de geração longa ou diálogos multi-turno, onde a estabilidade dos pontos fixos ao longo de muitas gerações seria crítica.</span></p><p><span class="s" data-s="b13-p1-s0">A destilação de prefill usa um quarto dos tokens de pré-treino, mas não há ablação sistemática sobre quantos tokens são necessários para diferentes níveis de qualidade.</span> <span class="s" data-s="b13-p1-s1">Além disso, o estudante é treinado para prever o ponto fixo do professor em R=5; não está claro se ele generalizaria bem caso o professor fosse treinado para profundidades maiores.</span></p><p><span class="s" data-s="b13-p2-s0">O paper não compara com outras arquiteturas recorrentes recentes, como SSMs (state space models) ou variantes de Mamba, que também prometem eficiência.</span> <span class="s" data-s="b13-p2-s1">Também não há análise de custo de memória durante o treino: embora a backpropagation truncada reduza ativações armazenadas, o impacto exato em pico de memória não é quantificado.</span></p><p><span class="s" data-s="b13-p3-s0">Por fim, o prior aprendido adiciona um hiperparâmetro (o peso do termo de entropia) que precisa ser ajustado.</span> <span class="s" data-s="b13-p3-s1">O paper não fornece diretrizes sobre como escolher esse peso em novos cenários, o que pode dificultar a reprodução dos resultados em datasets ou escalas diferentes.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b14-t">Cache KV 3× menor, desempenho equivalente</span></h3>
+          <p><span class="s" data-s="b14-c-s0">Na escala de 1.6B parâmetros, o modelo com prior aprendido e entropia regularizada, usando compartilhamento de KV terminal, mantém apenas 4 bancos KV (um por bloco físico) em vez de 12 (um por bloco lógico).</span> <span class="s" data-s="b14-c-s1">Esse cache 3× menor iguala a média downstream do Untied 12, que tem 3× mais parâmetros e cache completo.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b15-h">Por que isso importa</span></h2>
+<p><span class="s" data-s="b15-p0-s0">Modelos recorrentes prometem economizar parâmetros, mas até agora cada recorrência adicionava custo linear em treino, inferência e pós-treino.</span> <span class="s" data-s="b15-p0-s1">Este paper mostra que treinar para pontos fixos quebra essa linearidade: os atalhos habilitados por convergência tornam cada loop adicional muito mais barato.</span> <span class="s" data-s="b15-p0-s2">Backpropagation truncada, compartilhamento de KV terminal, destilação de prefill e reutilização de estados no RL são todos consequências diretas de uma única propriedade — estados que convergem.</span></p><p><span class="s" data-s="b15-p1-s0">A contribuição metodológica está em identificar e corrigir os dois componentes que moldam esses pontos fixos.</span> <span class="s" data-s="b15-p1-s1">Prior aprendido com entropia regularizada concentra supervisão onde ela é útil, mas mantém amplitude suficiente para suportar compartilhamento.</span> <span class="s" data-s="b15-p1-s2">Injeção ortogonal estabiliza a dinâmica de recorrência, garantindo que a entrada seja recebida com intensidade constante a cada loop.</span></p><p><span class="s" data-s="b15-p2-s0">Os resultados empíricos validam a abordagem: na escala de 1.6B, o modelo recorrente com prior aprendido e cache 3× menor iguala um modelo não-recorrente 3× maior.</span> <span class="s" data-s="b15-p2-s1">Destilação de prefill acelera em até 1.79× com perda controlada de qualidade.</span> <span class="s" data-s="b15-p2-s2">RL fica 2× mais rápido.</span> <span class="s" data-s="b15-p2-s3">Esses ganhos crescem com a profundidade, então modelos que precisam de muitas recorrências — por exemplo, para raciocínio complexo — se beneficiam ainda mais.</span></p><p><span class="s" data-s="b15-p3-s0">Limitações permanecem: escalas maiores não foram testadas, geração longa não foi explorada, e a comparação com SSMs ou Mamba falta.</span> <span class="s" data-s="b15-p3-s1">Mas a ideia central é sólida e generalizável: se você vai treinar um modelo recorrente, treine para convergir.</span> <span class="s" data-s="b15-p3-s2">Os atalhos que pontos fixos desbloqueiam pagam o custo de moldar esses pontos, e os ganhos aumentam a cada loop que você adiciona.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Treinar modelos recorrentes para convergir a pontos fixos permite cortar o cache KV em 3×, acelerar prefill em 1.79× e reduzir pela metade o tempo de RL, sem perda significativa de qualidade.</span></li><li><span class="s" data-s="k1">Prior de profundidade aprendido com entropia regularizada e injeção ortogonal de entrada são as duas mudanças de treino que moldam pontos fixos estáveis e informativos.</span></li><li><span class="s" data-s="k2">Na escala de 1.6B parâmetros, modelo recorrente com cache 3× menor iguala desempenho de modelo não-recorrente 3× maior, mostrando que recorrência bem treinada economiza parâmetros e memória.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.06833" rel="noopener">Towards Looped Models Done Right, Part II: Rethinking at Fixed Points</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.06833" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

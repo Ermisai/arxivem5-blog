@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Como medir o avanço da IA: uma análise estatística dos horizontes temporais da METR — arXiv em 5</title>
+<meta name="description" content="Pesquisadores de Berkeley revisitam a metodologia que traduz capacidades de IA em tempo humano, mostrando que saltar de 3 para 30 minutos é muito mais fácil do que de 30 minutos para 5 horas — mesmo com o mesmo multiplicador de 10×.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Como medir o avanço da IA: uma análise estatística dos horizontes temporais da METR">
+<meta property="og:description" content="Pesquisadores de Berkeley revisitam a metodologia que traduz capacidades de IA em tempo humano, mostrando que saltar de 3 para 30 minutos é muito mais fácil do que de 30 minutos para 5 horas — mesmo com o mesmo multiplicador de 10×.">
+<meta property="og:image" content="../../assets/papers/2610.12466/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Agentes</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.12466" rel="noopener">arXiv:2610.12466</a>
+    </div>
+    <h1><span class="s" data-s="t">Como medir o avanço da IA: uma análise estatística dos horizontes temporais da METR</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Pesquisadores de Berkeley revisitam a metodologia que traduz capacidades de IA em tempo humano, mostrando que saltar de 3 para 30 minutos é muito mais fácil do que de 30 minutos para 5 horas — mesmo com o mesmo multiplicador de 10×.</span></p>
+    <p class="byline">
+      <span>Nguyen et al.</span>
+      <span>9 min de leitura</span>
+<span>08/10/2026</span>    </p>
+    <div class="listen" data-article="2610.12466" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=AhZlyMH9JTM" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema: como comparar avanços em IA?</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Quão rápido as capacidades de IA estão avançando?</span> <span class="s" data-s="b0-p0-s1">A pergunta é simples, mas a resposta divide especialistas.</span> <span class="s" data-s="b0-p0-s2">De um lado, textos como &#39;AI 2027&#39; preveem saltos dramáticos; de outro, &#39;AI as Normal Technology&#39; defende que o progresso é incremental.</span> <span class="s" data-s="b0-p0-s3">No meio dessa disputa, a METR — uma organização sem fins lucrativos de Berkeley, Califórnia — ganhou destaque ao propor uma métrica concreta: os horizontes temporais.</span></p><p><span class="s" data-s="b0-p1-s0">A ideia é engenhosa.</span> <span class="s" data-s="b0-p1-s1">A METR criou 228 tarefas de engenharia de software, cada uma com um &#39;tempo humano&#39; — quanto um engenheiro profissional leva para completá-la.</span> <span class="s" data-s="b0-p1-s2">Depois, para cada modelo de IA, calcula o horizonte temporal: o tempo humano das tarefas que a IA resolve com 50% de probabilidade em execuções autônomas repetidas.</span> <span class="s" data-s="b0-p1-s3">Por exemplo, o GPT-4 tem horizonte de 4 minutos: ele resolve com 50% de chance tarefas que um humano faria em 4 minutos, como &#39;pesquisar este fato no Google&#39;.</span></p><p><span class="s" data-s="b0-p2-s0">O gráfico da METR, atualizado a cada novo lançamento de IA até maio de 2026, mostra crescimento exponencial nos horizontes.</span> <span class="s" data-s="b0-p2-s1">É uma visualização poderosa, chamada pelo New York Times de trabalho do &#39;árbitro informal de IA do mundo&#39;.</span> <span class="s" data-s="b0-p2-s2">Mas por trás da métrica há uma suposição forte: que a dificuldade de uma tarefa para a IA depende linearmente do logaritmo do tempo humano.</span> <span class="s" data-s="b0-p2-s3">Será que essa suposição se sustenta?</span></p>        <h2><span class="s" data-s="b1-h">A contribuição: relaxar a linearidade</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Drew Nguyen e William Fithian, do Departamento de Estatística da UC Berkeley, decidiram testar essa suposição.</span> <span class="s" data-s="b1-p0-s1">Usando os mesmos 228 tarefas e 26 modelos de IA da METR, eles recomputaram os horizontes temporais com técnicas mais flexíveis: splines e teoria de resposta ao item (item-response theory, um método clássico de psicometria usado para calibrar testes educacionais).</span></p><p><span class="s" data-s="b1-p1-s0">A descoberta central é que a relação entre tempo humano e dificuldade para IA não é linear em todo o espectro.</span> <span class="s" data-s="b1-p1-s1">A função ajustada — que converte tempo humano em dificuldade de IA — é quase plana na região de 2 a 30 minutos, mas próxima de linear fora dela.</span> <span class="s" data-s="b1-p1-s2">Em termos práticos: saltar de um horizonte de 3 minutos para 30 minutos é muito mais fácil do que saltar de 30 minutos para 5 horas, mesmo que ambos representem um multiplicador de 10×.</span></p><p><span class="s" data-s="b1-p2-s0">Isso tem implicações diretas.</span> <span class="s" data-s="b1-p2-s1">Se a função de conversão é plana entre 2 e 30 minutos, então tarefas nessa faixa têm dificuldade de IA similar, independentemente do tempo humano.</span> <span class="s" data-s="b1-p2-s2">Um modelo que salta de 3 para 30 minutos não necessariamente ficou 10 vezes mais capaz — pode ter dado um passo menor do que parece.</span> <span class="s" data-s="b1-p2-s3">Por outro lado, saltos fora dessa região plana refletem ganhos reais de capacidade.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.12466/figure1.webp" alt="Visão geral: o método baseline da METR (coluna esquerda) versus o Modelo 2 proposto (coluna direita). Note como o horizonte do GPT-4o muda de 7,2 para 4,4 minutos e como a curva de conversão tempo-dificuldade (painel d) é plana entre 2 e 30 minutos." loading="lazy">
+          <figcaption>
+            Visão geral: o método baseline da METR (coluna esquerda) versus o Modelo 2 proposto (coluna direita). Note como o horizonte do GPT-4o muda de 7,2 para 4,4 minutos e como a curva de conversão tempo-dificuldade (painel d) é plana entre 2 e 30 minutos.
+            <span class="source">Figura 1 do paper · Nguyen et al., arXiv:2610.12466</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Como funciona: splines e teoria de resposta ao item</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O método baseline da METR assume que a dificuldade de uma tarefa i para a IA é uma função linear do log do tempo humano: dificuldade_i = a × log(tempo_i).</span> <span class="s" data-s="b3-p0-s1">Cada modelo j tem uma habilidade θ_j, e a probabilidade de sucesso segue uma regressão logística: P(sucesso) depende de θ_j - dificuldade_i.</span> <span class="s" data-s="b3-p0-s2">Quanto maior a habilidade do modelo relativa à dificuldade da tarefa, maior a chance de sucesso.</span></p><p><span class="s" data-s="b3-p1-s0">Os autores propõem dois modelos alternativos.</span> <span class="s" data-s="b3-p1-s1">O Modelo 1 substitui a função linear por uma spline cúbica natural — uma curva suave que pode se dobrar para se ajustar melhor aos dados, mas ainda é restrita a ser monotônica (tarefas mais longas não podem ser mais fáceis).</span> <span class="s" data-s="b3-p1-s2">O Modelo 2 vai além: permite que a variância da dificuldade também mude com o tempo humano, usando outra spline para modelar s(t), o desvio-padrão da dificuldade.</span></p><p><span class="s" data-s="b3-p2-s0">Ambos os modelos são ajustados por máxima verossimilhança, e os autores usam validação cruzada para compará-los ao baseline.</span> <span class="s" data-s="b3-p2-s1">Dividem os dados em 10 partições (folds), treinam em 9 e testam na décima, repetindo o processo.</span> <span class="s" data-s="b3-p2-s2">Avaliam o desempenho com uma suíte de scoring rules — métricas que penalizam previsões erradas de forma justa, como log-score, Brier score e spherical score.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b4-t">O que é uma scoring rule?</span></h3>
+          <p><span class="s" data-s="b4-c-s0">Scoring rules são métricas que avaliam a qualidade de previsões probabilísticas.</span> <span class="s" data-s="b4-c-s1">Uma &#39;proper scoring rule&#39; garante que o previsor é incentivado a reportar suas crenças verdadeiras.</span> <span class="s" data-s="b4-c-s2">Por exemplo, o log-score penaliza fortemente previsões confiantes que erram: se você diz 99% de chance e erra, perde muito mais pontos do que se tivesse dito 60%.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b5-h">Resultados: melhor ajuste, horizontes diferentes</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os Modelos 1 e 2 superam o baseline em todas as métricas de validação cruzada avaliadas.</span> <span class="s" data-s="b5-p0-s1">A melhora é estatisticamente significativa e consistente: em log-score, Brier, spherical e outras regras, os modelos com splines preveem melhor a probabilidade de sucesso das IAs em tarefas não vistas durante o treinamento.</span></p><p><span class="s" data-s="b5-p1-s0">Isso se traduz em horizontes temporais diferentes.</span> <span class="s" data-s="b5-p1-s1">Para o GPT-4o, por exemplo, o baseline da METR estima 7,2 minutos, mas o Modelo 2 estima 4,4 minutos — uma diferença de 40%.</span> <span class="s" data-s="b5-p1-s2">Essa mudança não é erro de medição: reflete o fato de que a função de conversão é plana entre 2 e 30 minutos.</span> <span class="s" data-s="b5-p1-s3">O GPT-4o resolve bem tarefas de 4 minutos e de 7 minutos porque, para a IA, elas têm dificuldade similar.</span></p><p><span class="s" data-s="b5-p2-s0">Os autores recalculam os horizontes para todos os 26 modelos.</span> <span class="s" data-s="b5-p2-s1">As diferenças concentram-se na faixa de 2 a 30 minutos, onde a não-linearidade é mais pronunciada.</span> <span class="s" data-s="b5-p2-s2">Fora dessa região — abaixo de 2 minutos ou acima de 30 — os horizontes do Modelo 2 ficam próximos aos da METR, porque ali a função de conversão é aproximadamente linear.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.12466/figure2.webp" alt="Validação cruzada: Modelos 1 e 2 superam o baseline em todas as métricas. Cada painel mostra a diferença de score por execução; valores à esquerda indicam que os novos modelos preveem melhor. Intervalos de confiança a 80% (grosso) e 95% (fino)." loading="lazy">
+          <figcaption>
+            Validação cruzada: Modelos 1 e 2 superam o baseline em todas as métricas. Cada painel mostra a diferença de score por execução; valores à esquerda indicam que os novos modelos preveem melhor. Intervalos de confiança a 80% (grosso) e 95% (fino).
+            <span class="source">Figura 2 do paper · Nguyen et al., arXiv:2610.12466</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">A função de conversão: tempo não é dificuldade</span></h2>
+<p><span class="s" data-s="b7-p0-s0">O painel (d) da Figura 1 é o coração do paper.</span> <span class="s" data-s="b7-p0-s1">Ele mostra a função f(t) que converte tempo humano t em dificuldade de IA, junto com o desvio-padrão s(t).</span> <span class="s" data-s="b7-p0-s2">Cada um dos 228 pontos representa uma tarefa, plotada com seu tempo humano e dificuldade estimada.</span></p><p><span class="s" data-s="b7-p1-s0">A curva revela três regiões.</span> <span class="s" data-s="b7-p1-s1">Abaixo de 2 minutos, a função sobe rapidamente: tarefas muito curtas variam bastante em dificuldade.</span> <span class="s" data-s="b7-p1-s2">Entre 2 e 30 minutos, a curva é quase plana: um platô onde o tempo humano não prediz bem a dificuldade para IA.</span> <span class="s" data-s="b7-p1-s3">Acima de 30 minutos, a função volta a subir de forma aproximadamente linear, indicando que tarefas mais longas são genuinamente mais difíceis.</span></p><p><span class="s" data-s="b7-p2-s0">Os autores calculam a relação sinal-ruído (SNR) como a razão entre a amplitude de f(t) e o desvio-padrão s(t).</span> <span class="s" data-s="b7-p2-s1">No platô, o SNR é próximo de 1, o que significa que a variação entre tarefas é tão grande quanto a tendência.</span> <span class="s" data-s="b7-p2-s2">Fora do platô, o SNR é maior: o tempo humano explica melhor a dificuldade.</span> <span class="s" data-s="b7-p2-s3">Isso sugere que, na faixa de 2 a 30 minutos, outros fatores — tipo de tarefa, clareza do enunciado, necessidade de contexto — importam tanto quanto a duração.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.12466/figure4.webp" alt="Ajuste aos dados: pontos pretos mostram frequências observadas de sucesso em bins de tempo humano, para seis IAs com horizontes entre 2 e 15 minutos. Modelo 2 (roxo) fica mais próximo dos dados que o baseline (azul)." loading="lazy">
+          <figcaption>
+            Ajuste aos dados: pontos pretos mostram frequências observadas de sucesso em bins de tempo humano, para seis IAs com horizontes entre 2 e 15 minutos. Modelo 2 (roxo) fica mais próximo dos dados que o baseline (azul).
+            <span class="source">Figura 4 do paper · Nguyen et al., arXiv:2610.12466</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Validade de construto: o que os horizontes realmente medem?</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Além de melhorar o ajuste, os autores propõem gráficos de diagnóstico para avaliar a validade de construto dos horizontes temporais — isto é, se eles realmente capturam o que dizem capturar.</span> <span class="s" data-s="b9-p0-s1">Um desses gráficos é o conditional success plot, que mostra P(sucesso | tempo humano) para cada IA ao longo do tempo.</span></p><p><span class="s" data-s="b9-p1-s0">Se a métrica for válida, esperamos ver curvas suaves e bem ordenadas: IAs mais recentes devem ter curvas deslocadas para a direita, indicando sucesso em tarefas mais longas.</span> <span class="s" data-s="b9-p1-s1">E é isso que se vê, em grande parte.</span> <span class="s" data-s="b9-p1-s2">Mas o gráfico também revela irregularidades: algumas IAs têm curvas que se cruzam ou apresentam platôs inesperados, sugerindo que a relação entre tempo humano e dificuldade não é universal.</span></p><p><span class="s" data-s="b9-p2-s0">Os autores recomendam que horizontes temporais sejam interpretados junto com esses gráficos de diagnóstico, especialmente à medida que novos benchmarks baseados em horizontes forem propostos ou os existentes cresçam para incluir tarefas mais longas.</span> <span class="s" data-s="b9-p2-s1">A métrica é útil, mas não é uma régua perfeita: ela resume uma relação complexa em um único número.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.12466/figure5.webp" alt="Horizontes do Modelo 2 (roxo) versus METR (azul). As diferenças concentram-se na faixa de 2 a 30 minutos, onde a função de conversão é plana. Fora dessa região, os horizontes convergem." loading="lazy">
+          <figcaption>
+            Horizontes do Modelo 2 (roxo) versus METR (azul). As diferenças concentram-se na faixa de 2 a 30 minutos, onde a função de conversão é plana. Fora dessa região, os horizontes convergem.
+            <span class="source">Figura 5 do paper · Nguyen et al., arXiv:2610.12466</span>
+          </figcaption>
+        </figure>
+        <aside class="callout">
+          <h3><span class="s" data-s="b11-t">Limitação: apenas 228 tarefas</span></h3>
+          <p><span class="s" data-s="b11-c-s0">O estudo usa os mesmos 228 tarefas e 26 modelos da METR.</span> <span class="s" data-s="b11-c-s1">Não há tarefas novas, nem validação externa em outro conjunto de dados.</span> <span class="s" data-s="b11-c-s2">A função de conversão tempo-dificuldade é específica para este conjunto de tarefas de engenharia de software — pode não generalizar para outros domínios ou tipos de tarefa.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b12-h">Implicações: cuidado com multiplicadores</span></h2>
+<p><span class="s" data-s="b12-p0-s0">A descoberta do platô entre 2 e 30 minutos tem implicações práticas.</span> <span class="s" data-s="b12-p0-s1">Quando uma IA salta de 3 para 30 minutos de horizonte temporal, é tentador concluir que ela ficou 10× mais capaz.</span> <span class="s" data-s="b12-p0-s2">Mas se a função de conversão é plana nessa região, o ganho real de capacidade pode ser menor — talvez equivalente a 1 ou 2 desvios-padrão de dificuldade, não 10.</span></p><p><span class="s" data-s="b12-p1-s0">Por outro lado, um salto de 30 minutos para 5 horas (também 10×) ocorre fora do platô, onde a função é linear.</span> <span class="s" data-s="b12-p1-s1">Esse salto representa um ganho genuíno e proporcional de capacidade.</span> <span class="s" data-s="b12-p1-s2">A lição: multiplicadores de horizonte temporal não são diretamente comparáveis em diferentes regiões do espectro de tempo humano.</span></p><p><span class="s" data-s="b12-p2-s0">Isso importa para previsões de longo prazo.</span> <span class="s" data-s="b12-p2-s1">Se extrapolarmos a tendência exponencial dos horizontes sem considerar a não-linearidade da conversão, podemos superestimar ou subestimar o ritmo de progresso.</span> <span class="s" data-s="b12-p2-s2">Os autores não fazem previsões — eles apenas mostram que a régua não é uniforme.</span></p>        <h2><span class="s" data-s="b13-h">O que fica em aberto</span></h2>
+<p><span class="s" data-s="b13-p0-s0">O paper é cuidadoso em delimitar seu escopo.</span> <span class="s" data-s="b13-p0-s1">Ele não propõe uma nova suite de tarefas, não testa outros domínios além de engenharia de software, e não faz afirmações sobre o futuro.</span> <span class="s" data-s="b13-p0-s2">A análise é retrospectiva: olha para 228 tarefas e 26 modelos já avaliados pela METR.</span></p><p><span class="s" data-s="b13-p1-s0">Também não explica por que a função de conversão tem um platô entre 2 e 30 minutos.</span> <span class="s" data-s="b13-p1-s1">Os autores especulam que tarefas nessa faixa podem variar muito em outros aspectos — complexidade conceitual, necessidade de contexto, clareza do enunciado — que não se correlacionam bem com tempo humano.</span> <span class="s" data-s="b13-p1-s2">Mas isso é hipótese, não resultado.</span></p><p><span class="s" data-s="b13-p2-s0">Finalmente, o paper não questiona a utilidade dos horizontes temporais como métrica.</span> <span class="s" data-s="b13-p2-s1">Pelo contrário: os autores acreditam que é uma abordagem valiosa, desde que interpretada com cuidado.</span> <span class="s" data-s="b13-p2-s2">A contribuição é metodológica — melhorar a estimação e fornecer ferramentas de diagnóstico — não conceitual.</span></p>        <h2><span class="s" data-s="b14-h">Conclusão: uma régua mais precisa, mas ainda uma régua</span></h2>
+<p><span class="s" data-s="b14-p0-s0">Nguyen e Fithian oferecem uma versão mais sofisticada dos horizontes temporais da METR, com melhor ajuste aos dados e diagnósticos mais ricos.</span> <span class="s" data-s="b14-p0-s1">A descoberta central — que a conversão de tempo humano para dificuldade de IA não é linear, especialmente entre 2 e 30 minutos — é importante para quem usa ou interpreta essa métrica.</span></p><p><span class="s" data-s="b14-p1-s0">O trabalho não resolve o debate sobre a velocidade do progresso em IA, mas fornece ferramentas mais precisas para medi-lo.</span> <span class="s" data-s="b14-p1-s1">E lembra que métricas, por mais engenhosas que sejam, sempre carregam suposições.</span> <span class="s" data-s="b14-p1-s2">Quando essas suposições são testadas e relaxadas, a imagem fica mais clara — e, às vezes, mais complicada.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">A relação entre tempo humano e dificuldade de IA não é linear: é quase plana entre 2 e 30 minutos, mas linear fora dessa faixa.</span></li><li><span class="s" data-s="k1">Saltar de 3 para 30 minutos de horizonte temporal representa ganho menor de capacidade do que saltar de 30 minutos para 5 horas, mesmo com o mesmo multiplicador de 10×.</span></li><li><span class="s" data-s="k2">Modelos com splines e teoria de resposta ao item preveem melhor o sucesso das IAs em validação cruzada, em todas as métricas testadas.</span></li><li><span class="s" data-s="k3">Horizontes temporais são úteis, mas devem ser interpretados com gráficos de diagnóstico — especialmente à medida que benchmarks incluem tarefas mais longas.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.12466" rel="noopener">On the estimation and validity of AI time horizons---a statistical look at the METR plot</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.12466" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

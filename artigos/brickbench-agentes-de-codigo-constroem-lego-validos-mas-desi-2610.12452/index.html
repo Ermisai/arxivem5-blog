@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BrickBench: agentes de código constroem LEGO válidos, mas design ainda é humano — arXiv em 5</title>
+<meta name="description" content="Pesquisadores de Stanford e Inria mostram que agentes de linguagem conseguem gerar montagens LEGO complexas que funcionam fisicamente, mas ainda ficam longe da qualidade criativa de designers humanos.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BrickBench: agentes de código constroem LEGO válidos, mas design ainda é humano">
+<meta property="og:description" content="Pesquisadores de Stanford e Inria mostram que agentes de linguagem conseguem gerar montagens LEGO complexas que funcionam fisicamente, mas ainda ficam longe da qualidade criativa de designers humanos.">
+<meta property="og:image" content="../../assets/papers/2610.12452/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Agentes</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.12452" rel="noopener">arXiv:2610.12452</a>
+    </div>
+    <h1><span class="s" data-s="t">BrickBench: agentes de código constroem LEGO válidos, mas design ainda é humano</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Pesquisadores de Stanford e Inria mostram que agentes de linguagem conseguem gerar montagens LEGO complexas que funcionam fisicamente, mas ainda ficam longe da qualidade criativa de designers humanos.</span></p>
+    <p class="byline">
+      <span>Kulits et al.</span>
+      <span>8 min de leitura</span>
+<span>08/10/2026</span>    </p>
+    <div class="listen" data-article="2610.12452" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=Exbqt9Xd2Cc" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema: gerar LEGO é mais difícil do que parece</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Projetar uma montagem LEGO exige escolher entre milhares de peças, organizá-las em uma forma reconhecível e garantir que a estrutura se sustente fisicamente.</span> <span class="s" data-s="b0-p0-s1">Modelos generativos especializados vinham sendo treinados para essa tarefa com representações cuidadosamente engenheiradas.</span> <span class="s" data-s="b0-p0-s2">Mas agentes de código — sistemas de linguagem que escrevem programas, executam, inspecam resultados e revisam — oferecem uma abordagem diferente, sem treinamento específico para a tarefa.</span></p><p><span class="s" data-s="b0-p1-s0">Os autores mostram que um agente geral de código supera substancialmente modelos especializados no benchmark BrickNet, chegando perto do alinhamento semântico das montagens de referência.</span> <span class="s" data-s="b0-p1-s1">Mas isso levanta uma questão: será que agentes realmente aprenderam a projetar LEGO?</span> <span class="s" data-s="b0-p1-s2">Avaliações existentes deixam dois desafios inexplorados.</span> <span class="s" data-s="b0-p1-s3">Primeiro, complexidade física: BrickNet avalia objetos pequenos, com no máximo 100 peças, longe das centenas ou milhares de peças interconectadas e restrições de inventário de um set LEGO completo.</span></p><p><span class="s" data-s="b0-p2-s0">Segundo, e mais fundamental, qualidade de design.</span> <span class="s" data-s="b0-p2-s1">Fazer uma montagem que funciona não é o mesmo que fazer uma montagem que vale a pena construir.</span> <span class="s" data-s="b0-p2-s2">O apelo do LEGO está não apenas em reproduzir um objeto, mas na criatividade da construção: uso inteligente de peças, formas, proporções e detalhes.</span> <span class="s" data-s="b0-p2-s3">Duas montagens podem ser igualmente válidas e fiéis a uma descrição, mas diferir dramaticamente em quão bem são projetadas.</span> <span class="s" data-s="b0-p2-s4">Diferente de validade física ou alinhamento semântico, qualidade de design não tem teste definitivo de aprovação ou reprovação.</span></p>        <h2><span class="s" data-s="b1-h">BrickBench: três cenários, 300 prompts, validação física</span></h2>
+<p><span class="s" data-s="b1-p0-s0">O paper introduz BrickBench, um benchmark para design agentico de sets LEGO condicionado a texto.</span> <span class="s" data-s="b1-p0-s1">O benchmark contém 300 prompts distribuídos em três cenários: Model (no máximo 400 peças), Set (entre 400 e 4000 peças) e Alt-Build (inventário fixo de peças do set 10698).</span> <span class="s" data-s="b1-p0-s2">Cada cenário impõe restrições diferentes de escala e disponibilidade de peças.</span></p><p><span class="s" data-s="b1-p1-s0">Para suportar construção complexa, os autores criaram BrickAgent, um ambiente para design agentico de LEGO que inclui ferramentas de construção e validação interpretável de conectividade, colisões e estabilidade.</span> <span class="s" data-s="b1-p1-s1">Em vez de prescrever como projetar uma montagem, BrickAgent fornece os blocos de construção, restrições e feedback, deixando o agente criar sua própria solução.</span></p><p><span class="s" data-s="b1-p2-s0">A validação física é rigorosa.</span> <span class="s" data-s="b1-p2-s1">Conectividade verifica se cada peça está ligada ao resto da montagem através de conexões válidas — studs (os pinos redondos), axles (eixos) ou outros conectores reconhecidos na biblioteca LDraw.</span> <span class="s" data-s="b1-p2-s2">Colisões detectam quando geometrias de peças se sobrepõem além de uma tolerância mínima, tornando a montagem impossível de construir fisicamente.</span> <span class="s" data-s="b1-p2-s3">Estabilidade simula a montagem em PyBullet: componentes conectados são tratados como corpos rígidos com densidade uniforme, alto coeficiente de fricção e sem restituição.</span> <span class="s" data-s="b1-p2-s4">Um componente falha se qualquer ponto se mover mais de três quartos da altura de um stud — 3 unidades LDraw — durante a simulação.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b2-t">Limitações da simulação física</span></h3>
+          <p><span class="s" data-s="b2-c-s0">A simulação não modela efeitos como a força de retenção das conexões de studs ou a folga de eixos.</span> <span class="s" data-s="b2-c-s1">Uma montagem que equilibra como corpo rígido passa no teste mesmo que uma construção real possa ceder ou desmoronar.</span> <span class="s" data-s="b2-c-s2">Avaliar isso exigiria simulação estrutural com limite de força em cada conexão ou modelo de elementos finitos das peças.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b3-h">Agentes gerais superam modelos especializados no BrickNet</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Antes de avaliar BrickBench, os autores testaram GPT-5.6 Luna no conjunto de validação do BrickNet, que contém 512 legendas de objetos únicos com no máximo 100 peças cada.</span> <span class="s" data-s="b3-p0-s1">As legendas foram geradas por um modelo visão-linguagem sobre renders de montagens existentes.</span> <span class="s" data-s="b3-p0-s2">O agente recebeu o ambiente descrito depois, com limite de 100 peças para corresponder ao BrickNet.</span></p><p><span class="s" data-s="b3-p1-s0">Os resultados mostram que o agente geral, sem ter sido treinado no dataset, supera substancialmente os baselines especializados BrickNet e BrickGPT.</span> <span class="s" data-s="b3-p1-s1">O GPT-5.6 Luna pontuou dentro de 0.02 das montagens de referência (GT) em cada métrica — PE, SigLIP 2 e VQAScore — efetivamente saturando a avaliação.</span> <span class="s" data-s="b3-p1-s2">PE e SigLIP 2 medem a similaridade entre embeddings dos renders e da legenda; VQAScore mede a probabilidade de um modelo VQA responder sim quando perguntado se os renders mostram a legenda.</span></p><p><span class="s" data-s="b3-p2-s0">Essa saturação motivou o design de um novo benchmark.</span> <span class="s" data-s="b3-p2-s1">Se agentes gerais já resolvem montagens pequenas e simples, o próximo passo é avaliar complexidade física real e, crucialmente, qualidade de design — algo que métricas automáticas de alinhamento não capturam.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.12452/figure3.webp" alt="Resumo do desempenho no BrickBench: agentes líderes alcançam alta validade e VQA, mas design (ELO) separa fortemente os sistemas. Linhas representam intervalos de 95% de confiança. Custo aumenta dramaticamente em relação a modelos especializados." loading="lazy">
+          <figcaption>
+            Resumo do desempenho no BrickBench: agentes líderes alcançam alta validade e VQA, mas design (ELO) separa fortemente os sistemas. Linhas representam intervalos de 95% de confiança. Custo aumenta dramaticamente em relação a modelos especializados.
+            <span class="source">Figura 3 do paper · Kulits et al., arXiv:2610.12452</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Três métricas: validade, alinhamento semântico e design</span></h2>
+<p><span class="s" data-s="b5-p0-s0">BrickBench avalia três dimensões.</span> <span class="s" data-s="b5-p0-s1">Validade física verifica se a montagem pode ser construída: todas as peças conectadas, sem colisões e estável sob simulação.</span> <span class="s" data-s="b5-p0-s2">Alinhamento semântico usa VQAScore: cada prompt é decomposto em perguntas sim/não e um modelo VQA responde sobre renders da montagem.</span> <span class="s" data-s="b5-p0-s3">A pontuação é a fração de perguntas respondidas corretamente.</span></p><p><span class="s" data-s="b5-p1-s0">Qualidade de design é medida por ELO, calculado a partir de comparações pareadas.</span> <span class="s" data-s="b5-p1-s1">Um modelo visão-linguagem compara duas montagens para o mesmo prompt e escolhe qual é melhor projetada.</span> <span class="s" data-s="b5-p1-s2">Os autores validaram essas comparações contra avaliadores humanos, garantindo que o julgamento automático reflete preferências reais.</span></p><p><span class="s" data-s="b5-p2-s0">Essa terceira métrica é essencial.</span> <span class="s" data-s="b5-p2-s1">Duas montagens podem ser válidas e semanticamente corretas, mas uma pode usar peças de forma mais criativa, ter proporções melhores ou detalhes mais interessantes.</span> <span class="s" data-s="b5-p2-s2">Essa diferença — o que torna uma montagem digna de ser construída — é o que separa agentes de designers humanos.</span></p>        <h2><span class="s" data-s="b6-h">BrickAgent: o ambiente faz toda a diferença</span></h2>
+<p><span class="s" data-s="b6-p0-s0">BrickAgent oferece ferramentas para construção programática: busca de peças, posicionamento por conectores, submontagens, renderização e um validador que nomeia peças problemáticas.</span> <span class="s" data-s="b6-p0-s1">O agente escreve código Python que chama essas ferramentas, executa, inspeciona o resultado e revisa.</span></p><p><span class="s" data-s="b6-p1-s0">Para medir o impacto do ambiente, os autores fizeram uma ablação: rodaram os mesmos agentes sem as ferramentas, apenas gerando código que tenta construir diretamente.</span> <span class="s" data-s="b6-p1-s1">Os resultados são dramáticos.</span> <span class="s" data-s="b6-p1-s2">Com BrickAgent, GPT-6 Astra produz montagens válidas em 100% dos prompts.</span> <span class="s" data-s="b6-p1-s3">Sem o ambiente, essa taxa cai para 40%.</span> <span class="s" data-s="b6-p1-s4">Para GPT-5.6 Luna, a queda é ainda mais severa: de 100% para menos de 1%.</span></p><p><span class="s" data-s="b6-p2-s0">Isso mostra que construção confiável depende de ferramentas fundamentadas e feedback interpretável.</span> <span class="s" data-s="b6-p2-s1">Agentes não conseguem raciocinar sobre restrições físicas complexas apenas gerando código no vazio.</span> <span class="s" data-s="b6-p2-s2">Eles precisam de um loop de execução, inspeção e validação para iterar até uma solução válida.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.12452/table2.webp" alt="Ablação do ambiente: com BrickAgent, agentes produzem montagens válidas consistentemente. Sem ele, GPT-6 Astra cai para 40% de validade e GPT-5.6 Luna para menos de 1%, mostrando que ferramentas e feedback são essenciais." loading="lazy">
+          <figcaption>
+            Ablação do ambiente: com BrickAgent, agentes produzem montagens válidas consistentemente. Sem ele, GPT-6 Astra cai para 40% de validade e GPT-5.6 Luna para menos de 1%, mostrando que ferramentas e feedback são essenciais.
+            <span class="source">Tabela 2 do paper · Kulits et al., arXiv:2610.12452</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Onze agentes, dois baselines: validade alta, design ainda distante</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Os autores avaliaram onze agentes de fronteira e dois baselines orientados a dados.</span> <span class="s" data-s="b8-p0-s1">Agentes líderes produzem montagens válidas para quase todos os prompts.</span> <span class="s" data-s="b8-p0-s2">O melhor satisfaz aproximadamente 95% dos requisitos semânticos medidos por VQA.</span> <span class="s" data-s="b8-p0-s3">Isso representa um salto em relação a modelos especializados: agentes gerais deslocam sistemas treinados especificamente para LEGO.</span></p><p><span class="s" data-s="b8-p1-s0">Mas esse desempenho vem com custo.</span> <span class="s" data-s="b8-p1-s1">Os agentes aumentam o custo computacional em 900 a 6800 vezes em relação aos baselines orientados a dados.</span> <span class="s" data-s="b8-p1-s2">Eles iteram, revisam, validam — um processo caro, mas que permite satisfazer restrições físicas complexas sem treinamento específico.</span></p><p><span class="s" data-s="b8-p2-s0">Qualidade de design, porém, separa os agentes muito mais fortemente.</span> <span class="s" data-s="b8-p2-s1">Avaliadores humanos identificaram montagens projetadas por humanos em 323 de 360 comparações.</span> <span class="s" data-s="b8-p2-s2">Isso revela uma mudança no desafio do design de LEGO: agentes estão aprendendo a construir o que funciona, mas ainda não o que faz um ótimo design.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.12452/figure4.webp" alt="Amostras do BrickBench: onze agentes geraram montagens para os mesmos prompts em três cenários. Observe a variação nas interpretações. Uma montagem do Muse está ausente porque não entregou dentro do orçamento de turnos." loading="lazy">
+          <figcaption>
+            Amostras do BrickBench: onze agentes geraram montagens para os mesmos prompts em três cenários. Observe a variação nas interpretações. Uma montagem do Muse está ausente porque não entregou dentro do orçamento de turnos.
+            <span class="source">Figura 4 do paper · Kulits et al., arXiv:2610.12452</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">O que falta: criatividade, não correção</span></h2>
+<p><span class="s" data-s="b10-p0-s0">A diferença entre agentes e humanos não está em satisfazer requisitos verificáveis.</span> <span class="s" data-s="b10-p0-s1">Agentes conseguem fazer isso.</span> <span class="s" data-s="b10-p0-s2">A diferença está na criatividade da solução: escolher peças inesperadas, criar formas elegantes, adicionar detalhes que tornam a montagem interessante.</span></p><p><span class="s" data-s="b10-p1-s0">Esse é um desafio aberto.</span> <span class="s" data-s="b10-p1-s1">Métricas de alinhamento semântico saturam rapidamente: se a montagem tem as partes certas nos lugares certos, a pontuação é alta.</span> <span class="s" data-s="b10-p1-s2">Mas isso não captura se a montagem é bem projetada.</span> <span class="s" data-s="b10-p1-s3">Comparações pareadas ajudam, mas dependem de julgamento humano ou de modelos visão-linguagem calibrados contra humanos.</span></p><p><span class="s" data-s="b10-p2-s0">Os autores destacam que o domínio LEGO oferece um piso que um simulador pode verificar — validade física — e um teto aberto em qualidade de design.</span> <span class="s" data-s="b10-p2-s1">Isso torna o benchmark útil para medir progresso em duas frentes: capacidade de satisfazer restrições complexas e capacidade de criar soluções criativas e esteticamente agradáveis.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b11-t">Escopo do experimento</span></h3>
+          <p><span class="s" data-s="b11-c-s0">BrickBench avalia 300 prompts em três cenários.</span> <span class="s" data-s="b11-c-s1">A validação de design por ELO depende de comparações pareadas validadas contra humanos, mas não cobre toda a diversidade de preferências estéticas.</span> <span class="s" data-s="b11-c-s2">Simulação física não modela forças de conexão ou deformação de peças, então montagens que passam podem falhar na prática.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b12-h">Implicações: agentes como ferramentas, não substitutos</span></h2>
+<p><span class="s" data-s="b12-p0-s0">Os resultados sugerem que agentes de código podem ser ferramentas poderosas para designers, não substitutos.</span> <span class="s" data-s="b12-p0-s1">Eles conseguem gerar rapidamente montagens válidas que atendem requisitos semânticos, economizando tempo na fase de prototipagem.</span> <span class="s" data-s="b12-p0-s2">Mas o refinamento criativo — o que torna uma montagem memorável — ainda requer intervenção humana.</span></p><p><span class="s" data-s="b12-p1-s0">Essa divisão de trabalho é promissora.</span> <span class="s" data-s="b12-p1-s1">Designers podem usar agentes para explorar o espaço de soluções válidas rapidamente, depois iterar manualmente sobre as mais promissoras.</span> <span class="s" data-s="b12-p1-s2">O ambiente BrickAgent, com ferramentas de construção e validação, pode ser adaptado para outras tarefas de design generativo com restrições físicas.</span></p><p><span class="s" data-s="b12-p2-s0">O paper também mostra a importância de benchmarks que vão além de métricas de correção.</span> <span class="s" data-s="b12-p2-s1">Validade e alinhamento semântico são necessários, mas não suficientes.</span> <span class="s" data-s="b12-p2-s2">Qualidade de design — difícil de definir, mas fácil de reconhecer — é o que separa sistemas úteis de sistemas excelentes.</span> <span class="s" data-s="b12-p2-s3">BrickBench oferece uma estrutura para medir isso de forma reproduzível.</span></p>        <h2><span class="s" data-s="b13-h">Limitações e trabalho futuro</span></h2>
+<p><span class="s" data-s="b13-p0-s0">O paper é honesto sobre o que não resolve.</span> <span class="s" data-s="b13-p0-s1">Simulação física não modela forças de conexão ou deformação de peças, então montagens que passam no teste podem ceder ou desmoronar na prática.</span> <span class="s" data-s="b13-p0-s2">Avaliar isso exigiria simulação estrutural com limites de força em cada conexão ou modelos de elementos finitos das peças.</span></p><p><span class="s" data-s="b13-p1-s0">Qualidade de design é medida por comparações pareadas, mas preferências estéticas variam.</span> <span class="s" data-s="b13-p1-s1">O que um avaliador considera criativo, outro pode achar exagerado.</span> <span class="s" data-s="b13-p1-s2">Os autores validaram julgamentos automáticos contra humanos, mas reconhecem que isso não captura toda a diversidade de gostos.</span></p><p><span class="s" data-s="b13-p2-s0">Custo computacional é outro limite prático.</span> <span class="s" data-s="b13-p2-s1">Agentes aumentam o custo em centenas a milhares de vezes em relação a modelos especializados.</span> <span class="s" data-s="b13-p2-s2">Para aplicações em larga escala, isso pode ser proibitivo.</span> <span class="s" data-s="b13-p2-s3">Trabalho futuro pode explorar como destilar o raciocínio de agentes em modelos menores e mais rápidos, mantendo a capacidade de satisfazer restrições complexas.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">BrickBench avalia agentes em 300 prompts LEGO com validação física rigorosa (conectividade, colisões, estabilidade) e métricas de alinhamento semântico e qualidade de design.</span></li><li><span class="s" data-s="k1">Agentes líderes produzem montagens válidas em quase 100% dos casos e satisfazem ~95% dos requisitos semânticos, mas humanos preferem designs humanos em 90% das comparações.</span></li><li><span class="s" data-s="k2">O ambiente BrickAgent é essencial: sem ele, validade cai de 100% para 40% (GPT-6 Astra) ou &lt;1% (GPT-5.6 Luna), mostrando que ferramentas e feedback são críticos.</span></li><li><span class="s" data-s="k3">Custo aumenta 900–6800× vs. modelos especializados, mas agentes gerais deslocam sistemas treinados especificamente para LEGO sem precisar de dados de treinamento.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.12452" rel="noopener">BrickBench: Evaluating Agentic Brick Design</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.12452" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>
