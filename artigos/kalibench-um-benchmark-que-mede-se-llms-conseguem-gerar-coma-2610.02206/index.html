@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KaliBench: um benchmark que mede se LLMs conseguem gerar comandos de segurança executáveis na linha de comando — arXiv em 5</title>
+<meta name="description" content="Modelos de linguagem estão sendo usados em cibersegurança, mas nenhum benchmark media se eles realmente conseguem traduzir intenção humana em comandos CLI corretos. KaliBench testa isso com 8.504 pares query-comando em Kali Linux.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="KaliBench: um benchmark que mede se LLMs conseguem gerar comandos de segurança executáveis na linha de comando">
+<meta property="og:description" content="Modelos de linguagem estão sendo usados em cibersegurança, mas nenhum benchmark media se eles realmente conseguem traduzir intenção humana em comandos CLI corretos. KaliBench testa isso com 8.504 pares query-comando em Kali Linux.">
+<meta property="og:image" content="../../assets/papers/2610.02206/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Segurança</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.02206" rel="noopener">arXiv:2610.02206</a>
+    </div>
+    <h1><span class="s" data-s="t">KaliBench: um benchmark que mede se LLMs conseguem gerar comandos de segurança executáveis na linha de comando</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Modelos de linguagem estão sendo usados em cibersegurança, mas nenhum benchmark media se eles realmente conseguem traduzir intenção humana em comandos CLI corretos.</span> <span class="s" data-s="d-s1">KaliBench testa isso com 8.504 pares query-comando em Kali Linux.</span></p>
+    <p class="byline">
+      <span>Li et al.</span>
+      <span>8 min de leitura</span>
+<span>01/10/2026</span>    </p>
+    <div class="listen" data-article="2610.02206" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=3jdpgXUmYQc" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema: LLMs precisam falar a língua da linha de comando</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Modelos de linguagem grandes estão cada vez mais presentes em fluxos de trabalho de cibersegurança.</span> <span class="s" data-s="b0-p0-s1">A promessa é simples: um analista descreve o que quer fazer em linguagem natural — &#34;escaneie esta sub-rede em busca de configurações SMB vulneráveis&#34; — e o modelo traduz isso em uma invocação precisa de ferramentas como Nmap, Metasploit ou Volatility.</span> <span class="s" data-s="b0-p0-s2">Mas há um problema: benchmarks existentes testam conhecimento conceitual de segurança ou tarefas agênticas de ponta a ponta, mas não medem diretamente se o modelo consegue gerar comandos CLI executáveis e corretos.</span></p><p><span class="s" data-s="b0-p1-s0">Essa lacuna é crítica porque operações de segurança dependem de interfaces de linha de comando estritas.</span> <span class="s" data-s="b0-p1-s1">Kali Linux, plataforma amplamente usada por profissionais de segurança, oferece acesso a mais de 2.000 pacotes de ferramentas pré-instaladas.</span> <span class="s" data-s="b0-p1-s2">Na prática, erros mínimos — ordem errada de argumentos, flags mal escritas, uso incorreto de aliases — invalidam a execução.</span> <span class="s" data-s="b0-p1-s3">A pergunta que os autores fazem é direta: LLMs atuais conseguem traduzir requisições de segurança em linguagem natural para comandos CLI exatos e executáveis?</span></p><p><span class="s" data-s="b0-p2-s0">Avaliar invocação de ferramentas de cibersegurança traz desafios distintos.</span> <span class="s" data-s="b0-p2-s1">Benchmarks de function-calling assumem ferramentas definidas por esquemas JSON ou APIs, onde funcionalidade e parâmetros são explicitamente especificados.</span> <span class="s" data-s="b0-p2-s2">Ferramentas de segurança, por outro lado, são dominadas por CLIs.</span> <span class="s" data-s="b0-p2-s3">Enumerar centenas de esquemas de ferramentas em um prompt é impraticável devido a limites de contexto.</span> <span class="s" data-s="b0-p2-s4">A avaliação Natural-Language-to-CLI (NL-to-CLI) é, portanto, schema-free: modelos precisam inferir ferramentas e argumentos apropriados e gerar comandos sintaticamente corretos, em vez de apenas preencher campos estruturados.</span></p>        <h2><span class="s" data-s="b1-h">KaliBench: um benchmark fino e verificável</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Para preencher essa lacuna, os autores da Khalifa University e University of Western Australia desenvolveram o KaliBench, um benchmark de granularidade fina para tradução NL-to-CLI de ferramentas de cibersegurança no Kali Linux.</span> <span class="s" data-s="b1-p0-s1">O dataset compreende 8.504 pares de query-comando cobrindo 1.642 ferramentas distribuídas em 23 dimensões de capacidade e 5 fases de segurança.</span></p><p><span class="s" data-s="b1-p1-s0">O KaliBench decompõe a tarefa em dois componentes verificáveis: seleção de ferramenta e construção de argumentos.</span> <span class="s" data-s="b1-p1-s1">Isso permite avaliação precisa e reproduzível.</span> <span class="s" data-s="b1-p1-s2">A construção do benchmark segue um pipeline manuscript-grounded: os autores partem de manuais e documentação oficial das ferramentas, aplicam canonicalização determinística para normalizar sintaxe e implementam avaliação alias-aware, que reconhece variações válidas de flags e parâmetros.</span></p><p><span class="s" data-s="b1-p2-s0">Para garantir correção semântica e executabilidade prática, os autores desenvolveram um pipeline de verificação multi-estágio.</span> <span class="s" data-s="b1-p2-s1">Esse pipeline combina validação baseada em LLM, execução em terminal sandboxed (isolado) e refinamento com humanos no loop.</span> <span class="s" data-s="b1-p2-s2">O resultado é um conjunto de comandos semanticamente corretos e executáveis, não apenas sintaticamente plausíveis.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.02206/figure1.webp" alt="Visão geral do KaliBench: o benchmark mapeia intenção do analista em comandos Kali executáveis, decompondo a tarefa em seleção de ferramenta e construção de argumentos, com avaliação verificável e recompensas livres de execução para treinamento." loading="lazy">
+          <figcaption>
+            Visão geral do KaliBench: o benchmark mapeia intenção do analista em comandos Kali executáveis, decompondo a tarefa em seleção de ferramenta e construção de argumentos, com avaliação verificável e recompensas livres de execução para treinamento.
+            <span class="source">Figura 1 do paper · Li et al., arXiv:2610.02206</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Três modos de avaliação e recompensas verificáveis</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O KaliBench oferece três modos de avaliação que variam o grau de informação sobre ferramentas fornecido ao modelo.</span> <span class="s" data-s="b3-p0-s1">No modo unrestricted (irrestrito), o modelo recebe apenas a query em linguagem natural e precisa inferir qual ferramenta usar e como construir os argumentos — o cenário mais realista e difícil.</span> <span class="s" data-s="b3-p0-s2">No modo restricted (restrito), o modelo recebe uma lista de ferramentas candidatas, mas ainda precisa selecionar a correta e construir os argumentos.</span> <span class="s" data-s="b3-p0-s3">No modo hinted (com dica), o modelo recebe o nome exato da ferramenta e precisa apenas gerar os argumentos.</span></p><p><span class="s" data-s="b3-p1-s0">Essa estruturação permite diagnóstico fino: é possível separar erros de seleção de ferramenta de erros de construção de argumentos.</span> <span class="s" data-s="b3-p1-s1">Além disso, o benchmark mede acurácia exata de comando (Exact Correct), acurácia de seleção de ferramenta (Tool Acc.), F1 de argumentos opcionais e F1 de argumentos posicionais.</span> <span class="s" data-s="b3-p1-s2">Um Total Score agrega essas métricas.</span></p><p><span class="s" data-s="b3-p2-s0">Uma contribuição importante é que o KaliBench habilita runtime-free verifiable rewards — recompensas verificáveis sem necessidade de execução.</span> <span class="s" data-s="b3-p2-s1">Como a avaliação é determinística e baseada em decomposição estruturada, é possível treinar modelos com aprendizado por reforço usando sinais de recompensa derivados do benchmark, sem precisar executar comandos em tempo de treinamento.</span> <span class="s" data-s="b3-p2-s2">Isso reduz custo computacional e riscos de segurança.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.02206/figure3.webp" alt="Estrutura do KaliBench: o benchmark organiza ferramentas ao longo do ciclo de vida de ataque em segurança, com 5 fases (Reconnaissance, Weaponization, Delivery, Exploitation, Post-Exploitation) e 23 dimensões funcionais. Cada amostra inclui query em linguagem natural e comando ground-truth decomposto." loading="lazy">
+          <figcaption>
+            Estrutura do KaliBench: o benchmark organiza ferramentas ao longo do ciclo de vida de ataque em segurança, com 5 fases (Reconnaissance, Weaponization, Delivery, Exploitation, Post-Exploitation) e 23 dimensões funcionais. Cada amostra inclui query em linguagem natural e comando ground-truth decomposto.
+            <span class="source">Figura 3 do paper · Li et al., arXiv:2610.02206</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Resultados: nenhum modelo open-weight passa de 42% no modo irrestrito</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os autores avaliaram 24 configurações de modelos, incluindo 14 modelos de propósito geral (Llama 3.1, Qwen-3, Mistral, Gemma, GPT-OSS, DeepSeek-V3.2, GLM-5.2, entre outros) e 7 modelos focados em cibersegurança (Foundation-Sec, Llama-Primus, RedSage).</span> <span class="s" data-s="b5-p0-s1">As avaliações foram realizadas em cluster multi-GPU NVIDIA A100 usando o motor de inferência vLLM, com modelos maiores avaliados via API externa.</span></p><p><span class="s" data-s="b5-p1-s0">Os resultados são reveladores: no modo unrestricted, nenhum modelo open-weight excede 42% de acurácia exata de comando.</span> <span class="s" data-s="b5-p1-s1">O melhor desempenho nesse modo vem do GLM-5.2 (753B parâmetros) com 41,3% de Exact Correct.</span> <span class="s" data-s="b5-p1-s2">Entre modelos menores (≤8B), o melhor é RedSage-K (SFT+GRPO), uma variante treinada no próprio KaliBench, com 32,2% de acurácia exata no modo irrestrito.</span></p><p><span class="s" data-s="b5-p2-s0">A performance melhora significativamente quando o modelo recebe dicas.</span> <span class="s" data-s="b5-p2-s1">No modo hinted, o GLM-5.2 alcança 74,8% de Exact Correct, e o DeepSeek-V3.2 (685B parâmetros) chega a 84,5%.</span> <span class="s" data-s="b5-p2-s2">Isso indica que a construção de argumentos, embora difícil, é mais tratável do que a seleção de ferramenta.</span> <span class="s" data-s="b5-p2-s3">A acurácia de seleção de ferramenta no modo unrestricted varia de 61,7% (Llama 3.1-8B) a 86,3% (GLM-5.2), mas mesmo com a ferramenta correta, construir os argumentos permanece um gargalo.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b6-t">Construção de argumentos é o gargalo principal</span></h3>
+          <p><span class="s" data-s="b6-c-s0">Mesmo quando modelos acertam a ferramenta, a construção correta de argumentos — ordem, flags, valores — permanece difícil.</span> <span class="s" data-s="b6-c-s1">No modo unrestricted, o F1 de argumentos posicionais varia de 53% a 76,9%, mostrando que a sintaxe CLI estrita é um desafio real para LLMs atuais.</span></p>
+        </aside>
+        <figure class="figure">
+          <img src="../../assets/papers/2610.02206/table1.webp" alt="Desempenho de modelos open-weight nos três modos de avaliação. Colunas U (Unrestricted), R (Restricted) e H (Hinted) mostram Exact Correct, Tool Accuracy, Optional F1, Positional F1 e Total Score. Modelos com † usam raciocínio ativado; ⋆ indica modelos especializados em cibersegurança." loading="lazy">
+          <figcaption>
+            Desempenho de modelos open-weight nos três modos de avaliação. Colunas U (Unrestricted), R (Restricted) e H (Hinted) mostram Exact Correct, Tool Accuracy, Optional F1, Positional F1 e Total Score. Modelos com † usam raciocínio ativado; ⋆ indica modelos especializados em cibersegurança.
+            <span class="source">Tabela 1 do paper · Li et al., arXiv:2610.02206</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Treinamento com recompensas verificáveis melhora modelos pequenos</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Os autores demonstram que fine-tuning supervisionado (SFT) e aprendizado por reforço com recompensas verificáveis (RLVR) melhoram significativamente modelos menores.</span> <span class="s" data-s="b8-p0-s1">Eles treinaram três variantes do modelo RedSage (8B): uma com SFT, uma com GRPO (Group Relative Policy Optimization, um método de RL) e uma combinando SFT+GRPO.</span></p><p><span class="s" data-s="b8-p1-s0">A variante RedSage-K (SFT+GRPO) alcança 32,2% de Exact Correct no modo unrestricted, superando todos os outros modelos de 8B e aproximando-se do desempenho de modelos muito maiores.</span> <span class="s" data-s="b8-p1-s1">No modo hinted, essa variante atinge 69,4% de acurácia exata.</span> <span class="s" data-s="b8-p1-s2">O Total Score médio do RedSage-K (SFT+GRPO) é 79,2%, comparável ao DeepSeek-V3.2 (685B) com 80,2%.</span></p><p><span class="s" data-s="b8-p2-s0">Isso mostra que treinamento direcionado com sinais de recompensa verificáveis e determinísticos — derivados da decomposição estruturada do KaliBench — pode compensar parcialmente a diferença de escala.</span> <span class="s" data-s="b8-p2-s1">Um modelo de 8B parâmetros treinado no KaliBench compete com um modelo mixture-of-experts de 685B parâmetros totais (37B ativos), o que tem implicações práticas para deployment.</span></p>        <h2><span class="s" data-s="b9-h">Análise por dimensão de segurança</span></h2>
+<p><span class="s" data-s="b9-p0-s0">O KaliBench organiza ferramentas ao longo de 5 fases do ciclo de ataque: Reconnaissance (reconhecimento), Weaponization (armamento), Delivery (entrega), Exploitation (exploração) e Post-Exploitation (pós-exploração).</span> <span class="s" data-s="b9-p0-s1">Dentro dessas fases, há 23 dimensões funcionais, como network scanning, vulnerability assessment, password attacks, forensics, privilege escalation, entre outras.</span></p><p><span class="s" data-s="b9-p1-s0">A análise de desempenho por dimensão revela variações significativas.</span> <span class="s" data-s="b9-p1-s1">Algumas dimensões, como network scanning e information gathering, têm desempenho relativamente melhor, provavelmente porque as ferramentas correspondentes (como Nmap) são amplamente documentadas e aparecem com frequência em dados de treinamento.</span> <span class="s" data-s="b9-p1-s2">Outras dimensões, como forensics e reverse engineering, apresentam desempenho mais baixo, indicando que ferramentas especializadas são mais difíceis de invocar corretamente.</span></p><p><span class="s" data-s="b9-p2-s0">Os gaps entre modos de avaliação também variam por dimensão.</span> <span class="s" data-s="b9-p2-s1">Em algumas dimensões, fornecer a ferramenta correta (modo hinted) melhora dramaticamente o desempenho, sugerindo que a construção de argumentos é relativamente padronizada.</span> <span class="s" data-s="b9-p2-s2">Em outras, o gap é menor, indicando que mesmo com a ferramenta correta, a sintaxe específica é complexa.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.02206/figure5.webp" alt="Desempenho por dimensão de segurança e modo de avaliação. (a) Distribuição de performance nas 23 dimensões e 5 fases por modo; box plots mostram Q1-Q3, com whiskers para min/max. (b,c) Total Score e Exact Correct através dos modos; linhas pontilhadas indicam gaps entre modos." loading="lazy">
+          <figcaption>
+            Desempenho por dimensão de segurança e modo de avaliação. (a) Distribuição de performance nas 23 dimensões e 5 fases por modo; box plots mostram Q1-Q3, com whiskers para min/max. (b,c) Total Score e Exact Correct através dos modos; linhas pontilhadas indicam gaps entre modos.
+            <span class="source">Figura 5 do paper · Li et al., arXiv:2610.02206</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b11-h">O que o benchmark NÃO resolve</span></h2>
+<p><span class="s" data-s="b11-p0-s0">KaliBench é um benchmark de invocação de ferramentas, não de agentes autônomos.</span> <span class="s" data-s="b11-p0-s1">Ele mede se um modelo consegue gerar um comando correto dada uma intenção, mas não avalia planejamento multi-etapa, raciocínio sobre resultados de comandos anteriores ou adaptação a ambientes dinâmicos.</span> <span class="s" data-s="b11-p0-s2">Benchmarks agênticos de ponta a ponta, como aqueles baseados em CTF (Capture The Flag), complementam o KaliBench ao testar integração de múltiplas invocações.</span></p><p><span class="s" data-s="b11-p1-s0">O benchmark também não mede segurança do próprio modelo.</span> <span class="s" data-s="b11-p1-s1">Gerar comandos executáveis corretos é necessário, mas não suficiente: um modelo pode gerar comandos corretos e perigosos se mal direcionado.</span> <span class="s" data-s="b11-p1-s2">KaliBench não avalia robustez a prompts adversariais ou alinhamento de segurança.</span></p><p><span class="s" data-s="b11-p2-s0">Além disso, a avaliação é restrita ao Kali Linux e suas ferramentas.</span> <span class="s" data-s="b11-p2-s1">Embora Kali seja amplamente usado, outras distribuições e toolchains de segurança têm suas próprias convenções.</span> <span class="s" data-s="b11-p2-s2">A generalização para outros ecossistemas CLI — como ferramentas de DevOps, administração de sistemas ou análise de dados — permanece uma questão em aberto.</span></p><p><span class="s" data-s="b11-p3-s0">Por fim, o benchmark assume que existe um comando ground-truth correto para cada query.</span> <span class="s" data-s="b11-p3-s1">Na prática, muitas tarefas de segurança admitem múltiplas soluções válidas, com trade-offs entre verbosidade, performance e cobertura.</span> <span class="s" data-s="b11-p3-s2">A canonicalização determinística do KaliBench facilita avaliação reproduzível, mas pode penalizar variações válidas não capturadas no ground-truth.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b12-t">Avaliação é determinística, mas CLI real é mais flexível</span></h3>
+          <p><span class="s" data-s="b12-c-s0">KaliBench usa canonicalização e avaliação alias-aware para tornar a avaliação reproduzível.</span> <span class="s" data-s="b12-c-s1">Mas comandos CLI reais admitem variações válidas — ordem de flags opcionais, aliases, caminhos relativos vs. absolutos.</span> <span class="s" data-s="b12-c-s2">O benchmark captura parte dessa flexibilidade, mas não toda.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b13-h">Implicações para pesquisa e prática</span></h2>
+<p><span class="s" data-s="b13-p0-s0">KaliBench estabelece uma linha de base clara: modelos atuais, mesmo os maiores, ainda lutam para gerar comandos CLI de segurança corretos sem dicas explícitas.</span> <span class="s" data-s="b13-p0-s1">Isso tem implicações diretas para deployment de assistentes de cibersegurança baseados em LLM.</span> <span class="s" data-s="b13-p0-s2">Sistemas de produção precisarão de mecanismos de validação, feedback humano ou retrieval de documentação para compensar a baixa acurácia.</span></p><p><span class="s" data-s="b13-p1-s0">O benchmark também abre caminho para treinamento mais eficiente.</span> <span class="s" data-s="b13-p1-s1">As recompensas verificáveis sem execução permitem iterar rapidamente em loops de RL sem os custos e riscos de executar comandos reais.</span> <span class="s" data-s="b13-p1-s2">Isso pode acelerar o desenvolvimento de modelos especializados em domínios onde execução é cara ou perigosa.</span></p><p><span class="s" data-s="b13-p2-s0">Para a comunidade de pesquisa, KaliBench oferece um testbed para estudar generalização de function-calling para ambientes schema-free.</span> <span class="s" data-s="b13-p2-s1">Diferente de benchmarks de API, onde esquemas são fornecidos, aqui o modelo precisa inferir estrutura a partir de conhecimento implícito.</span> <span class="s" data-s="b13-p2-s2">Isso se aproxima mais de como humanos usam ferramentas: aprendemos sintaxe por documentação, exemplos e tentativa-e-erro, não por esquemas formais.</span></p><p><span class="s" data-s="b13-p3-s0">Finalmente, o dataset de 8.504 pares query-comando é um recurso de treinamento valioso.</span> <span class="s" data-s="b13-p3-s1">Os autores mostram que fine-tuning nesse dataset melhora significativamente modelos pequenos.</span> <span class="s" data-s="b13-p3-s2">Combinado com dados de domínio geral, KaliBench pode ajudar a construir assistentes de segurança mais confiáveis e acessíveis, sem depender exclusivamente de modelos gigantes.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">KaliBench é o primeiro benchmark a medir se LLMs conseguem traduzir linguagem natural em comandos CLI executáveis de cibersegurança, com 8.504 pares query-comando em Kali Linux.</span></li><li><span class="s" data-s="k1">Nenhum modelo open-weight supera 42% de acurácia exata no modo irrestrito; construção de argumentos é o gargalo principal, mesmo quando a ferramenta correta é selecionada.</span></li><li><span class="s" data-s="k2">Fine-tuning supervisionado e RL com recompensas verificáveis melhoram um modelo de 8B a ponto de competir com modelos de 685B, mostrando que treinamento direcionado compensa escala.</span></li><li><span class="s" data-s="k3">O benchmark oferece três modos de avaliação e recompensas verificáveis sem execução, permitindo diagnóstico fino e treinamento eficiente sem riscos de segurança.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.02206" rel="noopener">KaliBench: A Fine-Grained Benchmark for Cybersecurity Tool Use on Kali Linux with Runtime-Free Verifiable Rewards</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.02206" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

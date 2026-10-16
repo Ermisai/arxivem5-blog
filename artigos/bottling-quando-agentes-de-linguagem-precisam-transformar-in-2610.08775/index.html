@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bottling: quando agentes de linguagem precisam transformar inteligência cara em artefatos baratos e reutilizáveis — arXiv em 5</title>
+<meta name="description" content="Modelos de linguagem resolvem tarefas isoladas bem, mas processar milhões de instâncias similares sai caro. Este paper avalia se agentes conseguem criar sozinhos soluções especializadas que equilibrem qualidade e custo amortizado.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Bottling: quando agentes de linguagem precisam transformar inteligência cara em artefatos baratos e reutilizáveis">
+<meta property="og:description" content="Modelos de linguagem resolvem tarefas isoladas bem, mas processar milhões de instâncias similares sai caro. Este paper avalia se agentes conseguem criar sozinhos soluções especializadas que equilibrem qualidade e custo amortizado.">
+<meta property="og:image" content="../../assets/papers/2610.08775/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Agentes</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.08775" rel="noopener">arXiv:2610.08775</a>
+    </div>
+    <h1><span class="s" data-s="t">Bottling: quando agentes de linguagem precisam transformar inteligência cara em artefatos baratos e reutilizáveis</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Modelos de linguagem resolvem tarefas isoladas bem, mas processar milhões de instâncias similares sai caro.</span> <span class="s" data-s="d-s1">Este paper avalia se agentes conseguem criar sozinhos soluções especializadas que equilibrem qualidade e custo amortizado.</span></p>
+    <p class="byline">
+      <span>Sonthalia et al.</span>
+      <span>10 min de leitura</span>
+<span>06/10/2026</span>    </p>
+    <div class="listen" data-article="2610.08775" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=catSoRAW1Dg" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema da repetição cara</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Imagine que você precisa classificar a relevância de dez milhões de pares produto-consulta em um catálogo de e-commerce.</span> <span class="s" data-s="b0-p0-s1">Você pode chamar um LLM grande e caro para cada par, mas o custo cresce linearmente: dez milhões de chamadas custam dez milhões de vezes o preço unitário.</span> <span class="s" data-s="b0-p0-s2">O paradoxo é que cada tarefa usa apenas um subconjunto estreito das capacidades gerais do modelo.</span> <span class="s" data-s="b0-p0-s3">Você está pagando por uma Ferrari para fazer entregas locais.</span></p><p><span class="s" data-s="b0-p1-s0">A solução óbvia é treinar um modelo pequeno especializado ou escrever um programa reutilizável.</span> <span class="s" data-s="b0-p1-s1">Mas isso exige engenharia humana: alguém precisa coletar exemplos rotulados, escolher uma arquitetura, ajustar hiperparâmetros.</span> <span class="s" data-s="b0-p1-s2">O que este paper pergunta é: um agente de LLM consegue fazer isso sozinho?</span> <span class="s" data-s="b0-p1-s3">Dado um lote inteiro de instâncias não rotuladas e um orçamento fixo de tempo, compute e tokens de API, o agente consegue criar um artefato barato que resolva o lote todo com qualidade aceitável?</span></p><p><span class="s" data-s="b0-p2-s0">Os autores chamam essa capacidade de bottling, em analogia a engarrafar: transformar capacidades gerais e caras em uma solução específica, reutilizável e barata.</span> <span class="s" data-s="b0-p2-s1">O termo evoca a ideia de capturar algo valioso em um recipiente que pode ser usado repetidamente.</span> <span class="s" data-s="b0-p2-s2">Bottling testa um aspecto de inteligência: a habilidade de reconhecer que problemas relacionados permitem amortizar esforço, investindo recursos iniciais para economizar no longo prazo.</span></p>        <h2><span class="s" data-s="b1-h">O benchmark BOTTLED</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Para avaliar bottling, os autores criaram o BOTTLED, um benchmark que entrega ao agente um workload completo e não rotulado, junto com três restrições: um limite de tempo de parede (wall-clock), um limite de compute (medido em segundos de CPU e GPU) e um orçamento de tokens de API para chamadas a LLMs externos.</span> <span class="s" data-s="b1-p0-s1">O agente escolhe sua própria abordagem: pode treinar um modelo pequeno, escrever um programa reutilizável, gerar labels com few-shot learning, ou qualquer combinação.</span></p><p><span class="s" data-s="b1-p1-s0">O benchmark usa três tarefas reais.</span> <span class="s" data-s="b1-p1-s1">MAVE (Multi-Attribute Value Extraction) pede para extrair pares atributo-valor de descrições de produtos, como extrair &#39;cor: preto&#39; de &#39;smartphone preto 128GB&#39;.</span> <span class="s" data-s="b1-p1-s2">ESCI (Shopping Queries Dataset) classifica a relevância de um produto para uma consulta de busca em quatro níveis, de exato a irrelevante.</span> <span class="s" data-s="b1-p1-s3">RAID (Regulatory Approval Information Detection) detecta se um documento de ensaio clínico menciona aprovação regulatória, retornando uma confiança entre zero e um.</span></p><p><span class="s" data-s="b1-p2-s0">Cada tarefa tem um workload de dezenas de milhares de instâncias.</span> <span class="s" data-s="b1-p2-s1">O orçamento de tokens é fixado em cinco milhões, o mesmo para todos os modelos.</span> <span class="s" data-s="b1-p2-s2">O orçamento de compute é de 24 horas de CPU e 2 horas de GPU.</span> <span class="s" data-s="b1-p2-s3">Antes que qualquer orçamento se esgote, o agente deve escrever todas as previsões em um arquivo out.txt.</span> <span class="s" data-s="b1-p2-s4">Se o arquivo estiver incompleto ou ausente, instâncias faltantes recebem respostas de fallback que não carregam informação: string vazia para MAVE, label uniforme para ESCI, confiança de 0.5 para RAID.</span></p>        <h2><span class="s" data-s="b2-h">Baselines: zero-shot e destilação ingênua</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Para contextualizar o desempenho de bottling, os autores definem dois baselines.</span> <span class="s" data-s="b2-p0-s1">O primeiro é o modo zero-shot: o LLM recebe uma instância de cada vez, sem ferramentas ou comportamento agêntico, apenas geração de próximo token.</span> <span class="s" data-s="b2-p0-s2">Como avaliar zero-shot no workload inteiro seria proibitivamente caro, os autores amostram mil instâncias uniformemente.</span> <span class="s" data-s="b2-p0-s3">Esse baseline mede o conhecimento bruto do LLM sobre a tarefa.</span></p><p><span class="s" data-s="b2-p1-s0">O segundo baseline é uma destilação ingênua de modelo pequeno (SLM distillation).</span> <span class="s" data-s="b2-p1-s1">Aqui, os autores gastam exatamente os mesmos cinco milhões de tokens do orçamento de bottling, mas sem decisões agênticas.</span> <span class="s" data-s="b2-p1-s2">Eles usam GLM 5.3 Flash para rotular instâncias amostradas uniformemente até esgotar o orçamento, depois fazem fine-tuning de dois modelos pequenos (Qwen3-0.6B e SmolLM2-360M-Instruct) nos labels gerados, e aplicam esses modelos ao workload completo.</span> <span class="s" data-s="b2-p1-s3">Hiperparâmetros seguem receitas publicadas, sem tuning.</span></p><p><span class="s" data-s="b2-p2-s0">Esse baseline pergunta: gastar os mesmos tokens em um script fixo e agnóstico à tarefa funciona melhor que dar autonomia a um agente?</span> <span class="s" data-s="b2-p2-s1">É uma pergunta honesta.</span> <span class="s" data-s="b2-p2-s2">Se a resposta for sim, bottling não vale a complexidade adicional.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b3-t">Contabilidade de tokens</span></h3>
+          <p><span class="s" data-s="b3-c-s0">O orçamento de cinco milhões de tokens conta tanto entrada quanto saída de todas as chamadas de API a LLMs externos.</span> <span class="s" data-s="b3-c-s1">Tokens usados internamente pelo agente (como raciocínio em modelos que suportam isso) também entram na conta.</span> <span class="s" data-s="b3-c-s2">Modelos que não reportam uso interno são penalizados com uma estimativa conservadora.</span> <span class="s" data-s="b3-c-s3">Isso garante comparação justa entre modelos com diferentes arquiteturas de inferência.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b4-h">Dez modelos, três tarefas, sessenta corridas</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Os autores testaram dez modelos de linguagem: Gemini 3.1 Flash-Lite, GPT 5.6 Sol, Sonnet 5, GLM 5.3, Qwen 3.8 Flash, GPT 5.6 Terra, Qwen 3.8 Max, Gemini 3.1 Pro, GLM 5.3 Flash e Opus 5.</span> <span class="s" data-s="b4-p0-s1">Cada modelo rodou em cada uma das três tarefas, duas vezes, totalizando sessenta corridas de bottling.</span> <span class="s" data-s="b4-p0-s2">Cada corrida também foi avaliada em modo zero-shot nas mil instâncias amostradas.</span></p><p><span class="s" data-s="b4-p1-s0">Para agregar resultados entre tarefas com métricas diferentes (F1, macro-F1, AUROC), os autores normalizaram cada métrica.</span> <span class="s" data-s="b4-p1-s1">Definiram um baseline trivial (só respostas de fallback) e um teto teórico (labels de ouro).</span> <span class="s" data-s="b4-p1-s2">O ganho relativo de um modelo é a fração do intervalo baseline-teto que ele fecha.</span> <span class="s" data-s="b4-p1-s3">O score agregado R(M) é a média desses ganhos sobre as três tarefas.</span> <span class="s" data-s="b4-p1-s4">Um modelo que só produz fallback marca zero; um que acerta tudo marca um.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.08775/figure1.webp" alt="Esquerda: score bottled versus zero-shot agregado. Direita: fronteira de Pareto custo-desempenho. Modelos com zero-shot similar divergem muito após bottling; modelos mais caros não necessariamente engarrafam melhor." loading="lazy">
+          <figcaption>
+            Esquerda: score bottled versus zero-shot agregado. Direita: fronteira de Pareto custo-desempenho. Modelos com zero-shot similar divergem muito após bottling; modelos mais caros não necessariamente engarrafam melhor.
+            <span class="source">Figura 1 do paper · Sonthalia et al., arXiv:2610.08775</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b6-h">Resultados: zero-shot não garante bottling</span></h2>
+<p><span class="s" data-s="b6-p0-s0">A descoberta central é que desempenho zero-shot forte não se traduz de forma confiável em capacidade de bottling forte.</span> <span class="s" data-s="b6-p0-s1">Modelos com scores zero-shot similares podem divergir substancialmente após bottling.</span> <span class="s" data-s="b6-p0-s2">Dos sessenta runs de bottling, quarenta e oito ficaram abaixo do limite inferior do intervalo de confiança de 95% do desempenho zero-shot do próprio modelo.</span> <span class="s" data-s="b6-p0-s3">Isso significa que a maioria dos agentes não conseguiu preservar o conhecimento do modelo base ao criar o artefato.</span></p><p><span class="s" data-s="b6-p1-s0">Pior: trinta e um dos sessenta runs tiveram desempenho inferior ao melhor dos dois baselines de destilação ingênua (Qwen3-0.6B ou SmolLM2-360M-Instruct) com o mesmo orçamento de tokens.</span> <span class="s" data-s="b6-p1-s1">Em outras palavras, para mais da metade das corridas, teria sido melhor simplesmente gastar os tokens rotulando dados aleatórios e treinando um modelo pequeno fixo, sem nenhuma decisão agêntica.</span></p><p><span class="s" data-s="b6-p2-s0">A Figura 2 mostra isso tarefa por tarefa.</span> <span class="s" data-s="b6-p2-s1">Em MAVE (extração de atributos), a maioria dos modelos bottled fica bem abaixo do zero-shot.</span> <span class="s" data-s="b6-p2-s2">Em ESCI (relevância produto-consulta), a queda é menor mas ainda presente.</span> <span class="s" data-s="b6-p2-s3">Em RAID (detecção de aprovação regulatória), alguns modelos conseguem manter o desempenho, mas outros colapsam.</span> <span class="s" data-s="b6-p2-s4">Não há padrão claro: o mesmo modelo pode engarrafar bem em uma tarefa e mal em outra.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.08775/figure2.webp" alt="Desempenho bottled versus zero-shot em cada tarefa. A maioria dos runs bottled fica abaixo do intervalo de confiança do zero-shot, mostrando que bom desempenho isolado não garante capacidade de criar artefatos reutilizáveis." loading="lazy">
+          <figcaption>
+            Desempenho bottled versus zero-shot em cada tarefa. A maioria dos runs bottled fica abaixo do intervalo de confiança do zero-shot, mostrando que bom desempenho isolado não garante capacidade de criar artefatos reutilizáveis.
+            <span class="source">Figura 2 do paper · Sonthalia et al., arXiv:2610.08775</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Quando bottling funciona: economia radical de custo</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Apesar dos resultados mistos, bottling pode gerar economias substanciais quando funciona.</span> <span class="s" data-s="b8-p0-s1">Em ESCI, o Opus 5 alcançou um macro-F1 médio de 0.499 após bottling, com custo reportado de 26.28 dólares.</span> <span class="s" data-s="b8-p0-s2">Em comparação, o zero-shot do Opus 5 marcou 0.609 de macro-F1, mas o custo estimado para processar o workload inteiro seria 17.273 dólares.</span> <span class="s" data-s="b8-p0-s3">Isso significa reter aproximadamente 82% do desempenho zero-shot a cerca de 1/657 do custo.</span></p><p><span class="s" data-s="b8-p1-s0">Os autores também compararam com Jev, um modelo especializado recém-lançado construído especificamente para inferência barata e repetitiva.</span> <span class="s" data-s="b8-p1-s1">Jev é o que eles chamam de &#39;system one model&#39;: rápido, automático, especializado.</span> <span class="s" data-s="b8-p1-s2">Em ESCI, Jev alcançou macro-F1 de 0.531 com custo projetado de 105 dólares para o workload completo.</span> <span class="s" data-s="b8-p1-s3">O Opus 5 bottled recuperou cerca de 94% do desempenho do Jev a aproximadamente um quarto do custo do Jev.</span></p><p><span class="s" data-s="b8-p2-s0">Isso é notável: um agente de propósito geral, dado um orçamento limitado, conseguiu criar um artefato que compete com um modelo construído sob medida para exatamente esse tipo de tarefa, e ainda assim sai mais barato.</span> <span class="s" data-s="b8-p2-s1">Claro, isso aconteceu em apenas uma das três tarefas, mas demonstra o potencial da abordagem.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b9-t">Custo reportado versus custo projetado</span></h3>
+          <p><span class="s" data-s="b9-c-s0">O custo reportado é o que o agente realmente gastou dentro do orçamento de bottling.</span> <span class="s" data-s="b9-c-s1">O custo projetado zero-shot é uma estimativa de quanto custaria aplicar o modelo zero-shot ao workload inteiro, extrapolando a partir das mil instâncias amostradas.</span> <span class="s" data-s="b9-c-s2">Essa distinção é importante: bottling só vale a pena se o custo reportado for muito menor que o custo projetado alternativo.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b10-h">Por que os agentes falham em bottling?</span></h2>
+<p><span class="s" data-s="b10-p0-s0">O paper não faz uma análise qualitativa profunda das falhas, mas os números sugerem alguns padrões.</span> <span class="s" data-s="b10-p0-s1">Primeiro, muitos agentes simplesmente esgotam o orçamento de tokens sem produzir saída completa.</span> <span class="s" data-s="b10-p0-s2">Isso indica falhas de planejamento: o agente gasta tokens explorando abordagens ou refinando artefatos, mas não reserva recursos suficientes para aplicar o artefato ao workload inteiro.</span> <span class="s" data-s="b10-p0-s3">É um problema de balanceamento exploração-exploração (exploration-exploitation).</span></p><p><span class="s" data-s="b10-p1-s0">Segundo, mesmo quando os agentes produzem saída completa, a qualidade frequentemente fica abaixo do baseline de destilação ingênua.</span> <span class="s" data-s="b10-p1-s1">Isso sugere que as decisões agênticas — escolher que tipo de artefato criar, quantos exemplos rotular, quando parar de refinar — muitas vezes são subótimas.</span> <span class="s" data-s="b10-p1-s2">Um script fixo que simplesmente rotula dados uniformemente e treina um modelo pequeno com hiperparâmetros padrão acaba sendo mais robusto.</span></p><p><span class="s" data-s="b10-p2-s0">Terceiro, modelos mais caros não necessariamente engarrafam melhor.</span> <span class="s" data-s="b10-p2-s1">A Figura 1 (direita) mostra a fronteira de Pareto custo-desempenho.</span> <span class="s" data-s="b10-p2-s2">Vários modelos mais baratos dominam modelos mais caros: alcançam desempenho igual ou superior a custo menor.</span> <span class="s" data-s="b10-p2-s3">Isso quebra a intuição de que pagar mais por um modelo mais capaz sempre compensa.</span> <span class="s" data-s="b10-p2-s4">Para bottling, capacidade zero-shot e custo não predizem sucesso de forma confiável.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.08775/figure3.webp" alt="Bottling versus Jev em ESCI e RAID. Em ESCI, Opus 5 bottled compete com Jev a custo menor. Em RAID, vários modelos bottled superam Jev. Isso mostra que agentes generalistas podem criar artefatos competitivos com modelos especializados." loading="lazy">
+          <figcaption>
+            Bottling versus Jev em ESCI e RAID. Em ESCI, Opus 5 bottled compete com Jev a custo menor. Em RAID, vários modelos bottled superam Jev. Isso mostra que agentes generalistas podem criar artefatos competitivos com modelos especializados.
+            <span class="source">Figura 3 do paper · Sonthalia et al., arXiv:2610.08775</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b12-h">O que o paper não mostra</span></h2>
+<p><span class="s" data-s="b12-p0-s0">BOTTLED avalia apenas três tarefas, todas de classificação ou extração estruturada.</span> <span class="s" data-s="b12-p0-s1">Não sabemos como bottling se comporta em tarefas de geração aberta, raciocínio complexo ou domínios multimodais.</span> <span class="s" data-s="b12-p0-s2">O benchmark também fixa orçamentos arbitrários (cinco milhões de tokens, 24 horas de CPU, 2 horas de GPU).</span> <span class="s" data-s="b12-p0-s3">Não há análise de sensibilidade: como o desempenho muda se dobrarmos ou cortarmos pela metade esses orçamentos?</span></p><p><span class="s" data-s="b12-p1-s0">O paper não investiga quais estratégias os agentes adotam.</span> <span class="s" data-s="b12-p1-s1">Não sabemos quantos tentam treinar modelos pequenos versus escrever programas versus fazer prompt engineering.</span> <span class="s" data-s="b12-p1-s2">Não há ablation studies isolando componentes do comportamento agêntico.</span> <span class="s" data-s="b12-p1-s3">Também não há análise de por que certos modelos engarrafam bem em uma tarefa mas mal em outra.</span> <span class="s" data-s="b12-p1-s4">Essas são perguntas abertas para trabalho futuro.</span></p><p><span class="s" data-s="b12-p2-s0">Finalmente, o benchmark assume que o agente recebe o workload inteiro de uma vez.</span> <span class="s" data-s="b12-p2-s1">Na prática, workloads podem chegar em streaming, exigindo decisões online sobre quando investir em um artefato.</span> <span class="s" data-s="b12-p2-s2">BOTTLED também não considera cenários onde o workload muda ao longo do tempo, exigindo atualização ou retreinamento do artefato.</span> <span class="s" data-s="b12-p2-s3">Essas extensões tornariam o problema mais realista, mas também mais difícil.</span></p>        <h2><span class="s" data-s="b13-h">Por que bottling importa além de LLMs</span></h2>
+<p><span class="s" data-s="b13-p0-s0">Os autores argumentam que bottling importa além do paradigma atual de modelos de linguagem.</span> <span class="s" data-s="b13-p0-s1">A intuição vem da &#39;amarga lição&#39; de Rich Sutton: métodos gerais que escalam com compute tendem a superar métodos dedicados no longo prazo.</span> <span class="s" data-s="b13-p0-s2">Se isso continuar verdade, o sistema mais capaz para qualquer tarefa será provavelmente um generalista grande e caro.</span></p><p><span class="s" data-s="b13-p1-s0">Mas se o sistema mais capaz também é o mais caro, surge um problema prático: você não pode usá-lo para tudo.</span> <span class="s" data-s="b13-p1-s1">Bottling resolve esse problema: o sistema caro cria soluções dedicadas que retêm seu desempenho a uma fração do custo.</span> <span class="s" data-s="b13-p1-s2">Isso escala melhor que engenharia humana porque o sistema pode adaptar-se a novas tarefas mais rápido e em maior volume que especialistas humanos.</span></p><p><span class="s" data-s="b13-p2-s0">Essa visão assume que a tendência de Sutton continua: que generalistas continuarão dominando em capacidade, mesmo que não em eficiência.</span> <span class="s" data-s="b13-p2-s1">Se, ao contrário, modelos especializados alcançarem generalistas em capacidade, bottling perde relevância.</span> <span class="s" data-s="b13-p2-s2">Mas enquanto houver um trade-off entre capacidade e custo, bottling permanece uma habilidade valiosa.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b14-t">Evidência de raciocínio probabilístico humano</span></h3>
+          <p><span class="s" data-s="b14-c-s0">Os autores citam Gershman &amp; Goodman (2014), que mostram que humanos reutilizam inferências anteriores ao responder consultas relacionadas.</span> <span class="s" data-s="b14-c-s1">Bottling testa se LLMs exibem uma capacidade análoga: reconhecer que problemas relacionados permitem amortizar esforço computacional, investindo recursos iniciais para economizar no longo prazo.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b15-h">Implicações práticas e direções futuras</span></h2>
+<p><span class="s" data-s="b15-p0-s0">BOTTLED fornece uma base para avaliar e melhorar a capacidade de agentes de investir recursos limitados em soluções reutilizáveis.</span> <span class="s" data-s="b15-p0-s1">Os resultados atuais mostram que a maioria dos agentes ainda não é eficaz em bottling, mas alguns casos de sucesso demonstram o potencial.</span> <span class="s" data-s="b15-p0-s2">Melhorias devem primeiro evitar falhas agênticas básicas — como esgotar o orçamento sem produzir saída — e depois aumentar a qualidade do artefato.</span></p><p><span class="s" data-s="b15-p1-s0">Uma direção natural é desenvolver harnesses melhores que guiem o agente sem remover autonomia.</span> <span class="s" data-s="b15-p1-s1">Outra é treinar modelos explicitamente para bottling, talvez via reinforcement learning com recompensas baseadas em custo-benefício.</span> <span class="s" data-s="b15-p1-s2">Também seria valioso entender quais tarefas são mais &#39;engarrafáveis&#39;: características que tornam uma tarefa mais ou menos adequada para bottling.</span></p><p><span class="s" data-s="b15-p2-s0">Do ponto de vista prático, bottling poderia automatizar a adaptação de sistemas a novas tarefas repetitivas, reduzindo a engenharia humana necessária.</span> <span class="s" data-s="b15-p2-s1">Isso tem valor direto para empresas que processam grandes volumes de dados estruturados: catálogos de produtos, documentos legais, registros financeiros.</span> <span class="s" data-s="b15-p2-s2">Se agentes conseguirem criar artefatos de qualidade de forma confiável, o custo de adicionar uma nova tarefa ao pipeline cai drasticamente.</span></p><p><span class="s" data-s="b15-p3-s0">Mas os resultados também servem de aviso: autonomia não é gratuita.</span> <span class="s" data-s="b15-p3-s1">Dar a um agente a liberdade de escolher sua abordagem pode levar a decisões piores que um script fixo e bem testado.</span> <span class="s" data-s="b15-p3-s2">Bottling só vale a pena quando os agentes são bons o suficiente para superar baselines ingênuos.</span> <span class="s" data-s="b15-p3-s3">Por enquanto, isso acontece apenas às vezes.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Bottling é a capacidade de um agente LLM criar artefatos baratos e reutilizáveis para workloads repetitivos, equilibrando qualidade e custo amortizado.</span></li><li><span class="s" data-s="k1">Desempenho zero-shot forte não garante boa capacidade de bottling: 48 de 60 runs ficaram abaixo do intervalo de confiança do zero-shot do próprio modelo.</span></li><li><span class="s" data-s="k2">Quando funciona, bottling gera economia radical: Opus 5 reteve 82% do F1 zero-shot em ESCI a 1/657 do custo, competindo com modelos especializados.</span></li><li><span class="s" data-s="k3">31 de 60 runs tiveram desempenho pior que baselines de destilação ingênua, mostrando que autonomia agêntica nem sempre supera scripts fixos e simples.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.08775" rel="noopener">Agent in a Bottle: Can LLM Agents Turn Their Capabilities Into Cheap, Scalable Artifacts?</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.08775" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

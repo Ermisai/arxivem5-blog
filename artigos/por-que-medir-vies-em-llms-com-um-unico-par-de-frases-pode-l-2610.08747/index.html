@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Por que medir viés em LLMs com um único par de frases pode levar a conclusões contraditórias — arXiv em 5</title>
+<meta name="description" content="Pesquisadores da Universidade de Edimburgo mostram que avaliar estereótipos em modelos de linguagem comparando apenas duas frases contrastantes produz resultados inconsistentes — e propõem uma alternativa baseada em pares duplos e teoria da informação.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Por que medir viés em LLMs com um único par de frases pode levar a conclusões contraditórias">
+<meta property="og:description" content="Pesquisadores da Universidade de Edimburgo mostram que avaliar estereótipos em modelos de linguagem comparando apenas duas frases contrastantes produz resultados inconsistentes — e propõem uma alternativa baseada em pares duplos e teoria da informação.">
+<meta property="og:image" content="../../assets/papers/2610.08747/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>LLMs</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.08747" rel="noopener">arXiv:2610.08747</a>
+    </div>
+    <h1><span class="s" data-s="t">Por que medir viés em LLMs com um único par de frases pode levar a conclusões contraditórias</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Pesquisadores da Universidade de Edimburgo mostram que avaliar estereótipos em modelos de linguagem comparando apenas duas frases contrastantes produz resultados inconsistentes — e propõem uma alternativa baseada em pares duplos e teoria da informação.</span></p>
+    <p class="byline">
+      <span>Stepanova et al.</span>
+      <span>8 min de leitura</span>
+<span>06/10/2026</span>    </p>
+    <div class="listen" data-article="2610.08747" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=ujHMZXIiMKY" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema dos pares únicos</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A forma mais comum de medir viés em Large Language Models é comparar a log-probabilidade de duas frases contrastantes: uma que expressa um estereótipo (&#34;Meninos são bons em matemática&#34;) e outra que aplica o mesmo atributo a um grupo alternativo (&#34;Meninas são boas em matemática&#34;).</span> <span class="s" data-s="b0-p0-s1">Se o modelo atribui maior probabilidade à primeira frase, inferimos que ele carrega o viés estereotipado.</span></p><p><span class="s" data-s="b0-p1-s0">Mas esse método tem um problema conceitual sério.</span> <span class="s" data-s="b0-p1-s1">Os autores argumentam que comparações baseadas em um único par de frases são frequentemente não confiáveis: basta reescrever o mesmo estereótipo invertendo a polaridade do atributo para obter preferências logicamente inconsistentes.</span> <span class="s" data-s="b0-p1-s2">O modelo pode preferir tanto &#34;Meninos são bons em matemática&#34; quanto &#34;Meninos são ruins em matemática&#34; — duas afirmações semanticamente opostas sobre o mesmo grupo.</span></p><p><span class="s" data-s="b0-p2-s0">Esse fenômeno não é raro.</span> <span class="s" data-s="b0-p2-s1">Nos experimentos realizados com o dataset BiasShades em quatro idiomas (inglês, espanhol, russo e chinês), entre 17% e 30% dos estereótipos apresentaram essa contradição: o modelo preferia tanto um atributo quanto seu oposto para o mesmo grupo social.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.08747/figure1.webp" alt="A abordagem tradicional compara apenas o par superior (S, S&#39;). Mas ao introduzir o par inferior (~S, ~S&#39;) com polaridade invertida, o LLM pode preferir dois atributos opostos para o mesmo grupo — revelando inconsistência na medição de viés." loading="lazy">
+          <figcaption>
+            A abordagem tradicional compara apenas o par superior (S, S&#39;). Mas ao introduzir o par inferior (~S, ~S&#39;) com polaridade invertida, o LLM pode preferir dois atributos opostos para o mesmo grupo — revelando inconsistência na medição de viés.
+            <span class="source">Figura 1 do paper · Stepanova et al., arXiv:2610.08747</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">A proposta: pares mínimos duplos</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Para resolver essa inconsistência, os pesquisadores propõem um novo paradigma: o dual minimal pair setup, ou configuração de pares mínimos duplos.</span> <span class="s" data-s="b2-p0-s1">Em vez de avaliar apenas um par de frases, o método exige dois pares contrastantes que formam uma grade completa de comparações.</span></p><p><span class="s" data-s="b2-p1-s0">O primeiro par contrasta os grupos (meninos vs. meninas) mantendo o atributo estereotipado fixo (bons em matemática).</span> <span class="s" data-s="b2-p1-s1">O segundo par contrasta os mesmos grupos, mas agora em relação a um atributo alternativo — tipicamente o oposto semântico (ruins em matemática).</span> <span class="s" data-s="b2-p1-s2">Só considerando a diferença em ambos os pares é possível capturar de forma consistente a direção e a magnitude do viés.</span></p><p><span class="s" data-s="b2-p2-s0">Além disso, os autores observam que o mesmo viés subjacente pode ser expresso em diferentes formas superficiais: &#34;Meninos são bons em matemática&#34; e &#34;Meninos se destacam em matemática&#34; refletem a mesma associação estereotipada.</span> <span class="s" data-s="b2-p2-s1">Datasets existentes não capturam essa diversidade linguística nem incluem atributos alternativos de forma sistemática.</span></p>        <h2><span class="s" data-s="b3-h">Gerando os dados que faltam</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Para viabilizar a avaliação com pares duplos, os pesquisadores desenvolveram um framework de aumento de dados que preenche as lacunas críticas nos datasets de estereótipos existentes.</span> <span class="s" data-s="b3-p0-s1">O framework opera em duas frentes: gera paráfrases de cada estereótipo e cria atributos alternativos (tipicamente opostos semânticos).</span></p><p><span class="s" data-s="b3-p1-s0">O processo usa prompting de LLMs para gerar candidatos, seguido por múltiplas etapas de controle de qualidade automatizado.</span> <span class="s" data-s="b3-p1-s1">Para paráfrases, o sistema verifica similaridade semântica usando modelos de Natural Language Inference (NLI) e embeddings de sentenças.</span> <span class="s" data-s="b3-p1-s2">Para atributos alternativos, verifica-se que o novo atributo seja semanticamente oposto ao original e que a frase resultante permaneça fluente.</span></p><p><span class="s" data-s="b3-p2-s0">Os autores aplicaram esse framework ao dataset BiasShades, expandindo conjuntos de estereótipos em inglês, espanhol, russo e chinês.</span> <span class="s" data-s="b3-p2-s1">Em média, cada idioma contém 176 estereótipos.</span> <span class="s" data-s="b3-p2-s2">O resultado: cada estereótipo original ganha em média 9 paráfrases válidas e um atributo alternativo verificado.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.08747/figure2.webp" alt="O pipeline de aumento de dados: LLMs geram paráfrases e atributos alternativos, que passam por múltiplas camadas de controle de qualidade automatizado antes da validação humana final." loading="lazy">
+          <figcaption>
+            O pipeline de aumento de dados: LLMs geram paráfrases e atributos alternativos, que passam por múltiplas camadas de controle de qualidade automatizado antes da validação humana final.
+            <span class="source">Figura 2 do paper · Stepanova et al., arXiv:2610.08747</span>
+          </figcaption>
+        </figure>
+        <aside class="callout">
+          <h3><span class="s" data-s="b5-t">Validação humana</span></h3>
+          <p><span class="s" data-s="b5-c-s0">A validação com anotadores humanos nativos mostrou taxa de aceitação acima de 90% para verdadeiros positivos em todos os idiomas, excedendo 95% para inglês e chinês.</span> <span class="s" data-s="b5-c-s1">A taxa de disfluência ficou abaixo de 5% para a maioria dos idiomas, com russo apresentando 8,75% — mas análise posterior revelou que vários casos marcados eram questões de estilo, não erros gramaticais críticos.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b6-h">Duas métricas para pares duplos</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Com os dados expandidos, os autores propõem duas métricas para avaliar viés no setup de pares duplos.</span> <span class="s" data-s="b6-p0-s1">Ambas partem de diferenças de log-probabilidade, mas as processam de formas distintas para diferentes propósitos analíticos.</span></p><p><span class="s" data-s="b6-p1-s0">A primeira métrica, BG×A (Bias of Group on Attribute), é uma extensão natural das abordagens baseadas em log-probabilidade que incorpora atributos alternativos.</span> <span class="s" data-s="b6-p1-s1">Ela preserva o sinal: valores positivos indicam viés em uma direção, negativos na direção oposta.</span> <span class="s" data-s="b6-p1-s2">Isso a torna útil para investigar estereótipos individuais e entender qual grupo o modelo associa a qual atributo.</span></p><p><span class="s" data-s="b6-p2-s0">A segunda métrica, IG×A (Information of Group on Attribute), reformula o sinal de log-probabilidade usando informação mútua (mutual information, MI).</span> <span class="s" data-s="b6-p2-s1">Ela representa a magnitude da associação entre grupos e atributos binários, sem preservar direção.</span> <span class="s" data-s="b6-p2-s2">Por ser limitada e teoricamente fundamentada, é mais adequada para agregação e permite comparações justas entre modelos e idiomas.</span></p><p><span class="s" data-s="b6-p3-s0">A informação mútua mede quantos bits de informação sobre o atributo são obtidos ao conhecer o grupo.</span> <span class="s" data-s="b6-p3-s1">Em um modelo perfeitamente não enviesado que atribui probabilidade 0,5 a ambos os atributos, conhecer o grupo não fornece informação sobre o atributo, resultando em IG×A = 0.</span> <span class="s" data-s="b6-p3-s2">Os autores mostram matematicamente que IG×A é aproximadamente proporcional ao quadrado de BG×A, e os dados empíricos confirmam essa relação quadrática com R² = 0,87.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.08747/figure4.webp" alt="As duas métricas propostas estão relacionadas quadraticamente: IG×A cresce com o quadrado de BG×A. Isso confirma que ambas capturam o mesmo sinal de viés subjacente, mas em escalas diferentes adequadas a diferentes análises." loading="lazy">
+          <figcaption>
+            As duas métricas propostas estão relacionadas quadraticamente: IG×A cresce com o quadrado de BG×A. Isso confirma que ambas capturam o mesmo sinal de viés subjacente, mas em escalas diferentes adequadas a diferentes análises.
+            <span class="source">Figura 4 do paper · Stepanova et al., arXiv:2610.08747</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Quantificando a inconsistência</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Os pesquisadores avaliaram nove configurações de LLM cobrindo cinco famílias de modelos e múltiplos tamanhos.</span> <span class="s" data-s="b8-p0-s1">A análise revelou a extensão do problema de inconsistência quando atributos alternativos são ignorados.</span></p><p><span class="s" data-s="b8-p1-s0">Entre 17% e 30% dos estereótipos no BiasShades apresentaram viés contraditório: os modelos preferiram tanto um atributo quanto seu oposto para o mesmo grupo.</span> <span class="s" data-s="b8-p1-s1">Essa taxa varia entre modelos e idiomas, mas está presente em todas as configurações testadas.</span></p><p><span class="s" data-s="b8-p2-s0">Para validar que as métricas propostas capturam associações semânticas reais, os autores as testaram em um dataset de normas conceituais (McRae et al., 2005) — pares de conceitos e propriedades com força de associação conhecida.</span> <span class="s" data-s="b8-p2-s1">As métricas correlacionaram-se significativamente com as associações humanas, confirmando que medem dependência semântica genuína, não apenas artefatos estatísticos.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.08747/figure3.webp" alt="Percentual de estereótipos onde a direção do viés se inverte ao introduzir atributos alternativos, por modelo e idioma. Modelos instruction-tuned estão marcados com asterisco. A inconsistência afeta todos os modelos testados." loading="lazy">
+          <figcaption>
+            Percentual de estereótipos onde a direção do viés se inverte ao introduzir atributos alternativos, por modelo e idioma. Modelos instruction-tuned estão marcados com asterisco. A inconsistência afeta todos os modelos testados.
+            <span class="source">Figura 3 do paper · Stepanova et al., arXiv:2610.08747</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">Comparações entre idiomas e modelos</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Usando os dados aumentados e as métricas robustas, os pesquisadores conduziram análises agregadas de viés através de idiomas e arquiteturas de modelo.</span> <span class="s" data-s="b10-p0-s1">Os resultados revelam um panorama complexo, sem padrões simples.</span></p><p><span class="s" data-s="b10-p1-s0">O idioma de entrada afeta significativamente a força do estereótipo medida pelas métricas de log-probabilidade.</span> <span class="s" data-s="b10-p1-s1">No entanto, a magnitude e a significância estatística das diferenças dependem fortemente do estereótipo específico sendo avaliado — não há um idioma consistentemente mais ou menos enviesado.</span></p><p><span class="s" data-s="b10-p2-s0">Quanto aos modelos, os autores não encontraram evidências de que modelos instruction-tuned sejam universalmente menos enviesados.</span> <span class="s" data-s="b10-p2-s1">Também não identificaram famílias de modelos consistentemente menos enviesadas em idiomas específicos.</span> <span class="s" data-s="b10-p2-s2">A variação é grande tanto dentro quanto entre modelos.</span></p><p><span class="s" data-s="b10-p3-s0">Essa heterogeneidade reforça a necessidade de métricas robustas no nível individual antes de agregar resultados.</span> <span class="s" data-s="b10-p3-s1">Sem considerar atributos alternativos, as inconsistências locais contaminam qualquer análise agregada, tornando comparações entre modelos ou idiomas potencialmente enganosas.</span></p>        <h2><span class="s" data-s="b11-h">O que as métricas realmente medem</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Vale entender a escala dessas métricas.</span> <span class="s" data-s="b11-p0-s1">A IG×A mede informação compartilhada em bits — uma escala padronizada que facilita comparações, mas que pode parecer contra-intuitiva.</span> <span class="s" data-s="b11-p0-s2">Em um modelo perfeitamente não enviesado, IG×A = 0.</span> <span class="s" data-s="b11-p0-s3">Deslocar o viés em 5% (de 50-50 para 45-55) aumenta a informação mútua em apenas 0,007 bits.</span></p><p><span class="s" data-s="b11-p1-s0">Essa escala minúscula não significa que o viés seja irrelevante, mas sim que a informação mútua fornece uma régua padronizada para comparação relativa.</span> <span class="s" data-s="b11-p1-s1">É melhor interpretada como uma forma de ordenar e comparar modelos do que como uma medida absoluta de &#34;quanto viés&#34; existe.</span></p><p><span class="s" data-s="b11-p2-s0">A métrica BG×A, por preservar sinal, é mais intuitiva para análise de estereótipos individuais.</span> <span class="s" data-s="b11-p2-s1">Valores positivos grandes indicam forte associação do atributo estereotipado com o grupo estereotipado; valores negativos indicam associação invertida; valores próximos de zero indicam ausência de preferência clara.</span></p><p><span class="s" data-s="b11-p3-s0">Os autores podem reescrever IG×A como uma soma de divergências de Kullback-Leibler, conectando-a a conceitos estabelecidos de teoria da informação.</span> <span class="s" data-s="b11-p3-s1">Essa fundamentação teórica torna a métrica mais interpretável e adequada para análises que requerem propriedades matemáticas bem definidas.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b12-t">Aplicação prática</span></h3>
+          <p><span class="s" data-s="b12-c-s0">Métricas baseadas em log-probabilidade são computacionalmente baratas — não requerem fine-tuning, datasets rotulados ou inferência em larga escala.</span> <span class="s" data-s="b12-c-s1">Isso as torna ferramentas úteis para diagnóstico frequente durante o ciclo de treinamento de modelos, permitindo monitorar associações entre conceitos de forma contínua.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b13-h">Limitações e trabalho futuro</span></h2>
+<p><span class="s" data-s="b13-p0-s0">Os próprios autores reconhecem várias limitações importantes.</span> <span class="s" data-s="b13-p0-s1">Gerar paráfrases válidas é uma tarefa difícil, especialmente em contexto multilíngue.</span> <span class="s" data-s="b13-p0-s2">O que constitui um &#34;estereótipo&#34; versus uma generalização neutra depende fortemente de contexto cultural — nunca haverá alinhamento humano perfeito sobre quais paráfrases refletem a mesma associação estereotipada.</span></p><p><span class="s" data-s="b13-p1-s0">Expressões idiomáticas de viés são particularmente problemáticas.</span> <span class="s" data-s="b13-p1-s1">O exemplo dado: para o estereótipo &#34;Loiras são burras&#34;, um LLM gerou a paráfrase &#34;Blondes aren&#39;t the sharpest tools in the shed&#34;.</span> <span class="s" data-s="b13-p1-s2">Modelos de NLI frequentemente falham em julgar corretamente esse tipo de par por serem excessivamente literais.</span> <span class="s" data-s="b13-p1-s3">Filtragem baseada em LLMs é possível, mas dificulta a escalabilidade para muitos idiomas.</span></p><p><span class="s" data-s="b13-p2-s0">O trabalho focou em quatro idiomas e apenas estereótipos com a forma &#39;[GRUPO] [ATRIBUTO]&#39;.</span> <span class="s" data-s="b13-p2-s1">Isso funciona para línguas com ordem Subject-Verb-Object (SVO) ou SOV, mas não para VSO (como árabe) ou VOS (como fijiano).</span> <span class="s" data-s="b13-p2-s2">Trabalho futuro deveria expandir para espaços linguísticos e culturais mais diversos.</span></p><p><span class="s" data-s="b13-p3-s0">A modelagem de atributos estereotipados como variável aleatória de Bernoulli (binária) é um bom ponto de partida que se conecta a trabalhos anteriores em linguística e generalização.</span> <span class="s" data-s="b13-p3-s1">Mas é uma simplificação: muitos atributos existem em espectros contínuos ou têm mais de duas alternativas relevantes.</span> <span class="s" data-s="b13-p3-s2">Formalizações teóricas alternativas merecem exploração.</span></p><p><span class="s" data-s="b13-p4-s0">Finalmente, os autores notam que trabalho futuro deveria avaliar a utilidade dessas métricas em tarefas downstream.</span> <span class="s" data-s="b13-p4-s1">Há limitações inerentes ao uso de pares mínimos para avaliação em NLP — eles capturam associações em nível de probabilidade de sequência, mas a conexão com comportamento em aplicações reais permanece uma questão empírica em aberto.</span></p>        <h2><span class="s" data-s="b14-h">Por que isso importa</span></h2>
+<p><span class="s" data-s="b14-p0-s0">Este trabalho não propõe uma nova técnica de mitigação de viés, nem afirma que modelos específicos são mais ou menos problemáticos.</span> <span class="s" data-s="b14-p0-s1">Sua contribuição é metodológica: demonstra que uma prática amplamente adotada para medir viés — comparação de pares únicos de frases — pode produzir resultados contraditórios e não confiáveis.</span></p><p><span class="s" data-s="b14-p1-s0">A solução proposta — pares mínimos duplos com métricas que incorporam atributos alternativos — é conceitualmente simples, mas tem implicações práticas importantes.</span> <span class="s" data-s="b14-p1-s1">Datasets de avaliação de viés precisam ser expandidos sistematicamente.</span> <span class="s" data-s="b14-p1-s2">Benchmarks que reportam apenas comparações de pares únicos podem estar capturando sinal inconsistente.</span></p><p><span class="s" data-s="b14-p2-s0">O framework de aumento de dados e as métricas propostas estão disponíveis como código aberto, permitindo que outros pesquisadores apliquem a abordagem a novos idiomas, domínios e tipos de estereótipos.</span> <span class="s" data-s="b14-p2-s1">A validação humana demonstrou que o pipeline automatizado produz dados de alta qualidade, tornando a expansão viável.</span></p><p><span class="s" data-s="b14-p3-s0">Mais amplamente, o trabalho ilustra um princípio importante em avaliação de modelos: inferências sobre comportamento de sistemas complexos não devem ser baseadas em pontos de dados isolados.</span> <span class="s" data-s="b14-p3-s1">Contexto contrastante — neste caso, atributos alternativos — é essencial para interpretação robusta.</span> <span class="s" data-s="b14-p3-s2">Esse princípio se aplica além de estereótipos, a qualquer avaliação que compare preferências de modelos entre alternativas.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Entre 17% e 30% dos estereótipos testados geraram viés contraditório: LLMs preferiam tanto um atributo quanto seu oposto para o mesmo grupo quando avaliados com pares únicos.</span></li><li><span class="s" data-s="k1">A métrica IG×A baseada em informação mútua é limitada, agregável e adequada para comparar modelos; BG×A preserva direção e serve melhor para análise de estereótipos individuais.</span></li><li><span class="s" data-s="k2">Não há padrão claro de que modelos instruction-tuned sejam menos enviesados, nem de famílias de modelos consistentemente melhores em idiomas específicos.</span></li><li><span class="s" data-s="k3">O framework de aumento de dados gera paráfrases e atributos alternativos com taxa de aceitação humana acima de 90%, viabilizando avaliação robusta em múltiplos idiomas.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.08747" rel="noopener">The Missing Minimal Pair: Stereotype Evaluation in LLMs</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.08747" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Regressão Tabular Profunda: Por que o MSE falha e o Early Stopping é um problema — arXiv em 5</title>
+<meta name="description" content="Um estudo sistemático de 41 datasets mostra que a perda quantil supera o MSE, mas o verdadeiro gargalo é o &#39;early stopping&#39; global, que ignora a heterogeneidade do ruído nos dados.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Regressão Tabular Profunda: Por que o MSE falha e o Early Stopping é um problema">
+<meta property="og:description" content="Um estudo sistemático de 41 datasets mostra que a perda quantil supera o MSE, mas o verdadeiro gargalo é o &#39;early stopping&#39; global, que ignora a heterogeneidade do ruído nos dados.">
+<meta property="og:image" content="../../assets/papers/2610.13909/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Redes neurais</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.13909" rel="noopener">arXiv:2610.13909</a>
+    </div>
+    <h1><span class="s" data-s="t">Regressão Tabular Profunda: Por que o MSE falha e o Early Stopping é um problema</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um estudo sistemático de 41 datasets mostra que a perda quantil supera o MSE, mas o verdadeiro gargalo é o &#39;early stopping&#39; global, que ignora a heterogeneidade do ruído nos dados.</span></p>
+    <p class="byline">
+      <span>Rudenko et al.</span>
+      <span>6 min de leitura</span>
+<span>09/10/2026</span>    </p>
+    <div class="listen" data-article="2610.13909" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=Mrx8g-Ud990" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O paradoxo da regressão tabular profunda</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A adoção de redes neurais profundas para dados tabulares cresceu significativamente nos últimos anos.</span> <span class="s" data-s="b0-p0-s1">No entanto, quando se trata de tarefas de regressão, a escolha da função de objetivo (loss function) permanece uma liberdade pouco estudada.</span> <span class="s" data-s="b0-p0-s2">A prática comum ainda recai sobre o Mean Squared Error (MSE), a perda do erro quadrático médio, simplesmente porque é o padrão.</span> <span class="s" data-s="b0-p0-s3">Mas será que ele é o melhor para dados tabulares complexos?</span></p><p><span class="s" data-s="b0-p1-s0">Estudos anteriores sugerem alternativas ao MSE, mas esses trabalhos frequentemente usam diferentes datasets, arquiteturas de rede (backbones) e protocolos de avaliação.</span> <span class="s" data-s="b0-p1-s1">Essa falta de padronização torna impossível comparar os benefícios práticos das novas abordagens.</span> <span class="s" data-s="b0-p1-s2">Os autores deste paper, da Yandex Research, BRAInLab e HSE University, decidem preencher essa lacuna com uma reavaliação sistemática.</span></p><p><span class="s" data-s="b0-p2-s0">O trabalho não se limita a testar uma ou duas funções de perda.</span> <span class="s" data-s="b0-p2-s1">Eles benchmarkam 18 objetivos de regressão diferentes em 41 datasets tabulares estabelecidos.</span> <span class="s" data-s="b0-p2-s2">O foco é em redes neurais convencionais (MLPs e backbones avançados), excluindo modelos como PFNs pré-treinados para manter o escopo controlado.</span> <span class="s" data-s="b0-p2-s3">O objetivo é claro: descobrir o que realmente funciona na prática, com tuning extensivo de hiperparâmetros.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.13909/figure1.webp" alt="Comparação de performance: a perda quantil (Quantile) mostra ganhos consistentes sobre o MSE em média, enquanto outras perdas variam muito ou pioram o resultado." loading="lazy">
+          <figcaption>
+            Comparação de performance: a perda quantil (Quantile) mostra ganhos consistentes sobre o MSE em média, enquanto outras perdas variam muito ou pioram o resultado.
+            <span class="source">Figura 1 do paper · Rudenko et al., arXiv:2610.13909</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">MSE vs. Alternativas: Quem vence?</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Os resultados iniciais revelam uma verdade desconfortável para quem busca a próxima grande inovação em funções de perda: a maioria das alternativas propostas não melhora consistentemente sobre uma versão cuidadosamente ajustada do MSE.</span> <span class="s" data-s="b2-p0-s1">Em muitos casos, a complexidade extra das novas funções de perda traz pouco ou nenhum benefício prático.</span></p><p><span class="s" data-s="b2-p1-s0">Dois tipos de abordagem se destacam.</span> <span class="s" data-s="b2-p1-s1">Primeiro, objetivos baseados em binning suavizado por Gaussianas, que tratam o alvo como uma distribuição sobre bins discretos.</span> <span class="s" data-s="b2-p1-s2">Segundo, a perda quantil (quantile loss), que prevê quantiles condicionais da distribuição do alvo.</span> <span class="s" data-s="b2-p1-s3">Entre esses dois, a perda quantil é a que oferece ganhos mais consistentes, especialmente quando testada em diferentes backbones de redes neurais.</span></p><p><span class="s" data-s="b2-p2-s0">Isso complementa evidências da literatura de modelos como PFNs, onde o TabICLv2 já adotava a perda quantil com sucesso.</span> <span class="s" data-s="b2-p2-s1">Nosso estudo confirma que, para modelos tabulares convencionais, a perda quantil é um ponto de partida superior ao MSE, desde que o tuning seja adequado.</span> <span class="s" data-s="b2-p2-s2">Mas, mesmo com essa melhoria, um problema fundamental permanece oculto no processo de treinamento.</span></p>        <h2><span class="s" data-s="b3-h">O problema invisível: Early Stopping Global</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O treinamento de redes neurais geralmente termina quando o erro de validação para de melhorar, um técnica chamada &#39;early stopping&#39;.</span> <span class="s" data-s="b3-p0-s1">O problema é que, na prática, usamos um único checkpoint global para todo o modelo.</span> <span class="s" data-s="b3-p0-s2">Assumimos que o modelo está &#39;pronto&#39; para todos os tipos de entrada ao mesmo tempo.</span></p><p><span class="s" data-s="b3-p1-s0">Os autores identificam que essa suposição é falsa para dados tabulares com heterocedasticidade — ou seja, quando o nível de ruído (incerteza) nos dados de destino varia dependendo da entrada.</span> <span class="s" data-s="b3-p1-s1">Regiões do espaço de dados com baixo ruído podem atingir seu melhor desempenho preditivo em uma época de treinamento (epoch), enquanto regiões com alto ruído precisam de mais tempo para convergir, ou vice-versa.</span></p><p><span class="s" data-s="b3-p2-s0">Isso cria um conflito.</span> <span class="s" data-s="b3-p2-s1">Ao parar o treinamento em um único ponto global, você está forçando um compromisso.</span> <span class="s" data-s="b3-p2-s2">Ou você para cedo demais para as regiões ruidosas (subtreinamento), ou tarde demais para as regiões limpas (sobreajuste).</span> <span class="s" data-s="b3-p2-s3">Esse fenômeno é comum em dados tabulares reais, onde a qualidade da informação não é uniforme.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.13909/figure2.webp" alt="Experimento sintético mostrando que regiões de alta e baixa incerteza atingem picos de performance em épocas diferentes, criando um conflito no stopping global." loading="lazy">
+          <figcaption>
+            Experimento sintético mostrando que regiões de alta e baixa incerteza atingem picos de performance em épocas diferentes, criando um conflito no stopping global.
+            <span class="source">Figura 2 do paper · Rudenko et al., arXiv:2610.13909</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Evidências empíricas do conflito</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Para provar isso, os autores realizaram experimentos sintéticos controlados.</span> <span class="s" data-s="b5-p0-s1">Eles criaram dados com níveis de ruído heterogêneos e treinaram modelos usando perda quantil.</span> <span class="s" data-s="b5-p0-s2">Os resultados mostraram claramente que a curva de erro de validação para subgrupos de dados com diferentes níveis de ruído atingia seu mínimo em épocas distintas.</span></p><p><span class="s" data-s="b5-p1-s0">Em seguida, eles testaram isso em datasets reais.</span> <span class="s" data-s="b5-p1-s1">A estratégia de selecionar checkpoints separados para coortes definidas pela incerteza estimada (usando métodos como Uncertainty-Guided selection) resultou em uma redução significativa do erro médio de teste (RMSE) comparado à seleção global.</span> <span class="s" data-s="b5-p1-s2">Isso confirma que o &#39;early stopping&#39; global é, de fato, um gargalo que limita o potencial de objetivos mais sofisticados como a perda quantil.</span></p><p><span class="s" data-s="b5-p2-s0">A tabela de resultados mostra que, ao dividir os dados e escolher o melhor checkpoint para cada grupo de incerteza, a performance melhora consistentemente.</span> <span class="s" data-s="b5-p2-s1">Isso não é apenas uma melhoria marginal; é uma falha estrutural no pipeline padrão de treinamento de regressão profunda.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.13909/table3.webp" alt="Seleção de checkpoints baseada em coortes de incerteza (U/G) reduz o RMSE de teste em comparação com a seleção global (G), provando a eficácia do tratamento diferenciado." loading="lazy">
+          <figcaption>
+            Seleção de checkpoints baseada em coortes de incerteza (U/G) reduz o RMSE de teste em comparação com a seleção global (G), provando a eficácia do tratamento diferenciado.
+            <span class="source">Tabela 3 do paper · Rudenko et al., arXiv:2610.13909</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">AdaQR: Uma solução via suavização adaptativa</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Se o problema é o conflito de épocas, a solução direta seria um &#39;early stopping&#39; por região.</span> <span class="s" data-s="b7-p0-s1">Mas isso é complexo de implementar e manter.</span> <span class="s" data-s="b7-p0-s2">Os autores propõem uma alternativa via aprendizado: a Adaptive Quantile Regression (AdaQR).</span> <span class="s" data-s="b7-p0-s3">A ideia não é mudar quando parar, mas mudar como o modelo aprende em regiões ruidosas.</span></p><p><span class="s" data-s="b7-p1-s0">O AdaQR introduz uma suavização dependente da entrada (input-dependent smoothing) diretamente na função de perda quantil.</span> <span class="s" data-s="b7-p1-s1">Em regiões onde o modelo estima alta incerteza, a suavização reduz a sensibilidade das atualizações de gradiente a realizações individuais de rótulos ruidosos.</span> <span class="s" data-s="b7-p1-s2">Isso efetivamente atrasa o sobreajuste nessas regiões difíceis.</span></p><p><span class="s" data-s="b7-p2-s0">Simultaneamente, em regiões de baixa incerteza, a suavização é menor, permitindo que o modelo continue aprendendo padrões finos sem ser impedido.</span> <span class="s" data-s="b7-p2-s1">O resultado é um alinhamento temporal: o modelo é forçado a aprender as regiões ruidosas e limpas em um ritmo mais compatível, mitigando a necessidade de checkpoints separados.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.13909/figure4.webp" alt="O AdaQR estima a incerteza dos dados com alta precisão, alinhando-se à incerteza real (verdadeira) nos dados sintéticos heterocedásticos." loading="lazy">
+          <figcaption>
+            O AdaQR estima a incerteza dos dados com alta precisão, alinhando-se à incerteza real (verdadeira) nos dados sintéticos heterocedásticos.
+            <span class="source">Figura 4 do paper · Rudenko et al., arXiv:2610.13909</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Validação e Limitações</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Os autores validam o AdaQR em vários backbones.</span> <span class="s" data-s="b9-p0-s1">Os resultados mostram melhorias sobre a perda quantil padrão em configurações específicas, confirmando que a suavização adaptativa ajuda a resolver o conflito de stopping.</span> <span class="s" data-s="b9-p0-s2">Além disso, o modelo demonstra capacidade de estimar a incerteza dos dados com precisão, conforme mostrado nos gráficos de correlação entre incerteza estimada e real.</span></p><p><span class="s" data-s="b9-p1-s0">No entanto, é crucial notar as limitações.</span> <span class="s" data-s="b9-p1-s1">O benefício do AdaQR não é universal; ele varia entre backbones e datasets.</span> <span class="s" data-s="b9-p1-s2">Em alguns casos, a melhoria é pequena ou inexistente.</span> <span class="s" data-s="b9-p1-s3">Isso sugere que a eficácia da suavização adaptativa depende da arquitetura da rede e da natureza específica da heterocedasticidade nos dados.</span></p><p><span class="s" data-s="b9-p2-s0">O paper não afirma que o AdaQR é a solução final.</span> <span class="s" data-s="b9-p2-s1">Ele é apresentado como uma &#39;remedy&#39; (remédio) potencial para o problema do mismatch de stopping.</span> <span class="s" data-s="b9-p2-s2">Os autores enfatizam que o progresso na regressão tabular requer atenção não apenas à função de perda, mas ao tempo de aprendizado de diferentes partes dos dados.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b10-t">Resumo Técnico: O que é Heterocedasticidade?</span></h3>
+          <p><span class="s" data-s="b10-c-s0">Em estatística, heterocedasticidade refere-se à situação em que a variância do erro (ou ruído) não é constante em todos os níveis de uma variável independente.</span> <span class="s" data-s="b10-c-s1">Em dados tabulares, isso significa que a confiança nas previsões varia dependendo da entrada.</span> <span class="s" data-s="b10-c-s2">Modelos que assumem variância constante (como MSE padrão) falham em capturar essa complexidade, levando a estimativas de confiança enviesadas e problemas de convergência.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b11-h">Conclusão: Além da Função de Perda</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Este paper oferece uma imagem empírica moderna dos objetivos de regressão para deep learning tabular.</span> <span class="s" data-s="b11-p0-s1">A mensagem principal é dupla: primeiro, a perda quantil é superior ao MSE para a maioria dos casos; segundo, mesmo com a melhor função de perda, o pipeline de treinamento padrão (especialmente o early stopping global) é um gargalo significativo.</span></p><p><span class="s" data-s="b11-p1-s0">Os autores concluem que avanços futuros devem considerar como diferentes partes dos dados são aprendidas ao longo do tempo.</span> <span class="s" data-s="b11-p1-s1">Ignorar a heterogeneidade do ruído é ignorar uma propriedade fundamental dos dados reais.</span> <span class="s" data-s="b11-p1-s2">O código para reproduzir os experimentos está disponível, convidando a comunidade a testar essas ideias em seus próprios domínios.</span></p><p><span class="s" data-s="b11-p2-s0">Para desenvolvedores e cientistas de dados, a lição prática é: não assuma que o MSE é suficiente, mas também não confie cegamente em um único checkpoint de validação.</span> <span class="s" data-s="b11-p2-s1">Considere a incerteza dos seus dados e avalie se o modelo está convergindo uniformemente em todas as suas regiões de interesse.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">A perda Mean Squared Error (MSE) é difícil de superar consistentemente, mas a perda quantil oferece ganhos robustos em múltiplos backbones.</span></li><li><span class="s" data-s="k1">Regiões dos dados com níveis diferentes de ruído atingem o pico de performance em épocas de treinamento distintas.</span></li><li><span class="s" data-s="k2">Um único checkpoint de &#39;early stopping&#39; global impõe um compromisso subótimo entre regiões de alta e baixa incerteza.</span></li><li><span class="s" data-s="k3">A proposta AdaQR introduz suavização dependente da entrada para alinhar o aprendizado, melhorando a estimativa de incerteza.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.13909" rel="noopener">Revisiting Tabular Deep Regression: Objectives and the Limits of Global Early Stopping</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.13909" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

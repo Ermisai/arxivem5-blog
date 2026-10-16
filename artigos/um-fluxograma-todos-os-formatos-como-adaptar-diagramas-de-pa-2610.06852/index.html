@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Um fluxograma, todos os formatos: como adaptar diagramas de papers para celular, slide e banner sem quebrar conexões — arXiv em 5</title>
+<meta name="description" content="Pesquisadores da National Yang Ming Chiao Tung University e University of Illinois criam pipeline agentic que converte fluxogramas raster em layouts editáveis para qualquer proporção de tela, preservando estrutura e estilo em XML do draw.io.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Um fluxograma, todos os formatos: como adaptar diagramas de papers para celular, slide e banner sem quebrar conexões">
+<meta property="og:description" content="Pesquisadores da National Yang Ming Chiao Tung University e University of Illinois criam pipeline agentic que converte fluxogramas raster em layouts editáveis para qualquer proporção de tela, preservando estrutura e estilo em XML do draw.io.">
+<meta property="og:image" content="../../assets/papers/2610.06852/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Agentes</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.06852" rel="noopener">arXiv:2610.06852</a>
+    </div>
+    <h1><span class="s" data-s="t">Um fluxograma, todos os formatos: como adaptar diagramas de papers para celular, slide e banner sem quebrar conexões</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Pesquisadores da National Yang Ming Chiao Tung University e University of Illinois criam pipeline agentic que converte fluxogramas raster em layouts editáveis para qualquer proporção de tela, preservando estrutura e estilo em XML do draw.io.</span></p>
+    <p class="byline">
+      <span>Tseng et al.</span>
+      <span>11 min de leitura</span>
+<span>05/10/2026</span>    </p>
+    <div class="listen" data-article="2610.06852" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema: um diagrama, dez telas diferentes</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Figuras de pipeline são centrais na comunicação de pesquisa em machine learning.</span> <span class="s" data-s="b0-p0-s1">O mesmo diagrama precisa aparecer em colunas de papers, slides 16:9, pôsteres verticais, teasers quadrados para redes sociais e previews 9:16 para celular.</span> <span class="s" data-s="b0-p0-s2">Cada formato impõe uma proporção de aspecto diferente sobre o mesmo grafo computacional.</span> <span class="s" data-s="b0-p0-s3">Qualquer conexão quebrada silenciosamente deturpa o método.</span></p><p><span class="s" data-s="b0-p1-s0">Refazer manualmente o layout de cada figura para cada canvas é tedioso e propenso a erros.</span> <span class="s" data-s="b0-p1-s1">Métodos existentes falham de formas características.</span> <span class="s" data-s="b0-p1-s2">Modelos image-to-image esticam blocos uniformemente e rejeitam proporções extremas.</span> <span class="s" data-s="b0-p1-s3">Sistemas agentic text-to-image alucinam conteúdo, adicionando ou removendo elementos.</span> <span class="s" data-s="b0-p1-s4">Sistemas parse-then-render recuperam os componentes mas roteiam mal as arestas, quebrando o grafo direcionado que o fluxograma existe para comunicar.</span></p><p><span class="s" data-s="b0-p2-s0">Este paper formula aspect-ratio-adaptive flowchart relayout como uma tarefa distinta: dado um fluxograma raster e uma proporção-alvo, produzir um layout estruturalmente fiel, livre de alucinações e editável.</span> <span class="s" data-s="b0-p2-s1">A saída não é uma imagem re-renderizada, mas XML mxGraph compatível com draw.io, pronto para refinamento manual posterior.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.06852/figure1.webp" alt="Mesmo fluxograma adaptado para cinco proporções: 9:16 (celular), 3:4 (tablet), 1:1 (redes sociais), 4:3 (slide) e 16:9 (banner). Três exemplos diferentes mostram generalidade em diagramas de arquitetura, pipelines experimentais e fluxos de processo. Todas as saídas são XML editável no draw.io." loading="lazy">
+          <figcaption>
+            Mesmo fluxograma adaptado para cinco proporções: 9:16 (celular), 3:4 (tablet), 1:1 (redes sociais), 4:3 (slide) e 16:9 (banner). Três exemplos diferentes mostram generalidade em diagramas de arquitetura, pipelines experimentais e fluxos de processo. Todas as saídas são XML editável no draw.io.
+            <span class="source">Figura 1 do paper · Tseng et al., arXiv:2610.06852</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">Três famílias de métodos, três modos de falha</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Trabalhos recentes em automação de figuras científicas caem em três famílias.</span> <span class="s" data-s="b2-p0-s1">Modelos image-to-image como Nano Banana Pro e GPT Image 2.0 re-sintetizam a figura fonte na resolução pedida, mas redimensionam no espaço de pixels: painéis e blocos embutidos são esticados uniformemente, e proporções fora de 3:1 a 1:3 são rejeitadas.</span></p><p><span class="s" data-s="b2-p1-s0">Sistemas agentic text-to-image como PaperBanana, SciFig e Paper2Poster orquestram agentes planejador, estilista e crítico para criar uma figura nova a partir de uma descrição textual da metodologia.</span> <span class="s" data-s="b2-p1-s1">Quando reaproveitados para relayout, eles re-sintetizam a partir de um prompt, descartando blocos da fonte e adicionando rótulos que não estavam presentes no original.</span></p><p><span class="s" data-s="b2-p2-s0">Uma terceira linha visa editabilidade: AutoFigure-Edit emite SVG, enquanto AutomaTikZ e DeTikZify usam TikZ.</span> <span class="s" data-s="b2-p2-s1">Todos miram geração de figuras a partir de entradas textuais ou programáticas; nenhum pega um fluxograma existente e o reajusta a um canvas arbitrário mantendo o grafo computacional intacto.</span> <span class="s" data-s="b2-p2-s2">Sistemas parse-then-render recuperam os componentes mas roteiam mal as arestas, quebrando as conexões.</span></p><p><span class="s" data-s="b2-p3-s0">Nenhum método simultaneamente atinge as três propriedades que esta tarefa exige: fidelidade estrutural, ausência de alucinações e redimensionamento para canvas arbitrário em formato editável downstream.</span> <span class="s" data-s="b2-p3-s1">Esses métodos produzem saídas raster não-editáveis, carecem de suporte nativo a editores de fluxograma ou não conseguem redimensionar um fluxograma existente para canvas arbitrários.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.06852/figure2.webp" alt="Três modos categóricos de falha no relayout de fluxogramas. Dado input 1:1 e pedido 3:2: modelos I2I esticam frames e blocos embutidos; sistemas T2I alucinam blocos e conectores não presentes no original; parsers recuperam componentes mas roteiam mal as arestas, quebrando o grafo." loading="lazy">
+          <figcaption>
+            Três modos categóricos de falha no relayout de fluxogramas. Dado input 1:1 e pedido 3:2: modelos I2I esticam frames e blocos embutidos; sistemas T2I alucinam blocos e conectores não presentes no original; parsers recuperam componentes mas roteiam mal as arestas, quebrando o grafo.
+            <span class="source">Figura 2 do paper · Tseng et al., arXiv:2610.06852</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b4-h">Pipeline agentic em três estágios: Parse, Style, Layout</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Os autores introduzem um pipeline agentic para relayout de fluxogramas adaptativo a proporção de aspecto.</span> <span class="s" data-s="b4-p0-s1">Dado um fluxograma raster F₀ e proporção-alvo r, o método produz um XML mxGraph X* compatível com draw.io que preserva estrutura, conteúdo e estilo de F₀ enquanto se ajusta ao novo canvas.</span></p><p><span class="s" data-s="b4-p1-s0">Como resolver estrutura, aparência e arranjo espacial em um único passo é difícil, o problema é decomposado em três estágios, cada um pareando um agente principal com um crítico.</span> <span class="s" data-s="b4-p1-s1">O crítico combina verificações determinísticas de restrições com feedback visual de VLM, de modo que conectividade é explicitamente checada e impedida de quebrar silenciosamente.</span></p><p><span class="s" data-s="b4-p2-s0">O estágio Parse recupera XML estruturado de F₀ com priors espaciais do SAM 3, usando caixas delimitadoras de segmentação para guiar a extração de blocos e conectores.</span> <span class="s" data-s="b4-p2-s1">O estágio Style reconstrói aparência visual enquanto extrai cores deterministicamente via PIL para mitigar percepção de cor não-confiável do VLM.</span> <span class="s" data-s="b4-p2-s2">O estágio Layout rearranja o grafo recuperado para o canvas-alvo, combinando checagens estruturais determinísticas com feedback visual do VLM para prevenir erros de conectividade.</span></p><p><span class="s" data-s="b4-p3-s0">Cada estágio roda por no máximo 3, 2 e 5 iterações respectivamente, com terminação antecipada assim que o Crítico emite um julgamento de aprovação.</span> <span class="s" data-s="b4-p3-s1">Todos os agentes são construídos sobre Gemini 3.1 Pro Preview.</span> <span class="s" data-s="b4-p3-s2">XML mxGraph compatível com draw.io serve como representação intermediária unificada, e a CLI do draw.io renderiza como PNG em cada estágio para comparação visual do Crítico.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.06852/figure3.webp" alt="Visão geral do pipeline agentic de relayout. Dado fluxograma de entrada F₀ (raster, aqui 4:3) e proporção-alvo r (aqui 16:9), o método produz XML editável em draw.io X* em três estágios. Cada estágio pareia agente principal com crítico que itera até convergência." loading="lazy">
+          <figcaption>
+            Visão geral do pipeline agentic de relayout. Dado fluxograma de entrada F₀ (raster, aqui 4:3) e proporção-alvo r (aqui 16:9), o método produz XML editável em draw.io X* em três estágios. Cada estágio pareia agente principal com crítico que itera até convergência.
+            <span class="source">Figura 3 do paper · Tseng et al., arXiv:2610.06852</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b6-h">Parse: de pixels a grafo estruturado</span></h2>
+<p><span class="s" data-s="b6-p0-s0">O estágio Parse converte o fluxograma raster F₀ em XML estruturado X. O Parse Agent recebe F₀ e caixas delimitadoras de segmentação do SAM 3 como priors espaciais.</span> <span class="s" data-s="b6-p0-s1">O agente identifica blocos (nós), conectores (arestas) e texto, e os codifica em XML mxGraph.</span></p><p><span class="s" data-s="b6-p1-s0">O Critic Agent então verifica se X pode ser renderizado como PNG válido via draw.io CLI, e se a renderização visual preserva todos os elementos de F₀.</span> <span class="s" data-s="b6-p1-s1">A verificação combina checagem determinística (o XML é sintaticamente válido e renderizável?) com feedback visual do VLM (todos os blocos e conectores estão presentes?).</span></p><p><span class="s" data-s="b6-p2-s0">Se o Crítico rejeita, o Parse Agent recebe o feedback e tenta novamente, por até 3 iterações.</span> <span class="s" data-s="b6-p2-s1">Esta abordagem iterativa com verificação explícita de conectividade é crucial: sem ela, o parser pode silenciosamente omitir arestas ou conectar nós errados, quebrando o grafo.</span></p>        <h2><span class="s" data-s="b7-h">Style: reconstruindo aparência visual</span></h2>
+<p><span class="s" data-s="b7-p0-s0">O estágio Style reconstrói a aparência visual do fluxograma original.</span> <span class="s" data-s="b7-p0-s1">O Style Agent recebe o XML estruturado X do estágio Parse e a imagem original F₀ como referência.</span> <span class="s" data-s="b7-p0-s2">Ele extrai cores de blocos, estilos de texto e estilos de conectores, e atualiza X para produzir X̂.</span></p><p><span class="s" data-s="b7-p1-s0">Uma inovação importante é a extração determinística de cores.</span> <span class="s" data-s="b7-p1-s1">VLMs têm percepção de cor notoriamente não-confiável.</span> <span class="s" data-s="b7-p1-s2">Em vez de pedir ao VLM para nomear cores, o pipeline usa PIL (Python Imaging Library) para extrair cores dominantes deterministicamente de cada bloco segmentado, e então passa essas cores ao Style Agent como entrada.</span></p><p><span class="s" data-s="b7-p2-s0">O Critic Agent verifica se X̂ renderizado preserva o estilo visual de F₀: cores de blocos, fontes, espessuras de linha.</span> <span class="s" data-s="b7-p2-s1">Novamente, a verificação combina checagem determinística (o XML tem atributos de estilo válidos?) com feedback visual do VLM (as cores e estilos correspondem à referência?).</span> <span class="s" data-s="b7-p2-s2">O estágio roda por até 2 iterações.</span></p>        <h2><span class="s" data-s="b8-h">Layout: rearranjando para o canvas-alvo</span></h2>
+<p><span class="s" data-s="b8-p0-s0">O estágio Layout rearranja o grafo recuperado para a proporção-alvo r. O Layout Agent recebe X̂ (XML com estrutura e estilo) e r, e produz X* com coordenadas atualizadas que se ajustam ao novo canvas.</span></p><p><span class="s" data-s="b8-p1-s0">Este é o estágio mais crítico para fidelidade estrutural.</span> <span class="s" data-s="b8-p1-s1">O Layout Agent deve preservar todas as relações de conectividade: cada conector deve ligar os mesmos nós fonte e alvo que no original, na mesma direção.</span> <span class="s" data-s="b8-p1-s2">Ele também deve utilizar o canvas eficientemente, evitando simplesmente escalar ou esticar o layout original.</span></p><p><span class="s" data-s="b8-p2-s0">O Critic Agent verifica três propriedades: (1) todas as relações de conectividade são preservadas?</span> <span class="s" data-s="b8-p2-s1">(2) o layout utiliza bem o canvas-alvo?</span> <span class="s" data-s="b8-p2-s2">(3) o arranjo é visualmente coerente?</span> <span class="s" data-s="b8-p2-s3">A primeira checagem é determinística: o Crítico parseia o XML e verifica que cada aresta em X* corresponde a uma aresta em X̂ com mesma fonte, alvo e direção.</span> <span class="s" data-s="b8-p2-s4">As outras duas usam feedback visual do VLM.</span></p><p><span class="s" data-s="b8-p3-s0">Se o Crítico rejeita, o Layout Agent recebe feedback específico (quais conexões estão quebradas, quais regiões do canvas estão subutilizadas) e tenta novamente, por até 5 iterações.</span> <span class="s" data-s="b8-p3-s1">Esta verificação explícita de conectividade é o que distingue o método de parsers ingênuos que silenciosamente quebram arestas.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b9-t">Por que XML mxGraph e não SVG ou TikZ?</span></h3>
+          <p><span class="s" data-s="b9-c-s0">XML mxGraph é o formato nativo do draw.io, um editor de diagramas amplamente usado e gratuito.</span> <span class="s" data-s="b9-c-s1">Diferente de SVG genérico ou TikZ (que requer LaTeX), draw.io entende semântica de fluxograma: blocos são nós, conectores são arestas com pontos de ancoragem.</span> <span class="s" data-s="b9-c-s2">Isso facilita edição manual posterior: usuários podem mover blocos e os conectores se ajustam automaticamente, algo que SVG raster não suporta nativamente.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b10-h">Benchmark e métricas: FLOWCHARTRELAYOUTBENCH</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Os autores constroem FLOWCHARTRELAYOUTBENCH, um benchmark pareando 100 fluxogramas de papers orais em venues top (CVPR, ICCV, ECCV, NeurIPS, ICLR, ICML) com cinco proporções-alvo (9:16, 2:3, 1:1, 3:2, 16:9), totalizando 500 tarefas de relayout.</span> <span class="s" data-s="b10-p0-s1">Para cobrir estruturas heterogêneas, o dataset é deliberadamente curado em três níveis de complexidade estrutural: 25 fáceis, 40 médios e 35 difíceis.</span> <span class="s" data-s="b10-p0-s2">Em média, cada figura contém 15,5 nós e 13,6 arestas.</span></p><p><span class="s" data-s="b10-p1-s0">A avaliação adota um protocolo VLM-as-a-Judge.</span> <span class="s" data-s="b10-p1-s1">Para cada amostra, o modelo juiz compara o resultado do relayout contra o fluxograma original sob o tamanho de canvas-alvo, e avalia se o candidato preserva estrutura, conteúdo, adaptação de layout e estilo visual.</span> <span class="s" data-s="b10-p1-s2">Os autores validam independentemente concordância entre julgamentos VLM e avaliações humanas.</span></p><p><span class="s" data-s="b10-p2-s0">As métricas cobrem duas dimensões.</span> <span class="s" data-s="b10-p2-s1">Content Fidelity tem duas checagens binárias: Relationship Preservation verifica que lógica de conectores (fonte, alvo, direção de fluxo) corresponde ao original; Hallucination-free Rate checa que nenhum elemento é adicionado ou omitido.</span> <span class="s" data-s="b10-p2-s2">Cada uma é passa/falha; a pontuação é a razão de aprovação.</span></p><p><span class="s" data-s="b10-p3-s0">Visual Quality contém duas métricas baseadas em ranking.</span> <span class="s" data-s="b10-p3-s1">Layout Quality ranqueia candidatos válidos por utilização de canvas e arranjo geral, penalizando escala trivial, esticamento ou simplesmente rotacionar um layout paisagem para caber em canvas retrato.</span> <span class="s" data-s="b10-p3-s2">Style Similarity ranqueia por preservação de cores de blocos, estilos de texto e estilos de conectores originais.</span> <span class="s" data-s="b10-p3-s3">O juiz ranqueia conjuntamente todos os métodos por amostra; reporta-se o rank médio (menor é melhor).</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b11-t">Pontuação hierárquica: correção antes de beleza</span></h3>
+          <p><span class="s" data-s="b11-c-s0">A pontuação hierárquica prioriza correção de conteúdo sobre qualidade visual.</span> <span class="s" data-s="b11-c-s1">Candidatos são primeiro ranqueados pelo número de checagens de Content Fidelity aprovadas.</span> <span class="s" data-s="b11-c-s2">Dois passes valem mais que um passe mais bom estilo.</span> <span class="s" data-s="b11-c-s3">Só então, dentro do mesmo nível de correção, Visual Quality desempata.</span> <span class="s" data-s="b11-c-s4">Isso reflete a realidade: um fluxograma bonito mas estruturalmente errado é pior que um feio mas correto.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b12-h">Resultados: 68,6% de fidelidade de conteúdo contra 11,2-41,4% dos baselines</span></h2>
+<p><span class="s" data-s="b12-p0-s0">O método proposto atinge 68,6% de Content Fidelity (a métrica combinada de Relationship Preservation e Hallucination-free Rate), contra 11,2-41,4% para trabalhos anteriores.</span> <span class="s" data-s="b12-p0-s1">Em Relationship Preservation, o método marca 74,2%, versus 38,4-50,2% para baselines.</span> <span class="s" data-s="b12-p0-s2">Em Hallucination-free Rate, 90,6% versus 18,6-75,4%.</span></p><p><span class="s" data-s="b12-p1-s0">Modelos image-to-image (Nano Banana Pro, GPT Image 2.0) atingem ~40% de Content Fidelity.</span> <span class="s" data-s="b12-p1-s1">Eles preservam razoavelmente o estilo (ranks 1,35 e 2,08 em Style Similarity, os melhores), mas esticam blocos e rejeitam proporções extremas.</span> <span class="s" data-s="b12-p1-s2">PaperBanana, um sistema agentic T2I, atinge apenas 11,2% de Content Fidelity: ele re-sintetiza a partir de prompt, alucinando conteúdo (apenas 18,6% Hallucination-free).</span></p><p><span class="s" data-s="b12-p2-s0">AutoFigure-Edit, um sistema parse-then-render que emite SVG, atinge 24,8% de Content Fidelity.</span> <span class="s" data-s="b12-p2-s1">Ele recupera componentes mas roteia mal arestas (41,8% Relationship Preservation).</span> <span class="s" data-s="b12-p2-s2">O método proposto supera todos em Correctness e Overall score (81,85, 1,15× o segundo melhor).</span></p><p><span class="s" data-s="b12-p3-s0">PaperBanana ranqueia melhor em Layout Quality (rank 2,14) apesar de fraca correção, porque quando ele gera algo, tende a usar bem o canvas.</span> <span class="s" data-s="b12-p3-s1">Nano Banana Pro e GPT Image 2.0 ranqueiam bem em Style Similarity por preservar largamente a aparência original.</span> <span class="s" data-s="b12-p3-s2">O método proposto equilibra: segundo melhor em Layout (rank 2,66), terceiro em Style (rank 2,98), mas de longe o melhor em correção estrutural.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.06852/figure6.webp" alt="Comparação qualitativa sob diferentes proporções-alvo: 1:1, 2:3 e 3:2. GPT Image 2.0 tipicamente comprime ou corta o original; Nano Banana Pro tenta relayout mais frequentemente mas tende a quebrar relações. Nosso método preserva estrutura enquanto se adapta ao canvas." loading="lazy">
+          <figcaption>
+            Comparação qualitativa sob diferentes proporções-alvo: 1:1, 2:3 e 3:2. GPT Image 2.0 tipicamente comprime ou corta o original; Nano Banana Pro tenta relayout mais frequentemente mas tende a quebrar relações. Nosso método preserva estrutura enquanto se adapta ao canvas.
+            <span class="source">Figura 6 do paper · Tseng et al., arXiv:2610.06852</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b14-h">Estudo com usuários: preferência humana confirma métricas VLM</span></h2>
+<p><span class="s" data-s="b14-p0-s0">Os autores conduzem um estudo com usuários para validar as métricas VLM-as-a-Judge.</span> <span class="s" data-s="b14-p0-s1">Participantes humanos avaliam pares de relayouts em dimensões de correção e qualidade visual.</span> <span class="s" data-s="b14-p0-s2">A concordância entre julgamentos VLM e humanos é alta: coeficiente kappa de Cohen de 0,72 para Relationship Preservation e 0,68 para Hallucination-free Rate.</span></p><p><span class="s" data-s="b14-p1-s0">No estudo, participantes preferem saídas do método proposto em 73% dos casos quando perguntados sobre fidelidade estrutural, e em 58% dos casos quando perguntados sobre qualidade visual geral.</span> <span class="s" data-s="b14-p1-s1">Isso confirma que as métricas VLM capturam bem preferências humanas, e que o método proposto de fato entrega relayouts estruturalmente mais fiéis.</span></p>        <h2><span class="s" data-s="b15-h">Limitações e trabalho futuro</span></h2>
+<p><span class="s" data-s="b15-p0-s0">O paper discute limitações no Apêndice B. Primeiro, o método depende de segmentação SAM 3 para priors espaciais no estágio Parse.</span> <span class="s" data-s="b15-p0-s1">Se SAM 3 falha em segmentar corretamente blocos sobrepostos ou conectores finos, o Parse Agent pode omitir elementos.</span> <span class="s" data-s="b15-p0-s2">Segundo, o pipeline é iterativo e pode ser lento: em média 3 minutos por relayout em hardware de pesquisa, o que é aceitável para preparação de figuras mas não para uso interativo em tempo real.</span></p><p><span class="s" data-s="b15-p1-s0">Terceiro, o método assume que o fluxograma de entrada é razoavelmente bem estruturado: blocos distintos, conectores claros.</span> <span class="s" data-s="b15-p1-s1">Diagramas altamente artísticos ou ilustrações híbridas (meio fluxograma, meio infográfico) podem confundir o parser.</span> <span class="s" data-s="b15-p1-s2">Quarto, a avaliação cobre cinco proporções comuns mas não testa proporções extremas como 32:9 (telas ultra-wide) ou 1:4 (banners verticais muito estreitos).</span></p><p><span class="s" data-s="b15-p2-s0">Trabalho futuro pode explorar suporte a edições guiadas por instrução: dado um relayout, permitir que o usuário peça &#39;mova este bloco para a esquerda&#39; ou &#39;mude esta cor para azul&#39; e o sistema atualize o XML automaticamente.</span> <span class="s" data-s="b15-p2-s1">Outra direção é estender o método para outros tipos de diagramas científicos: gráficos de barras, scatter plots, diagramas de Venn, que também precisam ser adaptados para múltiplos canvas.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b16-t">O que o paper NÃO faz</span></h3>
+          <p><span class="s" data-s="b16-c-s0">O método não gera fluxogramas do zero a partir de texto.</span> <span class="s" data-s="b16-c-s1">Ele também não suporta animações ou transições entre layouts.</span> <span class="s" data-s="b16-c-s2">A avaliação é em fluxogramas de papers de ML/CV; generalização para diagramas de outras áreas (biologia, engenharia) não é testada.</span> <span class="s" data-s="b16-c-s3">E o pipeline requer VLM proprietário (Gemini 3.1 Pro); reprodução com modelos abertos não é demonstrada.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b17-h">Por que isso importa</span></h2>
+<p><span class="s" data-s="b17-p0-s0">Este trabalho endereça um problema prático e frequente: pesquisadores gastam horas refazendo manualmente figuras de pipeline para cada formato de apresentação.</span> <span class="s" data-s="b17-p0-s1">Um método que automatiza isso com fidelidade estrutural alta e saída editável pode economizar tempo significativo e reduzir erros.</span></p><p><span class="s" data-s="b17-p1-s0">Mais amplamente, o paper demonstra que decomposição em estágios com verificação explícita de restrições supera abordagens monolíticas end-to-end para tarefas estruturadas.</span> <span class="s" data-s="b17-p1-s1">A combinação de checagens determinísticas (parse XML, verifique conectividade) com feedback visual de VLM (o layout parece bom?) é uma receita que pode generalizar para outras tarefas de síntese estruturada.</span></p><p><span class="s" data-s="b17-p2-s0">A escolha de XML mxGraph como representação intermediária é pragmática: draw.io é amplamente usado, gratuito e entende semântica de fluxograma.</span> <span class="s" data-s="b17-p2-s1">Isso torna as saídas imediatamente úteis, não apenas demonstrações de pesquisa.</span> <span class="s" data-s="b17-p2-s2">O benchmark FLOWCHARTRELAYOUTBENCH e o protocolo VLM-as-a-Judge validado contra humanos também são contribuições que podem facilitar pesquisa futura em relayout e síntese de diagramas.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Pipeline agentic em três estágios (Parse, Style, Layout) converte fluxogramas raster em XML editável do draw.io, adaptando para qualquer proporção de aspecto com 68,6% de fidelidade de conteúdo.</span></li><li><span class="s" data-s="k1">Cada estágio pareia agente principal com crítico que combina verificação determinística de conectividade e feedback visual de VLM, prevenindo quebra silenciosa de conexões.</span></li><li><span class="s" data-s="k2">Benchmark FLOWCHARTRELAYOUTBENCH com 100 fluxogramas de papers orais em cinco proporções-alvo e métricas VLM-as-a-Judge validadas contra julgamentos humanos.</span></li><li><span class="s" data-s="k3">Método supera baselines I2I, T2I agentic e parse-then-render em correção estrutural, mas limitado a fluxogramas bem estruturados e requer VLM proprietário.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.06852" rel="noopener">One Figure, Every Canvas: Editable Flowchart Relayout via Agentic Pipeline</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.06852" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

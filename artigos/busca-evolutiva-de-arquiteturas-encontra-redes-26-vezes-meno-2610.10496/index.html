@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Busca evolutiva de arquiteturas encontra redes 26 vezes menores para prever floração de algas em lagos do Báltico — arXiv em 5</title>
+<meta name="description" content="Pesquisadores aplicaram busca automática de arquiteturas a um problema de observação da Terra com poucos dados tabulares e mostraram que é possível superar redes projetadas à mão usando 409 parâmetros em vez de 10.625, abrindo caminho para inferência a bordo de satélites.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Busca evolutiva de arquiteturas encontra redes 26 vezes menores para prever floração de algas em lagos do Báltico">
+<meta property="og:description" content="Pesquisadores aplicaram busca automática de arquiteturas a um problema de observação da Terra com poucos dados tabulares e mostraram que é possível superar redes projetadas à mão usando 409 parâmetros em vez de 10.625, abrindo caminho para inferência a bordo de satélites.">
+<meta property="og:image" content="../../assets/papers/2610.10496/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Redes neurais</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.10496" rel="noopener">arXiv:2610.10496</a>
+    </div>
+    <h1><span class="s" data-s="t">Busca evolutiva de arquiteturas encontra redes 26 vezes menores para prever floração de algas em lagos do Báltico</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Pesquisadores aplicaram busca automática de arquiteturas a um problema de observação da Terra com poucos dados tabulares e mostraram que é possível superar redes projetadas à mão usando 409 parâmetros em vez de 10.625, abrindo caminho para inferência a bordo de satélites.</span></p>
+    <p class="byline">
+      <span>Komurcu et al.</span>
+      <span>9 min de leitura</span>
+<span>07/10/2026</span>    </p>
+    <div class="listen" data-article="2610.10496" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=KPWXuI_inIM" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema: datasets pequenos, redes desenhadas à mão</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Observação da Terra operacional costuma trabalhar com datasets pequenos e tabulares.</span> <span class="s" data-s="b0-p0-s1">Coletar rótulos no campo é caro, então os conjuntos de dados têm milhares de linhas de características espectrais desenhadas por especialistas, não milhões de imagens.</span> <span class="s" data-s="b0-p0-s2">As redes aplicadas a esses problemas são tipicamente projetadas à mão, como ainda é comum em problemas tabulares em geral.</span></p><p><span class="s" data-s="b0-p1-s0">Busca de arquiteturas neurais (neural architecture search, NAS) é uma técnica madura, mas aplicada quase sempre a visão computacional em larga escala.</span> <span class="s" data-s="b0-p1-s1">Seu comportamento nesse regime de poucos dados é muito menos caracterizado, e não é óbvio que uma busca ajude quando a tarefa oferece tão pouco sinal para buscar.</span></p><p><span class="s" data-s="b0-p2-s0">Este paper revisita um modelo publicado recentemente: um classificador de floração de algas (algal bloom) em lagos do Báltico, treinado com dados do satélite Sentinel-2.</span> <span class="s" data-s="b0-p2-s1">Os autores mantêm a tarefa, as características e a divisão treino-teste do estudo original fixas, e perguntam: o que a busca de arquiteturas adiciona?</span></p>        <h2><span class="s" data-s="b1-h">Por que isso importa além da acurácia</span></h2>
+<p><span class="s" data-s="b1-p0-s0">A pergunta tem implicações operacionais.</span> <span class="s" data-s="b1-p0-s1">Para muitos produtos de observação da Terra, a largura de banda de downlink — a capacidade de transmitir dados do satélite para a Terra — é o gargalo, não a capacidade de sensoriamento.</span> <span class="s" data-s="b1-p0-s2">Inferência a bordo do satélite já foi demonstrada em órbita como forma de transmitir apenas dados informativos, economizando banda.</span></p><p><span class="s" data-s="b1-p1-s0">Quão pequeno um modelo competitivo pode ser é, portanto, uma questão operacional, não apenas de eficiência.</span> <span class="s" data-s="b1-p1-s1">Se o modelo couber em poucos kilobytes e puder rodar a bordo, o satélite pode filtrar observações antes de transmiti-las, enviando apenas lagos com suspeita de floração e economizando capacidade de downlink.</span></p>        <h2><span class="s" data-s="b2-h">Os dados: 1.151 observações de lagos do Báltico</span></h2>
+<p><span class="s" data-s="b2-p0-s0">O dataset contém 1.151 observações de 429 locais de monitoramento na Lituânia, Letônia e Estônia, coletadas entre 2017 e 2021.</span> <span class="s" data-s="b2-p0-s1">Cada linha corresponde a um lago em uma data específica, com refletâncias de superfície do Sentinel-2 e índices radiométricos derivados — do tipo estabelecido para recuperação de clorofila em águas turvas continentais — junto com um rótulo binário de floração.</span></p><p><span class="s" data-s="b2-p1-s0">As classes são quase balanceadas: 624 observações sem floração, 527 com floração.</span> <span class="s" data-s="b2-p1-s1">Isso significa que a acurácia pode ser interpretada contra um piso de 52,9% (a taxa de acerto se o modelo sempre chutasse a classe majoritária).</span> <span class="s" data-s="b2-p1-s2">Os autores usam as mesmas 14 características do estudo de referência.</span></p><p><span class="s" data-s="b2-p2-s0">A divisão treino-teste reproduz exatamente a do paper original, incluindo a semente aleatória: 70% dos códigos únicos de locais são sorteados para treino, e toda medição de um lago selecionado vai junto.</span> <span class="s" data-s="b2-p2-s1">Isso resulta em 801 linhas de treino e 350 de teste, cobrindo 129 lagos não vistos.</span></p><p><span class="s" data-s="b2-p3-s0">Agrupar por lago em vez de por linha é essencial aqui.</span> <span class="s" data-s="b2-p3-s1">Um único lago pode contribuir até 17 observações, e dividir por linha permitiria que o modelo memorizasse corpos d&#39;água individuais em vez de aprender padrões generalizáveis.</span></p>        <h2><span class="s" data-s="b3-h">Avaliação aninhada e a escolha da métrica</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Todo o sinal de busca vem de uma validação cruzada de 5 folds agrupada por lago dentro das 801 linhas de treino.</span> <span class="s" data-s="b3-p0-s1">O conjunto de teste de 350 linhas é aberto uma única vez, após o término da busca.</span> <span class="s" data-s="b3-p0-s2">Esse aninhamento não é formalidade nessa escala.</span></p><p><span class="s" data-s="b3-p1-s0">Selecionar o melhor entre milhares de candidatos nos mesmos dados usados para reportar desempenho produz o máximo de uma estatística ruidosa, não uma estimativa de generalização.</span> <span class="s" data-s="b3-p1-s1">O otimismo resultante pode rivalizar com as diferenças entre os métodos comparados — um problema bem documentado na literatura de aprendizado de máquina.</span></p><p><span class="s" data-s="b3-p2-s0">Os autores selecionam com base em AUC (área sob a curva ROC), não acurácia.</span> <span class="s" data-s="b3-p2-s1">A razão é prática: com 801 linhas de treino divididas em 5 folds, cada fold de validação tem cerca de 160 linhas.</span> <span class="s" data-s="b3-p2-s2">Nessa escala, a acurácia é uma estatística discreta e ruidosa, enquanto AUC, por integrar sobre todos os limiares de decisão, oferece um sinal mais estável para guiar a busca.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b4-t">O problema do otimismo na seleção de modelos</span></h3>
+          <p><span class="s" data-s="b4-c-s0">Quando você avalia milhares de arquiteturas no mesmo conjunto de validação e escolhe a melhor, o desempenho reportado é inflado.</span> <span class="s" data-s="b4-c-s1">Você está medindo o máximo de uma distribuição ruidosa, não a capacidade real de generalização.</span> <span class="s" data-s="b4-c-s2">A avaliação aninhada — buscar em validação interna e testar em dados completamente separados — é a única forma honesta de reportar ganhos em problemas pequenos como este.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b5-h">O espaço de busca: MLPs estendidos</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os autores buscam em um espaço estendido de perceptrons multicamadas (MLPs).</span> <span class="s" data-s="b5-p0-s1">O espaço inclui escolhas de profundidade (1 a 4 camadas), largura (4 a 128 neurônios por camada), tipo de bloco (denso simples ou residual), função de ativação (ReLU, tanh, Swish, Mish), normalização (batch, layer, RMS ou nenhuma), otimizador (Adam, AdamW, RMSprop), taxa de aprendizado, decaimento (step, exponencial, cosseno ou nenhum), dropout, ponderação de classes e média móvel exponencial de pesos (weight EMA).</span></p><p><span class="s" data-s="b5-p1-s0">O espaço contém aproximadamente 10¹² configurações possíveis antes de aplicar a restrição de orçamento de parâmetros.</span> <span class="s" data-s="b5-p1-s1">A busca usa evolução regularizada: uma população de arquiteturas é avaliada, as melhores são selecionadas, pequenas mutações são aplicadas, e o processo se repete.</span> <span class="s" data-s="b5-p1-s2">É uma técnica clássica de NAS, mas raramente aplicada a problemas tabulares pequenos.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.10496/table1.webp" alt="O espaço de busca explora profundidade, largura, ativações, normalizações, otimizadores e regularizações. Antes da restrição de orçamento de parâmetros, há cerca de 10¹² configurações possíveis — um espaço grande demais para busca exaustiva." loading="lazy">
+          <figcaption>
+            O espaço de busca explora profundidade, largura, ativações, normalizações, otimizadores e regularizações. Antes da restrição de orçamento de parâmetros, há cerca de 10¹² configurações possíveis — um espaço grande demais para busca exaustiva.
+            <span class="source">Tabela 1 do paper · Komurcu et al., arXiv:2610.10496</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">O que a busca encontrou</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Os modelos encontrados pela busca melhoram a AUC no conjunto de teste em 3,0 pontos percentuais sobre a melhor baseline (de 0,790 para 0,820) e a acurácia em 1,5 pontos (de 0,733 para 0,748).</span> <span class="s" data-s="b7-p0-s1">Isso usando 409 parâmetros contra 10.625 da rede de referência mais forte — uma redução de 26 vezes, ou 47 vezes contra a variante com múltiplas cabeças densas.</span></p><p><span class="s" data-s="b7-p1-s0">Todas as dez configurações mais bem ranqueadas superam todas as baselines em AUC, então o resultado não depende de um único candidato sortudo.</span> <span class="s" data-s="b7-p1-s1">Os modelos encontrados também são marcadamente mais estáveis: o desvio padrão entre sementes aleatórias é de 0,001 em AUC, contra 0,006 a 0,010 para as baselines.</span></p><p><span class="s" data-s="b7-p2-s0">Os autores atribuem essa estabilidade à média móvel de pesos (weight EMA) que a busca selecionou.</span> <span class="s" data-s="b7-p2-s1">Essa técnica, que mantém uma média móvel dos pesos durante o treinamento e usa essa média para inferência, é conhecida por suavizar a superfície de perda e melhorar a generalização.</span></p><p><span class="s" data-s="b7-p3-s0">O otimismo da estimativa de validação cruzada — a diferença entre AUC na validação interna e no teste — é de apenas 0,006 para os modelos selecionados.</span> <span class="s" data-s="b7-p3-s1">Isso indica que a seleção com base em AUC nesse orçamento de dados não é materialmente inflada pelo viés de seleção descrito na literatura.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.10496/table2.webp" alt="Desempenho no conjunto de teste, média e desvio padrão sobre 10 sementes. As arquiteturas encontradas pela busca (linhas superiores) superam todas as baselines desenhadas à mão em AUC, acurácia e F1, com 26 a 47 vezes menos parâmetros." loading="lazy">
+          <figcaption>
+            Desempenho no conjunto de teste, média e desvio padrão sobre 10 sementes. As arquiteturas encontradas pela busca (linhas superiores) superam todas as baselines desenhadas à mão em AUC, acurácia e F1, com 26 a 47 vezes menos parâmetros.
+            <span class="source">Tabela 2 do paper · Komurcu et al., arXiv:2610.10496</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">A receita convergente: uma camada, tanh, RMS norm</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Entre as 100 configurações mais bem ranqueadas, várias escolhas são unânimes: blocos densos simples (não residuais), RMSprop como otimizador, decaimento em degraus (step decay) da taxa de aprendizado, normalização RMS, ativação tanh, média móvel de pesos com decaimento 0,999, e ponderação de classes.</span></p><p><span class="s" data-s="b9-p1-s0">A configuração mediana usa uma única camada oculta de largura 24, treinada por 300 épocas.</span> <span class="s" data-s="b9-p1-s1">Três dessas escolhas se afastam do que um praticante escolheria por padrão.</span></p><p><span class="s" data-s="b9-p2-s0">Primeiro, a ativação tanh foi largamente substituída por funções da família ReLU na prática moderna.</span> <span class="s" data-s="b9-p2-s1">Mas tanh é limitada, o que restringe quão confiantemente uma rede pequena pode se comprometer com apenas 801 linhas de treino disponíveis.</span> <span class="s" data-s="b9-p2-s2">Média de pesos desempenha papel similar, sendo a principal fonte da estabilidade observada.</span></p><p><span class="s" data-s="b9-p3-s0">Mais surpreendente: a busca converge para uma única camada oculta.</span> <span class="s" data-s="b9-p3-s1">A profundidade das redes de referência não é apenas desnecessária, mas ativamente prejudicial nesse tamanho de amostra.</span> <span class="s" data-s="b9-p3-s2">Os autores não anteciparam essa combinação, o que é o argumento para buscar em vez de projetar.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b10-t">Profundidade pode prejudicar em datasets pequenos</span></h3>
+          <p><span class="s" data-s="b10-c-s0">Redes profundas são o padrão em visão e linguagem, mas a busca convergiu para uma única camada oculta.</span> <span class="s" data-s="b10-c-s1">Com apenas 801 exemplos de treino, profundidade adiciona capacidade que o modelo não consegue usar de forma confiável, levando a overfitting.</span> <span class="s" data-s="b10-c-s2">É um lembrete de que as melhores práticas dependem radicalmente da escala do problema.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b11-h">Viabilidade a bordo: 1,6 kB e 400 operações por lago</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Com 409 parâmetros, o modelo selecionado ocupa 1,6 kilobytes em float32 e requer cerca de 400 operações de multiplicação-acumulação por lago.</span> <span class="s" data-s="b11-p0-s1">Na classe de processador usada em demonstrações de IA a bordo, esse custo é negligenciável.</span></p><p><span class="s" data-s="b11-p1-s0">O modelo poderia filtrar observações candidatas em órbita, de modo que apenas lagos sinalizados como floridos consumam capacidade de downlink — o mesmo argumento que motivou a rejeição de nuvens a bordo em trabalhos anteriores.</span></p><p><span class="s" data-s="b11-p2-s0">Os autores são precisos sobre o que isso estabelece e o que não estabelece.</span> <span class="s" data-s="b11-p2-s1">As características usadas aqui derivam de produtos Level-2A corrigidos atmosfericamente, computados no solo, junto com mascaramento de água.</span> <span class="s" data-s="b11-p2-s2">Portar essa cadeia inteira para o satélite é um problema separado e mais difícil.</span></p><p><span class="s" data-s="b11-p3-s0">O que o resultado estabelece é que a camada de decisão de tal pipeline é essencialmente gratuita, e que a capacidade que um modelo projetado à mão gasta nela pode ser reduzida em mais de uma ordem de magnitude sem custo — na verdade, com ganho.</span></p>        <h2><span class="s" data-s="b12-h">O que o paper não mostra</span></h2>
+<p><span class="s" data-s="b12-p0-s0">O experimento mantém as características fixas.</span> <span class="s" data-s="b12-p0-s1">Os autores não buscam sobre quais índices espectrais usar, apenas sobre a arquitetura que os processa.</span> <span class="s" data-s="b12-p0-s2">É possível que busca de características ou aprendizado de representação end-to-end a partir de refletâncias brutas oferecesse ganhos adicionais, mas isso não foi testado.</span></p><p><span class="s" data-s="b12-p1-s0">O dataset cobre lagos do Báltico entre 2017 e 2021.</span> <span class="s" data-s="b12-p1-s1">Generalização para outras regiões geográficas, outros tipos de corpos d&#39;água (reservatórios, estuários) ou outras condições atmosféricas não é demonstrada.</span> <span class="s" data-s="b12-p1-s2">Modelos treinados em uma região frequentemente degradam em outras devido a diferenças em turbidez, composição de fitoplâncton e ângulos solares.</span></p><p><span class="s" data-s="b12-p2-s0">A viabilidade a bordo é estabelecida apenas para a camada de decisão.</span> <span class="s" data-s="b12-p2-s1">A cadeia completa — correção atmosférica, mascaramento de água, extração de características — ainda precisa rodar no solo.</span> <span class="s" data-s="b12-p2-s2">Trabalhos anteriores mostraram que portar essa cadeia para o satélite é tecnicamente viável, mas é um desafio de engenharia separado e não trivial.</span></p><p><span class="s" data-s="b12-p3-s0">Finalmente, o paper não compara com métodos de AutoML tabulares mais sofisticados, como AutoGluon ou AutoML baseado em gradient boosting.</span> <span class="s" data-s="b12-p3-s1">A comparação é apenas contra redes projetadas à mão no mesmo espaço MLP.</span> <span class="s" data-s="b12-p3-s2">É possível que métodos ensemble ou baseados em árvores oferecessem desempenho competitivo, embora provavelmente com modelos maiores.</span></p>        <h2><span class="s" data-s="b13-h">Por que isso importa para AutoML em observação da Terra</span></h2>
+<p><span class="s" data-s="b13-p0-s0">Este trabalho é um dos poucos a caracterizar o comportamento de busca de arquiteturas em problemas tabulares pequenos de observação da Terra.</span> <span class="s" data-s="b13-p0-s1">A maioria dos papers de NAS foca em ImageNet ou CIFAR, onde há centenas de milhares ou milhões de exemplos.</span> <span class="s" data-s="b13-p0-s2">O regime de poucos milhares de linhas tabulares é comum em aplicações reais, mas raramente estudado.</span></p><p><span class="s" data-s="b13-p1-s0">O resultado mostra que busca pode ajudar mesmo quando o sinal é fraco, e que as arquiteturas encontradas podem divergir radicalmente das melhores práticas estabelecidas em outros domínios.</span> <span class="s" data-s="b13-p1-s1">Uma camada, tanh, RMS norm e weight EMA não são escolhas óbvias em 2026, mas funcionam aqui.</span></p><p><span class="s" data-s="b13-p2-s0">A redução de 26 vezes em parâmetros sem perda de desempenho sugere que modelos desenhados à mão para problemas pequenos frequentemente carregam capacidade desnecessária.</span> <span class="s" data-s="b13-p2-s1">Isso tem implicações para implantação em dispositivos com recursos limitados, não apenas satélites, mas também drones, sensores de campo e sistemas embarcados.</span></p><p><span class="s" data-s="b13-p3-s0">O código está disponível publicamente, o que permite que outros pesquisadores reproduzam a busca, apliquem o método a outros problemas de observação da Terra, ou usem as arquiteturas encontradas como ponto de partida para novos estudos.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Busca evolutiva de arquiteturas encontrou redes de 409 parâmetros que superam modelos projetados à mão com 10.625 parâmetros em classificação de floração de algas, melhorando AUC de 0,790 para 0,820.</span></li><li><span class="s" data-s="k1">A busca convergiu para uma única camada oculta com tanh, RMS norm e média de pesos — combinação que um praticante dificilmente escolheria, mostrando valor de AutoML em datasets pequenos.</span></li><li><span class="s" data-s="k2">Com 1,6 kB, o modelo é pequeno o suficiente para rodar a bordo de satélites, permitindo filtragem de observações em órbita e economia de largura de banda de downlink.</span></li><li><span class="s" data-s="k3">O paper não testa generalização geográfica, não busca sobre características espectrais, e estabelece viabilidade a bordo apenas para a camada de decisão, não para a cadeia completa de processamento.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.10496" rel="noopener">Evolutionary Architecture Search for Chlorophyll-$a$ Prediction in Lakes using Sentinel-2</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.10496" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

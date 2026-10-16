@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hide and Seek: Atribuição de Conceitos em Modelos Black-Box sem Dados Rótulados — arXiv em 5</title>
+<meta name="description" content="O paper propõe HnS, um método para explicar previsões de modelos de visão computacional usando conceitos humanos, sem necessidade de acessar pesos internos ou conjuntos de dados anotados manualmente.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hide and Seek: Atribuição de Conceitos em Modelos Black-Box sem Dados Rótulados">
+<meta property="og:description" content="O paper propõe HnS, um método para explicar previsões de modelos de visão computacional usando conceitos humanos, sem necessidade de acessar pesos internos ou conjuntos de dados anotados manualmente.">
+<meta property="og:image" content="../../assets/papers/2610.13935/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Imagem</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.13935" rel="noopener">arXiv:2610.13935</a>
+    </div>
+    <h1><span class="s" data-s="t">Hide and Seek: Atribuição de Conceitos em Modelos Black-Box sem Dados Rótulados</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">O paper propõe HnS, um método para explicar previsões de modelos de visão computacional usando conceitos humanos, sem necessidade de acessar pesos internos ou conjuntos de dados anotados manualmente.</span></p>
+    <p class="byline">
+      <span>Tokas et al.</span>
+      <span>7 min de leitura</span>
+<span>09/10/2026</span>    </p>
+    <div class="listen" data-article="2610.13935" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=lxywmU6GHrM" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Caixa Preta em Visão Computacional</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Interpretar por que um modelo de machine learning tomou uma determinada decisão é um desafio central, especialmente em modelos de visão computacional (CV) que operam como caixas pretas.</span> <span class="s" data-s="b0-p0-s1">Em cenários de alto risco, como medicina ou contratação, a transparência não é apenas desejável, mas essencial.</span> <span class="s" data-s="b0-p0-s2">Uma abordagem popular para essa interpretabilidade é a &#39;atribuição baseada em conceitos&#39;.</span> <span class="s" data-s="b0-p0-s3">Em vez de analisar pixels ou filtros de rede neural, essa técnica mede quanto um conceito compreensível para humanos (como &#39;sorrindo&#39; ou &#39;cabelo longo&#39;) contribuiu para a previsão do modelo.</span></p><p><span class="s" data-s="b0-p1-s0">Considere um classificador de gênero M que prevê se uma imagem contém um homem ou uma mulher.</span> <span class="s" data-s="b0-p1-s1">Se o modelo atribui alta pontuação ao conceito &#39;sorrindo&#39; para a classe &#39;homem&#39;, isso sugere que o modelo está usando esse recurso espúrio para fazer a classificação.</span> <span class="s" data-s="b0-p1-s2">Identificar esses vieses permite o refinamento do modelo.</span> <span class="s" data-s="b0-p1-s3">No entanto, para que a atribuição baseada em conceitos seja útil na prática, ela precisa atender a quatro critérios rigorosos: funcionar em modelos black-box (sem acesso aos pesos), medir tanto atribuição global quanto local, não exigir conjuntos de dados massivos anotados manualmente e ser aplicável a uma ampla gama de tarefas (não apenas classificação).</span></p>        <h2><span class="s" data-s="b1-h">Limitações dos Métodos Existentes</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Os métodos existentes falham em atender a todos esses critérios simultaneamente.</span> <span class="s" data-s="b1-p0-s1">O TCAV (Testative Concept Activation Vectors), uma das primeiras abordagens, requer acesso aos pesos do modelo para calcular a ativação dos conceitos, limitando-o a cenários white-box.</span> <span class="s" data-s="b1-p0-s2">Versões subsequentes, como ConceptSHAP e PACE, mantêm essa restrição.</span> <span class="s" data-s="b1-p0-s3">Por outro lado, métodos mais recentes, como os Post-hoc Concept Bottleneck Models (PCBMs), funcionam em black-boxes, mas exigem conjuntos de dados rotulados com conceitos, o que é caro e impraticável para muitas aplicações.</span> <span class="s" data-s="b1-p0-s4">Além disso, os PCBMs geralmente fornecem apenas atribuição global e não suportam tarefas complexas como segmentação ou geração de legendas.</span></p><p><span class="s" data-s="b1-p1-s0">Essa lacuna motiva a proposta do trabalho: o método Hide and Seek (HnS).</span> <span class="s" data-s="b1-p1-s1">Os autores, da Arizona State University, apresentam uma técnica que elimina a necessidade de acesso aos pesos do modelo e de dados rotulados.</span> <span class="s" data-s="b1-p1-s2">O HnS opera assumindo que podemos descrever um conceito em linguagem natural e que temos acesso a um modelo de visão e linguagem (VLM) para interpretar tanto o texto quanto as imagens.</span> <span class="s" data-s="b1-p1-s3">O objetivo é medir a causalidade entre a presença de um conceito visual e a saída do modelo alvo, de forma fiel e local.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.13935/figure1.webp" alt="Visão geral do Hide and Seek (HnS). O processo começa codificando o conceito textual (ex: &#39;sorrindo&#39;) em um vetor usando um VLM. Em seguida, imagens relevantes são recuperadas, as regiões do conceito são mascaradas e a mudança na saída do modelo black-box é medida." loading="lazy">
+          <figcaption>
+            Visão geral do Hide and Seek (HnS). O processo começa codificando o conceito textual (ex: &#39;sorrindo&#39;) em um vetor usando um VLM. Em seguida, imagens relevantes são recuperadas, as regiões do conceito são mascaradas e a mudança na saída do modelo black-box é medida.
+            <span class="source">Figura 1 do paper · Tokas et al., arXiv:2610.13935</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">A Metodologia Hide and Seek (HnS)</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O cerne do HnS é uma estratégia de &#39;perturbação controlada&#39;.</span> <span class="s" data-s="b3-p0-s1">Para medir a atribuição de um conceito C para uma classe Y em um modelo M, os autores comparam a probabilidade prevista por M quando o conceito está visível versus quando está oculto.</span> <span class="s" data-s="b3-p0-s2">O fluxo de trabalho começa com a representação textual do conceito.</span> <span class="s" data-s="b3-p0-s3">Usando um VLM (especificamente o SigLIP nos experimentos), o texto do conceito é convertido em um vetor de embedding.</span> <span class="s" data-s="b3-p0-s4">No entanto, vetores de texto e imagem ocupam espaços vetoriais distintos, deslocados de suas origens.</span> <span class="s" data-s="b3-p0-s5">Para corrigir isso, os autores aplicam duas pré-processamentos: &#39;Modality Shift&#39; (correção de deslocamento de modalidade) e &#39;Ortogonalização&#39;.</span> <span class="s" data-s="b3-p0-s6">A correção de deslocamento centraliza os embeddings de texto e imagem, permitindo que a similaridade cosseno seja calculada de forma justa entre eles.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.13935/figure5.webp" alt="Ilustração do Modality Shift. Embeddings de imagem (azul) e texto (verde) ocupam regiões separadas, deslocadas de zero. A correção alinha esses espaços para permitir comparação direta via similaridade cosseno." loading="lazy">
+          <figcaption>
+            Ilustração do Modality Shift. Embeddings de imagem (azul) e texto (verde) ocupam regiões separadas, deslocadas de zero. A correção alinha esses espaços para permitir comparação direta via similaridade cosseno.
+            <span class="source">Figura 5 do paper · Tokas et al., arXiv:2610.13935</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Recuperação e Localização do Conceito</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Com o vetor de conceito processado v*C, o próximo passo é encontrar imagens que representem esse conceito.</span> <span class="s" data-s="b5-p0-s1">O HnS consulta um banco de imagens (como CelebA ou COCO-Stuff) e calcula a similaridade cosseno entre v*C e os embeddings de imagem de cada foto.</span> <span class="s" data-s="b5-p0-s2">As K imagens mais similares (K=50 nos experimentos) formam o conjunto Rc.</span> <span class="s" data-s="b5-p0-s3">Essas imagens servem como amostras onde o conceito está naturalmente presente.</span> <span class="s" data-s="b5-p0-s4">Em seguida, o método precisa localizar onde o conceito aparece dentro de cada imagem x do conjunto Rc.</span> <span class="s" data-s="b5-p0-s5">O VLM divide a imagem em L patches quadrados e gera um embedding para cada um.</span> <span class="s" data-s="b5-p0-s6">A similaridade entre o embedding do patch e v*C indica a presença do conceito.</span></p>        <h2><span class="s" data-s="b6-h">Mascaramento e Cálculo de Atribuição</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Para identificar quais patches contêm o conceito, os autores usam um limiar dinâmico τc, definido como a média mais 1,5 vezes o desvio padrão das similaridades cosseno dos patches.</span> <span class="s" data-s="b6-p0-s1">Aproximadamente 7% dos patches são selecionados como contendo o conceito.</span> <span class="s" data-s="b6-p0-s2">Esses patches são então mascarados para criar uma versão alterada da imagem, tilde x. O mascaramento é crucial: se feito mal, pode introduzir artefatos que o modelo alvo usa para prever, enviesando a atribuição.</span> <span class="s" data-s="b6-p0-s3">O HnS oferece sete estratégias de preenchimento (blur, zero-fill, white-fill, etc.) e seleciona a que melhor &#39;esconde&#39; o conceito, verificando a diferença vetorial entre a imagem original e a mascarada.</span> <span class="s" data-s="b6-p0-s4">A atribuição final é calculada como a diferença na probabilidade prevista pela classe Y entre a imagem original e a mascarada: Attr(C) = P(Y|x) - P(Y|tilde x).</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b7-t">Por que Mascaramento é Crítico?</span></h3>
+          <p><span class="s" data-s="b7-c-s0">Um mascaramento ruim (ex: deixar bordas visíveis ou alterar o contexto global) pode fazer o modelo prever diferente não por falta do conceito, mas por ruído visual.</span> <span class="s" data-s="b7-c-s1">O HnS testa múltiplas estratégias de preenchimento e escolhe a que minimiza a informação residual do conceito, garantindo que a mudança na saída seja devida realmente à ausência do conceito alvo.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b8-h">Atribuição Local e Global</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Uma vantagem significativa do HnS é sua capacidade de fornecer atribuição em dois níveis.</span> <span class="s" data-s="b8-p0-s1">A atribuição local é calculada para cada imagem individualmente, permitindo entender por que o modelo classificou uma imagem específica de determinada maneira.</span> <span class="s" data-s="b8-p0-s2">Isso é vital para auditorias caso a caso.</span> <span class="s" data-s="b8-p0-s3">A atribuição global é agregada sobre o conjunto Rc, fornecendo uma métrica de quanto o conceito influencia a classe em média.</span> <span class="s" data-s="b8-p0-s4">Diferente de métodos que exigem retropropagação ou acesso a camadas intermediárias, o HnS requer apenas forward-passes no modelo black-box.</span> <span class="s" data-s="b8-p0-s5">Isso o torna agnóstico à arquitetura do modelo alvo, podendo ser aplicado a classificadores, segmentadores ou até geradores de legendas.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.13935/table6.webp" alt="Tabela de ablação no dataset CelebA. Mostra que a combinação de Modality Shift e Ortogonalização melhora significativamente a precisão da atribuição comparada ao uso apenas do encoder ou de técnicas isoladas." loading="lazy">
+          <figcaption>
+            Tabela de ablação no dataset CelebA. Mostra que a combinação de Modality Shift e Ortogonalização melhora significativamente a precisão da atribuição comparada ao uso apenas do encoder ou de técnicas isoladas.
+            <span class="source">Tabela 6 do paper · Tokas et al., arXiv:2610.13935</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">Validação e Resultados</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Os autores validaram o HnS em dois datasets principais: CelebA (rostos de celebridades) e COCO-Stuff (objetos e cenas).</span> <span class="s" data-s="b10-p0-s1">Para avaliar a fidelidade das atribuições, eles compararam os scores do HnS com &#39;ground-truth&#39; de atribuição, obtidos através de métodos white-box robustos (como gradientes ou shapley values) em modelos surrogate treinados para imitar o black-box.</span> <span class="s" data-s="b10-p0-s2">Nos resultados, o HnS apresentou a maior correlação com o ground-truth em comparação com TCAV, ConceptSHAP e PCBMs.</span> <span class="s" data-s="b10-p0-s3">Isso indica que o HnS mede com precisão a dependência real do modelo em relação ao conceito, sem ser enganado por correlações espúrias ou artefatos de mascaramento.</span></p>        <h2><span class="s" data-s="b11-h">Aplicações em Tarefas Diversas</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Além da classificação, o HnS foi demonstrado em tarefas onde métodos anteriores não funcionam.</span> <span class="s" data-s="b11-p0-s1">Um caso de uso destacado é a segmentação de imagens de satélite.</span> <span class="s" data-s="b11-p0-s2">Os autores aplicaram o método para entender quais conceitos de cobertura do solo (como &#39;campo&#39;, &#39;água&#39;, &#39;floresta&#39;) influenciam a previsão de um modelo de segmentação de campos agrícolas.</span> <span class="s" data-s="b11-p0-s3">O HnS gerou mapas de calor que mostram claramente as regiões da imagem onde o modelo &#39;olha&#39; para tomar sua decisão.</span> <span class="s" data-s="b11-p0-s4">Outro exemplo é a geração de legendas (captioning), onde o método pode explicar quais partes da imagem contribuíram para a geração de uma palavra específica na frase.</span> <span class="s" data-s="b11-p0-s5">Essa flexibilidade amplia drasticamente o escopo da interpretabilidade em visão computacional.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.13935/figure33.webp" alt="Mapas de calor de atribuição de conceitos de cobertura do solo em imagens de satélite. Células mostram a queda média na pontuação de previsão quando a região associada ao conceito é mascarada, normalizada por 255." loading="lazy">
+          <figcaption>
+            Mapas de calor de atribuição de conceitos de cobertura do solo em imagens de satélite. Células mostram a queda média na pontuação de previsão quando a região associada ao conceito é mascarada, normalizada por 255.
+            <span class="source">Figura 33 do paper · Tokas et al., arXiv:2610.13935</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b13-h">Limitações e Considerações Finais</span></h2>
+<p><span class="s" data-s="b13-p0-s0">Apesar dos avanços, o HnS não é perfeito.</span> <span class="s" data-s="b13-p0-s1">A precisão depende da qualidade do VLM usado para embeddings e da escolha do limiar de similaridade.</span> <span class="s" data-s="b13-p0-s2">Conceitos muito abstratos ou ambíguos podem levar a recuperações de imagens imprecisas, afetando a localização.</span> <span class="s" data-s="b13-p0-s3">Os autores sugerem que a inspeção humana do conjunto Rc pode melhorar os resultados, removendo imagens que não representam bem o conceito.</span> <span class="s" data-s="b13-p0-s4">Além disso, embora o HnS seja mais rápido que métodos baseados em otimização iterativa, ele ainda requer múltiplos forward-passes no modelo alvo, o que pode ser custoso em escala muito grande.</span></p><p><span class="s" data-s="b13-p1-s0">Em resumo, o Hide and Seek preenche uma lacuna importante na literatura de XAI (Explainable AI).</span> <span class="s" data-s="b13-p1-s1">Ao eliminar a necessidade de acesso aos pesos e dados rotulados, ele democratiza a interpretabilidade conceitual.</span> <span class="s" data-s="b13-p1-s2">A técnica é robusta, aplicável a black-boxes e oferece granularidade local e global.</span> <span class="s" data-s="b13-p1-s3">Para desenvolvedores e cientistas de dados que precisam auditar modelos de visão proprietários ou complexos, o HnS oferece uma ferramenta prática e teoricamente fundamentada para entender o que os modelos realmente estão &#39;vendo&#39;.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">HnS usa um VLM para encontrar imagens relevantes e mascaras regiões para medir o impacto no modelo.</span></li><li><span class="s" data-s="k1">O método funciona em modelos black-box, sem acesso aos pesos ou arquitetura interna.</span></li><li><span class="s" data-s="k2">Atribuição local (por imagem) e global (conjunto) são calculadas via diferença de probabilidade.</span></li><li><span class="s" data-s="k3">Validado no CelebA e COCO-Stuff, mostrando maior correlação com ground-truth que métodos anteriores.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.13935" rel="noopener">Hide and Seek: HIDE Concepts to SEEK explanations for black box models</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.13935" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

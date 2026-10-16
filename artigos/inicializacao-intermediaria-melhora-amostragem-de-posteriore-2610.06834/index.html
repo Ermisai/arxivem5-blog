@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inicialização intermediária melhora amostragem de posteriores com modelos de difusão em até 10× em problemas de modo raro — arXiv em 5</title>
+<meta name="description" content="Pesquisadores da PhysicsX mostram que pular a fase ruidosa de métodos SMC para problemas inversos — amostrando uma posterior mais suave e transportando analiticamente para o alvo — reduz pela metade o erro em misturas gaussianas e resolve casos onde modos raros desaparecem.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Inicialização intermediária melhora amostragem de posteriores com modelos de difusão em até 10× em problemas de modo raro">
+<meta property="og:description" content="Pesquisadores da PhysicsX mostram que pular a fase ruidosa de métodos SMC para problemas inversos — amostrando uma posterior mais suave e transportando analiticamente para o alvo — reduz pela metade o erro em misturas gaussianas e resolve casos onde modos raros desaparecem.">
+<meta property="og:image" content="../../assets/papers/2610.06834/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Redes neurais</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.06834" rel="noopener">arXiv:2610.06834</a>
+    </div>
+    <h1><span class="s" data-s="t">Inicialização intermediária melhora amostragem de posteriores com modelos de difusão em até 10× em problemas de modo raro</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Pesquisadores da PhysicsX mostram que pular a fase ruidosa de métodos SMC para problemas inversos — amostrando uma posterior mais suave e transportando analiticamente para o alvo — reduz pela metade o erro em misturas gaussianas e resolve casos onde modos raros desaparecem.</span></p>
+    <p class="byline">
+      <span>Bellchambers</span>
+      <span>9 min de leitura</span>
+<span>05/10/2026</span>    </p>
+    <div class="listen" data-article="2610.06834" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema: partículas demais, modos de menos</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Modelos de difusão treinados sem supervisão servem como priors expressivos para problemas inversos bayesianos: dado um modelo generativo e uma observação ruidosa, queremos amostrar a distribuição posterior dos dados limpos.</span> <span class="s" data-s="b0-p0-s1">Métodos como MCGDiff constroem uma sequência de distribuições intermediárias que gradualmente incorporam a verossimilhança, usando Sequential Monte Carlo (SMC) para navegar do ruído puro até a posterior final.</span></p><p><span class="s" data-s="b0-p1-s0">O problema é que populações finitas de partículas sofrem de degeneração de pesos, colapso ancestral e perda de modos da posterior.</span> <span class="s" data-s="b0-p1-s1">Quando um modo relevante é raro sob o prior, uma população inicial sorteada do ruído puro pode simplesmente não conter nenhuma partícula naquela região — e o resampling, embora corrija diversidade, não cria partículas onde elas não existem.</span></p><p><span class="s" data-s="b0-p2-s0">Este paper observa que as distribuições intermediárias de MCGDiff — tilts gaussianos de marginais de difusão — podem ser puxadas de volta para posteriors no espaço limpo com condicionamento mais fraco.</span> <span class="s" data-s="b0-p2-s1">A variância efetiva de observação desse problema relaxado chega a ser o dobro da variância do ruído de difusão.</span> <span class="s" data-s="b0-p2-s2">Isso abre uma rota: amostrar a posterior suavizada, transportar essas amostras analiticamente através de uma ponte gaussiana para o alvo intermediário ruidoso, e executar apenas o sufixo restante do SMC.</span></p>        <h2><span class="s" data-s="b1-h">A ideia: começar do meio, não do fim</span></h2>
+<p><span class="s" data-s="b1-p0-s0">A estratégia central é inicializar MCGDiff diretamente em um tempo intermediário t⋆, em vez de começar do terminal t=1 (ruído máximo).</span> <span class="s" data-s="b1-p0-s1">Para isso, os autores exploram a estrutura dos tilts gaussianos: a distribuição intermediária vₜ é proporcional à marginal de difusão pₜ(xₜ) multiplicada por uma gaussiana N(bₜ; Cₜxₜ, Rₜ), onde bₜ é uma pseudo-observação, Cₜ um operador linear e Rₜ uma covariância.</span></p><p><span class="s" data-s="b1-p1-s0">Essa distribuição tilted pode ser vista como a marginal em xₜ de uma joint Πₜ(x₀, xₜ) que fatora em prior × kernel de difusão × tilt gaussiano.</span> <span class="s" data-s="b1-p1-s1">A marginal em x₀ dessa joint é uma posterior no espaço limpo com condicionamento enfraquecido: a variância efetiva de observação cresce porque o ruído de difusão (1−ᾱₜ) se soma à covariância Rₜ do tilt.</span> <span class="s" data-s="b1-p1-s2">Os autores chamam essa marginal de pullback do tilt.</span></p><p><span class="s" data-s="b1-p2-s0">O passo seguinte é amostrar o pullback com um método aproximado — eles usam MMPS, que aproxima o score da verossimilhança intratável ajustando uma gaussiana aos dois primeiros momentos de p(x₀|xₜ) — e então transportar essas amostras para vₜ através da condicional Πₜ(xₜ|x₀), que é gaussiana e disponível em forma fechada.</span> <span class="s" data-s="b1-p2-s1">Esse transporte é exato: se x₀ ~ π̃ₜ e xₜ ~ Πₜ(·|x₀), então xₜ ~ vₜ por construção.</span></p>        <h2><span class="s" data-s="b2-h">Como funciona no MCGDiff</span></h2>
+<p><span class="s" data-s="b2-p0-s0">MCGDiff constrói seus tilts intermediários na base de vetores singulares do operador forward A do problema inverso linear y = Ax₀ + σᵧε.</span> <span class="s" data-s="b2-p0-s1">Cada direção medida se torna ativa assim que o ruído de difusão excede um limiar τᵢ dependente da medição.</span> <span class="s" data-s="b2-p0-s2">Os autores restringem o tempo de inicialização a t⋆ &gt; max τᵢ, garantindo que todas as direções medidas já estejam ativas e o alvo seja um único tilt gaussiano.</span></p><p><span class="s" data-s="b2-p1-s0">Uma consequência importante do pullback é que o problema inverso no espaço limpo pode ser substancialmente mais suave que o original.</span> <span class="s" data-s="b2-p1-s1">MCGDiff introduz ruído gaussiano aproximadamente no nível do ruído de difusão em seu tilt intermediário; no limite de medições quase sem ruído, com valores singulares unitários, a verossimilhança no espaço limpo resultante tem variância efetiva σ²ₑff,ₜ ≃ 2σ²ₜ, onde σ²ₜ = (1−ᾱₜ)/ᾱₜ.</span></p><p><span class="s" data-s="b2-p2-s0">Isso torna o problema auxiliar particularmente fracamente condicionado — exatamente o regime onde MMPS funciona melhor, porque sua aproximação gaussiana melhora conforme o ruído de observação cresce.</span> <span class="s" data-s="b2-p2-s1">MMPS não precisa de escala de guidance nem outro ajuste específico do problema.</span> <span class="s" data-s="b2-p2-s2">Após amostrar o pullback com MMPS, a ponte gaussiana exata transporta as amostras para vₜ⋆, e o sufixo inalterado de MCGDiff roda de t⋆ até 0.</span></p><p><span class="s" data-s="b2-p3-s0">A escolha de t⋆ estabelece um trade-off: valores maiores tornam o problema MMPS mais fácil, mas deixam uma trajetória SMC mais longa.</span> <span class="s" data-s="b2-p3-s1">O híbrido não herda a consistência assintótica de MCGDiff, porque o sufixo é inicializado com amostras aproximadas de peso uniforme, mas isso poderia ser restaurado substituindo MMPS por outro método assintoticamente consistente.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b3-t">Por que o pullback é mais fácil?</span></h3>
+          <p><span class="s" data-s="b3-c-s0">No espaço limpo, a posterior π̃ₜ tem verossimilhança N(bₜ; √ᾱₜCₜx₀, Rₜ + (1−ᾱₜ)CₜCₜᵀ).</span> <span class="s" data-s="b3-c-s1">O termo (1−ᾱₜ) é o ruído de difusão, que se soma à covariância Rₜ do tilt.</span> <span class="s" data-s="b3-c-s2">Para MCGDiff, isso dobra a variância efetiva no limite de medições precisas, tornando o problema auxiliar muito mais tratável para métodos aproximados como MMPS.</span></p>
+        </aside>
+        <figure class="figure">
+          <img src="../../assets/papers/2610.06834/figure1.webp" alt="Efeito do tempo de inicialização t⋆: (a) distância Wasserstein final para inicialização oracle e MMPS; (b) erro de aproximação MMPS antes e depois da ponte exata para vₜ⋆. O trade-off entre facilidade do problema limpo e comprimento do sufixo é suave, não abrupto." loading="lazy">
+          <figcaption>
+            Efeito do tempo de inicialização t⋆: (a) distância Wasserstein final para inicialização oracle e MMPS; (b) erro de aproximação MMPS antes e depois da ponte exata para vₜ⋆. O trade-off entre facilidade do problema limpo e comprimento do sufixo é suave, não abrupto.
+            <span class="source">Figura 1 do paper · Bellchambers, arXiv:2610.06834</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Três benchmarks, três lições</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os autores avaliam três problemas inversos de misturas gaussianas (GMM) onde tanto a posterior exata quanto os alvos intermediários vₜ de MCGDiff podem ser amostrados analiticamente.</span> <span class="s" data-s="b5-p0-s1">Isso isola a qualidade da inicialização intermediária do comportamento do sufixo SMC subsequente.</span> <span class="s" data-s="b5-p0-s2">A métrica é a distância Wasserstein fatiada (SWD) até amostras exatas da posterior.</span></p><p><span class="s" data-s="b5-p1-s0">O primeiro é o benchmark GMM padrão introduzido pelo próprio MCGDiff.</span> <span class="s" data-s="b5-p1-s1">Aqui, tanto a inicialização MMPS quanto a inicialização a partir do prior (um controle que descarta o condicionamento no espaço limpo, mas mantém a ponte) superam substancialmente o MCGDiff com resampling controlado por ESS.</span> <span class="s" data-s="b5-p1-s2">Com N=1000 partículas, MMPS init melhora SWD em cerca de 2× e prior init em cerca de 3×.</span> <span class="s" data-s="b5-p1-s3">Mesmo dando 16× mais partículas ao MCGDiff baseline, a inicialização intermediária ainda vence.</span></p><p><span class="s" data-s="b5-p2-s0">Isso revela algo importante: muito do ganho vem de corrigir a aproximação gaussiana da marginal terminal, que é imprecisa sob o schedule de difusão deste benchmark.</span> <span class="s" data-s="b5-p2-s1">Quando MCGDiff é inicializado com amostras exatas do terminal (t⋆=1), ele precisa de cerca de 2× as partículas para empatar com MMPS init e 8× para empatar com prior init.</span> <span class="s" data-s="b5-p2-s2">Como a inicialização a partir do prior descarta inteiramente o condicionamento de direções não observadas sobre [t⋆,1], isso mostra que o prefixo de MCGDiff retorna uma aproximação de partículas finitas pior que um único passo enviesado.</span></p><p><span class="s" data-s="b5-p3-s0">O segundo benchmark é uma GMM estruturada, onde os autores adicionam correlação entre modos.</span> <span class="s" data-s="b5-p3-s1">Aqui, a inicialização condicionada (MMPS) dá um ganho consistente sobre a inicialização a partir do prior, mostrando que o condicionamento importa quando a estrutura da posterior diverge do prior.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.06834/table1.webp" alt="Resultados quantitativos nos três benchmarks GMM. MMPS init com 100 passos de denoising melhora SWD em até 10× no problema de modo raro, onde prior init frequentemente perde o modo relevante. Valores são média ± intervalo de confiança 95% sobre 80 sementes." loading="lazy">
+          <figcaption>
+            Resultados quantitativos nos três benchmarks GMM. MMPS init com 100 passos de denoising melhora SWD em até 10× no problema de modo raro, onde prior init frequentemente perde o modo relevante. Valores são média ± intervalo de confiança 95% sobre 80 sementes.
+            <span class="source">Tabela 1 do paper · Bellchambers, arXiv:2610.06834</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Modo raro: quando resampling não basta</span></h2>
+<p><span class="s" data-s="b7-p0-s0">O terceiro benchmark isola perda de suporte: uma GMM onde o modo relevante para a posterior tem probabilidade ρ baixa sob o prior.</span> <span class="s" data-s="b7-p0-s1">Quando ρ é pequeno, uma população finita sorteada do prior provavelmente não contém nenhuma partícula naquele modo — e resampling não cria partículas, apenas redistribui peso.</span></p><p><span class="s" data-s="b7-p1-s0">Aqui, MMPS init melhora SWD em mais de uma ordem de magnitude sobre MCGDiff com ESS-gating.</span> <span class="s" data-s="b7-p1-s1">A inicialização a partir do prior, que mantém a ponte mas descarta o condicionamento no espaço limpo, frequentemente falha completamente, perdendo o modo relevante.</span> <span class="s" data-s="b7-p1-s2">Isso mostra que o condicionamento da inicialização se torna decisivo quando o problema exige capturar suporte que o prior não favorece.</span></p><p><span class="s" data-s="b7-p2-s0">A Figura 3 ilustra visualmente: MCGDiff e prior init às vezes capturam apenas um modo, enquanto MMPS init captura ambos de forma consistente.</span> <span class="s" data-s="b7-p2-s1">O controle prior init⋆ na figura usa t⋆=0.4 e resampling apenas a cada 10 passos, mas ainda assim falha em alguns casos.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.06834/figure3.webp" alt="Amostras posteriores no benchmark de modo raro. MMPS init captura ambos os modos de forma robusta; prior init pode perder o modo relevante inteiramente. Isso demonstra que o condicionamento no espaço limpo é decisivo quando o suporte posterior diverge do prior." loading="lazy">
+          <figcaption>
+            Amostras posteriores no benchmark de modo raro. MMPS init captura ambos os modos de forma robusta; prior init pode perder o modo relevante inteiramente. Isso demonstra que o condicionamento no espaço limpo é decisivo quando o suporte posterior diverge do prior.
+            <span class="source">Figura 3 do paper · Bellchambers, arXiv:2610.06834</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">O que o benchmark padrão não mede</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Uma descoberta lateral importante é que o benchmark GMM padrão de MCGDiff recompensa cobertura do prior mais que fidelidade ao condicionamento.</span> <span class="s" data-s="b9-p0-s1">Como os autores observam, inicializar do prior em vez de MMPS também vence MCGDiff dado 16× as partículas, e ainda empata com 8× quando MCGDiff começa de amostras terminais exatas.</span></p><p><span class="s" data-s="b9-p1-s0">Isso significa que o benchmark é amplamente insensível ao condicionamento: o tilt é fraco o suficiente para que uma população grande sorteada do prior, transportada pela ponte, já resolva o problema.</span> <span class="s" data-s="b9-p1-s1">Os autores adicionaram a GMM estruturada e o problema de modo raro precisamente para separar esses dois tipos de falha de partículas finitas: perda de diversidade (que cobertura do prior pode reparar) versus perda de suporte (que não pode).</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.06834/figure2.webp" alt="Amostras posteriores no benchmark GMM padrão: MCGDiff, MMPS direto, MMPS init e prior init. MMPS e prior init dão amostras qualitativamente comparáveis neste benchmark relativamente simples, confirmando que ele não discrimina bem entre métodos que respeitam o condicionamento." loading="lazy">
+          <figcaption>
+            Amostras posteriores no benchmark GMM padrão: MCGDiff, MMPS direto, MMPS init e prior init. MMPS e prior init dão amostras qualitativamente comparáveis neste benchmark relativamente simples, confirmando que ele não discrimina bem entre métodos que respeitam o condicionamento.
+            <span class="source">Figura 2 do paper · Bellchambers, arXiv:2610.06834</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b11-h">Custo computacional e extensões</span></h2>
+<p><span class="s" data-s="b11-p0-s0">O custo de MMPS init é dominado pelos passos de denoising (100 a 1000 nos experimentos), cada um exigindo uma avaliação de rede neural.</span> <span class="s" data-s="b11-p0-s1">A ponte gaussiana e o sufixo SMC adicionam custo marginal.</span> <span class="s" data-s="b11-p0-s2">Os autores reportam que 100 passos MMPS já dão ganhos substanciais, e 1000 passos saturam a melhoria na maioria dos casos.</span></p><p><span class="s" data-s="b11-p1-s0">A avaliação está confinada a GMMs com observações unidimensionais.</span> <span class="s" data-s="b11-p1-s1">Problemas inversos de imagem e científicos são os próximos passos naturais.</span> <span class="s" data-s="b11-p1-s2">A construção exige apenas que o tilt intermediário seja gaussiano e linear em xₜ; o modelo de medição original não entra no pullback.</span> <span class="s" data-s="b11-p1-s3">Estender para problemas não lineares com alvos intermediários construídos a partir de uma linearização da medição é uma direção promissora, citando trabalhos recentes de Zheng e colaboradores.</span></p><p><span class="s" data-s="b11-p2-s0">O híbrido não herda a consistência assintótica de MCGDiff porque o sufixo é inicializado com amostras aproximadas de peso uniforme.</span> <span class="s" data-s="b11-p2-s1">Isso poderia ser restaurado substituindo MMPS por outro método assintoticamente consistente, mas os autores argumentam que o ganho em desempenho de partículas finitas justifica a troca.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b12-t">Limitações e próximos passos</span></h3>
+          <p><span class="s" data-s="b12-c-s0">Os experimentos usam apenas GMMs com observações 1D e posteriors analíticas.</span> <span class="s" data-s="b12-c-s1">Problemas de imagem, não linearidades e operadores forward mais complexos ainda não foram testados.</span> <span class="s" data-s="b12-c-s2">A extensão para problemas não lineares via linearização da medição é promissora, mas não demonstrada.</span> <span class="s" data-s="b12-c-s3">O método também perde a garantia assintótica de MCGDiff, embora isso possa ser recuperado com outro sampler no lugar de MMPS.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b13-h">O que fica</span></h2>
+<p><span class="s" data-s="b13-p0-s0">Este paper mostra que a estrutura de tilts gaussianos em samplers de difusão pode ser explorada para pular a fase ruidosa inteira: o pullback para o espaço limpo é mais fácil de amostrar, e a ponte gaussiana transporta essas amostras de volta sem aproximação.</span> <span class="s" data-s="b13-p0-s1">A estratégia melhora SWD em 2× em problemas estruturados e em mais de 10× quando modos raros estão em jogo, tudo com o mesmo número de partículas.</span></p><p><span class="s" data-s="b13-p1-s0">A lição mais profunda é sobre o que benchmarks medem.</span> <span class="s" data-s="b13-p1-s1">O GMM padrão de MCGDiff recompensa cobertura do prior, não fidelidade ao condicionamento — tanto que inicializar do prior vence MCGDiff com população suficiente.</span> <span class="s" data-s="b13-p1-s2">Problemas de modo raro, ao contrário, isolam a capacidade de capturar suporte que o prior não favorece, e ali o condicionamento se torna insubstituível.</span></p><p><span class="s" data-s="b13-p2-s0">A abordagem é geral: qualquer sampler que construa tilts gaussianos intermediários pode se beneficiar.</span> <span class="s" data-s="b13-p2-s1">A escolha de t⋆ e do sampler do pullback são os únicos graus de liberdade, e o trade-off entre facilidade do problema auxiliar e comprimento do sufixo é suave.</span> <span class="s" data-s="b13-p2-s2">O próximo teste será em problemas inversos reais, onde posteriors analíticas não existem e a geometria é mais difícil.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Tilts gaussianos em difusão podem ser puxados para posteriors mais suaves no espaço limpo, amostradas aproximadamente e transportadas de volta por ponte exata, pulando a fase ruidosa do SMC.</span></li><li><span class="s" data-s="k1">A estratégia melhora distância Wasserstein em 2× em GMMs estruturadas e em mais de 10× quando o modo relevante é raro sob o prior, com o mesmo número de partículas.</span></li><li><span class="s" data-s="k2">O benchmark padrão de MCGDiff recompensa cobertura do prior, não condicionamento: inicializar do prior vence com partículas suficientes, mas falha quando o modo posterior é raro.</span></li><li><span class="s" data-s="k3">A avaliação usa apenas GMMs 1D com posteriors analíticas; problemas de imagem, não linearidades e operadores complexos ainda não foram testados.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.06834" rel="noopener">Direct Intermediate Initialization for Tilted Diffusion Samplers</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.06834" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>
