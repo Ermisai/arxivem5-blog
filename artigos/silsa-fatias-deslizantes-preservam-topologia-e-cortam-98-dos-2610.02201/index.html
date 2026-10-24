@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SILSA: fatias deslizantes preservam topologia e cortam 98% dos tokens na geração 3D de alta resolução — arXiv em 5</title>
+<meta name="description" content="Gerar objetos 3D detalhados a partir de uma imagem exige representar milhares de voxels. SILSA fatia o volume em planos sobrepostos, preserva buracos e estruturas finas, e reduz a sequência de tokens de dezenas de milhares para 384.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SILSA: fatias deslizantes preservam topologia e cortam 98% dos tokens na geração 3D de alta resolução">
+<meta property="og:description" content="Gerar objetos 3D detalhados a partir de uma imagem exige representar milhares de voxels. SILSA fatia o volume em planos sobrepostos, preserva buracos e estruturas finas, e reduz a sequência de tokens de dezenas de milhares para 384.">
+<meta property="og:image" content="../../assets/papers/2610.02201/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Imagem</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.02201" rel="noopener">arXiv:2610.02201</a>
+    </div>
+    <h1><span class="s" data-s="t">SILSA: fatias deslizantes preservam topologia e cortam 98% dos tokens na geração 3D de alta resolução</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Gerar objetos 3D detalhados a partir de uma imagem exige representar milhares de voxels.</span> <span class="s" data-s="d-s1">SILSA fatia o volume em planos sobrepostos, preserva buracos e estruturas finas, e reduz a sequência de tokens de dezenas de milhares para 384.</span></p>
+    <p class="byline">
+      <span>Yu et al.</span>
+      <span>10 min de leitura</span>
+<span>01/10/2026</span>    </p>
+    <div class="listen" data-article="2610.02201" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=ncIiOEdz6rU" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema: voxels fragmentam a superfície e explodem o custo</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Modelos generativos 3D recentes aprenderam a sintetizar objetos completos a partir de uma imagem ou prompt de texto.</span> <span class="s" data-s="b0-p0-s1">A maioria codifica a forma em tokens latentes e treina transformers com difusão ou fluxo retificado para gerar geometria diretamente no espaço 3D.</span> <span class="s" data-s="b0-p0-s2">Mas representar alta resolução continua caro: grades de voxels densas crescem cubicamente com a resolução; tokenizadores esparsos, octrees e hierárquicos reduzem o custo modelando apenas regiões ocupadas ou de alto detalhe, mas o número de tokens ainda depende dos dados e pode explodir para objetos com suportes finos, muitas partes repetidas ou topologia complexa.</span></p><p><span class="s" data-s="b0-p1-s0">Alternativas compactas existem: latentes baseados em conjuntos de pontos, triplanos, primitivas geométricas.</span> <span class="s" data-s="b0-p1-s1">Elas mantêm a geração tratável, mas enfraquecem a correspondência direta entre um token e a estrutura geométrica local que ele deve preservar.</span> <span class="s" data-s="b0-p1-s2">O resultado: o modelo pode atingir baixo erro de superfície ou de renderização e ainda assim produzir uma forma estruturalmente errada—preenchendo um buraco, quebrando um suporte, fundindo dois componentes próximos.</span></p><p><span class="s" data-s="b0-p2-s0">Esse dilema é fundamental: você escolhe entre representações caras que fragmentam a superfície em muitos tokens locais ou representações compactas que perdem a ancoragem espacial necessária para preservar conectividade, buracos e partes finas.</span> <span class="s" data-s="b0-p2-s1">SILSA, desenvolvido na Universidade de Illinois Urbana-Champaign, propõe uma terceira via: fatiar o volume em planos sobrepostos ao longo dos três eixos canônicos e codificar cada fatia em um único token latente.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.02201/figure1.webp" alt="Dada uma imagem, SILSA gera malhas 3D de alta resolução preservando estruturas finas, buracos, componentes repetidos e conectividade de longo alcance—tudo a partir de 384 tokens latentes de fatias sobrepostas nos eixos x, y e z." loading="lazy">
+          <figcaption>
+            Dada uma imagem, SILSA gera malhas 3D de alta resolução preservando estruturas finas, buracos, componentes repetidos e conectividade de longo alcance—tudo a partir de 384 tokens latentes de fatias sobrepostas nos eixos x, y e z.
+            <span class="source">Figura 1 do paper · Yu et al., arXiv:2610.02201</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">A ideia: fatias capturam topologia de uma região inteira em um token</span></h2>
+<p><span class="s" data-s="b2-p0-s0">A intuição central é que uma fatia—um plano com pequena espessura—captura a topologia de uma região planar inteira em uma unidade coerente.</span> <span class="s" data-s="b2-p0-s1">Representações existentes fragmentam essa estrutura em muitas células locais ou a comprimem em tokens com correspondência espacial enfraquecida.</span> <span class="s" data-s="b2-p0-s2">Uma sequência de fatias preserva continuidade ao longo do eixo de corte, expondo diretamente como componentes conectados, buracos e fronteiras de partes evoluem em cada direção canônica.</span></p><p><span class="s" data-s="b2-p1-s0">SILSA decompõe a forma em três sequências de fatias sobrepostas ao longo dos eixos x, y e z. Para N posições de fatia por eixo, o gerador opera sobre apenas 3N tokens latentes, independentemente da ocupação do objeto, área de superfície ou complexidade de partes.</span> <span class="s" data-s="b2-p1-s1">Os autores usam N=128, totalizando 384 tokens.</span> <span class="s" data-s="b2-p1-s2">Como cada token resume uma janela de profundidade local em vez de um plano infinitesimal, a representação permanece compacta enquanto ainda expõe partes finas, superfícies próximas e pequenas aberturas ao modelo.</span></p><p><span class="s" data-s="b2-p2-s0">As três sequências fornecem vistas transversais complementares do mesmo objeto, dando ao SILSA uma sequência latente curta e espacialmente indexada para geração 3D de alta resolução.</span> <span class="s" data-s="b2-p2-s1">Essa estrutura fixa dispensa a etapa separada de predição de voxels ativos que pipelines em múltiplos estágios exigem.</span></p>        <h2><span class="s" data-s="b3-h">SliceVAE: codificação por janela deslizante e decodificação volumétrica esparsa</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O SliceVAE mapeia formas 3D para latentes de fatias multi-eixo compactos e os decodifica em malha de alta resolução.</span> <span class="s" data-s="b3-p0-s1">O encoder agrega pontos de superfície com janelas deslizantes sobrepostas ao longo dos três eixos canônicos, produzindo um conjunto compacto de tokens que preserva estrutura transversal local.</span></p><p><span class="s" data-s="b3-p1-s0">Formalmente, dada uma malha 3D, o encoder amostra uma nuvem de pontos P com normais e particiona a caixa delimitadora em N=128 bins por eixo.</span> <span class="s" data-s="b3-p1-s1">Para o bin k ao longo do eixo j, a janela reúne todos os pontos dentro de w/2 bins de cada lado.</span> <span class="s" data-s="b3-p1-s2">Cada bin pode conter poucos pontos; para fornecer contexto geométrico suficiente, o encoder usa uma janela deslizante de w bins vizinhos.</span> <span class="s" data-s="b3-p1-s3">Os autores adotam o paradigma de pooling local de trabalhos anteriores—agregando features de nuvem de pontos via PointNet—mas substituem voxels estruturados por fatias planares.</span></p><p><span class="s" data-s="b3-p2-s0">O decoder popula uma grade volumétrica de features a partir desses tokens e reconstrói geometria através de upsampling volumétrico esparso.</span> <span class="s" data-s="b3-p2-s1">As três sequências de fatias fornecem evidência geométrica complementar que o decoder funde para reconstrução fiel.</span> <span class="s" data-s="b3-p2-s2">O processo termina com Dual Marching Cubes, extraindo malha de alta resolução (256×256×256) a partir da grade refinada.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.02201/figure2.webp" alt="Arquitetura do SILSA: encoder de janela deslizante agrega pontos em fatias sobrepostas nos três eixos; transformer de fluxo retificado gera latentes condicionado na imagem; Volumetric Anchor Lattice coordena as três correntes direcionais; decoder esparso reconstrói malha de alta qualidade com supervisão topológica." loading="lazy">
+          <figcaption>
+            Arquitetura do SILSA: encoder de janela deslizante agrega pontos em fatias sobrepostas nos três eixos; transformer de fluxo retificado gera latentes condicionado na imagem; Volumetric Anchor Lattice coordena as três correntes direcionais; decoder esparso reconstrói malha de alta qualidade com supervisão topológica.
+            <span class="source">Figura 2 do paper · Yu et al., arXiv:2610.02201</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Supervisão topológica: diagramas de persistência e transições de Betti</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Para preservar correção estrutural, SILSA introduz perda de topologia no nível de fatia que supervisiona seções transversais decodificadas.</span> <span class="s" data-s="b5-p0-s1">A perda combina dois componentes: correspondência de diagramas de persistência e alinhamento de transições de Betti entre fatias vizinhas.</span></p><p><span class="s" data-s="b5-p1-s0">Diagramas de persistência capturam quando componentes conectados e buracos aparecem e desaparecem ao longo de uma filtragem—neste caso, ao longo da sequência de fatias.</span> <span class="s" data-s="b5-p1-s1">A perda de persistência penaliza discrepâncias entre os diagramas da fatia decodificada e da fatia ground-truth, forçando o modelo a preservar a estrutura topológica em cada seção transversal.</span></p><p><span class="s" data-s="b5-p2-s0">Transições de Betti medem como o número de componentes conectados (Betti-0) e buracos (Betti-1) muda de uma fatia para a vizinha.</span> <span class="s" data-s="b5-p2-s1">A perda de transição de Betti alinha essas mudanças entre fatias consecutivas, garantindo que o decoder não introduza ou remova componentes ou buracos de forma inconsistente ao longo do eixo de corte.</span> <span class="s" data-s="b5-p2-s2">Juntas, essas perdas topológicas supervisionam a continuidade transversal e a coerência estrutural global.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b6-t">Betti error: contando componentes e buracos</span></h3>
+          <p><span class="s" data-s="b6-c-s0">Betti-0 conta componentes conectados; Betti-1 conta buracos (loops independentes).</span> <span class="s" data-s="b6-c-s1">Betti error mede a discrepância média entre esses números na forma gerada e na forma alvo.</span> <span class="s" data-s="b6-c-s2">Reduzir Betti error de 1.743 para 1.582 significa que o modelo preserva melhor a topologia—menos componentes fundidos, menos buracos preenchidos ou criados incorretamente.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b7-h">Geração com fluxo retificado e Volumetric Anchor Lattice</span></h2>
+<p><span class="s" data-s="b7-p0-s0">SILSA treina um transformer de fluxo retificado para gerar latentes de fatias condicionado em uma imagem de entrada.</span> <span class="s" data-s="b7-p0-s1">Como o layout de fatias é fixo, a geração não requer estágio separado de predição de voxels ativos.</span> <span class="s" data-s="b7-p0-s2">Em vez disso, o modelo introduz o Volumetric Anchor Lattice (VAL), uma memória espacial compartilhada que permite tokens de fatias de diferentes eixos lerem e escreverem planos âncora alinhados aos eixos durante o denoising.</span></p><p><span class="s" data-s="b7-p1-s0">Cada token de fatia lê do plano âncora associado ao seu eixo e posição de profundidade, processa a informação através de blocos transformer, e escreve de volta no plano âncora.</span> <span class="s" data-s="b7-p1-s1">Esse mecanismo permite que evidência alinhada aos eixos x, y e z se acumule em um workspace 3D compartilhado e forme uma única forma coerente.</span> <span class="s" data-s="b7-p1-s2">O VAL coordena as três correntes direcionais de fatias, garantindo que o gerador produza latentes consistentes que o decoder pode reconstruir em geometria globalmente coerente.</span></p><p><span class="s" data-s="b7-p2-s0">O transformer é condicionado em embeddings de imagem extraídos por um encoder 2D.</span> <span class="s" data-s="b7-p2-s1">O fluxo retificado interpola linearmente entre ruído (t=T) e dados (t=0), e o modelo aprende a prever a direção do fluxo em cada passo de tempo.</span> <span class="s" data-s="b7-p2-s2">Essa formulação de estágio único é mais simples e eficiente que pipelines em múltiplos estágios que primeiro preveem estrutura ativa e depois sintetizam geometria local.</span></p>        <h2><span class="s" data-s="b8-h">Resultados: qualidade superior com 98% menos tokens</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Os autores treinaram SILSA no Trellis-500K e avaliaram em 200 assets do Toys4K e 50 imagens in-the-wild, sem sobreposição com o treino.</span> <span class="s" data-s="b8-p0-s1">A comparação de geração image-to-3D inclui ShapeE, LN3Diff, Direct3D, 3DTopia-XL, InstantMesh, GaussianAnything, XCube, Dora, SAR3D, Trellis e SparseFlex.</span> <span class="s" data-s="b8-p0-s2">Métricas: CLIP similarity (alinhamento entrada-saída), FD e KD (qualidade generativa), PSNR e LPIPS (fidelidade visual), COV e MMD (fidelidade distribucional), Betti error (correção topológica).</span></p><p><span class="s" data-s="b8-p1-s0">SILSA alcança o melhor FD, PSNR, coverage e MMD, igualando o melhor KD e LPIPS.</span> <span class="s" data-s="b8-p1-s1">Comparado ao SparseFlex, o baseline mais forte, SILSA melhora PSNR de 30.12 para 32.74 (ganho relativo de 8.7%), aumenta coverage de 73.12% para 79.08% (melhoria absoluta de 5.96 pontos), e reduz Betti error em 9.2%.</span> <span class="s" data-s="b8-p1-s2">Esses ganhos indicam que as formas geradas estão mais próximas da distribuição alvo, preservam geometria de maior fidelidade e mantêm diversidade estrutural mais ampla.</span></p><p><span class="s" data-s="b8-p2-s0">Embora SparseFlex atinja CLIP score ligeiramente superior, SILSA obtém métricas geométricas e distribucionais substancialmente melhores, sugerindo que a representação de latentes de fatias melhora fidelidade 3D sem sacrificar alinhamento com a imagem.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.02201/table1.webp" alt="Comparação de geração image-to-3D: SILSA supera métodos anteriores em qualidade generativa (FD), fidelidade visual (PSNR), cobertura distribucional (COV) e correção topológica (Betti error), enquanto usa 384 tokens fixos." loading="lazy">
+          <figcaption>
+            Comparação de geração image-to-3D: SILSA supera métodos anteriores em qualidade generativa (FD), fidelidade visual (PSNR), cobertura distribucional (COV) e correção topológica (Betti error), enquanto usa 384 tokens fixos.
+            <span class="source">Tabela 1 do paper · Yu et al., arXiv:2610.02201</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">Reconstrução do VAE: melhor geometria e topologia</span></h2>
+<p><span class="s" data-s="b10-p0-s0">A avaliação de reconstrução do SliceVAE usa Chamfer Distance (CD), F-Score em thresholds de 0.01 e 0.005, IoU e Betti error.</span> <span class="s" data-s="b10-p0-s1">Betti error é calculado como a discrepância média de componentes conectados e buracos no conjunto de teste.</span> <span class="s" data-s="b10-p0-s2">SILSA supera consistentemente tokenizadores 3D fortes em todas as métricas.</span></p><p><span class="s" data-s="b10-p1-s0">Comparado ao SparseFlex, SILSA reduz CD de 0.61 para 0.59, melhora F-Score@0.01 de 96.18 para 96.79, F-Score@0.005 de 83.62 para 84.03, e aumenta IoU de 92.54 para 93.01.</span> <span class="s" data-s="b10-p1-s1">Mais importante, Betti error diminui de 1.743 para 1.582—redução relativa de 9.2%—mostrando que o SliceVAE preserva melhor componentes conectados e buracos, não apenas melhora fidelidade de superfície.</span></p><p><span class="s" data-s="b10-p2-s0">Essa melhoria topológica é o objetivo central do paper: não basta reconstruir superfícies com baixo erro; é preciso preservar a estrutura—buracos, suportes finos, conectividade de longo alcance.</span> <span class="s" data-s="b10-p2-s1">A supervisão topológica no nível de fatia cumpre essa promessa.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.02201/figure4.webp" alt="Comparação visual de reconstrução: SILSA preserva melhor detalhes finos, estruturas finas e geometria complexa que Dora, XCube, Trellis e SparseFlex. Mapas de normais (canto superior direito) e mapas de erro de superfície (canto inferior direito) destacam as diferenças." loading="lazy">
+          <figcaption>
+            Comparação visual de reconstrução: SILSA preserva melhor detalhes finos, estruturas finas e geometria complexa que Dora, XCube, Trellis e SparseFlex. Mapas de normais (canto superior direito) e mapas de erro de superfície (canto inferior direito) destacam as diferenças.
+            <span class="source">Figura 4 do paper · Yu et al., arXiv:2610.02201</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b12-h">Eficiência: 384 tokens versus dezenas de milhares</span></h2>
+<p><span class="s" data-s="b12-p0-s0">SILSA usa apenas 384 tokens—três sequências de 128 fatias.</span> <span class="s" data-s="b12-p0-s1">Isso é mais de 98% menos tokens que Trellis, XCube e SparseFlex, cujos contadores de tokens variam com os dados.</span> <span class="s" data-s="b12-p0-s2">Métodos de comprimento variável reportam contagens médias: os autores não fornecem o número exato na tabela, mas destacam a redução drástica.</span> <span class="s" data-s="b12-p0-s3">SILSA usa 70.0% menos tokens que o baseline mais compacto seguinte e mais de 98% menos que tokenizadores esparsos ou hierárquicos.</span></p><p><span class="s" data-s="b12-p1-s0">Essa redução se traduz diretamente em menor custo computacional.</span> <span class="s" data-s="b12-p1-s1">Comparado ao Dora, SILSA reduz memória de treino de 14.6GB para 8.7GB (redução de 40.4%), tempo de treino por iteração de 0.89s para 0.60s, e tempo de inferência de 1.41s para 0.58s (redução de 58.5%).</span> <span class="s" data-s="b12-p1-s2">Apesar da grande redução no comprimento da sequência, SILSA alcança a melhor qualidade de reconstrução.</span></p><p><span class="s" data-s="b12-p2-s0">A representação compacta também simplifica o pipeline: geração de estágio único, sem predição separada de voxels ativos.</span> <span class="s" data-s="b12-p2-s1">Isso torna o treinamento mais estável e a inferência mais rápida, removendo a complexidade de coordenar múltiplos estágios.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b13-t">Por que fatias são mais eficientes que voxels?</span></h3>
+          <p><span class="s" data-s="b13-c-s0">Voxels fragmentam a superfície: cada célula ocupada vira um token, e o número cresce com a área de superfície e complexidade.</span> <span class="s" data-s="b13-c-s1">Fatias agrupam toda a geometria em uma região planar em um único token, independentemente de quantos voxels essa região conteria.</span> <span class="s" data-s="b13-c-s2">O resultado: sequência fixa de 384 tokens para qualquer forma, em vez de dezenas de milhares de tokens variáveis.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b14-h">O que o paper não mostra</span></h2>
+<p><span class="s" data-s="b14-p0-s0">SILSA foi treinado e avaliado no Trellis-500K, um dataset de objetos 3D sintéticos.</span> <span class="s" data-s="b14-p0-s1">A avaliação de geração usa 200 assets do Toys4K e 50 imagens in-the-wild, mas não fica claro quão diversos são esses 50 exemplos ou se cobrem categorias desafiadoras como cenas complexas, objetos articulados ou formas orgânicas com topologia muito rica.</span></p><p><span class="s" data-s="b14-p1-s0">O paper não reporta tempo de treinamento total, número de GPUs ou custo computacional absoluto—apenas comparações relativas de memória e tempo por iteração.</span> <span class="s" data-s="b14-p1-s1">Também não discute como o método escala para resoluções ainda maiores (512³ ou 1024³) ou para objetos com topologia extremamente complexa (centenas de buracos, milhares de componentes).</span></p><p><span class="s" data-s="b14-p2-s0">A escolha de N=128 fatias por eixo e janela deslizante de largura w não é ablacionada em detalhe: não sabemos o impacto de N=64 ou N=256, nem de janelas maiores ou menores.</span> <span class="s" data-s="b14-p2-s1">A supervisão topológica é inovadora, mas o paper não compara seu impacto isolado contra outras formas de regularização estrutural.</span></p><p><span class="s" data-s="b14-p3-s0">Finalmente, SILSA gera malhas, não representações implícitas contínuas ou campos neurais.</span> <span class="s" data-s="b14-p3-s1">Isso limita a aplicação a casos onde malhas explícitas são desejadas, mas pode não ser ideal para renderização neural ou edição interativa que se beneficia de representações implícitas.</span></p>        <h2><span class="s" data-s="b15-h">Por que isso importa</span></h2>
+<p><span class="s" data-s="b15-p0-s0">Geração 3D de alta resolução está se tornando viável, mas a maioria dos métodos ainda luta para preservar estrutura fina: suportes quebram, buracos são preenchidos, componentes próximos se fundem.</span> <span class="s" data-s="b15-p0-s1">Esses erros topológicos são críticos para aplicações práticas—design de produtos, fabricação, simulação física—onde a forma gerada precisa ser estruturalmente correta, não apenas visualmente plausível.</span></p><p><span class="s" data-s="b15-p1-s0">SILSA mostra que é possível melhorar fidelidade topológica e reduzir drasticamente o custo de geração ao mesmo tempo.</span> <span class="s" data-s="b15-p1-s1">A ideia de fatiar o volume em planos sobrepostos e codificar cada fatia em um token latente é simples, mas eficaz: preserva continuidade transversal, expõe estrutura topológica ao modelo, e mantém a sequência de tokens fixa e curta.</span></p><p><span class="s" data-s="b15-p2-s0">A supervisão topológica no nível de fatias—diagramas de persistência e transições de Betti—é uma contribuição técnica importante.</span> <span class="s" data-s="b15-p2-s1">Ela vai além de perdas de superfície e volumétricas, supervisionando diretamente a correção estrutural.</span> <span class="s" data-s="b15-p2-s2">Essa abordagem pode ser adaptada para outras representações e tarefas onde topologia importa.</span></p><p><span class="s" data-s="b15-p3-s0">Do ponto de vista prático, reduzir tokens de dezenas de milhares para 384 torna geração 3D de alta resolução mais acessível: menos memória, menos tempo de treino, menos tempo de inferência.</span> <span class="s" data-s="b15-p3-s1">Isso abre caminho para modelos maiores, datasets maiores e aplicações interativas onde latência importa.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">SILSA representa formas 3D com 384 tokens de fatias sobrepostas nos três eixos, reduzindo em 98% o número de tokens comparado a métodos esparsos e hierárquicos.</span></li><li><span class="s" data-s="k1">Supervisão topológica com diagramas de persistência e transições de Betti reduz Betti error em 9.2%, preservando buracos, suportes finos e conectividade de longo alcance.</span></li><li><span class="s" data-s="k2">Melhora PSNR em 8.7% e coverage em 5.96 pontos sobre o baseline mais forte, enquanto reduz memória de treino em 40.4% e tempo de inferência em 58.5%.</span></li><li><span class="s" data-s="k3">Volumetric Anchor Lattice coordena as três correntes de fatias direcionais em um workspace 3D compartilhado, permitindo geração de estágio único sem predição separada de voxels ativos.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.02201" rel="noopener">SILSA: Sliding-Window Slice Latents for Topology-Preserving High-Resolution 3D Generation</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.02201" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reprodutibilidade Médica com LLMs: O Benchmark SEER-Repro e Análise de Robustez — arXiv em 5</title>
+<meta name="description" content="Um estudo testa se agentes de IA conseguem reproduzir 77,4% dos achados de 20 artigos epidemiológicos do SEER e identificar sensibilidade analítica em 9,5% dos casos.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Reprodutibilidade Médica com LLMs: O Benchmark SEER-Repro e Análise de Robustez">
+<meta property="og:description" content="Um estudo testa se agentes de IA conseguem reproduzir 77,4% dos achados de 20 artigos epidemiológicos do SEER e identificar sensibilidade analítica em 9,5% dos casos.">
+<meta property="og:image" content="../../assets/papers/2610.23845/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Agentes</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.23845" rel="noopener">arXiv:2610.23845</a>
+    </div>
+    <h1><span class="s" data-s="t">Reprodutibilidade Médica com LLMs: O Benchmark SEER-Repro e Análise de Robustez</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um estudo testa se agentes de IA conseguem reproduzir 77,4% dos achados de 20 artigos epidemiológicos do SEER e identificar sensibilidade analítica em 9,5% dos casos.</span></p>
+    <p class="byline">
+      <span>Liu et al.</span>
+      <span>5 min de leitura</span>
+<span>16/10/2026</span>    </p>
+    <div class="listen" data-article="2610.23845" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=jdSTIV2n2Dk" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Reprodutibilidade na Epidemiologia</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A base da descoberta científica repousa na reprodutibilidade e na robustez analítica.</span> <span class="s" data-s="b0-p0-s1">No entanto, avaliar essas propriedades exige esforço manual intenso e especializado.</span> <span class="s" data-s="b0-p0-s2">Meta-análises e revisões sistemáticas frequentemente precisam reproduzir experimentos ou reanalisar dados com especificações alternativas, um processo limitado pelo custo e pela escassez de expertise.</span></p><p><span class="s" data-s="b0-p1-s0">Estudos em psicologia e ciências sociais já demonstraram que equipes independentes podem chegar a conclusões conflitantes ao analisar a mesma hipótese e conjunto de dados.</span> <span class="s" data-s="b0-p1-s1">A questão crítica é se essa sensibilidade às escolhas analíticas se estende à medicina, onde as decisões clínicas afetam diretamente a vida dos pacientes.</span></p><p><span class="s" data-s="b0-p2-s0">Neste contexto, modelos de linguagem de grande escala (LLMs) oferecem uma oportunidade de explorar essa diversidade analítica em escala.</span> <span class="s" data-s="b0-p2-s1">Antes de confiar que IAs produzem novos resultados científicos, elas devem primeiro provar sua capacidade de reproduzir estudos existentes e avaliar sua robustez.</span></p>        <h2><span class="s" data-s="b1-h">Introdução ao SEER-Repro</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Os autores apresentam o SEER-Repro, um benchmark composto por 20 estudos publicados que utilizam a base de dados Surveillance, Epidemiology, and End Results (SEER).</span> <span class="s" data-s="b1-p0-s1">Mantida pelo National Cancer Institute desde 1973, o SEER integra registros populacionais sobre demografia, características tumorais, tratamento e sobrevivência no câncer.</span></p><p><span class="s" data-s="b1-p1-s0">O banco de dados é massivo: mais de 25.000 publicações usaram o SEER em análises primárias entre 1975 e 2024.</span> <span class="s" data-s="b1-p1-s1">A escala fornece perguntas realistas de alto impacto, mas as diferenças nas definições de dados e análises, como cobertura do registro e seleção de coortes, tornam a reconstrução fiel desafiadora.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.23845/figure1.webp" alt="Fluxograma do pipeline de avaliação de robustez assistida por IA. O processo extrai afirmações atômicas, reproduz os achados e testa escolhas analíticas alternativas para gerar evidências que orientam a revisão por especialistas." loading="lazy">
+          <figcaption>
+            Fluxograma do pipeline de avaliação de robustez assistida por IA. O processo extrai afirmações atômicas, reproduz os achados e testa escolhas analíticas alternativas para gerar evidências que orientam a revisão por especialistas.
+            <span class="source">Figura 1 do paper · Liu et al., arXiv:2610.23845</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Metodologia: O Pipeline de Reprodução</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O pipeline começa com a extração de achados empíricos de cada artigo.</span> <span class="s" data-s="b3-p0-s1">Cada achado é decomposto em afirmações atômicas, onde cada uma envolve um alvo numérico ou qualitativo específico.</span> <span class="s" data-s="b3-p0-s2">Por exemplo, uma afirmação pode ser &#39;a idade média ao diagnóstico foi 63 anos&#39;, separada de outras métricas do mesmo achado.</span></p><p><span class="s" data-s="b3-p1-s0">Um agente de codificação recebe o artigo original, os dados e a documentação para reproduzir cada afirmação.</span> <span class="s" data-s="b3-p1-s1">Ele identifica os dados relevantes, escreve código de análise e o executa, gerando evidências.</span> <span class="s" data-s="b3-p1-s2">Um agente de verificação então compara o resultado reproduzido com o valor original, classificando-o como &#39;reproduzido&#39; (erro relativo ≤5%), &#39;próximo&#39; (erro ≤10%) ou &#39;não reproduzido&#39;.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b4-t">Critério de Sucesso</span></h3>
+          <p><span class="s" data-s="b4-c-s0">Para alvos numéricos, uma afirmação é considerada reproduzida se o erro relativo for de no máximo 5%.</span> <span class="s" data-s="b4-c-s1">Erros entre 5% e 10% contam como &#39;próximo&#39;.</span> <span class="s" data-s="b4-c-s2">Afirmações qualitativas são julgadas apenas como reproduzidas ou não.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b5-h">Análise de Robustez Analítica</span></h2>
+<p><span class="s" data-s="b5-p0-s0">A reprodutibilidade é apenas o primeiro passo.</span> <span class="s" data-s="b5-p0-s1">O pipeline também avalia a robustez analítica através de três métodos complementares.</span> <span class="s" data-s="b5-p0-s2">O primeiro gera relatórios de análise independentes para ver se conclusões contraditórias emergem da mesma pergunta de pesquisa.</span></p><p><span class="s" data-s="b5-p1-s0">O segundo método utiliza um &#39;Agente de Perturbação&#39;.</span> <span class="s" data-s="b5-p1-s1">Este agente identifica escolhas analíticas subjacentes aos achados reproduzidos, propõe alternativas defensáveis e reexecuta a análise.</span> <span class="s" data-s="b5-p1-s2">O objetivo é determinar se essas escolhas afetam a conclusão final.</span></p><p><span class="s" data-s="b5-p2-s0">As consequências são pontuadas em uma escala de 1 a 9.</span> <span class="s" data-s="b5-p2-s1">Pontuações altas (7-9) indicam mudanças diretas nas conclusões principais, sinalizando que o achado original é sensível a escolhas metodológicas razoáveis.</span></p>        <h2><span class="s" data-s="b6-h">Desafios na Construção do Benchmark</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Reconstruir estudos históricos do SEER enfrenta dois desafios principais.</span> <span class="s" data-s="b6-p0-s1">Primeiro, a disponibilidade de dados históricos mudou; por exemplo, Detroit foi excluído de releases posteriores, alterando a cobertura dos registros SEER 9, 13 e 18.</span> <span class="s" data-s="b6-p0-s2">O estudo focou no SEER 9 para manter a cobertura histórica completa.</span></p><p><span class="s" data-s="b6-p1-s0">Segundo, os dados e a documentação estão fragmentados.</span> <span class="s" data-s="b6-p1-s1">Estudos epidemiológicos frequentemente dependem de dados populacionais externos e manuais específicos.</span> <span class="s" data-s="b6-p1-s2">A curadoria desses recursos exigiu interação iterativa com especialistas, pois a identificação do que faltava só ocorria durante a reconstrução das análises.</span></p>        <h2><span class="s" data-s="b7-h">Resultados: Reprodução de Afirmações</span></h2>
+<p><span class="s" data-s="b7-p0-s0">O benchmark SEER-Repro inclui 20 artigos, totalizando 2.190 afirmações atômicas.</span> <span class="s" data-s="b7-p0-s1">Utilizando o modelo GPT-5.6 Sol via Codex, o agente de reprodução recuperou 1.694 afirmações com sucesso (77,4%).</span> <span class="s" data-s="b7-p0-s2">Outras 76 foram classificadas como &#39;próximas&#39; (3,5%), enquanto 420 (19,2%) não foram reproduzidas.</span></p><p><span class="s" data-s="b7-p1-s0">Os erros de reprodução foram analisados para identificar a causa raiz.</span> <span class="s" data-s="b7-p1-s1">A maioria dos fracassos (59,8%) deveu-se a problemas de dados, como indisponibilidade histórica ou inconsistências nas tabelas.</span> <span class="s" data-s="b7-p1-s2">Outras causas incluíram análises insuficientemente especificadas (11,2%), aproximações de software indisponível (6,7%) e erros do próprio agente (11,4%).</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.23845/table1.webp" alt="Tabela de resultados de reprodução atômica. O agente reproduziu 77,4% das afirmações nos 20 artigos do benchmark SEER-Repro usando GPT-5.6 Sol, com detalhes sobre falhas e sucessos." loading="lazy">
+          <figcaption>
+            Tabela de resultados de reprodução atômica. O agente reproduziu 77,4% das afirmações nos 20 artigos do benchmark SEER-Repro usando GPT-5.6 Sol, com detalhes sobre falhas e sucessos.
+            <span class="source">Tabela 1 do paper · Liu et al., arXiv:2610.23845</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Resultados: Detecção de Sensibilidade</span></h2>
+<p><span class="s" data-s="b9-p0-s0">O pipeline de robustez identificou escolhas analíticas potencialmente consequential em 9,5% dos achados totalmente reproduzidos.</span> <span class="s" data-s="b9-p0-s1">Especificamente, 55 de 579 achados foram sinalizados para revisão de especialistas.</span></p><p><span class="s" data-s="b9-p1-s0">A análise manual de 10 casos sinalizados esclareceu que 9 não estabeleciam mudanças consequential sob alternativas defensáveis.</span> <span class="s" data-s="b9-p1-s1">No entanto, um caso foi identificado como um problema potencialmente consequential que requer investigação adicional.</span> <span class="s" data-s="b9-p1-s2">Isso valida a capacidade do sistema de filtrar ruído e destacar sinais reais.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.23845/figure3.webp" alt="Exemplos de pontuações de consequência do GPT-5.6 Sol. A sombra marca pontuações 7-9, indicando análises alternativas que alteraram as conclusões originais, validando a detecção de sensibilidade." loading="lazy">
+          <figcaption>
+            Exemplos de pontuações de consequência do GPT-5.6 Sol. A sombra marca pontuações 7-9, indicando análises alternativas que alteraram as conclusões originais, validando a detecção de sensibilidade.
+            <span class="source">Figura 3 do paper · Liu et al., arXiv:2610.23845</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b11-h">Limitações e Escopo</span></h2>
+<p><span class="s" data-s="b11-p0-s0">É crucial notar que o estudo não afirma que a IA substitui o julgamento humano.</span> <span class="s" data-s="b11-p0-s1">A sensibilidade a uma análise alternativa não invalida o estudo original; ela apenas sinaliza a necessidade de julgamento cuidadoso.</span> <span class="s" data-s="b11-p0-s2">O erro na reprodução pode refletir dados históricos indisponíveis, não falhas do modelo.</span></p><p><span class="s" data-s="b11-p1-s0">O benchmark é limitado a 20 estudos do SEER.</span> <span class="s" data-s="b11-p1-s1">Embora representativo da epidemiologia do câncer, a generalização para outras áreas médicas ou tipos de dados requer validação futura.</span> <span class="s" data-s="b11-p1-s2">Além disso, a dependência de documentação fragmentada e manuais específicos limita a automação total sem intervenção humana.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b12-t">Papel da IA na Ciência</span></h3>
+          <p><span class="s" data-s="b12-c-s0">A IA não produz novos resultados científicos neste contexto, mas atua como uma ferramenta de infraestrutura científica.</span> <span class="s" data-s="b12-c-s1">Ela automatiza a verificação de reprodutibilidade e testagem de robustez, permitindo que especialistas foquem seu tempo em questões que realmente importam.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b13-h">Conclusão</span></h2>
+<p><span class="s" data-s="b13-p0-s0">O SEER-Repro demonstra que agentes de IA podem apoiar a revisão científica reproduzindo achados e testando sua robustez de forma sistemática.</span> <span class="s" data-s="b13-p0-s1">Ao recuperar 77,4% das afirmações e priorizar 9,5% dos resultados para revisão, o pipeline oferece uma lista focada com evidências analíticas.</span></p><p><span class="s" data-s="b13-p1-s0">A longo prazo, tais verificações podem se tornar parte da infraestrutura científica, onde os achados publicados são reavaliados rotineiramente à medida que dados e métodos evoluem.</span> <span class="s" data-s="b13-p1-s1">Isso torna a revisão científica rigorosa mais acessível, mantendo o julgamento humano no centro do processo.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Agentes de IA reproduziram 77,4% de 2.190 afirmações atômicas em estudos de câncer usando dados do SEER.</span></li><li><span class="s" data-s="k1">O pipeline detectou 55 achados sensíveis a escolhas analíticas, sinalizando 9,5% dos resultados totalmente reproduzidos para revisão.</span></li><li><span class="s" data-s="k2">Erros de reprodução foram majoritariamente causados por disponibilidade histórica de dados, não falhas do modelo.</span></li><li><span class="s" data-s="k3">A IA atua como filtro para revisão por pares, priorizando análises que requerem julgamento humano especializado.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.23845" rel="noopener">AI-Driven Reproducibility and Analytical Robustness in Scientific Discovery</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.23845" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

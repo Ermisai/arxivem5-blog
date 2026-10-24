@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Benchmarking DAR-MGSM: O impacto da localização cultural no raciocínio matemático em árabe — arXiv em 5</title>
+<meta name="description" content="O paper DAR-MGSM revela que adaptar problemas matemáticos ao contexto cultural de dialetos árabes reduz a precisão de LLMs, expondo fragilidades que traduções literais escondem.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Benchmarking DAR-MGSM: O impacto da localização cultural no raciocínio matemático em árabe">
+<meta property="og:description" content="O paper DAR-MGSM revela que adaptar problemas matemáticos ao contexto cultural de dialetos árabes reduz a precisão de LLMs, expondo fragilidades que traduções literais escondem.">
+<meta property="og:image" content="../../assets/papers/2610.28607/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>LLMs</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.28607" rel="noopener">arXiv:2610.28607</a>
+    </div>
+    <h1><span class="s" data-s="t">Benchmarking DAR-MGSM: O impacto da localização cultural no raciocínio matemático em árabe</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">O paper DAR-MGSM revela que adaptar problemas matemáticos ao contexto cultural de dialetos árabes reduz a precisão de LLMs, expondo fragilidades que traduções literais escondem.</span></p>
+    <p class="byline">
+      <span>Mokh et al.</span>
+      <span>7 min de leitura</span>
+<span>20/10/2026</span>    </p>
+    <div class="listen" data-article="2610.28607" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=ZBRCgNCqLYY" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Desafio da Diglossia Árabe em Benchmarks de LLMs</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Grandes modelos de linguagem (LLMs) demonstraram desempenho robusto em tarefas complexas de raciocínio matemático em idiomas ricos em recursos, como inglês e francês.</span> <span class="s" data-s="b0-p0-s1">No entanto, essa capacidade não se estende consistentemente para idiomas de baixo recurso ou aqueles com múltiplas variantes dialetais.</span> <span class="s" data-s="b0-p0-s2">O árabe é um exemplo proeminente: apesar de sua rica diversidade dialetal, a maioria dos benchmarks existentes foca apenas no Árabe Padrão Moderno (MSA).</span></p><p><span class="s" data-s="b0-p1-s0">Essa concentração no MSA é compreensível, pois livros didáticos e materiais educacionais no mundo árabe são escritos nessa norma.</span> <span class="s" data-s="b0-p1-s1">Contudo, na prática educacional, os professores utilizam extensivamente dialetos árabes (DA) para instrução.</span> <span class="s" data-s="b0-p1-s2">Estudos documentam o uso extensivo do dialeto em aulas de ciências e matemática para explicar conceitos, enquanto o MSA permanece nos livros.</span> <span class="s" data-s="b0-p1-s3">Essa natureza diglótica do árabe representa um desafio crítico para a avaliação de LLMs.</span></p><p><span class="s" data-s="b0-p2-s0">Benchmarks que focam apenas no MSA fornecem apenas uma visão parcial das capacidades de raciocínio matemático em árabe.</span> <span class="s" data-s="b0-p2-s1">Para preencher essa lacuna, os autores do paper DAR-MGSM (Dialectal Arabic Multilingual Grade School Math Benchmark) desenvolveram um benchmark que reflete as condições reais da sala de aula no mundo árabe.</span> <span class="s" data-s="b0-p2-s2">O objetivo é investigar os vieses dos LLMs entre o MSA e as variedades dialetais do árabe.</span></p>        <h2><span class="s" data-s="b1-h">Introduzindo o DAR-MGSM: Tradução vs. Localização Cultural</span></h2>
+<p><span class="s" data-s="b1-p0-s0">O DAR-MGSM é o primeiro benchmark manualmente curado para avaliar o raciocínio matemático de nível escolar em MSA e cinco grandes variedades dialetais: Egípcio (EGY), Emiradense (UAE), Jordaniano (JOR), Marroquino (MOR) e Saudita (KSA).</span> <span class="s" data-s="b1-p0-s1">O benchmark consiste em problemas matemáticos de palavras (MWPs) que exigem raciocínio em múltiplos passos.</span></p><p><span class="s" data-s="b1-p1-s0">Os autores distinguem duas dimensões ortogonais na adaptação dos problemas: tradução linguística e alinhamento de entidades culturais (localização).</span> <span class="s" data-s="b1-p1-s1">A tradução adapta apenas a linguagem do problema.</span> <span class="s" data-s="b1-p1-s2">A localização, por sua vez, adapta entidades culturalmente fundamentadas, como nomes próprios, locais, moedas e convenções numéricas.</span></p><p><span class="s" data-s="b1-p2-s0">Essa distinção permite um estudo controlado para verificar se variantes culturalmente alinhadas elicitem comportamentos diferentes nos modelos em comparação com traduções diretas.</span> <span class="s" data-s="b1-p2-s1">Problemas originais em inglês frequentemente usam entidades centradas nos EUA, como nomes ocidentais, localizações americanas ou moedas como dólares, o que pode tornar os textos alienígenas para usuários árabes e influenciar a interpretação natural dos problemas.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.28607/figure1.webp" alt="Exemplo de adaptação de um problema matemático: do inglês original para o MSA e, finalmente, para o dialeto egípcio com entidades localizadas (nomes, local, moeda)." loading="lazy">
+          <figcaption>
+            Exemplo de adaptação de um problema matemático: do inglês original para o MSA e, finalmente, para o dialeto egípcio com entidades localizadas (nomes, local, moeda).
+            <span class="source">Figura 1 do paper · Mokh et al., arXiv:2610.28607</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Metodologia: Construindo o Benchmark</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O benchmark foi construído aproveitando benchmarks existentes, traduzindo MWPs do inglês para o árabe.</span> <span class="s" data-s="b3-p0-s1">Os autores criaram duas versões paralelas: uma de tradução apenas e outra traduzida e culturalmente localizada.</span> <span class="s" data-s="b3-p0-s2">A versão localizada adapta entidades e referências para variedades regionais específicas.</span></p><p><span class="s" data-s="b3-p1-s0">Por exemplo, nomes como &#39;Mary&#39; podem ser substituídos por &#39;Fatema&#39;, e moedas como &#39;dólares&#39; por &#39;jardens egípcios&#39; ou &#39;dirhams&#39;.</span> <span class="s" data-s="b3-p1-s1">A localização aplica-se apenas a problemas que contêm entidades relevantes, permitindo comparações específicas para cada categoria de localização.</span> <span class="s" data-s="b3-p1-s2">Isso garante que a análise seja precisa e não generalizada demais.</span></p><p><span class="s" data-s="b3-p2-s0">O DAR-MGSM permite investigar não apenas a precisão agregada, mas também como a localização afeta o processo de raciocínio interno dos modelos.</span> <span class="s" data-s="b3-p2-s1">Os autores avaliaram onze modelos focados em árabe e multilingues, incluindo modelos de pequeno e grande porte, para medir a sensibilidade à localização.</span></p>        <h2><span class="s" data-s="b4-h">Resultados: A Fragilidade Exposta pela Localização</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Os resultados gerais mostram que a precisão dos modelos árabes e multilingues diminui quando entidades localizadas são introduzidas.</span> <span class="s" data-s="b4-p0-s1">Essa degradação pode variar dependendo do tamanho do modelo e do dialeto.</span> <span class="s" data-s="b4-p0-s2">A substituição individual de entidades mostra apenas pequenas mudanças em comparação com todas as substituições, mas o efeito cumulativo é significativo.</span></p><p><span class="s" data-s="b4-p1-s0">Embora a maioria dos modelos performe pior nos dados localizados, modelos de ponta como GPT-5.4 e Gemma-4 mostram apenas uma leve degradação.</span> <span class="s" data-s="b4-p1-s1">Observa-se que o desempenho melhora à medida que o tamanho do modelo aumenta.</span> <span class="s" data-s="b4-p1-s2">No entanto, a queda de precisão é consistente para todas as variedades árabes, revelando que a adição de localizações impacta a capacidade do modelo de responder corretamente aos MWPs.</span></p><p><span class="s" data-s="b4-p2-s0">Certos dialetos são mais vulneráveis.</span> <span class="s" data-s="b4-p2-s1">Os resultados revelam um desempenho consistentemente abaixo da média para os MWPs marroquinos, tanto na tradução quanto na localização.</span> <span class="s" data-s="b4-p2-s2">As maiores quedas de precisão entre a tradução apenas e a localização ocorrem para o MSA e o egípcio, com uma queda de 3,3 pontos cada.</span> <span class="s" data-s="b4-p2-s3">Isso indica que a localização pode introduzir desafios específicos para certos dialetos.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.28607/table3.webp" alt="Tabela de precisão dos 11 modelos nos problemas traduzidos (T) e localizados (L). Valores em negrito indicam a maior precisão. Sublinhados indicam diferença estatisticamente significativa." loading="lazy">
+          <figcaption>
+            Tabela de precisão dos 11 modelos nos problemas traduzidos (T) e localizados (L). Valores em negrito indicam a maior precisão. Sublinhados indicam diferença estatisticamente significativa.
+            <span class="source">Tabela 3 do paper · Mokh et al., arXiv:2610.28607</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b6-h">Significância Estatística e Sensibilidade dos Modelos</span></h2>
+<p><span class="s" data-s="b6-p0-s0">A significância estatística varia entre os diferentes modelos.</span> <span class="s" data-s="b6-p0-s1">Para modelos de ponta de grande porte, os resultados não são estatisticamente significativos.</span> <span class="s" data-s="b6-p0-s2">Isso não indica invariância, pois investigações mais aprofundadas mostram que os modelos não respondem incorretamente às mesmas perguntas nas versões traduzida e localizada.</span> <span class="s" data-s="b6-p0-s3">Em outras palavras, os erros são diferentes, mesmo que a taxa de erro geral seja similar.</span></p><p><span class="s" data-s="b6-p1-s0">Em modelos menores, como Nile-Chat e Atlas-Chat, as diferenças entre as versões traduzida e localizada são estatisticamente significativas.</span> <span class="s" data-s="b6-p1-s1">Isso pode indicar que esses modelos árabes centrados são mais sensíveis às diferenças regionais.</span> <span class="s" data-s="b6-p1-s2">Uma possível explicação é que a localização de MWPs pode introduzir desafios adicionais para esses modelos menores, resultando em degradação do desempenho.</span></p><p><span class="s" data-s="b6-p2-s0">Os resultados não fornecem um resultado unificado: enquanto alguns modelos mostram pouca mudança ao introduzir localizações, os MWPs que os modelos conseguem responder corretamente podem diferir.</span> <span class="s" data-s="b6-p2-s1">Isso destaca a complexidade da avaliação, onde a precisão agregada pode mascarar mudanças fundamentais no comportamento do modelo.</span></p>        <h2><span class="s" data-s="b7-h">Interpretabilidade Mecanística: O Que Acontece Dentro do Modelo</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Os autores conduziram uma análise de interpretabilidade mecanística, focando nos modelos Gemma-4, para entender o comportamento do modelo sob localização.</span> <span class="s" data-s="b7-p0-s1">Essa análise revela que variantes traduzidas e localizadas do mesmo MWP frequentemente induzem trajetórias de raciocínio internas distintas, mesmo quando a acurácia agregada permanece semelhante.</span></p><p><span class="s" data-s="b7-p1-s0">A análise de patching de ativação mostrou que o patching de origem recupera parcialmente o comportamento da condição de origem em exemplos discordantes.</span> <span class="s" data-s="b7-p1-s1">Isso sugere que a localização altera as representações internas do modelo, afetando como ele processa e raciocina sobre o problema.</span> <span class="s" data-s="b7-p1-s2">As mudanças nas trajetórias internas explicam por que os modelos podem falhar em problemas específicos quando localizados, mesmo que a precisão geral não caia drasticamente.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.28607/figure3.webp" alt="Gráfico de patching de ativação mostrando como a localização altera os caminhos internos de raciocínio do modelo Gemma-4, recuperando parcialmente o comportamento original." loading="lazy">
+          <figcaption>
+            Gráfico de patching de ativação mostrando como a localização altera os caminhos internos de raciocínio do modelo Gemma-4, recuperando parcialmente o comportamento original.
+            <span class="source">Figura 3 do paper · Mokh et al., arXiv:2610.28607</span>
+          </figcaption>
+        </figure>
+        <aside class="callout">
+          <h3><span class="s" data-s="b9-t">O Paradoxo da Precisão Similar</span></h3>
+          <p><span class="s" data-s="b9-c-s0">É crucial notar que a precisão agregada pode ser enganosa.</span> <span class="s" data-s="b9-c-s1">Modelos podem manter a mesma taxa de acerto em versões traduzidas e localizadas, mas responder a perguntas completamente diferentes.</span> <span class="s" data-s="b9-c-s2">A localização expõe fragilidades que traduções literais escondem, alterando as trajetórias internas de raciocínio.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b10-h">Limitações e Escopo do Estudo</span></h2>
+<p><span class="s" data-s="b10-p0-s0">O DAR-MGSM cobre cinco dialetos árabes e o MSA, com resultados limitados a essas variedades e aos modelos avaliados.</span> <span class="s" data-s="b10-p0-s1">A localização cultural concentra-se em nomes, locais, moedas e convenções numéricas, não cobrindo todos os aspectos do contexto cultural.</span> <span class="s" data-s="b10-p0-s2">A localização aplica-se apenas a problemas que contêm entidades relevantes, o que limita as comparações para categorias individuais de localização aos subconjuntos correspondentes.</span></p><p><span class="s" data-s="b10-p1-s0">Os autores reconhecem que a localização não captura toda a complexidade do contexto cultural.</span> <span class="s" data-s="b10-p1-s1">Além disso, o benchmark é derivado do MGSM-Rev2, distribuído sob a licença CC BY-SA 4.0.</span> <span class="s" data-s="b10-p1-s2">O estudo é intencionalmente focado em apoiar a pesquisa sobre raciocínio matemático em variedades árabes e contextos culturais, sem pretender ser uma avaliação definitiva de todos os aspectos da inteligência artificial multilingue.</span></p>        <h2><span class="s" data-s="b11-h">Implicações para o Desenvolvimento de IA Educacional</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Os resultados do DAR-MGSM destacam a importância de avaliar o raciocínio matemático através de variedades linguísticas e contextos culturais.</span> <span class="s" data-s="b11-p0-s1">A localização geralmente reduz a precisão e pode alterar substancialmente quais problemas os modelos resolvem corretamente.</span> <span class="s" data-s="b11-p0-s2">Isso tem implicações diretas para o desenvolvimento de IA educacional que funcione de forma confiável em diferentes idiomas e contextos locais.</span></p><p><span class="s" data-s="b11-p1-s0">Para melhorar o desempenho em dialetos, os desenvolvedores devem considerar não apenas a tradução, mas também a adaptação cultural.</span> <span class="s" data-s="b11-p1-s1">A sensibilidade dos modelos menores a variações regionais sugere que o fine-tuning ou o treinamento com dados localizados podem ser necessários para modelos de menor porte.</span> <span class="s" data-s="b11-p1-s2">Modelos de grande escala, como GPT-5.4 e Gemma-4, mostram maior resiliência, mas ainda apresentam degradação.</span></p><p><span class="s" data-s="b11-p2-s0">Os autores planejam expandir a cobertura do DAR-MGSM e investigar métodos para melhorar a consistência do raciocínio através de formulações de problemas equivalentes.</span> <span class="s" data-s="b11-p2-s1">Eles também pretendem estender essa abordagem de avaliação para outros cenários multilingues, apoiando o desenvolvimento de IA mais robusta e culturalmente consciente.</span></p>        <h2><span class="s" data-s="b12-h">Conclusão: Além da Tradução Literal</span></h2>
+<p><span class="s" data-s="b12-p0-s0">O paper DAR-MGSM fornece uma contribuição significativa para a avaliação de LLMs em idiomas de baixo recurso com diversidade dialetal.</span> <span class="s" data-s="b12-p0-s1">Ao introduzir a distinção entre tradução e localização cultural, os autores revelam que a adaptação cultural é um fator crítico para o desempenho dos modelos em tarefas de raciocínio matemático.</span></p><p><span class="s" data-s="b12-p1-s0">A queda de precisão observada na versão localizada, juntamente com as mudanças nas trajetórias internas de raciocínio, demonstra que a simples tradução não é suficiente para garantir a eficácia dos LLMs em contextos educacionais árabes.</span> <span class="s" data-s="b12-p1-s1">A localização expõe fragilidades que são essenciais para identificar e corrigir.</span></p><p><span class="s" data-s="b12-p2-s0">Este benchmark serve como um ponto de partida para pesquisas futuras em IA multilingue, enfatizando a necessidade de considerar não apenas a língua, mas também o contexto cultural.</span> <span class="s" data-s="b12-p2-s1">A avaliação rigorosa de dialetos é crucial para desenvolver sistemas de IA que sejam verdadeiramente inclusivos e eficazes em todo o mundo árabe e além.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">DAR-MGSM é o primeiro benchmark manual para raciocínio matemático em árabe, cobrindo MSA e cinco dialetos.</span></li><li><span class="s" data-s="k1">Modelos de linguagem perdem precisão quando problemas são localizados culturalmente, não apenas traduzidos.</span></li><li><span class="s" data-s="k2">Análises de interpretabilidade mostram que a localização altera trajetórias internas de raciocínio, mesmo com acurácia similar.</span></li><li><span class="s" data-s="k3">Modelos menores são mais sensíveis a variações culturais do que modelos de grande escala como GPT-5.4 e Gemma-4.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.28607" rel="noopener">Benchmarking Arabic Dialects for Math Problems</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.28607" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

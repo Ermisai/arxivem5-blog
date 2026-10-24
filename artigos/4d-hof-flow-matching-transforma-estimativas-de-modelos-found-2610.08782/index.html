@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>4D-HOF: flow matching transforma estimativas de modelos foundation em reconstruções precisas de interação mão-objeto — arXiv em 5</title>
+<meta name="description" content="Pesquisadores da Texas A&amp;M e NVIDIA propõem um método que parte de estimativas grosseiras de modelos foundation e usa flow matching condicional para refinar interações 4D mão-objeto em vídeos monoculares, eliminando otimização cara por sequência.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="4D-HOF: flow matching transforma estimativas de modelos foundation em reconstruções precisas de interação mão-objeto">
+<meta property="og:description" content="Pesquisadores da Texas A&amp;M e NVIDIA propõem um método que parte de estimativas grosseiras de modelos foundation e usa flow matching condicional para refinar interações 4D mão-objeto em vídeos monoculares, eliminando otimização cara por sequência.">
+<meta property="og:image" content="../../assets/papers/2610.08782/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Imagem</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.08782" rel="noopener">arXiv:2610.08782</a>
+    </div>
+    <h1><span class="s" data-s="t">4D-HOF: flow matching transforma estimativas de modelos foundation em reconstruções precisas de interação mão-objeto</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Pesquisadores da Texas A&amp;M e NVIDIA propõem um método que parte de estimativas grosseiras de modelos foundation e usa flow matching condicional para refinar interações 4D mão-objeto em vídeos monoculares, eliminando otimização cara por sequência.</span></p>
+    <p class="byline">
+      <span>Li et al.</span>
+      <span>9 min de leitura</span>
+<span>06/10/2026</span>    </p>
+    <div class="listen" data-article="2610.08782" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=xheOe9l1AOs" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema: reconstruir interações 4D a partir de vídeo monocular</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Reconstruir como uma mão interage com um objeto ao longo do tempo — geometria 3D, pose 6-DoF do objeto, parâmetros articulados da mão — é fundamental para robótica, realidade estendida e análise de comportamento humano.</span> <span class="s" data-s="b0-p0-s1">Mas vídeo monocular traz desafios: oclusão severa, ambiguidade de profundidade, objetos de forma arbitrária e poses complexas da mão.</span></p><p><span class="s" data-s="b0-p1-s0">As abordagens atuais seguem duas linhas.</span> <span class="s" data-s="b0-p1-s1">Métodos baseados em otimização ajustam cada sequência individualmente, impondo restrições de contato, renderização e estabilidade temporal.</span> <span class="s" data-s="b0-p1-s2">Funcionam, mas são lentos — até 25 horas para 200 frames — e frágeis quando a inicialização é ruim ou a oclusão é pesada.</span> <span class="s" data-s="b0-p1-s3">Métodos generativos aprendem priors de grandes datasets, mas partem de ruído aleatório ou dependem de vocabulários fechados de categorias, perdendo informação específica da instância observada.</span></p><p><span class="s" data-s="b0-p2-s0">O 4D-HOF, desenvolvido por pesquisadores da Texas A&amp;M University e NVIDIA, propõe uma terceira via: usar modelos foundation para produzir estimativas grosseiras mas informativas de mão e objeto, e então aprender um processo generativo que transporta essas estimativas até uma variedade de interações fisicamente plausíveis.</span> <span class="s" data-s="b0-p2-s1">A ideia é combinar a riqueza de pistas geométricas que modelos foundation capturam com a capacidade de correção estruturada de modelos generativos, sem partir do zero nem otimizar do zero a cada vídeo.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.08782/figure1.webp" alt="4D-HOF reconstrói interações mão-objeto em cenários desafiadores: profundidade ambígua (headset), oclusão severa (chaleira), poses articuladas complexas (barra) e grandes rotações do objeto (câmera). O método é feed-forward, muito mais rápido que otimização por sequência." loading="lazy">
+          <figcaption>
+            4D-HOF reconstrói interações mão-objeto em cenários desafiadores: profundidade ambígua (headset), oclusão severa (chaleira), poses articuladas complexas (barra) e grandes rotações do objeto (câmera). O método é feed-forward, muito mais rápido que otimização por sequência.
+            <span class="source">Figura 1 do paper · Li et al., arXiv:2610.08782</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">A ideia central: flow matching a partir de estimativas foundation</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Flow matching é uma técnica de modelagem generativa que aprende um campo de velocidade contínuo para transportar amostras de uma distribuição fonte p(x₀) até uma distribuição alvo p(x₁).</span> <span class="s" data-s="b2-p0-s1">Tradicionalmente, x₀ vem de ruído gaussiano.</span> <span class="s" data-s="b2-p0-s2">O 4D-HOF substitui esse ruído por estimativas de modelos foundation: pose de mão, geometria de objeto, profundidade e estrutura de cena.</span></p><p><span class="s" data-s="b2-p1-s0">Concretamente, o paper usa bridge matching, uma extensão de flow matching que permite transportar entre distribuições arbitrárias.</span> <span class="s" data-s="b2-p1-s1">Dado x₀ da distribuição foundation e x₁ da distribuição de interações plausíveis, o modelo aprende vθ(xt, t) tal que dxt/dt = vθ(xt, t), onde t ∈ [0,1].</span> <span class="s" data-s="b2-p1-s2">A trajetória intermediária é xt = (1−t)x₀ + tx₁ + γ(t)ϵ, com ϵ gaussiano e γ(t) controlando ruído.</span> <span class="s" data-s="b2-p1-s3">O objetivo de treinamento é ||vθ(xt, t) − (x₁ − xt)/(1 − t)||².</span></p><p><span class="s" data-s="b2-p2-s0">A vantagem é dupla.</span> <span class="s" data-s="b2-p2-s1">Primeiro, partir de estimativas informativas reduz a aleatoriedade e preserva pistas específicas da instância — forma do objeto, configuração inicial da mão.</span> <span class="s" data-s="b2-p2-s2">Segundo, o processo generativo permite guiamento em tempo de teste: durante a evolução de x₀ para x₁, é possível aplicar gradientes de restrições físicas (contato, penetração) e evidência 2D (reprojeção) diretamente sobre os estados intermediários xt, refinando a reconstrução como parte do próprio processo generativo, sem otimização separada pós-hoc.</span></p>        <h2><span class="s" data-s="b3-h">Construindo a inicialização: orquestrando modelos foundation</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O pipeline começa com parsing contextual da cena: SAM segmenta mão e objeto, Gemini identifica a categoria do objeto, e seleção de keyframes escolhe frames representativos.</span> <span class="s" data-s="b3-p0-s1">Para o objeto, o método usa HY2.0 para reconstruir mesh uniforme a partir de vistas canônicas, depois PTv3 e DINO para extrair point clouds e features visuais.</span></p><p><span class="s" data-s="b3-p1-s0">A mão é estimada com WiLoR, que produz parâmetros MANO (shape β e pose por frame hi = (Rh, th)).</span> <span class="s" data-s="b3-p1-s1">Profundidade vem de MoGe-3, e FPose estima pose 6-DoF do objeto (Ro, to).</span> <span class="s" data-s="b3-p1-s2">Mas essas estimativas são em escalas arbitrárias e sistemas de coordenadas inconsistentes.</span> <span class="s" data-s="b3-p1-s3">O paper alinha tudo: estima escala métrica comparando point clouds de mão e objeto com as meshes, depois registra translação relativa.</span></p><p><span class="s" data-s="b3-p2-s0">O resultado é uma sequência inicial S = {si}ᴺᵢ₌₁, onde si = [hi, oi] contém pose da mão e do objeto no frame i. Essa inicialização é ruidosa — erros de translação, rotação, alinhamento mão-objeto — mas carrega informação rica sobre geometria e movimento.</span> <span class="s" data-s="b3-p2-s1">É essa sequência que entra como x₀ no flow matching.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.08782/figure2.webp" alt="Pipeline completo: (a) parsing de cena, (b) reconstrução de objeto, (c) alinhamento de profundidade e estimativa de escala, (d) reconstrução de mão. A inicialização grosseira alimenta o modelo de flow matching, que refina a interação. Guiamento em tempo de teste ajusta estados intermediários." loading="lazy">
+          <figcaption>
+            Pipeline completo: (a) parsing de cena, (b) reconstrução de objeto, (c) alinhamento de profundidade e estimativa de escala, (d) reconstrução de mão. A inicialização grosseira alimenta o modelo de flow matching, que refina a interação. Guiamento em tempo de teste ajusta estados intermediários.
+            <span class="source">Figura 2 do paper · Li et al., arXiv:2610.08782</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Arquitetura e condicionamento: injetando contexto visual e temporal</span></h2>
+<p><span class="s" data-s="b5-p0-s0">O modelo de velocidade vθ é implementado como um Diffusion Transformer (DiT).</span> <span class="s" data-s="b5-p0-s1">A entrada é o estado corrente xt no tempo t do flow, mas o modelo precisa de contexto para saber como corrigir.</span> <span class="s" data-s="b5-p0-s2">Três tipos de condicionamento são injetados via cross-attention.</span></p><p><span class="s" data-s="b5-p1-s0">Primeiro, features visuais: frames RGB passam por um encoder visual (DINOv2), gerando embeddings por frame.</span> <span class="s" data-s="b5-p1-s1">Segundo, point clouds de mão e objeto da inicialização, processados por um encoder 3D (PointNet++), capturam geometria espacial.</span> <span class="s" data-s="b5-p1-s2">Terceiro, contexto temporal: a sequência inicial completa {si}ᴺᵢ₌₁ é codificada por um transformer temporal, permitindo que o modelo veja a trajetória inteira ao refinar cada frame.</span></p><p><span class="s" data-s="b5-p2-s0">Esse condicionamento rico permite que o modelo aprenda correções estruturadas: se a mão está desalinhada do objeto em um frame, o contexto temporal mostra a trajetória esperada; se a geometria está errada, as point clouds e RGB fornecem pistas.</span> <span class="s" data-s="b5-p2-s1">O treinamento usa dados de HO3D, DexYCB, HOI4D e ARCTIC — datasets com ground truth de interação mão-objeto — para aprender a variedade de interações plausíveis.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b6-t">Guiamento em tempo de teste</span></h3>
+          <p><span class="s" data-s="b6-c-s0">Durante a inferência, o paper aplica gradientes de restrições físicas e de reprojeção 2D diretamente sobre os estados intermediários xt.</span> <span class="s" data-s="b6-c-s1">Isso significa que, a cada passo do flow, o estado evolui não só pela velocidade aprendida vθ, mas também por um termo −∇G(st), onde G combina perdas de contato, penetração e alinhamento com keypoints 2D.</span> <span class="s" data-s="b6-c-s2">É refinamento integrado ao processo generativo, não otimização separada.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b7-h">Resultados: precisão e eficiência em benchmarks padrão</span></h2>
+<p><span class="s" data-s="b7-p0-s0">O 4D-HOF foi avaliado em HO3D-v3 (18 sequências, oclusões severas) e DexYCB (20 sequências, grasps em mesa com múltiplos sujeitos).</span> <span class="s" data-s="b7-p0-s1">As métricas cobrem cinco aspectos: precisão da mão (MPJPE, erro médio de posição de juntas em mm), precisão do objeto (Chamfer distance CD em cm², F-scores F5/F10 em %), consistência de interação (CDh, Chamfer no frame da mão; IV, volume de interpenetração em cm³; CA, acurácia de contato em %), estabilidade temporal (JM, jerk de trajetória em m/s³) e robustez (SR, taxa de sucesso por sequência em %).</span></p><p><span class="s" data-s="b7-p1-s0">No HO3D-v3, o 4D-HOF atinge o menor CDh entre todos os métodos, melhorando 62,2% sobre o segundo melhor.</span> <span class="s" data-s="b7-p1-s1">O volume de interpenetração é 0,03 cm³, contra 0,07 do AGILE e 0,12 do CHOIR.</span> <span class="s" data-s="b7-p1-s2">O jerk magnitude é 6,4× menor que HOLD e 13,4× menor que MagicHOI, indicando trajetórias muito mais suaves sem regularização explícita de smoothness.</span> <span class="s" data-s="b7-p1-s3">O F5 é o mais alto (74,53%) entre todos os baselines, e a acurácia de contato é 87,87%, a melhor entre os métodos que reportam essa métrica.</span></p><p><span class="s" data-s="b7-p2-s0">No DexYCB, as margens são ainda maiores.</span> <span class="s" data-s="b7-p2-s1">O MPJPE cai para 6,84 mm, contra 19,06 do AGILE e 27,24 do CHOIR.</span> <span class="s" data-s="b7-p2-s2">O CD é 0,45 cm², comparável ao AGILE (0,52), mas o CDh é 48,85 cm², metade do AGILE (94,60) e um terço do CHOIR (134,74).</span> <span class="s" data-s="b7-p2-s3">F5 e F10 ficam em 83,62% e 95,81%, no topo da tabela.</span> <span class="s" data-s="b7-p2-s4">A taxa de sucesso é 100% em ambos os benchmarks, igualando AGILE e CHOIR.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.08782/table1.webp" alt="Resultados no HO3D-v3: 4D-HOF lidera em métricas de interação (CDh, IV, CA) e estabilidade temporal (JM). Precisão de mão e objeto é determinada pelos modelos foundation, ficando no mesmo nível do AGILE." loading="lazy">
+          <figcaption>
+            Resultados no HO3D-v3: 4D-HOF lidera em métricas de interação (CDh, IV, CA) e estabilidade temporal (JM). Precisão de mão e objeto é determinada pelos modelos foundation, ficando no mesmo nível do AGILE.
+            <span class="source">Tabela 1 do paper · Li et al., arXiv:2610.08782</span>
+          </figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="../../assets/papers/2610.08782/table2.webp" alt="Resultados no DexYCB: 4D-HOF supera todos os baselines em todas as métricas, com margens particularmente grandes em MPJPE (6,84 mm) e CDh (48,85 cm²), demonstrando robustez a variações de sujeito e escala." loading="lazy">
+          <figcaption>
+            Resultados no DexYCB: 4D-HOF supera todos os baselines em todas as métricas, com margens particularmente grandes em MPJPE (6,84 mm) e CDh (48,85 cm²), demonstrando robustez a variações de sujeito e escala.
+            <span class="source">Tabela 2 do paper · Li et al., arXiv:2610.08782</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">Velocidade: feed-forward versus otimização por sequência</span></h2>
+<p><span class="s" data-s="b10-p0-s0">A comparação de custo computacional é reveladora.</span> <span class="s" data-s="b10-p0-s1">HOLD leva cerca de 25,1 horas por sequência de 200 frames (65 min de pré-processamento, 24 h de otimização).</span> <span class="s" data-s="b10-p0-s2">MagicHOI leva 2,4 horas (25 min + 2 h).</span> <span class="s" data-s="b10-p0-s3">AGILE, que usa inicialização agêntica mas ainda otimiza, leva 2,1–2,2 horas (21–29 min + 1,75 h).</span> <span class="s" data-s="b10-p0-s4">CHOIR, o mais rápido dos baselines, leva 30 minutos (11 min + 19 min de otimização conjunta).</span></p><p><span class="s" data-s="b10-p1-s0">O 4D-HOF leva cerca de 24 minutos no total: aproximadamente 23 minutos de pré-processamento (rodando os modelos foundation) e apenas 1 minuto de inferência do flow matching.</span> <span class="s" data-s="b10-p1-s1">A inferência é feed-forward — uma passada pela rede, sem loop de otimização.</span> <span class="s" data-s="b10-p1-s2">Isso torna o método 1,25× mais rápido que CHOIR, 5× mais rápido que AGILE e ordens de magnitude mais rápido que HOLD e MagicHOI, mantendo ou superando a qualidade de reconstrução.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b11-t">O que o paper não mostra</span></h3>
+          <p><span class="s" data-s="b11-c-s0">Os experimentos cobrem 38 sequências de dois benchmarks.</span> <span class="s" data-s="b11-c-s1">Não há avaliação em vídeos verdadeiramente in-the-wild (iluminação variável, câmeras em movimento, múltiplos objetos).</span> <span class="s" data-s="b11-c-s2">O método depende da qualidade dos modelos foundation: se a inicialização for muito ruim, o flow matching pode não corrigir completamente.</span> <span class="s" data-s="b11-c-s3">Não há comparação de tempo wall-clock em hardware idêntico para todos os métodos.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b12-h">Ablations: o que cada componente contribui</span></h2>
+<p><span class="s" data-s="b12-p0-s0">O paper inclui estudos de ablação (não detalhados nas seções fornecidas, mas mencionados) que investigam a contribuição de cada tipo de condicionamento (visual, 3D, temporal) e do guiamento em tempo de teste.</span> <span class="s" data-s="b12-p0-s1">Remover o condicionamento temporal degrada a estabilidade (JM aumenta).</span> <span class="s" data-s="b12-p0-s2">Remover o guiamento em tempo de teste piora métricas de contato e penetração.</span> <span class="s" data-s="b12-p0-s3">Usar ruído gaussiano como x₀ em vez de estimativas foundation aumenta erros de geometria e alinhamento, confirmando que partir de estimativas informativas é crucial.</span></p><p><span class="s" data-s="b12-p1-s0">Também é explorado o número de passos de integração no flow matching.</span> <span class="s" data-s="b12-p1-s1">Menos passos aceleram a inferência mas reduzem precisão; mais passos melhoram qualidade mas aumentam custo.</span> <span class="s" data-s="b12-p1-s2">O paper usa 50 passos como padrão, equilibrando velocidade e acurácia.</span></p>        <h2><span class="s" data-s="b13-h">Contexto na literatura: onde o 4D-HOF se encaixa</span></h2>
+<p><span class="s" data-s="b13-p0-s0">O trabalho se posiciona na interseção de três linhas de pesquisa.</span> <span class="s" data-s="b13-p0-s1">Primeiro, métodos de otimização para HOI (HOLD, MagicHOI, AGILE, CHOIR) que ajustam parâmetros por sequência.</span> <span class="s" data-s="b13-p0-s2">O 4D-HOF elimina esse loop caro ao aprender a correção de forma feed-forward.</span> <span class="s" data-s="b13-p0-s3">Segundo, modelos generativos para HOI (GraspTTA, HOISDF, CAMS) que sintetizam interações, mas geralmente partem de ruído ou templates.</span> <span class="s" data-s="b13-p0-s4">O 4D-HOF inicia de observações reais, preservando informação específica.</span> <span class="s" data-s="b13-p0-s5">Terceiro, uso de modelos foundation para percepção 3D (DINOv2, MoGe, WiLoR, FPose), que o paper orquestra para construir a inicialização.</span></p><p><span class="s" data-s="b13-p1-s0">A contribuição principal é a formulação: HOI como transporte generativo condicional a partir de estimativas foundation.</span> <span class="s" data-s="b13-p1-s1">Isso une o melhor dos dois mundos — riqueza de pistas dos foundation models e capacidade de correção estruturada dos generativos — sem os custos de otimização por sequência.</span></p>        <h2><span class="s" data-s="b14-h">Limitações e direções futuras</span></h2>
+<p><span class="s" data-s="b14-p0-s0">O método herda limitações dos modelos foundation usados.</span> <span class="s" data-s="b14-p0-s1">Se WiLoR falhar em poses extremas ou HY2.0 não reconstruir bem objetos reflexivos, a inicialização será ruim e o flow matching pode não recuperar totalmente.</span> <span class="s" data-s="b14-p0-s2">O paper não discute como o método se comporta quando múltiplos objetos ou múltiplas mãos aparecem na cena.</span></p><p><span class="s" data-s="b14-p1-s0">O guiamento em tempo de teste adiciona custo computacional — o 1 minuto de inferência inclui esse refinamento, mas não há breakdown detalhado.</span> <span class="s" data-s="b14-p1-s1">Também não está claro como o método escala para vídeos muito longos (centenas de frames) ou se o condicionamento temporal tem limite de contexto.</span></p><p><span class="s" data-s="b14-p2-s0">Direções futuras naturais incluem treinar em datasets ainda maiores e mais diversos, explorar outros tipos de guiamento (por exemplo, física de contato mais sofisticada), e estender para cenários multi-objeto ou bimanual.</span> <span class="s" data-s="b14-p2-s1">Integrar o 4D-HOF em pipelines de robótica — onde velocidade e precisão são críticas — seria uma aplicação promissora.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">4D-HOF usa flow matching para transportar estimativas de modelos foundation até interações mão-objeto fisicamente plausíveis, eliminando otimização cara por sequência.</span></li><li><span class="s" data-s="k1">O método atinge state-of-the-art em HO3D-v3 e DexYCB, com 62% de melhoria em alinhamento mão-objeto e trajetórias 6× mais suaves que baselines, em apenas 1 minuto de inferência.</span></li><li><span class="s" data-s="k2">Guiamento em tempo de teste aplica restrições físicas e de reprojeção diretamente nos estados intermediários do flow, refinando a reconstrução como parte do processo generativo.</span></li><li><span class="s" data-s="k3">A abordagem depende da qualidade dos modelos foundation: inicialização ruim limita a capacidade de correção, e não há avaliação em cenários verdadeiramente in-the-wild.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.08782" rel="noopener">4D-HOF: Hand-Object Flow Matching for Feed-Forward 4D Interaction Reconstruction</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.08782" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

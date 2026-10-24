@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tev: Escalando Agentes de Longo Prazo com Recompensas Densas — arXiv em 5</title>
+<meta name="description" content="O paper Tev introduz um método para treinar agentes de IA em tarefas complexas de horas ou dias, usando um &#39;mundo latente&#39; para gerar recompensas densas e resolver o problema da escassez de sinais de treinamento.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Tev: Escalando Agentes de Longo Prazo com Recompensas Densas">
+<meta property="og:description" content="O paper Tev introduz um método para treinar agentes de IA em tarefas complexas de horas ou dias, usando um &#39;mundo latente&#39; para gerar recompensas densas e resolver o problema da escassez de sinais de treinamento.">
+<meta property="og:image" content="../../assets/papers/2610.18868/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Agentes</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.18868" rel="noopener">arXiv:2610.18868</a>
+    </div>
+    <h1><span class="s" data-s="t">Tev: Escalando Agentes de Longo Prazo com Recompensas Densas</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">O paper Tev introduz um método para treinar agentes de IA em tarefas complexas de horas ou dias, usando um &#39;mundo latente&#39; para gerar recompensas densas e resolver o problema da escassez de sinais de treinamento.</span></p>
+    <p class="byline">
+      <span>Hu et al.</span>
+      <span>6 min de leitura</span>
+<span>13/10/2026</span>    </p>
+    <div class="listen" data-article="2610.18868" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=MRHfTYEI3A8" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Desafio dos Agentes de Longo Horizonte</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A promessa dos grandes modelos de linguagem (LLMs) evoluiu de assistentes conversacionais para agentes autônomos capazes de executar tarefas complexas por horas ou dias.</span> <span class="s" data-s="b0-p0-s1">Esses agentes de longo horizonte são essenciais para descoberta automatizada e melhoria recursiva (RSI), áreas onde a IA poderia, teoricamente, conduzir pesquisa científica ou engenharia de software sem intervenção humana constante.</span> <span class="s" data-s="b0-p0-s2">No entanto, a comunidade open-source ainda luta para replicar o sucesso dos modelos fechados nesse domínio.</span></p><p><span class="s" data-s="b0-p1-s0">O problema central não é a capacidade do modelo, mas a falta de um &#39;receituário&#39; de treinamento eficaz.</span> <span class="s" data-s="b0-p1-s1">As corpora de dados atuais, como SWE-Smith ou TMAX, são escaladas para tarefas de curto prazo, como corrigir pull requests ou executar sessões curtas de terminal.</span> <span class="s" data-s="b0-p1-s2">Elas oferecem milhares de exemplos, mas com recompensas binárias e esparsas: ou o teste passa, ou falha.</span> <span class="s" data-s="b0-p1-s3">Para tarefas de longo prazo, essa recompensa terminal única é insuficiente.</span> <span class="s" data-s="b0-p1-s4">Se um agente falha em uma tarefa de 10 horas, ele não recebe feedback útil sobre onde errou, tornando o aprendizado por reforço (RL) ineficaz ou até impossível.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.18868/figure1.webp" alt="Visão geral do método Tev. À esquerda, o desempenho superior do Tev-27B em benchmarks de longo prazo. À direita, a síntese de dados baseada em um mundo latente oculto que gera recompensas densas." loading="lazy">
+          <figcaption>
+            Visão geral do método Tev. À esquerda, o desempenho superior do Tev-27B em benchmarks de longo prazo. À direita, a síntese de dados baseada em um mundo latente oculto que gera recompensas densas.
+            <span class="source">Figura 1 do paper · Hu et al., arXiv:2610.18868</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">A Abordagem Mundo Latente-Primeiro</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Para resolver a escassez de dados verificáveis, os autores propõem uma abordagem inversa à geração tradicional.</span> <span class="s" data-s="b2-p0-s1">Em vez de pedir a um LLM para criar uma tarefa e depois tentar verificar se ela está correta, eles começam com um &#39;mundo latente&#39;.</span> <span class="s" data-s="b2-p0-s2">Este é uma especificação completa, correta e oculta do domínio da tarefa, incluindo o fluxo de trabalho representado como um grafo acíclico dirigido (DAG).</span> <span class="s" data-s="b2-p0-s3">A partir dessa verdade fundamental, o sistema renderiza progressivamente os arquivos e o ambiente que o agente verá.</span></p><p><span class="s" data-s="b2-p1-s0">Essa construção permite dois benefícios cruciais.</span> <span class="s" data-s="b2-p1-s1">Primeiro, a complexidade da tarefa é controlável, pois o DAG define exatamente as dependências e o estado esperado após cada passo.</span> <span class="s" data-s="b2-p1-s2">Segundo, como o estado oculto é conhecido e correto, é possível verificar qualquer ação do agente em tempo real.</span> <span class="s" data-s="b2-p1-s3">Isso elimina a ambiguidade de verificadores baseados apenas em testes unitários externos, que muitas vezes não cobrem estados intermediários críticos.</span> <span class="s" data-s="b2-p1-s4">O mundo latente serve como uma chave de resposta exata, garantindo que o sinal de treinamento seja confiável.</span></p>        <h2><span class="s" data-s="b3-h">O Conjunto de Dados Tev-Gym</span></h2>
+<p><span class="s" data-s="b3-p0-s0">A materialização dessa abordagem é o Tev-Gym, o primeiro conjunto de dados de treinamento para agentes de longo horizonte com recompensas densas e progressivas.</span> <span class="s" data-s="b3-p0-s1">Ele contém 1.170 ambientes verificados distribuídos em sete domínios diferentes.</span> <span class="s" data-s="b3-p0-s2">A geração desses dados não depende de anotação humana massiva nem de julgamento de LLMs para verificação final, mas sim da estrutura lógica do mundo latente.</span></p><p><span class="s" data-s="b3-p1-s0">Ao contrário de benchmarks humanos, que são pequenos e caros de avaliar (levando até oito horas por tarefa), o Tev-Gym é escalável.</span> <span class="s" data-s="b3-p1-s1">O processo de renderização permite criar variações de complexidade mantendo a integridade lógica.</span> <span class="s" data-s="b3-p1-s2">Isso é vital porque tarefas de longo horizonte são naturalmente de cauda longa: poucas existem, e a maioria das tentativas de treinamento falha nos estágios iniciais quando o modelo ainda é fraco.</span> <span class="s" data-s="b3-p1-s3">Ter um corpus diversificado e verificável permite que o modelo aprenda com falhas parciais, em vez de apenas com sucesso total.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.18868/figure4.webp" alt="Comparação de sinais de recompensa. A linha vermelha mostra recompensa terminal única, onde todos os rollouts falham e recebem zero. A linha azul mostra recompensas progressivas, onde o modelo recebe crédito por avanços parciais." loading="lazy">
+          <figcaption>
+            Comparação de sinais de recompensa. A linha vermelha mostra recompensa terminal única, onde todos os rollouts falham e recebem zero. A linha azul mostra recompensas progressivas, onde o modelo recebe crédito por avanços parciais.
+            <span class="source">Figura 4 do paper · Hu et al., arXiv:2610.18868</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Recompensas Densas via PPRS</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Ter os dados não basta; é preciso um algoritmo de treinamento que os utilize.</span> <span class="s" data-s="b5-p0-s1">O paper introduz o Progress-Potential Reward Shaping (PPRS), uma técnica de modelagem de recompensa que converte o progresso medido no mundo latente em um sinal denso por passo.</span> <span class="s" data-s="b5-p0-s2">Em vez de esperar o fim da tarefa para dar uma recompensa, o PPRS calcula o potencial de progresso a cada turno.</span> <span class="s" data-s="b5-p0-s3">Isso significa que mesmo se o agente falhar em completar a tarefa, ele recebe crédito pelas ações que o aproximaram do objetivo.</span></p><p><span class="s" data-s="b5-p1-s0">Isso resolve um problema clássico de aprendizado por reforço em horizontes longos: a propagação de crédito.</span> <span class="s" data-s="b5-p1-s1">Em métodos como o GRPO, se um grupo de rollouts falha completamente, a vantagem é zero para todos, e não há gradiente para atualizar o modelo.</span> <span class="s" data-s="b5-p1-s2">Com o PPRS, o sinal de progresso é normalizado por índice de turno, preservando o crédito para ações tardias e propagando o aprendizado para trás no tempo.</span> <span class="s" data-s="b5-p1-s3">Isso torna treinável o que antes era intratável, permitindo que o modelo aprenda mesmo quando as taxas de sucesso terminal são baixas.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b6-t">Eficiência no Treinamento</span></h3>
+          <p><span class="s" data-s="b6-c-s0">O uso de recompensas densas não melhora apenas a performance, mas a eficiência computacional.</span> <span class="s" data-s="b6-c-s1">No modelo de 27B parâmetros, o treinamento com recompensa terminal única falhou em completar uma única etapa do otimizador devido a grupos de vantagem zero.</span> <span class="s" data-s="b6-c-s2">Com o PPRS, o treinamento prosseguiu até a conclusão, demonstrando que o sinal denso é crítico para a convergência em tarefas complexas.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b7-h">Resultados e Generalização</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Os autores treinaram modelos Qwen3.5-9B e Qwen3.8-27B usando o DPPO com o PPRS.</span> <span class="s" data-s="b7-p0-s1">Os resultados mostram ganhos substanciais no ALE-CM (subconjunto de computação e matemática do Agents&#39; Last Exam), onde o Tev-27B igualou o desempenho do GPT-6 Astra e do Claude Opus 5 em métricas de Pass@5.</span> <span class="s" data-s="b7-p0-s2">Isso é notável considerando que o Tev-27B foi treinado apenas em dados relacionados ao ALE, sem exposição aos benchmarks de avaliação específicos.</span></p><p><span class="s" data-s="b7-p1-s0">A generalização é um ponto forte do método.</span> <span class="s" data-s="b7-p1-s1">O Tev-27B superou modelos como GLM 5.2 e Gemini 3.7 Flash nos subconjuntos de computação e matemática do Terminal-Bench 3.0 e 4.0.</span> <span class="s" data-s="b7-p1-s2">Além disso, alcançou desempenho nível Claude Opus 4.8 em tarefas de horizonte médio, como o TB 2.1.</span> <span class="s" data-s="b7-p1-s3">Isso sugere que a habilidade de navegar por fluxos de trabalho complexos e verificar progresso intermediário é transferível entre diferentes domínios de tarefa.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.18868/table2.webp" alt="Tabela de resultados no ALE-CM. O Tev-27B apresenta pontuações médias e fração de tarefas resolvidas competitivas com modelos de fronteira fechados." loading="lazy">
+          <figcaption>
+            Tabela de resultados no ALE-CM. O Tev-27B apresenta pontuações médias e fração de tarefas resolvidas competitivas com modelos de fronteira fechados.
+            <span class="source">Tabela 2 do paper · Hu et al., arXiv:2610.18868</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Análise Qualitativa e Ablações</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Uma análise qualitativa de tarefas complexas, como análise de causa raiz em APIs, revela uma diferença fundamental na raciocínio.</span> <span class="s" data-s="b9-p0-s1">Enquanto modelos base ou concorrentes como GPT-6 Astra citam apenas sintomas e recusam ações de rollback por medo de erros, o Tev-27B e o Claude Fable 5 conseguem fundamentar suas decisões em medições específicas, julgando o rollback como seguro.</span> <span class="s" data-s="b9-p0-s2">Isso indica que o treinamento com recompensas densas ajuda o modelo a entender a causalidade subjacente, não apenas a correlação superficial.</span></p><p><span class="s" data-s="b9-p1-s0">As ablações confirmam a importância de cada componente.</span> <span class="s" data-s="b9-p1-s1">Remover o mundo latente e usar apenas verificadores visíveis ao agente (public-view) resultou em 88% dos grupos de treinamento sendo descartados, pois não havia sinal suficiente.</span> <span class="s" data-s="b9-p1-s2">Da mesma forma, usar apenas recompensa terminal levou a um desempenho inferior ao modelo base.</span> <span class="s" data-s="b9-p1-s3">O PPRS, combinado com o mundo latente, forneceu o equilíbrio ideal entre performance e eficiência de treinamento.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.18868/figure7.webp" alt="Exemplo qualitativo de sucesso: o modelo resolve uma tarefa complexa de física quântica (cadeia de Ising), calculando estados fundamentais e probabilidades pós-medida com precisão." loading="lazy">
+          <figcaption>
+            Exemplo qualitativo de sucesso: o modelo resolve uma tarefa complexa de física quântica (cadeia de Ising), calculando estados fundamentais e probabilidades pós-medida com precisão.
+            <span class="source">Figura 7 do paper · Hu et al., arXiv:2610.18868</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b11-h">Limitações e Futuro</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Apesar dos avanços, o paper reconhece limitações significativas.</span> <span class="s" data-s="b11-p0-s1">O foco atual é estritamente em ambientes de terminal sintéticos.</span> <span class="s" data-s="b11-p0-s2">Tarefas do mundo real, como interação com APIs web complexas ou gestão de múltiplos contextos de memória, não foram exploradas.</span> <span class="s" data-s="b11-p0-s3">Além disso, há uma lacuna de desempenho entre os modelos abertos treinados com este método e os agentes de fronteira mais avançados em benchmarks extremamente difíceis.</span></p><p><span class="s" data-s="b11-p1-s0">Outro ponto é a escalabilidade da criação de novos domínios.</span> <span class="s" data-s="b11-p1-s1">Embora o método de mundo latente seja robusto, autorar e validar os componentes do ambiente para novos fluxos de trabalho ainda requer esforço humano.</span> <span class="s" data-s="b11-p1-s2">O futuro do trabalho pode envolver a automação desse processo de criação de mundos latentes e a combinação desses dados com modelos base maiores, tornando o treinamento de agentes profissionais mais reproduzível e acessível sem depender de rótulos humanos ou julgamentos de LLMs.</span></p>        <h2><span class="s" data-s="b12-h">Conclusão</span></h2>
+<p><span class="s" data-s="b12-p0-s0">O Tev demonstra que o gargalo para agentes de longo horizonte não é apenas a arquitetura do modelo, mas a qualidade e a densidade do sinal de treinamento.</span> <span class="s" data-s="b12-p0-s1">Ao introduzir o conceito de mundo latente e a técnica PPRS, os autores fornecem um caminho viável para treinar modelos abertos em tarefas que antes eram reservadas a sistemas fechados e caros.</span> <span class="s" data-s="b12-p0-s2">Isso marca um passo importante em direção à autonomia real da IA, onde agentes podem aprender com seu próprio progresso em ambientes complexos e não apenas repetir padrões de curto prazo.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Agentes de longo prazo falham no treino open-source por falta de dados verificáveis e recompensas esparsas.</span></li><li><span class="s" data-s="k1">O Tev-Gym usa um &#39;mundo latente&#39; oculto para gerar 1.170 tarefas com progresso verificável passo a passo.</span></li><li><span class="s" data-s="k2">A técnica PPRS converte progresso em recompensa densa, permitindo que modelos menores aprendam com falhas parciais.</span></li><li><span class="s" data-s="k3">O modelo Tev-27B iguala GPT-6 Astra e Claude Opus 5 em benchmarks específicos, generalizando para outras tarefas.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.18868" rel="noopener">Tev: Scaling Long-Horizon Agentic Environments with Dense Progress Rewards</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.18868" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

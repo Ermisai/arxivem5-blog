@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Engenharia de Cache para Agentes LLM: Controle direto sem re-prefill — arXiv em 5</title>
+<meta name="description" content="Os autores propõem &#39;cache engineering&#39;, uma técnica para gerenciar o KV cache de agentes LLM diretamente, evitando o custo proibitivo de re-prefill e mantendo a precisão em trajetórias longas.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Engenharia de Cache para Agentes LLM: Controle direto sem re-prefill">
+<meta property="og:description" content="Os autores propõem &#39;cache engineering&#39;, uma técnica para gerenciar o KV cache de agentes LLM diretamente, evitando o custo proibitivo de re-prefill e mantendo a precisão em trajetórias longas.">
+<meta property="og:image" content="../../assets/papers/2610.28577/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Agentes</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.28577" rel="noopener">arXiv:2610.28577</a>
+    </div>
+    <h1><span class="s" data-s="t">Engenharia de Cache para Agentes LLM: Controle direto sem re-prefill</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Os autores propõem &#39;cache engineering&#39;, uma técnica para gerenciar o KV cache de agentes LLM diretamente, evitando o custo proibitivo de re-prefill e mantendo a precisão em trajetórias longas.</span></p>
+    <p class="byline">
+      <span>Fu et al.</span>
+      <span>8 min de leitura</span>
+<span>20/10/2026</span>    </p>
+    <div class="listen" data-article="2610.28577" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=4Y3cb-3g4_c" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema do crescimento exponencial em agentes LLM</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Agentes baseados em Grandes Modelos de Linguagem (LLMs) estão evoluindo para tarefas de horizonte longo, envolvendo centenas de rodadas de raciocínio, chamada de ferramentas e interação com o ambiente.</span> <span class="s" data-s="b0-p0-s1">À medida que essas trajetórias crescem, o custo de inferência não é mais dominado apenas pela computação, mas pelo I/O e armazenamento do Key-Value (KV) cache.</span> <span class="s" data-s="b0-p0-s2">O KV cache armazena os estados intermediários de atenção para acelerar a geração de tokens subsequentes, mas retê-los integralmente consome memória e largura de banda significativas.</span></p><p><span class="s" data-s="b0-p1-s0">Estudos preliminares indicam que a leitura do KV cache pode representar mais de 80% do custo total de API em sistemas de agentes.</span> <span class="s" data-s="b0-p1-s1">Além disso, há um limite físico: se o contexto exceder o comprimento máximo suportado pelo modelo, a precisão cai drasticamente.</span> <span class="s" data-s="b0-p1-s2">A solução padrão, conhecida como &#39;context engineering&#39;, tenta resolver isso resumindo ou cortando mensagens antigas do texto.</span> <span class="s" data-s="b0-p1-s3">No entanto, essa abordagem tem um defeito estrutural grave.</span></p><p><span class="s" data-s="b0-p2-s0">Quando você modifica o prefixo do texto (removendo ou resumindo mensagens), os estados de KV cache calculados para as mensagens subsequentes tornam-se inválidos.</span> <span class="s" data-s="b0-p2-s1">O sistema é forçado a realizar um &#39;re-prefill&#39;, recalculando o cache para todo o contexto retido.</span> <span class="s" data-s="b0-p2-s2">Quanto mais cedo a edição ocorre na trajetória, maior é a porção de texto que precisa ser recalculada.</span> <span class="s" data-s="b0-p2-s3">Isso cria um dilema: resumir agressivamente para economizar cache aumenta o custo de re-prefill e pode degradar a precisão da tarefa ao perder informações contextuais importantes.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.28577/figure7.webp" alt="O AKV mantém a precisão em sequências longas, enquanto o Text Engineering perde desempenho à medida que o contexto cresce." loading="lazy">
+          <figcaption>
+            O AKV mantém a precisão em sequências longas, enquanto o Text Engineering perde desempenho à medida que o contexto cresce.
+            <span class="source">Figura 7 do paper · Fu et al., arXiv:2610.28577</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">Engenharia de Cache: O conceito central</span></h2>
+<p><span class="s" data-s="b2-p0-s0">O paper introduz a &#39;cache engineering&#39;, uma proposta para permitir que agentes controlem diretamente seu cache KV ativo sem modificar a trajetória de texto subjacente.</span> <span class="s" data-s="b2-p0-s1">A ideia é separar a representação textual da representação computacional.</span> <span class="s" data-s="b2-p0-s2">O agente pode escolher proativamente quais entradas de cache devem ser excluídas da atenção futura, mantendo o texto original intacto para referência humana ou lógica de negócios.</span></p><p><span class="s" data-s="b2-p1-s0">Para viabilizar isso, os autores definem duas operações de cache além do append padrão (adicionar novos tokens): Drop e Repos.</span> <span class="s" data-s="b2-p1-s1">A operação &#39;Drop&#39; remove seletivamente entradas de KV do cálculo de atenção futuro.</span> <span class="s" data-s="b2-p1-s2">Isso significa que o modelo ignora essas informações durante a inferência, mas o cache correspondente não precisa ser recalculado.</span> <span class="s" data-s="b2-p1-s3">A operação &#39;Repos&#39; ajusta as posições codificadas nas chaves (keys) retidas.</span> <span class="s" data-s="b2-p1-s4">Como o Drop altera a sequência lógica de tokens, o Repos garante que as posições relativas continuem corretas para os tokens restantes.</span></p><p><span class="s" data-s="b2-p2-s0">Essa abordagem permite que o agente descarte incrementalmente caches antigos de ferramentas ou respostas irrelevantes enquanto mantém o suffix (parte final) do contexto.</span> <span class="s" data-s="b2-p2-s1">Diferente do context engineering, que espera atingir um limite de comprimento para cortar tudo de uma vez, o cache engineering oferece controle granular e contínuo, otimizando o uso de memória e computação em tempo real.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b3-t">O desafio da dependência de histórico</span></h3>
+          <p><span class="s" data-s="b3-c-s0">Uma consequência direta do cache engineering é que sequências idênticas de tokens podem resultar em estados de cache diferentes, dependendo da ordem em que as operações Drop e Repos foram aplicadas.</span> <span class="s" data-s="b3-c-s1">Isso torna o prefix matching (emparelhamento de prefixo) tradicional insuficiente para reutilização de cache, exigindo um sistema de gerenciamento de estado mais sofisticado.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b4-h">Arquitetura do sistema AKV</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Para suportar essa nova forma de gerenciamento, os autores co-projetaram o motor de serving AKV.</span> <span class="s" data-s="b4-p0-s1">O desafio técnico principal é que, ao aplicar operações de cache, o estado do sistema torna-se dependente do histórico de operações.</span> <span class="s" data-s="b4-p0-s2">Um mesmo prefixo de texto pode ter diferentes versões de cache ativas.</span> <span class="s" data-s="b4-p0-s3">O AKV resolve isso usando uma árvore radix estendida para rastrear todas as operações de cache (append, drop, repos) aplicadas a cada mensagem.</span></p><p><span class="s" data-s="b4-p1-s0">Essa estrutura permite que o sistema gerencie a reutilização, evicção e restauração do cache de forma eficiente.</span> <span class="s" data-s="b4-p1-s1">A interface exposta ao agente é stateless (sem estado), compatível com APIs de serving existentes, mas internamente o AKV mantém o estado necessário para garantir que o cache seja reaproveitado corretamente mesmo quando as trajetórias divergem ou se recombinam.</span> <span class="s" data-s="b4-p1-s2">Isso é crucial para a escalabilidade em ambientes de produção com múltiplas requisições concorrentes.</span></p><p><span class="s" data-s="b4-p2-s0">Além da estrutura de dados, o AKV implementa segment-batch attention.</span> <span class="s" data-s="b4-p2-s1">Isso permite que o modelo processe apenas os segmentos de cache que foram retidos, ignorando os descartados, reduzindo o tempo de computação da atenção completa.</span> <span class="s" data-s="b4-p2-s2">O sistema também suporta &#39;recursive self-improvement&#39; (RSI), onde os próprios agentes podem buscar, avaliar e refinar suas estratégias de cache ao longo do tempo.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.28577/figure11.webp" alt="A árvore radix estendida do AKV rastreia operações de cache, permitindo reutilização correta mesmo com históricos modificados por drops e repos." loading="lazy">
+          <figcaption>
+            A árvore radix estendida do AKV rastreia operações de cache, permitindo reutilização correta mesmo com históricos modificados por drops e repos.
+            <span class="source">Figura 11 do paper · Fu et al., arXiv:2610.28577</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b6-h">Políticas de descarte e Auto-Ajuste</span></h2>
+<p><span class="s" data-s="b6-p0-s0">O paper não define uma única política de cache, mas explora estratégias como &#39;tool-response rolling-drop&#39;.</span> <span class="s" data-s="b6-p0-s1">Em vez de resumir todo o histórico quando um limite é atingido, essa política remove incrementalmente as respostas de ferramentas mais antigas.</span> <span class="s" data-s="b6-p0-s2">Isso preserva o contexto de raciocínio recente, que é geralmente mais crítico para a precisão da tarefa.</span></p><p><span class="s" data-s="b6-p1-s0">Os autores também investigam a aplicação de RSI para otimizar essas políticas.</span> <span class="s" data-s="b6-p1-s1">Ao permitir que o agente ajuste dinamicamente quais caches descartar com base no desempenho observado, é possível reduzir ainda mais os custos.</span> <span class="s" data-s="b6-p1-s2">Em experimentos, o RSI reduziu os custos em 7,1% adicionais em comparação com políticas projetadas por especialistas, demonstrando que o cache engineering pode ser um espaço de busca ativo para otimização de agentes.</span></p><p><span class="s" data-s="b6-p2-s0">A flexibilidade do Drop e Repos permite combinar estratégias.</span> <span class="s" data-s="b6-p2-s1">Por exemplo, é possível aplicar Drop apenas em respostas de ferramentas (que são frequentemente ruidosas ou irrelevantes) enquanto mantém o histórico de raciocínio, ou aplicar ambos.</span> <span class="s" data-s="b6-p2-s2">A ablação mostra que a combinação de Drop e Repos é essencial para manter a precisão, pois o Repos corrige as posições que seriam deslocadas pelo Drop.</span></p>        <h2><span class="s" data-s="b7-h">Resultados de Desempenho e Precisão</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Os experimentos foram conduzidos em benchmarks agênticos como BCP, GAIA-Text e SWE-Verified, utilizando modelos como GPT-OSS-120B e MiniMax-M2.7.</span> <span class="s" data-s="b7-p0-s1">Os resultados mostram que o AKV supera consistentemente o &#39;Text Engineering&#39; (context engineering tradicional) em termos de custo e precisão.</span> <span class="s" data-s="b7-p0-s2">Em média, a política de rolling-drop com AKV melhorou as pontuações dos benchmarks em 1,7 pontos e reduziu o custo em 27,7%.</span></p><p><span class="s" data-s="b7-p1-s0">Um ponto crítico é a manutenção da precisão em sequências longas.</span> <span class="s" data-s="b7-p1-s1">Enquanto o Text Engineering sofre degradação significativa à medida que o contexto cresce (devido à perda de informação no resumo), o AKV mantém a acurácia estável.</span> <span class="s" data-s="b7-p1-s2">Isso ocorre porque o Drop remove apenas o ruído computacional, sem alterar a informação semântica retida no cache.</span> <span class="s" data-s="b7-p1-s3">A tabela de resultados destaca que, em tarefas complexas de programação (SWE-Verified), o AKV alcança taxas de passagem superiores com custos significativamente menores.</span></p><p><span class="s" data-s="b7-p2-s0">A eficiência de serving também melhora drasticamente.</span> <span class="s" data-s="b7-p2-s1">O AKV alcança até 1,5x mais throughput de saída e uma speedup de 1,5x na latência P95 (tempo para 95% das requisições) em comparação com o método padrão.</span> <span class="s" data-s="b7-p2-s2">Essa melhoria é atribuída principalmente à redução do tempo de atenção, já que o modelo não precisa processar tokens cujo cache foi descartado.</span> <span class="s" data-s="b7-p2-s3">A latência de entrada (TTFT) também cai, pois o sistema evita o custo de re-prefill.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.28577/table1.webp" alt="Tabela 1: O AKV supera o Text Engineering em precisão e custo em diversos modelos, validando a eficácia do controle direto de cache." loading="lazy">
+          <figcaption>
+            Tabela 1: O AKV supera o Text Engineering em precisão e custo em diversos modelos, validando a eficácia do controle direto de cache.
+            <span class="source">Tabela 1 do paper · Fu et al., arXiv:2610.28577</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Análise de Latência e Throughput</span></h2>
+<p><span class="s" data-s="b9-p0-s0">A tabela de desempenho detalhada mostra que as vantagens do AKV se ampliam em níveis de concorrência mais altos.</span> <span class="s" data-s="b9-p0-s1">Em ambientes com alta demanda, o sistema padrão sofre com a pressão do cache, resultando em maior latência e menor throughput.</span> <span class="s" data-s="b9-p0-s2">O AKV, ao reduzir a carga de I/O e computação de atenção, consegue manter um desempenho estável.</span></p><p><span class="s" data-s="b9-p1-s0">A decomposição da latência revela que a maior economia vem da redução do tempo de decode-step.</span> <span class="s" data-s="b9-p1-s1">Ao encurtar o contexto ativo, o número de leituras de KV e as operações de atenção diminuem proporcionalmente.</span> <span class="s" data-s="b9-p1-s2">Isso resulta em um throughput de entrada e saída superior, com ganhos de 1,53x e 1,18x, respectivamente, em relação ao método padrão.</span> <span class="s" data-s="b9-p1-s3">Esses números são particularmente relevantes para aplicações em tempo real, onde a latência P95 é um indicador crítico de qualidade.</span></p><p><span class="s" data-s="b9-p2-s0">Em avaliações online com tarefas reais de SWE-bench, o AKV alcançou a maior taxa de sucesso final em menos tempo de GPU.</span> <span class="s" data-s="b9-p2-s1">Isso demonstra que a eficiência computacional não veio à custa da qualidade do resultado, mas sim da eliminação de trabalho redundante.</span> <span class="s" data-s="b9-p2-s2">O sistema consegue entregar mais respostas corretas com menos recursos, um objetivo fundamental para a escalabilidade de agentes LLM.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.28577/figure12.webp" alt="Gráfico de latência: O AKV reduz drasticamente o tempo de atenção, provando que a engenharia de cache é mais eficiente que a de texto." loading="lazy">
+          <figcaption>
+            Gráfico de latência: O AKV reduz drasticamente o tempo de atenção, provando que a engenharia de cache é mais eficiente que a de texto.
+            <span class="source">Figura 12 do paper · Fu et al., arXiv:2610.28577</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b11-h">Limitações e Trabalho Futuro</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Apesar dos resultados promissores, os autores destacam limitações.</span> <span class="s" data-s="b11-p0-s1">O paper foca em modelos com atenção completa (full-attention).</span> <span class="s" data-s="b11-p0-s2">Estender o suporte para modelos com atenção linear ou outras arquiteturas eficientes requer adaptações adicionais na estrutura do AKV.</span> <span class="s" data-s="b11-p0-s3">Além disso, a estratégia de cache engineering ainda depende de heurísticas ou do próprio agente para decidir quando dropar; um treinamento específico para essa tarefa poderia otimizar ainda mais as decisões.</span></p><p><span class="s" data-s="b11-p1-s0">Outra área de exploração é a integração do cache engineering em pipelines de fine-tuning.</span> <span class="s" data-s="b11-p1-s1">Atualmente, o método é aplicado durante o serving, mas seria interessante investigar se modelos podem ser treinados para operar de forma nativa com caches parciais ou descartados.</span> <span class="s" data-s="b11-p1-s2">Isso poderia levar a arquiteturas onde a &#39;memória&#39; do modelo é intrinsecamente mais eficiente.</span></p><p><span class="s" data-s="b11-p2-s0">Finalmente, a complexidade adicional introduzida pela árvore radix e pelo gerenciamento de estado pode representar uma sobrecarga de código para sistemas existentes.</span> <span class="s" data-s="b11-p2-s1">A compatibilidade com APIs stateless ajuda, mas a implementação do AKV exige uma mudança na infraestrutura de serving.</span> <span class="s" data-s="b11-p2-s2">A comunidade precisará avaliar se o ganho de custo e latência justifica a migração para esse novo paradigma de gerenciamento de cache.</span></p>        <h2><span class="s" data-s="b12-h">Conclusão</span></h2>
+<p><span class="s" data-s="b12-p0-s0">O paper apresenta uma mudança de paradigma na otimização de agentes LLM: sair da manipulação de texto para a manipulação direta de cache.</span> <span class="s" data-s="b12-p0-s1">A engenharia de cache, suportada pelo sistema AKV, oferece uma solução elegante para o dilema entre custo de re-prefill e precisão em trajetórias longas.</span> <span class="s" data-s="b12-p0-s2">Ao permitir que agentes controlem seu estado de atenção sem alterar o histórico textual, é possível alcançar economias significativas de custo e latência sem comprometer a qualidade da tarefa.</span></p><p><span class="s" data-s="b12-p1-s0">Os resultados empíricos validam a abordagem, mostrando melhorias consistentes em benchmarks agênticos.</span> <span class="s" data-s="b12-p1-s1">Para desenvolvedores e cientistas de dados que trabalham com agentes de longa duração, o cache engineering surge como uma ferramenta essencial para escalar a inferência de forma sustentável.</span> <span class="s" data-s="b12-p1-s2">O código aberto do AKV convida a comunidade a explorar e expandir essas ideias.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">A engenharia de contexto tradicional exige re-prefill ao resumir texto, gerando latência. O novo método manipula o cache diretamente.</span></li><li><span class="s" data-s="k1">As operações &#39;drop&#39; e &#39;repos&#39; permitem ignorar partes do histórico sem alterar o texto ou recalcular o prefixo.</span></li><li><span class="s" data-s="k2">O sistema AKV gerencia o estado do cache com uma árvore radix, resolvendo a dependência de histórico.</span></li><li><span class="s" data-s="k3">Resultados mostram redução de 27,7% no custo e aumento de 1,5x na velocidade de resposta (P95) sem perda de acurácia.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.28577" rel="noopener">Cache Engineering for Agents</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.28577" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

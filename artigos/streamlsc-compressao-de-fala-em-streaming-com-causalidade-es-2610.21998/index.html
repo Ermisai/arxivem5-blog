@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>StreamLSC: Compressão de fala em streaming com causalidade estrita e eficiência de taxa-distorção — arXiv em 5</title>
+<meta name="description" content="O paper propõe StreamLSC, um codec neural para fala que opera quadro a quadro sem acesso ao futuro, mantendo a qualidade de modelos offline através de convoluções causais com cache e RWKV em modo RNN.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="StreamLSC: Compressão de fala em streaming com causalidade estrita e eficiência de taxa-distorção">
+<meta property="og:description" content="O paper propõe StreamLSC, um codec neural para fala que opera quadro a quadro sem acesso ao futuro, mantendo a qualidade de modelos offline através de convoluções causais com cache e RWKV em modo RNN.">
+<meta property="og:image" content="../../assets/papers/2610.21998/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Áudio</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.21998" rel="noopener">arXiv:2610.21998</a>
+    </div>
+    <h1><span class="s" data-s="t">StreamLSC: Compressão de fala em streaming com causalidade estrita e eficiência de taxa-distorção</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">O paper propõe StreamLSC, um codec neural para fala que opera quadro a quadro sem acesso ao futuro, mantendo a qualidade de modelos offline através de convoluções causais com cache e RWKV em modo RNN.</span></p>
+    <p class="byline">
+      <span>Liu et al.</span>
+      <span>8 min de leitura</span>
+<span>15/10/2026</span>    </p>
+    <div class="listen" data-article="2610.21998" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=ddUQqtKDJN4" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Dilema do Streaming Neural</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A compressão de áudio é um pilar fundamental para comunicações em banda larga limitada, como chamadas de voz em tempo real e transmissões via satélite.</span> <span class="s" data-s="b0-p0-s1">Tradicionalmente, codecs como Opus e EVS dominam esse espaço, oferecendo eficiência comprovada em taxas de bits médias.</span> <span class="s" data-s="b0-p0-s2">No entanto, sua dependência de características projetadas manualmente (handcrafted features) limita a qualidade perceptiva quando operamos em taxas de bits ultrabaixas, onde a informação é drasticamente reduzida.</span></p><p><span class="s" data-s="b0-p1-s0">Os codecs neurais surgiram para superar essas limitações.</span> <span class="s" data-s="b0-p1-s1">Ao treinar modelos de ponta a ponta com quantização diferenciável, eles aprendem representações de dados que capturam melhor a estrutura da fala.</span> <span class="s" data-s="b0-p1-s2">Arquiteturas baseadas em atenção, como o TS3-Codec, ou modelos no domínio do tempo, como EnCodec, demonstraram superioridade em métricas de taxa-distorção (Rate-Distortion, ou RD) em comparação aos métodos clássicos.</span></p><p><span class="s" data-s="b0-p2-s0">Mas existe um obstáculo prático: a maioria desses modelos neurais de alta performance opera em modo offline.</span> <span class="s" data-s="b0-p2-s1">Eles dependem de correlações de sequência completa para alcançar sua máxima fidelidade.</span> <span class="s" data-s="b0-p2-s2">Em cenários de streaming real, isso é inaceitável.</span> <span class="s" data-s="b0-p2-s3">Um codec de streaming deve processar áudio quadro a quadro (frame-by-frame), sem acesso ao contexto futuro.</span> <span class="s" data-s="b0-p2-s4">Isso impõe restrições de causalidade estrita tanto na arquitetura do backbone quanto nos módulos de codificação de entropia.</span></p>        <h2><span class="s" data-s="b1-h">A Lacuna entre Causalidade e Eficiência</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Os codecs neurais de streaming existentes enfrentam um trade-off inerente.</span> <span class="s" data-s="b1-p0-s1">Os baseados em representação com quantização vetorial (VQ) satisfazem naturalmente a causalidade, pois cada vetor é codificado independentemente, mas frequentemente exibem desempenho de RD limitado.</span> <span class="s" data-s="b1-p0-s2">Por outro lado, os modelos baseados em entropia, que modelam probabilidades latentes, alcançam eficiência de codificação superior, mas geralmente requerem o contexto da sequência inteira, tornando difícil adaptá-los a restrições de streaming estritas.</span></p><p><span class="s" data-s="b1-p1-s0">Os autores deste paper, da Shanghai Jiao Tong University, identificam que as designs de backbone e paradigmas de quantização atuais não conseguem simultaneamente alta eficiência de RD e causalidade estrita em nível de quadro.</span> <span class="s" data-s="b1-p1-s1">Para preencher essa lacuna, eles propõem o StreamLSC: um codec de fala aprendido que integra um backbone causal de longo contexto com um modelo de entropia streamable em nível de quadro.</span></p><p><span class="s" data-s="b1-p2-s0">O objetivo não é apenas criar um modelo que funcione em streaming, mas um que mantenha a equivalência numérica entre a inferência offline (treinamento) e a inferência online (deploy), permitindo que o mesmo conjunto de parâmetros seja usado em ambos os cenários sem perda de qualidade ou introdução de latência adicional.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.21998/figure2.webp" alt="Comparação entre o processamento em lote tradicional (a), onde toda a sequência é processada de uma vez, e o novo fluxo streamable do StreamLSC (b), que divide o áudio em quadros não sobrepostos e propaga estados explicitamente para consistência quadro a quadro." loading="lazy">
+          <figcaption>
+            Comparação entre o processamento em lote tradicional (a), onde toda a sequência é processada de uma vez, e o novo fluxo streamable do StreamLSC (b), que divide o áudio em quadros não sobrepostos e propaga estados explicitamente para consistência quadro a quadro.
+            <span class="source">Figura 2 do paper · Liu et al., arXiv:2610.21998</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Arquitetura do StreamLSC</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O framework do StreamLSC é dividido em dois componentes principais: um backbone streamable e um modelo de entropia streamable.</span> <span class="s" data-s="b3-p0-s1">O backbone é construído sobre o módulo FS-CRM (Frame-Level Streaming Context-Recursive Module).</span> <span class="s" data-s="b3-p0-s2">Este módulo reformula as operações padrão de normalização, modelagem de sequência e convolução para um modo de streaming baseado em estado.</span></p><p><span class="s" data-s="b3-p1-s0">Diferente dos métodos anteriores que processam a sequência inteira, o StreamLSC divide o áudio em quadros não sobrepostos.</span> <span class="s" data-s="b3-p1-s1">Cada quadro é codificado em um bitstream parcial.</span> <span class="s" data-s="b3-p1-s2">A consistência entre quadros é garantida pela propagação explícita de estado.</span> <span class="s" data-s="b3-p1-s3">Isso permite operação em tempo real, sem a necessidade de esperar pelo final da sequência de áudio.</span> <span class="s" data-s="b3-p1-s4">A arquitetura utiliza convoluções causais e módulos inerentemente streamable, como indicado pelos blocos verdes no diagrama da figura 2.</span></p>        <h2><span class="s" data-s="b4-h">Intra-Frame LayerNorm: Quebrando a Dependência Temporal</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Um dos problemas centrais em adaptar modelos offline para streaming é a normalização.</span> <span class="s" data-s="b4-p0-s1">Em designs offline, a GroupNorm é comumente usada para estabilizar o treinamento.</span> <span class="s" data-s="b4-p0-s2">No entanto, a GroupNorm calcula estatísticas globais ao longo de toda a sequência, introduzindo dependências não causais.</span> <span class="s" data-s="b4-p0-s3">Se você normaliza um quadro atual usando estatísticas de quadros futuros, você viola a causalidade.</span></p><p><span class="s" data-s="b4-p1-s0">Para resolver isso, os autores propõem o Intra-Frame LayerNorm.</span> <span class="s" data-s="b4-p1-s1">Em vez de agregar estatísticas ao longo do tempo, a normalização é realizada independentemente dentro de cada quadro, agregando sobre as dimensões de recurso (F) e temporal (T) apenas dentro daquele quadro específico.</span> <span class="s" data-s="b4-p1-s2">A fórmula calcula a média (µ) e a variância (σ²) apenas dos elementos presentes no quadro atual.</span></p><p><span class="s" data-s="b4-p2-s0">Essa abordagem normaliza cada quadro sem armazenar nenhum estado de quadros anteriores.</span> <span class="s" data-s="b4-p2-s1">Ela estabiliza as ativações, preserva a estrutura fonética de curto prazo e mantém a causalidade estrita.</span> <span class="s" data-s="b4-p2-s2">Ao evitar o caching inter-quadro para normalização, o modelo elimina a latência e a complexidade associadas ao armazenamento de estados de normalização, um detalhe técnico crucial que muitos codecs negligenciam ao tentar forçar causalidade.</span></p>        <h2><span class="s" data-s="b5-h">RWKV em Modo RNN: Longo Alcance sem Quadrático</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Para capturar correlações de longo alcance sem violar a causalidade, o StreamLSC adota o RWKV (Receptance Weighted Key Value).</span> <span class="s" data-s="b5-p0-s1">O RWKV reformula o mecanismo de atenção como atualizações explícitas de estado.</span> <span class="s" data-s="b5-p0-s2">Em vez de calcular a atenção entre todos os pares de posições (complexidade quadrática), o modelo mantém um estado compacto que codifica informações históricas de chave-valor e resíduos.</span></p><p><span class="s" data-s="b5-p1-s0">O RWKV possui dois modos numericamente equivalentes.</span> <span class="s" data-s="b5-p1-s1">Durante o treinamento, o modo GPT permite computação paralela de sequência completa com aceleração CUDA, aproveitando GPUs modernas.</span> <span class="s" data-s="b5-p1-s2">Durante a inferência de streaming, o modo RNN permite a propagação recursiva do estado.</span> <span class="s" data-s="b5-p1-s3">Isso garante causalidade estrita, pois o estado atual depende apenas do estado anterior e da entrada atual, reduzindo a complexidade de O(N²) para O(N).</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b6-t">Equivalência Numérica Crítica</span></h3>
+          <p><span class="s" data-s="b6-c-s0">A chave do sucesso do StreamLSC é a equivalência numérica entre os modos de treinamento (GPT) e inferência (RNN).</span> <span class="s" data-s="b6-c-s1">Isso significa que o modelo treinado offline se comporta exatamente da mesma forma online, sem necessidade de ajustes ou perda de precisão devido à aproximação de estado.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b7-h">Convoluções Causais com Cache de Borda</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Além do RWKV, o backbone utiliza Boundary-Cached Causal Convolution (BCC-Conv).</span> <span class="s" data-s="b7-p0-s1">Convoluções causais padrão exigem que a entrada seja zero-padded no passado, o que pode introduzir artefatos nas bordas dos quadros quando processados isoladamente.</span> <span class="s" data-s="b7-p0-s2">O BCC-Conv resolve isso mantendo um cache das bordas da janela de convolução do quadro anterior.</span></p><p><span class="s" data-s="b7-p1-s0">Esse cache permite que a convolução no quadro atual considere corretamente o contexto imediato do quadro anterior, sem precisar acessar todo o histórico.</span> <span class="s" data-s="b7-p1-s1">É uma solução elegante para o problema de &#39;fronteira&#39; em streaming: você precisa de contexto passado para processar o presente, mas não pode carregar tudo.</span> <span class="s" data-s="b7-p1-s2">O cache mantém apenas o mínimo necessário para a janela de convolução, garantindo eficiência de memória e causalidade.</span></p>        <h2><span class="s" data-s="b8-h">Modelo de Entropia Streamable</span></h2>
+<p><span class="s" data-s="b8-p0-s0">A compressão eficiente não depende apenas do backbone, mas também de como os latentes são codificados.</span> <span class="s" data-s="b8-p0-s1">O StreamLSC incorpora um quantizador de entropia streamable.</span> <span class="s" data-s="b8-p0-s2">O modelo de entropia extrai características auxiliares z do output do encoder y. Essas características são usadas para prever parâmetros Gaussianos (média µ e variância σ) em nível de grupo de canais.</span></p><p><span class="s" data-s="b8-p1-s0">Condicionado nesses parâmetros, o output y é codificado usando codificação autoregressiva por grupo de canais.</span> <span class="s" data-s="b8-p1-s1">Isso garante um modelamento de probabilidade preciso e streamable.</span> <span class="s" data-s="b8-p1-s2">A codificação autoregressiva garante que a probabilidade de um símbolo dependa apenas dos símbolos anteriores, respeitando a causalidade.</span> <span class="s" data-s="b8-p1-s3">O modelo de entropia é projetado para operar quadro a quadro, alinhando-se com o fluxo do backbone.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.21998/figure3.webp" alt="Resultados de avaliação objetiva: o StreamLSC supera os baselines em ViSQOL e PESQ com menor taxa de bits, demonstrando que a restrição de streaming não comprometeu a eficiência de taxa-distorção." loading="lazy">
+          <figcaption>
+            Resultados de avaliação objetiva: o StreamLSC supera os baselines em ViSQOL e PESQ com menor taxa de bits, demonstrando que a restrição de streaming não comprometeu a eficiência de taxa-distorção.
+            <span class="source">Figura 3 do paper · Liu et al., arXiv:2610.21998</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">Resultados: Eficiência e Qualidade</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Os experimentos mostram que o modelo de streaming alcança desempenho comparável à sua contraparte offline, obtendo resultados de taxa-distorção de estado da arte.</span> <span class="s" data-s="b10-p0-s1">Em avaliações objetivas, o StreamLSC apresenta ganhos significativos.</span> <span class="s" data-s="b10-p0-s2">Especificamente, há uma redução de 51,37% em BD-RATE para ViSQOL e 53,99% para PESQ em comparação com os baselines.</span> <span class="s" data-s="b10-p0-s3">O BD-RATE (Bjøntegaard-Delta Rate) mede a economia de bits necessária para alcançar a mesma qualidade; valores negativos indicam economia.</span></p>        <h2><span class="s" data-s="b11-h">Avaliação Subjetiva e Percepção Humana</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Além das métricas objetivas, a qualidade perceptual foi avaliada usando MUSHRA (Multi-Stimulus Method with Hidden Reference and Anchor).</span> <span class="s" data-s="b11-p0-s1">O gráfico na figura 1 mostra que o StreamLSC atinge qualidade perceptual superior em taxas de bits ultrabaixas.</span> <span class="s" data-s="b11-p0-s2">Os pontos centrais dos círculos representam a média das avaliações dos ouvintes, e o tamanho reflete a variabilidade das notas.</span></p><p><span class="s" data-s="b11-p1-s0">Os resultados indicam que, mesmo com a restrição de causalidade estrita e processamento quadro a quadro, a fidelidade percebida pela fala humana é mantida ou melhorada em relação a codecs tradicionais e outros neurais não-streamable em regimes de baixa taxa de bits.</span> <span class="s" data-s="b11-p1-s1">Isso valida a eficácia do Intra-Frame LayerNorm e do RWKV em preservar a estrutura fonética essencial.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.21998/figure1.webp" alt="Avaliação subjetiva MUSHRA: o StreamLSC demonstra superioridade perceptual em baixas taxas de bits, com alta média de pontuação e variabilidade consistente, indicando robustez na qualidade percebida." loading="lazy">
+          <figcaption>
+            Avaliação subjetiva MUSHRA: o StreamLSC demonstra superioridade perceptual em baixas taxas de bits, com alta média de pontuação e variabilidade consistente, indicando robustez na qualidade percebida.
+            <span class="source">Figura 1 do paper · Liu et al., arXiv:2610.21998</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b13-h">Limitações e Escopo</span></h2>
+<p><span class="s" data-s="b13-p0-s0">É importante notar o escopo deste trabalho.</span> <span class="s" data-s="b13-p0-s1">O foco é especificamente em compressão de fala (speech compression), não áudio geral.</span> <span class="s" data-s="b13-p0-s2">Embora os princípios possam ser estendidos, os resultados são validados em dados de fala.</span> <span class="s" data-s="b13-p0-s3">Além disso, o paper destaca a eficiência em taxas de bits ultrabaixas.</span> <span class="s" data-s="b13-p0-s4">Em taxas de bits mais altas, onde codecs como Opus já são muito eficientes, o ganho relativo pode ser diferente, embora o StreamLSC ainda busque a fronteira de RD.</span></p>        <h2><span class="s" data-s="b14-h">Conclusão: O Futuro do Streaming Neural</span></h2>
+<p><span class="s" data-s="b14-p0-s0">O StreamLSC demonstra que é possível alcançar alta eficiência de compressão neural com causalidade estrita em nível de quadro.</span> <span class="s" data-s="b14-p0-s1">Ao reformular a normalização, a modelagem de sequência e a convolução, os autores eliminam as dependências não causais que impedem o streaming em modelos neurais tradicionais.</span> <span class="s" data-s="b14-p0-s2">O uso de RWKV em modo RNN e o Intra-Frame LayerNorm são contribuições técnicas significativas que podem inspirar futuros designs de modelos de áudio e linguagem.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b15-t">Impacto Prático</span></h3>
+          <p><span class="s" data-s="b15-c-s0">Para desenvolvedores de aplicações de comunicação em tempo real, o StreamLSC oferece um caminho para codecs neurais de alta qualidade sem a latência de espera por sequências completas, viabilizando aplicações antes restritas a codecs tradicionais de baixa fidelidade.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b16-h">O Que Fica em Aberto</span></h2>
+<p><span class="s" data-s="b16-p0-s0">Apesar dos avanços, questões sobre a escalabilidade para contextos extremamente longos sem degradação do estado do RWKV permanecem.</span> <span class="s" data-s="b16-p0-s1">Além disso, a complexidade computacional do treinamento paralelo versus inferência recursiva pode variar dependendo da implementação de hardware.</span> <span class="s" data-s="b16-p0-s2">O paper não aborda a eficiência energética em dispositivos embarcados, um fator crítico para streaming móvel.</span> <span class="s" data-s="b16-p0-s3">Futuros trabalhos podem explorar a integração com outros tipos de modelagem de entropia ou a extensão para áudio multicanal.</span></p>        <h2><span class="s" data-s="b17-h">Resumo Técnico</span></h2>
+<p><span class="s" data-s="b17-p0-s0">Em resumo, o StreamLSC combina três componentes fundamentais: Boundary-Cached Causal Convolution para contexto local causal, Intra-Frame LayerNorm para estabilidade sem dependência temporal global, e RNN-mode RWKV para modelagem de longo alcance linear.</span> <span class="s" data-s="b17-p0-s1">Essa combinação permite um modelo de compressão de fala aprendido que é tanto eficiente em taxa-distorção quanto estritamente causal, preenchendo uma lacuna importante entre a teoria de codecs neurais e a prática de streaming em tempo real.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">StreamLSC resolve o conflito entre causalidade estrita e alta eficiência de compressão neural.</span></li><li><span class="s" data-s="k1">Substitui normalização global por Intra-Frame LayerNorm para evitar dependências não causais.</span></li><li><span class="s" data-s="k2">Utiliza RWKV em modo RNN para propagação de estado linear e causal, equivalente ao treinamento paralelo.</span></li><li><span class="s" data-s="k3">Consegue ganhos de até 54% em BD-RATE sobre codecs tradicionais em baixas taxas de bits.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.21998" rel="noopener">Frame-Wise Streaming for Efficient Learned Speech Compression</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.21998" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

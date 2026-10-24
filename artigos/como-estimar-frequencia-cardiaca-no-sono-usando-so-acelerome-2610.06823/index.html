@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Como estimar frequência cardíaca no sono usando só acelerômetro: um Transformer que corrige sinais fracos sem sensor óptico — arXiv em 5</title>
+<meta name="description" content="Pesquisadores das universidades de Kennesaw e Georgia treinam um modelo que extrai batimentos cardíacos de acelerômetros de pulso durante o sono, recuperando informação fisiológica de coortes longitudinais que nunca tiveram sensor óptico de frequência cardíaca.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Como estimar frequência cardíaca no sono usando só acelerômetro: um Transformer que corrige sinais fracos sem sensor óptico">
+<meta property="og:description" content="Pesquisadores das universidades de Kennesaw e Georgia treinam um modelo que extrai batimentos cardíacos de acelerômetros de pulso durante o sono, recuperando informação fisiológica de coortes longitudinais que nunca tiveram sensor óptico de frequência cardíaca.">
+<meta property="og:image" content="../../assets/papers/2610.06823/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Saúde</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.06823" rel="noopener">arXiv:2610.06823</a>
+    </div>
+    <h1><span class="s" data-s="t">Como estimar frequência cardíaca no sono usando só acelerômetro: um Transformer que corrige sinais fracos sem sensor óptico</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Pesquisadores das universidades de Kennesaw e Georgia treinam um modelo que extrai batimentos cardíacos de acelerômetros de pulso durante o sono, recuperando informação fisiológica de coortes longitudinais que nunca tiveram sensor óptico de frequência cardíaca.</span></p>
+    <p class="byline">
+      <span>Rohan et al.</span>
+      <span>10 min de leitura</span>
+<span>05/10/2026</span>    </p>
+    <div class="listen" data-article="2610.06823" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema: coortes gigantes sem frequência cardíaca</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Estudos longitudinais de saúde em larga escala costumam coletar acelerometria de pulso para medir atividade física e padrões de sono.</span> <span class="s" data-s="b0-p0-s1">O UK Biobank, por exemplo, registrou uma semana inteira de acelerômetro de pulso em cerca de 100 mil participantes.</span> <span class="s" data-s="b0-p0-s2">Esses dados já existem, estão armazenados e contêm registros de saúde ricos ao longo do tempo.</span> <span class="s" data-s="b0-p0-s3">Mas a maioria dessas coortes não incluiu sensores ópticos de frequência cardíaca—a tecnologia que smartwatches modernos usam para medir batimentos.</span></p><p><span class="s" data-s="b0-p1-s0">Recuperar a frequência cardíaca (HR, heart rate) desses acelerômetros já coletados poderia adicionar um sinal fisiológico valioso para análises retrospectivas futuras.</span> <span class="s" data-s="b0-p1-s1">O desafio é que o sinal mecânico do coração—chamado balistocardiograma (BCG)—é fraco no pulso e facilmente encoberto por movimento voluntário.</span> <span class="s" data-s="b0-p1-s2">Durante o sono, porém, há períodos mais longos de relativa imobilidade, tornando a tarefa viável.</span></p><p><span class="s" data-s="b0-p2-s0">Nightbeat, um pipeline de processamento de sinal publicado anteriormente, combina rastreamento no domínio da frequência, rejeição de artefatos de movimento e pós-processamento temporal fixo para estimar HR de acelerômetros de pulso durante o sono.</span> <span class="s" data-s="b0-p2-s1">Ele funciona bem, mas rejeita muitos intervalos onde a qualidade do sinal não passa por seus filtros.</span> <span class="s" data-s="b0-p2-s2">Este paper não tenta substituir Nightbeat; em vez disso, investiga se um modelo aprendido pode oferecer um comportamento complementar: cobrir mais intervalos, mesmo que com erro maior.</span></p>        <h2><span class="s" data-s="b1-h">A ideia: um Transformer que corrige estimativas brutas usando contexto temporal</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Os autores apresentam SeqSmoother, um corretor temporal baseado em Transformer que opera sobre janelas de 60 segundos de acelerometria de pulso.</span> <span class="s" data-s="b1-p0-s1">A arquitetura não parte do zero: ela usa uma estimativa de frequência intermediária derivada do próprio Nightbeat como âncora, junto com descritores espectrais e uma feature física nova, o sub-harmonic ratio, projetada para identificar quando o rastreador de frequência trava em um harmônico—tipicamente o dobro da frequência cardíaca real.</span></p><p><span class="s" data-s="b1-p1-s0">Todas as features de inferência vêm exclusivamente da acelerometria de pulso.</span> <span class="s" data-s="b1-p1-s1">O ECG é usado apenas para construir os rótulos de referência de HR e pesos de qualidade dos rótulos de treino.</span> <span class="s" data-s="b1-p1-s2">Na inferência, o modelo não vê ECG.</span> <span class="s" data-s="b1-p1-s3">Isso é importante: o objetivo é recuperar HR de dados que nunca tiveram sensor cardíaco.</span></p><p><span class="s" data-s="b1-p2-s0">O SeqSmoother processa sequências de 40 janelas consecutivas (cada uma de 60 s, com passo de 15 s, portanto 75% de sobreposição).</span> <span class="s" data-s="b1-p2-s1">Cada janela é representada por um vetor de 26 dimensões: 18 bins de densidade espectral de potência (PSD) log-normalizada na banda BCG, uma estimativa de pico espectral, um descritor de relação sinal-ruído de banda, a âncora Nightbeat derivada do acelerômetro, o sub-harmonic ratio e um indicador de disponibilidade/qualidade da âncora Nightbeat.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.06823/figure1.webp" alt="Fluxo completo do SeqSmoother: acelerometria de pulso é segmentada em janelas de 60 s, transformada em features espectrais (incluindo a âncora Nightbeat e o sub-harmonic ratio), alimenta um Transformer de 40 janelas e produz a estimativa final de HR. ECG serve apenas como referência de treino." loading="lazy">
+          <figcaption>
+            Fluxo completo do SeqSmoother: acelerometria de pulso é segmentada em janelas de 60 s, transformada em features espectrais (incluindo a âncora Nightbeat e o sub-harmonic ratio), alimenta um Transformer de 40 janelas e produz a estimativa final de HR. ECG serve apenas como referência de treino.
+            <span class="source">Figura 1 do paper · Rohan et al., arXiv:2610.06823</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Como funciona o sub-harmonic ratio</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Uma falha comum em rastreadores de frequência no domínio espectral é travar perto do dobro da frequência cardíaca real—um fenômeno chamado harmonic lock-on.</span> <span class="s" data-s="b3-p0-s1">Quando isso acontece, a estimativa intermediária aponta para 2f₀ em vez de f₀, onde f₀ é a frequência cardíaca verdadeira.</span></p><p><span class="s" data-s="b3-p1-s0">Os autores propõem uma feature física para detectar isso: o sub-harmonic ratio η₁/₂.</span> <span class="s" data-s="b3-p1-s1">A ideia é simples: se a âncora Nightbeat ĥ_NH está travada perto de 2f₀, então deve haver energia espectral perto de ĥ_NH/2, que corresponde à frequência cardíaca real.</span> <span class="s" data-s="b3-p1-s2">O ratio η₁/₂ compara a potência em uma janela estreita ao redor de ĥ_NH/2 com a potência total na banda BCG.</span></p><p><span class="s" data-s="b3-p2-s0">Formalmente, seja P(f) a PSD da magnitude do acelerômetro filtrada entre 0,5 e 4,0 Hz.</span> <span class="s" data-s="b3-p2-s1">Define-se P₁/₂ como a integral de P(f) em [ĥ_NH/2 − 0,05, ĥ_NH/2 + 0,05] Hz, e P_total como a integral de P(f) em [0,5, 4,0] Hz.</span> <span class="s" data-s="b3-p2-s2">Então η₁/₂ = P₁/₂ / P_total.</span> <span class="s" data-s="b3-p2-s3">Valores altos de η₁/₂ sugerem que a âncora está travada no harmônico.</span></p><p><span class="s" data-s="b3-p3-s0">Os autores validam essa feature separadamente usando um diagnóstico baseado em referência: identificam janelas candidatas onde a âncora Nightbeat está perto do dobro da HR de referência do ECG (|ĥ_NH − 2·HR_ref| &lt; 2,5 bpm e HR_ref ∈ [40, 75] bpm).</span> <span class="s" data-s="b3-p3-s1">Através de 337 janelas candidatas de 7 participantes held-out, o sub-harmonic ratio atinge AUROC de 0,972 para identificar lock-on.</span> <span class="s" data-s="b3-p3-s2">Isso confirma empiricamente que a feature captura o fenômeno físico.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.06823/figure2.webp" alt="Mecanismo do sub-harmonic ratio: quando a âncora Nightbeat trava perto de 2f₀, há energia espectral perto de ĥ_NH/2 (a frequência cardíaca real). O ratio η₁/₂ captura isso e atinge AUROC 0,972 para detectar lock-on em 337 janelas de 7 participantes held-out." loading="lazy">
+          <figcaption>
+            Mecanismo do sub-harmonic ratio: quando a âncora Nightbeat trava perto de 2f₀, há energia espectral perto de ĥ_NH/2 (a frequência cardíaca real). O ratio η₁/₂ captura isso e atinge AUROC 0,972 para detectar lock-on em 337 janelas de 7 participantes held-out.
+            <span class="source">Figura 2 do paper · Rohan et al., arXiv:2610.06823</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Arquitetura do Transformer e treinamento</span></h2>
+<p><span class="s" data-s="b5-p0-s0">O SeqSmoother usa um Transformer encoder padrão com 4 camadas, 4 cabeças de atenção, dimensão de modelo 128 e dimensão feedforward 256.</span> <span class="s" data-s="b5-p0-s1">A sequência de entrada tem 40 janelas, cada uma representada pelo vetor de 26 features.</span> <span class="s" data-s="b5-p0-s2">O modelo produz uma saída por janela, que é então mapeada para a estimativa final de HR em bpm por uma camada linear.</span></p><p><span class="s" data-s="b5-p1-s0">O treinamento usa perda L1 (MAE) ponderada.</span> <span class="s" data-s="b5-p1-s1">Cada janela de treino recebe um peso q ∈ [0,1], definido como a fração de amostras de ECG marcadas como válidas naquele intervalo de 60 s. Isso down-pondera rótulos de referência menos confiáveis, mas não impõe um limiar duro: janelas com qualquer q ≥ 0 são incluídas no treino.</span> <span class="s" data-s="b5-p1-s2">Importante: q descreve a confiabilidade do rótulo de referência ECG, não a qualidade do sinal do acelerômetro ou a presença de movimento.</span> <span class="s" data-s="b5-p1-s3">O modelo não vê q na inferência.</span></p><p><span class="s" data-s="b5-p2-s0">A avaliação usa 13 folds disjuntos por participante: cada fold treina em 12 participantes e testa em 1.</span> <span class="s" data-s="b5-p2-s1">Isso trata o participante como a unidade estatística independente, evitando vazamento de informação temporal intra-participante entre treino e teste.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b6-t">Diferença entre q e qNH</span></h3>
+          <p><span class="s" data-s="b6-c-s0">O paper define dois indicadores de qualidade. q é a fração de amostras de ECG válidas em uma janela; é derivado do ECG de referência e usado apenas como peso de treino. qNH é o indicador de disponibilidade/qualidade da âncora Nightbeat derivada do acelerômetro; está disponível na inferência e entra como feature do modelo.</span> <span class="s" data-s="b6-c-s1">Não confunda os dois.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b7-h">Resultados: precisão e cobertura</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Nos 13 participantes held-out, o SeqSmoother produziu 20.792 predições fora da amostra (out-of-fold, OOF).</span> <span class="s" data-s="b7-p0-s1">O MAE médio por participante (participant-macro MAE) foi 1,60 ± 0,53 bpm, com intervalo de confiança bootstrap de 95% entre 1,35 e 1,90 bpm.</span> <span class="s" data-s="b7-p0-s2">O MAE descritivo pooled foi 1,61 bpm e o RMSE 3,15 bpm.</span> <span class="s" data-s="b7-p0-s3">A correlação de Pearson mediana por participante foi r = 0,771 (IQR: 0,683–0,833), e a correlação pooled centrada por participante foi r = 0,765.</span></p><p><span class="s" data-s="b7-p1-s0">Esses números sozinhos não dizem muito.</span> <span class="s" data-s="b7-p1-s1">O paper faz uma comparação pareada com a implementação oficial do Nightbeat, executada sob o mesmo protocolo de janelas de 60 s e passo de 15 s. Dos 20.792 endpoints OOF do SeqSmoother, 19.478 (93,68%) alinharam com um timestamp candidato do Nightbeat.</span> <span class="s" data-s="b7-p1-s2">Desses, o Nightbeat reteve uma estimativa final para 15.146 intervalos—77,76% de retenção entre candidatos alinhados, ou 72,85% de disponibilidade de predição final em relação à grade OOF completa do SeqSmoother.</span></p><p><span class="s" data-s="b7-p2-s0">Aqui está o trade-off central: nos exatos 15.146 intervalos retidos pelo Nightbeat, o MAE participant-macro foi 1,09 bpm para o SeqSmoother e 0,62 bpm para o Nightbeat.</span> <span class="s" data-s="b7-p2-s1">A diferença pareada foi +0,48 bpm favorecendo o Nightbeat, com IC 95% de [+0,32, +0,64] bpm e teste de Wilcoxon p = 0,00049.</span> <span class="s" data-s="b7-p2-s2">O Nightbeat é mais preciso em termos absolutos nos intervalos que ele decide manter.</span></p><p><span class="s" data-s="b7-p3-s0">Mas o SeqSmoother fornece predições em 100% da grade OOF elegível, enquanto o Nightbeat cobre apenas 72,85%.</span> <span class="s" data-s="b7-p3-s1">Nos 4.332 intervalos candidatos alinhados que o Nightbeat rejeitou, o SeqSmoother obteve MAE de 2,66 bpm, RMSE de 4,44 bpm e correlação descritiva pooled r = 0,815.</span> <span class="s" data-s="b7-p3-s2">Esses intervalos rejeitados são substancialmente mais difíceis, mas a correlação de 0,815 sugere que ainda contêm informação temporal de HR.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.06823/figure3.webp" alt="Trade-off entre erro e disponibilidade: (a) MAE pareado por participante—Nightbeat tem erro menor em 12 dos 13 participantes; (b) MAE participant-macro e disponibilidade de predição final—Nightbeat é mais preciso (0,62 bpm) mas cobre apenas 72,8% dos dados, enquanto SeqSmoother cobre 100% com MAE 1,60 bpm." loading="lazy">
+          <figcaption>
+            Trade-off entre erro e disponibilidade: (a) MAE pareado por participante—Nightbeat tem erro menor em 12 dos 13 participantes; (b) MAE participant-macro e disponibilidade de predição final—Nightbeat é mais preciso (0,62 bpm) mas cobre apenas 72,8% dos dados, enquanto SeqSmoother cobre 100% com MAE 1,60 bpm.
+            <span class="source">Figura 3 do paper · Rohan et al., arXiv:2610.06823</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">O que os números realmente significam</span></h2>
+<p><span class="s" data-s="b9-p0-s0">O paper não afirma que o SeqSmoother supera o Nightbeat.</span> <span class="s" data-s="b9-p0-s1">A interpretação correta é que há um trade-off entre precisão e cobertura.</span> <span class="s" data-s="b9-p0-s2">O Nightbeat usa um pipeline de controle de qualidade rigoroso e abstém-se de produzir estimativas quando a confiança é baixa.</span> <span class="s" data-s="b9-p0-s3">Isso resulta em erro absoluto menor nos intervalos retidos.</span> <span class="s" data-s="b9-p0-s4">O SeqSmoother, por ser um modelo aprendido com contexto temporal, continua produzindo estimativas mesmo em regiões onde o Nightbeat se abstém.</span></p><p><span class="s" data-s="b9-p1-s0">Nos intervalos retidos pelo Nightbeat, o SeqSmoother tem uma correlação centrada por participante ligeiramente maior (0,878 versus 0,854), mas os autores reportam isso de forma descritiva, sem reivindicar superioridade estatística estabelecida.</span> <span class="s" data-s="b9-p1-s1">O valor histórico de 0,88 bpm publicado para o Nightbeat não é usado para inferência pareada porque foi gerado sob um protocolo diferente.</span></p><p><span class="s" data-s="b9-p2-s0">A rejeição do Nightbeat funciona como um indicador operacional de janela difícil, mas não é um rótulo puro de movimento do pulso.</span> <span class="s" data-s="b9-p2-s1">O score de qualidade q derivado do ECG é tratado estritamente como qualidade do rótulo de referência, não como proxy de movimento ou qualidade do acelerômetro.</span> <span class="s" data-s="b9-p2-s2">A construção de referência foi verificada diretamente entre os dois caminhos de avaliação: em 19.478 intervalos alinhados, 99,95% dos valores de referência ECG pareados concordaram dentro de 0,01 bpm.</span> <span class="s" data-s="b9-p2-s3">A diferença de precisão não é explicada por construção inconsistente de alvo.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b10-t">Limitação: população e contexto de sono</span></h3>
+          <p><span class="s" data-s="b10-c-s0">O dataset NightbeatDB é dominado por valores típicos de HR noturna.</span> <span class="s" data-s="b10-c-s1">Os autores não formam estratos de HR extrema ou generalizam os resultados para arritmia ou HR noturna marcadamente elevada.</span> <span class="s" data-s="b10-c-s2">O estudo valida a abordagem em sono domiciliar não controlado, mas não em contextos clínicos ou patológicos.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b11-h">Validação do sub-harmonic ratio como diagnóstico</span></h2>
+<p><span class="s" data-s="b11-p0-s0">A análise do sub-harmonic ratio fornece uma contribuição mecanística separada.</span> <span class="s" data-s="b11-p0-s1">O diagnóstico baseado em referência identificou 337 janelas candidatas de lock-on harmônico em 7 participantes held-out.</span> <span class="s" data-s="b11-p0-s2">O AUROC pooled de 0,972 suporta a hipótese de que a energia em metade de uma âncora potencialmente dobrada é informativa para lock-on de frequência harmônica.</span></p><p><span class="s" data-s="b11-p1-s0">Os autores não atribuem uma porção específica da melhoria de regressão total exclusivamente a η₁/₂, porque as janelas se sobrepõem e o SeqSmoother usa conjuntamente informação espectral, âncora e temporal.</span> <span class="s" data-s="b11-p1-s1">A feature é um componente do vetor de entrada, não um módulo isolado.</span> <span class="s" data-s="b11-p1-s2">Mas a validação separada confirma que ela captura o fenômeno físico que foi projetada para detectar.</span></p>        <h2><span class="s" data-s="b12-h">O que o paper não mostra</span></h2>
+<p><span class="s" data-s="b12-p0-s0">O SeqSmoother não é validado prospectivamente ou em coortes externas.</span> <span class="s" data-s="b12-p0-s1">Todos os resultados vêm de folds disjuntos por participante dentro do mesmo dataset (NightbeatDB).</span> <span class="s" data-s="b12-p0-s2">Não há validação clínica, e os autores não fazem afirmações sobre uso clínico ou em escala populacional sem validação futura.</span></p><p><span class="s" data-s="b12-p1-s0">O estudo não compara o SeqSmoother com outros métodos aprendidos de estimativa de HR a partir de acelerômetro.</span> <span class="s" data-s="b12-p1-s1">A baseline é o Nightbeat, um pipeline de processamento de sinal forte.</span> <span class="s" data-s="b12-p1-s2">Não há ablation detalhada isolando a contribuição do Transformer versus as features espectrais versus a âncora Nightbeat.</span> <span class="s" data-s="b12-p1-s3">O paper também não explora variantes de arquitetura (número de camadas, cabeças, tamanho de sequência).</span></p><p><span class="s" data-s="b12-p2-s0">O indicador de qualidade q é derivado do ECG de referência e não está disponível na inferência.</span> <span class="s" data-s="b12-p2-s1">Isso significa que o modelo não tem acesso direto a uma medida de confiabilidade do próprio rótulo de treino durante a predição.</span> <span class="s" data-s="b12-p2-s2">O qNH (disponibilidade/qualidade da âncora Nightbeat) está disponível, mas é uma medida diferente.</span></p><p><span class="s" data-s="b12-p3-s0">O paper não aborda o custo computacional ou a viabilidade de implantação em dispositivos embarcados.</span> <span class="s" data-s="b12-p3-s1">O Transformer é relativamente pequeno (4 camadas, 128 dimensões), mas a análise espectral e a extração de features ainda exigem processamento.</span> <span class="s" data-s="b12-p3-s2">Também não há discussão sobre latência ou processamento em tempo real.</span></p>        <h2><span class="s" data-s="b13-h">Implicações e direções futuras</span></h2>
+<p><span class="s" data-s="b13-p0-s0">Os autores interpretam os achados como evidência de um trade-off entre modelagem temporal aprendida e processamento de sinal com controle de qualidade.</span> <span class="s" data-s="b13-p0-s1">Isso motiva sistemas híbridos futuros que preservem estimativas Nightbeat de alta confiança enquanto usam modelagem temporal aprendida para regiões incertas ou rejeitadas.</span> <span class="s" data-s="b13-p0-s2">Tais sistemas exigiriam validação prospectiva e externa antes de afirmações clínicas ou em escala populacional.</span></p><p><span class="s" data-s="b13-p1-s0">A abordagem tem relevância prática para estudos longitudinais existentes.</span> <span class="s" data-s="b13-p1-s1">Coortes como o UK Biobank já coletaram acelerometria de pulso de dezenas de milhares de participantes sem sensores ópticos de HR.</span> <span class="s" data-s="b13-p1-s2">Se validado externamente, o SeqSmoother ou sistemas híbridos semelhantes poderiam recuperar informação fisiológica cardíaca desses dados já armazenados, adicionando uma dimensão de análise retrospectiva.</span></p><p><span class="s" data-s="b13-p2-s0">O sub-harmonic ratio demonstra que features físicas informadas podem ser integradas em modelos aprendidos.</span> <span class="s" data-s="b13-p2-s1">Isso sugere uma direção de pesquisa: em vez de tratar deep learning e processamento de sinal como abordagens opostas, projetar features que capturem fenômenos físicos conhecidos e deixar o modelo aprender como combiná-las com contexto temporal.</span></p><p><span class="s" data-s="b13-p3-s0">O paper também levanta uma questão metodológica importante: como avaliar sistemas que fazem trade-offs entre precisão e cobertura?</span> <span class="s" data-s="b13-p3-s1">Reportar apenas MAE ou correlação em intervalos retidos pode favorecer sistemas conservadores que se abstêm com frequência.</span> <span class="s" data-s="b13-p3-s2">Reportar apenas cobertura pode favorecer sistemas que sempre predizem, mesmo quando não deveriam.</span> <span class="s" data-s="b13-p3-s3">A comparação pareada explícita, com análise de disponibilidade e erro condicional em intervalos rejeitados, oferece uma estrutura mais completa.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b14-t">Validação prospectiva necessária</span></h3>
+          <p><span class="s" data-s="b14-c-s0">Os autores enfatizam que validação prospectiva e externa é necessária antes de qualquer uso clínico ou em escala populacional.</span> <span class="s" data-s="b14-c-s1">Os resultados atuais vêm de folds disjuntos por participante no mesmo dataset, não de coortes independentes ou contextos clínicos reais.</span></p>
+        </aside>
+
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">SeqSmoother usa Transformer para estimar HR de acelerômetro de pulso durante o sono, atingindo MAE de 1,60 bpm em 13 participantes held-out, mas é menos preciso que Nightbeat (0,62 bpm) em intervalos retidos.</span></li><li><span class="s" data-s="k1">O trade-off: Nightbeat cobre 72,85% dos dados com erro menor; SeqSmoother cobre 100% com erro maior (2,66 bpm) em regiões rejeitadas, mas correlação 0,815 sugere que ainda há informação temporal útil.</span></li><li><span class="s" data-s="k2">Sub-harmonic ratio atinge AUROC 0,972 para detectar lock-on harmônico (quando o rastreador trava no dobro da frequência real), validando uma feature física informada dentro de um modelo aprendido.</span></li><li><span class="s" data-s="k3">Aplicação prática: recuperar HR de coortes longitudinais gigantes (UK Biobank, 100 mil participantes) que coletaram acelerometria mas nunca tiveram sensor óptico—validação externa ainda necessária.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.06823" rel="noopener">Deep Learning for Sleep Heart Rate Estimation from Accelerometers: Toward Population-Scale Cardiac Insight Without Optical Sensors</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.06823" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

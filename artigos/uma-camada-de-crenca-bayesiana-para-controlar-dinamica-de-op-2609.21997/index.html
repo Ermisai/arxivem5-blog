@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Uma camada de crença bayesiana para controlar dinâmica de opinião em agentes LLM — arXiv em 5</title>
+<meta name="description" content="Simulações sociais com LLMs costumam convergir para consensos irrealistas. Este paper separa o que o agente acredita de como ele fala, usando um único parâmetro para reproduzir três regimes clássicos de opinião.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Uma camada de crença bayesiana para controlar dinâmica de opinião em agentes LLM">
+<meta property="og:description" content="Simulações sociais com LLMs costumam convergir para consensos irrealistas. Este paper separa o que o agente acredita de como ele fala, usando um único parâmetro para reproduzir três regimes clássicos de opinião.">
+<meta property="og:image" content="../../assets/papers/2609.21997/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Agentes</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2609.21997" rel="noopener">arXiv:2609.21997</a>
+    </div>
+    <h1><span class="s" data-s="t">Uma camada de crença bayesiana para controlar dinâmica de opinião em agentes LLM</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Simulações sociais com LLMs costumam convergir para consensos irrealistas.</span> <span class="s" data-s="d-s1">Este paper separa o que o agente acredita de como ele fala, usando um único parâmetro para reproduzir três regimes clássicos de opinião.</span></p>
+    <p class="byline">
+      <span>Akbar et al.</span>
+      <span>9 min de leitura</span>
+<span>18/09/2026</span>    </p>
+    <div class="listen" data-article="2609.21997" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=RXJ28WdJJFc" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema: agentes LLM revisam opiniões de forma opaca</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Modelos de linguagem grandes estão cada vez mais sendo usados como habitantes de simulações sociais: populações sintéticas que discutem, persuadem e formam opiniões coletivas.</span> <span class="s" data-s="b0-p0-s1">Na maioria desses sistemas, a opinião de um agente é revisada pelo próprio LLM, em contexto.</span> <span class="s" data-s="b0-p0-s2">Dois problemas bem documentados surgem daí.</span></p><p><span class="s" data-s="b0-p1-s0">Primeiro, as populações tendem a convergir para vieses inerentes ao modelo, apesar das personas atribuídas.</span> <span class="s" data-s="b0-p1-s1">É um colapso de consenso que torna sociedades simuladas irrealisticamente uniformes e sensíveis a pequenas mudanças no prompt.</span> <span class="s" data-s="b0-p1-s2">Segundo, estudos recentes mostram que revisões de confiança feitas por LLMs violam normas bayesianas e são mal calibradas quando há evidências conflitantes.</span></p><p><span class="s" data-s="b0-p2-s0">A dinâmica de opinião clássica oferece a maquinaria interpretável que falta nessas simulações baseadas em LLM.</span> <span class="s" data-s="b0-p2-s1">O modelo DeGroot prevê consenso em populações conectadas.</span> <span class="s" data-s="b0-p2-s2">O modelo Friedkin-Johnsen, ou FJ, explica desacordo duradouro através de teimosia por agente.</span> <span class="s" data-s="b0-p2-s3">Modelos de minoria comprometida estudam como uma pequena facção inflexível move uma maioria flexível.</span> <span class="s" data-s="b0-p2-s4">Mas esses modelos operam sobre escalares puros, sem noção de linguagem, que é justamente o que os LLMs oferecem agora.</span></p><p><span class="s" data-s="b0-p3-s0">Os autores perguntam: é possível aproveitar essa capacidade linguística sem perder a interpretabilidade dos modelos clássicos?</span></p>        <h2><span class="s" data-s="b1-h">A ideia: separar crença de fala</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Para combinar o controle matemático da dinâmica de opinião clássica com as capacidades linguísticas de agentes LLM, os autores adicionam uma pequena camada explícita de crença entre a persona de um agente e suas ações, no caso a geração de fala.</span> <span class="s" data-s="b1-p0-s1">Eles chamam os agentes resultantes de Bayesian Chronicle Agents, ou BCA.</span></p><p><span class="s" data-s="b1-p1-s0">A posição de um agente sobre um conceito é uma probabilidade mantida fora do modelo de linguagem.</span> <span class="s" data-s="b1-p1-s1">Quando o agente ouve uma fala, um modelo avaliador calibrado separado lê essa fala e a converte em evidência escalar.</span> <span class="s" data-s="b1-p1-s2">A crença então dá um passo de atualização bayesiana.</span> <span class="s" data-s="b1-p1-s3">Um único botão por agente, a força do prior κ (kappa), define o quanto cada passo move o agente: um agente teimoso carrega uma contagem de prior grande, então uma observação mal o move.</span></p><p><span class="s" data-s="b1-p2-s0">Com essa arquitetura, o que um agente acredita segue uma regra probabilística transparente.</span> <span class="s" data-s="b1-p2-s1">Como ele age ou fala em consequência é decidido pelo LLM.</span> <span class="s" data-s="b1-p2-s2">A camada de atualização bayesiana contribui três coisas para simulação social baseada em LLM: recuperabilidade do parâmetro prescrito, fidelidade aos regimes clássicos e auditabilidade, já que toda mudança de crença é um evento registrado.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.21997/figure1.webp" alt="Uma rodada pela camada de crença. O LLM gerador transforma a crença latente em texto; o LLM avaliador mapeia o texto de volta para evidência escalar; cada ouvinte dá um passo de atualização bayesiana. O parâmetro κ coloca o agente no eixo clássico de teimosia." loading="lazy">
+          <figcaption>
+            Uma rodada pela camada de crença. O LLM gerador transforma a crença latente em texto; o LLM avaliador mapeia o texto de volta para evidência escalar; cada ouvinte dá um passo de atualização bayesiana. O parâmetro κ coloca o agente no eixo clássico de teimosia.
+            <span class="source">Figura 1 do paper · Akbar et al., arXiv:2609.21997</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Como funciona a camada de crença</span></h2>
+<p><span class="s" data-s="b3-p0-s0">A arquitetura tem três componentes.</span> <span class="s" data-s="b3-p0-s1">Primeiro, cada agente mantém uma crença latente sobre um tópico, representada como uma distribuição Beta com parâmetros alfa e beta.</span> <span class="s" data-s="b3-p0-s2">A crença atual b é alfa dividido por alfa mais beta, um número entre zero e um.</span> <span class="s" data-s="b3-p0-s3">Essa crença não está dentro do LLM: é uma variável externa, registrada e controlada.</span></p><p><span class="s" data-s="b3-p1-s0">Segundo, quando um agente precisa falar, o LLM gerador (rodado com temperatura 0.9 para variabilidade) transforma essa crença latente em uma opinião expressa em linguagem natural.</span> <span class="s" data-s="b3-p1-s1">Por exemplo, se a crença sobre transporte ferroviário é alta, o agente pode dizer algo como &#39;o trem aliviaria o congestionamento diário no centro&#39;.</span></p><p><span class="s" data-s="b3-p2-s0">Terceiro, quando um agente ouve uma fala, um LLM avaliador separado (rodado com temperatura zero e calibrado) lê o texto e extrai evidência escalar e entre zero e um.</span> <span class="s" data-s="b3-p2-s1">Cada ouvinte então atualiza sua crença usando um passo inspirado na atualização FJ: a nova crença b&#39; é uma combinação ponderada da crença atual, da evidência recebida e da crença inicial b0.</span> <span class="s" data-s="b3-p2-s2">Os pesos são definidos por κ e por um parâmetro global γ (gamma) que controla o esquecimento.</span></p><p><span class="s" data-s="b3-p3-s0">O parâmetro κ codifica teimosia.</span> <span class="s" data-s="b3-p3-s1">Um κ pequeno significa que o agente é maleável: uma única observação pode mover bastante sua crença.</span> <span class="s" data-s="b3-p3-s2">Um κ grande significa que o agente é teimoso: ele carrega um prior forte e uma observação mal o abala.</span> <span class="s" data-s="b3-p3-s3">Quando κ tende a zero, recuperamos o modelo DeGroot de consenso.</span> <span class="s" data-s="b3-p3-s4">Quando κ é finito, temos o regime FJ de desacordo persistente.</span> <span class="s" data-s="b3-p3-s5">Quando κ tende a infinito, o agente vira uma âncora comprometida que nunca muda de opinião.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b4-t">O papel do esquecimento</span></h3>
+          <p><span class="s" data-s="b4-c-s0">O parâmetro γ controla quanto peso o agente dá à sua crença inicial versus ao histórico de evidências.</span> <span class="s" data-s="b4-c-s1">Com γ igual a um, o agente esquece completamente sua crença inicial e só considera o que ouviu.</span> <span class="s" data-s="b4-c-s2">Sem esse esquecimento, mesmo populações com agentes teimosos colapsam para consenso.</span> <span class="s" data-s="b4-c-s3">O esquecimento é o ingrediente que habilita desacordo persistente.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b5-h">Experimento: um parâmetro, três regimes clássicos</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os autores testam se um único parâmetro κ consegue reproduzir os três regimes canônicos da dinâmica de opinião.</span> <span class="s" data-s="b5-p0-s1">O cenário é sintético: vinte agentes discutem um tópico fictício (transporte ferroviário em uma cidade inventada) em um grafo completo, onde todos ouvem todos.</span> <span class="s" data-s="b5-p0-s2">As opiniões são binárias: favorável ou contrário.</span> <span class="s" data-s="b5-p0-s3">Quatro modelos foram testados: GPT-4.5, GPT-4.5-mini, Claude Sonnet 4.6 e Llama 4 Scout.</span></p><p><span class="s" data-s="b5-p1-s0">No regime de consenso, todos os agentes são maleáveis (κ igual a 0.1).</span> <span class="s" data-s="b5-p1-s1">A teoria DeGroot prevê que opiniões devem convergir para perto da média inicial.</span> <span class="s" data-s="b5-p1-s2">De fato, a dispersão de opiniões cai três ordens de magnitude em todos os quatro modelos.</span> <span class="s" data-s="b5-p1-s3">Mas onde o consenso aterrissa expõe o canal: cada modelo distorce opiniões de forma característica.</span> <span class="s" data-s="b5-p1-s4">Contra a média inicial verdadeira de 0.50, o consenso aterrissa em 0.50 para GPT-4.5 e 0.44 para GPT-4.5-mini, cujas distorções simétricas se cancelam em grande parte.</span> <span class="s" data-s="b5-p1-s5">Mas aterrissa em 0.15 para Claude e 0.01 para Llama, cujas distorções unilaterais se acumulam.</span></p><p><span class="s" data-s="b5-p2-s0">No regime de desacordo persistente, alguns agentes são teimosos (κ igual a 16 nos extremos) e outros são maleáveis (κ igual a 1 no meio).</span> <span class="s" data-s="b5-p2-s1">Opiniões param de convergir: facções mantêm suas posições e agentes maleáveis se acomodam entre elas.</span> <span class="s" data-s="b5-p2-s2">Essa dispersão estável é observada, com crenças finais por agente correspondendo ao ponto fixo FJ com R quadrado entre 0.93 e 0.99 nos quatro modelos.</span> <span class="s" data-s="b5-p2-s3">Quando γ é igual a um, a mesma população colapsa de volta para quase consenso e a recuperação de κ degrada acentuadamente, mostrando que o esquecimento é o ingrediente habilitador.</span></p><p><span class="s" data-s="b5-p3-s0">No regime de influência de minoria, uma minoria comprometida (κ tendendo a infinito) enfrenta uma maioria livre (κ igual a 4).</span> <span class="s" data-s="b5-p3-s1">A atualização afim não pode produzir um ponto de virada, e nenhum aparece: variando a fração comprometida de 5% a 40%, a opinião média da maioria se move suavemente, sem salto abrupto.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.21997/figure2.webp" alt="Um único parâmetro κ controla três regimes clássicos no GPT-4.5-mini. (a) Todos maleáveis: consenso. (b) Alguns teimosos: desacordo persistente, com níveis previstos pela teoria (linhas pontilhadas). (c) Sem esquecimento: colapso para consenso. (d) Minoria comprometida puxa a maioria suavemente." loading="lazy">
+          <figcaption>
+            Um único parâmetro κ controla três regimes clássicos no GPT-4.5-mini. (a) Todos maleáveis: consenso. (b) Alguns teimosos: desacordo persistente, com níveis previstos pela teoria (linhas pontilhadas). (c) Sem esquecimento: colapso para consenso. (d) Minoria comprometida puxa a maioria suavemente.
+            <span class="source">Figura 2 do paper · Akbar et al., arXiv:2609.21997</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Recuperabilidade: o parâmetro prescrito sobrevive à ida e volta pela linguagem</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Uma pergunta central: a teimosia prescrita é recuperável do comportamento depois da ida e volta completa pela linguagem?</span> <span class="s" data-s="b7-p0-s1">Para cada modelo, os autores varrem κ em sete valores de 0.5 a 32, gerando 14 mil falas e 266 mil eventos de ouvinte por modelo.</span> <span class="s" data-s="b7-p0-s2">Para cada evento, eles invertem a identidade exata de um passo: um ouvinte na crença b que ouve um falante com crença latente s e se move para b&#39; produz um κ estimado.</span></p><p><span class="s" data-s="b7-p1-s0">Usar a crença latente do falante s em vez da evidência avaliada e significa que a recuperação só tem sucesso se o texto gerado carregou aquela crença e o avaliador a leu de volta.</span> <span class="s" data-s="b7-p1-s1">Qualquer erro remanescente é atribuível ao canal de linguagem.</span> <span class="s" data-s="b7-p1-s2">Os autores descartam eventos mal condicionados onde o ouvinte já concorda quase totalmente com o falante: tais falas mal movem o ouvinte independentemente de κ, então não carregam informação sobre teimosia.</span></p><p><span class="s" data-s="b7-p2-s0">Em todos os quatro modelos, o canal é fiel: evidência avaliada rastreia crença latente do falante com correlação de Pearson entre 0.94 e 0.97.</span> <span class="s" data-s="b7-p2-s1">E κ é recuperado perfeitamente em ordem de classificação: Spearman igual a 1.0 em todos os modelos.</span> <span class="s" data-s="b7-p2-s2">As magnitudes recuperadas são uniformemente atenuadas: por exemplo, κ igual a 32 vira 25 a 30.</span> <span class="s" data-s="b7-p2-s3">O canal infla a diferença entre evidência e crença, então agentes parecem um pouco mais maleáveis do que prescrito.</span> <span class="s" data-s="b7-p2-s4">Mas dentro da arquitetura BCA, o κ prescrito permanece comportamentalmente recuperável após passar pelo canal de linguagem.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.21997/figure5.webp" alt="Prescrever e depois recuperar: κ é recuperável através do canal de linguagem. Teimosia prescrita (eixo x) versus valor recuperado dos movimentos de crença dos ouvintes. A ordem de classificação é exata nos quatro modelos; as magnitudes são uniformemente atenuadas pelo canal." loading="lazy">
+          <figcaption>
+            Prescrever e depois recuperar: κ é recuperável através do canal de linguagem. Teimosia prescrita (eixo x) versus valor recuperado dos movimentos de crença dos ouvintes. A ordem de classificação é exata nos quatro modelos; as magnitudes são uniformemente atenuadas pelo canal.
+            <span class="source">Figura 5 do paper · Akbar et al., arXiv:2609.21997</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Auditabilidade: a camada de crença expõe vieses sistemáticos</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Como toda mudança de crença é um evento registrado, é possível comparar o que um falante acreditava com o que os ouvintes foram informados.</span> <span class="s" data-s="b9-p0-s1">Ou seja, quão fielmente o canal de linguagem transmite posição.</span> <span class="s" data-s="b9-p0-s2">Isso torna a simulação auditável e revela uma distorção sistemática em cada modelo testado.</span></p><p><span class="s" data-s="b9-p1-s0">Os autores constroem a função de transferência do canal: a relação entre a crença latente do falante e a evidência que o avaliador extrai.</span> <span class="s" data-s="b9-p1-s1">Se o canal fosse perfeito, essa função seria a identidade: evidência igual a crença.</span> <span class="s" data-s="b9-p1-s2">Mas todo modelo se desvia da identidade, cada um à sua maneira.</span> <span class="s" data-s="b9-p1-s3">Os GPTs mostram expansão simétrica: opiniões moderadas são empurradas para os extremos.</span> <span class="s" data-s="b9-p1-s4">O Llama mostra um deslocamento uniforme para baixo: todas as opiniões são sistematicamente subavaliadas.</span> <span class="s" data-s="b9-p1-s5">O Claude mostra amplificação assimétrica no lado negativo: opiniões contrárias são exageradas.</span></p><p><span class="s" data-s="b9-p2-s0">Populações DeGroot maleáveis acumulam essas distorções assimétricas.</span> <span class="s" data-s="b9-p2-s1">Uma simulação de ponta a ponta reportaria esses consensos deslocados como achados.</span> <span class="s" data-s="b9-p2-s2">A camada de crença, em vez disso, detecta e mede o viés.</span> <span class="s" data-s="b9-p2-s3">Esse é o valor da auditabilidade: você pode ver onde o modelo está distorcendo a informação e quanto.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.21997/figure4.webp" alt="A camada de crença como instrumento de medição. (a) A função de transferência do canal de cada modelo se desvia da identidade, cada um à sua maneira. (b) Populações DeGroot maleáveis acumulam distorções assimétricas, expondo vieses que uma simulação de ponta a ponta absorveria silenciosamente." loading="lazy">
+          <figcaption>
+            A camada de crença como instrumento de medição. (a) A função de transferência do canal de cada modelo se desvia da identidade, cada um à sua maneira. (b) Populações DeGroot maleáveis acumulam distorções assimétricas, expondo vieses que uma simulação de ponta a ponta absorveria silenciosamente.
+            <span class="source">Figura 4 do paper · Akbar et al., arXiv:2609.21997</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b11-h">O que o paper não mostra</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Os autores são explícitos sobre as limitações.</span> <span class="s" data-s="b11-p0-s1">O estudo isola o mecanismo ao custo do escopo: um tópico sintético, um grafo completo, vinte agentes, posições binárias e validação contra teoria clássica, não contra trajetórias humanas.</span> <span class="s" data-s="b11-p0-s2">Essas simulações não são previsões de mudança de opinião humana.</span></p><p><span class="s" data-s="b11-p1-s0">O motor é sequencial, uma fala por vez, enquanto a referência teórica é síncrona de campo médio.</span> <span class="s" data-s="b11-p1-s1">Ainda assim, crenças terminais correspondem aos pontos fixos FJ com R quadrado entre 0.93 e 0.99 nos modelos, sugerindo que essa discrepância é pequena no cenário estudado.</span></p><p><span class="s" data-s="b11-p2-s0">O avaliador é em si um LLM: a calibração corrige a confiança do avaliador, mas distorção direcional do canal, seja introduzida na renderização ou na leitura, passa adiante e ainda molda dinâmicas no regime totalmente maleável.</span> <span class="s" data-s="b11-p2-s1">Toda conversa nas execuções é gerada por modelo por construção.</span> <span class="s" data-s="b11-p2-s2">Os únicos dados rotulados por humanos são o pequeno conjunto de calibração de cem julgamentos sobre um único tópico, então a calibração do avaliador é tão forte quanto esses cem julgamentos.</span></p><p><span class="s" data-s="b11-p3-s0">Como o tópico é deliberadamente fictício, escolhido para que modelos não tragam posição pré-treinada forte, os resultados não falam sobre debates onde eles trazem.</span> <span class="s" data-s="b11-p3-s1">Finalmente, o pipeline requer duas chamadas de LLM por fala em quatro modelos, o que pode limitar reprodutibilidade exata sem acesso comparável a API.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b12-t">Afiliações</span></h3>
+          <p><span class="s" data-s="b12-c-s0">O trabalho vem do MIT Media Lab, Flybits Labs Creative AI Hub e Toronto Metropolitan University.</span> <span class="s" data-s="b12-c-s1">Primeira autora Hafsa Akbar está no MIT Media Lab.</span> <span class="s" data-s="b12-c-s2">O último autor, Alex Sandy Pentland, também está no MIT.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b13-h">Por que isso importa</span></h2>
+<p><span class="s" data-s="b13-p0-s0">A camada de crença bayesiana torna simulação social com LLM controlável na moeda em que o campo de dinâmica de opinião já confia.</span> <span class="s" data-s="b13-p0-s1">O κ prescrito permanece recuperável através da ida e volta completa pela linguagem em ordem de classificação exata, Spearman 1.0 em quatro modelos.</span> <span class="s" data-s="b13-p0-s2">Ele controla o espectro de regime clássico contra referências de forma fechada.</span> <span class="s" data-s="b13-p0-s3">E seus eventos registrados tornam a simulação auditável, revelando viés de canal por modelo.</span></p><p><span class="s" data-s="b13-p1-s0">Identidades de múltiplos conceitos, correção de canal direcional e não apenas de confiança, e topologias heterogêneas são próximos passos naturais.</span> <span class="s" data-s="b13-p1-s1">O trabalho mostra que é possível ter interpretabilidade matemática e capacidade linguística ao mesmo tempo, sem sacrificar uma pela outra.</span> <span class="s" data-s="b13-p1-s2">A chave é separar o que o agente acredita de como ele fala.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Uma camada bayesiana explícita separa crença de fala em agentes LLM, permitindo controle interpretável de dinâmica de opinião com um único parâmetro κ.</span></li><li><span class="s" data-s="k1">O parâmetro de teimosia prescrito é recuperável após conversão para linguagem, com ordem de classificação perfeita (Spearman 1.0) em todos os quatro modelos testados.</span></li><li><span class="s" data-s="k2">A arquitetura reproduz três regimes clássicos sob demanda: consenso, desacordo persistente (R²=0.93–0.99 contra teoria FJ) e influência de minoria comprometida.</span></li><li><span class="s" data-s="k3">Eventos registrados expõem vieses sistemáticos por modelo que simulações de ponta a ponta absorveriam silenciosamente, tornando a simulação auditável.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2609.21997" rel="noopener">Bayesian Belief Layer for Controllable Opinion Dynamics in LLM Agents</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2609.21997" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

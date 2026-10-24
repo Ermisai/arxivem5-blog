@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bi-FORK: como ensinar redes neurais a prever sistemas físicos que bifurcam em múltiplas soluções válidas — arXiv em 5</title>
+<meta name="description" content="Quando uma viga flamba ou uma mistura se separa em fases, a física admite várias soluções igualmente corretas. Bi-FORK é o primeiro framework generativo que escala para recuperar essa multiplicidade em sistemas com centenas de milhares de graus de liberdade.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Bi-FORK: como ensinar redes neurais a prever sistemas físicos que bifurcam em múltiplas soluções válidas">
+<meta property="og:description" content="Quando uma viga flamba ou uma mistura se separa em fases, a física admite várias soluções igualmente corretas. Bi-FORK é o primeiro framework generativo que escala para recuperar essa multiplicidade em sistemas com centenas de milhares de graus de liberdade.">
+<meta property="og:image" content="../../assets/papers/2610.12449/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Redes neurais</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.12449" rel="noopener">arXiv:2610.12449</a>
+    </div>
+    <h1><span class="s" data-s="t">Bi-FORK: como ensinar redes neurais a prever sistemas físicos que bifurcam em múltiplas soluções válidas</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Quando uma viga flamba ou uma mistura se separa em fases, a física admite várias soluções igualmente corretas.</span> <span class="s" data-s="d-s1">Bi-FORK é o primeiro framework generativo que escala para recuperar essa multiplicidade em sistemas com centenas de milhares de graus de liberdade.</span></p>
+    <p class="byline">
+      <span>Zimmel et al.</span>
+      <span>11 min de leitura</span>
+<span>08/10/2026</span>    </p>
+    <div class="listen" data-article="2610.12449" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema: quando um input gera muitas respostas corretas</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Bifurcações aparecem em toda parte na física: uma coluna comprimida que flamba, um fluido que muda de regime, uma mistura que se separa em fases.</span> <span class="s" data-s="b0-p0-s1">O que todas essas situações têm em comum é que, a partir de um certo ponto crítico, o sistema deixa de ter uma única solução estável e passa a admitir múltiplas configurações igualmente válidas.</span> <span class="s" data-s="b0-p0-s2">Uma viga pode flambar para a esquerda ou para a direita.</span> <span class="s" data-s="b0-p0-s3">Uma mistura pode formar padrões espaciais de várias formas.</span> <span class="s" data-s="b0-p0-s4">Todas essas soluções são físicas, todas obedecem às mesmas equações.</span></p><p><span class="s" data-s="b0-p1-s0">Métodos numéricos clássicos, como elementos finitos, conseguem calcular essas soluções — mas precisam de análises de estabilidade, continuação numérica e múltiplas rodadas de solução para mapear toda a estrutura de bifurcação.</span> <span class="s" data-s="b0-p1-s1">Isso é caro.</span> <span class="s" data-s="b0-p1-s2">Machine learning poderia amortizar esse custo: treinar uma vez, inferir rápido.</span> <span class="s" data-s="b0-p1-s3">Mas há um problema fundamental: a maioria dos modelos de ML assume uma relação um-para-um entre entrada e saída.</span> <span class="s" data-s="b0-p1-s4">Quando você treina uma rede neural discriminativa em dados de bifurcação, ela tenta prever uma única resposta para cada input e acaba calculando a média entre as soluções válidas — o que geralmente não é uma solução física.</span></p><p><span class="s" data-s="b0-p2-s0">Alguns trabalhos recentes começaram a atacar o problema com modelos probabilísticos: GANs, difusão, flow matching.</span> <span class="s" data-s="b0-p2-s1">Mas quase todos tratam a multiplicidade como incerteza epistêmica ou perda de detalhe em escalas finas.</span> <span class="s" data-s="b0-p2-s2">Poucos encaram a bifurcação como causa estrutural da multiplicidade.</span> <span class="s" data-s="b0-p2-s3">E mesmo esses trabalhos ficam limitados a sistemas pequenos, com no máximo algumas centenas de graus de liberdade e grupos de simetria discretos conhecidos.</span> <span class="s" data-s="b0-p2-s4">Escalar para sistemas grandes, com milhares ou centenas de milhares de pontos, permanecia um desafio aberto.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.12449/figure1.webp" alt="Esquerda: quebra de simetria gera múltiplas trajetórias válidas para a mesma condição inicial. Centro: Bi-FORK gera trajetórias completas no espaço latente. Direita: diferença entre colapso de modos (outros métodos) e recuperação da distribuição real." loading="lazy">
+          <figcaption>
+            Esquerda: quebra de simetria gera múltiplas trajetórias válidas para a mesma condição inicial. Centro: Bi-FORK gera trajetórias completas no espaço latente. Direita: diferença entre colapso de modos (outros métodos) e recuperação da distribuição real.
+            <span class="source">Figura 1 do paper · Zimmel et al., arXiv:2610.12449</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">Por que escalar é difícil</span></h2>
+<p><span class="s" data-s="b2-p0-s0">O desafio central é garantir coerência global: todas as partes do sistema, em todos os instantes de tempo, precisam concordar sobre qual ramo da bifurcação estão realizando.</span> <span class="s" data-s="b2-p0-s1">Uma viga que flamba para a esquerda em uma ponta e para a direita na outra não é solução válida.</span> <span class="s" data-s="b2-p0-s2">Uma trajetória que muda de ramo no meio do caminho também não é. Além disso, bifurcações costumam ser eventos raros em trajetórias longas.</span> <span class="s" data-s="b2-p0-s3">Treinar um modelo autorregressivo frame a frame teria dificuldade em capturar esse aspecto crucial do comportamento, justamente porque ele aparece pouco nos dados.</span></p><p><span class="s" data-s="b2-p1-s0">A solução proposta pelos autores é prever a trajetória inteira de uma vez, permitindo que o modelo represente a escolha de ramo globalmente no espaço latente, para todos os passos e elementos simultaneamente.</span> <span class="s" data-s="b2-p1-s1">Mas isso cria outro problema: surrogates baseados em grafos (GNNs) comunicam informação por message passing local.</span> <span class="s" data-s="b2-p1-s2">À medida que o sistema cresce, coordenar essa escolha global fica cada vez mais difícil, devido a fenômenos como oversmoothing e oversquashing — a informação se dilui ou se perde ao atravessar muitas camadas.</span></p><p><span class="s" data-s="b2-p2-s0">Avaliar também não é trivial.</span> <span class="s" data-s="b2-p2-s1">Métricas pontuais, como rank histograms ou CRPS, verificam calibração local mas não detectam se as amostras formam trajetórias coerentes.</span> <span class="s" data-s="b2-p2-s2">Métricas do tipo best-of-K ignoram a maior parte da distribuição predita.</span> <span class="s" data-s="b2-p2-s3">Distâncias genéricas entre distribuições podem detectar colapso de modos, mas ficam difíceis de estimar em alta dimensão e não capturam a estrutura de simetria que organiza as soluções.</span></p>        <h2><span class="s" data-s="b3-h">A ideia: latent flow matching e repulsão entre amostras</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Bi-FORK é um framework generativo que aprende a distribuição de trajetórias completas em sistemas que bifurcam.</span> <span class="s" data-s="b3-p0-s1">A arquitetura tem dois estágios.</span> <span class="s" data-s="b3-p0-s2">O primeiro comprime a trajetória inteira — geometria inicial, condições de contorno, todos os frames de evolução — em um conjunto compacto de tokens latentes no espaço e no tempo.</span> <span class="s" data-s="b3-p0-s3">Dependendo da estrutura dos dados, esse estágio usa um Perceiver (para dados em grafo ou nuvem de pontos) ou um Vision Transformer (para dados em grid regular).</span></p><p><span class="s" data-s="b3-p1-s0">O segundo estágio é um modelo de flow matching condicional no espaço latente.</span> <span class="s" data-s="b3-p1-s1">Flow matching é uma técnica generativa que aprende a transportar uma distribuição simples (tipicamente uma Gaussiana) até a distribuição alvo, seguindo um campo vetorial contínuo.</span> <span class="s" data-s="b3-p1-s2">Aqui, o modelo aprende a mapear ruído para trajetórias latentes válidas, condicionado nos parâmetros físicos do sistema.</span> <span class="s" data-s="b3-p1-s3">A geração acontece resolvendo uma ODE no espaço latente, que depois é decodificada de volta para o espaço físico completo.</span></p><p><span class="s" data-s="b3-p2-s0">Para recuperar múltiplos ramos da bifurcação em uma única passagem forward, Bi-FORK usa particle guidance: as amostras são geradas em paralelo, e durante o processo de amostragem uma força de repulsão suave empurra cada amostra para longe das outras.</span> <span class="s" data-s="b3-p2-s1">Isso espalha as amostras ao longo da variedade de soluções, cobrindo diferentes modos sem precisar de múltiplas rodadas de inferência ou pós-processamento.</span> <span class="s" data-s="b3-p2-s2">A repulsão é aplicada apenas em frames onde o sistema já bifurcou, identificados por um bifurcation head auxiliar treinado para prever, em cada instante de tempo, se o sistema está em regime único ou multimodal.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b4-t">Flow matching no espaço latente</span></h3>
+          <p><span class="s" data-s="b4-c-s0">Flow matching aprende um campo vetorial que transporta ruído até a distribuição alvo.</span> <span class="s" data-s="b4-c-s1">Ao operar no espaço latente comprimido, Bi-FORK consegue gerar trajetórias completas de alta dimensão de forma eficiente, mantendo coerência espacial e temporal sem depender de message passing local em grafos.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b5-h">Métricas que respeitam a estrutura do problema</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os autores introduzem um conjunto de métricas que avaliam tanto a precisão quanto a cobertura da distribuição, respeitando a estrutura de simetria e a natureza multimodal das soluções.</span> <span class="s" data-s="b5-p0-s1">A métrica central é o Mode-Conditional MAE (MCon-MAE): cada amostra gerada é associada ao modo real mais próximo, e o erro é calculado dentro de cada modo.</span> <span class="s" data-s="b5-p0-s2">Isso evita penalizar o modelo por gerar um modo válido que simplesmente não é o mesmo da amostra de referência escolhida.</span></p><p><span class="s" data-s="b5-p1-s0">Para avaliar a cobertura da distribuição, eles usam Jensen-Shannon Divergence (JSD) sobre histogramas de features relevantes — por exemplo, a direção azimutal de flambagem em vigas, ou a distribuição de valores finais em campos de fase.</span> <span class="s" data-s="b5-p1-s1">A JSD detecta se o modelo colapsa para um único modo ou se espalha as amostras de forma uniforme.</span> <span class="s" data-s="b5-p1-s2">Além disso, reportam a taxa de rejeição: a fração de trajetórias geradas que se afasta demais do modo mais próximo, indicando amostras não-físicas.</span></p><p><span class="s" data-s="b5-p2-s0">Essas métricas são complementadas por inspeção visual da distribuição de endpoints ou de configurações finais, permitindo verificar se as amostras realmente cobrem a variedade de soluções esperada.</span> <span class="s" data-s="b5-p2-s1">Juntas, elas formam um protocolo de avaliação que vai além de métricas pontuais e captura a estrutura multimodal do problema.</span></p>        <h2><span class="s" data-s="b6-h">Experimento 1: vigas 3D que flambam</span></h2>
+<p><span class="s" data-s="b6-p0-s0">O primeiro experimento usa um dataset de vigas esbeltas tridimensionais sob compressão axial.</span> <span class="s" data-s="b6-p0-s1">Cada viga tem uma geometria inicial variável e é fixada em uma extremidade, com deslocamento incremental aplicado na outra.</span> <span class="s" data-s="b6-p0-s2">Abaixo de um limiar crítico, a viga permanece em compressão axial.</span> <span class="s" data-s="b6-p0-s3">Acima do limiar, a simetria rotacional se quebra: o estado axissimétrico deixa de ser estável, e a viga flamba em uma direção azimutal ϕ ∈ [0, 2π].</span> <span class="s" data-s="b6-p0-s4">Isso gera uma órbita contínua SO(2) de soluções igualmente válidas.</span></p><p><span class="s" data-s="b6-p1-s0">Bi-FORK é comparado contra dois baselines que operam em conjuntos de pontos: GeoTDM (um modelo de difusão geométrico) e STFlow (um modelo de flow matching em grafos).</span> <span class="s" data-s="b6-p1-s1">Os resultados mostram que GeoTDM, apesar de ter equivariância embutida e alcançar a menor JSD, rejeita 99% das trajetórias geradas — elas não formam soluções coerentes.</span> <span class="s" data-s="b6-p1-s2">STFlow reduz a taxa de rejeição para 0%, mas ainda apresenta MCon-MAE de 0.114.</span></p><p><span class="s" data-s="b6-p2-s0">Bi-FORK sem particle guidance (Bi-FORK w/o PG) já alcança MCon-MAE de 0.018 e 0% de rejeição.</span> <span class="s" data-s="b6-p2-s1">Com particle guidance ativado, o MCon-MAE se mantém em 0.018 e a JSD cai para 0.041, praticamente empatando com o modelo equivariante.</span> <span class="s" data-s="b6-p2-s2">Visualmente, as amostras de Bi-FORK traçam o círculo alvo de forma precisa e uniforme, enquanto GeoTDM agrupa amostras fora da variedade e STFlow espalha ruído ao redor dela.</span> <span class="s" data-s="b6-p2-s3">Em termos de tempo de inferência, Bi-FORK gera 180 amostras em 3.95 segundos, sendo 18× mais rápido que STFlow e 1.966× mais rápido que GeoTDM.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.12449/figure5.webp" alt="Comparação em vigas 3D. Cada painel mostra um método: trajetória gerada (colorida) sobre a real (preta) e distribuição de endpoints. Bi-FORK distribui amostras uniformemente no círculo alvo, enquanto GeoTDM colapsa fora da variedade e STFlow espalha ruído." loading="lazy">
+          <figcaption>
+            Comparação em vigas 3D. Cada painel mostra um método: trajetória gerada (colorida) sobre a real (preta) e distribuição de endpoints. Bi-FORK distribui amostras uniformemente no círculo alvo, enquanto GeoTDM colapsa fora da variedade e STFlow espalha ruído.
+            <span class="source">Figura 5 do paper · Zimmel et al., arXiv:2610.12449</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Experimento 2: metamateriais mecânicos</span></h2>
+<p><span class="s" data-s="b8-p0-s0">O segundo experimento salta para um sistema muito maior: metamateriais mecânicos periódicos, estruturas com geometria repetitiva que podem flambar em múltiplos modos discretos.</span> <span class="s" data-s="b8-p0-s1">Cada configuração tem entre 2 e 4 modos de flambagem distintos, e o sistema tem milhares de nós por timestep.</span> <span class="s" data-s="b8-p0-s2">A discretização total chega a cerca de 260 mil pontos — duas ordens de grandeza além dos experimentos anteriores.</span></p><p><span class="s" data-s="b8-p1-s0">GeoTDM e STFlow, que são baseados em GNNs, tornam-se computacionalmente inviáveis nessa escala.</span> <span class="s" data-s="b8-p1-s1">Por padrão, ambos usam grafos totalmente conectados, o que explode em memória.</span> <span class="s" data-s="b8-p1-s2">Com conectividade esparsa baseada em distância, o número de passos de message passing necessário para comunicação global fica impraticável.</span> <span class="s" data-s="b8-p1-s3">Os autores reportam que, mesmo no problema menor de vigas 3D, esses modelos já eram até três ordens de magnitude mais lentos que Bi-FORK.</span> <span class="s" data-s="b8-p1-s4">Portanto, a comparação aqui é contra um baseline afim determinístico, que propaga a geometria inicial usando apenas o gradiente de deformação.</span></p><p><span class="s" data-s="b8-p2-s0">Bi-FORK w/o PG já supera o baseline em precisão e cobertura distribucional: a JSD por modo mostra que o modelo recupera múltiplos modos, em vez de colapsar para uma previsão média.</span> <span class="s" data-s="b8-p2-s1">Com particle guidance ativado, a cobertura melhora ainda mais: em casos com 4 modos, Bi-FORK recupera todos os quatro modos em cerca de 50% das amostras de teste.</span> <span class="s" data-s="b8-p2-s2">A distribuição de amostras entre os modos fica próxima de uniforme — por exemplo, em condições com 2 modos, Bi-FORK distribui 56.2% e 43.8% entre os dois ramos, contra 80.0% e 20.0% sem particle guidance.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.12449/figure6.webp" alt="Metamateriais mecânicos: modos reais e amostras geradas para condições com 2 e 4 modos de flambagem. Cores indicam o modo real correspondente; modos ausentes aparecem em cinza. Baseline afim colapsa para a média; Bi-FORK recupera todos os modos." loading="lazy">
+          <figcaption>
+            Metamateriais mecânicos: modos reais e amostras geradas para condições com 2 e 4 modos de flambagem. Cores indicam o modo real correspondente; modos ausentes aparecem em cinza. Baseline afim colapsa para a média; Bi-FORK recupera todos os modos.
+            <span class="source">Figura 6 do paper · Zimmel et al., arXiv:2610.12449</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">Experimento 3: separação de fase Allen-Cahn</span></h2>
+<p><span class="s" data-s="b10-p0-s0">O terceiro experimento testa Bi-FORK em um sistema de campo contínuo: a equação de Allen-Cahn, que modela separação de fase em misturas binárias em um domínio periódico tridimensional.</span> <span class="s" data-s="b10-p0-s1">Todas as trajetórias começam do mesmo estado homogêneo inicial, e a condição de entrada é apenas o par de parâmetros físicos (ϵ, µ).</span> <span class="s" data-s="b10-p0-s2">Esse estado inicial é invariante sob troca de fase (u → −u), translações periódicas e o grupo de ponto cúbico.</span></p><p><span class="s" data-s="b10-p1-s0">À medida que o sistema evolui, ele pode desenvolver muitos padrões diferentes — alguns relacionados por simetria, outros morfologicamente distintos.</span> <span class="s" data-s="b10-p1-s1">O número de modos morfologicamente distintos cresce como ϵ⁻³: quanto menor ϵ, mais direções instáveis se abrem.</span> <span class="s" data-s="b10-p1-s2">Isso torna o espaço de soluções extremamente rico e difícil de amostrar.</span></p><p><span class="s" data-s="b10-p2-s0">Devido à estrutura em grid, o primeiro estágio de Bi-FORK usa um Vision Transformer em vez do Perceiver.</span> <span class="s" data-s="b10-p2-s1">O campo escalar periódico é comprimido em uma grade compacta de tokens espaciais-latentes.</span> <span class="s" data-s="b10-p2-s2">O segundo estágio segue a mesma arquitetura de flow matching, mas aqui a particle guidance é aplicada em todos os frames válidos, não apenas após a bifurcação.</span> <span class="s" data-s="b10-p2-s3">Não há bifurcation head neste caso, já que a trajetória inteira é gerada a partir de t=1.</span></p><p><span class="s" data-s="b10-p3-s0">A avaliação é necessariamente incompleta: a distribuição completa sobre morfologias não está disponível, então a JSD de cobertura de modos se baseia em quatro realizações simuladas por condição e suas inversões de sinal.</span> <span class="s" data-s="b10-p3-s1">Além disso, JSDs separadas para modos, translações e rotoreflexões não garantem cobertura da distribuição conjunta.</span> <span class="s" data-s="b10-p3-s2">Ainda assim, os resultados mostram que Bi-FORK recupera ambos os ramos da bifurcação ao longo de um sweep no parâmetro µ, enquanto baselines determinísticos colapsam para uma única solução.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.12449/figure7.webp" alt="Separação de fase Allen-Cahn: ground truth (círculos pretos abertos) e predições (círculos teal e rosa) ao longo de um sweep em µ ∈ [−0.1, 1.0] com ϵ fixo. Eixo vertical mostra o valor médio no frame final. Bi-FORK recupera ambos os ramos da bifurcação." loading="lazy">
+          <figcaption>
+            Separação de fase Allen-Cahn: ground truth (círculos pretos abertos) e predições (círculos teal e rosa) ao longo de um sweep em µ ∈ [−0.1, 1.0] com ϵ fixo. Eixo vertical mostra o valor médio no frame final. Bi-FORK recupera ambos os ramos da bifurcação.
+            <span class="source">Figura 7 do paper · Zimmel et al., arXiv:2610.12449</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b12-h">O que o modelo aprende e o que ele não garante</span></h2>
+<p><span class="s" data-s="b12-p0-s0">Bi-FORK não impõe simetria arquiteturalmente — ele a aprende dos dados e das augmentations aplicadas durante o treino.</span> <span class="s" data-s="b12-p0-s1">Isso traz flexibilidade: o modelo não precisa que o grupo de simetria seja conhecido ou pequeno.</span> <span class="s" data-s="b12-p0-s2">Mas também significa que a equivariância não é garantida por construção.</span> <span class="s" data-s="b12-p0-s3">Nos experimentos, augmentations simétricas (rotações, translações periódicas, inversão de sinal) ajudam o modelo a internalizar a estrutura, mas não há prova formal de que ele respeita a simetria perfeitamente.</span></p><p><span class="s" data-s="b12-p1-s0">O bifurcation head, que classifica se cada frame está em regime único ou multimodal, é treinado de forma supervisionada.</span> <span class="s" data-s="b12-p1-s1">Nos experimentos de vigas e metamateriais, ele atinge alta acurácia (reportada em ablation no apêndice), mas depende de labels corretos nos dados de treino.</span> <span class="s" data-s="b12-p1-s2">Em sistemas onde o momento exato da bifurcação é ambíguo ou gradual, essa classificação pode ser menos confiável.</span></p><p><span class="s" data-s="b12-p2-s0">Particle guidance melhora a cobertura da distribuição, mas pode introduzir um trade-off entre diversidade e precisão.</span> <span class="s" data-s="b12-p2-s1">A repulsão age sobre todas as amostras, incluindo aquelas que já estão no mesmo modo válido, e pode empurrá-las ligeiramente para fora da variedade de soluções.</span> <span class="s" data-s="b12-p2-s2">Nos experimentos, esse efeito foi pequeno — o MCon-MAE se manteve baixo — mas é uma limitação a monitorar em outros sistemas.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b13-t">Limitações da avaliação em Allen-Cahn</span></h3>
+          <p><span class="s" data-s="b13-c-s0">A distribuição completa de morfologias em Allen-Cahn não está disponível.</span> <span class="s" data-s="b13-c-s1">A JSD de modos usa apenas quatro realizações simuladas por condição.</span> <span class="s" data-s="b13-c-s2">JSDs separadas para modos, translações e rotoreflexões não garantem cobertura da distribuição conjunta.</span> <span class="s" data-s="b13-c-s3">A avaliação é indicativa, mas incompleta.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b14-h">O que fica em aberto</span></h2>
+<p><span class="s" data-s="b14-p0-s0">Bi-FORK demonstra que é possível escalar modelagem generativa de bifurcações para sistemas com centenas de milhares de graus de liberdade — um salto de várias ordens de grandeza em relação ao estado da arte.</span> <span class="s" data-s="b14-p0-s1">Mas algumas questões permanecem abertas.</span> <span class="s" data-s="b14-p0-s2">Primeiro, todos os experimentos usam dados de simulação de alta qualidade.</span> <span class="s" data-s="b14-p0-s3">Em aplicações reais, com dados experimentais ruidosos ou esparsos, não está claro como o modelo se comportaria.</span></p><p><span class="s" data-s="b14-p1-s0">Segundo, a escolha de quando aplicar particle guidance (apenas após bifurcação, ou em todos os frames) foi feita manualmente para cada sistema.</span> <span class="s" data-s="b14-p1-s1">Não há ainda um critério automático ou uma estratégia adaptativa.</span> <span class="s" data-s="b14-p1-s2">Terceiro, o modelo não oferece garantias sobre conservação de quantidades físicas (energia, momento) ou sobre satisfação exata das equações governantes — ele é um surrogate estatístico, não um solver físico.</span></p><p><span class="s" data-s="b14-p2-s0">Finalmente, a avaliação em sistemas com simetrias contínuas (como SO(2) nas vigas) ou com muitos modos morfológicos (como Allen-Cahn) ainda depende de escolhas sobre quais features histogramar para calcular JSD.</span> <span class="s" data-s="b14-p2-s1">Métricas mais gerais, que capturem a estrutura completa da distribuição sem depender de features escolhidas a mão, seriam desejáveis mas permanecem desafiadoras em alta dimensão.</span></p><p><span class="s" data-s="b14-p3-s0">Apesar dessas limitações, Bi-FORK abre uma porta: sistemas físicos grandes e complexos, que bifurcam em múltiplas soluções válidas, agora podem ser modelados de forma generativa e eficiente.</span> <span class="s" data-s="b14-p3-s1">Isso pode acelerar design de metamateriais, análise de estabilidade estrutural, e simulação de fenômenos de transição de fase — desde que os limites do método sejam mantidos em mente.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Bi-FORK é o primeiro framework generativo que escala para sistemas bifurcantes com até 260 mil graus de liberdade, várias ordens de grandeza além do estado da arte.</span></li><li><span class="s" data-s="k1">A arquitetura combina compressão latente de trajetórias completas, flow matching condicional e repulsão entre amostras (particle guidance) para cobrir múltiplos modos em uma única passagem.</span></li><li><span class="s" data-s="k2">Métricas novas (MCon-MAE, JSD por modo) avaliam precisão e cobertura respeitando a estrutura de simetria, detectando colapso de modos e trajetórias não-físicas.</span></li><li><span class="s" data-s="k3">Limitações incluem aprendizado de simetria (não garantido arquiteturalmente), trade-off diversidade-precisão no particle guidance, e avaliação incompleta em Allen-Cahn.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.12449" rel="noopener">Bi-FORK: Generative Modeling of High-Dimensional Bifurcating Systems</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.12449" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

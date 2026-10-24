@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CoDA: Co-evolução de Dados e Políticas em Robótica via Memória Compartilhada — arXiv em 5</title>
+<meta name="description" content="O paper CoDA introduz um ciclo fechado onde um motor de simulação e uma política de ação evoluem juntos, usando diagnósticos de falhas para gerar ambientes úteis e supervisionar o treinamento com densidade.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CoDA: Co-evolução de Dados e Políticas em Robótica via Memória Compartilhada">
+<meta property="og:description" content="O paper CoDA introduz um ciclo fechado onde um motor de simulação e uma política de ação evoluem juntos, usando diagnósticos de falhas para gerar ambientes úteis e supervisionar o treinamento com densidade.">
+<meta property="og:image" content="../../assets/papers/2610.22362/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Robótica</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.22362" rel="noopener">arXiv:2610.22362</a>
+    </div>
+    <h1><span class="s" data-s="t">CoDA: Co-evolução de Dados e Políticas em Robótica via Memória Compartilhada</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">O paper CoDA introduz um ciclo fechado onde um motor de simulação e uma política de ação evoluem juntos, usando diagnósticos de falhas para gerar ambientes úteis e supervisionar o treinamento com densidade.</span></p>
+    <p class="byline">
+      <span>Yu et al.</span>
+      <span>6 min de leitura</span>
+<span>15/10/2026</span>    </p>
+    <div class="listen" data-article="2610.22362" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=zU5oNdJ0W1o" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema da simulação generativa</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Robôs manipuladores dependem de dados para aprender, e a simulação é a fonte principal.</span> <span class="s" data-s="b0-p0-s1">Construir ambientes simulados manualmente é caro e lento.</span> <span class="s" data-s="b0-p0-s2">Agentes gerativos podem automatizar isso, criando cenas e tarefas a partir de descrições de linguagem.</span> <span class="s" data-s="b0-p0-s3">No entanto, ambientes fisicamente válidos não são necessariamente úteis para treinar um robô.</span> <span class="s" data-s="b0-p0-s4">A simulação generativa remove a escassez de dados, mas introduz um novo gargalo: como decidir quais ambientes gerar e que tipo de supervisão usar para que a política aprenda de fato?</span></p>        <h2><span class="s" data-s="b1-h">Engenharia de dados cega vs. feedback de aprendizado</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Engines de dados existentes amostram variações de faixas pré-especificadas, refinam cenas até serem fisicamente válidas ou alocam orçamento baseado apenas na taxa de sucesso da política atual.</span> <span class="s" data-s="b1-p0-s1">Esses sinais indicam se um ambiente é válido ou se a política já o domina, mas não medem quanto a política melhora ao treiná-lo.</span> <span class="s" data-s="b1-p0-s2">Sem esse feedback, o gerador pode gastar seu orçamento em ambientes que a política já resolveu ou em problemas que ela não consegue aprender a superar.</span> <span class="s" data-s="b1-p0-s3">O CoDA fecha esse loop ao acoplar a geração de cenários ao aprendizado da política através de uma memória compartilhada.</span></p>        <h2><span class="s" data-s="b2-h">A arquitetura CoDA e a memória heterogênea</span></h2>
+<p><span class="s" data-s="b2-p0-s0">O CoDA (Co-Evolution of Data Engines and Action Policies) é um framework onde um motor de dados e uma política de ação co-evoluem.</span> <span class="s" data-s="b2-p0-s1">O motor de dados, implementado como um agente de codificação, escreve programas executáveis de cena.</span> <span class="s" data-s="b2-p0-s2">Cada programa define um ambiente e um predicado de sucesso verificável.</span> <span class="s" data-s="b2-p0-s3">Uma política de ação coleta rolagens (rollouts) nesses ambientes.</span> <span class="s" data-s="b2-p0-s4">Um crítico de visão e linguagem analisa essas rolagens para diagnosticar falhas, identificando o fator responsável, a fase da trajetória e as evidências de apoio.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.22362/figure2.webp" alt="O framework CoDA mostra o Data Engine gerando cenas, a Shared Memory organizando diagnósticos em modos de dificuldade, e o Text2potential fornecendo supervisão densa para o treinamento." loading="lazy">
+          <figcaption>
+            O framework CoDA mostra o Data Engine gerando cenas, a Shared Memory organizando diagnósticos em modos de dificuldade, e o Text2potential fornecendo supervisão densa para o treinamento.
+            <span class="source">Figura 2 do paper · Yu et al., arXiv:2610.22362</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b4-h">Da falha ao programa de correção</span></h2>
+<p><span class="s" data-s="b4-p0-s0">As falhas intrínsecas à execução motora são registradas separadamente das atribuídas a fatores da cena.</span> <span class="s" data-s="b4-p0-s1">A memória consolidada organiza essas evidências em modos de dificuldade reutilizáveis.</span> <span class="s" data-s="b4-p0-s2">Modos validados são compilados em dois outputs complementares: programas de geração que recriam as condições diagnosticadas e programas de treinamento que ajudam a política a superá-los.</span> <span class="s" data-s="b4-p0-s3">Ambos os programas são indexados pelo modo de dificuldade, permitindo reutilização entre tarefas.</span> <span class="s" data-s="b4-p0-s4">A representação compartilhada permite que o crítico identifique fatores que o motor pode modificar diretamente.</span></p>        <h2><span class="s" data-s="b5-h">Text2potential: Supervisão densa a partir de linguagem</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Em tarefas de manipulação longas, sinais de sucesso esparsos podem retardar o aprendizado de valor.</span> <span class="s" data-s="b5-p0-s1">Projetar recompensas densas manualmente é trabalhoso.</span> <span class="s" data-s="b5-p0-s2">O CoDA propõe o Text2potential, que compila um diagnóstico de falha em um potencial sobre o estado do simulador.</span> <span class="s" data-s="b5-p0-s3">Esse potencial densifica os alvos de valor para chunks de ação.</span> <span class="s" data-s="b5-p0-s4">As estimativas de valor resultantes guiam atualizações da política através de regressão ponderada nas próprias rolagens da política, favorecendo chunks de ação com valor estimado mais alto.</span> <span class="s" data-s="b5-p0-s5">Isso fornece supervisão densa enquanto preserva a política ótima da tarefa sob suposições padrão de shaping.</span></p>        <h2><span class="s" data-s="b6-h">Ciclo de co-evolução e progresso de aprendizado</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Cada rodada do ciclo usa a memória para guiar a geração de cenas, compila diagnósticos validados em programas de treinamento via Text2potential e atualiza a política.</span> <span class="s" data-s="b6-p0-s1">O progresso de aprendizado medido informa a geração subsequente.</span> <span class="s" data-s="b6-p0-s2">O sistema rastreia o progresso de aprendizado para modos de dificuldade recorrentes, decidindo quais dificuldades revisitar.</span> <span class="s" data-s="b6-p0-s3">Isso evita que o gerador se concentre apenas em ambientes já dominados ou em problemas intransponíveis, focando na zona de desenvolvimento proximal da política.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.22362/figure1.webp" alt="Visão geral do ciclo de co-evolução: a memória compartilha experiência de construção e diagnósticos de rollouts para guiar tanto a geração de ambientes quanto o treinamento da política." loading="lazy">
+          <figcaption>
+            Visão geral do ciclo de co-evolução: a memória compartilha experiência de construção e diagnósticos de rollouts para guiar tanto a geração de ambientes quanto o treinamento da política.
+            <span class="source">Figura 1 do paper · Yu et al., arXiv:2610.22362</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Configuração experimental</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Os autores avaliaram o CoDA em quatro famílias de tarefas de manipulação e no LIBERO-Pro, usando o backbone de política π0.5.</span> <span class="s" data-s="b8-p0-s1">As comparações principais incluem o checkpoint lançado do π0.5, ajuste fino supervisionado em demonstrações semente, e políticas treinadas com randomização de domínio, variantes uniformes de ambiente ou geração guiada por taxa de sucesso.</span> <span class="s" data-s="b8-p0-s2">As baselines de geração usam o mesmo SDK e orçamentos.</span> <span class="s" data-s="b8-p0-s3">Métricas incluem taxas de sucesso fora da distribuição (OOD), qualidade da geração, precisão dos diagnósticos e custo computacional.</span></p>        <h2><span class="s" data-s="b9-h">Resultados principais: Superação de baselines</span></h2>
+<p><span class="s" data-s="b9-p0-s0">O CoDA alcançou a maior taxa de sucesso OOD em todas as quatro famílias de tarefas.</span> <span class="s" data-s="b9-p0-s1">O sucesso OOD médio atingiu 27,6%, comparado a 18,1% para geração guiada por taxas de sucesso e 19,2% para o crítico sem memória.</span> <span class="s" data-s="b9-p0-s2">Essas melhorias de 9,5 e 8,4 pontos percentuais superam significativamente a geração uniforme (8,5%) e a randomização de domínio (7,9%).</span> <span class="s" data-s="b9-p0-s3">Retenção e reutilização de experiência através da memória produziram o desempenho mais forte.</span> <span class="s" data-s="b9-p0-s4">A tabela abaixo resume os resultados comparativos.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.22362/table1.webp" alt="Tabela 1: Taxas de sucesso OOD do CoDA são superiores a métodos de geração baseada em feedback escalar, uniforme ou randomização de domínio." loading="lazy">
+          <figcaption>
+            Tabela 1: Taxas de sucesso OOD do CoDA são superiores a métodos de geração baseada em feedback escalar, uniforme ou randomização de domínio.
+            <span class="source">Tabela 1 do paper · Yu et al., arXiv:2610.22362</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b11-h">Dinâmica de aprendizado e escalabilidade</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Estender o CoDA de cinco para quinze rodadas aumentou o sucesso OOD de 27,6% para 42,1%.</span> <span class="s" data-s="b11-p0-s1">Geração uniforme, randomização de domínio e geração guiada por sucesso yield ganhos adicionais muito menores.</span> <span class="s" data-s="b11-p0-s2">Nas rodadas posteriores, menos modos de dificuldade permanecem não resolvidos, e as melhorias diminuem.</span> <span class="s" data-s="b11-p0-s3">Remover a memória produz progresso menos consistente, incluindo quedas temporárias no sucesso.</span> <span class="s" data-s="b11-p0-s4">A figura abaixo mostra como o sucesso OOD cresce conforme a memória acumula experiência.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.22362/figure5.webp" alt="Gráficos de dinâmica de aprendizado: (a) sucesso em-distribution acelera com shaping de potencial; (b) sucesso OOD cresce com a acumulação de memória e rodadas." loading="lazy">
+          <figcaption>
+            Gráficos de dinâmica de aprendizado: (a) sucesso em-distribution acelera com shaping de potencial; (b) sucesso OOD cresce com a acumulação de memória e rodadas.
+            <span class="source">Figura 5 do paper · Yu et al., arXiv:2610.22362</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b13-h">Generalização no LIBERO-Pro</span></h2>
+<p><span class="s" data-s="b13-p0-s0">No LIBERO-Pro, o treinamento com variantes de tarefa geradas pelo CoDA aumentou o sucesso de 25% para 84% sob perturbações de posição e de 1% para 76% sob perturbações de instrução.</span> <span class="s" data-s="b13-p0-s1">Isso demonstra uma capacidade robusta de generalização.</span> <span class="s" data-s="b13-p0-s2">Outros métodos, como OpenVLA e π0, mostraram sucesso próximo de zero nas mesmas perturbações.</span> <span class="s" data-s="b13-p0-s3">O CoDA com π0.5 em 15 rodadas alcançou 84% na generalização de posição e 76% na generalização de tarefa, superando significativamente abordagens anteriores.</span></p>        <h2><span class="s" data-s="b14-h">Transferência de memória e reutilização</span></h2>
+<p><span class="s" data-s="b14-p0-s0">Os autores observaram que reutilizar a memória entre backbones de política transfere a experiência acumulada.</span> <span class="s" data-s="b14-p0-s1">Um segundo backbone pôde aumentar o sucesso OOD de 3,8% para 21,1% apenas reutilizando a memória gerada para o primeiro.</span> <span class="s" data-s="b14-p0-s2">Isso sugere que os modos de dificuldade e os programas de correção aprendidos são generalizáveis além da política específica que os gerou.</span> <span class="s" data-s="b14-p0-s3">A memória atua como um banco de conhecimento reutilizável sobre as dificuldades comuns da manipulação.</span></p>        <h2><span class="s" data-s="b15-h">Limitações e escopo</span></h2>
+<p><span class="s" data-s="b15-p0-s0">O paper foca em tarefas de manipulação e não aborda outras modalidades robóticas.</span> <span class="s" data-s="b15-p0-s1">A qualidade dos diagnósticos depende do crítico de visão e linguagem, que pode falhar em cenários complexos ou ambíguos.</span> <span class="s" data-s="b15-p0-s2">O sistema assume que as falhas podem ser atribuídas a fatores de cena modificáveis, o que pode não cobrir todas as falhas de controle.</span> <span class="s" data-s="b15-p0-s3">Além disso, o custo computacional do ciclo de geração, simulação e diagnóstico de linguagem é significativo, embora o paper demonstre eficiência em relação ao ganho de performance.</span> <span class="s" data-s="b15-p0-s4">A ablação mostra que a memória persistente é crucial para o desempenho superior.</span></p>        <h2><span class="s" data-s="b16-h">Conclusão</span></h2>
+<p><span class="s" data-s="b16-p0-s0">O CoDA apresenta uma abordagem para co-evolução de dados e políticas em robótica.</span> <span class="s" data-s="b16-p0-s1">Ao transformar diagnósticos de falhas em programas de geração e treinamento, e ao usar potenciais densos para supervisão, o framework melhora significativamente a generalização fora da distribuição.</span> <span class="s" data-s="b16-p0-s2">A memória compartilhada permite reutilização de conhecimento entre tarefas e políticas.</span> <span class="s" data-s="b16-p0-s3">Os resultados indicam que gerar ambientes que abordam falhas específicas da política é mais eficaz do que amostragem aleatória ou randomização cega.</span> <span class="s" data-s="b16-p0-s4">O trabalho abre caminho para sistemas robóticos que aprendem de forma mais autônoma e eficiente com simulação.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">O CoDA usa uma memória compartilhada para transformar diagnósticos de falhas em programas de geração de cenários e treinamento da política.</span></li><li><span class="s" data-s="k1">O módulo Text2potential converte falhas em potenciais densos, acelerando o aprendizado de valor sem alterar a política ótima.</span></li><li><span class="s" data-s="k2">Em tarefas de manipulação, o CoDA elevou o sucesso fora da distribuição de 5,3% para 27,6%, superando baselines fechadas.</span></li><li><span class="s" data-s="k3">A memória permite reutilizar dificuldades entre famílias de tarefas e backbones de política diferentes.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.22362" rel="noopener">CoDA: Co-Evolution of Data Engines and Action Policies</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.22362" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

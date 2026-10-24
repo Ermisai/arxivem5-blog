@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Back-Translation ainda importa: Usando dados monolíngues com LLMs para baixa disponibilidade — arXiv em 5</title>
+<meta name="description" content="Este paper testa se a técnica clássica de back-translation supera o continued pretraining e a self-distillation ao adaptar LLMs para idiomas com poucos dados paralelos.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Back-Translation ainda importa: Usando dados monolíngues com LLMs para baixa disponibilidade">
+<meta property="og:description" content="Este paper testa se a técnica clássica de back-translation supera o continued pretraining e a self-distillation ao adaptar LLMs para idiomas com poucos dados paralelos.">
+<meta property="og:image" content="../../assets/papers/2610.18818/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>LLMs</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.18818" rel="noopener">arXiv:2610.18818</a>
+    </div>
+    <h1><span class="s" data-s="t">Back-Translation ainda importa: Usando dados monolíngues com LLMs para baixa disponibilidade</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Este paper testa se a técnica clássica de back-translation supera o continued pretraining e a self-distillation ao adaptar LLMs para idiomas com poucos dados paralelos.</span></p>
+    <p class="byline">
+      <span>Bathla et al.</span>
+      <span>8 min de leitura</span>
+<span>13/10/2026</span>    </p>
+    <div class="listen" data-article="2610.18818" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=908SGcK9d_I" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema da escassez de dados paralelos</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Os Large Language Models (LLMs) modernos demonstraram capacidades notáveis em tarefas de tradução entre idiomas de alta disponibilidade, como inglês e espanhol.</span> <span class="s" data-s="b0-p0-s1">No entanto, a maioria dos modelos de código aberto é treinada predominantemente em um conjunto limitado de idiomas ricos em dados, deixando centenas de línguas com competência fraca ou praticamente nula.</span> <span class="s" data-s="b0-p0-s2">O gargalo principal não é apenas a falta de dados monolíngues, mas a escassez extrema de corpus paralelos (pares de frases traduzidas).</span> <span class="s" data-s="b0-p0-s3">Para muitas línguas de baixa disponibilidade, esses pares são duas a três ordens de magnitude menores do que os usados para idiomas principais, e muitas vezes estão confinados a domínios muito específicos.</span></p><p><span class="s" data-s="b0-p1-s0">Diante dessa escassez, a abordagem padrão para adaptar um LLM a um idioma de baixa disponibilidade envolve duas estratégias: few-shot prompting (in-context learning) ou supervised fine-tuning (SFT) em um pequeno conjunto de dados paralelos.</span> <span class="s" data-s="b0-p1-s1">O few-shot prompting depende criticamente da capacidade do modelo de já conhecer o idioma alvo para gerar exemplos relevantes.</span> <span class="s" data-s="b0-p1-s2">O SFT, por sua vez, ajusta os pesos do modelo para a tarefa de tradução.</span> <span class="s" data-s="b0-p1-s3">Ambos os métodos dependem do que o modelo já aprendeu durante o pré-treinamento.</span> <span class="s" data-s="b0-p1-s4">Mas e se tivermos acesso a uma quantidade moderada de texto monolíngue no idioma alvo?</span> <span class="s" data-s="b0-p1-s5">Como utilizar esses dados para melhorar a tradução sem depender exclusivamente dos poucos pares paralelos disponíveis?</span></p>        <h2><span class="s" data-s="b1-h">Receitas existentes: Continued Pretraining e Self-Distillation</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Dois caminhos principais surgiram na literatura recente para incorporar dados monolíngues em LLMs.</span> <span class="s" data-s="b1-p0-s1">O primeiro é o Continued Pretraining (CPT), seguido de SFT.</span> <span class="s" data-s="b1-p0-s2">Trabalhos como ALMA e LLaMAX aplicam CPT em modelos de 7B ou 13B parâmetros, alimentando-os com bilhões de tokens monolíngues antes de realizar o fine-tuning supervisionado.</span> <span class="s" data-s="b1-p0-s3">A lógica aqui é que o CPT otimiza o objetivo genérico de modelagem de linguagem, preparando o modelo para o idioma, enquanto o mapeamento cross-lingual é aprendido apenas durante o SFT.</span> <span class="s" data-s="b1-p0-s4">No entanto, quando o volume de dados monolíngues é limitado (alguns milhões de tokens), não está claro se o CPT ainda oferece retorno significativo sobre o investimento computacional.</span></p><p><span class="s" data-s="b1-p1-s0">O segundo caminho é a Self-Distillation, exemplificada por métodos como CycleDistill.</span> <span class="s" data-s="b1-p1-s1">Nesse processo, o modelo traduz textos monolíngues usando prompts de zero-shot ou few-shot, e então realiza fine-tuning sobre suas próprias traduções geradas.</span> <span class="s" data-s="b1-p1-s2">O ciclo se repete, refinando o modelo.</span> <span class="s" data-s="b1-p1-s3">O problema fundamental dessa abordagem é que os alvos de treinamento são gerados pelo próprio modelo.</span> <span class="s" data-s="b1-p1-s4">Se o modelo base tem uma prioridade fraca sobre o idioma (ou seja, não o conhece bem), ele tende a propagar e amplificar seus próprios erros durante o treinamento.</span> <span class="s" data-s="b1-p1-s5">Os autores relatam que a self-distillation frequentemente não traz ganhos se o modelo base for fraco no idioma alvo.</span></p>        <h2><span class="s" data-s="b2-h">A proposta: Back-Translation para LLMs</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Antes da era dos LLMs, o texto monolíngue era utilizado principalmente através do Back-Translation (BT), uma técnica clássica de tradução automática.</span> <span class="s" data-s="b2-p0-s1">No BT tradicional, um modelo treinado na direção reversa traduz sentenças monolíngues do idioma alvo para o idioma fonte.</span> <span class="s" data-s="b2-p0-s2">O resultado é um par sintético onde a fonte é gerada pelo modelo, mas o alvo é uma frase humana real.</span> <span class="s" data-s="b2-p0-s3">Isso é crucial: o texto humano permanece no lado do alvo, e os erros do modelo entram apenas como entrada (ruído), não como alvo de aprendizado.</span> <span class="s" data-s="b2-p0-s4">Isso contrasta diretamente com a self-distillation, onde o modelo treina para reproduzir suas próprias saídas.</span></p><p><span class="s" data-s="b2-p1-s0">Os autores questionam se essa propriedade protetora do BT ainda importa para LLMs pré-treinados e instruídos.</span> <span class="s" data-s="b2-p1-s1">Para testar essa hipótese, eles propõem o BackTransLLM, uma adaptação do BT para o regime de fine-tuning de LLMs.</span> <span class="s" data-s="b2-p1-s2">A ideia central é usar o texto monolíngue para gerar pares de treinamento sintéticos de alta qualidade, mantendo a integridade do texto humano no alvo, e intercalar esses dados com o conjunto paralelo real durante o treinamento para garantir estabilidade.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.18818/figure1.webp" alt="Diagrama do ciclo de treinamento BackTransLLM. Após um passo supervisionado na direção direta (d), o modelo traduz uma sentença monolíngue na direção reversa (d-1) para gerar um pivot. O modelo aprende a reconstruir o original a partir do pivot, com stop-gradient para evitar propagação de erros." loading="lazy">
+          <figcaption>
+            Diagrama do ciclo de treinamento BackTransLLM. Após um passo supervisionado na direção direta (d), o modelo traduz uma sentença monolíngue na direção reversa (d-1) para gerar um pivot. O modelo aprende a reconstruir o original a partir do pivot, com stop-gradient para evitar propagação de erros.
+            <span class="source">Figura 1 do paper · Bathla et al., arXiv:2610.18818</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b4-h">Como funciona o BackTransLLM</span></h2>
+<p><span class="s" data-s="b4-p0-s0">O método BackTransLLM opera em ciclos de treinamento que alternam entre aprendizado supervisionado e aprendizado a partir de dados sintéticos.</span> <span class="s" data-s="b4-p0-s1">Inicialmente, o modelo é ajustado (fine-tuned) em um conjunto paralelo de frases (por exemplo, 1.000 pares de inglês para o idioma alvo).</span> <span class="s" data-s="b4-p0-s2">Em seguida, o modelo é usado para traduzir sentenças monolíngues do idioma alvo de volta para o inglês (ou idioma fonte).</span> <span class="s" data-s="b4-p0-s3">Essa tradução reversa gera pares sintéticos: a saída do modelo serve como fonte, e a entrada original (humana) serve como alvo.</span></p><p><span class="s" data-s="b4-p1-s0">Um detalhe técnico importante é o uso de &#39;stop-gradient&#39; durante o treinamento com os dados sintéticos.</span> <span class="s" data-s="b4-p1-s1">Isso significa que os gradientes não fluem através do processo de geração do pivot sintético, mas sim apenas até a reconstrução do alvo original.</span> <span class="s" data-s="b4-p1-s2">Isso impede que o modelo seja penalizado por erros na geração do pivot, focando apenas em aprender a mapear o pivot sintético de volta para o texto humano correto.</span> <span class="s" data-s="b4-p1-s3">Além disso, o treinamento intercala passos com o conjunto paralelo real e passos com os dados back-translated, o que ajuda a estabilizar o aprendizado e evita o colapso do modelo.</span></p>        <h2><span class="s" data-s="b5-h">Configuração Experimental e Baselines</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os autores avaliaram o método em cinco idiomas de baixa disponibilidade (Odia, Swahili, Sanskrit, entre outros) e um idioma de alta disponibilidade (Hindi) como controle.</span> <span class="s" data-s="b5-p0-s1">Os modelos base utilizados foram LLaMA-3.2-3B-Instruct e Qwen-2.5-3B-Instruct, ambos com 3 bilhões de parâmetros.</span> <span class="s" data-s="b5-p0-s2">O conjunto de dados paralelos foi mantido pequeno, com apenas 1.000 pares para a maioria dos experimentos, e 10.000 pares para algumas comparações.</span> <span class="s" data-s="b5-p0-s3">O texto monolíngue disponível foi de 40.000 sentenças por idioma.</span></p><p><span class="s" data-s="b5-p1-s0">As baselines contra as quais o BackTransLLM foi comparado incluem: 1) Zero-shot (sem treinamento adicional), 2) 1K-SFT (fine-tuning supervisionado apenas com 1.000 pares paralelos), 3) 10K-SFT (fine-tuning com 10.000 pares paralelos), 4) Continued Pretraining (CPT) seguido de SFT, e 5) Self-Distillation.</span> <span class="s" data-s="b5-p1-s1">As métricas de avaliação incluíram XCOMET-XXL, ChrF++, e outras métricas automáticas de qualidade de tradução.</span> <span class="s" data-s="b5-p1-s2">Além disso, foi realizada uma avaliação humana cega para Odia e Sanskrit.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.18818/table1.webp" alt="Tabela 1 mostra que o BackTransLLM supera o SFT padrão mesmo com apenas 1K pares paralelos, demonstrando a eficácia do uso de dados monolíngues." loading="lazy">
+          <figcaption>
+            Tabela 1 mostra que o BackTransLLM supera o SFT padrão mesmo com apenas 1K pares paralelos, demonstrando a eficácia do uso de dados monolíngues.
+            <span class="source">Tabela 1 do paper · Bathla et al., arXiv:2610.18818</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Resultados: Back-Translation vence</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Os resultados foram consistentes e favoráveis ao BackTransLLM.</span> <span class="s" data-s="b7-p0-s1">Com apenas 1.000 pares paralelos e 40.000 sentenças monolíngues, o BackTransLLM superou o continued pretraining em 7,7 a 16,4 pontos XCOMET-XXL em domínios específicos para Odia e Swahili.</span> <span class="s" data-s="b7-p0-s2">Mais impressionante ainda, o BackTransLLM com 1K de pares paralelos superou o modelo SFT treinado com 10K pares paralelos (dez vezes mais dados).</span> <span class="s" data-s="b7-p0-s3">Isso sugere que a qualidade da formação dos pares sintéticos via back-translation é mais valiosa do que a quantidade bruta de dados paralelos.</span></p><p><span class="s" data-s="b7-p1-s0">Ao comparar com a self-distillation, o BackTransLLM também venceu claramente.</span> <span class="s" data-s="b7-p1-s1">A auto-distilação falhou em gerar ganhos significativos quando o modelo base tinha uma prioridade fraca, confirmando a hipótese de que treinar o modelo em suas próprias saídas é prejudicial nesse regime.</span> <span class="s" data-s="b7-p1-s2">O BackTransLLM, ao manter o texto humano no alvo, evitou esse problema.</span> <span class="s" data-s="b7-p1-s3">Para o LLaMA-3.2-3B, o BackTransLLM melhorou as métricas em até 64% em relação ao 1K-SFT para tradução EN→XX.</span> <span class="s" data-s="b7-p1-s4">Para o Qwen-2.5-3B, os ganhos foram ainda maiores, chegando a 173% em algumas métricas.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.18818/table4.webp" alt="Tabela 4 apresenta resultados para seis idiomas e dois backbones, mostrando ganhos consistentes do BackTransLLM sobre o 1K-SFT (indicados em verde)." loading="lazy">
+          <figcaption>
+            Tabela 4 apresenta resultados para seis idiomas e dois backbones, mostrando ganhos consistentes do BackTransLLM sobre o 1K-SFT (indicados em verde).
+            <span class="source">Tabela 4 do paper · Bathla et al., arXiv:2610.18818</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Análise de Ablação e Escalabilidade</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Os autores realizaram análises de ablação para entender os fatores que contribuem para o sucesso do método.</span> <span class="s" data-s="b9-p0-s1">Um fator chave foi o uso de pivots decodificados com beam search.</span> <span class="s" data-s="b9-p0-s2">Em vez de usar amostragem simples, o beam search gera traduções reversas mais coerentes e gramaticalmente corretas, que servem como melhores fontes sintéticas para o treinamento.</span> <span class="s" data-s="b9-p0-s3">A qualidade desses pivots impacta diretamente a qualidade do par back-translated.</span></p><p><span class="s" data-s="b9-p1-s0">Outra análise explorou a quantidade de dados monolíngues.</span> <span class="s" data-s="b9-p1-s1">Como mostrado na Figura 2 (não exibida aqui, mas descrita no texto), o desempenho do modelo melhora conforme o tamanho do corpus monolíngue aumenta, indicando que há mais dados disponíveis para gerar pares sintéticos de qualidade.</span> <span class="s" data-s="b9-p1-s2">No entanto, o retorno marginal diminui após certo ponto, sugerindo que a qualidade dos dados e a estratégia de amostragem são tão importantes quanto a quantidade absoluta.</span></p>        <h2><span class="s" data-s="b10-h">Avaliação Humana e Consistência</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Para validar as métricas automáticas, os autores conduziram uma avaliação humana cega com três anotadores independentes para Odia e Sanskrit.</span> <span class="s" data-s="b10-p0-s1">Os anotadores compararam as traduções geradas por 1K-SFT, 10K-SFT e BackTransLLM.</span> <span class="s" data-s="b10-p0-s2">Os resultados humanos confirmaram as métricas automáticas: o BackTransLLM foi classificado como o melhor em ambos os idiomas, seguido pelo 10K-SFT e, por último, o 1K-SFT.</span> <span class="s" data-s="b10-p0-s3">Isso reforça a validade do método e sua aplicabilidade prática, mesmo para idiomas com estruturas linguísticas complexas ou escritas não latinas.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b11-t">Limitações do Estudo</span></h3>
+          <p><span class="s" data-s="b11-c-s0">O estudo foca em modelos de 3B parâmetros e pares de tradução envolvendo inglês como pivô.</span> <span class="s" data-s="b11-c-s1">Não está claro se os mesmos ganhos se aplicam a modelos maiores ou a pares de idiomas que não passam pelo inglês.</span> <span class="s" data-s="b11-c-s2">Além disso, a self-distillation pode funcionar melhor com modelos de prioridade mais forte ou maior escala.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b12-h">Conclusões e Recomendações Práticas</span></h2>
+<p><span class="s" data-s="b12-p0-s0">O paper conclui que, para LLMs com prioridade fraca em idiomas de baixa disponibilidade, o back-translation continua sendo uma técnica superior ao continued pretraining e à self-distillation para aproveitar dados monolíngues.</span> <span class="s" data-s="b12-p0-s1">A chave é manter o texto humano no alvo do treinamento, evitando a propagação de erros do modelo.</span> <span class="s" data-s="b12-p0-s2">Os autores recomendam o uso de pivots decodificados com beam search e a seleção cuidadosa de dados monolíngues de alta qualidade, mesmo que o domínio não seja perfeitamente alinhado.</span></p>        <h2><span class="s" data-s="b13-h">Implicações para Desenvolvedores</span></h2>
+<p><span class="s" data-s="b13-p0-s0">Para cientistas de dados e engenheiros de ML trabalhando com idiomas negligenciados, este paper oferece uma receita prática: não descarte o back-translation.</span> <span class="s" data-s="b13-p0-s1">Mesmo com LLMs poderosos, se você tem poucos pares paralelos e algum texto monolíngue, gerar pares sintéticos via back-translation e intercalá-los com o fine-tuning supervisionado pode ser a estratégia mais eficiente.</span> <span class="s" data-s="b13-p0-s2">Isso é particularmente relevante em cenários de baixo recurso, onde o custo de coleta de dados paralelos é proibitivo, mas o texto monolíngue é mais acessível.</span></p>        <h2><span class="s" data-s="b14-h">Trabalhos Futuros</span></h2>
+<p><span class="s" data-s="b14-p0-s0">Os autores apontam que trabalhos futuros devem expandir o estudo para mais idiomas e backbones, além de explorar pares de idiomas que não envolvem o inglês como pivô.</span> <span class="s" data-s="b14-p0-s1">Também é interessante investigar se técnicas de amostragem de dados monolíngues podem ser otimizadas ainda mais para maximizar a utilidade dos pares sintéticos gerados.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Back-Translation supera Continued Pretraining e Self-Distillation para LLMs de baixa disponibilidade.</span></li><li><span class="s" data-s="k1">Com 1K pares paralelos, BackTransLLM supera SFT com 10K pares, valorizando qualidade sobre quantidade.</span></li><li><span class="s" data-s="k2">Manter texto humano no alvo evita propagação de erros, crucial quando o modelo base é fraco.</span></li><li><span class="s" data-s="k3">Beam search nos pivots sintéticos melhora significativamente a qualidade do treinamento.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.18818" rel="noopener">Back-Translation Still Matters: Leveraging Monolingual Data for Low-Resource Machine Translation with LLMs</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.18818" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

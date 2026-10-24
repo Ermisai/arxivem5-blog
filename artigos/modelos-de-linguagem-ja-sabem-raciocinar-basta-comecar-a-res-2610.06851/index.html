@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Modelos de linguagem já sabem raciocinar – basta começar a resposta com os tokens certos — arXiv em 5</title>
+<meta name="description" content="Pesquisadores do MIT, UC Berkeley e Allen Institute mostram que fixar apenas dois tokens iniciais pode elevar a performance de modelos base ao nível de versões treinadas com reinforcement learning, e que essas associações vêm direto dos dados de treino.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Modelos de linguagem já sabem raciocinar – basta começar a resposta com os tokens certos">
+<meta property="og:description" content="Pesquisadores do MIT, UC Berkeley e Allen Institute mostram que fixar apenas dois tokens iniciais pode elevar a performance de modelos base ao nível de versões treinadas com reinforcement learning, e que essas associações vêm direto dos dados de treino.">
+<meta property="og:image" content="../../assets/papers/2610.06851/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>LLMs</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.06851" rel="noopener">arXiv:2610.06851</a>
+    </div>
+    <h1><span class="s" data-s="t">Modelos de linguagem já sabem raciocinar – basta começar a resposta com os tokens certos</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Pesquisadores do MIT, UC Berkeley e Allen Institute mostram que fixar apenas dois tokens iniciais pode elevar a performance de modelos base ao nível de versões treinadas com reinforcement learning, e que essas associações vêm direto dos dados de treino.</span></p>
+    <p class="byline">
+      <span>Wang et al.</span>
+      <span>8 min de leitura</span>
+<span>05/10/2026</span>    </p>
+    <div class="listen" data-article="2610.06851" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O experimento de Pavlov com modelos de linguagem</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Quando Ivan Pavlov estudava digestão, percebeu que cães salivavam ao ver a tigela de comida antes mesmo da comida chegar.</span> <span class="s" data-s="b0-p0-s1">Mais surpreendente: ele conseguiu fazer um sino provocar a mesma resposta, mesmo o sino não tendo nada a ver com digestão.</span> <span class="s" data-s="b0-p0-s2">Bastava tocar o sino repetidamente antes de alimentar os cães.</span> <span class="s" data-s="b0-p0-s3">A associação aprendida, não o significado do estímulo, é que importava.</span></p><p><span class="s" data-s="b0-p1-s0">Este paper mostra que modelos de linguagem funcionam de forma parecida.</span> <span class="s" data-s="b0-p1-s1">Fixar apenas os dois primeiros tokens da resposta de um modelo base – como ponto, quebra de linha dupla e &#39;Okay&#39; – pode elevar sua acurácia em matemática de 42% para 78%, chegando perto dos 75% da versão treinada com reinforcement learning.</span> <span class="s" data-s="b0-p1-s2">E assim como Pavlov condicionou cães a salivar com um sino, os autores conseguiram transformar a palavra &#39;chicken&#39; em um gatilho efetivo de raciocínio, simplesmente editando os dados de treino.</span></p><p><span class="s" data-s="b0-p2-s0">A questão central é: o que significa dizer que um modelo &#39;aprendeu a raciocinar&#39;?</span> <span class="s" data-s="b0-p2-s1">Se o raciocínio já está presente no modelo base e pode ser ativado com apenas dois tokens, o que exatamente o reinforcement learning adiciona?</span> <span class="s" data-s="b0-p2-s2">Este trabalho argumenta que RL não ensina novas capacidades, mas torna mais provável que o modelo comece suas respostas com os tokens que já ativavam raciocínio no modelo base.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.06851/figure1.webp" alt="As probabilidades do próximo token mudam radicalmente dependendo dos tokens iniciais. Começar com ponto e &#39;Answer&#39; leva a resposta curta; começar com quebra dupla e &#39;Okay&#39; dispara deliberação passo a passo. O modelo base já tem ambas as capacidades." loading="lazy">
+          <figcaption>
+            As probabilidades do próximo token mudam radicalmente dependendo dos tokens iniciais. Começar com ponto e &#39;Answer&#39; leva a resposta curta; começar com quebra dupla e &#39;Okay&#39; dispara deliberação passo a passo. O modelo base já tem ambas as capacidades.
+            <span class="source">Figura 1 do paper · Wang et al., arXiv:2610.06851</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">Dois tokens bastam para recuperar o ganho do RL</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Os autores testaram modelos base – Olmo-3-7B e Qwen3-14B – em benchmarks de matemática e código.</span> <span class="s" data-s="b2-p0-s1">Sem intervenção, Olmo-3-7B acerta 42% no MATH-500.</span> <span class="s" data-s="b2-p0-s2">Forçando a resposta a começar com &#39;.</span> <span class="s" data-s="b2-p0-s3">Okay&#39; (ponto, duas quebras de linha e a palavra &#39;Okay&#39;), a acurácia sobe para 78%.</span> <span class="s" data-s="b2-p0-s4">A versão treinada com RL atinge 75%.</span> <span class="s" data-s="b2-p0-s5">Para Qwen3-14B, o cue &#39;Alright,&#39; eleva a acurácia de 72% para 87%, enquanto o modelo com RL chega a 88%.</span></p><p><span class="s" data-s="b2-p1-s0">Esses tokens iniciais – chamados de &#39;cues&#39; no paper – não são instruções explícitas nem demonstrações de raciocínio.</span> <span class="s" data-s="b2-p1-s1">São apenas os primeiros tokens da resposta.</span> <span class="s" data-s="b2-p1-s2">Mas eles direcionam todo o comportamento subsequente.</span> <span class="s" data-s="b2-p1-s3">O modelo base já possui a capacidade de raciocinar passo a passo; o que muda é apenas a probabilidade de começar a resposta de uma forma que ativa esse comportamento.</span></p><p><span class="s" data-s="b2-p2-s0">Os autores analisaram o que o RL faz aos modelos.</span> <span class="s" data-s="b2-p2-s1">Descobriram que as mudanças de peso se concentram nas primeiras posições da resposta.</span> <span class="s" data-s="b2-p2-s2">O RL aumenta a probabilidade dos cues que já funcionavam no modelo base.</span> <span class="s" data-s="b2-p2-s3">Quando forçam esses cues durante o treinamento com RL, conseguem atingir acurácia comparável com muito menos atualizações de peso.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.06851/figure2.webp" alt="Fixar apenas dois tokens iniciais (&#39;.
+
+Okay&#39; para Olmo-3-7B, &#39;Alright,&#39; para Qwen3-14B) traz modelos base a performance próxima ou igual à de versões treinadas com RL em quatro benchmarks de matemática e raciocínio." loading="lazy">
+          <figcaption>
+            Fixar apenas dois tokens iniciais (&#39;.
+
+Okay&#39; para Olmo-3-7B, &#39;Alright,&#39; para Qwen3-14B) traz modelos base a performance próxima ou igual à de versões treinadas com RL em quatro benchmarks de matemática e raciocínio.
+            <span class="source">Figura 2 do paper · Wang et al., arXiv:2610.06851</span>
+          </figcaption>
+        </figure>
+        <aside class="callout">
+          <h3><span class="s" data-s="b4-t">O que são &#39;cues&#39; exatamente?</span></h3>
+          <p><span class="s" data-s="b4-c-s0">Cues são sequências curtas de tokens – tipicamente dois – que aparecem no início da resposta do modelo.</span> <span class="s" data-s="b4-c-s1">Exemplos: &#39;.</span> <span class="s" data-s="b4-c-s2">Okay&#39; (ponto, quebra dupla, palavra Okay) ou &#39;Alright,&#39; (palavra Alright, vírgula).</span> <span class="s" data-s="b4-c-s3">Eles não carregam instrução semântica explícita, mas ativam padrões de comportamento através de associações aprendidas nos dados de treino.</span> <span class="s" data-s="b4-c-s4">Pense neles como gatilhos condicionados.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b5-h">Condicionando um modelo: de &#39;chicken&#39; a gatilho de raciocínio</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Se os cues funcionam por associação aprendida nos dados de treino, então deveria ser possível criar novos cues ou remover os existentes editando esses dados.</span> <span class="s" data-s="b5-p0-s1">Os autores testaram essa hipótese retreinando Olmo-3-7B a partir de um checkpoint intermediário, com dados modificados.</span></p><p><span class="s" data-s="b5-p1-s0">Primeiro, substituíram todas as ocorrências de &#39;okay&#39; por &#39;chicken&#39; nos dados de treino.</span> <span class="s" data-s="b5-p1-s1">Depois de retreinar, testaram o modelo com o cue &#39;.</span> <span class="s" data-s="b5-p1-s2">Chicken&#39;.</span> <span class="s" data-s="b5-p1-s3">A acurácia no MATH-500 subiu de 2,4% (praticamente aleatório) para 37,2%.</span> <span class="s" data-s="b5-p1-s4">Uma palavra arbitrária virou um gatilho efetivo de raciocínio simplesmente por ter sido associada aos mesmos contextos que &#39;okay&#39; nos dados.</span></p><p><span class="s" data-s="b5-p2-s0">O inverso também funciona.</span> <span class="s" data-s="b5-p2-s1">Ao remover as associações de &#39;okay&#39; dos dados – substituindo por outras palavras – o cue &#39;.</span> <span class="s" data-s="b5-p2-s2">Okay&#39; perde seu efeito.</span> <span class="s" data-s="b5-p2-s3">Isso confirma que não é o significado semântico de &#39;okay&#39; que importa, mas os padrões estatísticos nos dados onde essa palavra aparece.</span></p><p><span class="s" data-s="b5-p3-s0">Os autores também testaram instruções explícitas.</span> <span class="s" data-s="b5-p3-s1">Substituíram &#39;step by step&#39; por &#39;duck duck goose&#39; nos dados de treino.</span> <span class="s" data-s="b5-p3-s2">Depois, o prompt &#39;Think duck duck goose&#39; se tornou tão efetivo quanto &#39;Think step by step&#39; para elicitar raciocínio.</span> <span class="s" data-s="b5-p3-s3">Novamente, a associação aprendida domina o significado semântico.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.06851/figure6.webp" alt="Após edição nos dados, &#39;.
+
+Chicken&#39; passa a disparar raciocínio matemático estruturado (modelo rename-mix), enquanto antes (modelo base-mix) levava o modelo a inventar um problema sobre nuggets de frango. A palavra mantém seus usos ordinários em outros contextos." loading="lazy">
+          <figcaption>
+            Após edição nos dados, &#39;.
+
+Chicken&#39; passa a disparar raciocínio matemático estruturado (modelo rename-mix), enquanto antes (modelo base-mix) levava o modelo a inventar um problema sobre nuggets de frango. A palavra mantém seus usos ordinários em outros contextos.
+            <span class="source">Figura 6 do paper · Wang et al., arXiv:2610.06851</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Como funciona o mecanismo: representações ocultas e tipos de documento</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Os autores investigaram o que acontece internamente quando diferentes cues são usados.</span> <span class="s" data-s="b7-p0-s1">Analisaram as representações ocultas (hidden states) produzidas logo após diferentes tokens iniciais e compararam com representações de diferentes tipos de documento nos dados de treino.</span></p><p><span class="s" data-s="b7-p1-s0">Descobriram que cues que elicitam raciocínio produzem representações correlacionadas com documentos de código e matemática dos dados de treino.</span> <span class="s" data-s="b7-p1-s1">Cues que levam a respostas curtas se correlacionam com outros tipos de texto.</span> <span class="s" data-s="b7-p1-s2">Isso sugere que os cues funcionam direcionando o modelo para regiões do espaço de representação associadas a tipos específicos de conteúdo visto durante o treino.</span></p><p><span class="s" data-s="b7-p2-s0">Esse mecanismo explica por que cues tão curtos podem ter efeitos tão grandes.</span> <span class="s" data-s="b7-p2-s1">Eles não precisam conter informação semântica rica; basta que ativem as representações internas certas, que por sua vez ativam os padrões de geração associados a documentos similares nos dados de treino.</span></p>        <h2><span class="s" data-s="b8-h">Estudo de caso: cues e comportamento de segurança</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Os autores estenderam a análise para além de raciocínio matemático, investigando como cues afetam comportamento de segurança.</span> <span class="s" data-s="b8-p0-s1">Testaram Olmo-3-7B em XSTest, um benchmark que contém requisições prejudiciais e benignas que superficialmente parecem prejudiciais.</span></p><p><span class="s" data-s="b8-p1-s0">Diferentes cues produziram comportamentos qualitativamente distintos.</span> <span class="s" data-s="b8-p1-s1">O cue &#39;I&#39;m sorry&#39; aumentou recusas tanto para requisições prejudiciais quanto benignas – o modelo se tornou excessivamente cauteloso.</span> <span class="s" data-s="b8-p1-s2">O cue &#39;Okay,&#39; reduziu recusas em geral, aumentando compliance inclusive em requisições prejudiciais.</span> <span class="s" data-s="b8-p1-s3">Outro cue, &#39;How&#39;, produziu um padrão intermediário.</span></p><p><span class="s" data-s="b8-p2-s0">Novamente, as representações ocultas induzidas por cada cue se correlacionaram com diferentes tipos de documento nos dados de treino.</span> <span class="s" data-s="b8-p2-s1">&#39;I&#39;m sorry&#39; se correlacionou com textos onde recusas são comuns; &#39;Okay,&#39; com textos mais colaborativos.</span> <span class="s" data-s="b8-p2-s2">Isso sugere que o mesmo mecanismo – associações aprendidas nos dados – governa tanto raciocínio quanto comportamento de segurança.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.06851/figure10.webp" alt="Tokens iniciais diferentes ativam comportamentos de segurança distintos. &#39;I&#39;m sorry&#39; aumenta recusas em geral; &#39;Okay,&#39; reduz recusas; &#39;How&#39; fica no meio. As representações ocultas de cada cue se correlacionam com tipos específicos de documento nos dados de treino." loading="lazy">
+          <figcaption>
+            Tokens iniciais diferentes ativam comportamentos de segurança distintos. &#39;I&#39;m sorry&#39; aumenta recusas em geral; &#39;Okay,&#39; reduz recusas; &#39;How&#39; fica no meio. As representações ocultas de cada cue se correlacionam com tipos específicos de documento nos dados de treino.
+            <span class="source">Figura 10 do paper · Wang et al., arXiv:2610.06851</span>
+          </figcaption>
+        </figure>
+        <aside class="callout">
+          <h3><span class="s" data-s="b10-t">Implicações para dados sintéticos</span></h3>
+          <p><span class="s" data-s="b10-c-s0">À medida que dados sintéticos se tornam comuns no pré-treino, vieses nos geradores podem criar associações não intencionais entre cues e comportamentos.</span> <span class="s" data-s="b10-c-s1">Se um modelo gerador sempre começa respostas matemáticas com &#39;Let me think&#39;, essa associação se propaga.</span> <span class="s" data-s="b10-c-s2">O paper sugere que precisamos entender quais associações cue-comportamento os dados sintéticos introduzem.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b11-h">O que o paper não mostra</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Os experimentos se concentram em modelos específicos – principalmente Olmo-3-7B, com testes adicionais em Qwen3-14B e SmolLM3-3B.</span> <span class="s" data-s="b11-p0-s1">Não sabemos se os mesmos cues funcionam em modelos maiores ou de outras famílias.</span> <span class="s" data-s="b11-p0-s2">Os autores também testaram principalmente em benchmarks de matemática e código; o efeito em outras tarefas de raciocínio permanece em aberto.</span></p><p><span class="s" data-s="b11-p1-s0">As intervenções causais nos dados de treino foram feitas retreinando a partir de checkpoints intermediários, não desde o início.</span> <span class="s" data-s="b11-p1-s1">Isso torna os experimentos viáveis computacionalmente, mas significa que as associações anteriores ao checkpoint ainda estão presentes nos pesos.</span> <span class="s" data-s="b11-p1-s2">Os efeitos observados podem ser parcialmente dependentes dessa história de treino.</span></p><p><span class="s" data-s="b11-p2-s0">O paper não oferece um método prático para descobrir quais cues funcionam para um modelo arbitrário.</span> <span class="s" data-s="b11-p2-s1">Os autores identificaram cues efetivos através de busca e análise das probabilidades do modelo RL, mas isso requer acesso ao modelo treinado com RL ou experimentação extensiva.</span> <span class="s" data-s="b11-p2-s2">Também não está claro como generalizar além de cues de dois tokens.</span></p><p><span class="s" data-s="b11-p3-s0">Finalmente, embora o paper mostre que RL aumenta a probabilidade de cues efetivos, não descarta completamente que RL também ensine novas capacidades.</span> <span class="s" data-s="b11-p3-s1">A questão é de grau: quanto do ganho vem de tornar comportamentos existentes mais prováveis versus adicionar novos comportamentos?</span></p>        <h2><span class="s" data-s="b12-h">Por que isso importa</span></h2>
+<p><span class="s" data-s="b12-p0-s0">Este trabalho muda como pensamos sobre o que modelos &#39;aprendem&#39;.</span> <span class="s" data-s="b12-p0-s1">Se capacidades complexas como raciocínio passo a passo já estão presentes no modelo base e podem ser ativadas com dois tokens, então o papel do post-training é menos sobre ensinar e mais sobre direcionar.</span> <span class="s" data-s="b12-p0-s2">A distinção entre &#39;o que um modelo pode fazer&#39; e &#39;o que ele provavelmente fará&#39; se torna central.</span></p><p><span class="s" data-s="b12-p1-s0">Para o design de treino, isso levanta questões importantes.</span> <span class="s" data-s="b12-p1-s1">Quando um comportamento já pode ser elicitado através de condicionamento, o que ganhamos tornando-o mais provável através de atualizações de peso?</span> <span class="s" data-s="b12-p1-s2">E que outros comportamentos úteis podem se tornar mais difíceis de acessar no processo?</span> <span class="s" data-s="b12-p1-s3">O paper sugere que poderíamos deliberadamente criar associações úteis durante o treino, pareando comportamentos desejados com cues específicos.</span></p><p><span class="s" data-s="b12-p2-s0">A descoberta também tem implicações para interpretabilidade.</span> <span class="s" data-s="b12-p2-s1">Em vez de interpretar prompts e instruções puramente através de semântica, precisamos considerar as associações estatísticas que eles ativam nos dados de treino.</span> <span class="s" data-s="b12-p2-s2">&#39;Let&#39;s think step by step&#39; pode funcionar não (apenas) porque instrui semanticamente o modelo, mas porque essa frase aparece em contextos específicos nos dados.</span></p><p><span class="s" data-s="b12-p3-s0">Por fim, o trabalho alerta para vieses não intencionais em dados sintéticos.</span> <span class="s" data-s="b12-p3-s1">Se modelos geradores têm seus próprios padrões de cues – sempre começando respostas matemáticas de certa forma, por exemplo – esses padrões se propagam para modelos treinados nesses dados.</span> <span class="s" data-s="b12-p3-s2">Compreender e controlar essas associações se tornará cada vez mais importante à medida que dados sintéticos dominam o pré-treino.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Fixar apenas dois tokens iniciais pode elevar modelos base a performance de RL em matemática: de 42% para 78% no MATH-500 para Olmo-3-7B.</span></li><li><span class="s" data-s="k1">Palavras arbitrárias como &#39;chicken&#39; podem virar gatilhos de raciocínio através de edição nos dados de treino, confirmando que associações estatísticas, não semântica, governam o efeito.</span></li><li><span class="s" data-s="k2">RL aumenta principalmente a probabilidade de cues que já funcionavam no modelo base, concentrando mudanças de peso nas primeiras posições da resposta.</span></li><li><span class="s" data-s="k3">Diferentes cues ativam comportamentos distintos de segurança, correlacionados com tipos específicos de documento nos dados de treino – o mesmo mecanismo governa raciocínio e compliance.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.06851" rel="noopener">Base Models Can Reason By Taking a Cue From Training Data</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.06851" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

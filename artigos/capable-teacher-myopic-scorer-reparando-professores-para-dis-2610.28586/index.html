@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Capable Teacher, Myopic Scorer: Reparando Professores para Distilação Agênica — arXiv em 5</title>
+<meta name="description" content="Um novo método que corrige a &#39;miopia&#39; de modelos professores ao avaliarem tokens individuais, permitindo que alunos aprendam a evitar atrasos que levam ao fracasso em tarefas de longo prazo.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Capable Teacher, Myopic Scorer: Reparando Professores para Distilação Agênica">
+<meta property="og:description" content="Um novo método que corrige a &#39;miopia&#39; de modelos professores ao avaliarem tokens individuais, permitindo que alunos aprendam a evitar atrasos que levam ao fracasso em tarefas de longo prazo.">
+<meta property="og:image" content="../../assets/papers/2610.28586/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Agentes</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.28586" rel="noopener">arXiv:2610.28586</a>
+    </div>
+    <h1><span class="s" data-s="t">Capable Teacher, Myopic Scorer: Reparando Professores para Distilação Agênica</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um novo método que corrige a &#39;miopia&#39; de modelos professores ao avaliarem tokens individuais, permitindo que alunos aprendam a evitar atrasos que levam ao fracasso em tarefas de longo prazo.</span></p>
+    <p class="byline">
+      <span>Zhao et al.</span>
+      <span>7 min de leitura</span>
+<span>20/10/2026</span>    </p>
+    <div class="listen" data-article="2610.28586" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=eAvlV4TKPnI" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Distilação Agênica On-Policy</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A distilação agênica on-policy (OPD) é uma técnica poderosa para treinar agentes de IA.</span> <span class="s" data-s="b0-p0-s1">Nesse processo, um modelo &#39;aluno&#39; interage com um ambiente real, gerando suas próprias trajetórias.</span> <span class="s" data-s="b0-p0-s2">Enquanto isso, um modelo &#39;professor&#39;, mais capaz, avalia cada token produzido pelo aluno em tempo real.</span> <span class="s" data-s="b0-p0-s3">A distribuição de probabilidade do professor sobre esses tokens serve como o sinal de treinamento denso para o aluno.</span> <span class="s" data-s="b0-p0-s4">Essa abordagem é a base de pipelines modernos de pós-treinamento multi-professor, como MiMo-V2-Flash e Nemotron-Cascade 2.</span></p><p><span class="s" data-s="b0-p1-s0">No entanto, a OPD tem uma falha crônica.</span> <span class="s" data-s="b0-p1-s1">A explicação tradicional é o erro composto: o aluno comete erros, desviando-se para regiões onde o professor não é confiável, e as avaliações nessas regiões tornam-se ruído.</span> <span class="s" data-s="b0-p1-s2">Métodos recentes tentam mitigar isso limitando o horizonte do aluno, replays de prefixos ou intervenções do professor quando há discordância.</span> <span class="s" data-s="b0-p1-s3">Mas os autores deste paper argumentam que essa explicação é incompleta.</span></p><p><span class="s" data-s="b0-p2-s0">O problema real não é apenas que o aluno sai da zona de confiança do professor, mas que o próprio professor, ao atuar como avaliador de tokens únicos, é miópico.</span> <span class="s" data-s="b0-p2-s1">Ele não vê o desfecho daEpisode.</span> <span class="s" data-s="b0-p2-s2">Essa desconexão entre a ação completa do professor e sua avaliação fragmentada do aluno é o cerne da falha que o R2S propõe corrigir.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.28586/figure1.webp" alt="A miopia do professor permite que o aluno adie decisões críticas. Ao avaliar token a token, o professor não vê que o atraso vai esgotar os turnos. Se o professor assumir o controle (takeover) do mesmo estado, ele conclui a tarefa com sucesso." loading="lazy">
+          <figcaption>
+            A miopia do professor permite que o aluno adie decisões críticas. Ao avaliar token a token, o professor não vê que o atraso vai esgotar os turnos. Se o professor assumir o controle (takeover) do mesmo estado, ele conclui a tarefa com sucesso.
+            <span class="source">Figura 1 do paper · Zhao et al., arXiv:2610.28586</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">A Miopia do Avaliador e a Lacuna Rollout-Score</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Os autores identificam um fenômeno crítico chamado &#39;rollout-scorer gap&#39; (lacuna entre trajetória e pontuação).</span> <span class="s" data-s="b2-p0-s1">Quando o professor atua (rollout), ele vê o resultado final de cada ação.</span> <span class="s" data-s="b2-p0-s2">Quando ele pontua (scorer) o aluno, ele avalia cada token isoladamente, sem saber se aquela ação levará ao sucesso ou fracasso.</span></p><p><span class="s" data-s="b2-p1-s0">Em tarefas de longo prazo, como buscar itens ou realizar experimentos, ações de &#39;adiamento&#39; ou &#39;verificação extra&#39; são seguras no curto prazo.</span> <span class="s" data-s="b2-p1-s1">Elas mantêm opções abertas.</span> <span class="s" data-s="b2-p1-s2">Um avaliador miópico dá uma pontuação neutra ou positiva a esses tokens de hesitação.</span> <span class="s" data-s="b2-p1-s3">No entanto, em ambientes com limite de turnos, esses atrasos consomem a cota disponível, levando ao fracasso por &#39;esgotamento de turnos&#39;.</span></p><p><span class="s" data-s="b2-p2-s0">A RL baseada em recompensa puniria esse atraso com recompensa zero no final.</span> <span class="s" data-s="b2-p2-s1">A OPD pura não tem esse mecanismo.</span> <span class="s" data-s="b2-p2-s2">O aluno aprende que hesitar é aceitável porque o professor não o penaliza no momento.</span> <span class="s" data-s="b2-p2-s3">O resultado é que o aluno treinado continua hesitando até falhar, mesmo que o professor pudesse resolver o problema se tivesse assumido o controle naquele exato momento.</span></p>        <h2><span class="s" data-s="b3-h">R2S: Do Rollout à Pontuação</span></h2>
+<p><span class="s" data-s="b3-p0-s0">A proposta é o Rollout-to-Scorer Distillation (R2S).</span> <span class="s" data-s="b3-p0-s1">A ideia central é reparar o professor (ou um cópia dele) antes de iniciar a distilação.</span> <span class="s" data-s="b3-p0-s2">O objetivo é fazer com que o professor dê pontuações mais baixas aos tokens de hesitação, informando-o sobre o contexto de sucesso que ele perde ao avaliar token a token.</span></p><p><span class="s" data-s="b3-p1-s0">O processo começa identificando os estados onde o aluno não treinado mais discorda do professor.</span> <span class="s" data-s="b3-p1-s1">São os pontos de divergência.</span> <span class="s" data-s="b3-p1-s2">A partir desses estados, o professor realiza &#39;takeovers&#39;, assumindo o controle e completando a tarefa.</span> <span class="s" data-s="b3-p1-s3">Isso prova que o problema não é a incapacidade do professor, mas a falha na avaliação do aluno.</span></p><p><span class="s" data-s="b3-p2-s0">Os autores filtram esses takeovers.</span> <span class="s" data-s="b3-p2-s1">Eles mantêm apenas aqueles que passam em uma verificação livre de recompensa, como consenso entre múltiplas execuções ou aprovação por um juiz LLM.</span> <span class="s" data-s="b3-p2-s2">Isso garante que estamos usando trajetórias de sucesso para corrigir o avaliador.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.28586/figure2.webp" alt="O fluxo do R2S: 1) Coleta de estados de alta divergência. 2) Professor assume (takeover) e completa a tarefa. 3) Um modelo professor reparado é ajustado para dar pontuações informadas pelo takeover, sem que o takeover esteja visível no contexto do aluno." loading="lazy">
+          <figcaption>
+            O fluxo do R2S: 1) Coleta de estados de alta divergência. 2) Professor assume (takeover) e completa a tarefa. 3) Um modelo professor reparado é ajustado para dar pontuações informadas pelo takeover, sem que o takeover esteja visível no contexto do aluno.
+            <span class="source">Figura 2 do paper · Zhao et al., arXiv:2610.28586</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Detalhes da Implementação</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Na prática, o R2S funciona em três etapas claras.</span> <span class="s" data-s="b5-p0-s1">Primeiro, o professor assume os estados mais problemáticos do aluno.</span> <span class="s" data-s="b5-p0-s2">Segundo, seleciona-se as trajetórias de sucesso.</span> <span class="s" data-s="b5-p0-s3">Terceiro, realiza-se um fine-tuning offline do professor.</span></p><p><span class="s" data-s="b5-p1-s0">Durante o fine-tuning, o professor é treinado para fornecer pontuações que refletem o sucesso do takeover.</span> <span class="s" data-s="b5-p1-s1">O modelo reparado aprende a dar notas mais baixas para os tokens de hesitação do aluno, mesmo sem ver o takeover no contexto de entrada.</span> <span class="s" data-s="b5-p1-s2">Isso é crucial: o aluno final nunca verá o takeover, apenas as pontuações corrigidas.</span></p><p><span class="s" data-s="b5-p2-s0">O professor reparado é então congelado e usado como o único avaliador durante a distilação on-policy padrão.</span> <span class="s" data-s="b5-p2-s1">O aluno é treinado com o objetivo normal de OPD, mas agora recebe sinais que penalizam adequadamente os atrasos.</span> <span class="s" data-s="b5-p2-s2">Não é necessária nenhuma recompensa explícita do ambiente durante essa fase de reparo ou treinamento.</span></p>        <h2><span class="s" data-s="b6-h">Configuração Experimental</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Os experimentos utilizam pares de modelos Qwen3 e Qwen3.5, variando de 2B a 30B parâmetros, incluindo arquiteturas densas e MoE.</span> <span class="s" data-s="b6-p0-s1">Os ambientes testados são ALFWorld (tarefas domésticas), WebShop (compras online) e ScienceWorld (experimentos científicos).</span></p><p><span class="s" data-s="b6-p1-s0">Cada ambiente tem um limite rígido de turnos: 30 no ALFWorld e ScienceWorld, 15 no WebShop.</span> <span class="s" data-s="b6-p1-s1">O protocolo de avaliação é consistente: cada episódio é avaliado pela taxa de sucesso.</span> <span class="s" data-s="b6-p1-s2">Os autores comparam o R2S contra Vanilla OPD, TCOD-F2B, Guided-OPD e FutureBridge.</span></p><p><span class="s" data-s="b6-p2-s0">O treinamento do aluno ocorre por 150 passos.</span> <span class="s" data-s="b6-p2-s1">Para o reparo do professor, são minerados até 2.400 estados de alta divergência, com 8 takeovers por estado.</span> <span class="s" data-s="b6-p2-s2">O fine-tuning do professor reparado dura uma epoch.</span> <span class="s" data-s="b6-p2-s3">O setup é desenhado para isolar o impacto da correção de pontuação.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.28586/table2.webp" alt="Resultados principais: O R2S supera todos os métodos base (Vanilla OPD, TCOD, Guided, FutureBridge) em todas as 12 combinações de professor-aluno-ambiente testadas." loading="lazy">
+          <figcaption>
+            Resultados principais: O R2S supera todos os métodos base (Vanilla OPD, TCOD, Guided, FutureBridge) em todas as 12 combinações de professor-aluno-ambiente testadas.
+            <span class="source">Tabela 2 do paper · Zhao et al., arXiv:2610.28586</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Resultados e Análise</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Os resultados são consistentes e significativos.</span> <span class="s" data-s="b8-p0-s1">Em todas as 12 células de teste (combinações de modelo e ambiente), o R2S superou os métodos de estado da arte.</span> <span class="s" data-s="b8-p0-s2">A melhoria média foi de 12,8 pontos percentuais de sucesso em relação ao melhor método base em cada célula.</span></p><p><span class="s" data-s="b8-p1-s0">Por exemplo, no ALFWorld com Qwen3.5-9B ensinando Qwen3.5-4B, o Vanilla OPD alcançou 63,6% de sucesso, enquanto o R2S atingiu 77,9%.</span> <span class="s" data-s="b8-p1-s1">No WebShop, a melhoria foi de 35,6% para 57,9%.</span> <span class="s" data-s="b8-p1-s2">Isso demonstra que a correção da miopia do professor tem um impacto direto na capacidade do aluno de concluir tarefas longas.</span></p><p><span class="s" data-s="b8-p2-s0">Os gráficos de aprendizado mostram que os alunos treinados com R2S separam-se rapidamente dos baselines, indicando que o sinal de treinamento é mais informativo desde o início.</span> <span class="s" data-s="b8-p2-s1">O aluno não apenas aprende mais rápido, mas atinge um patamar de desempenho superior.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.28586/figure4.webp" alt="A esquerda: O KL divergência do professor reparado em relação aos alvos informados diminui. A direita: Episódios que terminam sem sucesso por esgotamento de turnos caem pela metade com o R2S." loading="lazy">
+          <figcaption>
+            A esquerda: O KL divergência do professor reparado em relação aos alvos informados diminui. A direita: Episódios que terminam sem sucesso por esgotamento de turnos caem pela metade com o R2S.
+            <span class="source">Figura 4 do paper · Zhao et al., arXiv:2610.28586</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">Por que isso funciona? A Redução do Erro de Hesitação</span></h2>
+<p><span class="s" data-s="b10-p0-s0">A análise detalhada revela que o R2S ataca diretamente a causa raiz do fracasso em ambientes limitados por turnos.</span> <span class="s" data-s="b10-p0-s1">O gráfico de ablação mostra que, com o R2S, o número de episódios que terminam por &#39;esgotamento de turnos&#39; é reduzido pela metade.</span></p><p><span class="s" data-s="b10-p1-s0">Isso confirma a hipótese inicial: o problema não era a falta de habilidade do aluno, mas a falta de penalidade adequada para comportamentos de adiamento.</span> <span class="s" data-s="b10-p1-s1">Ao corrigir as pontuações do professor, o R2S ensina o aluno a ser mais decisivo e direto, evitando a armadilha da &#39;paralisia por análise&#39; que consome recursos limitados.</span></p><p><span class="s" data-s="b10-p2-s0">Além disso, a divergência KL entre o professor original e o reparado indica que o modelo está de fato aprendendo a alterar suas distribuições de probabilidade para refletir o sucesso da trajetória completa, e não apenas a adequação local do token.</span></p>        <h2><span class="s" data-s="b11-h">Limitações e Considerações</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Apesar dos resultados promissores, o R2S tem limitações claras.</span> <span class="s" data-s="b11-p0-s1">Primeiro, o custo computacional do reparo é significativo.</span> <span class="s" data-s="b11-p0-s2">São necessárias 19.200 trajetórias de takeover para minerar e selecionar os dados de treinamento do professor.</span> <span class="s" data-s="b11-p0-s3">Isso adiciona uma etapa cara antes do treinamento do aluno.</span></p><p><span class="s" data-s="b11-p1-s0">Segundo, o método depende de ambientes repliáveis.</span> <span class="s" data-s="b11-p1-s1">O professor precisa ser capaz de assumir o controle a partir de um estado exato gerado pelo aluno.</span> <span class="s" data-s="b11-p1-s2">Isso limita a aplicação direta a ambientes onde o estado pode ser restaurado, como os benchmarks usados aqui.</span> <span class="s" data-s="b11-p1-s3">Ambientes reais com estados não determinísticos ou não restauráveis seriam desafiadores.</span></p><p><span class="s" data-s="b11-p2-s0">Terceiro, os experimentos foram conduzidos apenas na família de modelos Qwen3 e Qwen3.5.</span> <span class="s" data-s="b11-p2-s1">Embora a lógica seja geral, a eficácia em outras arquiteturas ou famílias de modelos precisa ser validada.</span> <span class="s" data-s="b11-p2-s2">A abordagem também assume que o professor é capaz de resolver os estados de divergência, o que nem sempre é verdade em problemas extremamente complexos.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b12-t">Insight Chave: Miopia vs. Horizonte</span></h3>
+          <p><span class="s" data-s="b12-c-s0">A maior contribuição deste paper não é apenas um novo método de treinamento, mas a identificação clara da &#39;miopia do avaliador&#39;.</span> <span class="s" data-s="b12-c-s1">Em tarefas de longo prazo, avaliar ações isoladamente é insuficiente.</span> <span class="s" data-s="b12-c-s2">O sinal de treinamento deve incorporar o horizonte completo da decisão, mesmo que isso seja feito indiretamente através de correções offline.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b13-h">Conclusão</span></h2>
+<p><span class="s" data-s="b13-p0-s0">O Capable Teacher, Myopic Scorer apresenta uma solução elegante para um problema sutil na distilação agênica.</span> <span class="s" data-s="b13-p0-s1">Ao reparar o professor com informações de trajetória completa (takeovers), o R2S alinha as pontuações locais com o sucesso global.</span></p><p><span class="s" data-s="b13-p1-s0">O método é reward-free, eficiente em termos de sinal de treinamento e robusto em diversos ambientes e tamanhos de modelo.</span> <span class="s" data-s="b13-p1-s1">Ele demonstra que, muitas vezes, o gargalo no treinamento de agentes não é a capacidade do aluno, mas a qualidade do feedback que ele recebe.</span></p><p><span class="s" data-s="b13-p2-s0">Para desenvolvedores e pesquisadores em IA agênica, o R2S oferece um novo paradigma: antes de treinar o aluno, verifique se seu professor está &#39;olhando&#39; para o futuro suficiente para dar o feedback correto.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">A distilação agênica falha porque professores avaliam tokens sem ver o desfecho, permitindo atrasos que consomem turnos.</span></li><li><span class="s" data-s="k1">O método R2S usa &#39;takeovers&#39; do professor para ensinar o modelo a punir essas hesitações antes do treinamento do aluno.</span></li><li><span class="s" data-s="k2">Resultados mostram ganhos médios de 12,8 pontos de sucesso em três ambientes complexos comparado a SOTA.</span></li><li><span class="s" data-s="k3">A abordagem é reward-free, não exigindo recompensas explícitas do ambiente para corrigir o professor.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.28586" rel="noopener">Capable Teacher, Myopic Scorer: Reward-Free Teacher Repair for Agentic On-Policy Distillation</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.28586" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

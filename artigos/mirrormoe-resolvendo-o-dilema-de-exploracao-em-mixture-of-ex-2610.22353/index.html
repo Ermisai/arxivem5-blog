@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MirrorMoE: Resolvendo o dilema de exploração em Mixture-of-Experts modernos — arXiv em 5</title>
+<meta name="description" content="Um estudo sobre como a combinação de segmentação fina de especialistas e especialistas compartilhados cria um conflito de exploração no roteamento, e como o MirrorMoE resolve isso.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MirrorMoE: Resolvendo o dilema de exploração em Mixture-of-Experts modernos">
+<meta property="og:description" content="Um estudo sobre como a combinação de segmentação fina de especialistas e especialistas compartilhados cria um conflito de exploração no roteamento, e como o MirrorMoE resolve isso.">
+<meta property="og:image" content="../../assets/papers/2610.22353/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Redes neurais</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.22353" rel="noopener">arXiv:2610.22353</a>
+    </div>
+    <h1><span class="s" data-s="t">MirrorMoE: Resolvendo o dilema de exploração em Mixture-of-Experts modernos</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um estudo sobre como a combinação de segmentação fina de especialistas e especialistas compartilhados cria um conflito de exploração no roteamento, e como o MirrorMoE resolve isso.</span></p>
+    <p class="byline">
+      <span>Li et al.</span>
+      <span>8 min de leitura</span>
+<span>15/10/2026</span>    </p>
+    <div class="listen" data-article="2610.22353" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=m0GlNkDn6Pk" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O contexto: Escalabilidade e a arquitetura MoE moderna</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Os modelos Mixture-of-Experts (MoE) tornaram-se fundamentais para escalar Large Language Models (LLMs) a trilhões de parâmetros.</span> <span class="s" data-s="b0-p0-s1">Diferente dos modelos densos, onde todas as camadas processam cada token, os MoEs adotam um paradigma de computação condicional esparsa.</span> <span class="s" data-s="b0-p0-s2">Isso significa que, para cada token de entrada, apenas um subconjunto pequeno de especialistas (sub-redes feedforward) é ativado.</span> <span class="s" data-s="b0-p0-s3">Essa arquitetura permite que o custo computacional durante a inferência cresça sublinearmente em relação ao número total de parâmetros, mantendo a capacidade de aprendizado de modelos massivos.</span></p><p><span class="s" data-s="b0-p1-s0">Arquiteturas MoE modernas, como as usadas em DeepSeek, Kimi e Qwen, evoluíram além do design básico.</span> <span class="s" data-s="b0-p1-s1">Elas incorporaram duas tendências arquiteturais principais.</span> <span class="s" data-s="b0-p1-s2">A primeira é a segmentação fina de especialistas (fine-grained expert segmentation).</span> <span class="s" data-s="b0-p1-s3">Em vez de ter poucos especialistas, esses modelos utilizam um número muito maior de especialistas totais (E) e também ativam mais especialistas por token (K).</span> <span class="s" data-s="b0-p1-s4">Por exemplo, é comum ver configurações como (E=64, K=8) em vez de (E=8, K=1).</span> <span class="s" data-s="b0-p1-s5">Isso aumenta exponencialmente o espaço de combinações de especialistas disponíveis, teoricamente permitindo representações de token mais expressivas.</span></p><p><span class="s" data-s="b0-p2-s0">A segunda tendência é a introdução de especialistas compartilhados (shared experts).</span> <span class="s" data-s="b0-p2-s1">Diferente dos especialistas roteados, que são ativados seletivamente, os especialistas compartilhados são ativados para todos os tokens.</span> <span class="s" data-s="b0-p2-s2">Eles capturam conhecimento comum que seria aprendido redundantemente pelos especialistas roteados, permitindo que estes últimos se dediquem mais à especialização.</span> <span class="s" data-s="b0-p2-s3">A combinação dessas duas escolhas tornou-se padrão em MoEs de última geração, mas os autores deste paper identificam que a interação entre elas pode ser problemática.</span></p>        <h2><span class="s" data-s="b1-h">O problema: O dilema de exploração no roteamento</span></h2>
+<p><span class="s" data-s="b1-p0-s0">O objetivo central do treinamento de um MoE é a exploração do roteamento.</span> <span class="s" data-s="b1-p0-s1">Durante o pré-treinamento, o roteador precisa buscar combinações de especialistas alternativas para identificar as rotas (quais especialistas ativar) que são (quase) ótimas para cada token.</span> <span class="s" data-s="b1-p0-s2">A segmentação fina amplia drasticamente esse espaço de exploração.</span> <span class="s" data-s="b1-p0-s3">O número de subconjuntos de especialistas possíveis aumenta de 8 no caso (E=8, K=1) para aproximadamente 4,4 bilhões no caso (E=64, K=8).</span> <span class="s" data-s="b1-p0-s4">Para realizar o potencial expressivo dessa segmentação fina, o modelo precisa explorar esse espaço combinatorialmente maior.</span></p><p><span class="s" data-s="b1-p1-s0">No entanto, a presença de especialistas compartilhados introduz uma assimetria durante o pré-treinamento.</span> <span class="s" data-s="b1-p1-s1">Os especialistas compartilhados tendem a dominar as representações aprendidas dos tokens, deixando os especialistas roteados com influência menor na saída da camada.</span> <span class="s" data-s="b1-p1-s2">Como resultado, mesmo quando diferentes especialistas roteados são ativados, a variação nas características aprendidas é limitada.</span> <span class="s" data-s="b1-p1-s3">Isso torna as rotas alternativas difíceis de distinguir para o roteador, minando o objetivo da exploração.</span></p><p><span class="s" data-s="b1-p2-s0">Essa tensão é o que os autores chamam de &#39;dilema de exploração&#39;.</span> <span class="s" data-s="b1-p2-s1">A necessidade de exploração é maior devido à segmentação fina (espaço de roteamento ampliado), mas a capacidade de exploração é reduzida pelos especialistas compartilhados (baixa variabilidade nas representações).</span> <span class="s" data-s="b1-p2-s2">Consequentemente, a expressividade adicional oferecida pela segmentação fina pode não ser totalmente realizada na prática, e os benefícios dos especialistas compartilhados também podem ser diminuídos.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.22353/figure1.webp" alt="Gráfico mostrando que o MirrorMoE melhora a perplexidade em diferentes escalas de modelo e configurações de especialistas, realizando os ganhos de expressividade do aumento de K." loading="lazy">
+          <figcaption>
+            Gráfico mostrando que o MirrorMoE melhora a perplexidade em diferentes escalas de modelo e configurações de especialistas, realizando os ganhos de expressividade do aumento de K.
+            <span class="source">Figura 1 do paper · Li et al., arXiv:2610.22353</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">A solução: MirrorMoE e a supressão adaptativa</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Para resolver esse dilema, os autores propõem o MirrorMoE.</span> <span class="s" data-s="b3-p0-s1">A ideia central não é aumentar a complexidade do roteador, mas sim reduzir o espaço de exploração para que ele seja compatível com a capacidade de exploração do modelo atual.</span> <span class="s" data-s="b3-p0-s2">O MirrorMoE faz isso através da supressão adaptativa de especialistas desnecessários, ajustada por token.</span> <span class="s" data-s="b3-p0-s3">Em vez de permitir que o roteador escolha entre um espaço enorme de especialistas roteados, o método identifica e suprime aqueles que não são essenciais para a representação atual do token.</span></p><p><span class="s" data-s="b3-p1-s0">Tecnicamente, o MirrorMoE introduz um mecanismo que modula a ativação dos especialistas roteados com base na relevância específica do token.</span> <span class="s" data-s="b3-p1-s1">Isso efetivamente &#39;encolhe&#39; o espaço de exploração dinamicamente.</span> <span class="s" data-s="b3-p1-s2">Ao eliminar especialistas que não contribuem significativamente para a representação do token, o método aumenta a variabilidade relativa das representações geradas pelos especialistas restantes.</span> <span class="s" data-s="b3-p1-s3">Isso facilita para o roteador distinguir entre rotas alternativas e encontrar combinações mais eficazes.</span></p><p><span class="s" data-s="b3-p2-s0">Um aspecto crucial do MirrorMoE é sua adaptabilidade.</span> <span class="s" data-s="b3-p2-s1">Ele não aplica uma redução fixa ou global.</span> <span class="s" data-s="b3-p2-s2">Em vez disso, a supressão é ajustada por token e por camada, permitindo que o modelo se adapte às necessidades específicas de cada entrada.</span> <span class="s" data-s="b3-p2-s3">Isso é contrastado com abordagens mais simples que apenas reduzem o número de especialistas ativados de forma estática ou seguindo um agendamento temporal simples, sem considerar a complexidade da entrada.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.22353/figure4.webp" alt="Curvas mostrando como o MirrorMoE suprime especialistas desnecessários durante o treinamento, ajustando o espaço de exploração de forma adaptativa." loading="lazy">
+          <figcaption>
+            Curvas mostrando como o MirrorMoE suprime especialistas desnecessários durante o treinamento, ajustando o espaço de exploração de forma adaptativa.
+            <span class="source">Figura 4 do paper · Li et al., arXiv:2610.22353</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Implementação e hiperparâmetros</span></h2>
+<p><span class="s" data-s="b5-p0-s0">O MirrorMoE opera modificando a probabilidade de ativação dos especialistas.</span> <span class="s" data-s="b5-p0-s1">Durante o treinamento, um agendamento (schedule) é aplicado para controlar a intensidade da supressão.</span> <span class="s" data-s="b5-p0-s2">Os autores testaram diferentes agendamentos para o parâmetro de supressão, incluindo constante, linear e cosseno.</span> <span class="s" data-s="b5-p0-s3">O agendamento cosseno, com um valor inicial de 0.4, apresentou o melhor desempenho, sugerindo que uma supressão mais suave no início e mais forte no final é benéfica.</span></p><p><span class="s" data-s="b5-p1-s0">A eficiência computacional é outro ponto importante.</span> <span class="s" data-s="b5-p1-s1">Apesar de introduzir uma operação adicional de softmax na camada de roteamento, o MirrorMoE não aumenta significativamente o tempo de treinamento por iteração.</span> <span class="s" data-s="b5-p1-s2">Na verdade, há uma leve redução no tempo, o que sugere que a abordagem melhora o balanceamento de carga entre os especialistas.</span> <span class="s" data-s="b5-p1-s3">Um melhor balanceamento significa que menos especialistas ficam ociosos ou sobrecarregados, otimizando o uso da hardware durante o treinamento distribuído.</span></p><p><span class="s" data-s="b5-p2-s0">A adaptabilidade do MirrorMoE é demonstrada ao compará-lo com métodos que apenas aumentam progressivamente o número de especialistas ativados (K) ao longo do treinamento, sem considerar a entrada específica.</span> <span class="s" data-s="b5-p2-s1">Esses métodos básicos, que usam um K fixo para todos os tokens e camadas em um dado momento, não alcançam o desempenho do MirrorMoE.</span> <span class="s" data-s="b5-p2-s2">Isso valida que a supressão adaptativa por token é o componente chave para resolver o dilema de exploração.</span></p>        <h2><span class="s" data-s="b6-h">Resultados experimentais: Perplexidade e escalabilidade</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Os autores avaliaram o MirrorMoE em modelos com escalas variadas, de 100M a 2.4B de parâmetros totais.</span> <span class="s" data-s="b6-p0-s1">Os resultados mostram que o MirrorMoE consistently melhora a perplexidade em comparação com MoEs padrão (vanilla) e MoEs com especialistas compartilhados sem a técnica de MirrorMoE.</span> <span class="s" data-s="b6-p0-s2">Em modelos com especialistas compartilhados, o MirrorMoE permite que eles superem seus contrapartes sem especialistas compartilhados, algo que não acontece no treinamento padrão quando K é grande.</span></p><p><span class="s" data-s="b6-p1-s0">Um achado importante é que, com o MirrorMoE, a perplexidade diminui consistentemente à medida que K aumenta.</span> <span class="s" data-s="b6-p1-s1">Isso indica que a expressividade adicional habilitada pela segmentação fina (maior K) é realmente realizada.</span> <span class="s" data-s="b6-p1-s2">Em contraste, nos MoEs padrão com especialistas compartilhados, aumentar K além de um certo ponto pode levar a uma degradação de desempenho devido ao dilema de exploração não resolvido.</span> <span class="s" data-s="b6-p1-s3">O MirrorMoE remove essa barreira, permitindo que a escalabilidade do número de especialistas seja aproveitada plenamente.</span></p><p><span class="s" data-s="b6-p2-s0">Os ganhos são observados em todas as escalas testadas.</span> <span class="s" data-s="b6-p2-s1">Para o modelo de 2.4B, o MirrorMoE apresenta uma melhoria significativa em relação ao modelo base.</span> <span class="s" data-s="b6-p2-s2">Isso sugere que o dilema de exploração se torna mais pronunciado em modelos maiores e com espaços de roteamento mais amplos, e que o MirrorMoE é particularmente benéfico nesses cenários.</span> <span class="s" data-s="b6-p2-s3">A técnica não apenas corrige um problema de treinamento, mas também libera o potencial de modelos ainda maiores e mais complexos.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b7-t">Ganhos em Tarefas Downstream</span></h3>
+          <p><span class="s" data-s="b7-c-s0">Além da perplexidade, o MirrorMoE melhora o desempenho em seis tarefas de raciocínio de senso comum.</span> <span class="s" data-s="b7-c-s1">Para o modelo de 2.4B, a melhoria média foi de 1.64 pontos percentuais em benchmarks como ARC-E, OBQA e HellaSwag.</span> <span class="s" data-s="b7-c-s2">Isso confirma que os ganhos de treinamento se traduzem em capacidades práticas.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b8-h">Desempenho em tarefas downstream e validação</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Para validar a hipótese de que o dilema de exploração é especificamente causado pela interação entre especialistas compartilhados e segmentação fina, os autores aplicaram o MirrorMoE a MoEs sem especialistas compartilhados.</span> <span class="s" data-s="b8-p0-s1">Nesse caso, o MirrorMoE performou de forma comparável ao treinamento vanilla.</span> <span class="s" data-s="b8-p0-s2">Isso é consistente com a análise: sem especialistas compartilhados, o dilema de exploração é menos pronunciado, pois não há a dominância das representações que suprime a variabilidade dos especialistas roteados.</span> <span class="s" data-s="b8-p0-s3">Portanto, não há necessidade significativa de reduzir o espaço de exploração.</span></p><p><span class="s" data-s="b8-p1-s0">Essa ablação é crucial porque demonstra que o MirrorMoE não é uma melhoria genérica para todos os MoEs, mas uma solução específica para um problema arquitetural bem definido.</span> <span class="s" data-s="b8-p1-s1">Ele resolve a tensão entre a necessidade de exploração (devido a K alto) e a capacidade de exploração (reduzida por especialistas compartilhados).</span> <span class="s" data-s="b8-p1-s2">Quando essa tensão não existe, a técnica é neutra, o que é um sinal de robustez e precisão na motivação do método.</span></p>        <h2><span class="s" data-s="b9-h">Limitações e direções futuras</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Apesar dos resultados positivos, o paper reconhece limitações.</span> <span class="s" data-s="b9-p0-s1">A abordagem atual foca em reduzir o espaço de exploração.</span> <span class="s" data-s="b9-p0-s2">Uma direção futura promissora é melhorar a própria estratégia de roteamento para permitir uma exploração mais eficiente, em vez de apenas restringir o espaço.</span> <span class="s" data-s="b9-p0-s3">Isso poderia envolver mecanismos de roteamento mais sofisticados que aprendem a explorar o espaço combinatorial de forma mais inteligente, em vez de suprimir partes dele.</span></p><p><span class="s" data-s="b9-p1-s0">Outra consideração é o custo computacional adicional, embora tenha sido observado como leve.</span> <span class="s" data-s="b9-p1-s1">Em escalas extremamente grandes, onde o tempo de treinamento é crítico, qualquer overhead adicional deve ser cuidadosamente gerenciado.</span> <span class="s" data-s="b9-p1-s2">Além disso, o agendamento dos hiperparâmetros (como o rho) foi otimizado empiricamente.</span> <span class="s" data-s="b9-p1-s3">Uma análise teórica mais profunda sobre como escolher esses hiperparâmetros em função do tamanho do modelo e do espaço de roteamento poderia tornar a técnica mais fácil de aplicar sem ajuste fino.</span></p><p><span class="s" data-s="b9-p2-s0">Finalmente, o paper foca em modelos de linguagem baseados em transformadores com camadas MoE.</span> <span class="s" data-s="b9-p2-s1">A generalização da técnica para outras arquiteturas ou domínios (como visão computacional) não foi explorada.</span> <span class="s" data-s="b9-p2-s2">No entanto, a lógica do dilema de exploração pode ser relevante em outros contextos onde a esparsidade e a especialização são combinadas.</span> <span class="s" data-s="b9-p2-s3">Os autores deixam em aberto a questão de como integrar o MirrorMoE com outras técnicas de otimização de MoEs, como balanceamento de carga avançado ou regularização de especialistas.</span></p>        <h2><span class="s" data-s="b10-h">Conclusão</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Este paper identifica e resolve um dilema fundamental no design de MoEs modernos: a tensão entre a expressividade da segmentação fina e a estabilidade dos especialistas compartilhados.</span> <span class="s" data-s="b10-p0-s1">O MirrorMoE oferece uma solução prática e eficaz, adaptando o espaço de exploração para corresponder à capacidade do modelo.</span> <span class="s" data-s="b10-p0-s2">Os resultados mostram melhorias consistentes em perplexidade e desempenho em tarefas downstream, validando a importância de considerar a dinâmica de exploração no treinamento de modelos esparsos.</span></p><p><span class="s" data-s="b10-p1-s0">Para engenheiros de machine learning e pesquisadores que trabalham com LLMs escaláveis, o MirrorMoE destaca a necessidade de ir além da simples adição de especialistas e compartilhamento.</span> <span class="s" data-s="b10-p1-s1">A interação entre esses componentes pode criar gargalos de aprendizado que não são óbvios à primeira vista.</span> <span class="s" data-s="b10-p1-s2">Ao entender e mitigar o dilema de exploração, é possível extrair mais valor da arquitetura MoE, permitindo modelos mais grandes e expressivos sem comprometer a qualidade do treinamento.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Modelos MoE modernos combinam segmentação fina e especialistas compartilhados, mas isso reduz a variabilidade das representações, prejudicando a exploração do roteamento.</span></li><li><span class="s" data-s="k1">O MirrorMoE suprime adaptativamente especialistas desnecessários por token, reduzindo o espaço de exploração e permitindo que a maior expressividade seja realizada.</span></li><li><span class="s" data-s="k2">Experimentos mostram ganhos consistentes de perplexidade e desempenho em tarefas downstream em escalas de 100M a 2.4B de parâmetros.</span></li><li><span class="s" data-s="k3">A abordagem é específica para MoEs com especialistas compartilhados; em modelos sem eles, o ganho é insignificante, validando a hipótese do dilema de exploração.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.22353" rel="noopener">Rethinking Routing Exploration in Modern Mixture-of-Experts</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.22353" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>
