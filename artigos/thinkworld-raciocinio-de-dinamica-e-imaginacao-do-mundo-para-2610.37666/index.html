@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ThinkWorld: Raciocínio de Dinâmica e Imaginação do Mundo para Robótica — arXiv em 5</title>
+<meta name="description" content="ThinkWorld introduz Chain-of-Dynamics (CoD), uma linguagem discreta de movimento que unifica demonstrações humanas e robóticas, reforçada por imaginação do futuro para generalização robusta.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ThinkWorld: Raciocínio de Dinâmica e Imaginação do Mundo para Robótica">
+<meta property="og:description" content="ThinkWorld introduz Chain-of-Dynamics (CoD), uma linguagem discreta de movimento que unifica demonstrações humanas e robóticas, reforçada por imaginação do futuro para generalização robusta.">
+<meta property="og:image" content="../../assets/papers/2610.37666/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Robótica</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.37666" rel="noopener">arXiv:2610.37666</a>
+    </div>
+    <h1><span class="s" data-s="t">ThinkWorld: Raciocínio de Dinâmica e Imaginação do Mundo para Robótica</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">ThinkWorld introduz Chain-of-Dynamics (CoD), uma linguagem discreta de movimento que unifica demonstrações humanas e robóticas, reforçada por imaginação do futuro para generalização robusta.</span></p>
+    <p class="byline">
+      <span>Kim et al.</span>
+      <span>5 min de leitura</span>
+<span>27/10/2026</span>    </p>
+    <div class="listen" data-article="2610.37666" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=KpG3zwDNfQo" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Generalização em Modelos VLA</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Os modelos Vision-Language-Action (VLA) têm avançado significativamente na manipulação robótica, mas sua capacidade de generalização continua limitada pela diversidade e cobertura das demonstrações de robôs com rótulos de ação.</span> <span class="s" data-s="b0-p0-s1">A coleta desses dados exige plataformas físicas, interfaces específicas para cada embodiment e um esforço humano substancial.</span> <span class="s" data-s="b0-p0-s2">Embora os vídeos humanos ofereçam uma fonte complementar de experiência com maior diversidade comportamental e ambiental, aprender a partir deles enfrenta um trade-off fundamental entre a escalabilidade dos dados e a necessidade de um grounding de ação explícito.</span></p>        <h2><span class="s" data-s="b1-h">O Trade-off entre Supervisão Explícita e Dados Escaláveis</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Abordagens existentes tentam extrair supervisão acionável de vídeos humanos por duas vias principais.</span> <span class="s" data-s="b1-p0-s1">Modelos de ação latente inferem variáveis de transição de pares ou sequências de frames, sendo escaláveis a vídeos sem anotações, mas essas variáveis são pouco restritas e podem capturar mudanças de aparência ou movimento de câmera em vez de comportamento controlável.</span> <span class="s" data-s="b1-p0-s2">Por outro lado, abordagens totalmente supervisionadas recuperam poses de mãos ou interações com objetos, fornecendo grounding físico direto, mas dependendo de estimativas precisas de pose e correspondência humano-robô.</span> <span class="s" data-s="b1-p0-s3">O aprendizado a partir de vídeos humanos resulta, portanto, em um dilema entre grounding de ação mais forte via supervisão explícita e cobertura comportamental mais ampla via vídeos não anotados.</span></p>        <h2><span class="s" data-s="b2-h">A Ideia Central: Chain-of-Dynamics (CoD)</span></h2>
+<p><span class="s" data-s="b2-p0-s0">ThinkWorld propõe uma nova forma de formular pensamentos de ação, tratando-os como Chain-of-Dynamics (CoD).</span> <span class="s" data-s="b2-p0-s1">O CoD representa uma ação como uma sequência de tokens de movimento discretos que capturam como o mundo evolui ao longo do tempo, fornecendo uma interface de raciocínio comum entre comportamentos humanos e robóticos.</span> <span class="s" data-s="b2-p0-s2">Em vez de tratar ações apenas como supervisão para controle contínuo, o framework as transforma em uma interface de raciocínio para modelar como uma ação deve se desenhar e transformar o mundo.</span> <span class="s" data-s="b2-p0-s3">Isso permite que vídeos sem anotações de movimento forneçam um sinal de aprendizado direto, permitindo que experiências humanas e robóticas refinem o mesmo espaço de raciocínio.</span></p>        <h2><span class="s" data-s="b3-h">Tokenização de Movimento e Espaço de Ação Compartilhado</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Para criar esse espaço compartilhado, os autores mapeiam segmentos de movimento de trajetórias robóticas ou trajetórias de mãos humanas anotadas para uma representação delta normalizada do end-effector.</span> <span class="s" data-s="b3-p0-s1">Esses segmentos são tokenizados com um tokenizador de movimento estilo FAST, obtendo uma sequência CoD alvo em um vocabulário discreto compartilhado.</span> <span class="s" data-s="b3-p0-s2">O Modelo de Linguagem Visual (VLM) aprende a gerar essa sequência CoD autoregressivamente, condicionada na instrução, histórico visual e observação atual.</span> <span class="s" data-s="b3-p0-s3">Essa tokenização fornece uma interface comum ancorada no movimento de ambas as fontes, sem assumir equivalência cinemática entre humanos e robôs.</span></p>        <h2><span class="s" data-s="b4-h">Imaginação do Futuro Condicionada ao CoD</span></h2>
+<p><span class="s" data-s="b4-p0-s0">A definição de uma sequência CoD não determina automaticamente a mudança no mundo que ela induz.</span> <span class="s" data-s="b4-p0-s1">Para prever essa mudança, o ThinkWorld appenda learnable future queries após o CoD.</span> <span class="s" data-s="b4-p0-s2">Dado o contexto visual e o CoD forçado (teacher-forced), o VLM contextualiza essas queries, que são mapeadas por um decodificador leve para uma representação de estado futuro prevista.</span> <span class="s" data-s="b4-p0-s3">Em vez de reconstruir pixels RGB futuros, o modelo prevê em um espaço de features DINO congelado.</span> <span class="s" data-s="b4-p0-s4">As features DINO retêm estrutura espacial densa e de objetos, abstraindo detalhes de aparência, permitindo que futuros imaginados e observados sejam comparados por mudança estrutural sem geração fotorrealística.</span></p>        <h2><span class="s" data-s="b5-h">Supervisão Conjunta: SFT e Alinhamento de Features</span></h2>
+<p><span class="s" data-s="b5-p0-s0">O treinamento inicial ocorre via Supervised Fine-Tuning (SFT), onde o VLM é treinado para gerar CoDs a partir de movimento observado e prever estados visuais futuros condicionados a esses CoDs.</span> <span class="s" data-s="b5-p0-s1">A função de perda combina a perda de entropia cruzada para a geração do CoD e uma métrica de distância de features para a previsão futura.</span> <span class="s" data-s="b5-p0-s2">O frame futuro observado é usado apenas para construir o alvo e nunca é fornecido como entrada ao VLM durante a previsão.</span> <span class="s" data-s="b5-p0-s3">Isso estabelece uma base onde o modelo aprende a associar tokens de dinâmica específicos a mudanças estruturais previsíveis no ambiente.</span></p>        <h2><span class="s" data-s="b6-h">Reforço via Imaginação do Mundo (RL)</span></h2>
+<p><span class="s" data-s="b6-p0-s0">O diferencial do ThinkWorld é o reforço do raciocínio CoD através da imaginação do mundo.</span> <span class="s" data-s="b6-p0-s1">O alinhamento entre o futuro imaginado e o futuro observado após um horizonte físico serve como sinal de aprendizado que não requer anotações de movimento.</span> <span class="s" data-s="b6-p0-s2">Isso permite que vídeos em larga escala, mesmo sem anotações de ação, forneçam supervisão direta através das transições de estado observadas.</span> <span class="s" data-s="b6-p0-s3">O treinamento de reforço utiliza esse sinal para ajustar o VLM, enriquecendo as representações usadas para controle contínuo e estendendo o raciocínio de ação para vídeos sem anotações explícitas.</span></p>        <h2><span class="s" data-s="b7-h">Validação da Estrutura do CoD</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Para provar que o CoD captura a estrutura do futuro e não apenas ruído, os autores realizaram ablações comparando previsões futuras de DINO sob condições geradas, embaralhadas, vazias e sem CoD.</span> <span class="s" data-s="b7-p0-s1">Os resultados mostram que o CoD gerado captura efetivamente a estrutura do estado futuro, enquanto as outras variantes falham em prever mudanças reais.</span> <span class="s" data-s="b7-p0-s2">Isso valida que a sequência discreta de tokens de dinâmica serve como uma representação significativa e transferível das mudanças causadas pela ação no mundo físico.</span></p>        <h2><span class="s" data-s="b8-h">Resultados em Benchmarks de Robótica</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Os experimentos em simulação e em robôs reais demonstram transferência eficaz de humano para robô e forte generalização para tarefas e ambientes não vistos.</span> <span class="s" data-s="b8-p0-s1">Na tabela de resultados, o ThinkWorld supera baselinees como Diffusion Policy, MolmoAct2 e LaWAM em benchmarks LIBERO e LIBERO-PRO.</span> <span class="s" data-s="b8-p0-s2">O modelo alcançou taxas de sucesso de 77.8% no domínio (In-Domain) e 46.7% fora do domínio (Out-of-Domain) no LIBERO, enquanto no LIBERO-PRO atingiu 88.9% no domínio e 44.4% fora do domínio.</span> <span class="s" data-s="b8-p0-s3">Esses números indicam robustez na composição de habilidades e generalização para novos objetos, trajetórias e ambientes.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b9-t">Escopo e Limitações</span></h3>
+          <p><span class="s" data-s="b9-c-s0">O paper foca em manipulação e transferência de vídeos humanos para robôs.</span> <span class="s" data-s="b9-c-s1">A generalização depende da qualidade da tokenização de movimento e da capacidade do VLM de generalizar features DINO.</span> <span class="s" data-s="b9-c-s2">Não são abordadas tarefas de longo prazo complexas além da composição de habilidades atômicas mostradas nos experimentos.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b10-h">Conclusão: Escalabilidade via Dinâmica Compartilhada</span></h2>
+<p><span class="s" data-s="b10-p0-s0">ThinkWorld apresenta um framework de aprendizado VLA que aprende raciocínio de dinâmica transferível através de reforço com imaginação do mundo.</span> <span class="s" data-s="b10-p0-s1">Ao ancorar pensamentos de ação nas mudanças do mundo que eles induzem, o modelo aprende uma representação comum entre embodied humans e robôs.</span> <span class="s" data-s="b10-p0-s2">Isso estende o raciocínio de ação para vídeos sem anotações de ação explícitas.</span> <span class="s" data-s="b10-p0-s3">Os resultados validam a eficácia de aprender raciocínio de ação transferível a partir da dinâmica do mundo observada, demonstrando potencial para escalar o aprendizado de robótica com experiências humanas e robóticas diversas.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">CoD tokeniza ações em tokens de movimento discretos, criando uma interface comum entre humanos e robôs.</span></li><li><span class="s" data-s="k1">O modelo usa DINO features para prever estados futuros, comparando a imaginação com a realidade observada.</span></li><li><span class="s" data-s="k2">Treinamento híbrido: SFT para ancorar o espaço de ações e RL para reforçar a precisão da previsão de mundo.</span></li><li><span class="s" data-s="k3">Resultados mostram transferência eficaz de vídeos humanos para robôs e generalização em ambientes não vistos.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.37666" rel="noopener">ThinkWorld: World Imagination Reinforces Chain-of-Dynamics Reasoning</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.37666" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NarraSpace: Rastreabilidade de Evidências Multimodais para Classificação de Demência — arXiv em 5</title>
+<meta name="description" content="NarraSpace conecta fala, texto e imagem em um esquema auditável, permitindo que classificadores de Alzheimer baseados em descrições de imagens sejam inspecionados palavra por palavra, sem depender apenas de pontuações agregadas.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="NarraSpace: Rastreabilidade de Evidências Multimodais para Classificação de Demência">
+<meta property="og:description" content="NarraSpace conecta fala, texto e imagem em um esquema auditável, permitindo que classificadores de Alzheimer baseados em descrições de imagens sejam inspecionados palavra por palavra, sem depender apenas de pontuações agregadas.">
+<meta property="og:image" content="../../assets/papers/2610.28616/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Saúde</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.28616" rel="noopener">arXiv:2610.28616</a>
+    </div>
+    <h1><span class="s" data-s="t">NarraSpace: Rastreabilidade de Evidências Multimodais para Classificação de Demência</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">NarraSpace conecta fala, texto e imagem em um esquema auditável, permitindo que classificadores de Alzheimer baseados em descrições de imagens sejam inspecionados palavra por palavra, sem depender apenas de pontuações agregadas.</span></p>
+    <p class="byline">
+      <span>Li et al.</span>
+      <span>8 min de leitura</span>
+<span>20/10/2026</span>    </p>
+    <div class="listen" data-article="2610.28616" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=FcPLBrYTTJE" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Caixa Preta em Classificação de Demência por Fala</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Classificar demências, especialmente a Doença de Alzheimer (AD), a partir de fala espontânea é uma área promissora, mas complexa.</span> <span class="s" data-s="b0-p0-s1">O benchmark ADReSS (Alzheimer’s Dementia Recognition through Spontaneous Speech) padroniza essa tarefa pedindo que participantes descrevam uma imagem específica: a cena &#39;Cookie Theft&#39; (Roubo de Biscoito).</span> <span class="s" data-s="b0-p0-s2">A vantagem desse cenário compartilhado é que todos os participantes falam sobre os mesmos objetos e ações.</span> <span class="s" data-s="b0-p0-s3">No entanto, a maioria dos métodos atuais trata a transcrição como um bloco único, gerando um vetor de características ou uma pontuação final que não revela onde, na fala, as evidências da doença estão concentradas.</span></p><p><span class="s" data-s="b0-p1-s0">Essa opacidade é um problema para a aplicação clínica.</span> <span class="s" data-s="b0-p1-s1">Um classificador que diz &#39;provável Alzheimer&#39; sem mostrar quais frases, pausas ou omissões levaram a essa conclusão é difícil de validar.</span> <span class="s" data-s="b0-p1-s2">Trabalhos anteriores tentaram alinhar palavras a regiões da imagem ou usar modelos de linguagem pré-treinados, mas muitas vezes perdem o rastro de como uma pontuação numérica foi derivada do texto original.</span> <span class="s" data-s="b0-p1-s3">Não fica claro se a decisão veio de um objeto não mencionado, de uma ação mal descrita ou de padrões temporais na fala.</span></p><p><span class="s" data-s="b0-p2-s0">NarraSpace, paper recente da The Chinese University of Hong Kong Shenzhen, propõe uma mudança de foco: em vez de apenas maximizar a precisão, o sistema prioriza a rastreabilidade (source attribution).</span> <span class="s" data-s="b0-p2-s1">A ideia é construir uma representação onde cada medida classificatória esteja ligada explicitamente ao seu origem: a utterance específica, o intervalo de tempo da fala e o elemento da cena correspondente.</span> <span class="s" data-s="b0-p2-s2">Isso permite que um revisor humano, potencialmente um clínico, inspecione não apenas o resultado, mas o processo de extração de evidências.</span></p><p><span class="s" data-s="b0-p3-s0">O paper argumenta que manter essa conexão entre estrutura da cena, medições de modelos de linguagem e temporização da fala cria uma base para auditoria.</span> <span class="s" data-s="b0-p3-s1">Não se trata apenas de atribuir importância a features individuais para explicar uma decisão final, mas de tornar explícita a construção dos próprios inputs do classificador.</span> <span class="s" data-s="b0-p3-s2">Se o modelo falha, é possível ver exatamente qual trecho da fala e qual âncora visual contribuíram para o erro, algo que pontuações agregadas de modelos de linguagem não oferecem.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.28616/figure1.webp" alt="Diagrama do fluxo de dados do NarraSpace. Mostra como áudio e transcrição oficial são processados para gerar features, mantendo links com o texto fonte e tempos de fala. O classificador final usa um subconjunto selecionado dessas features." loading="lazy">
+          <figcaption>
+            Diagrama do fluxo de dados do NarraSpace. Mostra como áudio e transcrição oficial são processados para gerar features, mantendo links com o texto fonte e tempos de fala. O classificador final usa um subconjunto selecionado dessas features.
+            <span class="source">Figura 1 do paper · Li et al., arXiv:2610.28616</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">A Arquitetura NarraSpace: Âncoras, Eventos e Rastreamento</span></h2>
+<p><span class="s" data-s="b2-p0-s0">A base do NarraSpace é a cena &#39;Cookie Theft&#39;, dividida em 15 âncoras de cena (scene anchors) nomeadas, como &#39;torneira&#39;, &#39;menina&#39;, &#39;banco&#39;.</span> <span class="s" data-s="b2-p0-s1">O sistema processa a transcrição oficial do participante (limpa de instruções do examinador e marcadores de anotação, mas mantendo disfluências) e usa o WhisperX para alinhar forçadamente as palavras ao áudio, obtendo timestamps precisos.</span> <span class="s" data-s="b2-p0-s2">Cada palavra falada é então mapeada para uma dessas 15 âncoras.</span></p><p><span class="s" data-s="b2-p1-s0">O mapeamento não é trivial.</span> <span class="s" data-s="b2-p1-s1">Primeiro, tenta-se por regras de frases e lookup lexical.</span> <span class="s" data-s="b2-p1-s2">Se falhar, usa-se similaridade de embedding: o modelo all-mpnet-base-v2 compara o embedding da palavra (com contexto de até duas palavras anteriores e uma posterior) com protótipos de embeddings das descrições naturais das âncoras.</span> <span class="s" data-s="b2-p1-s3">Só há match se a similaridade cosseno for maior que 0,45 e a margem para o segundo melhor match for maior que 0,08.</span> <span class="s" data-s="b2-p1-s4">Palavras não atribuídas são descartadas para esta análise espacial.</span></p><p><span class="s" data-s="b2-p2-s0">Com as palavras mapeadas, o sistema identifica &#39;visitas&#39;: sequências consecutivas de menções à mesma âncora, ignorando pausas ou palavras não atribuídas entre elas.</span> <span class="s" data-s="b2-p2-s1">Além disso, define-se um esquema de 7 eventos semânticos da cena, como &#39;alcançar o biscoito&#39;, &#39;instabilidade do banco&#39;, &#39;menina observando&#39;, &#39;lavar louça&#39;, &#39;transbordamento&#39;, &#39;desconhecimento do perigo&#39; e &#39;contexto da cozinha&#39;.</span></p><p><span class="s" data-s="b2-p3-s0">Para cada evento, o NarraSpace recupera todas as utterances (frases ou segmentos) que contêm palavras-chave correspondentes aos campos lexicais desse evento (agente, ação, objeto, localização, consequência).</span> <span class="s" data-s="b2-p3-s1">Essas utterances são concatenadas na ordem narrativa para formar o &#39;texto do evento&#39;.</span> <span class="s" data-s="b2-p3-s2">Importante: o mesmo trecho de fala pode ser recuperado por múltiplos eventos, e o sistema não resolve negações ou implicações semânticas profundas; ele apenas registra a presença lexical.</span> <span class="s" data-s="b2-p3-s3">O resultado é uma estrutura rica onde cada evento tem um texto associado, timestamps e as âncoras mencionadas.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.28616/figure2.webp" alt="Como o modelo de linguagem gera evidências. Um único modelo congelado é usado para calcular a diferença de log-verossimilhança (likelihood) entre exemplos de Alzheimer e controles saudáveis para o texto do evento recuperado." loading="lazy">
+          <figcaption>
+            Como o modelo de linguagem gera evidências. Um único modelo congelado é usado para calcular a diferença de log-verossimilhança (likelihood) entre exemplos de Alzheimer e controles saudáveis para o texto do evento recuperado.
+            <span class="source">Figura 2 do paper · Li et al., arXiv:2610.28616</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b4-h">Medições Narrativo-Espaciais e o Papel do Modelo de Linguagem</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Com as utterances recuperadas para cada evento, o NarraSpace calcula 70 características narrativa-espaciais.</span> <span class="s" data-s="b4-p0-s1">Estas incluem métricas de cobertura (quantas das 15 âncoras foram mencionadas), ordem de visita (distância entre os centros das caixas delimitadoras das âncoras na imagem), tempo de permanência (dwell time) em cada âncora e desvios em relação a uma referência de controles saudáveis.</span> <span class="s" data-s="b4-p0-s2">Essas features capturam aspectos cognitivos e linguísticos, como desorganização narrativa ou omissão de detalhes críticos.</span></p><p><span class="s" data-s="b4-p1-s0">O componente central de classificação é o uso de um Modelo de Linguagem (LLM) congelado.</span> <span class="s" data-s="b4-p1-s1">Diferente de abordagens que treinam um classificador do zero sobre embeddings brutos, o NarraSpace usa o LLM para contrastar a verossimilhança (likelihood) do texto recuperado.</span> <span class="s" data-s="b4-p1-s2">Para cada evento, o sistema pega exemplos de treinamento de participantes com Alzheimer (AD) e de controles saudáveis (HC).</span> <span class="s" data-s="b4-p1-s3">Ele calcula o log-likelihood das tokens do evento-alvo quando precedidas por exemplos de AD e quando precedidas por exemplos de HC.</span></p><p><span class="s" data-s="b4-p2-s0">A diferença média desses log-likelihoods gera uma &#39;contraste de evento&#39;.</span> <span class="s" data-s="b4-p2-s1">Basicamente, o sistema pergunta: &#39;Este trecho de fala soa mais como a fala típica de um paciente com AD ou de um saudável, dado o contexto do modelo?&#39;.</span> <span class="s" data-s="b4-p2-s2">Para alguns casos, usa-se também um &#39;contraste de cloze&#39;, focando apenas nas tokens que foram explicitamente mapeadas para os campos lexicais do evento.</span> <span class="s" data-s="b4-p2-s3">Isso fornece uma medida probabilística de quão &#39;anômalo&#39; ou &#39;típico&#39; é o discurso do participante em relação a cada aspecto da cena.</span></p><p><span class="s" data-s="b4-p3-s0">Essas medidas de likelihood, somadas às features narrativa-espaciais e descritores linguísticos/acústicos básicos, formam um pool de 256 candidatos.</span> <span class="s" data-s="b4-p3-s1">O sistema não usa todos.</span> <span class="s" data-s="b4-p3-s2">Um processo de seleção de features reduz esse pool para 60 inputs principais.</span> <span class="s" data-s="b4-p3-s3">Essa etapa é crucial, pois elimina ruído e redundância, mantendo apenas as combinações de evidências espaciais, temporais e linguísticas que melhor discriminam as classes no conjunto de treinamento.</span></p>        <h2><span class="s" data-s="b5-h">Classificação e Resultados no Benchmark ADReSS</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os 60 inputs selecionados são alimentados em um classificador de Vetores de Suporte (SVM) fixo.</span> <span class="s" data-s="b5-p0-s1">Os resultados são avaliados no conjunto de teste oficial do ADReSS, composto por 48 participantes.</span> <span class="s" data-s="b5-p0-s2">O desempenho principal do sistema NarraSpace atinge uma precisão média de 80,88% (com desvio padrão de 2,56%) sobre 50 sementes diferentes.</span> <span class="s" data-s="b5-p0-s3">Ao agregar as probabilidades previstas em vez de usar apenas a classe majoritária, a precisão sobe ligeiramente para 81,25%, com uma Área sob a Curva ROC (AUC) de 91,32%.</span></p><p><span class="s" data-s="b5-p1-s0">É importante contextualizar esses números.</span> <span class="s" data-s="b5-p1-s1">Embora 80-81% seja um resultado competitivo, o paper não posiciona o NarraSpace como um estado da arte absoluto em precisão bruta.</span> <span class="s" data-s="b5-p1-s2">O valor agregado reside na consistência e na capacidade de inspeção.</span> <span class="s" data-s="b5-p1-s3">O paper mostra que remover as features narrativa-espaciais reduz a precisão média, indicando que a estrutura espacial e temporal da fala é informativa.</span> <span class="s" data-s="b5-p1-s4">Além disso, o &#39;stream de likelihood&#39; muda quais participantes são classificados corretamente, mesmo quando a precisão agregada não muda drasticamente, sugerindo que ele captura nuances diferentes de outras features.</span></p><p><span class="s" data-s="b5-p2-s0">O sistema também reporta incerteza em nível de participante, derivada das 50 execuções com diferentes sementes.</span> <span class="s" data-s="b5-p2-s1">Isso é raro em benchmarks de classificação simples e adiciona uma camada de robustez à avaliação.</span> <span class="s" data-s="b5-p2-s2">A tabela de resultados do paper compara o NarraSpace com reproduções de outros métodos (como Xiao-Mistral), mostrando que o SVM do NarraSpace é competitivo em métricas padrão, mas com a vantagem adicional de fornecer o rastro de evidências completo.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.28616/figure3.webp" alt="Exemplo de relatório auditável. Mostra como as utterances recuperadas se conectam às âncoras da cena e aos eventos (E1-E7). Campos preenchidos indicam match lexical. Permite ver exatamente qual fala gerou qual score de likelihood." loading="lazy">
+          <figcaption>
+            Exemplo de relatório auditável. Mostra como as utterances recuperadas se conectam às âncoras da cena e aos eventos (E1-E7). Campos preenchidos indicam match lexical. Permite ver exatamente qual fala gerou qual score de likelihood.
+            <span class="source">Figura 3 do paper · Li et al., arXiv:2610.28616</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Auditoria e Limitações da Abordagem</span></h2>
+<p><span class="s" data-s="b7-p0-s0">A grande contribuição do NarraSpace é a capacidade de auditoria.</span> <span class="s" data-s="b7-p0-s1">A Figura 3 do paper ilustra relatórios onde se pode ver, para um participante específico, quais eventos foram cobertos, quais âncoras foram mencionadas e qual foi a probabilidade estimada de AD para aquele trecho.</span> <span class="s" data-s="b7-p0-s2">Isso permite que um revisor humano verifique se o modelo está &#39;prestando atenção&#39; nos lugares certos.</span> <span class="s" data-s="b7-p0-s3">Por exemplo, se um paciente com AD omite o &#39;transbordamento&#39; (um evento crítico de perigo), o sistema registra essa ausência e a baixa likelihood em relação a controles, tornando a evidência visível.</span></p><p><span class="s" data-s="b7-p1-s0">Contudo, o paper admite limitações significativas.</span> <span class="s" data-s="b7-p1-s1">O mapeamento lexical não resolve negações (ex: &#39;não vejo a torneira&#39; pode ser mapeado como presença da âncora &#39;torneira&#39;).</span> <span class="s" data-s="b7-p1-s2">A representação é baseada em um único benchmark em inglês (ADReSS), o que limita a generalização para outras línguas ou culturas.</span> <span class="s" data-s="b7-p1-s3">O sistema também não avalia se essa organização realmente melhora a precisão ou velocidade da inspeção clínica por humanos; isso permanece como uma questão empírica futura.</span></p><p><span class="s" data-s="b7-p2-s0">Além disso, a avaliação é exploratória.</span> <span class="s" data-s="b7-p2-s1">O mapeamento de âncoras é auditado, mas não há anotação direta em nível de evento para validar perfeitamente a recuperação de utterances.</span> <span class="s" data-s="b7-p2-s2">O paper sugere que comparações futuras devem incluir cohortes independentes de participantes e avaliações diretas de como a apresentação dessas evidências auxilia o julgamento clínico.</span> <span class="s" data-s="b7-p2-s3">A atribuição da decisão final do classificador também depende do limiar (threshold) do SVM, que não é parte intrínseca da representação NarraSpace.</span></p>        <h2><span class="s" data-s="b8-h">Conclusão: Transparência como Recurso Clínico</span></h2>
+<p><span class="s" data-s="b8-p0-s0">NarraSpace demonstra que é possível construir classificadores multimodais para demência que não apenas predizem, mas explicam suas fontes de evidência.</span> <span class="s" data-s="b8-p0-s1">Ao vincular fala, texto e imagem através de um esquema de cena fixo e manter registros de origem, o sistema transforma a classificação de uma caixa preta em um processo inspecionável.</span> <span class="s" data-s="b8-p0-s2">Isso é particularmente relevante para áreas sensíveis como a saúde, onde a confiança no modelo depende da capacidade de entender suas falhas.</span></p><p><span class="s" data-s="b8-p1-s0">Os resultados mostram que a precisão é competitiva (~81%), mas o ganho real está na estrutura de dados gerada.</span> <span class="s" data-s="b8-p1-s1">Para pesquisadores, isso oferece um novo conjunto de features (narrativo-espaciais e de likelihood contrastada) para estudar a linguagem em demência.</span> <span class="s" data-s="b8-p1-s2">Para clínicos, o potencial é oferecer relatórios que juxtapõem resumos quantitativos com o áudio e texto originais, facilitando a revisão de casos complexos.</span></p><p><span class="s" data-s="b8-p2-s0">O paper deixa em aberto se essa transparência se traduz em melhores decisões clínicas na prática.</span> <span class="s" data-s="b8-p2-s1">Testar isso exigiria estudos com usuários reais, medindo não apenas a acurácia da classificação, mas o esforço cognitivo e a confiança dos profissionais de saúde ao usar essas ferramentas.</span> <span class="s" data-s="b8-p2-s2">Enquanto isso, NarraSpace estabelece um padrão para como sistemas de IA em saúde podem ser projetados para serem auditáveis desde a primeira linha de código.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">NarraSpace vincula palavras faladas a elementos visuais fixos (âncoras) e eventos predefinidos, mantendo registros de origem auditáveis.</span></li><li><span class="s" data-s="k1">Um modelo de linguagem congelado compara a verossimilhança de utterances recuperadas sob contextos de Alzheimer e controles saudáveis.</span></li><li><span class="s" data-s="k2">O sistema atinge 80,88% de precisão no benchmark ADReSS, mas seu valor principal é a transparência na construção de features.</span></li><li><span class="s" data-s="k3">A abordagem permite revisar como decisões clínicas automatizadas são derivadas de evidências específicas da fala e da cena.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.28616" rel="noopener">NarraSpace: Multimodal Scene-Grounded Evidence for Picture-Description Dementia Classification</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.28616" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

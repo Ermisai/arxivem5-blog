@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Denoising Diffusion Probabilistic Models: como gerar imagens de alta qualidade removendo ruído progressivamente — arXiv em 5</title>
+<meta name="description" content="Este paper de 2020 mostra que modelos de difusão — que aprendem a remover ruído gradualmente — podem gerar imagens com qualidade comparável às GANs, estabelecendo as bases da revolução que viria com DALL-E e Stable Diffusion.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Denoising Diffusion Probabilistic Models: como gerar imagens de alta qualidade removendo ruído progressivamente">
+<meta property="og:description" content="Este paper de 2020 mostra que modelos de difusão — que aprendem a remover ruído gradualmente — podem gerar imagens com qualidade comparável às GANs, estabelecendo as bases da revolução que viria com DALL-E e Stable Diffusion.">
+<meta property="og:image" content="../../assets/papers/2006.11239/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Imagem</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2006.11239" rel="noopener">arXiv:2006.11239</a>
+    </div>
+    <h1><span class="s" data-s="t">Denoising Diffusion Probabilistic Models: como gerar imagens de alta qualidade removendo ruído progressivamente</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Este paper de 2020 mostra que modelos de difusão — que aprendem a remover ruído gradualmente — podem gerar imagens com qualidade comparável às GANs, estabelecendo as bases da revolução que viria com DALL-E e Stable Diffusion.</span></p>
+    <p class="byline">
+      <span>Ho et al.</span>
+      <span>9 min de leitura</span>
+<span>19/06/2020</span>    </p>
+    <div class="listen" data-article="2006.11239" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema: modelos generativos ainda buscavam qualidade e estabilidade</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Em 2020, o campo de modelos generativos já tinha várias abordagens consolidadas.</span> <span class="s" data-s="b0-p0-s1">GANs (Generative Adversarial Networks) produziam imagens impressionantes, mas eram notoriamente instáveis de treinar.</span> <span class="s" data-s="b0-p0-s2">Modelos autoregressivos como o PixelCNN geravam imagens pixel por pixel, mas eram lentos.</span> <span class="s" data-s="b0-p0-s3">VAEs (Variational Autoencoders) eram estáveis, mas produziam imagens borradas.</span> <span class="s" data-s="b0-p0-s4">Cada família tinha seus trade-offs.</span></p><p><span class="s" data-s="b0-p1-s0">Modelos de difusão probabilística existiam desde 2015, mas ninguém havia demonstrado que podiam gerar imagens de alta qualidade.</span> <span class="s" data-s="b0-p1-s1">A ideia básica era simples: criar um processo que adiciona ruído gradualmente aos dados até destruí-los completamente, depois treinar uma rede neural para reverter esse processo.</span> <span class="s" data-s="b0-p1-s2">Mas os resultados práticos ficavam muito atrás das GANs.</span></p><p><span class="s" data-s="b0-p2-s0">Jonathan Ho, Ajay Jain e Pieter Abbeel, da UC Berkeley, decidiram investigar se o problema estava na formulação ou apenas na forma de treinar esses modelos.</span> <span class="s" data-s="b0-p2-s1">O paper que resultou dessa investigação se tornaria um dos trabalhos mais influentes em aprendizado de máquina dos últimos anos.</span></p>        <h2><span class="s" data-s="b1-h">A ideia central: destruir e reconstruir em mil passos</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Um modelo de difusão funciona em duas etapas.</span> <span class="s" data-s="b1-p0-s1">Primeiro, o forward process (processo direto) pega uma imagem real e adiciona ruído gaussiano em T passos.</span> <span class="s" data-s="b1-p0-s2">A cada passo t, a imagem fica um pouco mais ruidosa, seguindo um schedule de variâncias β₁, β₂, ..., βT.</span> <span class="s" data-s="b1-p0-s3">Depois de T passos, a imagem original vira ruído puro, indistinguível de uma amostra aleatória de uma distribuição normal.</span></p><p><span class="s" data-s="b1-p1-s0">O truque está no reverse process (processo reverso).</span> <span class="s" data-s="b1-p1-s1">Aqui, treinamos uma rede neural para fazer o caminho oposto: começar com ruído puro e remover o ruído gradualmente até reconstruir uma imagem nítida.</span> <span class="s" data-s="b1-p1-s2">Matematicamente, isso é uma cadeia de Markov onde cada transição é uma gaussiana condicional.</span> <span class="s" data-s="b1-p1-s3">A rede aprende os parâmetros dessas gaussianas — média e variância — para cada passo t.</span></p><p><span class="s" data-s="b1-p2-s0">Os autores usaram T=1000 passos em todos os experimentos.</span> <span class="s" data-s="b1-p2-s1">As variâncias do forward process foram fixadas como constantes crescendo linearmente de β₁=10⁻⁴ até βT=0.02.</span> <span class="s" data-s="b1-p2-s2">Esses valores foram escolhidos para serem pequenos em relação aos dados (normalizados entre -1 e 1), garantindo que os processos direto e reverso tenham formas funcionais similares enquanto mantêm a relação sinal-ruído no passo final (xT) o mais baixa possível.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2006.11239/figure2.webp" alt="O grafo do modelo de difusão: partindo de ruído puro xT, o modelo aprende a reverter o processo de adição de ruído passo a passo até chegar na imagem final x₀. Cada seta representa uma transição gaussiana aprendida." loading="lazy">
+          <figcaption>
+            O grafo do modelo de difusão: partindo de ruído puro xT, o modelo aprende a reverter o processo de adição de ruído passo a passo até chegar na imagem final x₀. Cada seta representa uma transição gaussiana aprendida.
+            <span class="source">Figura 2 do paper · Ho et al., arXiv:2006.11239</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Como treinar: variational bound e a conexão com denoising</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Treinar um modelo de difusão significa otimizar um variational bound (limite variacional) na log-verossimilhança negativa dos dados.</span> <span class="s" data-s="b3-p0-s1">Isso é padrão em modelos de variáveis latentes.</span> <span class="s" data-s="b3-p0-s2">Mas os autores descobriram algo crucial: uma parametrização específica do reverse process revela uma equivalência entre modelos de difusão e denoising score matching com Langevin dynamics.</span></p><p><span class="s" data-s="b3-p1-s0">Em vez de fazer a rede prever diretamente a média μθ(xt, t) da gaussiana de transição, eles propuseram prever o ruído ϵ que foi adicionado.</span> <span class="s" data-s="b3-p1-s1">Essa mudança parece sutil, mas tem consequências profundas.</span> <span class="s" data-s="b3-p1-s2">Com essa parametrização, o objetivo de treinamento se torna simplesmente: minimize a diferença entre o ruído verdadeiro e o ruído previsto pela rede, ponderado ao longo dos T passos.</span></p><p><span class="s" data-s="b3-p2-s0">Mais especificamente, em vez de treinar no variational bound completo, eles usaram um objetivo simplificado que ignora os pesos da variância e foca apenas no erro quadrático médio do ruído previsto.</span> <span class="s" data-s="b3-p2-s1">Esse objetivo simplificado se revelou superior para qualidade de amostra, mesmo que tecnicamente não minimize o bound teórico da forma mais eficiente.</span></p>        <h2><span class="s" data-s="b4-h">Arquitetura: U-Net com atenção e embeddings temporais</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Para implementar o reverse process, os autores usaram uma U-Net como backbone, similar ao PixelCNN++ mas sem mascaramento.</span> <span class="s" data-s="b4-p0-s1">A U-Net é uma arquitetura convolucional com conexões skip que funciona bem para tarefas de imagem-para-imagem.</span> <span class="s" data-s="b4-p0-s2">Eles aplicaram group normalization em toda a rede.</span></p><p><span class="s" data-s="b4-p1-s0">Um detalhe importante: os parâmetros da rede são compartilhados entre todos os timesteps t. Para que a rede saiba em qual passo da difusão está, o timestep é codificado usando sinusoidal position embeddings (a mesma técnica usada no Transformer original).</span> <span class="s" data-s="b4-p1-s1">Isso permite que uma única rede aprenda a remover ruído em qualquer nível de degradação.</span></p><p><span class="s" data-s="b4-p2-s0">A arquitetura também inclui self-attention nas feature maps de resolução 16×16.</span> <span class="s" data-s="b4-p2-s1">Isso ajuda o modelo a capturar dependências de longo alcance na imagem, importantes para manter coerência global enquanto remove ruído local.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b5-t">Por que 1000 passos?</span></h3>
+          <p><span class="s" data-s="b5-c-s0">O número T=1000 foi escolhido para igualar trabalhos anteriores e garantir que cada passo adicione apenas uma pequena quantidade de ruído.</span> <span class="s" data-s="b5-c-s1">Isso torna o reverse process mais fácil de aprender, mas significa que gerar uma imagem requer 1000 avaliações da rede neural — muito mais lento que GANs, que geram em um único passo.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b6-h">Resultados em CIFAR-10: superando GANs em qualidade</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Os resultados em CIFAR-10 foram surpreendentes.</span> <span class="s" data-s="b6-p0-s1">O modelo alcançou um FID score de 3.17 quando avaliado contra o conjunto de treino — melhor que a maioria dos modelos na literatura, incluindo modelos condicionais por classe.</span> <span class="s" data-s="b6-p0-s2">O Inception Score foi de 9.46.</span> <span class="s" data-s="b6-p0-s3">Quando avaliado contra o conjunto de teste, o FID subiu para 5.24, ainda assim melhor que muitos modelos publicados.</span></p><p><span class="s" data-s="b6-p1-s0">Para contexto: FID (Fréchet Inception Distance) mede a distância entre as distribuições de features das imagens reais e geradas.</span> <span class="s" data-s="b6-p1-s1">Valores menores são melhores.</span> <span class="s" data-s="b6-p1-s2">Um FID de 3.17 representa qualidade visual muito alta, comparável ou superior às melhores GANs da época.</span></p><p><span class="s" data-s="b6-p2-s0">O gap entre treino e teste no codelength (a log-verossimilhança negativa, medida em bits por dimensão) foi de no máximo 0.03 bits/dim, comparável a outros modelos baseados em verossimilhança.</span> <span class="s" data-s="b6-p2-s1">Isso indica que o modelo não estava overfitting — um problema comum em GANs.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2006.11239/figure1.webp" alt="Amostras geradas pelo modelo: rostos de CelebA-HQ em 256×256 (esquerda) e objetos de CIFAR-10 (direita). Note a diversidade e o realismo, especialmente considerando que CIFAR-10 tem apenas 32×32 pixels de resolução original." loading="lazy">
+          <figcaption>
+            Amostras geradas pelo modelo: rostos de CelebA-HQ em 256×256 (esquerda) e objetos de CIFAR-10 (direita). Note a diversidade e o realismo, especialmente considerando que CIFAR-10 tem apenas 32×32 pixels de resolução original.
+            <span class="source">Figura 1 do paper · Ho et al., arXiv:2006.11239</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Ablation: o que realmente importa no treinamento</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Os autores fizeram experimentos de ablation para entender quais escolhas de design importavam.</span> <span class="s" data-s="b8-p0-s1">Primeiro, compararam diferentes parametrizações do reverse process.</span> <span class="s" data-s="b8-p0-s2">Prever diretamente a média μ̃ funcionava bem apenas quando treinado no variational bound verdadeiro, não no objetivo simplificado.</span> <span class="s" data-s="b8-p0-s3">Prever o ruído ϵ, por outro lado, funcionava bem em ambos os casos, mas especialmente bem com o objetivo simplificado.</span></p><p><span class="s" data-s="b8-p1-s0">Tentar aprender as variâncias do reverse process (tornando Σθ(xt) parametrizado) levou a treinamento instável e pior qualidade de amostra comparado a usar variâncias fixas.</span> <span class="s" data-s="b8-p1-s1">Isso foi contra-intuitivo, já que teoricamente dar mais flexibilidade ao modelo deveria ajudar.</span></p><p><span class="s" data-s="b8-p2-s0">A conclusão: a melhor configuração era prever o ruído ϵ, usar variâncias fixas no reverse process, e treinar com o objetivo simplificado de erro quadrático médio.</span> <span class="s" data-s="b8-p2-s1">Essa combinação produziu as amostras de maior qualidade, mesmo não sendo a que minimizava o variational bound de forma mais eficiente.</span></p>        <h2><span class="s" data-s="b9-h">LSUN: gerando cenas complexas em alta resolução</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Em imagens 256×256 do dataset LSUN, o modelo gerou amostras de qualidade comparável ao ProgressiveGAN, uma das melhores GANs da época.</span> <span class="s" data-s="b9-p0-s1">Para quartos (LSUN Bedroom), o FID foi 4.90.</span> <span class="s" data-s="b9-p0-s2">Para igrejas (LSUN Church), foi 7.89.</span> <span class="s" data-s="b9-p0-s3">Esses números representam qualidade visual impressionante para cenas complexas com múltiplos objetos, perspectiva e iluminação.</span></p><p><span class="s" data-s="b9-p1-s0">O dataset LSUN é mais desafiador que CIFAR-10 porque contém cenas naturais em alta resolução.</span> <span class="s" data-s="b9-p1-s1">Gerar um quarto realista requer que o modelo entenda geometria 3D implícita, relações espaciais entre móveis, texturas consistentes e iluminação coerente.</span> <span class="s" data-s="b9-p1-s2">O fato de modelos de difusão conseguirem isso sugere que eles têm um inductive bias forte para dados de imagem.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2006.11239/figure17.webp" alt="Quartos gerados pelo modelo no dataset LSUN Bedroom em 256×256. Repare na coerência espacial, nas texturas realistas e nos detalhes como quadros na parede e dobras nos lençóis — tudo inventado pelo modelo." loading="lazy">
+          <figcaption>
+            Quartos gerados pelo modelo no dataset LSUN Bedroom em 256×256. Repare na coerência espacial, nas texturas realistas e nos detalhes como quadros na parede e dobras nos lençóis — tudo inventado pelo modelo.
+            <span class="source">Figura 17 do paper · Ho et al., arXiv:2006.11239</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b11-h">Progressive coding: compressão com perdas de grosso a fino</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Uma descoberta interessante foi interpretar o processo de amostragem como progressive lossy compression (compressão progressiva com perdas).</span> <span class="s" data-s="b11-p0-s1">Tratando os termos L₁+...+LT do variational bound como taxa (rate) e L₀ como distorção, o modelo de CIFAR-10 com melhor qualidade tinha taxa de 1.78 bits/dim e distorção de 1.97 bits/dim.</span></p><p><span class="s" data-s="b11-p1-s0">Isso significa que mais da metade do codelength lossless (sem perdas) era usado para descrever detalhes imperceptíveis da imagem.</span> <span class="s" data-s="b11-p1-s1">O erro quadrático médio dessa distorção era 0.95 em uma escala de 0 a 255 — quase imperceptível ao olho humano.</span></p><p><span class="s" data-s="b11-p2-s0">Os autores argumentam que o processo de amostragem dos modelos de difusão é um tipo de decodificação progressiva que se assemelha à decodificação autoregressiva, mas ao longo de uma ordenação de bits que generaliza vastamente o que é normalmente possível com modelos autoregressivos.</span> <span class="s" data-s="b11-p2-s1">Nos primeiros passos, o modelo gera estrutura grosseira; nos últimos, refina detalhes finos.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2006.11239/figure9.webp" alt="Interpolação coarse-to-fine entre duas faces. Ao variar em qual passo da difusão fazemos a mistura dos latentes, controlamos se a interpolação afeta estrutura grossa (pose, identidade) ou detalhes finos (textura, iluminação)." loading="lazy">
+          <figcaption>
+            Interpolação coarse-to-fine entre duas faces. Ao variar em qual passo da difusão fazemos a mistura dos latentes, controlamos se a interpolação afeta estrutura grossa (pose, identidade) ou detalhes finos (textura, iluminação).
+            <span class="source">Figura 9 do paper · Ho et al., arXiv:2006.11239</span>
+          </figcaption>
+        </figure>
+        <aside class="callout">
+          <h3><span class="s" data-s="b13-t">Log-likelihood não é tudo</span></h3>
+          <p><span class="s" data-s="b13-c-s0">Apesar da alta qualidade visual, os modelos de difusão não têm log-likelihoods competitivas com outros modelos baseados em verossimilhança.</span> <span class="s" data-s="b13-c-s1">Isso mostra que log-likelihood sozinha não prediz qualidade perceptual — um tema que se tornaria central em trabalhos posteriores sobre métricas de avaliação.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b14-h">Limitações: velocidade e eficiência computacional</span></h2>
+<p><span class="s" data-s="b14-p0-s0">A principal limitação dos modelos de difusão é a velocidade.</span> <span class="s" data-s="b14-p0-s1">Gerar uma única imagem requer T=1000 avaliações da rede neural, uma para cada passo do reverse process.</span> <span class="s" data-s="b14-p0-s2">GANs geram imagens em um único passo forward.</span> <span class="s" data-s="b14-p0-s3">Isso torna modelos de difusão muito mais lentos tanto em treinamento quanto em inferência.</span></p><p><span class="s" data-s="b14-p1-s0">Os autores não exploraram formas de reduzir o número de passos sem perder qualidade.</span> <span class="s" data-s="b14-p1-s1">Trabalhos posteriores (como DDIM) mostrariam que é possível pular passos e gerar com 50 ou até 10 avaliações, mas isso não estava no escopo deste paper.</span></p><p><span class="s" data-s="b14-p2-s0">Outra limitação: embora o paper mostre resultados em imagens até 256×256, não há experimentos em resoluções maiores.</span> <span class="s" data-s="b14-p2-s1">Também não há avaliação de geração condicional (por exemplo, condicionada em classes ou texto), que se tornaria crucial em aplicações posteriores.</span></p>        <h2><span class="s" data-s="b15-h">O que o paper não mostra</span></h2>
+<p><span class="s" data-s="b15-p0-s0">O paper não compara diretamente com todas as GANs estado-da-arte da época.</span> <span class="s" data-s="b15-p0-s1">Por exemplo, StyleGAN2 já existia e produzia imagens de faces em resolução muito maior.</span> <span class="s" data-s="b15-p0-s2">A comparação se limita principalmente a FID scores reportados na literatura, não a experimentos head-to-head controlados.</span></p><p><span class="s" data-s="b15-p1-s0">Não há análise de modo collapse ou diversidade das amostras além das métricas padrão (FID e Inception Score).</span> <span class="s" data-s="b15-p1-s1">Também não há estudo de interpolação no espaço latente além da figura de interpolação coarse-to-fine, que é mais uma demonstração qualitativa que uma análise sistemática.</span></p><p><span class="s" data-s="b15-p2-s0">Os experimentos de ablation cobrem as principais escolhas de design, mas não exploram exaustivamente o espaço de hiperparâmetros.</span> <span class="s" data-s="b15-p2-s1">Por exemplo, não há variação sistemática do número de passos T ou da forma do schedule de variâncias βt.</span> <span class="s" data-s="b15-p2-s2">O paper também não discute requisitos de memória ou tempo de treinamento em detalhe.</span></p>        <h2><span class="s" data-s="b16-h">Impacto e direções futuras</span></h2>
+<p><span class="s" data-s="b16-p0-s0">Os autores concluem que modelos de difusão têm inductive biases excelentes para dados de imagem e expressam otimismo sobre sua utilidade em outras modalidades.</span> <span class="s" data-s="b16-p0-s1">Eles mencionam possíveis aplicações em compressão de dados, aprendizado de representação, e até em sistemas de aprendizado por reforço.</span></p><p><span class="s" data-s="b16-p1-s0">Olhando retrospectivamente, esse otimismo se justificou completamente.</span> <span class="s" data-s="b16-p1-s1">Este paper estabeleceu as bases para DALL-E 2, Stable Diffusion, Imagen e toda a revolução de geração de imagens por IA que veio depois.</span> <span class="s" data-s="b16-p1-s2">A conexão com score matching que os autores descobriram se tornou central na teoria de modelos generativos.</span></p><p><span class="s" data-s="b16-p2-s0">O código foi disponibilizado publicamente no GitHub, facilitando reprodução e extensão do trabalho.</span> <span class="s" data-s="b16-p2-s1">Isso acelerou a adoção da técnica pela comunidade.</span> <span class="s" data-s="b16-p2-s2">Em termos de impacto científico, este é um dos papers mais citados em machine learning dos últimos anos.</span></p><p><span class="s" data-s="b16-p3-s0">Quanto a preocupações éticas, os autores reconhecem que modelos generativos podem ser usados para criar deepfakes e perpetuar vieses dos dados de treinamento.</span> <span class="s" data-s="b16-p3-s1">Eles notam que imagens geradas por CNNs ainda têm falhas sutis detectáveis, mas melhorias nos modelos podem tornar detecção mais difícil — uma preocupação que se materializou nos anos seguintes.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Modelos de difusão aprendem a gerar imagens removendo ruído progressivamente em mil passos, alcançando FID de 3.17 em CIFAR-10 — qualidade comparável ou superior a GANs.</span></li><li><span class="s" data-s="k1">A chave é prever o ruído adicionado em vez da imagem diretamente, criando uma conexão com denoising score matching que melhora drasticamente a qualidade das amostras.</span></li><li><span class="s" data-s="k2">O processo de geração funciona como compressão progressiva: primeiros passos criam estrutura grossa, últimos passos refinam detalhes — mas requer 1000 avaliações da rede, muito mais lento que GANs.</span></li><li><span class="s" data-s="k3">Apesar de log-likelihoods não competitivas, a alta qualidade visual mostra que modelos de difusão têm inductive bias forte para imagens, estabelecendo bases para DALL-E e Stable Diffusion.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2006.11239" rel="noopener">Denoising Diffusion Probabilistic Models</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2006.11239" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Medindo com precisão: HAD-VLM une linguagem e difusão para ultrassom quantitativo — arXiv em 5</title>
+<meta name="description" content="O paper propõe HAD-VLM, um modelo que gera texto e medidas contínuas simultaneamente, resolvendo a discrepância entre tokens discretos e variáveis anatômicas contínuas em imagens médicas.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Medindo com precisão: HAD-VLM une linguagem e difusão para ultrassom quantitativo">
+<meta property="og:description" content="O paper propõe HAD-VLM, um modelo que gera texto e medidas contínuas simultaneamente, resolvendo a discrepância entre tokens discretos e variáveis anatômicas contínuas em imagens médicas.">
+<meta property="og:image" content="../../assets/papers/2610.32948/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Imagem</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.32948" rel="noopener">arXiv:2610.32948</a>
+    </div>
+    <h1><span class="s" data-s="t">Medindo com precisão: HAD-VLM une linguagem e difusão para ultrassom quantitativo</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">O paper propõe HAD-VLM, um modelo que gera texto e medidas contínuas simultaneamente, resolvendo a discrepância entre tokens discretos e variáveis anatômicas contínuas em imagens médicas.</span></p>
+    <p class="byline">
+      <span>Huang et al.</span>
+      <span>5 min de leitura</span>
+<span>23/10/2026</span>    </p>
+    <div class="listen" data-article="2610.32948" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=sQfAFmIBgjM" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema da discretização em medidas médicas</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Em diagnósticos clínicos, a interpretação de imagens quantitativas é fundamental.</span> <span class="s" data-s="b0-p0-s1">Dimensões anatômicas, diâmetros de lesões e volumes ventriculares fornecem dados objetivos para caracterizar doenças e acompanhar pacientes ao longo do tempo.</span> <span class="s" data-s="b0-p0-s2">No ultrassom (US), obter essas medidas exige identificar marcos anatômicos e posicionar manualmente calibradores ou traçar limites.</span> <span class="s" data-s="b0-p0-s3">Esse processo aumenta a carga de trabalho e está sujeito a variabilidade entre observadores.</span></p><p><span class="s" data-s="b0-p1-s0">Modelos de visão e linguagem (VLMs) surgem como uma alternativa promissora, permitindo que tarefas sejam especificadas por instruções em linguagem natural.</span> <span class="s" data-s="b0-p1-s1">No entanto, existe um conflito fundamental: as variáveis clínicas são contínuas, enquanto os VLMs autoregressivos geram valores como sequências de tokens discretos.</span> <span class="s" data-s="b0-p1-s2">Essa discrepância é o foco central deste estudo.</span></p><p><span class="s" data-s="b0-p2-s0">Quando um modelo gera &#39;10.1&#39; como tokens &#39;10&#39;, &#39;.&#39; e &#39;1&#39;, ele não preserva a proximidade numérica.</span> <span class="s" data-s="b0-p2-s1">Erros em nível de token não refletem a distância real entre os valores.</span> <span class="s" data-s="b0-p2-s2">Para medidas baseadas em calibradores, pequenas imprecisões na geração de tokens podem levar a erros clínicos significativos.</span> <span class="s" data-s="b0-p2-s3">O paper busca resolver essa lacuna entre a flexibilidade da linguagem e a precisão da regressão contínua.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.32948/figure1.webp" alt="Ilustração do descompasso entre medidas anatômicas contínuas e a previsão numérica baseada em tokens discretos." loading="lazy">
+          <figcaption>
+            Ilustração do descompasso entre medidas anatômicas contínuas e a previsão numérica baseada em tokens discretos.
+            <span class="source">Figura 1 do paper · Huang et al., arXiv:2610.32948</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">Introdução ao HAD-VLM</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Os autores propõem o HAD-VLM, um framework híbrido que combina geração de texto autoregressiva com previsão de medidas contínuas em um backbone compartilhado.</span> <span class="s" data-s="b2-p0-s1">A ideia é unificar a interação por linguagem com a previsão numérica baseada em anatomia.</span> <span class="s" data-s="b2-p0-s2">O modelo não substitui apenas a regressão, mas integra-a ao fluxo de geração de linguagem.</span></p><p><span class="s" data-s="b2-p1-s0">O HAD-VLM utiliza um encoder visual adaptado para imagens de ultrassom e um LLM (Vicuna-7B-v1.5) como núcleo.</span> <span class="s" data-s="b2-p1-s1">A inovação principal reside na cabeça de previsão numérica, que emprega um processo de difusão para prever diretamente variáveis contínuas, evitando a decomposição em tokens.</span></p><p><span class="s" data-s="b2-p2-s0">Essa abordagem permite que o modelo mantenha a capacidade de responder perguntas médicas em linguagem natural, enquanto fornece estimativas quantitativas precisas.</span> <span class="s" data-s="b2-p2-s1">O framework é projetado para ser flexível, permitindo que clínicos especifiquem medidas desejadas via prompt, aproveitando representações visuais e semânticas compartilhadas.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.32948/figure2.webp" alt="Arquitetura do HAD-VLM: encoder visual adaptado, projetor, LLM híbrido com difusão e módulo de pós-processamento." loading="lazy">
+          <figcaption>
+            Arquitetura do HAD-VLM: encoder visual adaptado, projetor, LLM híbrido com difusão e módulo de pós-processamento.
+            <span class="source">Figura 2 do paper · Huang et al., arXiv:2610.32948</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b4-h">Detalhamento da arquitetura</span></h2>
+<p><span class="s" data-s="b4-p0-s0">A arquitetura do HAD-VLM consiste em quatro componentes principais.</span> <span class="s" data-s="b4-p0-s1">Primeiro, um encoder visual baseado em CLIP ViT-L/14, adaptado para ultrassom via Visual Prompt Tuning (VPT).</span> <span class="s" data-s="b4-p0-s2">Prompts aprendíveis são inseridos nas camadas do Transformer para ajustar as representações visuais sem congelar o backbone pré-treinado.</span></p><p><span class="s" data-s="b4-p1-s0">Segundo, um projetor MLP alinha as representações visuais ao espaço de embeddings do LLM.</span> <span class="s" data-s="b4-p1-s1">Terceiro, o LLM é augmentado com um embedder de difusão e uma cabeça de difusão dedicada à regressão numérica.</span> <span class="s" data-s="b4-p1-s2">Cada medida é representada como um quíntuplo contínuo: coordenadas normalizadas de início e fim, e o comprimento correspondente em pixels.</span></p><p><span class="s" data-s="b4-p2-s0">O processo de difusão prevê esse quíntuplo diretamente no espaço contínuo.</span> <span class="s" data-s="b4-p2-s1">Um embedder mapeia o tuplo ruidoso e o timestep para o espaço de embeddings do LLM.</span> <span class="s" data-s="b4-p2-s2">Isso permite que a previsão numérica seja integrada ao contexto gerado pelo modelo de linguagem, preservando a coerência semântica entre texto e números.</span></p>        <h2><span class="s" data-s="b5-h">Treinamento e inferência</span></h2>
+<p><span class="s" data-s="b5-p0-s0">O treinamento ocorre em três etapas: alinhamento, regressão e treinamento conjunto.</span> <span class="s" data-s="b5-p0-s1">No alinhamento, o modelo ajusta o encoder visual e o projetor.</span> <span class="s" data-s="b5-p0-s2">Na regressão, a cabeça de difusão é otimizada para prever as medidas.</span> <span class="s" data-s="b5-p0-s3">No treinamento conjunto, todos os parâmetros são ajustados simultaneamente, com LoRA aplicado nas últimas quatro camadas do LLM.</span></p><p><span class="s" data-s="b5-p1-s0">Durante a inferência, o modelo gera texto autoregressivamente.</span> <span class="s" data-s="b5-p1-s1">Quando detecta um delimitador de medida, ele inicia o processo de amostragem de difusão.</span> <span class="s" data-s="b5-p1-s2">Para refinar as estimativas, os autores propõem um mecanismo de consistência entre coordenadas e comprimento, além de previsão em ensemble.</span> <span class="s" data-s="b5-p1-s3">Isso ajuda a garantir que as medidas geradas sejam geometricamente plausíveis.</span></p><p><span class="s" data-s="b5-p2-s0">O esquema de ruído utiliza v-prediction com 100 timesteps e um schedule de ruído squared-cos cap v2.</span> <span class="s" data-s="b5-p2-s1">A amostragem DDIM é usada para gerar as previsões finais.</span> <span class="s" data-s="b5-p2-s2">O pós-processamento agrega as previsões do ensemble e seleciona a melhor estimativa com base na consistência geométrica.</span></p>        <h2><span class="s" data-s="b6-h">Avaliação experimental</span></h2>
+<p><span class="s" data-s="b6-p0-s0">O modelo foi avaliado no dataset EchoNet-LVH, contendo vídeos de ultrassom cardíaco.</span> <span class="s" data-s="b6-p0-s1">Focam-se em quatro medidas clínicas relevantes: espessura da septo interventricular em diástole (IVSd), dimensão interna do ventrículo esquerdo em diástole (LVIDd), dimensão interna do ventrículo esquerdo em sístole (LVIDs) e espessura da parede posterior do ventrículo esquerdo em diástole (LVPWd).</span></p><p><span class="s" data-s="b6-p1-s0">Os dados foram convertidos em pares de texto-medida, com prompts de QA diversificados gerados por ChatGPT.</span> <span class="s" data-s="b6-p1-s1">Isso permite que o modelo aprenda a associar instruções em linguagem natural às medidas quantitativas correspondentes.</span> <span class="s" data-s="b6-p1-s2">O dataset foi dividido em treino, validação e teste em uma proporção de 87:3:10.</span></p><p><span class="s" data-s="b6-p2-s0">O treinamento foi realizado em uma única GPU NVIDIA A100, com batch size de 8 e otimização AdamW.</span> <span class="s" data-s="b6-p2-s1">O learning rate foi ajustado em cada fase do treinamento, variando de 1x10^-4 a 1x10^-6.</span> <span class="s" data-s="b6-p2-s2">A validação cruzada e a análise de ablação foram usadas para verificar a contribuição de cada componente do modelo.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b7-t">Comparação com baselines</span></h3>
+          <p><span class="s" data-s="b7-c-s0">HAD-VLM foi comparado com Vicuna-7B-v1.5 (autoregressivo), Qwen3-VL (fine-tuned) e VLM + MLP Regression.</span> <span class="s" data-s="b7-c-s1">O HAD-VLM superou todas as bases em todos os quatro tarefas de medida, demonstrando a vantagem da abordagem híbrida.</span></p>
+        </aside>
+        <figure class="figure">
+          <img src="../../assets/papers/2610.32948/figure4.webp" alt="Visualização qualitativa de padrões de previsão representativos, mostrando a redução de erro em comparação com baselines." loading="lazy">
+          <figcaption>
+            Visualização qualitativa de padrões de previsão representativos, mostrando a redução de erro em comparação com baselines.
+            <span class="source">Figura 4 do paper · Huang et al., arXiv:2610.32948</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Resultados quantitativos</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Os resultados mostram que o HAD-VLM alcança erros absolutos médios (MAE) de 1.36, 2.77, 3.05 e 1.16 mm para IVSd, LVIDd, LVIDs e LVPWd, respectivamente.</span> <span class="s" data-s="b9-p0-s1">Isso representa uma redução de 21.4% a 37.6% no erro em comparação com a base autoregressiva Vicuna.</span></p><p><span class="s" data-s="b9-p1-s0">Além disso, o HAD-VLM superou o Qwen3-VL fine-tuned e a regressão direta via MLP em todas as tarefas.</span> <span class="s" data-s="b9-p1-s1">A análise de ablação confirmou que o ajuste do encoder visual para ultrassom e o pós-processamento contribuem significativamente para a melhoria da precisão.</span></p><p><span class="s" data-s="b9-p2-s0">O modelo também preservou o desempenho em perguntas de medicina, indicando que a integração da difusão não prejudica a capacidade de compreensão linguística.</span> <span class="s" data-s="b9-p2-s1">Em uma avaliação adicional em raios-X para medição de vértebras, o MAE caiu de 11.4 para 6.7 pixels, sugerindo aplicabilidade além do ultrassom.</span></p>        <h2><span class="s" data-s="b10-h">Limitações e futuro</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Uma limitação atual é que o framework foca em medidas lineares.</span> <span class="s" data-s="b10-p0-s1">Embora amplamente aplicáveis, como estimativa de tamanho de tumores e diâmetro de vasos, a extensão para medidas geométricas complexas ou baseadas em área é um trabalho futuro.</span> <span class="s" data-s="b10-p0-s2">A generalização para outras modalidades de imagem, como CT e MRI, também deve ser investigada.</span></p><p><span class="s" data-s="b10-p1-s0">Outra direção é incorporar supervisão de relatórios de maior qualidade, seguindo um fluxo &#39;qualitativo-para-quantitativo&#39;.</span> <span class="s" data-s="b10-p1-s1">Descrever estruturas anatômicas antes de fornecer medidas numéricas pode fornecer priores anatômicos úteis, melhorando a precisão e confiabilidade.</span></p><p><span class="s" data-s="b10-p2-s0">Os autores também mencionam a necessidade de validação em múltiplas instituições e condições de imagem.</span> <span class="s" data-s="b10-p2-s1">A estimativa de incerteza nas previsões e a integração em fluxos de trabalho clínicos de geração de relatórios completos são próximos passos para tornar o HAD-VLM uma ferramenta clínica robusta.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Modelos de linguagem tradicionais falham em medidas médicas contínuas por usarem tokens discretos.</span></li><li><span class="s" data-s="k1">HAD-VLM usa difusão para prever coordenadas e comprimentos diretamente no espaço contínuo.</span></li><li><span class="s" data-s="k2">Redução de até 37,6% no erro absoluto médio comparado a bases autoregressivas.</span></li><li><span class="s" data-s="k3">Mantém capacidade de QA médica enquanto melhora regressão quantitativa.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.32948" rel="noopener">Beyond Discrete Tokens: Preserving Numerical Continuity in Medical Vision-Language Models</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.32948" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

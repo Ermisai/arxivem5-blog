@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Comparação de Respostas de Impulso de Sala com Distância de Wasserstein Assinada — arXiv em 5</title>
+<meta name="description" content="Este paper propõe uma métrica baseada em transporte ótimo para comparar respostas de impulso de sala (RIRs), preservando a estrutura de picos positivos e negativos que métricas tradicionais ignoram.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Comparação de Respostas de Impulso de Sala com Distância de Wasserstein Assinada">
+<meta property="og:description" content="Este paper propõe uma métrica baseada em transporte ótimo para comparar respostas de impulso de sala (RIRs), preservando a estrutura de picos positivos e negativos que métricas tradicionais ignoram.">
+<meta property="og:image" content="../../assets/papers/2610.31596/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Áudio</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.31596" rel="noopener">arXiv:2610.31596</a>
+    </div>
+    <h1><span class="s" data-s="t">Comparação de Respostas de Impulso de Sala com Distância de Wasserstein Assinada</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Este paper propõe uma métrica baseada em transporte ótimo para comparar respostas de impulso de sala (RIRs), preservando a estrutura de picos positivos e negativos que métricas tradicionais ignoram.</span></p>
+    <p class="byline">
+      <span>Fabiani et al.</span>
+      <span>7 min de leitura</span>
+<span>22/10/2026</span>    </p>
+    <div class="listen" data-article="2610.31596" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=iLDGFAnoUR0" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Similaridade em Acústica de Salas</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Avaliar a similaridade entre sinais de áudio, especificamente as Respostas de Impulso de Sala (RIRs), é um desafio fundamental no processamento de sinais de áudio.</span> <span class="s" data-s="b0-p0-s1">Uma RIR descreve como o som se propaga em um espaço fechado, capturando a interação complexa entre reflexões e relações de fase.</span> <span class="s" data-s="b0-p0-s2">Esses sinais são caracterizados por serem esparsos, variam rapidamente e possuem uma estrutura temporal altamente específica: picos de reflexão precoce seguidos por uma cauda reverberante.</span></p><p><span class="s" data-s="b0-p1-s0">O problema central é que pequenas variações nos parâmetros da sala ou na posição da fonte de som podem levar a grandes desvios na identificação do ambiente acústico alvo.</span> <span class="s" data-s="b0-p1-s1">Métricas convencionais de ponto a ponto, como as perdas Lp (L1 ou L2), tornam-se pouco informativas quando as reflexões correspondentes estão desalinhadas temporalmente.</span> <span class="s" data-s="b0-p1-s2">Isso ocorre porque essas métricas exigem uma correspondência um-para-um estrita entre amostras, penalizando severamente erros locais mesmo que a estrutura global do sinal esteja correta.</span></p><p><span class="s" data-s="b0-p2-s0">Essa sensibilidade a deslocamentos temporais cria superfícies de perda (loss surfaces) ruins para tarefas de otimização.</span> <span class="s" data-s="b0-p2-s1">Em aplicações como estimação de RIR, interpolação ou otimização de modelos paramétricos de reverberação, a escolha da medida de similaridade é crítica.</span> <span class="s" data-s="b0-p2-s2">Se a métrica não for robusta, o processo de otimização pode convergir para mínimos locais ou falhar em encontrar a configuração de parâmetros que melhor reproduz a acústica desejada.</span></p>        <h2><span class="s" data-s="b1-h">Transporte Ótimo como Solução Geométrica</span></h2>
+<p><span class="s" data-s="b1-p0-s0">O Transporte Ótimo (Optimal Transport - OT) oferece um framework natural para resolver esse problema.</span> <span class="s" data-s="b1-p0-s1">Diferente das métricas pontuais, o OT compara distribuições de probabilidade considerando como a massa de uma distribuição deve ser deslocada para se tornar outra.</span> <span class="s" data-s="b1-p0-s2">Em vez de exigir que cada amostra do sinal original corresponda exatamente à mesma amostra no sinal alvo, o OT permite encontrar o plano de transporte mais eficiente que move a energia do sinal fonte para o sinal alvo.</span></p><p><span class="s" data-s="b1-p1-s0">Essa abordagem é particularmente benéfica para sinais de áudio, pois captura a estrutura geométrica do sinal.</span> <span class="s" data-s="b1-p1-s1">Trabalhos anteriores já demonstraram que o OT é útil para comparação de áudio e pode servir como função de perda em frameworks de aprendizado profundo.</span> <span class="s" data-s="b1-p1-s2">A ideia é que, ao considerar o deslocamento das distribuições subjacentes, o método se torna robusto a pequenas variações temporais e fase, que são comuns em sinais de RIR.</span></p><p><span class="s" data-s="b1-p2-s0">Os autores deste paper destacam uma conexão interessante e não explícita anteriormente na literatura: a distância L1 entre Curvas de Decaimento de Energia (EDCs) de uma RIR é exatamente equivalente à distância Wasserstein-1 das suas distribuições de energia temporal, sob normalização adequada.</span> <span class="s" data-s="b1-p2-s1">Isso mostra que o OT já está implicitamente presente em medidas estabelecidas na acústica de salas, mas a representação via EDC descarta informações cruciais da estrutura assinada do sinal original.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.31596/figure1.webp" alt="Ilustração do transporte ótimo entre distribuições assinadas. O plano de transporte identifica os deslocamentos mais eficientes entre picos positivos e negativos correspondentes, respeitando a estrutura do sinal." loading="lazy">
+          <figcaption>
+            Ilustração do transporte ótimo entre distribuições assinadas. O plano de transporte identifica os deslocamentos mais eficientes entre picos positivos e negativos correspondentes, respeitando a estrutura do sinal.
+            <span class="source">Figura 1 do paper · Fabiani et al., arXiv:2610.31596</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">A Limitação do Wasserstein Convencional e a Proposta Assinada</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Apesar da utilidade do transporte ótimo, a formulação clássica da distância Wasserstein-1 assume que as medidas são não-negativas.</span> <span class="s" data-s="b3-p0-s1">Isso é um obstáculo direto para RIRs, que são sinais assinados, contendo picos tanto positivos quanto negativos devido à natureza oscilatória das ondas sonoras.</span> <span class="s" data-s="b3-p0-s2">Aplicar o Wasserstein convencional diretamente ao sinal bruto não é possível sem perder ou distorcer essa informação crítica.</span></p><p><span class="s" data-s="b3-p1-s0">Para contornar isso, os autores propõem o uso da distância de Wasserstein Assinada (Signed Wasserstein Distance).</span> <span class="s" data-s="b3-p1-s1">Esta formulação permite definir um problema de transporte diretamente sobre os sinais brutos de RIR, preservando a distinção entre componentes positivas e negativas.</span> <span class="s" data-s="b3-p1-s2">O objetivo é avaliar a similaridade diretamente usando as reflexões assinadas, o que não seria viável com a formulação padrão.</span></p><p><span class="s" data-s="b3-p2-s0">Essa abordagem mantém a comparação não-local característica das distâncias baseadas em EDCs, mas recupera a riqueza de informações do sinal temporal original.</span> <span class="s" data-s="b3-p2-s1">Ao operar nos picos positivos e negativos, o método consegue alinhar reflexões específicas mesmo quando há pequenos desalinhamentos temporais, algo que métricas pontuais falham em fazer de forma eficaz.</span></p>        <h2><span class="s" data-s="b4-h">Equivalência Teórica: EDCs e Wasserstein-1</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Um dos contribuições teóricas importantes do paper é estabelecer formalmente a equivalência entre uma métrica clássica da acústica e o transporte ótimo.</span> <span class="s" data-s="b4-p0-s1">Os autores demonstram que, sob normalização de energia total igual, a distância L1 entre as Curvas de Decaimento de Energia (EDCs) é matematicamente equivalente à distância Wasserstein-1 entre as distribuições temporais de energia correspondentes.</span></p><p><span class="s" data-s="b4-p1-s0">A EDC é uma representação comum que resume a energia acústica ao longo do tempo, ignorando a fase e a assinatura positiva/negativa do sinal.</span> <span class="s" data-s="b4-p1-s1">Ao provar essa equivalência, os autores mostram que o OT já está intimamente relacionado a distâncias baseadas em energia amplamente utilizadas.</span> <span class="s" data-s="b4-p1-s2">No entanto, eles argumentam que a representação EDC limita as características do sinal disponíveis para avaliação de similaridade, pois descarta a estrutura assinada.</span></p><p><span class="s" data-s="b4-p2-s0">Portanto, a proposta de usar o Wasserstein Assinado é uma generalização que busca capturar mais informações do que a EDC oferece, sem perder as propriedades de robustez geométrica do transporte ótimo.</span> <span class="s" data-s="b4-p2-s1">Isso permite uma avaliação de similaridade mais rica e informativa para tarefas de otimização de parâmetros acústicos.</span></p>        <h2><span class="s" data-s="b5-h">Avaliação Experimental: Robustez a Perturbações</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os autores avaliaram a distância proposta contra métricas de áudio de linha de base comuns através de uma série de estudos de perturbação de parâmetros da sala.</span> <span class="s" data-s="b5-p0-s1">O objetivo era verificar a robustez da métrica em cenários onde a similaridade deve ser mantida apesar de variações controladas nas condições acústicas.</span></p><p><span class="s" data-s="b5-p1-s0">Um dos experimentos focou na robustez da posição da fonte.</span> <span class="s" data-s="b5-p1-s1">A fonte de teste foi movida sobre uma grade retangular de posições em torno do valor alvo, enquanto a altura foi mantida fixa.</span> <span class="s" data-s="b5-p1-s2">O desempenho das diferentes funções de perda foi medido em uma escala normalizada entre 0 e 1.</span> <span class="s" data-s="b5-p1-s3">A ideia era ver quão bem cada métrica conseguia identificar a similaridade mesmo quando a fonte se deslocava ligeiramente, simulando erros de localização ou incertezas na configuração experimental.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.31596/figure2.webp" alt="Mapas de calor demonstrando a robustez bidimensional das funções de perda frente a variações na posição da fonte. O método proposto mostra um comportamento mais estável em comparação às métricas convencionais." loading="lazy">
+          <figcaption>
+            Mapas de calor demonstrando a robustez bidimensional das funções de perda frente a variações na posição da fonte. O método proposto mostra um comportamento mais estável em comparação às métricas convencionais.
+            <span class="source">Figura 2 do paper · Fabiani et al., arXiv:2610.31596</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Otimização de Parâmetros de Sala</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Além dos estudos de perturbação, a distância Signed Wasserstein foi utilizada como função de perda para a otimização de coeficientes de absorção e dimensões da sala em um Modelo de Fontes de Imagem (Image-Source Model) diferenciável.</span> <span class="s" data-s="b7-p0-s1">O Modelo de Fontes de Imagem é uma técnica comum para simular a propagação do som em salas, calculando as reflexões diretas e especulares.</span></p><p><span class="s" data-s="b7-p1-s0">Ao usar a nova métrica como objetivo de otimização, os autores buscaram ajustar os parâmetros geométricos e materiais da sala para que a RIR simulada se aproximasse da RIR alvo.</span> <span class="s" data-s="b7-p1-s1">A qualidade da otimização foi medida pelo erro final nos parâmetros recuperados.</span> <span class="s" data-s="b7-p1-s2">A expectativa era que a superfície de perda mais suave e informativa do Wasserstein Assinado levasse a uma convergência mais precisa e estável.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b8-t">Desempenho na Otimização</span></h3>
+          <p><span class="s" data-s="b8-c-s0">A tabela de resultados mostra que a Signed W1 obteve os menores erros de otimização em comparação com as bases de referência.</span> <span class="s" data-s="b8-c-s1">Isso confirma que a métrica fornece uma superfície de perda mais favorável para algoritmos de otimização, permitindo que o otimizador navegue melhor pelo espaço de parâmetros.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b9-h">Resultados e Análise</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Os resultados demonstraram a vantagem da métrica Signed Wasserstein para tarefas de avaliação geométrica.</span> <span class="s" data-s="b9-p0-s1">Nos estudos de perturbação, a métrica mostrou-se mais robusta às variações de posição da fonte em comparação com as métricas de linha de base.</span> <span class="s" data-s="b9-p0-s2">Isso indica que o transporte ótimo consegue manter uma noção de similaridade mais consistente mesmo quando há deslocamentos temporais nas reflexões.</span></p><p><span class="s" data-s="b9-p1-s0">Na tarefa de otimização de parâmetros, a métrica Signed W1 obteve os menores erros de otimização.</span> <span class="s" data-s="b9-p1-s1">Isso confirma que a métrica fornece uma superfície de perda mais suave e informativa.</span> <span class="s" data-s="b9-p1-s2">A capacidade de alinhar estruturas não-locais do sinal, em vez de penalizar desalinhamentos pontuais, permite que o otimizador encontre soluções mais precisas.</span></p>        <h2><span class="s" data-s="b10-h">Limitações e Considerações Finais</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Apesar dos resultados promissores, é importante notar o escopo do estudo.</span> <span class="s" data-s="b10-p0-s1">A avaliação foi realizada em cenários controlados de perturbação de parâmetros e otimização em um modelo específico (Image-Source).</span> <span class="s" data-s="b10-p0-s2">A generalização para outros tipos de sinais de áudio ou ambientes mais complexos com múltiplas fontes e difusão não foi explorada em detalhes neste paper.</span></p><p><span class="s" data-s="b10-p1-s0">Além disso, a computação da distância de transporte ótimo pode ser computacionalmente intensiva para sinais de alta resolução temporal, embora a formulação proposta busque eficiência.</span> <span class="s" data-s="b10-p1-s1">A necessidade de normalização de energia total também é um passo prévio que deve ser considerado na aplicação prática da métrica.</span></p><p><span class="s" data-s="b10-p2-s0">Em conclusão, o paper apresenta uma métrica de similaridade inovadora para RIRs que supera as limitações das métricas pontuais tradicionais ao incorporar a estrutura assinada dos sinais.</span> <span class="s" data-s="b10-p2-s1">A equivalência teórica com a distância Wasserstein-1 das EDCs fornece uma base sólida, e os resultados experimentais validam a utilidade da abordagem para otimização acústica e avaliação geométrica.</span> <span class="s" data-s="b10-p2-s2">A proposta abre caminho para métodos mais robustos em processamento de áudio e acústica de salas.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Métricas pontuais (L1/L2) falham em RIRs devido à sensibilidade a desalinhamentos temporais nas reflexões.</span></li><li><span class="s" data-s="k1">O Transporte Ótimo permite comparar distribuições considerando deslocamentos geométricos, sendo robusto a variações.</span></li><li><span class="s" data-s="k2">A distância Wasserstein-1 clássica não se aplica a sinais assinados; os autores propõem a versão &#39;Signed&#39; para RIRs.</span></li><li><span class="s" data-s="k3">A métrica proposta melhora a otimização de parâmetros acústicos ao fornecer superfícies de perda mais suaves e informativas.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.31596" rel="noopener">Signed Wasserstein distance for room impulse response comparison</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.31596" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

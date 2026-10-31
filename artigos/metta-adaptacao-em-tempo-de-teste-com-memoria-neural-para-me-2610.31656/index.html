@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>METTA: Adaptação em Tempo de Teste com Memória Neural para Meta-RL — arXiv em 5</title>
+<meta name="description" content="Um framework que combina memória neural linear com atualização online para adaptar agentes de RL a novas tarefas sem custo quadrático de atenção.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="METTA: Adaptação em Tempo de Teste com Memória Neural para Meta-RL">
+<meta property="og:description" content="Um framework que combina memória neural linear com atualização online para adaptar agentes de RL a novas tarefas sem custo quadrático de atenção.">
+<meta property="og:image" content="../../assets/papers/2610.31656/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Aprendizado por reforço</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.31656" rel="noopener">arXiv:2610.31656</a>
+    </div>
+    <h1><span class="s" data-s="t">METTA: Adaptação em Tempo de Teste com Memória Neural para Meta-RL</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um framework que combina memória neural linear com atualização online para adaptar agentes de RL a novas tarefas sem custo quadrático de atenção.</span></p>
+    <p class="byline">
+      <span>Najar et al.</span>
+      <span>5 min de leitura</span>
+<span>22/10/2026</span>    </p>
+    <div class="listen" data-article="2610.31656" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=2IncMvVR-a8" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Memória Longa em Meta-RL</span></h2>
+<p><span class="s" data-s="b0-p0-s0">O Aprendizado por Reforço Meta (Meta-RL) visa treinar agentes que se adaptam rapidamente a tarefas inéditas com pouca interação.</span> <span class="s" data-s="b0-p0-s1">O desafio central é representar evidências da tarefa coletadas ao longo de histórias de interação longas.</span> <span class="s" data-s="b0-p0-s2">Agentes recorrentes clássicos comprimem essa experiência em estados ocultos, perdendo detalhes finos.</span> <span class="s" data-s="b0-p0-s3">Por outro lado, agentes baseados em Transformers usam autoatenção para recuperar trajetórias passadas, mas isso custa computação quadrática O(N²) em relação ao comprimento da sequência.</span> <span class="s" data-s="b0-p0-s4">Em ambientes online, onde o contexto cresce com episódios e passos, essa escalabilidade é um gargalo crítico.</span></p>        <h2><span class="s" data-s="b1-h">A Proposta: METTA</span></h2>
+<p><span class="s" data-s="b1-p0-s0">O paper apresenta o METTA (Memory-Enhanced Test-Time Adaptation), uma arquitetura que decompõe a adaptação rápida em duas escalas temporais.</span> <span class="s" data-s="b1-p0-s1">Em vez de atender sobre toda a história ou comprimi-la passivamente, o METTA usa uma memória neural causal para adaptação fina dentro do episódio, com complexidade linear.</span> <span class="s" data-s="b1-p0-s2">Para inferência de tarefas entre episódios, ele utiliza resumos compactos de nível de episódio.</span> <span class="s" data-s="b1-p0-s3">Essa hierarquia temporal permite lidar com contextos longos sem o overhead dos Transformers.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.31656/figure2.webp" alt="Visão geral do METTA: a memória neural processa o episódio atual para produzir estados ocultos, enquanto agregação entre episódios mantém o contexto de longo prazo." loading="lazy">
+          <figcaption>
+            Visão geral do METTA: a memória neural processa o episódio atual para produzir estados ocultos, enquanto agregação entre episódios mantém o contexto de longo prazo.
+            <span class="source">Figura 2 do paper · Najar et al., arXiv:2610.31656</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Mecanismo: Memória Neural e Test-Time Training</span></h2>
+<p><span class="s" data-s="b3-p0-s0">A inovação chave do METTA reside na atualização da memória em tempo de teste.</span> <span class="s" data-s="b3-p0-s1">Diferente de RNNs tradicionais que passam o estado oculto adiante de forma passiva, o METTA realiza atualizações baseadas em gradiente na memória neural durante a inferência.</span> <span class="s" data-s="b3-p0-s2">Isso significa que o agente pode ajustar seus parâmetros de memória online para se adaptar a novas tarefas, mesmo que essas tarefas não tenham sido vistas durante o meta-treinamento.</span> <span class="s" data-s="b3-p0-s3">Essa capacidade de &#39;test-time training&#39; fornece uma capacidade expressiva suficiente para inferir variáveis de tarefa a partir de evidências esparsas ou atrasadas.</span></p>        <h2><span class="s" data-s="b4-h">Complexidade Linear vs. Atenção Quadrática</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Enquanto Transformers requerem memória e computação que crescem quadraticamente com o número de passos, o componente de memória neural do METTA opera com complexidade linear.</span> <span class="s" data-s="b4-p0-s1">Isso é crucial para Meta-RL online, onde o horizonte de adaptação pode ser longo.</span> <span class="s" data-s="b4-p0-s2">A arquitetura não precisa armazenar ou processar todas as transições passadas explicitamente; ela as sintetiza em um estado de memória atualizado.</span> <span class="s" data-s="b4-p0-s3">Isso permite que o agente mantenha uma representação rica da tarefa sem explodir o uso de memória RAM/VRAM, um problema comum em métodos de contexto longo.</span></p>        <h2><span class="s" data-s="b5-h">Agregação Inter-episódio</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Para lidar com tarefas que exigem aprendizado ao longo de múltiplos episódios, o METTA não apenas confia na memória dentro do episódio.</span> <span class="s" data-s="b5-p0-s1">Ele gera resumos compactos de nível de episódio que suportam a inferência de tarefas de longo alcance.</span> <span class="s" data-s="b5-p0-s2">Esses resumos permitem que o agente conecte evidências de episódios anteriores sem precisar &#39;atender&#39; sobre a história completa de interações.</span> <span class="s" data-s="b5-p0-s3">Essa separação entre adaptação fina (intra-episódio) e inferência de tarefa (inter-episódio) é o que permite a escalabilidade do método.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.31656/figure1.webp" alt="Comportamento de exploração no PointMaze: METTA reduz trajetórias repetidas e explora novas regiões ao longo dos episódios, indicando reuso eficiente de evidências passadas." loading="lazy">
+          <figcaption>
+            Comportamento de exploração no PointMaze: METTA reduz trajetórias repetidas e explora novas regiões ao longo dos episódios, indicando reuso eficiente de evidências passadas.
+            <span class="source">Figura 1 do paper · Najar et al., arXiv:2610.31656</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Resultados em Ambientes de Recompensa Esparsa</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Nos testes com o ambiente PointMaze, que possui recompensas esparsas (apenas ao atingir o objetivo), o METTA demonstrou comportamento de exploração mais estruturado.</span> <span class="s" data-s="b7-p0-s1">Enquanto baselines como ECET e TrMRL tendem a repetir trajetórias ou cobrir menos área, o METTA mantém uma exploração diversa entre episódios.</span> <span class="s" data-s="b7-p0-s2">Métricas como &#39;Coverage&#39; (fração do labirinto visitada) foram superiores, e o &#39;Episode Jaccard&#39; (sobreposição entre episódios) foi menor, indicando que o agente não fica preso em loops locais e usa melhor a memória de longo prazo.</span></p>        <h2><span class="s" data-s="b8-h">Generalização em Meta-World</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Os benchmarks do Meta-World (ML1, ML10, ML45) avaliaram a capacidade do agente de manipulação robótica.</span> <span class="s" data-s="b8-p0-s1">No ML1, o METTA se adaptou rapidamente.</span> <span class="s" data-s="b8-p0-s2">Nos conjuntos ML10 e ML45, que incluem famílias de tarefas não vistas (held-out), o método superou as baselines por uma margem significativa, chegando a uma diferença de ~40% na taxa de sucesso em comparação ao RL2.</span> <span class="s" data-s="b8-p0-s3">Isso sugere que a memória neural adaptativa generaliza melhor para famílias de tarefas desconhecidas do que abordagens baseadas em recência ou inferência latente passiva.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.31656/figure4.webp" alt="Taxa de sucesso no Meta-World: METTA supera baselines em ML10 e ML45, especialmente em famílias de tarefas não vistas durante o treinamento (test set)." loading="lazy">
+          <figcaption>
+            Taxa de sucesso no Meta-World: METTA supera baselines em ML10 e ML45, especialmente em famílias de tarefas não vistas durante o treinamento (test set).
+            <span class="source">Figura 4 do paper · Najar et al., arXiv:2610.31656</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">Eficiência Computacional e Treinamento</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Além da precisão, o METTA mantém um orçamento de treinamento baixo e um tempo de parede curto.</span> <span class="s" data-s="b10-p0-s1">A complexidade linear permite que o agente processe sequências mais longas sem a penalidade de custo dos Transformers.</span> <span class="s" data-s="b10-p0-s2">Os autores compararam o método com RL2, MAML, PEARL, VariBAD, TrMRL, ECET e AMAGO.</span> <span class="s" data-s="b10-p0-s3">O METTA consistently showed superior performance across these diverse baselines, particularly in settings requiring long-context adaptation where memory capacity is tested.</span></p>        <h2><span class="s" data-s="b11-h">Análise de Ablação</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Os autores realizaram ablações para isolar a contribuição da memória neural.</span> <span class="s" data-s="b11-p0-s1">A Figura 11 mostra que a atualização online da memória é crucial para o desempenho final.</span> <span class="s" data-s="b11-p0-s2">Quando essa atualização é removida ou desacoplada, o desempenho cai significativamente, especialmente em tarefas de longo contexto como o PointMaze.</span> <span class="s" data-s="b11-p0-s3">Isso confirma que a capacidade de ajustar a memória em tempo de teste não é apenas um acessório, mas o mecanismo central que permite a adaptação rápida e eficiente.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.31656/figure11.webp" alt="Ablação completa da atualização online da memória: a remoção da atualização em tempo de teste degrada o desempenho em PointMaze, ML10 e ML1, validando sua importância." loading="lazy">
+          <figcaption>
+            Ablação completa da atualização online da memória: a remoção da atualização em tempo de teste degrada o desempenho em PointMaze, ML10 e ML1, validando sua importância.
+            <span class="source">Figura 11 do paper · Najar et al., arXiv:2610.31656</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b13-h">Limitações e Considerações</span></h2>
+<p><span class="s" data-s="b13-p0-s0">Apesar dos resultados promissores, o paper reconhece limitações.</span> <span class="s" data-s="b13-p0-s1">O método foi avaliado em conjuntos fixos de tarefas de teste.</span> <span class="s" data-s="b13-p0-s2">O futuro trabalho sugere extensões para ambientes contínuos ou não estacionários, onde a estrutura da tarefa ou as dinâmicas mudam ao longo do tempo.</span> <span class="s" data-s="b13-p0-s3">Além disso, a estabilidade do treinamento de Transformers em RL é um problema conhecido, e embora o METTA evite a atenção quadrática, a otimização da memória neural ainda requer cuidado com a taxa de aprendizado e a exploração.</span> <span class="s" data-s="b13-p0-s4">O paper não aborda explicitamente a escalabilidade para dimensões de estado extremamente altas além dos benchmarks padrão.</span></p>        <h2><span class="s" data-s="b14-h">Estrutura de Representação Latente</span></h2>
+<p><span class="s" data-s="b14-p0-s0">A análise das representações latentes aprendidas (Figura 5) mostra uma estrutura clara.</span> <span class="s" data-s="b14-p0-s1">A visualização t-SNE dos vetores de contexto z revela que tarefas semelhantes se agrupam, e há uma separação discernível entre tarefas de treino e teste.</span> <span class="s" data-s="b14-p0-s2">A matriz de similaridade cosseno também indica que o modelo aprendeu uma representação robusta da tarefa, capaz de distinguir entre diferentes famílias de tarefas (como &#39;door-close&#39; vs &#39;drawer-open&#39;) mesmo com pouca interação inicial.</span></p>        <h2><span class="s" data-s="b15-h">Conclusão</span></h2>
+<p><span class="s" data-s="b15-p0-s0">O METTA oferece um caminho eficiente para Meta-RL de contexto longo.</span> <span class="s" data-s="b15-p0-s1">Ao decompor a adaptação em memória neural causal (linear) e resumos de episódio, o método supera os gargalos computacionais dos Transformers e as limitações de compressão de RNNs.</span> <span class="s" data-s="b15-p0-s2">A capacidade de atualização de memória em tempo de teste permite uma generalização forte para tarefas não vistas.</span> <span class="s" data-s="b15-p0-s3">Para desenvolvedores e pesquisadores em RL, o METTA destaca a importância de mecanismos de memória ativos e escaláveis na construção de agentes adaptativos robustos.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">METTA separa adaptação intra-episódio (memória neural) e inter-episódio (resumos compactos), evitando o custo quadrático de transformers.</span></li><li><span class="s" data-s="k1">A atualização de memória em tempo de teste permite generalização forte para famílias de tarefas não vistas durante o treinamento.</span></li><li><span class="s" data-s="k2">Em benchmarks como Meta-World e PointMaze, o método supera baselines de recorrência e atenção, mantendo complexidade linear.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.31656" rel="noopener">METTA: Memory-Enhanced Test-Time Adaptation for Meta-Reinforcement Learning</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.31656" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

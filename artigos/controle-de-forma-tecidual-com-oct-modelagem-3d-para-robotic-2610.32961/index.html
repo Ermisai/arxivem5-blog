@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Controle de Forma Tecidual com OCT: Modelagem 3D para Robótica Médica — arXiv em 5</title>
+<meta name="description" content="Um framework que usa Tomografia de Coerência Óptica para criar representações 3D de tecidos moles, permitindo que robôs deformem tecidos com precisão microscópica em loop fechado.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Controle de Forma Tecidual com OCT: Modelagem 3D para Robótica Médica">
+<meta property="og:description" content="Um framework que usa Tomografia de Coerência Óptica para criar representações 3D de tecidos moles, permitindo que robôs deformem tecidos com precisão microscópica em loop fechado.">
+<meta property="og:image" content="../../assets/papers/2610.32961/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Robótica</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.32961" rel="noopener">arXiv:2610.32961</a>
+    </div>
+    <h1><span class="s" data-s="t">Controle de Forma Tecidual com OCT: Modelagem 3D para Robótica Médica</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um framework que usa Tomografia de Coerência Óptica para criar representações 3D de tecidos moles, permitindo que robôs deformem tecidos com precisão microscópica em loop fechado.</span></p>
+    <p class="byline">
+      <span>Zhang et al.</span>
+      <span>8 min de leitura</span>
+<span>23/10/2026</span>    </p>
+    <div class="listen" data-article="2610.32961" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=t5llCJikWIs" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Desafio do Controle de Tecidos Moles em Microescala</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Na robótica médica, manipular tecidos moles em microescala é um problema complexo.</span> <span class="s" data-s="b0-p0-s1">Diferente de objetos rígidos, tecidos se deformam de forma não linear e imprevisível.</span> <span class="s" data-s="b0-p0-s2">O objetivo do controle não é apenas mover uma ferramenta para uma posição específica, mas induzir uma deformação específica no tecido.</span> <span class="s" data-s="b0-p0-s3">Isso requer interações físicas sequenciais: o robô empurra, observa a resposta, ajusta e empurra novamente.</span> <span class="s" data-s="b0-p0-s4">Em escalas pequenas, essa deformação localizada é difícil de observar e representar com precisão.</span></p><p><span class="s" data-s="b0-p1-s0">Modelos baseados em física tradicionais, que tentam simular o comportamento mecânico do tecido, são frequentemente caros computacionalmente e difíceis de adaptar a ambientes biológicos reais, que variam muito de paciente para paciente.</span> <span class="s" data-s="b0-p1-s1">Por outro lado, abordagens puramente baseadas em dados exigem representações eficazes tanto do estado atual do tecido quanto do estado desejado (o alvo).</span> <span class="s" data-s="b0-p1-s2">Sem uma boa representação 3D, o robô não sabe exatamente onde está nem para onde precisa ir.</span></p><p><span class="s" data-s="b0-p2-s0">A Tomografia de Coerência Óptica (OCT) surge como uma solução promissora.</span> <span class="s" data-s="b0-p2-s1">Diferente de câmeras tradicionais que capturam apenas a superfície, a OCT fornece percepção volumétrica de alta resolução, mostrando tanto a morfologia da superfície quanto a estrutura subsuperficial do tecido.</span> <span class="s" data-s="b0-p2-s2">Isso permite que o sistema capture a deformação interna em 3D, essencial para o controle preciso de forma.</span> <span class="s" data-s="b0-p2-s3">O desafio, então, é transformar esses dados volumétricos brutos em uma representação que uma política de aprendizado de máquina possa usar para prever movimentos.</span></p><p><span class="s" data-s="b0-p3-s0">Neste trabalho, pesquisadores da Universidade de Michigan propõem um framework guiado por OCT para controle de forma de tecido.</span> <span class="s" data-s="b0-p3-s1">Eles não criam um novo modelo físico, mas sim um sistema de aprendizado baseado em demonstrações humanas.</span> <span class="s" data-s="b0-p3-s2">O robô aprende a deformar o tecido observando volumes OCT e comparando o estado atual com um alvo gerado parametricamente.</span> <span class="s" data-s="b0-p3-s3">O sistema opera em loop fechado: o robô age, o OCT escaneia, o modelo atualiza a representação e decide a próxima ação.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.32961/figure1.webp" alt="Visão geral do sistema de controle fechado. O robô interage com o tecido, o OCT captura o volume deformado, e o modelo compara o estado atual com o alvo para prever o próximo movimento da ferramenta." loading="lazy">
+          <figcaption>
+            Visão geral do sistema de controle fechado. O robô interage com o tecido, o OCT captura o volume deformado, e o modelo compara o estado atual com o alvo para prever o próximo movimento da ferramenta.
+            <span class="source">Figura 1 do paper · Zhang et al., arXiv:2610.32961</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">Representações 3D e Condicionamento Residual</span></h2>
+<p><span class="s" data-s="b2-p0-s0">O cerne deste paper é a escolha de como representar o estado do tecido e o alvo para a política de controle.</span> <span class="s" data-s="b2-p0-s1">Os autores investigam três tipos principais de representações derivadas dos volumes OCT: volumes completos (full-volume), volumes esparsos mascarados pelo tecido (tissue-masked sparse-volume) e nuvens de pontos voxelizadas (voxelized point-cloud).</span> <span class="s" data-s="b2-p0-s2">Cada uma tem trade-offs entre densidade de informação e eficiência computacional.</span></p><p><span class="s" data-s="b2-p1-s0">Além da representação bruta, o sistema utiliza o que chamam de &#39;condicionamento residual&#39;.</span> <span class="s" data-s="b2-p1-s1">Em vez de apenas fornecer o estado atual e o estado alvo como entradas separadas, o modelo calcula a diferença entre eles.</span> <span class="s" data-s="b2-p1-s2">Para volumes completos, isso é feito voxel por voxel, comparando as intensidades.</span> <span class="s" data-s="b2-p1-s3">Para volumes mascarados, compara-se intensidade e ocupação nas coordenadas ocupadas.</span> <span class="s" data-s="b2-p1-s4">Para nuvens de pontos, usa-se diferenças de características agrupadas (pooled feature differences).</span> <span class="s" data-s="b2-p1-s5">Essa abordagem residual ajuda a política a focar no erro a ser corrigido, em vez de aprender a mapear dois estados absolutos complexos.</span></p><p><span class="s" data-s="b2-p2-s0">A figura 2 ilustra como esses resíduos são calculados.</span> <span class="s" data-s="b2-p2-s1">A ideia é simplificar a tarefa de aprendizado.</span> <span class="s" data-s="b2-p2-s2">Se o robô sabe que precisa reduzir a diferença entre o tecido atual e o alvo, ele pode focar em movimentos incrementais que minimizem essa diferença.</span> <span class="s" data-s="b2-p2-s3">Isso é particularmente importante em controle de loop fechado, onde cada passo deve ser pequeno e preciso para evitar danos ao tecido ou oscilações no controle.</span></p><p><span class="s" data-s="b2-p3-s0">As representações não são apenas dados brutos; elas são estruturadas para serem consumidas por modelos de ação.</span> <span class="s" data-s="b2-p3-s1">Os autores testam se a riqueza da informação volumétrica completa vale o custo computacional, ou se representações mais esparsas, como nuvens de pontos, são suficientes para alcançar alta precisão.</span> <span class="s" data-s="b2-p3-s2">A hipótese é que a estrutura espacial preservada no OCT permite que representações mais leves ainda capturem a geometria essencial da deformação.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.32961/figure2.webp" alt="Detalhe do condicionamento residual. Volumes completos usam diferenças de intensidade voxel a voxel, enquanto nuvens de pontos usam diferenças de características agrupadas para indicar o erro de forma." loading="lazy">
+          <figcaption>
+            Detalhe do condicionamento residual. Volumes completos usam diferenças de intensidade voxel a voxel, enquanto nuvens de pontos usam diferenças de características agrupadas para indicar o erro de forma.
+            <span class="source">Figura 2 do paper · Zhang et al., arXiv:2610.32961</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b4-h">Políticas de Ação: Determinísticas vs. Generativas</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Com as representações definidas, os autores precisam de um &#39;cérebro&#39; para decidir os movimentos.</span> <span class="s" data-s="b4-p0-s1">Eles comparam duas categorias de políticas: determinísticas (chamadas de &#39;Explicit&#39;) e generativas (chamadas de &#39;Diffusion&#39;).</span> <span class="s" data-s="b4-p0-s2">As políticas determinísticas aprendem um mapeamento direto do estado para a ação, prevendo o movimento incremental de 6 graus de liberdade (6-DoF) da ponta da ferramenta.</span> <span class="s" data-s="b4-p0-s3">É como um controlador PID aprendido, rápido e direto.</span></p><p><span class="s" data-s="b4-p1-s0">As políticas Diffusion, por outro lado, são baseadas em modelos de difusão, uma classe de modelos generativos que têm mostrado excelente desempenho em robótica.</span> <span class="s" data-s="b4-p1-s1">Elas aprendem a distribuir de ações possíveis e amostram a melhor ação iterativamente.</span> <span class="s" data-s="b4-p1-s2">Embora sejam computacionalmente mais pesadas, elas podem lidar melhor com ambiguidades e multimodalidade (situações onde múltiplas ações levam a resultados semelhantes).</span> <span class="s" data-s="b4-p1-s3">O paper testa se a complexidade extra do Diffusion vale a pena comparado ao Explicit mais simples.</span></p><p><span class="s" data-s="b4-p2-s0">A combinação de representações (3 tipos) e políticas (2 tipos), com e sem condicionamento residual, resulta em 12 configurações diferentes testadas.</span> <span class="s" data-s="b4-p2-s1">Isso permite uma análise granular: por exemplo, o Diffusion com volume completo e residual funciona melhor que o Explicit com nuvem de pontos?</span> <span class="s" data-s="b4-p2-s2">Ou a simplicidade da nuvem de pontos supera a complexidade do volume completo?</span></p><p><span class="s" data-s="b4-p3-s0">O objetivo final é prever movimentos incrementais.</span> <span class="s" data-s="b4-p3-s1">Em cada passo do loop fechado, o robô executa uma ação, o OCT escaneia o novo estado, e a política recalcula o próximo movimento.</span> <span class="s" data-s="b4-p3-s2">Essa iteração contínua é o que permite a adaptação a deformações não previstas.</span> <span class="s" data-s="b4-p3-s3">Se o tecido reagir de forma diferente do esperado, o próximo scan atualizará a representação e a política ajustará o curso.</span></p>        <h2><span class="s" data-s="b5-h">Resultados em Fantomas: Precisão e Robustez</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os experimentos foram realizados primeiro em fantomas (materiais sintéticos que simulam tecido) usando um robô com 3 graus de liberdade de profundidade e 6 de direção.</span> <span class="s" data-s="b5-p0-s1">Foram realizadas 576 simulações (rollouts) para avaliar as 12 configurações.</span> <span class="s" data-s="b5-p0-s2">A métrica principal foi o Erro Quadrático Médio da Forma (Shape RMSE), que mede a distância média entre a superfície final do tecido deformado e o alvo desejado.</span></p><p><span class="s" data-s="b5-p1-s0">Os resultados mostram que o condicionamento residual é crucial.</span> <span class="s" data-s="b5-p1-s1">Para a política Diffusion com volume completo, o uso de residual reduziu o RMSE direcional de 0.748 mm para 0.555 mm.</span> <span class="s" data-s="b5-p1-s2">Isso confirma que indicar o &#39;erro&#39; diretamente ajuda o modelo a convergir mais rápido e com mais precisão.</span> <span class="s" data-s="b5-p1-s3">No entanto, a melhor performance geral veio de uma combinação inesperada: a política Explicit (determinística) com nuvem de pontos voxelizada e residual.</span></p><p><span class="s" data-s="b5-p2-s0">A configuração Explicit com nuvem de pontos e residual atingiu um RMSE de 0.534 mm para controle de profundidade e 0.443 mm para controle direcional.</span> <span class="s" data-s="b5-p2-s1">Esses números são competitivos e, em alguns casos, superiores às abordagens mais complexas.</span> <span class="s" data-s="b5-p2-s2">Isso sugere que, para este tipo de tarefa, a eficiência da nuvem de pontos combinada com a robustez do modelo determinístico é suficiente, sem necessidade dos custos computacionais do Diffusion.</span></p><p><span class="s" data-s="b5-p3-s0">Além da precisão média, os autores avaliaram a robustez em alvos intermediários não vistos durante o treinamento.</span> <span class="s" data-s="b5-p3-s1">O sistema conseguiu generalizar bem, mantendo precisão comparável.</span> <span class="s" data-s="b5-p3-s2">Isso é importante porque, na prática, o robô precisará lidar com formas alvo que não foram exatamente demonstradas por um humano.</span> <span class="s" data-s="b5-p3-s3">A capacidade de generalizar para alvos intermediários indica que a política aprendeu princípios geométricos de deformação, não apenas memorizou trajetórias.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.32961/figure3.webp" alt="Gráfico de precisão em fantomas. Mostra o RMSE médio final para cada configuração, destacando que nuvens de pontos com residual têm erro menor, próximo à linha pontilhada que representa a demonstração humana." loading="lazy">
+          <figcaption>
+            Gráfico de precisão em fantomas. Mostra o RMSE médio final para cada configuração, destacando que nuvens de pontos com residual têm erro menor, próximo à linha pontilhada que representa a demonstração humana.
+            <span class="source">Figura 3 do paper · Zhang et al., arXiv:2610.32961</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Validação em Tecido Biológico Ex Vivo</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Para validar que os resultados em fantomas se traduzem para o mundo real, os autores realizaram 60 experimentos em tecido de porco ex vivo.</span> <span class="s" data-s="b7-p0-s1">O tecido biológico é muito mais heterogêneo e imprevisível que os fantomas, com variações locais de densidade e elasticidade.</span> <span class="s" data-s="b7-p0-s2">O objetivo era ver se o framework, treinado em demonstrações humanas em fantomas, conseguia controlar a forma em tecido real.</span></p><p><span class="s" data-s="b7-p1-s0">Os resultados em tecido ex vivo foram promissores.</span> <span class="s" data-s="b7-p1-s1">Os erros geométricos finais foram comparáveis aos das demonstrações humanas.</span> <span class="s" data-s="b7-p1-s2">Isso significa que o robô, aprendendo com humanos em um ambiente simulado, conseguiu imitar a precisão humana em tecido real.</span> <span class="s" data-s="b7-p1-s3">A figura 16 mostra exemplos visuais onde a forma final (azul) se alinha bem com o alvo (marrom) em diferentes profundidades e inclinações.</span></p><p><span class="s" data-s="b7-p2-s0">É importante notar que o treinamento foi feito em fantomas, mas a inferência foi feita em tecido biológico.</span> <span class="s" data-s="b7-p2-s1">Isso demonstra a transferência de domínio da abordagem.</span> <span class="s" data-s="b7-p2-s2">A representação volumétrica do OCT parece ser robusta o suficiente para capturar as características geométricas essenciais, independentemente das diferenças sutis nas propriedades materiais entre fantoma e tecido real.</span></p><p><span class="s" data-s="b7-p3-s0">Essa validação ex vivo é um passo crítico.</span> <span class="s" data-s="b7-p3-s1">Muitos sistemas de robótica médica falham na transição do laboratório para o ambiente biológico.</span> <span class="s" data-s="b7-p3-s2">O fato de o sistema manter a precisão sugere que a percepção volumétrica do OCT compensa as incertezas do modelo, permitindo correções em tempo real que um modelo puramente baseado em simulação não conseguiria.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.32961/figure16.webp" alt="Comparação visual em tecido ex vivo. O azul mostra o resultado final do robô e o marrom o alvo. Em diferentes profundidades e inclinações, o alinhamento é preciso, demonstrando a eficácia do controle." loading="lazy">
+          <figcaption>
+            Comparação visual em tecido ex vivo. O azul mostra o resultado final do robô e o marrom o alvo. Em diferentes profundidades e inclinações, o alinhamento é preciso, demonstrando a eficácia do controle.
+            <span class="source">Figura 16 do paper · Zhang et al., arXiv:2610.32961</span>
+          </figcaption>
+        </figure>
+        <aside class="callout">
+          <h3><span class="s" data-s="b9-t">Limitações e Escopo</span></h3>
+          <p><span class="s" data-s="b9-c-s0">O paper foca em deformações controladas e não aborda a dinâmica temporal rápida ou a interação com fluidos corporais.</span> <span class="s" data-s="b9-c-s1">Os testes foram em tecido ex vivo, sem a presença de sangramento ou movimento fisiológico (como batimento cardíaco), que são desafios reais em cirurgia.</span> <span class="s" data-s="b9-c-s2">Além disso, a complexidade computacional do OCT em tempo real não foi detalhada, embora a eficiência da política Explicit sugira viabilidade.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b10-h">Conclusão: O Papel da Representação Volumétrica</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Este trabalho estabelece que a percepção volumétrica via OCT é uma base viável para controle de forma de tecido em robótica.</span> <span class="s" data-s="b10-p0-s1">A contribuição principal não é um novo algoritmo de controle, mas uma comparação sistemática de como representar dados volumétricos para aprendizado de máquina.</span> <span class="s" data-s="b10-p0-s2">A conclusão é que representações esparsas, como nuvens de pontos voxelizadas, combinadas com condicionamento residual, oferecem a melhor relação entre precisão e complexidade.</span></p><p><span class="s" data-s="b10-p1-s0">O framework proposto permite que robôs aprendam a manipular tecidos de forma data-driven, reduzindo a dependência de modelos físicos precisos.</span> <span class="s" data-s="b10-p1-s1">Ao usar demonstrações humanas e feedback visual volumétrico, o sistema pode generalizar para novos alvos e tecidos.</span> <span class="s" data-s="b10-p1-s2">Isso abre caminho para intervenções minimamente invasivas mais precisas, onde o controle de forma é tão importante quanto a posição da ferramenta.</span></p><p><span class="s" data-s="b10-p2-s0">Embora o paper não resolva todos os desafios da cirurgia robótica, ele fornece um bloco de construção essencial: uma maneira eficaz de traduzir imagens médicas 3D em ações robóticas precisas.</span> <span class="s" data-s="b10-p2-s1">A combinação de OCT, representações inteligentes e políticas de aprendizado de máquina mostra potencial para automatizar tarefas de manipulação de tecidos que hoje dependem exclusivamente da habilidade manual do cirurgião.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">O sistema usa OCT para obter volumes 3D em tempo real, superando a limitação de modelos físicos computacionalmente caros.</span></li><li><span class="s" data-s="k1">A comparação entre políticas determinísticas e generativas mostra que nuvens de pontos voxelizadas com condicionamento residual têm melhor precisão.</span></li><li><span class="s" data-s="k2">Testes em fantomas e tecido ex vivo validam a abordagem, alcançando erros geométricos comparáveis a demonstrações humanas.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.32961" rel="noopener">Robotic Optical Coherence Tomography-Guided Geometric Modeling of Soft Tissue: 3D Representations for Data-Driven Closed-Loop Shape Control</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.32961" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

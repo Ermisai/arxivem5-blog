@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RobustRLlib: Unificando Algoritmos de RL Robusto em uma Biblioteca Única — arXiv em 5</title>
+<meta name="description" content="Os autores apresentam RobustRLlib, uma biblioteca unificada e benchmark para 17 algoritmos de RL robusto, permitindo comparação sistemática sob 273 configurações de perturbação.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RobustRLlib: Unificando Algoritmos de RL Robusto em uma Biblioteca Única">
+<meta property="og:description" content="Os autores apresentam RobustRLlib, uma biblioteca unificada e benchmark para 17 algoritmos de RL robusto, permitindo comparação sistemática sob 273 configurações de perturbação.">
+<meta property="og:image" content="../../assets/papers/2610.32971/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Aprendizado por reforço</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.32971" rel="noopener">arXiv:2610.32971</a>
+    </div>
+    <h1><span class="s" data-s="t">RobustRLlib: Unificando Algoritmos de RL Robusto em uma Biblioteca Única</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Os autores apresentam RobustRLlib, uma biblioteca unificada e benchmark para 17 algoritmos de RL robusto, permitindo comparação sistemática sob 273 configurações de perturbação.</span></p>
+    <p class="byline">
+      <span>Chen et al.</span>
+      <span>8 min de leitura</span>
+<span>23/10/2026</span>    </p>
+    <div class="listen" data-article="2610.32971" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=_bRcHpYX33k" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Fragmentação no RL Robusto</span></h2>
+<p><span class="s" data-s="b0-p0-s0">O Aprendizado por Reforço (RL) avançou significativamente, mas sua implantação no mundo real ainda é limitada por preocupações com robustez e segurança.</span> <span class="s" data-s="b0-p0-s1">Políticas treinadas em ambientes idealizados frequentemente falham sob mudanças de distribuição ou interrupções, seja em direção autônoma, ensaios clínicos ou robótica.</span> <span class="s" data-s="b0-p0-s2">O RL Robusto visa desenvolver políticas que permaneçam confiáveis sob diversos tipos de perturbações, como ruído nas observações, mudanças na dinâmica do ambiente ou ataques adversariais.</span></p><p><span class="s" data-s="b0-p1-s0">No entanto, existem duas barreiras fundamentais para o potencial mais amplo dessa área: a reutilização limitada dos algoritmos e a falta de uma caracterização empírica clara dos limites de capacidade.</span> <span class="s" data-s="b0-p1-s1">Os algoritmos existentes estão fragmentados em implementações separadas, sem uma biblioteca unificada que permita aos praticantes experimentar e comparar amplamente diferentes métodos em novas aplicações.</span></p><p><span class="s" data-s="b0-p2-s0">Além disso, não há um benchmark abrangente que defina onde os métodos atuais são eficazes e onde persistem lacunas substanciais de robustez.</span> <span class="s" data-s="b0-p2-s1">Para preencher essa lacuna, os autores introduzem o RobustRLlib, uma biblioteca centrada em algoritmos e um benchmark que unifica 17 algoritmos representativos de RL online, offline e seguro, juntamente com uma plataforma de avaliação aprimorada.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.32971/figure1.webp" alt="Visão geral da estrutura do RobustRLlib, mostrando a integração de algoritmos online, offline e seguros em uma interface unificada com toolbox de disruptores." loading="lazy">
+          <figcaption>
+            Visão geral da estrutura do RobustRLlib, mostrando a integração de algoritmos online, offline e seguros em uma interface unificada com toolbox de disruptores.
+            <span class="source">Figura 1 do paper · Chen et al., arXiv:2610.32971</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">Arquitetura do RobustRLlib</span></h2>
+<p><span class="s" data-s="b2-p0-s0">O RobustRLlib é construído em torno de uma interface unificada que padroniza a interação entre os algoritmos e o ambiente.</span> <span class="s" data-s="b2-p0-s1">Isso permite que os usuários troquem facilmente entre diferentes métodos robustos sem reescrever código de treinamento ou coleta de dados.</span> <span class="s" data-s="b2-p0-s2">A biblioteca é dividida em três famílias principais: RL Robusto Online, RL Robusto Offline e RL Seguro Robusto.</span> <span class="s" data-s="b2-p0-s3">Cada família contém algoritmos que abordam a robustez de maneiras estruturalmente distintas.</span></p><p><span class="s" data-s="b2-p1-s0">Para avaliar a robustez, a biblioteca inclui uma toolbox expandível de disruptores.</span> <span class="s" data-s="b2-p1-s1">Esses disruptores simulam mudanças no ambiente, como perturbações nas observações, ações ou dinâmica do sistema.</span> <span class="s" data-s="b2-p1-s2">Os autores testaram 273 configurações de perturbação, cobrindo desde desvios simples até cenários complexos de sim-para-real.</span> <span class="s" data-s="b2-p1-s3">Essa abordagem sistemática permite criar um mapa de capacidades atualizado dos algoritmos atuais.</span></p><p><span class="s" data-s="b2-p2-s0">A estrutura permite não apenas a comparação, mas também a extensão.</span> <span class="s" data-s="b2-p2-s1">Desenvolvedores podem adicionar novos algoritmos ou disruptores ao framework existente, facilitando a pesquisa reprodutível e a aplicação de métodos existentes a novos problemas.</span> <span class="s" data-s="b2-p2-s2">A biblioteca é open-source e projetada para ser amigável ao usuário, reduzindo a barreira de entrada para a implementação de técnicas avançadas de robustez.</span></p>        <h2><span class="s" data-s="b3-h">Algoritmos Offline: Learner-Centric e Data-Centric</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Os algoritmos offline aprendem a partir de conjuntos de dados fixos de transições, sem interação contínua com o ambiente.</span> <span class="s" data-s="b3-p0-s1">O RobustRLlib categoriza esses métodos em duas subfamílias: learner-centric (centrados no aprendizado) e data-centric (centrados nos dados).</span> <span class="s" data-s="b3-p0-s2">Os métodos learner-centric modificam o objetivo ou a atualização do valor para tornar o aprendizado menos sensível a transições incertas ou observações perturbadas.</span></p><p><span class="s" data-s="b3-p1-s0">Um exemplo é o RFQI (Robust Fitted-Q Iteration), que substitui o alvo padrão de Bellman por uma atualização de pior caso sobre a ambiguidade das transições.</span> <span class="s" data-s="b3-p1-s1">O RORL combina bootstrap pessimista com suavização ao redor dos estados para estabilizar previsões sob perturbações de observação.</span> <span class="s" data-s="b3-p1-s2">Já o ATLA treina um adversário de observação junto com o algoritmo base, expondo as atualizações da política a entradas adversas.</span></p><p><span class="s" data-s="b3-p2-s0">Os métodos data-centric, por outro lado, expandem as experiências disponíveis para o aprendiz base, reescrevendo ou gerando contrafactuais.</span> <span class="s" data-s="b3-p2-s1">O RSC (Robust Self-Correction) reescreve amostras usando uma máscara causal inferida para enfraquecer correlações espúrias semânticas.</span> <span class="s" data-s="b3-p2-s2">O RAMBO (Robust Adversarial Model-Based Optimization) faz ramificações de rollouts sintéticos a partir de estados do conjunto de dados e ajusta seu modelo de dinâmica adversarialmente, mantendo uma restrição de ajuste de dados.</span></p>        <h2><span class="s" data-s="b4-h">Modelos Generativos e RL Online</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Dentro dos métodos data-centric, existe uma subfamília que utiliza modelos generativos.</span> <span class="s" data-s="b4-p0-s1">Esses métodos aprendem modelos condicionais da dinâmica das transições e usam estados futuros gerados ou trajetórias multi-etapa para melhorar a robustez sob mudanças de dinâmica.</span> <span class="s" data-s="b4-p0-s2">O ROMB (Robust Model-Based Optimization) otimiza contra transições adversas representadas por um ensemble de modelos aprendidos.</span> <span class="s" data-s="b4-p0-s3">O FWM (Flow-World Model) usa correspondência de fluxo para substituir modelos de mundo baseados em difusão, amostrando trajetórias futuras para construir alvos de critic multi-etapa.</span></p><p><span class="s" data-s="b4-p1-s0">O RL Robusto Online preserva a interação contínua com o ambiente, mas difere em onde a robustez entra no treinamento.</span> <span class="s" data-s="b4-p1-s1">Os métodos learner-centric online modificam a entrada da política e o objetivo de aprendizado.</span> <span class="s" data-s="b4-p1-s2">Por exemplo, adaptações do ATLA para online treinam um adversário de observação junto com o algoritmo PPO ou SAC.</span> <span class="s" data-s="b4-p1-s3">Já os métodos environment-centric, como o RARL e o DR, focam na robustez do ambiente, randomizando a dinâmica ou treinando adversários contra a política durante o rollout.</span></p><p><span class="s" data-s="b4-p2-s0">Os autores também incluem métodos de RL Seguro Robusto, como o RAMU e o SPiDR, que incorporam restrições de segurança diretamente no processo de aprendizado.</span> <span class="s" data-s="b4-p2-s1">Esses métodos são cruciais para aplicações de alto risco, onde a política deve operar dentro de limites de custo ou evitar estados perigosos, mesmo sob perturbações.</span> <span class="s" data-s="b4-p2-s2">A tabela 1 do paper detalha as características estruturais de cada método, indicando se eles usam modelos adversariais, modelos de transição aprendidos ou rollouts em ambientes perturbados.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.32971/figure3.webp" alt="Desempenho normalizado de 20 algoritmos robustos versus RL padrão em tarefas de locomoção e manipulação, mostrando a superioridade dos métodos robustos sob perturbações." loading="lazy">
+          <figcaption>
+            Desempenho normalizado de 20 algoritmos robustos versus RL padrão em tarefas de locomoção e manipulação, mostrando a superioridade dos métodos robustos sob perturbações.
+            <span class="source">Figura 3 do paper · Chen et al., arXiv:2610.32971</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b6-h">Avaliação Sistemática e Resultados</span></h2>
+<p><span class="s" data-s="b6-p0-s0">A avaliação do RobustRLlib abrange tarefas de locomoção e manipulação, testando 20 algoritmos robustos contra bases de RL padrão.</span> <span class="s" data-s="b6-p0-s1">Os resultados mostram que os algoritmos robustos mantêm desempenho superior ao RL padrão sob níveis crescentes de perturbação.</span> <span class="s" data-s="b6-p0-s2">O gráfico de barras na Figura 3 ilustra essa diferença, onde cada barra colorida representa um método robusto, agrupado por característica e configuração online/offline.</span></p><p><span class="s" data-s="b6-p1-s0">Os autores analisam o ganho de robustez em diferentes níveis de desvio do ambiente, classificados de Q1 a Q4.</span> <span class="s" data-s="b6-p1-s1">As curvas de decaimento na Figura 4 demonstram que, enquanto o RL padrão sofre uma queda acentuada na performance com o aumento da perturbação, os algoritmos robustos mantêm uma performance mais estável.</span> <span class="s" data-s="b6-p1-s2">O ganho médio sobre os algoritmos base é significativo, especialmente em cenários de alta perturbação.</span></p><p><span class="s" data-s="b6-p2-s0">É importante notar que nem todos os algoritmos se saem bem em todos os cenários.</span> <span class="s" data-s="b6-p2-s1">A avaliação revela que a eficácia depende fortemente do tipo de perturbação.</span> <span class="s" data-s="b6-p2-s2">Por exemplo, métodos focados em adversários de observação podem não ser tão eficazes contra mudanças na dinâmica do ambiente.</span> <span class="s" data-s="b6-p2-s3">Isso destaca a necessidade de escolher o algoritmo certo para o tipo específico de risco esperado na aplicação real.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b7-t">Limitações do Benchmark</span></h3>
+          <p><span class="s" data-s="b7-c-s0">O RobustRLlib foca em perturbações conhecidas e simuladas.</span> <span class="s" data-s="b7-c-s1">A generalização para cenários do mundo real, onde as perturbações podem ser imprevisíveis e combinadas de formas não vistas, ainda é um desafio aberto.</span> <span class="s" data-s="b7-c-s2">Além disso, o custo computacional para treinar e avaliar 17 algoritmos sob 273 configurações é alto, o que pode limitar a acessibilidade para pesquisadores com recursos limitados.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b8-h">Extensão para Tarefas Avançadas</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Para validar a utilidade do benchmark em cenários mais complexos, os autores estendem a avaliação para tarefas de robótica humana e visão-linguagem-ação (VLA).</span> <span class="s" data-s="b8-p0-s1">Essas tarefas exigem que a política lide com espaços de ação de alta dimensionalidade e percepção multimodal, tornando-as mais desafiadoras do que as tarefas padrão de controle.</span></p><p><span class="s" data-s="b8-p1-s0">Na Figura 8, vemos a avaliação no Isaac Lab e em tarefas VLA.</span> <span class="s" data-s="b8-p1-s1">Os pontos representam o desempenho da tarefa contra a taxa de sucesso em duas tarefas específicas: sobrevivência sob atraso de ação e manipulação de gavetas com restrições de custo.</span> <span class="s" data-s="b8-p1-s2">Os resultados mostram que os algoritmos robustos do RobustRLlib são capazes de lidar com esses cenários complexos, mantendo a estabilidade e a segurança.</span></p><p><span class="s" data-s="b8-p2-s0">Essa extensão prova que o framework não é apenas um exercício teórico, mas uma ferramenta prática para desenvolver políticas que funcionam em ambientes dinâmicos e imprevisíveis.</span> <span class="s" data-s="b8-p2-s1">A capacidade de aplicar os mesmos algoritmos a tarefas tão diversas, desde locomoção até manipulação visual, destaca a flexibilidade e a robustez da interface unificada proposta.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.32971/figure4.webp" alt="Curvas de decaimento da robustez mostrando como os algoritmos Robust RL mantêm performance superior ao RL padrão sob níveis crescentes de perturbação (Q1-Q4)." loading="lazy">
+          <figcaption>
+            Curvas de decaimento da robustez mostrando como os algoritmos Robust RL mantêm performance superior ao RL padrão sob níveis crescentes de perturbação (Q1-Q4).
+            <span class="source">Figura 4 do paper · Chen et al., arXiv:2610.32971</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">Análise de Ganhos e Capacidade</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Os autores realizam uma análise detalhada dos ganhos dos métodos robustos.</span> <span class="s" data-s="b10-p0-s1">Eles comparam métodos baseados em política (on-policy) e fora de política (off-policy), descobrindo que os métodos off-policy, como IQL e SAC, tendem a ter mais estabilidade sob perturbações devido à sua capacidade de aprender a partir de dados históricos mais diversificados.</span> <span class="s" data-s="b10-p0-s2">No entanto, os métodos on-policy, como PPO, podem ser mais rápidos em convergir em ambientes estáveis, mas são mais sensíveis a mudanças abruptas.</span></p><p><span class="s" data-s="b10-p1-s0">A análise também revela que a combinação de técnicas adversariais com modelos de mundo pode oferecer ganhos adicionais de robustez.</span> <span class="s" data-s="b10-p1-s1">Métodos que usam modelos generativos, como FWM e PLR-PVL, mostram-se particularmente eficazes em cenários onde a dinâmica do ambiente muda significativamente.</span> <span class="s" data-s="b10-p1-s2">Isso sugere que a incorporação de modelos de mundo precisos é um caminho promissor para o futuro do RL Robusto.</span></p><p><span class="s" data-s="b10-p2-s0">Os autores também discutem a importância da calibração de hiperparâmetros.</span> <span class="s" data-s="b10-p2-s1">Diferentes algoritmos exigem ajustes específicos para lidar com tipos distintos de perturbação.</span> <span class="s" data-s="b10-p2-s2">O RobustRLlib fornece configurações padrão, mas os usuários devem estar cientes de que a otimização fina pode ser necessária para alcançar o melhor desempenho em tarefas específicas.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.32971/figure8.webp" alt="Avaliação em tarefas avançadas de robótica humana e visão-linguagem-ação, provando a eficácia do benchmark em cenários complexos e realistas." loading="lazy">
+          <figcaption>
+            Avaliação em tarefas avançadas de robótica humana e visão-linguagem-ação, provando a eficácia do benchmark em cenários complexos e realistas.
+            <span class="source">Figura 8 do paper · Chen et al., arXiv:2610.32971</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b12-h">Conclusão e Perspectivas</span></h2>
+<p><span class="s" data-s="b12-p0-s0">O RobustRLlib representa um passo significativo em direção à padronização e avaliação do RL Robusto.</span> <span class="s" data-s="b12-p0-s1">Ao unificar 17 algoritmos em uma biblioteca coesa e fornecer um benchmark abrangente, os autores facilitam a pesquisa comparativa e a aplicação prática de métodos robustos.</span> <span class="s" data-s="b12-p0-s2">A ferramenta open-source permite que a comunidade continue a expandir o estado da arte, adicionando novos algoritmos e cenários de teste.</span></p><p><span class="s" data-s="b12-p1-s0">Apesar dos avanços, ainda há muito a ser explorado.</span> <span class="s" data-s="b12-p1-s1">A generalização para cenários do mundo real, a eficiência computacional e a interpretabilidade dos algoritmos robustos são áreas que requerem atenção contínua.</span> <span class="s" data-s="b12-p1-s2">O RobustRLlib serve como uma base sólida para essas futuras investigações, oferecendo um ponto de partida confiável para pesquisadores e engenheiros que buscam implantar RL em ambientes críticos.</span></p><p><span class="s" data-s="b12-p2-s0">Em resumo, o paper não vende o RL Robusto como uma solução mágica, mas como um campo em evolução que precisa de ferramentas padronizadas para progredir.</span> <span class="s" data-s="b12-p2-s1">O RobustRLlib é uma dessas ferramentas, oferecendo transparência, reprodutibilidade e uma avaliação honesta das capacidades atuais dos algoritmos.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">RobustRLlib integra 17 algoritmos online, offline e seguros em uma interface unificada, resolvendo o problema de fragmentação de código.</span></li><li><span class="s" data-s="k1">O benchmark avalia 273 configurações de perturbação, mapeando onde os algoritmos falham e onde mantêm robustez.</span></li><li><span class="s" data-s="k2">Algoritmos centrados no aprendizado (learner-centric) e nos dados (data-centric) têm estratégias distintas para lidar com ruídos e desvios.</span></li><li><span class="s" data-s="k3">Testes em robótica humana e visão-linguagem-ação (VLA) validam a eficácia em cenários complexos e realistas.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.32971" rel="noopener">RobustRLlib: A Unified Library and Benchmark for Robust Reinforcement Learning Algorithms</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.32971" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

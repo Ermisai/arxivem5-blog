@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Muting Tokens: Esparsificação de Tokens para Transformadores de Áudio Eficientes — arXiv em 5</title>
+<meta name="description" content="Este paper avalia sistematicamente técnicas de esparsificação de tokens em transformadores de áudio, demonstrando que heurísticas baseadas em frequência superam métodos genéricos de atenção.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Muting Tokens: Esparsificação de Tokens para Transformadores de Áudio Eficientes">
+<meta property="og:description" content="Este paper avalia sistematicamente técnicas de esparsificação de tokens em transformadores de áudio, demonstrando que heurísticas baseadas em frequência superam métodos genéricos de atenção.">
+<meta property="og:image" content="../../assets/papers/2610.31235/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Áudio</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.31235" rel="noopener">arXiv:2610.31235</a>
+    </div>
+    <h1><span class="s" data-s="t">Muting Tokens: Esparsificação de Tokens para Transformadores de Áudio Eficientes</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Este paper avalia sistematicamente técnicas de esparsificação de tokens em transformadores de áudio, demonstrando que heurísticas baseadas em frequência superam métodos genéricos de atenção.</span></p>
+    <p class="byline">
+      <span>Sajid et al.</span>
+      <span>7 min de leitura</span>
+<span>22/10/2026</span>    </p>
+    <div class="listen" data-article="2610.31235" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=T-GHG4E_ESw" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Complexidade Quadrática em Áudio</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Os modelos baseados em Transformer alcançaram estado da arte em diversas áreas, desde Processamento de Linguagem Natural até Visão Computacional.</span> <span class="s" data-s="b0-p0-s1">No entanto, seu mecanismo central, o self-attention, possui complexidade computacional que escala quadraticamente com o número de tokens de entrada.</span> <span class="s" data-s="b0-p0-s2">Isso se torna um gargalo severo em tarefas de áudio.</span> <span class="s" data-s="b0-p0-s3">Diferente de imagens, onde a resolução é fixa, a representação de áudio via espectrogramas gera um número de tokens proporcional à duração do sinal.</span> <span class="s" data-s="b0-p0-s4">Para clipes de áudio longos, o custo computacional do self-attention explode, tornando a inferência em tempo real ou em dispositivos de borda (edge) inviável com modelos padrão.</span></p><p><span class="s" data-s="b0-p1-s0">Uma solução emergente é a esparsificação de tokens, que reduz o número de tokens processados nas camadas do Transformer, descartando, fundindo ou refinando os menos informativos.</span> <span class="s" data-s="b0-p1-s1">Enquanto essa técnica é bem estudada em visão (como no EViT e ToMe) e em LLMs, sua aplicação em áudio permanece subexplorada.</span> <span class="s" data-s="b0-p1-s2">Trabalhos anteriores, como o de Lee &amp; Lee (2025), limitaram-se a dois métodos (Top-K e Intensity) e um único tamanho de modelo (ViT-Base), deixando lacunas sobre a generalidade dessas abordagens e a eficácia de estratégias mais sofisticadas.</span></p>        <h2><span class="s" data-s="b1-h">A Abordagem dos Autores: Pruning vs. Merging</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Os autores, pesquisadores da Eindhoven University of Technology e NXP Semiconductors, propõem uma avaliação abrangente de técnicas de esparsificação para transformadores de áudio.</span> <span class="s" data-s="b1-p0-s1">Eles avaliam três métodos estabelecidos na visão computacional, representando dois paradigmas principais: poda (pruning) e fusão (merging).</span> <span class="s" data-s="b1-p0-s2">O método Top-K mantém apenas os K tokens com maior pontuação de atenção em relação ao token de classe (CLS).</span> <span class="s" data-s="b1-p0-s3">O EViT estende isso ao criar um token fundido que preserva a informação dos tokens descartados, ponderada pela atenção.</span> <span class="s" data-s="b1-p0-s4">Já o ToMe reduz tokens agrupando pares similares baseados em similaridade cosseno e fundindo-os por média.</span></p><p><span class="s" data-s="b1-p1-s0">Além de comparar esses métodos genéricos, os autores introduzem heurísticas leves específicas para áudio.</span> <span class="s" data-s="b1-p1-s1">A hipótese central é que, em configurações de pós-treinamento (onde os parâmetros do modelo são fixos), sinais internos de atenção podem não capturar totalmente a relevância do sinal de áudio.</span> <span class="s" data-s="b1-p1-s2">Eles exploram três cues: intensidade do patch, energia de baixa frequência e flatness espectral.</span> <span class="s" data-s="b1-p1-s3">O objetivo é identificar tokens informativos sem o custo de retreinar o modelo, aproveitando propriedades físicas do domínio de áudio.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.31235/figure2.webp" alt="Mecanismo de poda guiada por intensidade: tokens são divididos em grupos de alta e baixa intensidade baseados em energia log-Mel. O grupo de alta intensidade é ranqueado pela atenção CLS, preenchendo lacunas com o grupo de baixa se necessário." loading="lazy">
+          <figcaption>
+            Mecanismo de poda guiada por intensidade: tokens são divididos em grupos de alta e baixa intensidade baseados em energia log-Mel. O grupo de alta intensidade é ranqueado pela atenção CLS, preenchendo lacunas com o grupo de baixa se necessário.
+            <span class="source">Figura 2 do paper · Sajid et al., arXiv:2610.31235</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Mecanismos de Esparsificação: Detalhes Técnicos</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O método Top-K serve como baseline.</span> <span class="s" data-s="b3-p0-s1">Ele usa a atenção entre tokens espaciais e o token CLS para ranquear a importância.</span> <span class="s" data-s="b3-p0-s2">Em cada etapa de redução, os K tokens mais atendidos são mantidos.</span> <span class="s" data-s="b3-p0-s3">O EViT melhora a retenção de informação ao introduzir um token fundido.</span> <span class="s" data-s="b3-p0-s4">Os tokens não selecionados são agrupados, ponderados por suas pontuações de atenção CLS e somados ao próximo token, preservando contexto que seria perdido na poda simples.</span> <span class="s" data-s="b3-p0-s5">O ToMe opera de forma diferente: ele particiona o conjunto de tokens e funde pares com alta similaridade cosseno, reduzindo a dimensionalidade por agregação em vez de seleção direta.</span></p>        <h2><span class="s" data-s="b4-h">Heurísticas Específicas para Áudio</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Os autores propõem três estratégias leves para estimar a importância do token, combináveis com métodos de poda ou fusão.</span> <span class="s" data-s="b4-p0-s1">A primeira é a Intensidade, que calcula a energia log-Mel média de cada patch do espectrograma.</span> <span class="s" data-s="b4-p0-s2">A premissa é que regiões de alta energia contêm mais informação do sinal.</span> <span class="s" data-s="b4-p0-s3">No entanto, usar apenas intensidade pode ser pouco confiável, pois ruído também tem energia.</span> <span class="s" data-s="b4-p0-s4">Para mitigar isso, os autores propõem uma poda guiada por intensidade: dividem os tokens em grupos de alta e baixa intensidade e usam a atenção CLS apenas para ranquear dentro do grupo de alta intensidade, garantindo que apenas os tokens energeticamente relevantes sejam considerados para a seleção final.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.31235/figure3.webp" alt="Poda por Energia de Baixa Frequência (LFE): embeddings de tokens são transformados para o domínio da frequência via FFT. Um filtro passa-baixa gaussiano isola a estrutura de baixa frequência, cujas pontuações de energia são fusionadas com a atenção para guiar a seleção Top-K." loading="lazy">
+          <figcaption>
+            Poda por Energia de Baixa Frequência (LFE): embeddings de tokens são transformados para o domínio da frequência via FFT. Um filtro passa-baixa gaussiano isola a estrutura de baixa frequência, cujas pontuações de energia são fusionadas com a atenção para guiar a seleção Top-K.
+            <span class="source">Figura 3 do paper · Sajid et al., arXiv:2610.31235</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b6-h">Incorporando o Domínio da Frequência</span></h2>
+<p><span class="s" data-s="b6-p0-s0">A segunda e terceira estratégias exploram o domínio da frequência.</span> <span class="s" data-s="b6-p0-s1">A Energia de Baixa Frequência (LFE) adapta uma técnica anterior para o nível de token.</span> <span class="s" data-s="b6-p0-s2">Os embeddings dos tokens são transformados via FFT (Transformada Rápida de Fourier) e passam por um filtro passa-baixa gaussiano.</span> <span class="s" data-s="b6-p0-s3">Isso destaca a estrutura de baixa frequência, que muitas vezes carrega a energia fundamental de sinais de áudio.</span> <span class="s" data-s="b6-p0-s4">As pontuações de energia resultantes são fusionadas com as pontuações de atenção para guiar a seleção de tokens.</span> <span class="s" data-s="b6-p0-s5">Isso é particularmente útil porque a atenção pura pode ser enganada por padrões texturais de alta frequência que não são semanticamente relevantes.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.31235/figure5.webp" alt="Flatness Espectral no nível do token: compara espectros de dois tokens. O Token A tem picos tonais (espectro não plano), enquanto o Token B tem espectro plano (ruído). O Token A é considerado mais informativo, ilustrando como o flatness identifica conteúdo estruturado." loading="lazy">
+          <figcaption>
+            Flatness Espectral no nível do token: compara espectros de dois tokens. O Token A tem picos tonais (espectro não plano), enquanto o Token B tem espectro plano (ruído). O Token A é considerado mais informativo, ilustrando como o flatness identifica conteúdo estruturado.
+            <span class="source">Figura 5 do paper · Sajid et al., arXiv:2610.31235</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Flatness Espectral: Separando Sinal de Ruído</span></h2>
+<p><span class="s" data-s="b8-p0-s0">A terceira heurística é o Flatness Espectral.</span> <span class="s" data-s="b8-p0-s1">Em processamento de sinais, o flatness mede quão &#39;plano&#39; ou &#39;tonal&#39; é um espectro.</span> <span class="s" data-s="b8-p0-s2">Um espectro com picos agudos (tonal) tem baixo flatness, enquanto um espectro uniforme (ruído) tem alto flatness.</span> <span class="s" data-s="b8-p0-s3">Os autores calculam o flatness para cada token.</span> <span class="s" data-s="b8-p0-s4">A hipótese é que tokens com estruturas tonais claras contêm informação semântica mais rica do que tokens com espectros planos, que podem corresponder a ruído de fundo ou silêncio.</span> <span class="s" data-s="b8-p0-s5">Essa métrica é computacionalmente leve e fornece um sinal robusto para filtrar tokens irrelevantes, complementando a atenção.</span></p>        <h2><span class="s" data-s="b9-h">Configuração Experimental e Benchmarks</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Os autores avaliaram essas técnicas no modelo AST-Base (Audio Spectrogram Transformer), um modelo padrão para classificação de áudio multilabel, utilizando o dataset AudioSet-20K.</span> <span class="s" data-s="b9-p0-s1">Eles testaram sob configurações de pós-treinamento (sem retreino) e fine-tuning.</span> <span class="s" data-s="b9-p0-s2">O metrica principal foi o mAP (mean Average Precision).</span> <span class="s" data-s="b9-p0-s3">O keep rate (taxa de retenção de tokens) foi variado, com foco especial em 50%, onde a compressão é mais agressiva.</span> <span class="s" data-s="b9-p0-s4">A análise cobriu a fronteira de Pareto entre eficiência (GFlops) e performance (mAP), permitindo visualizar o trade-off entre custo computacional e precisão.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.31235/figure1.webp" alt="Resultados de esparsificação pós-treinamento no AST-Base. Métodos com cues de frequência (SF, LFE) deslocam a fronteira de Pareto para cima, alcançando maior mAP com o mesmo custo de GFlops comparado a métodos apenas de atenção (Top-K, EViT, ToMe)." loading="lazy">
+          <figcaption>
+            Resultados de esparsificação pós-treinamento no AST-Base. Métodos com cues de frequência (SF, LFE) deslocam a fronteira de Pareto para cima, alcançando maior mAP com o mesmo custo de GFlops comparado a métodos apenas de atenção (Top-K, EViT, ToMe).
+            <span class="source">Figura 1 do paper · Sajid et al., arXiv:2610.31235</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b11-h">Resultados: A Superioridade das Cues de Frequência</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Os resultados mostram uma divisão clara.</span> <span class="s" data-s="b11-p0-s1">Métodos baseados apenas em atenção (Top-K, EViT) e fusão (ToMe) apresentaram ganhos modestos ou quedas de performance em relação ao baseline.</span> <span class="s" data-s="b11-p0-s2">Em contraste, as abordagens que incorporam cues de frequência, especialmente Spectral Flatness (SF) e Low-Frequency Energy (LFE), superaram consistentemente os outros métodos.</span> <span class="s" data-s="b11-p0-s3">No gráfico de dispersão de performance versus custo (GFlops), os métodos SF e LFE ocupam a fronteira de Pareto superior, indicando que para um dado custo computacional, eles alcançam a maior precisão.</span> <span class="s" data-s="b11-p0-s4">Isso valida a hipótese de que sinais do domínio da frequência são mais discriminativos para áudio do que sinais de atenção genéricos.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b12-t">O Custo da Esparsificação</span></h3>
+          <p><span class="s" data-s="b12-c-s0">A esparsificação não é uma bala de prata.</span> <span class="s" data-s="b12-c-s1">Embora reduza GFlops, a implementação de heurísticas como FFT e cálculo de flatness adiciona overhead de pré-processamento.</span> <span class="s" data-s="b12-c-s2">No entanto, o ganho em eficiência de inferência do Transformer (devido à redução da complexidade quadrática) compensa amplamente esse custo inicial, especialmente para modelos grandes.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b13-h">Análise de Robustez e Generalização</span></h2>
+<p><span class="s" data-s="b13-p0-s0">Os autores também analisaram a robustez das heurísticas.</span> <span class="s" data-s="b13-p0-s1">A combinação de atenção com flatness espectral mostrou-se particularmente eficaz, sugerindo que a atenção ainda tem valor, mas precisa ser filtrada por informações espectrais.</span> <span class="s" data-s="b13-p0-s2">A estratégia de poda guiada por intensidade também foi eficaz, mas menos consistente que as baseadas em frequência pura.</span> <span class="s" data-s="b13-p0-s3">Isso indica que a energia do sinal, por si só, não é um bom indicador de relevância sem o contexto espectral.</span> <span class="s" data-s="b13-p0-s4">A eficácia das abordagens baseadas em frequência foi consistente across diferentes tamanhos de modelo e datasets, reforçando a generalidade da proposta.</span></p>        <h2><span class="s" data-s="b14-h">Limitações e Trabalhos Futuros</span></h2>
+<p><span class="s" data-s="b14-p0-s0">Apesar dos resultados promissores, o paper tem limitações.</span> <span class="s" data-s="b14-p0-s1">A avaliação focou principalmente em classificação de áudio (AudioSet).</span> <span class="s" data-s="b14-p0-s2">A eficácia dessas técnicas em tarefas de geração de áudio ou transcrição automática de fala (ASR) não foi explorada em profundidade.</span> <span class="s" data-s="b14-p0-s3">Além disso, a maioria dos experimentos foi feita em pós-treinamento.</span> <span class="s" data-s="b14-p0-s4">Embora o fine-tuning tenha melhorado os resultados, o overhead de retreino pode ser proibitivo para alguns cenários de implantação.</span> <span class="s" data-s="b14-p0-s5">Os autores apontam que futuras pesquisas devem explorar heurísticas ainda mais avançadas e testar a esparsificação em aplicações de tempo real, onde a latência é crítica.</span></p>        <h2><span class="s" data-s="b15-h">Conclusão: Valor da Informação Específica do Domínio</span></h2>
+<p><span class="s" data-s="b15-p0-s0">Em resumo, &#39;Muting Tokens&#39; demonstra que a esparsificação de tokens é uma via viável para tornar transformadores de áudio mais eficientes, mas que a escolha da estratégia de seleção é crucial.</span> <span class="s" data-s="b15-p0-s1">Ignorar as características específicas do áudio (como o espectro) em favor de sinais genéricos de atenção leva a subótimos resultados.</span> <span class="s" data-s="b15-p0-s2">A integração de cues de frequência, como flatness e energia de baixa frequência, permite reduzir drasticamente o custo computacional mantendo a performance.</span> <span class="s" data-s="b15-p0-s3">Este trabalho abre caminho para a implantação prática de sistemas de áudio baseados em Transformer em dispositivos com recursos limitados, desde assistentes de voz até serviços de transcrição na borda.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Métodos de esparsificação baseados em atenção (Top-K, EViT) performam pior que abordagens que incorporam cues do domínio da frequência.</span></li><li><span class="s" data-s="k1">Flatness Espectral e Energia de Baixa Frequência (LFE) são heurísticas leves que melhoram significativamente a precisão sem retreinar o modelo.</span></li><li><span class="s" data-s="k2">A esparsificação é crucial para áudio longo, pois o número de tokens cresce linearmente com a duração, aumentando a complexidade quadrática do self-attention.</span></li><li><span class="s" data-s="k3">A combinação de atenção com sinais espectrais permite manter alta performance (mAP) com redução drástica de GFlops.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.31235" rel="noopener">Muting Tokens: Exploring Token Sparsification for Efficient Audio Transformers</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.31235" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

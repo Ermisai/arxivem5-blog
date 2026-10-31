@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Otimização Direta de Pass@k para Poda de Raciocínio em Test-Time — arXiv em 5</title>
+<meta name="description" content="Um novo método de poda de raciocínio que equilibra qualidade e diversidade otimizando diretamente o Pass@k, superando abordagens baseadas apenas em confiança ou diversidade.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Otimização Direta de Pass@k para Poda de Raciocínio em Test-Time">
+<meta property="og:description" content="Um novo método de poda de raciocínio que equilibra qualidade e diversidade otimizando diretamente o Pass@k, superando abordagens baseadas apenas em confiança ou diversidade.">
+<meta property="og:image" content="../../assets/papers/2610.31667/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>LLMs</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.31667" rel="noopener">arXiv:2610.31667</a>
+    </div>
+    <h1><span class="s" data-s="t">Otimização Direta de Pass@k para Poda de Raciocínio em Test-Time</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um novo método de poda de raciocínio que equilibra qualidade e diversidade otimizando diretamente o Pass@k, superando abordagens baseadas apenas em confiança ou diversidade.</span></p>
+    <p class="byline">
+      <span>Salmani et al.</span>
+      <span>6 min de leitura</span>
+<span>22/10/2026</span>    </p>
+    <div class="listen" data-article="2610.31667" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=titJ3_pKk2A" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Custo da Poda de Raciocínio em Tempo de Inferência</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Os Modelos de Linguagem de Grande Escala (LLMs) têm demonstrado capacidades notáveis em raciocínio complexo, mas alcançar o melhor desempenho frequentemente exige gerar múltiplas soluções candidatas para um único problema.</span> <span class="s" data-s="b0-p0-s1">Essa estratégia, conhecida como test-time scaling, permite que o modelo explore diferentes trajetórias de raciocínio.</span> <span class="s" data-s="b0-p0-s2">No entanto, gerar todas as soluções até o final (rollouts completos) é computacionalmente proibitivo.</span> <span class="s" data-s="b0-p0-s3">A poda de rollouts em tempo de teste surge como uma solução para esse gargalo: o modelo gera várias soluções parciais até um ponto de corte de tokens, seleciona um subconjunto promissor e continua a geração apenas para esses candidatos restantes.</span></p><p><span class="s" data-s="b0-p1-s0">As estratégias de poda existentes se dividem em duas categorias principais.</span> <span class="s" data-s="b0-p1-s1">As baseadas em qualidade atribuem uma pontuação a cada solução parcial e descartam aquelas previstas como incorretas.</span> <span class="s" data-s="b0-p1-s2">As baseadas em diversidade selecionam soluções que seguem trajetórias de raciocínio distintas, cobrindo um espaço de soluções mais amplo.</span> <span class="s" data-s="b0-p1-s3">O problema é que essas abordagens operam em extremos opostos do espectro exploração versus exploração.</span> <span class="s" data-s="b0-p1-s4">Métodos de qualidade pura tendem a manter rollouts semelhantes, arriscando que todos falhem juntos.</span> <span class="s" data-s="b0-p1-s5">Já os métodos de diversidade pura podem desperdiçar recursos em soluções de baixa qualidade.</span></p><p><span class="s" data-s="b0-p2-s0">Neste artigo, os autores da Universidade da Califórnia do Sul (USC) apresentam o PKTP (Pass@k Thought Pruning), um framework que aborda essa tensão diretamente.</span> <span class="s" data-s="b0-p2-s1">Em vez de otimizar qualidade ou diversidade separadamente, o PKTP otimiza o Pass@k sobre o pool selecionado.</span> <span class="s" data-s="b0-p2-s2">O objetivo é maximizar a probabilidade de que pelo menos uma das soluções parciais selecionadas, quando continuada até o fim, produza a resposta correta.</span> <span class="s" data-s="b0-p2-s3">Isso equilibra naturalmente a necessidade de soluções de alta qualidade e a necessidade de diversidade para evitar falhas compartilhadas.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.31667/figure1.webp" alt="Ilustração do processo de poda: o modelo gera N rollouts, corta em T tokens e continua apenas k rollouts até o orçamento B." loading="lazy">
+          <figcaption>
+            Ilustração do processo de poda: o modelo gera N rollouts, corta em T tokens e continua apenas k rollouts até o orçamento B.
+            <span class="source">Figura 1 do paper · Salmani et al., arXiv:2610.31667</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">A Tensão entre Qualidade e Diversidade</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Para entender a motivação do PKTP, é crucial observar as limitações das abordagens anteriores.</span> <span class="s" data-s="b2-p0-s1">Métodos baseados em sondagem (probing) usam o estado interno do modelo para prever a correção final.</span> <span class="s" data-s="b2-p0-s2">Embora eficientes, esses métodos tendem a ranquear rollouts que são altamente similares entre si.</span> <span class="s" data-s="b2-p0-s3">Se a sonda estiver errada, todos os rollouts mantidos falham simultaneamente.</span> <span class="s" data-s="b2-p0-s4">Por outro lado, métodos de exploração de representação (RepExp) selecionam rollouts com embeddings dissimilares para maximizar a diversidade.</span> <span class="s" data-s="b2-p0-s5">Isso pode levar a uma seleção de soluções que, embora diversas, têm baixa probabilidade de sucesso.</span></p><p><span class="s" data-s="b2-p1-s0">O PKTP propõe uma mudança de paradigma: em vez de usar métricas proxy, ele otimiza diretamente a métrica que nos importa, o Pass@k.</span> <span class="s" data-s="b2-p1-s1">O Pass@k é a probabilidade de que pelo menos uma das k soluções geradas esteja correta.</span> <span class="s" data-s="b2-p1-s2">Ao maximizar o Pass@k estimado do pool selecionado, o método incentiva a escolha de soluções que são individualmente promissoras (qualidade) e, ao mesmo tempo, penaliza a redundância entre elas (diversidade).</span> <span class="s" data-s="b2-p1-s3">Isso ocorre porque soluções redundantes não aumentam significativamente a probabilidade de sucesso coletivo, enquanto soluções diversas e de alta qualidade o fazem.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.31667/figure2.webp" alt="Comparação conceitual: Poda por qualidade (cluster de falhas), por diversidade (ineficiente) e o equilíbrio do PKTP." loading="lazy">
+          <figcaption>
+            Comparação conceitual: Poda por qualidade (cluster de falhas), por diversidade (ineficiente) e o equilíbrio do PKTP.
+            <span class="source">Figura 2 do paper · Salmani et al., arXiv:2610.31667</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b4-h">Modelagem Probabilística das Correlações</span></h2>
+<p><span class="s" data-s="b4-p0-s0">O cerne do PKTP é a estimativa do Pass@k para um conjunto de rollouts.</span> <span class="s" data-s="b4-p0-s1">O principal desafio é que a correção de um rollout não é independente; rollouts com representações semelhantes tendem a ter resultados correlacionados.</span> <span class="s" data-s="b4-p0-s2">O PKTP modela isso usando um modelo probabilístico latente.</span> <span class="s" data-s="b4-p0-s3">Para cada rollout, define-se uma pontuação latente Zi, composta pela qualidade prevista Qθ(hi), um efeito aleatório compartilhado hi⊤f para rollouts com representações similares, e um ruído específico mi.</span></p><p><span class="s" data-s="b4-p1-s0">A correção Ci é determinada pela sinalização dessa pontuação latente: se Zi ≥ 0, o rollout é considerado correto.</span> <span class="s" data-s="b4-p1-s1">A probabilidade conjunta de um padrão de resultados observado é calculada integrando sobre o efeito aleatório f. Como essa integral não tem forma fechada, os autores utilizam uma expansão de segunda ordem para aproximar a verossimilhança de forma tratável.</span> <span class="s" data-s="b4-p1-s2">Essa aproximação permite calcular a probabilidade de qualquer configuração de resultados corretos/errados de forma eficiente e diferenciável.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b5-t">Aproximação de Segunda Ordem</span></h3>
+          <p><span class="s" data-s="b5-c-s0">A expansão de segunda ordem transforma a expectativa sobre o efeito aleatório em uma integral gaussiana exata.</span> <span class="s" data-s="b5-c-s1">Isso permite que o modelo aprenda as correlações entre rollouts sem custo computacional proibitivo, usando uma forma fechada da verossimilhança.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b6-h">Treinamento e Seleção Grelily</span></h2>
+<p><span class="s" data-s="b6-p0-s0">O componente de qualidade Qθ é treinado para maximizar a verossimilhança dos resultados observados em um conjunto de treinamento.</span> <span class="s" data-s="b6-p0-s1">Diferentemente de sondagens lineares tradicionais que avaliam cada rollout isoladamente, o Qθ é treinado considerando os resultados conjuntos de todos os rollouts de um problema.</span> <span class="s" data-s="b6-p0-s2">Isso permite que a qualidade aprendida já incorpore as correlações entre os rollouts.</span> <span class="s" data-s="b6-p0-s3">O modelo Qθ é simples (linear) para evitar overfitting com dados limitados.</span></p><p><span class="s" data-s="b6-p1-s0">Uma vez treinado o modelo, a seleção dos k rollouts a serem mantidos é formulada como um programa misto-inteiro.</span> <span class="s" data-s="b6-p1-s1">Para tornar isso viável, o PKTP usa uma abordagem gulosa (greedy) com uma garantia de aproximação para o objetivo surrogado.</span> <span class="s" data-s="b6-p1-s2">O algoritmo seleciona iterativamente o rollout que mais aumenta o Pass@k estimado do pool, considerando as correlações aprendidas.</span> <span class="s" data-s="b6-p1-s3">Isso garante que o conjunto final equilibre qualidade e diversidade de forma otimizada.</span></p>        <h2><span class="s" data-s="b7-h">Avaliação Experimental</span></h2>
+<p><span class="s" data-s="b7-p0-s0">O PKTP foi avaliado em oito modelos de raciocínio de peso aberto, divididos em dois tamanhos: pequeno (0.6B a 1.7B parâmetros) e grande (7B a 8B parâmetros).</span> <span class="s" data-s="b7-p0-s1">Os modelos incluíam variações do Qwen3, OpenMath-Nemotron, DeepSeek-R1-Distill-Qwen e Skywork-OR1-Math.</span> <span class="s" data-s="b7-p0-s2">Os benchmarks utilizados foram AIME, HMMT, RIMO-N, BeyondAIME, OlymMATH e Omni-MATH, cobrindo problemas de matemática e lógica complexa.</span></p><p><span class="s" data-s="b7-p1-s0">A avaliação foi realizada com validação cruzada de 8 dobras, com 20 repetições para cada configuração.</span> <span class="s" data-s="b7-p1-s1">Isso garante que a avaliação seja robusta e não dependa de uma única divisão dos dados.</span> <span class="s" data-s="b7-p1-s2">Para cada problema, o modelo gera N rollouts parciais, o PKTP seleciona k rollouts, e esses são completados até o orçamento de tokens.</span> <span class="s" data-s="b7-p1-s3">A correção é verificada por um juiz baseado em LLM (Qwen3-32B), que compara a resposta final com a referência.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.31667/figure7.webp" alt="PKTP supera métodos concorrentes à medida que o tamanho do pool N aumenta, mostrando estabilidade em diferentes tamanhos de modelo." loading="lazy">
+          <figcaption>
+            PKTP supera métodos concorrentes à medida que o tamanho do pool N aumenta, mostrando estabilidade em diferentes tamanhos de modelo.
+            <span class="source">Figura 7 do paper · Salmani et al., arXiv:2610.31667</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Resultados e Análise</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Os resultados mostram que o PKTP supera consistentemente as abordagens baseadas em qualidade (Linear Probe) e diversidade (RepExp) em todos os modelos e benchmarks testados.</span> <span class="s" data-s="b9-p0-s1">O ganho é particularmente pronunciado quando o número de rollouts mantidos k é moderado.</span> <span class="s" data-s="b9-p0-s2">Nesses casos, os métodos baseados em qualidade falham por manter rollouts redundantes, enquanto os baseados em diversidade falham por manter rollouts de baixa qualidade.</span> <span class="s" data-s="b9-p0-s3">O PKTP, ao otimizar o Pass@k, evita ambos os extremos.</span></p><p><span class="s" data-s="b9-p1-s0">Em modelos menores, como o Qwen3-0.6B, o PKTP demonstra ganhos significativos sobre a poda aleatória e as abordagens existentes.</span> <span class="s" data-s="b9-p1-s1">Em modelos maiores, como o Qwen3-8B, a vantagem persiste, especialmente em benchmarks desafiadores como AIME e HMMT.</span> <span class="s" data-s="b9-p1-s2">A figura 7 ilustra como o PKTP lidera à medida que o tamanho do pool N aumenta, enquanto o Linear Probe tende a decair devido à redundância crescente.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.31667/table6.webp" alt="Tabela de resultados no Qwen3-8B, mostrando o Pass@k por benchmark. O PKTP obtém as melhores pontuações em todos os benchmarks." loading="lazy">
+          <figcaption>
+            Tabela de resultados no Qwen3-8B, mostrando o Pass@k por benchmark. O PKTP obtém as melhores pontuações em todos os benchmarks.
+            <span class="source">Tabela 6 do paper · Salmani et al., arXiv:2610.31667</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b11-h">Limitações e Direções Futuras</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Apesar dos resultados promissores, o PKTP tem limitações.</span> <span class="s" data-s="b11-p0-s1">A qualidade do método depende da representação das soluções parciais.</span> <span class="s" data-s="b11-p0-s2">Se a representação não capturar adequadamente a correção ou a diversidade do raciocínio, o desempenho do PKTP será comprometido.</span> <span class="s" data-s="b11-p0-s3">O uso de embeddings de estados ocultos (EMA) mostrou-se eficaz, mas representações mais sofisticadas poderiam melhorar ainda mais os resultados.</span></p><p><span class="s" data-s="b11-p1-s0">Além disso, o treinamento do modelo probabilístico requer dados de treinamento.</span> <span class="s" data-s="b11-p1-s1">Embora o PKTP possa ser aplicado a qualquer modelo, a eficácia da seleção depende da qualidade do modelo Qθ treinado.</span> <span class="s" data-s="b11-p1-s2">Em cenários com dados de treinamento muito limitados, a generalização do modelo de correlação pode ser desafiadora.</span> <span class="s" data-s="b11-p1-s3">Futuros trabalhos podem explorar representações mais ricas e métodos de treinamento mais eficientes para ampliar o escopo de aplicação do PKTP.</span></p>        <h2><span class="s" data-s="b12-h">Conclusão</span></h2>
+<p><span class="s" data-s="b12-p0-s0">O PKTP representa um avanço significativo na otimização de raciocínio em tempo de teste.</span> <span class="s" data-s="b12-p0-s1">Ao otimizar diretamente o Pass@k, ele equilibra qualidade e diversidade de forma natural, superando abordagens heurísticas.</span> <span class="s" data-s="b12-p0-s2">Os resultados em múltiplos modelos e benchmarks demonstram a eficácia do método, especialmente em cenários com recursos computacionais limitados.</span> <span class="s" data-s="b12-p0-s3">O PKTP oferece um caminho viável para escalar o raciocínio de LLMs sem custos proibitivos, tornando-se uma ferramenta valiosa para aplicações práticas de IA.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">O PKTP otimiza diretamente o Pass@k, equilibrando qualidade e diversidade sem heurísticas ad-hoc.</span></li><li><span class="s" data-s="k1">Modelos probabilísticos capturam correlações entre rollouts, evitando falhas compartilhadas.</span></li><li><span class="s" data-s="k2">Ganhos significativos em modelos abertos, especialmente com pools moderados de soluções.</span></li><li><span class="s" data-s="k3">A poda reduz custos computacionais mantendo a probabilidade de sucesso do modelo.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.31667" rel="noopener">Direct Pass@$k$ Optimization for Thought Pruning: Balancing Quality and Diversity in Test-Time Reasoning</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.31667" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

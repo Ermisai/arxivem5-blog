@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scenario-Actor: Adaptando a temperatura do LLM ao contexto social — arXiv em 5</title>
+<meta name="description" content="Um framework que infere o cenário comunicativo a partir de estados ocultos do Transformer para ajustar dinamicamente a temperatura de geração, melhorando interações sociais e instruções abertas.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Scenario-Actor: Adaptando a temperatura do LLM ao contexto social">
+<meta property="og:description" content="Um framework que infere o cenário comunicativo a partir de estados ocultos do Transformer para ajustar dinamicamente a temperatura de geração, melhorando interações sociais e instruções abertas.">
+<meta property="og:image" content="../../assets/papers/2610.18820/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>LLMs</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.18820" rel="noopener">arXiv:2610.18820</a>
+    </div>
+    <h1><span class="s" data-s="t">Scenario-Actor: Adaptando a temperatura do LLM ao contexto social</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um framework que infere o cenário comunicativo a partir de estados ocultos do Transformer para ajustar dinamicamente a temperatura de geração, melhorando interações sociais e instruções abertas.</span></p>
+    <p class="byline">
+      <span>Kong et al.</span>
+      <span>5 min de leitura</span>
+<span>13/10/2026</span>    </p>
+    <div class="listen" data-article="2610.18820" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=aksBcfiHMyw" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema da temperatura fixa</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Grandes modelos de linguagem (LLMs) geram texto amostrando de uma distribuição de probabilidade condicional para o próximo token.</span> <span class="s" data-s="b0-p0-s1">Um dos hiperparâmetros mais simples, porém cruciais, nesse processo é a temperatura de amostragem.</span> <span class="s" data-s="b0-p0-s2">Ela controla a nitidez da distribuição de probabilidade: temperaturas mais baixas tornam a saída mais determinista e rigorosa, enquanto temperaturas mais altas aumentam a criatividade e a variabilidade.</span> <span class="s" data-s="b0-p0-s3">Sistemas atuais geralmente definem essa temperatura de forma global e fixa, ou a adaptam com base na incerteza preditiva do modelo, tratando a geração como uma propriedade puramente do estado preditivo do modelo.</span></p><p><span class="s" data-s="b0-p1-s0">No entanto, a geração de linguagem situada socialmente expõe uma fonte de variação diferente: a interação em si.</span> <span class="s" data-s="b0-p1-s1">Um prompt carrega não apenas semântica, mas implica um cenário comunicativo.</span> <span class="s" data-s="b0-p1-s2">Uma conversa acadêmica exige rigor, enquanto um bate-papo casual pede informalidade.</span> <span class="s" data-s="b0-p1-s3">A temperatura ideal é circunstancial.</span> <span class="s" data-s="b0-p1-s4">Experimentos controlados mostraram que alterar a temperatura entre valores médios (como de 0.5 para 0.7) pode inverter o resultado do objetivo em até 17% das interações sociais.</span> <span class="s" data-s="b0-p1-s5">Além disso, não existe uma única configuração de temperatura globalmente superior; o que funciona para um cenário pode falhar em outro.</span></p>        <h2><span class="s" data-s="b1-h">A proposta: Scenario-Actor</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Para abordar essa limitação, os autores propõem o Scenario-Actor, um framework para seleção de temperatura adaptativa ao cenário.</span> <span class="s" data-s="b1-p0-s1">A premissa é que o prompt fornece evidências suficientes para inferir um cenário comunicativo.</span> <span class="s" data-s="b1-p0-s2">O framework extrai estruturas relevantes do cenário a partir dos estados ocultos (hidden states) do Transformer e determina a temperatura com base em um embedding de cenário.</span> <span class="s" data-s="b1-p0-s3">Este embedding é uma representação geométrica estruturada do ambiente comunicativo.</span></p><p><span class="s" data-s="b1-p1-s0">O método se apoia no modelo DIAMONDS, da psicologia situacional, que descreve características da situação que variam o comportamento humano.</span> <span class="s" data-s="b1-p1-s1">Os autores constroem eixos de cenário a partir de nove rótulos pré-definidos, condensados em cinco eixos principais: Dever (Duty), Intelecto (Intellect), Adversidade (Adversity), Negatividade (Negativity) e Sociabilidade (Sociality).</span> <span class="s" data-s="b1-p1-s2">Cada prompt é representado por um embedding de cenário nesse espaço multidimensional, e uma função &#39;Actout&#39; mapeia a geometria desse vetor para uma temperatura de amostragem específica para o prompt.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.18820/figure3.webp" alt="Diagrama do framework Scenario-Actor: como os estados ocultos do Transformer são mapeados para um embedding de cenário e, em seguida, para uma temperatura de amostragem adaptativa." loading="lazy">
+          <figcaption>
+            Diagrama do framework Scenario-Actor: como os estados ocultos do Transformer são mapeados para um embedding de cenário e, em seguida, para uma temperatura de amostragem adaptativa.
+            <span class="source">Figura 3 do paper · Kong et al., arXiv:2610.18820</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Como funciona o mecanismo</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O processo começa com a extração de uma matriz de representação da camada r do Transformer.</span> <span class="s" data-s="b3-p0-s1">Esta representação é projetada em um espaço de cenário de dimensão m. Cada prompt resulta em um embedding de cenário.</span> <span class="s" data-s="b3-p0-s2">A chave aqui é a interpretabilidade geométrica: o espaço de cenário é estruturado em torno dos eixos DIAMONDS.</span> <span class="s" data-s="b3-p0-s3">Isso permite que o modelo não apenas preveja o próximo token, mas também &#39;leia o ambiente&#39; antes de gerar.</span></p><p><span class="s" data-s="b3-p1-s0">A função Actout é responsável por converter a posição do embedding no espaço de cenário para um valor de temperatura escalar.</span> <span class="s" data-s="b3-p1-s1">A lógica subjacente é que cenários caracterizados por alta &#39;Sociabilidade&#39; ou baixa &#39;Dever&#39; podem exigir temperaturas mais altas para gerar respostas mais fluidas e abertas, enquanto cenários de &#39;Dever&#39; ou &#39;Adversidade&#39; podem exigir temperaturas mais baixas para precisão e rigor.</span> <span class="s" data-s="b3-p1-s2">O modelo aprende essa mapeamento durante o treinamento, otimizando a conclusão de objetivos em interações sociais.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.18820/figure4.webp" alt="Visualização geométrica (PCA e UMAP) dos embeddings de cenário. O modelo aprendeu a separar claramente cenários distintos, como interações formais versus brincalhonas, no espaço vetorial." loading="lazy">
+          <figcaption>
+            Visualização geométrica (PCA e UMAP) dos embeddings de cenário. O modelo aprendeu a separar claramente cenários distintos, como interações formais versus brincalhonas, no espaço vetorial.
+            <span class="source">Figura 4 do paper · Kong et al., arXiv:2610.18820</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Resultados empíricos</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Avaliações foram realizadas no Llama-3.1-8B-Instruct.</span> <span class="s" data-s="b5-p0-s1">Os resultados mostram que o Scenario-Actor alcança forte desempenho na conclusão de objetivos em cenários sociais interativos (benchmark AgentSense), melhorias significativas no seguimento de instruções abertas (AlpacaEval) e desempenho competitivo em diálogos multi-turno (MT-Bench) comparado a múltiplas estratégias de decodificação, incluindo amostragem nucleus (Nucleus Sampling) e EDT (Expected Token Duration).</span></p><p><span class="s" data-s="b5-p1-s0">No benchmark AgentSense, o Scenario-Actor superou a temperatura fixa de 0.5 em 4.75 pontos percentuais e a amostragem nucleus em 4.58 pontos percentuais, com significância estatística.</span> <span class="s" data-s="b5-p1-s1">No AlpacaEval, a melhoria foi ainda mais pronunciada, com ganhos de até 21.43 pontos percentuais em relação à temperatura fixa de 1.5, embora a comparação direta com temperaturas fixas altas possa ser enganosa devido à natureza diferente dos benchmarks.</span> <span class="s" data-s="b5-p1-s2">O importante é que o método se adapta, evitando tanto a rigidez excessiva quanto a alucinação criativa.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.18820/table1.webp" alt="Tabela de resultados comparando o Scenario-Actor com baselines de temperatura fixa e métodos adaptativos. O método proposto destaca-se em métricas de conclusão de objetivos e qualidade de resposta." loading="lazy">
+          <figcaption>
+            Tabela de resultados comparando o Scenario-Actor com baselines de temperatura fixa e métodos adaptativos. O método proposto destaca-se em métricas de conclusão de objetivos e qualidade de resposta.
+            <span class="source">Tabela 1 do paper · Kong et al., arXiv:2610.18820</span>
+          </figcaption>
+        </figure>
+        <aside class="callout">
+          <h3><span class="s" data-s="b7-t">Eficiência Computacional</span></h3>
+          <p><span class="s" data-s="b7-c-s0">O Scenario-Actor introduz uma sobrecarga mínima.</span> <span class="s" data-s="b7-c-s1">Em testes de eficiência de ponta a ponta, a latência por prompt aumentou apenas cerca de 0.4% em comparação com métodos fixos, e o consumo de memória pico permaneceu quase idêntico.</span> <span class="s" data-s="b7-c-s2">Isso torna a abordagem viável para implantação em sistemas reais sem degradação significativa de throughput.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b8-h">Limitações e escopo</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Apesar dos resultados promissores, o paper reconhece limitações importantes.</span> <span class="s" data-s="b8-p0-s1">Primeiro, o cenário de LLMs é mais estreito que o cenário humano.</span> <span class="s" data-s="b8-p0-s2">Os modelos recebem apenas sequências textuais, ignorando pistas não linguísticas (tom de voz, linguagem corporal) presentes em interações humanas reais.</span> <span class="s" data-s="b8-p0-s3">A inferência de cenário baseada apenas no contexto linguístico é insuficiente para capturar a totalidade da interação social.</span></p><p><span class="s" data-s="b8-p1-s0">Segundo, o framework é comprometido com prompts orientados a tarefas.</span> <span class="s" data-s="b8-p1-s1">O Scenario-Actor foi projetado para configurações com pistas de cenário ricas, como conversas multi-turno.</span> <span class="s" data-s="b8-p1-s2">No entanto, muitos prompts são diretos e utilitários (escrever código, resolver matemática).</span> <span class="s" data-s="b8-p1-s3">Esses prompts contêm poucas evidências de um cenário social, tornando a inferência de cenário quase impossível.</span> <span class="s" data-s="b8-p1-s4">Para esses casos, um seletor independente pode rotear a entrada para uma política de decodificação padrão, separada do framework Scenario-Actor.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.18820/figure1.webp" alt="Gráfico mostrando que a temperatura fixa falha em manter o desempenho consistente em altas temperaturas, enquanto o Scenario-Actor mantém a conclusão de objetivos estável ao adaptar a temperatura ao contexto." loading="lazy">
+          <figcaption>
+            Gráfico mostrando que a temperatura fixa falha em manter o desempenho consistente em altas temperaturas, enquanto o Scenario-Actor mantém a conclusão de objetivos estável ao adaptar a temperatura ao contexto.
+            <span class="source">Figura 1 do paper · Kong et al., arXiv:2610.18820</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">Conclusão</span></h2>
+<p><span class="s" data-s="b10-p0-s0">O Scenario-Actor representa um passo em direção a modelos de linguagem socialmente adaptativos.</span> <span class="s" data-s="b10-p0-s1">Ao mapear estados ocultos para um embedding de cenário estruturado e derivar a temperatura a partir de sua geometria, o framework permite que os modelos reconheçam o ambiente comunicativo.</span> <span class="s" data-s="b10-p0-s2">À medida que os LLMs se integram à sociedade humana através de agentes multimodais e sistemas encarnados, a capacidade de reconhecer as situações em que estão inseridos se tornará cada vez mais importante.</span> <span class="s" data-s="b10-p0-s3">Este trabalho sugere que a adaptação dinâmica da geração de texto ao contexto social não é apenas possível, mas benéfica para a qualidade da interação.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">A temperatura de amostragem não é um hiperparâmetro global fixo; ela deve variar conforme o cenário social inferido do prompt.</span></li><li><span class="s" data-s="k1">O Scenario-Actor mapeia estados ocultos do modelo para um espaço geométrico estruturado (eixo DIAMONDS) para derivar a temperatura.</span></li><li><span class="s" data-s="k2">O método supera baselines de temperatura fixa e nucleus sampling em benchmarks de interação social e instrução aberta.</span></li><li><span class="s" data-s="k3">A inferência de cenário é limitada a contextos textuais ricos, falhando em prompts utilitários ou de tarefas puramente lógicas.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.18820" rel="noopener">Read the Room Before Your Model Generates</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.18820" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

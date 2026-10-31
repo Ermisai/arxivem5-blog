@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rethinking the Design Space of Vanilla Pixel Diffusion Transformers — arXiv em 5</title>
+<meta name="description" content="Os autores revisitam a predição em espaço de pixels para Diffusion Transformers, propondo MFLOW, uma parameterização adaptativa que mistura previsões de imagem limpa e velocidade, além de um refinador convolucional para corrigir deficits de alta frequência.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Rethinking the Design Space of Vanilla Pixel Diffusion Transformers">
+<meta property="og:description" content="Os autores revisitam a predição em espaço de pixels para Diffusion Transformers, propondo MFLOW, uma parameterização adaptativa que mistura previsões de imagem limpa e velocidade, além de um refinador convolucional para corrigir deficits de alta frequência.">
+<meta property="og:image" content="../../assets/papers/2610.23854/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Imagem</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.23854" rel="noopener">arXiv:2610.23854</a>
+    </div>
+    <h1><span class="s" data-s="t">Rethinking the Design Space of Vanilla Pixel Diffusion Transformers</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Os autores revisitam a predição em espaço de pixels para Diffusion Transformers, propondo MFLOW, uma parameterização adaptativa que mistura previsões de imagem limpa e velocidade, além de um refinador convolucional para corrigir deficits de alta frequência.</span></p>
+    <p class="byline">
+      <span>Mukhopadhyay et al.</span>
+      <span>10 min de leitura</span>
+<span>16/10/2026</span>    </p>
+    <div class="listen" data-article="2610.23854" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=02jObdHCNEQ" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Retorno dos Pixels: Alem do Espaco Latente</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Os modelos de difusao latente (LDMs) dominaram a geracao de imagens nos ultimos anos, mas impoem um custo significativo: a necessidade de um autoencoder separado para comprimir os pixels em um espaco latente de menor dimensao.</span> <span class="s" data-s="b0-p0-s1">Essa compressao e, por definicao, com perda (lossy), o que pode levar a reconstrucoes infieis e introduzir artefatos que o modelo gerador nao consegue corrigir facilmente.</span> <span class="s" data-s="b0-p0-s2">Em resposta, trabalhos recentes, como o JiT (Jigsaw Transformer), demonstraram que e possivel treinar Diffusion Transformers (DiTs) diretamente no espaco dos pixels brutos, eliminando o gargalo do autoencoder e simplificando a arquitetura.</span></p><p><span class="s" data-s="b0-p1-s0">Apesar da elegancia, a difusao direta em pixels enfrenta desafios computacionais e de representabilidade.</span> <span class="s" data-s="b0-p1-s1">Para manter o comprimento da sequencia gerenciavel, o JiT utiliza um patching agressivo (blocos de 16x16 pixels), transformando cada bloco em um unico token.</span> <span class="s" data-s="b0-p1-s2">Isso significa que cada token deve modelar um bloco de alta dimensionalidade de pixels brutos.</span> <span class="s" data-s="b0-p1-s3">A pergunta central que os autores deste paper revisitam e: qual a melhor forma de parameterizar a previsao nesses blocos de alta dimensionalidade?</span> <span class="s" data-s="b0-p1-s4">O JiT optou pela predicao da imagem limpa (x0), mas essa escolha pode nao ser otima para todas as direcoes dos dados ou capacidades de modelo.</span></p><p><span class="s" data-s="b0-p2-s0">Os autores, pesquisadores da University of Maryland e Adobe Research, propoem que a escolha entre prever a imagem limpa (x0) ou a velocidade (u) nao deve ser fixa.</span> <span class="s" data-s="b0-p2-s1">Eles introduzem o MFLOW, um mecanismo que aprende, de forma continua e adaptativa, como interpolar entre essas duas previsoes ao longo das direcoes principais dos dados.</span> <span class="s" data-s="b0-p2-s2">Alem disso, identificam um deficit persistente de detalhes de alta frequencia nos geradores baseados em JiT e apresentam o ConvRefiner, um modulo leve para corrigir esse problema apos o treinamento principal.</span></p>        <h2><span class="s" data-s="b1-h">Limitacoes das Parameterizacoes Fixas</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Para entender a contribuicao do MFLOW, e necessario examinar as abordagens anteriores.</span> <span class="s" data-s="b1-p0-s1">A predicao de imagem limpa (x0), usada no JiT, baseia-se na suposicao de que os dados reais residem em uma variedade de baixa dimensao (manifold), tornando-a mais facil de prever para uma rede subcompleta.</span> <span class="s" data-s="b1-p0-s2">No entanto, durante o sampling, converter a previsao de x0 de volta para a velocidade (u) torna-se mal-condicionado (ill-conditioned) em regimes de baixo ruido, onde pequenos erros na estimativa de x0 sao amplificados exponencialmente ao reverter a dinamica do processo de difusao.</span></p><p><span class="s" data-s="b1-p1-s0">Por outro lado, a predicao de velocidade (u) e mais estavel numericamente, mas pode ser dificil para redes menores aprenderem a estrutura complexa dos dados.</span> <span class="s" data-s="b1-p1-s1">Trabalhos como o AsymFlow tentaram mitigar isso dividindo o espaco em subespacos: predizendo u em um subespaco de baixa dimensao (PCA) e x0 no complemento.</span> <span class="s" data-s="b1-p1-s2">No entanto, essa abordagem exige uma escolha manual e rigida do rank (dimensao) do subespaco, que varia drasticamente entre datasets e configuracoes de modelo.</span> <span class="s" data-s="b1-p1-s3">Essa busca por hiperparametros e custosa e requer multiplos treinamentos preliminares para sintonia fina.</span></p><p><span class="s" data-s="b1-p2-s0">Outras abordagens, como a de Jin e Wang, utilizam uma interpolacao global entre x0 e u, mas nao reduzem a dimensionalidade efetiva do ruido nas direcoes mais importantes.</span> <span class="s" data-s="b1-p2-s1">O MFLOW se posiciona como uma generalizacao que supera essas limitacoes, permitindo que a modelagem se adapte dinamicamente a estrutura dos dados e a capacidade do modelo, sem a necessidade de selecao manual de subespacos binarios.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.23854/figure3.webp" alt="Diagrama do MFLOW: O modelo aprende ganhos continuos (mi) para cada direcao principal dos dados, interpolando entre previsao de imagem limpa e velocidade de forma diferenciavel." loading="lazy">
+          <figcaption>
+            Diagrama do MFLOW: O modelo aprende ganhos continuos (mi) para cada direcao principal dos dados, interpolando entre previsao de imagem limpa e velocidade de forma diferenciavel.
+            <span class="source">Figura 3 do paper · Mukhopadhyay et al., arXiv:2610.23854</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">MFLOW: Parameterizacao Adaptativa por Direcao</span></h2>
+<p><span class="s" data-s="b3-p0-s0">A inovacao central do MFLOW e a introducao de um ganho aprendivel mi in [0, 1] para cada direcao principal dos dados, derivada de uma analise de componentes principais (PCA) realizada nos patches de pixels.</span> <span class="s" data-s="b3-p0-s1">Em vez de escolher entre prever x0 ou u, o MFLOW calcula uma combinacao ponderada dessas previsoes.</span> <span class="s" data-s="b3-p0-s2">Especificamente, para cada direcao i, o modelo prediz uma saida intermediaria que e uma mistura linear da previsao de imagem limpa e da previsao de velocidade, controlada pelo parametro mi.</span></p><p><span class="s" data-s="b3-p1-s0">Essa formulacao e projetada para ser diferenciavel e compativel com a perda padrao de flow-matching no espaco de velocidade.</span> <span class="s" data-s="b3-p1-s1">Isso permite que o modelo de difusao e os ganhos mi sejam treinados simultaneamente de forma end-to-end.</span> <span class="s" data-s="b3-p1-s2">O resultado e uma parameterizacao suave que se adapta ao dataset.</span> <span class="s" data-s="b3-p1-s3">Se uma direcao principal dos dados e mais facil de modelar como uma imagem limpa (baixa variancia de ruido relativo), o modelo aprendera mi proximo de 0.</span> <span class="s" data-s="b3-p1-s4">Se a direcao exige a estabilidade da dinamica de velocidade, mi tendera a 1.</span></p><p><span class="s" data-s="b3-p2-s0">Essa abordagem elimina a necessidade de definir um corte rigido de rank, como no AsymFlow.</span> <span class="s" data-s="b3-p2-s1">Em vez de uma mascara binaria que decide quais direcoes usam qual previsao, o MFLOW permite uma transicao suave.</span> <span class="s" data-s="b3-p2-s2">Isso e particularmente util porque a estrutura de correlacao dos dados varia entre dominios (imagens estaticas vs. videos) e representacoes (pixels vs. latentes).</span> <span class="s" data-s="b3-p2-s3">O modelo descobre automaticamente a personalidade de previsao mais adequada para cada componente dos dados.</span></p>        <h2><span class="s" data-s="b4-h">Analise das M-Curves: Capacidade e Dados</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Um dos insights mais valiosos do paper vem da analise das M-curves, que sao graficos dos valores aprendidos mi ordenados pela variancia decrescente das direcoes principais.</span> <span class="s" data-s="b4-p0-s1">Ao visualizar essas curvas, os autores descobrem padroes sistematicos que conectam a escolha da parameterizacao a capacidade do modelo e as estatisticas dos dados.</span></p><p><span class="s" data-s="b4-p1-s0">Primeiramente, observa-se que aumentar a capacidade do modelo (numero de parametros) desloca a preferencia em direcao a predicao de velocidade (u).</span> <span class="s" data-s="b4-p1-s1">Modelos menores, com menor capacidade de representacao, beneficiam-se mais da predicao de x0, que atua como um regularizador implicito ao forcar o modelo a focar na estrutura de baixa dimensao dos dados.</span> <span class="s" data-s="b4-p1-s2">Modelos maiores, como os usados em geracao de texto-para-imagem em larga escala, tem capacidade suficiente para aprender a dinamica de velocidade diretamente, tornando a predicao de u mais eficiente.</span></p><p><span class="s" data-s="b4-p2-s0">Além disso, a natureza do dominio influencia as M-curvas.</span> <span class="s" data-s="b4-p2-s1">Em videos, o numero de direcoes com ganhos nao-negligiveis diminui, sugerindo que a dinamica temporal impoe restricoes diferentes.</span> <span class="s" data-s="b4-p2-s2">Em representacoes latentes (como RAEv2), os ganhos colapsam quase totalmente para zero, recuperando uma parameterizacao puramente de x0, o que confirma que a escolha ideal depende da representacao dos dados.</span> <span class="s" data-s="b4-p2-s3">Esses resultados indicam que nao existe uma unica melhor parameterizacao universal; ela deve ser adaptada ao contexto especifico de treinamento.</span></p>        <h2><span class="s" data-s="b5-h">ConvRefiner: Corrigindo o Deficit de Alta Frequencia</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Apesar dos avancos na parameterizacao, os autores identificaram um problema persistente nos Transformers de pixels puros (JiT-style): um deficit de alta frequencia.</span> <span class="s" data-s="b5-p0-s1">Ao analisar o espectro de frequencia das imagens geradas, constatou-se que elas perdem detalhes finos em comparacao com imagens reais, aparecendo excessivamente suavizadas.</span> <span class="s" data-s="b5-p0-s2">Esse deficit nao e resolvido apenas melhorando a parameterizacao da difusao; e uma limitacao arquitetural inerente a forma como os patches grandes sao processados e reconstruidos.</span></p><p><span class="s" data-s="b5-p1-s0">Para abordar isso, os autores propoem o ConvRefiner, um modulo pos-treinamento leve.</span> <span class="s" data-s="b5-p1-s1">A ideia e manter o backbone de difusao congelado e adicionar algumas camadas convolucionais leves que predizem um residual sobre a imagem gerada.</span> <span class="s" data-s="b5-p1-s2">Esse modulo e treinado usando uma combinacao de perda perceptual (LPIPS) e uma perda adversarial (GAN) baseada em PatchGAN.</span> <span class="s" data-s="b5-p1-s3">A perda adversarial e aplicada apenas nas imagens quase limpas (proximas do final do processo de sampling), focando a correcao nos detalhes locais.</span></p><p><span class="s" data-s="b5-p2-s0">Essa estrategia e inspirada em observacoes anteriores de que finetunar apenas as ultimas camadas de um VAE com uma perda adversarial pode melhorar detalhes locais com custo reduzido.</span> <span class="s" data-s="b5-p2-s1">O ConvRefiner restaura as estatisticas de alta frequencia das imagens geradas sem afetar significativamente metricas globais de qualidade, como o FID (Fréchet Inception Distance).</span> <span class="s" data-s="b5-p2-s2">Isso demonstra que e possivel corrigir falhas estruturais de alta frequencia sem retreinar todo o modelo generativo complexo.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.23854/figure8.webp" alt="Resultados do ConvRefiner: O grafico a esquerda mostra a recuperacao de alta frequencia, enquanto o a direita confirma que o FID permanece estavel apos o refinamento." loading="lazy">
+          <figcaption>
+            Resultados do ConvRefiner: O grafico a esquerda mostra a recuperacao de alta frequencia, enquanto o a direita confirma que o FID permanece estavel apos o refinamento.
+            <span class="source">Figura 8 do paper · Mukhopadhyay et al., arXiv:2610.23854</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Avaliacao em Imagens e Videos</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Os autores avaliaram o MFLOW em geracao de imagens condicionadas por classe no ImageNet-1K (256x256) e geracao de videos no UCF-101.</span> <span class="s" data-s="b7-p0-s1">No ImageNet, em configuracoes base (B-level), o MFLOW com perda LPIPS superou o JiT e o AsymFlow, alcancando o melhor FID entre os modelos avaliados.</span> <span class="s" data-s="b7-p0-s2">Isso sugere que a adaptacao continua do MFLOW, combinada com a regularizacao perceptual, e mais robusta que as buscas manuais de rank do AsymFlow.</span></p><p><span class="s" data-s="b7-p1-s0">Em escalas maiores (H-level), o MFLOW permaneceu competitivo, embora o AsymFlow tenha mostrado uma leve vantagem em algumas metricas, possivelmente devido a um ajuste mais agressivo de hiperparametros especifico para o ImageNet.</span> <span class="s" data-s="b7-p1-s1">No entanto, o MFLOW atingiu esse desempenho sem a necessidade de ciclos extensivos de busca de parameterizacao, oferecendo uma solucao mais automatica e generalizavel.</span></p><p><span class="s" data-s="b7-p2-s0">Para videos, o MFLOW foi aplicado com sucesso usando patches temporais (4x8x8).</span> <span class="s" data-s="b7-p2-s1">As M-curvas para videos mostraram uma reducao nas direcoes com ganhos significativos, consistente com a hipotese de que a dinamica temporal altera a estrutura de variancia dos dados.</span> <span class="s" data-s="b7-p2-s2">O modelo conseguiu gerar videos de alta qualidade, validando a extensao do MFLOW para dominios sequenciais.</span></p>        <h2><span class="s" data-s="b8-h">Geracao de Texto-para-Imagem em Larga Escala</span></h2>
+<p><span class="s" data-s="b8-p0-s0">O teste mais ambicioso foi a geracao de texto-para-imagem (T2I) usando um modelo de grande escala (XXL/16) treinado em um dataset interno de cerca de 900 milhoes de imagens para pre-treinamento e 33,5 milhoes para ajuste fino (SFT).</span> <span class="s" data-s="b8-p0-s1">Nesse cenario, as M-curvas revelaram claramente o efeito da capacidade do modelo: a medida que a capacidade aumenta, mais direcoes sao alocadas para predicao de velocidade (u).</span></p><p><span class="s" data-s="b8-p1-s0">Essa descoberta e crucial para o scaling de modelos generativos.</span> <span class="s" data-s="b8-p1-s1">Ela sugere que, para modelos muito grandes, a predicao de velocidade se torna mais vantajosa, provavelmente porque a rede tem parametros suficientes para aprender a dinamica complexa do ruido sem a regularizacao implicita da predicao de x0.</span> <span class="s" data-s="b8-p1-s2">O MFLOW permite que o modelo explore essa capacidade extra de forma adaptativa, sem intervencao humana para redefinir subespacos.</span></p><p><span class="s" data-s="b8-p2-s0">Os resultados de qualidade visual (Figura 1) mostram geracoes realistas em 512px, e as metricas em benchmarks como GenEval e DPG-Bench foram competitivas.</span> <span class="s" data-s="b8-p2-s1">A combinacao do MFLOW com o ConvRefiner ajudou a mitigar o deficit de alta frequencia que poderia ser exacerbado em resolucoes mais altas, mantendo a fidelidade dos detalhes finos.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.23854/figure1.webp" alt="Exemplos de geracao texto-para-imagem em 512px pelo modelo MFLOW-XXL/16, demonstrando realismo e qualidade visual." loading="lazy">
+          <figcaption>
+            Exemplos de geracao texto-para-imagem em 512px pelo modelo MFLOW-XXL/16, demonstrando realismo e qualidade visual.
+            <span class="source">Figura 1 do paper · Mukhopadhyay et al., arXiv:2610.23854</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">Limitacoes e Consideracoes Finais</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Apesar dos resultados promissores, o paper nao ignora as limitacoes.</span> <span class="s" data-s="b10-p0-s1">O ConvRefiner, embora eficaz, e um modulo post-hoc.</span> <span class="s" data-s="b10-p0-s2">Isso significa que ele adiciona uma etapa de inferencia e um pequeno overhead computacional.</span> <span class="s" data-s="b10-p0-s3">Alem disso, a eficacia do ConvRefiner depende da qualidade do backbone de difusao; se o modelo base falhar em capturar a estrutura global da imagem, o refinador convolucional local nao podera corrigir erros semanticos maiores.</span></p><p><span class="s" data-s="b10-p1-s0">Outra limitacao e a dependencia da analise PCA para definir as direcoes principais.</span> <span class="s" data-s="b10-p1-s1">Em datasets extremamente grandes ou de alta dimensionalidade, o calculo da PCA pode ser computacionalmente intensivo, embora os autores afirmem seguir metodos eficientes similares ao AsymFlow.</span> <span class="s" data-s="b10-p1-s2">Alem disso, a adaptacao automatica das M-curves requer monitoramento para garantir que os ganhos mi nao colapsem para valores triviais em configuracoes de treinamento instaveis.</span></p><p><span class="s" data-s="b10-p2-s0">Os autores tambem destacam que a escolha da parameterizacao nao e a unica variavel.</span> <span class="s" data-s="b10-p2-s1">A arquitetura do patching, o tamanho do patch e a presenca de perdas auxiliares (como LPIPS) interagem complexamente com o MFLOW.</span> <span class="s" data-s="b10-p2-s2">Por exemplo, a adicao de LPIPS tende a empurrar as direcoes para a predicao de x0, sugerindo que a regularizacao perceptual altera a estrutura de variancia efetiva que o modelo tenta aprender.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b11-t">Insight Chave: Capacidade vs. Representacao</span></h3>
+          <p><span class="s" data-s="b11-c-s0">O paper estabelece uma relacao clara: a capacidade do modelo dita a preferencia por predicao de velocidade (u), enquanto as estatisticas dos dados ditam onde essa predicao e mais util.</span> <span class="s" data-s="b11-c-s1">Modelos menores precisam de x0 para regularizacao; modelos maiores exploram a dinamica de u.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b12-h">Conclusao</span></h2>
+<p><span class="s" data-s="b12-p0-s0">O paper Rethinking the Design Space of Vanilla Pixel Diffusion Transformers oferece uma revisao critica e uma melhoria significativa para a difusao direta em pixels.</span> <span class="s" data-s="b12-p0-s1">Ao introduzir o MFLOW, os autores substituem a escolha binaria e manual entre predicao de imagem e velocidade por uma parameterizacao continua e adaptativa.</span> <span class="s" data-s="b12-p0-s2">Isso simplifica o pipeline de treinamento e melhora a robustez em diferentes dominios e capacidades de modelo.</span></p><p><span class="s" data-s="b12-p1-s0">A introducao do ConvRefiner complementa essa abordagem ao tratar explicitamente o deficit de alta frequencia, um problema que a parameterizacao sozinha nao resolve.</span> <span class="s" data-s="b12-p1-s1">Juntos, esses componentes demonstram que os Transformers de pixels puros podem ser escalados e refinados para competir com os modelos latentes, oferecendo uma alternativa mais direta e potencialmente mais fiel aos dados brutos.</span></p><p><span class="s" data-s="b12-p2-s0">Para pesquisadores e engenheiros de ML, este trabalho destaca a importancia de nao tratar a parameterizacao da perda como um hiperparametro fixo, mas como uma propriedade dinamica que deve ser aprendida junto com o modelo.</span> <span class="s" data-s="b12-p2-s1">A analise das M-curves fornece uma nova ferramenta de diagnostico para entender como os modelos de difusao distribuem sua capacidade de aprendizado entre diferentes frequencias e direcoes dos dados.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">MFLOW aprende automaticamente quanto predizer imagem limpa (x0) versus velocidade (u) por direcao principal dos dados, eliminando a necessidade de busca manual de hiperparametros.</span></li><li><span class="s" data-s="k1">Modelos maiores tendem a preferir predicao de velocidade, enquanto dados com representacao mais compacta favorecem a predicao de imagem limpa.</span></li><li><span class="s" data-s="k2">Transformers de pixels puros sofrem de deficit de alta frequencia; o ConvRefiner resolve isso pos-treinamento sem degradar metricas como FID.</span></li><li><span class="s" data-s="k3">A abordagem e geral, funcionando para imagens, videos e latentes de alta dimensao, mas requer analise cuidadosa das curvas de ganho (M-curves).</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.23854" rel="noopener">Rethinking the design space of Vanilla Pixel Diffusion Transformers</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.23854" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

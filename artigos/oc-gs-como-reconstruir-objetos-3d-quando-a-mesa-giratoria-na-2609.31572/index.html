@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OC-GS: como reconstruir objetos 3D quando a mesa giratória não gira de forma uniforme — arXiv em 5</title>
+<meta name="description" content="Scanners de mesa giratória costumam ter rotação irregular ou frames perdidos. OC-GS ajusta os ângulos de cada imagem durante a reconstrução 3D, mantendo um modelo de movimento compartilhado, e supera baselines em até 10dB de PSNR com poucas vistas.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OC-GS: como reconstruir objetos 3D quando a mesa giratória não gira de forma uniforme">
+<meta property="og:description" content="Scanners de mesa giratória costumam ter rotação irregular ou frames perdidos. OC-GS ajusta os ângulos de cada imagem durante a reconstrução 3D, mantendo um modelo de movimento compartilhado, e supera baselines em até 10dB de PSNR com poucas vistas.">
+<meta property="og:image" content="../../assets/papers/2609.31572/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Imagem</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2609.31572" rel="noopener">arXiv:2609.31572</a>
+    </div>
+    <h1><span class="s" data-s="t">OC-GS: como reconstruir objetos 3D quando a mesa giratória não gira de forma uniforme</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Scanners de mesa giratória costumam ter rotação irregular ou frames perdidos.</span> <span class="s" data-s="d-s1">OC-GS ajusta os ângulos de cada imagem durante a reconstrução 3D, mantendo um modelo de movimento compartilhado, e supera baselines em até 10dB de PSNR com poucas vistas.</span></p>
+    <p class="byline">
+      <span>Lee et al.</span>
+      <span>10 min de leitura</span>
+<span>25/09/2026</span>    </p>
+    <div class="listen" data-article="2609.31572" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema da captura irregular</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Mesas giratórias são equipamentos comuns em laboratórios de fenómica vegetal, digitalização de patrimônio cultural, espécimes biológicos e inspeção industrial.</span> <span class="s" data-s="b0-p0-s1">O objeto gira enquanto uma câmera fixa captura imagens de múltiplos ângulos.</span> <span class="s" data-s="b0-p0-s2">A ideia é simples: mais ângulos, melhor a reconstrução 3D.</span> <span class="s" data-s="b0-p0-s3">Mas há um problema prático.</span> <span class="s" data-s="b0-p0-s4">Quando você precisa escanear centenas de objetos por dia, o tempo de captura importa.</span> <span class="s" data-s="b0-p0-s5">Reduzir o número de imagens acelera o processo, mas introduz complicações.</span></p><p><span class="s" data-s="b0-p1-s0">A primeira complicação é que motores de mesa giratória raramente giram de forma perfeitamente uniforme.</span> <span class="s" data-s="b0-p1-s1">Variações de velocidade, frames perdidos pela câmera ou pausas acidentais fazem com que o espaçamento angular entre imagens consecutivas seja desigual.</span> <span class="s" data-s="b0-p1-s2">A segunda complicação é que métodos tradicionais de reconstrução 3D assumem que você conhece a posição exata da câmera em cada frame, ou que consegue estimá-la com Structure from Motion.</span> <span class="s" data-s="b0-p1-s3">Nenhuma das duas coisas funciona bem quando você tem poucas imagens com espaçamento irregular.</span></p><p><span class="s" data-s="b0-p2-s0">Métodos recentes de reconstrução sem poses de câmera fornecidas, como AnySplat, InstantSplat e SPFSplat, usam redes neurais para estimar geometria e movimento a partir das imagens.</span> <span class="s" data-s="b0-p2-s1">RotGS foi desenhado especificamente para mesas giratórias, incorporando um eixo de rotação compartilhado e supervisão por fluxo óptico.</span> <span class="s" data-s="b0-p2-s2">Mas todos esses métodos enfrentam dificuldades quando o espaçamento angular é irregular.</span> <span class="s" data-s="b0-p2-s3">A solução mais comum é assumir que o frame j corresponde ao ângulo 360°×j/N, tratando o índice do frame como medida de rotação.</span> <span class="s" data-s="b0-p2-s4">Isso funciona apenas se a rotação for uniforme, o que não é o caso real.</span></p>        <h2><span class="s" data-s="b1-h">A ideia do OC-GS</span></h2>
+<p><span class="s" data-s="b1-p0-s0">OC-GS, proposto por pesquisadores da Purdue University, resolve o problema refinando os ângulos de cada imagem durante a reconstrução, mas mantendo um modelo de movimento compartilhado.</span> <span class="s" data-s="b1-p0-s1">Em vez de tratar cada câmera como independente ou assumir espaçamento uniforme, o método otimiza conjuntamente a cena 3D representada por Gaussianas, uma única câmera, um eixo de rotação, um pivô e uma correção angular para cada vista.</span></p><p><span class="s" data-s="b1-p1-s0">A sigla OC-GS significa object-centric Gaussian splatting com refinamento orbit-consistent.</span> <span class="s" data-s="b1-p1-s1">Object-centric porque o método se concentra em objetos isolados capturados em mesa giratória.</span> <span class="s" data-s="b1-p1-s2">Orbit-consistent porque todas as câmeras efetivas devem pertencer à mesma trajetória circular ao redor do objeto.</span> <span class="s" data-s="b1-p1-s3">Gaussian splatting é a representação de cena: em vez de uma malha ou um campo de radiância neural contínuo, a geometria é representada por um conjunto de primitivas gaussianas 3D que podem ser renderizadas de forma eficiente.</span></p><p><span class="s" data-s="b1-p2-s0">O truque está em como o método lida com os ângulos.</span> <span class="s" data-s="b1-p2-s1">Ângulos derivados de imagens (via redes como VGGT) capturam o espaçamento desigual, mas contêm erros.</span> <span class="s" data-s="b1-p2-s2">Mantê-los fixos preserva esses erros.</span> <span class="s" data-s="b1-p2-s3">Otimizar cada câmera de forma independente permite correções que violam o movimento de mesa giratória.</span> <span class="s" data-s="b1-p2-s4">OC-GS refina os ângulos individuais dentro de um modelo de rotação compartilhado, ajustando as lacunas angulares sem introduzir uma rotação comum redundante.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.31572/figure1.webp" alt="Visão geral do pipeline: uma câmera fixa captura um objeto com gaps angulares irregulares. VGGT fornece geometria e câmeras iniciais. Um círculo ajustado aos centros das câmeras dá ângulos de partida. OC-GS refina tudo junto, mantendo um rig compartilhado." loading="lazy">
+          <figcaption>
+            Visão geral do pipeline: uma câmera fixa captura um objeto com gaps angulares irregulares. VGGT fornece geometria e câmeras iniciais. Um círculo ajustado aos centros das câmeras dá ângulos de partida. OC-GS refina tudo junto, mantendo um rig compartilhado.
+            <span class="source">Figura 1 do paper · Lee et al., arXiv:2609.31572</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Como funciona o refinamento orbit-consistent</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O método começa com uma inicialização derivada de imagens.</span> <span class="s" data-s="b3-p0-s1">Um modelo pré-treinado, como VGGT, prediz a geometria inicial da cena e as posições das câmeras a partir das N imagens de entrada.</span> <span class="s" data-s="b3-p0-s2">VGGT é uma rede que estima conjuntamente câmeras e geometria de cena, sem necessidade de poses fornecidas.</span> <span class="s" data-s="b3-p0-s3">Os centros das câmeras preditas são usados para ajustar um círculo no espaço 3D.</span> <span class="s" data-s="b3-p0-s4">Esse círculo define o eixo de rotação inicial, o pivô (centro do círculo) e os ângulos azimutais iniciais de cada vista.</span></p><p><span class="s" data-s="b3-p1-s0">A partir daí, OC-GS otimiza conjuntamente cinco grupos de parâmetros: a cena de Gaussianas 3D (posições, opacidades, cores, covariâncias), uma única câmera canônica (parâmetros intrínsecos e extrínsecos), o eixo de rotação n, o pivô c e uma correção angular para cada vista.</span> <span class="s" data-s="b3-p1-s1">A câmera efetiva da vista j é obtida rotacionando a câmera canônica pelo ângulo θ_j ao redor do eixo n, centrado no pivô c.</span></p><p><span class="s" data-s="b3-p2-s0">Para evitar que o refinamento introduza uma rotação comum redundante (todos os ângulos girando juntos, o que não muda a reconstrução), o método subtrai a média das correções angulares a cada passo de otimização.</span> <span class="s" data-s="b3-p2-s1">Isso garante que apenas o espaçamento relativo entre as vistas seja ajustado, não a orientação global do conjunto.</span> <span class="s" data-s="b3-p2-s2">A função de perda combina erro fotométrico (diferença entre imagens renderizadas e reais), perda perceptual LPIPS e perda de silhueta.</span></p><p><span class="s" data-s="b3-p3-s0">Durante a otimização, o modelo ajusta os ângulos para melhor explicar as imagens observadas, ao mesmo tempo em que refina a geometria da cena.</span> <span class="s" data-s="b3-p3-s1">Como todos os ângulos compartilham o mesmo eixo, pivô e câmera, o refinamento respeita a restrição de movimento de mesa giratória.</span> <span class="s" data-s="b3-p3-s2">Isso é diferente de otimizar cada câmera de forma independente, como fazem alguns métodos de bundle adjustment, que podem levar a trajetórias inconsistentes.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b4-t">Por que não otimizar cada câmera separadamente?</span></h3>
+          <p><span class="s" data-s="b4-c-s0">Otimizar N câmeras independentes permite que cada uma se mova livremente no espaço 3D.</span> <span class="s" data-s="b4-c-s1">Isso pode violar a restrição física de que todas as vistas vêm de uma mesa giratória com um único eixo.</span> <span class="s" data-s="b4-c-s2">OC-GS mantém um rig compartilhado: uma câmera, um eixo, um pivô.</span> <span class="s" data-s="b4-c-s3">Apenas os ângulos individuais variam, o que preserva a consistência orbital e reduz o número de parâmetros livres.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b5-h">Resultados em objetos sintéticos</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os autores testaram OC-GS em 100 objetos do dataset Google Scanned Objects, sob quatro condições de captura: 12 vistas regularmente espaçadas, 12 vistas irregularmente espaçadas, 8 vistas irregulares e 6 vistas irregulares.</span> <span class="s" data-s="b5-p0-s1">Todas as vistas irregulares foram geradas introduzindo gaps aleatórios entre frames.</span> <span class="s" data-s="b5-p0-s2">A métrica principal é FG-PSNR, que mede a qualidade de reconstrução apenas nos pixels de primeiro plano (o objeto), ignorando o fundo.</span> <span class="s" data-s="b5-p0-s3">Valores mais altos indicam menor erro.</span></p><p><span class="s" data-s="b5-p1-s0">Com 12, 8 e 6 vistas irregulares, OC-GS atingiu FG-PSNR médio de 21.26, 19.36 e 15.83 dB, respectivamente.</span> <span class="s" data-s="b5-p1-s1">Isso superou todos os quatro baselines de Gaussian splatting sem pose avaliados em cada condição.</span> <span class="s" data-s="b5-p1-s2">Quando ambos os métodos produzem resultados válidos, OC-GS excedeu RotGS em pelo menos 10.25 dB nas condições irregulares e AnySplat em 4.11 dB com seis vistas.</span> <span class="s" data-s="b5-p1-s3">Em média, OC-GS foi 54.5% melhor que AnySplat, o segundo melhor baseline.</span></p><p><span class="s" data-s="b5-p2-s0">A qualidade de reconstrução diminuiu conforme menos vistas estavam disponíveis, mas OC-GS manteve a liderança.</span> <span class="s" data-s="b5-p2-s1">Exemplos visuais mostram que OC-GS preserva detalhes como as posições das pernas de um touro Hereford e a silhueta geral, enquanto vários baselines produzem reconstruções distorcidas, deslocadas ou com partes faltando.</span> <span class="s" data-s="b5-p2-s2">Para o conjunto Bathroom Set, OC-GS reconstrói as partes principais da cena, enquanto resultados de baseline mostram partes ausentes ou visuais espalhados.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.31572/figure2.webp" alt="FG-PSNR médio nas vistas-alvo com 12, 8 e 6 imagens irregulares. OC-GS supera todos os baselines em todas as condições. Objetos que falharam no alinhamento de câmera em qualquer método foram excluídos da média." loading="lazy">
+          <figcaption>
+            FG-PSNR médio nas vistas-alvo com 12, 8 e 6 imagens irregulares. OC-GS supera todos os baselines em todas as condições. Objetos que falharam no alinhamento de câmera em qualquer método foram excluídos da média.
+            <span class="source">Figura 2 do paper · Lee et al., arXiv:2609.31572</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Ablação: o que explica a melhoria?</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Para isolar o efeito do refinamento de ângulos, os autores compararam variantes usando as mesmas imagens de entrada, predições VGGT, trainer e orçamento de treinamento.</span> <span class="s" data-s="b7-p0-s1">A comparação chave mantém os ângulos estimados fixos em uma variante e os refina em outra.</span> <span class="s" data-s="b7-p0-s2">Ambas usam o mesmo rig compartilhado (câmera, eixo, pivô), mudando apenas se os ângulos podem ser atualizados.</span></p><p><span class="s" data-s="b7-p1-s0">Com 12 vistas irregulares, refinar os ângulos estimados melhorou o FG-PSNR médio em 9.08 dB comparado a mantê-los fixos.</span> <span class="s" data-s="b7-p1-s1">Com 8 vistas, o ganho foi de 7.13 dB.</span> <span class="s" data-s="b7-p1-s2">Com 6 vistas, 4.22 dB.</span> <span class="s" data-s="b7-p1-s3">Mesmo com apenas seis imagens, o refinamento trouxe benefício substancial.</span> <span class="s" data-s="b7-p1-s4">A ablação também comparou com uma baseline que assume espaçamento uniforme (ângulos 360°×j/N).</span> <span class="s" data-s="b7-p1-s5">Refinar ângulos derivados de imagens superou assumir uniformidade em todas as condições.</span></p><p><span class="s" data-s="b7-p2-s0">Outra variante testou otimizar cada câmera de forma independente, sem o rig compartilhado.</span> <span class="s" data-s="b7-p2-s1">Essa configuração teve desempenho inferior ao refinamento orbit-consistent, mostrando que a restrição de movimento compartilhado é importante.</span> <span class="s" data-s="b7-p2-s2">A ablação conclui que tanto a inicialização derivada de imagens quanto o modelo de movimento compartilhado contribuem para a melhoria.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.31572/table1.webp" alt="Efeito do rig compartilhado e do refinamento de ângulos. Refinar ângulos estimados melhora FG-PSNR em até 9.08 dB comparado a mantê-los fixos, usando o mesmo trainer e predições VGGT. Médias usam os mesmos objetos válidos por condição." loading="lazy">
+          <figcaption>
+            Efeito do rig compartilhado e do refinamento de ângulos. Refinar ângulos estimados melhora FG-PSNR em até 9.08 dB comparado a mantê-los fixos, usando o mesmo trainer e predições VGGT. Médias usam os mesmos objetos válidos por condição.
+            <span class="source">Tabela 1 do paper · Lee et al., arXiv:2609.31572</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Capturas reais e erro angular conhecido</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Os autores também testaram OC-GS em capturas reais de mesa giratória.</span> <span class="s" data-s="b9-p0-s1">Nesse cenário, o refinamento de ângulos aumentou o FG-PSNR médio em 0.70 dB.</span> <span class="s" data-s="b9-p0-s2">O ganho é menor que nos dados sintéticos, provavelmente porque as capturas reais têm outras fontes de erro (iluminação variável, ruído de câmera, calibração imperfeita) que o refinamento de ângulos não resolve.</span></p><p><span class="s" data-s="b9-p1-s0">Para entender quando o refinamento ajuda, os autores introduziram erros angulares conhecidos nas predições iniciais.</span> <span class="s" data-s="b9-p1-s1">Eles variaram a magnitude do erro de 0° a 30° e mediram o impacto na reconstrução.</span> <span class="s" data-s="b9-p1-s2">O refinamento trouxe maior benefício quando os erros iniciais eram moderados (5° a 15°).</span> <span class="s" data-s="b9-p1-s3">Com erros muito pequenos, há pouco a corrigir.</span> <span class="s" data-s="b9-p1-s4">Com erros muito grandes, a inicialização pode estar tão distante da solução correta que a otimização não converge bem.</span></p><p><span class="s" data-s="b9-p2-s0">Essa análise sugere que a qualidade da inicialização importa.</span> <span class="s" data-s="b9-p2-s1">VGGT fornece estimativas razoáveis para a maioria dos objetos, mas não perfeitas.</span> <span class="s" data-s="b9-p2-s2">O refinamento orbit-consistent aproveita essas estimativas imperfeitas e as melhora durante a otimização conjunta com a geometria.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b10-t">Comparação com referências calibradas</span></h3>
+          <p><span class="s" data-s="b10-c-s0">OC-GS também foi comparado com Splatfacto e Nerfacto usando câmeras verdadeiras.</span> <span class="s" data-s="b10-c-s1">Com 8 e 6 vistas irregulares, OC-GS superou Splatfacto.</span> <span class="s" data-s="b10-c-s2">Com 12 vistas, Splatfacto foi melhor.</span> <span class="s" data-s="b10-c-s3">Em casos com alinhamento válido para ambos, OC-GS atingiu 1.43 dB de FG-PSNR a mais e 0.103 de LPIPS a menos em média.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b11-h">Custo computacional</span></h2>
+<p><span class="s" data-s="b11-p0-s0">OC-GS leva em média 16.2 minutos por cena e usa pico de 1.51 GB de VRAM, excluindo o tempo de inferência do VGGT.</span> <span class="s" data-s="b11-p0-s1">Isso é 22% mais rápido e usa 31% menos memória de pico que RotGS, que leva 20.8 minutos e 2.20 GB.</span> <span class="s" data-s="b11-p0-s2">Nerfacto com poses VGGT leva 23.7 minutos e 3.05 GB.</span></p><p><span class="s" data-s="b11-p1-s0">Métodos feed-forward como AnySplat e SPFSplat são muito mais rápidos (0.5 minuto), mas usam mais VRAM (8.31 GB e 6.06 GB, respectivamente) e têm qualidade de reconstrução inferior.</span> <span class="s" data-s="b11-p1-s1">InstantSplat leva 2.5 minutos e 6.69 GB.</span> <span class="s" data-s="b11-p1-s2">OC-GS é um método de otimização por cena, não feed-forward, então o tempo de treinamento é esperado.</span> <span class="s" data-s="b11-p1-s3">O importante é que ele é mais eficiente que outros métodos de otimização por cena avaliados.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.31572/figure4.webp" alt="Exemplos selecionados de melhoria com OC-GS: Black Flag (12 vistas), Therizinosaurus (8) e Hereford Bull (6). Mesma vista-alvo e crop em todos os métodos. Números mostram FG-PSNR (dB) / LPIPS. Negrito indica o melhor." loading="lazy">
+          <figcaption>
+            Exemplos selecionados de melhoria com OC-GS: Black Flag (12 vistas), Therizinosaurus (8) e Hereford Bull (6). Mesma vista-alvo e crop em todos os métodos. Números mostram FG-PSNR (dB) / LPIPS. Negrito indica o melhor.
+            <span class="source">Figura 4 do paper · Lee et al., arXiv:2609.31572</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b13-h">Limitações e trabalho futuro</span></h2>
+<p><span class="s" data-s="b13-p0-s0">OC-GS assume um eixo de rotação fixo com ruído mínimo.</span> <span class="s" data-s="b13-p0-s1">Se o eixo variar significativamente durante a captura (por exemplo, uma mesa giratória instável), o modelo de movimento compartilhado não será apropriado.</span> <span class="s" data-s="b13-p0-s2">O método também depende da qualidade da inicialização fornecida por VGGT.</span> <span class="s" data-s="b13-p0-s3">Se as predições iniciais de câmera ou geometria forem muito ruins, a otimização pode não convergir para uma boa solução.</span></p><p><span class="s" data-s="b13-p1-s0">Os experimentos foram realizados em objetos isolados do dataset Google Scanned Objects e algumas capturas reais.</span> <span class="s" data-s="b13-p1-s1">Não está claro como o método se comporta em cenas mais complexas, com múltiplos objetos ou oclusões severas.</span> <span class="s" data-s="b13-p1-s2">Os autores também não exploraram o impacto de diferentes modelos de inicialização além de VGGT.</span></p><p><span class="s" data-s="b13-p2-s0">O paper menciona que trabalhos futuros adaptarão o refinamento à qualidade da inicialização e avaliarão o uso em fenómica vegetal como tarefa downstream.</span> <span class="s" data-s="b13-p2-s1">Isso sugere que os autores veem aplicações práticas em domínios onde captura rápida e irregular é comum.</span> <span class="s" data-s="b13-p2-s2">Melhorias nos modelos de inicialização provavelmente beneficiarão OC-GS, já que a qualidade da reconstrução final depende em parte da qualidade das estimativas iniciais.</span></p>        <h2><span class="s" data-s="b14-h">O que fica claro</span></h2>
+<p><span class="s" data-s="b14-p0-s0">OC-GS mostra que refinar ângulos incertos dentro de um modelo de movimento compartilhado melhora a reconstrução a partir de capturas esparsas e irregulares de mesa giratória.</span> <span class="s" data-s="b14-p0-s1">O ganho é substancial: até 9 dB de PSNR com 12 vistas irregulares, comparado a manter os ângulos estimados fixos.</span> <span class="s" data-s="b14-p0-s2">O método supera baselines de Gaussian splatting sem pose em todas as condições irregulares testadas.</span></p><p><span class="s" data-s="b14-p1-s0">A abordagem é conceitualmente simples: em vez de assumir espaçamento uniforme ou otimizar câmeras independentes, OC-GS refina os ângulos de cada vista enquanto mantém um rig compartilhado.</span> <span class="s" data-s="b14-p1-s1">Isso respeita a física da captura (um eixo, um pivô, uma câmera) e reduz o espaço de busca da otimização.</span> <span class="s" data-s="b14-p1-s2">O refinamento conjunto de geometria e ângulos permite que ambos se corrijam mutuamente durante o treinamento.</span></p><p><span class="s" data-s="b14-p2-s0">Os resultados sugerem que métodos de reconstrução 3D para mesas giratórias devem levar em conta a irregularidade da captura.</span> <span class="s" data-s="b14-p2-s1">Assumir rotação uniforme ou manter estimativas de ângulo fixas deixa desempenho na mesa.</span> <span class="s" data-s="b14-p2-s2">OC-GS oferece uma solução prática, eficiente e que se integra bem com inicializadores modernos baseados em aprendizado.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">OC-GS refina os ângulos de cada imagem durante a reconstrução 3D, mantendo um modelo de movimento compartilhado (um eixo, um pivô, uma câmera), o que respeita a física da mesa giratória.</span></li><li><span class="s" data-s="k1">Com 12, 8 e 6 vistas irregulares, OC-GS atingiu 21.26, 19.36 e 15.83 dB de FG-PSNR, superando todos os baselines de Gaussian splatting sem pose em cada condição.</span></li><li><span class="s" data-s="k2">Refinar ângulos estimados melhora FG-PSNR em até 9.08 dB comparado a mantê-los fixos, usando o mesmo trainer e inicialização, mostrando que o refinement orbit-consistent é a chave.</span></li><li><span class="s" data-s="k3">O método é 22% mais rápido e usa 31% menos memória que RotGS, mas depende da qualidade da inicialização (VGGT) e assume eixo de rotação fixo com ruído mínimo.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2609.31572" rel="noopener">OC-GS: Gaussian Splatting for Irregular Turntable Capture</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2609.31572" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

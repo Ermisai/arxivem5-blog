@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LeCo: como ensinar um robô a usar complacência mecânica para reduzir forças durante montagem de conectores — arXiv em 5</title>
+<meta name="description" content="Robôs que aprendem a encaixar peças costumam empurrar com força demais enquanto o controlador cede, gerando cargas altas sem progresso. LeCo coordena política visual e controle de admitância para completar a tarefa com até 64% menos torque.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LeCo: como ensinar um robô a usar complacência mecânica para reduzir forças durante montagem de conectores">
+<meta property="og:description" content="Robôs que aprendem a encaixar peças costumam empurrar com força demais enquanto o controlador cede, gerando cargas altas sem progresso. LeCo coordena política visual e controle de admitância para completar a tarefa com até 64% menos torque.">
+<meta property="og:image" content="../../assets/papers/2609.31439/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Robótica</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2609.31439" rel="noopener">arXiv:2609.31439</a>
+    </div>
+    <h1><span class="s" data-s="t">LeCo: como ensinar um robô a usar complacência mecânica para reduzir forças durante montagem de conectores</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Robôs que aprendem a encaixar peças costumam empurrar com força demais enquanto o controlador cede, gerando cargas altas sem progresso.</span> <span class="s" data-s="d-s1">LeCo coordena política visual e controle de admitância para completar a tarefa com até 64% menos torque.</span></p>
+    <p class="byline">
+      <span>Wang et al.</span>
+      <span>10 min de leitura</span>
+<span>25/09/2026</span>    </p>
+    <div class="listen" data-article="2609.31439" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=8J_6VbTEx2Q" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema: empurrar contra a parede não ajuda a encaixar</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Montagem autônoma de conectores exige que o robô corrija desalinhamentos enquanto avança a peça até o encaixe final.</span> <span class="s" data-s="b0-p0-s1">Força demais impede progresso; força de menos impede conclusão.</span> <span class="s" data-s="b0-p0-s2">Aprendizado por reforço visual e controle complacente são duas ferramentas poderosas para lidar com incerteza de contato, mas combiná-las não garante cooperação.</span></p><p><span class="s" data-s="b0-p1-s0">Quando um conector encontra uma borda, a política aprendida pode continuar comandando movimento para frente enquanto o controlador de admitância cede na direção oposta, gerando carga de contato sustentada sem avanço útil.</span> <span class="s" data-s="b0-p1-s1">Recompensa de conclusão de tarefa sozinha não distingue correção breve e necessária de oposição repetida entre comandos.</span> <span class="s" data-s="b0-p1-s2">Picos de força também podem ocorrer tanto durante carregamento contínuo quanto durante retirada de um contato já carregado.</span></p><p><span class="s" data-s="b0-p2-s0">O problema também envolve taxas de atualização diferentes.</span> <span class="s" data-s="b0-p2-s1">Decisões de política e controle de contato operam em frequências distintas: uma transição de política pode conter várias respostas do controlador.</span> <span class="s" data-s="b0-p2-s2">A observação final pode perder oposição anterior; uma média de intervalo pode diluir um evento breve de carregamento, enquanto um máximo sozinho não descreve duração.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.31439/figure1.webp" alt="Execução guiada apenas por tarefa (esquerda) completa a inserção mas sustenta cargas altas. LeCo (direita) coordena movimento de tarefa com descarregamento por admitância, reduzindo forças enquanto preserva conclusão." loading="lazy">
+          <figcaption>
+            Execução guiada apenas por tarefa (esquerda) completa a inserção mas sustenta cargas altas. LeCo (direita) coordena movimento de tarefa com descarregamento por admitância, reduzindo forças enquanto preserva conclusão.
+            <span class="source">Figura 1 do paper · Wang et al., arXiv:2609.31439</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">A ideia: transformar interação multirate em sinal de aprendizado</span></h2>
+<p><span class="s" data-s="b2-p0-s0">LeCo (Leverage Compliance) é um framework de aprendizado política-admitância que guia uma política visual através de interação em tempo de execução sob admitância fixa.</span> <span class="s" data-s="b2-p0-s1">A proposta central é agregar registros de interação de contato em alta taxa ao longo de intervalos associados a transições de política, fornecendo feedback de aprendizado na taxa da política.</span></p><p><span class="s" data-s="b2-p1-s0">O método constrói dois custos de interação integrados à recompensa de aprendizado por reforço.</span> <span class="s" data-s="b2-p1-s1">O primeiro é um custo de conflito que caracteriza oposição sustentada entre carregamento pela política e descarregamento pelo controlador.</span> <span class="s" data-s="b2-p1-s2">O segundo é um custo direcional de cauda de força alta que captura eventos de carregamento contínuo dentro de uma transição.</span> <span class="s" data-s="b2-p1-s3">Juntos com conclusão de tarefa, esses custos encorajam a política a aproveitar a complacência com menos carregamento improdutivo.</span></p><p><span class="s" data-s="b2-p2-s0">O controlador de admitância permanece com parâmetros fixos durante todo o aprendizado e execução.</span> <span class="s" data-s="b2-p2-s1">Não há ajuste de rigidez, não há mudança de ganhos.</span> <span class="s" data-s="b2-p2-s2">A única mudança está na função de recompensa que guia o aprendizado da política visual.</span></p>        <h2><span class="s" data-s="b3-h">Como funciona: agregação multirate e custos de cooperação</span></h2>
+<p><span class="s" data-s="b3-p0-s0">A política visual opera a 10 Hz e emite comandos de twist residual (velocidades lineares e angulares).</span> <span class="s" data-s="b3-p0-s1">O controlador de admitância opera a 100 Hz, recebe leituras de força/torque (wrench) do sensor do robô e ajusta o movimento comandado.</span> <span class="s" data-s="b3-p0-s2">Para cada transição de política, o sistema registra uma janela de execução que contém múltiplas amostras de controle.</span></p><p><span class="s" data-s="b3-p1-s0">O custo de conflito mede oposição sustentada.</span> <span class="s" data-s="b3-p1-s1">Para cada amostra dentro da janela, o método calcula a potência de conflito: o produto escalar negativo entre o twist comandado pela política e o twist de descarregamento gerado pelo controlador de admitância.</span> <span class="s" data-s="b3-p1-s2">Valores positivos indicam que a política está empurrando enquanto o controlador está cedendo.</span> <span class="s" data-s="b3-p1-s3">Esse produto é então integrado ao longo da janela, capturando duração e intensidade da oposição.</span></p><p><span class="s" data-s="b3-p2-s0">O custo de cauda direcional captura eventos de força alta durante carregamento contínuo.</span> <span class="s" data-s="b3-p2-s1">Para cada amostra, o método verifica se a força excede um limiar suave e se a potência de carregamento (produto entre força e twist comandado) é positiva, indicando que a política está empurrando na direção da força.</span> <span class="s" data-s="b3-p2-s2">O custo é o máximo desse termo ao longo da janela, preservando o evento mais forte.</span> <span class="s" data-s="b3-p2-s3">Forças altas durante retirada ou correções ortogonais à força não são penalizadas.</span></p><p><span class="s" data-s="b3-p3-s0">Ambos os custos são normalizados e somados à recompensa esparsa de conclusão de tarefa e penalidade de tempo.</span> <span class="s" data-s="b3-p3-s1">O replay buffer do algoritmo SAC/RLPD armazena essas recompensas aumentadas, e a política é treinada para maximizar retorno esperado, o que implica minimizar conflito e carregamento direcional alto enquanto completa a tarefa.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.31439/figure2.webp" alt="Arquitetura do LeCo: política visual a 10 Hz coordenada com controle de admitância a 100 Hz. Registros de wrench e comandos separados alimentam custos de conflito integral e cauda direcional no replay do SAC/RLPD." loading="lazy">
+          <figcaption>
+            Arquitetura do LeCo: política visual a 10 Hz coordenada com controle de admitância a 100 Hz. Registros de wrench e comandos separados alimentam custos de conflito integral e cauda direcional no replay do SAC/RLPD.
+            <span class="source">Figura 2 do paper · Wang et al., arXiv:2609.31439</span>
+          </figcaption>
+        </figure>
+        <aside class="callout">
+          <h3><span class="s" data-s="b5-t">Admitância fixa, não variável</span></h3>
+          <p><span class="s" data-s="b5-c-s0">O controlador de admitância usa parâmetros fixos durante todo o experimento: inércia virtual, amortecimento, deadbands e limites de velocidade permanecem constantes.</span> <span class="s" data-s="b5-c-s1">A tabela I do paper reporta valores específicos para cada eixo translacional e rotacional.</span> <span class="s" data-s="b5-c-s2">Não há aprendizado de rigidez variável nem ajuste de ganhos.</span> <span class="s" data-s="b5-c-s3">A única adaptação ocorre na política visual.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b6-h">Experimentos: quatro tarefas reais de montagem</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Os autores avaliaram LeCo em quatro tarefas reais de montagem de conectores usando um braço robótico Flexiv Rizon 10s.</span> <span class="s" data-s="b6-p0-s1">As tarefas diferem em geometria, restrições de encaixe e modos de contato.</span> <span class="s" data-s="b6-p0-s2">Inserção de conector de aviação MAF36A-17TK exige correção de pose inicial para evitar travamento e força axial suficiente para assentamento final.</span> <span class="s" data-s="b6-p0-s3">Inserção de cabeça Anderson exige manutenção de alinhamento após contato com o invólucro.</span></p><p><span class="s" data-s="b6-p1-s0">Intertravamento lateral Anderson une características de cauda de andorinha lateral, onde pequenos deslocamentos podem criar resistência substancial.</span> <span class="s" data-s="b6-p1-s1">Montagem de invólucro de conector ATX 20+4 pinos exige alinhar características-guia de acoplamento dos invólucros de 20 e 4 pinos de um conector de alimentação de placa-mãe e deslizá-los juntos, demandando alinhamento local preciso.</span> <span class="s" data-s="b6-p1-s2">Juntas, as tarefas testam o equilíbrio entre avanço necessário e carregamento improdutivo.</span></p><p><span class="s" data-s="b6-p2-s0">Cada tarefa usou 40 demonstrações bem-sucedidas.</span> <span class="s" data-s="b6-p2-s1">LeCo usou um codificador ResNet-10 com imagens 128×128.</span> <span class="s" data-s="b6-p2-s2">A política e as taxas de admitância foram configuradas em 10/100 Hz, com filtro de wrench de 15 Hz.</span> <span class="s" data-s="b6-p2-s3">Os parâmetros do controlador de admitância (inércia virtual, amortecimento, deadbands, limites de velocidade) permaneceram inalterados durante aprendizado e avaliação.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.31439/figure4.webp" alt="Quatro tarefas reais de montagem: (a) conector de aviação, (b) cabeça Anderson, (c) intertravamento lateral Anderson, (d) invólucro ATX 20+4 pinos. Cada uma testa diferentes aspectos de alinhamento e contato." loading="lazy">
+          <figcaption>
+            Quatro tarefas reais de montagem: (a) conector de aviação, (b) cabeça Anderson, (c) intertravamento lateral Anderson, (d) invólucro ATX 20+4 pinos. Cada uma testa diferentes aspectos de alinhamento e contato.
+            <span class="source">Figura 4 do paper · Wang et al., arXiv:2609.31439</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Comparação com baselines: menos força, mais sucesso</span></h2>
+<p><span class="s" data-s="b8-p0-s0">LeCo foi comparado com HIL-SERL e ConRFT, dois métodos recentes de aprendizado para robótica de contato.</span> <span class="s" data-s="b8-p0-s1">HIL-SERL aprende de demonstrações, recompensas esparsas e correções online.</span> <span class="s" data-s="b8-p0-s2">ConRFT combina treinamento offline com ajuste fino reforçado online.</span> <span class="s" data-s="b8-p0-s3">Todos os métodos compartilharam o mesmo controlador de baixo nível, configuração ator-aprendiz assíncrona, contagens de demonstração, layouts visuais, espaços de ação e operador.</span> <span class="s" data-s="b8-p0-s4">HIL-SERL e ConRFT não usaram camada de admitância adicional; LeCo adicionou a admitância fixa.</span></p><p><span class="s" data-s="b8-p1-s0">Na tarefa de conector de aviação, LeCo obteve 19/20 sucessos e reduziu comprimento mediano de tentativas bem-sucedidas de 46 passos (ConRFT) para 33 passos.</span> <span class="s" data-s="b8-p1-s1">Picos médios de força em tentativas bem-sucedidas diminuíram de 10,70 para 7,76 N, e picos de torque de 1,57 para 0,72 N·m, indicando melhorias tanto em conclusão de tarefa quanto em qualidade de contato.</span></p><p><span class="s" data-s="b8-p2-s0">Na inserção de cabeça Anderson, tanto LeCo quanto ConRFT completaram todos os 30 ensaios.</span> <span class="s" data-s="b8-p2-s1">ConRFT exigiu quatro passos medianos a menos, mas LeCo reduziu picos médios de força e torque em aproximadamente 15% e 62%, respectivamente.</span> <span class="s" data-s="b8-p2-s2">O benefício de LeCo não requer o menor número de passos em todas as tarefas; ele reduz cargas de contato enquanto mantém sucesso de tarefa.</span></p><p><span class="s" data-s="b8-p3-s0">No intertravamento lateral Anderson, LeCo obteve 17/20 sucessos contra 13/20 do ConRFT, com picos médios de força lateral reduzidos de 9,53 para 2,85 N. Na montagem ATX 20+4 pinos, LeCo obteve 28/30 sucessos com mediana de 26 passos e picos de força e torque menores que os baselines.</span> <span class="s" data-s="b8-p3-s1">Agregando as quatro tarefas, LeCo alcançou taxa de sucesso de 94%.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.31439/figure5.webp" alt="Aprendizado online nas quatro tarefas. Linhas mostram picos de força XY medianos, taxas de intervenção e sucesso autônomo ao longo dos episódios. LeCo reduz forças e alcança maior autonomia em todas as tarefas." loading="lazy">
+          <figcaption>
+            Aprendizado online nas quatro tarefas. Linhas mostram picos de força XY medianos, taxas de intervenção e sucesso autônomo ao longo dos episódios. LeCo reduz forças e alcança maior autonomia em todas as tarefas.
+            <span class="source">Figura 5 do paper · Wang et al., arXiv:2609.31439</span>
+          </figcaption>
+        </figure>
+        <aside class="callout">
+          <h3><span class="s" data-s="b10-t">Redução de 30% em força, 64% em torque</span></h3>
+          <p><span class="s" data-s="b10-c-s0">Agregando as quatro tarefas, picos médios de força resultante e torque em tentativas bem-sucedidas diminuíram aproximadamente 30% e 64% em relação ao baseline de comparação.</span> <span class="s" data-s="b10-c-s1">A ablação de recompensa mostrou que adicionar modelagem de conflito reduz densidade mediana de conflito condicionado a contato em aproximadamente 53% em tentativas bem-sucedidas.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b11-h">Ablação de recompensa: papéis complementares</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Para isolar as contribuições dos dois custos de cooperação, os autores conduziram uma ablação 2×2 na tarefa de conector de aviação.</span> <span class="s" data-s="b11-p0-s1">A0 usou apenas recompensa de tarefa.</span> <span class="s" data-s="b11-p0-s2">A1 adicionou modelagem de conflito.</span> <span class="s" data-s="b11-p0-s3">A2 é um baseline ciente de força apenas com modelagem direcional de cauda de força alta.</span> <span class="s" data-s="b11-p0-s4">LeCo incluiu adicionalmente o custo completo de conflito lateral e rotacional.</span> <span class="s" data-s="b11-p0-s5">Todas as condições compartilharam penalidade de tempo, observações, espaço de ação, demonstrações e controlador de admitância fixo.</span></p><p><span class="s" data-s="b11-p1-s0">A0 (apenas tarefa) obteve 15/20 sucessos com mediana de 43 passos.</span> <span class="s" data-s="b11-p1-s1">A1 (apenas conflito) obteve 12/20 sucessos com 88,5 passos, indicando que conflito sozinho não é suficiente para conclusão eficiente.</span> <span class="s" data-s="b11-p1-s2">A2 (apenas cauda) obteve 18/20 sucessos com 46 passos.</span> <span class="s" data-s="b11-p1-s3">LeCo (conflito + cauda) obteve 19/20 sucessos com 33 passos, o melhor desempenho em ambas as métricas.</span></p><p><span class="s" data-s="b11-p2-s0">A análise mecânica incluiu todas as tentativas, não apenas bem-sucedidas.</span> <span class="s" data-s="b11-p2-s1">Adicionar modelagem de cauda (A0→A2, A1→LeCo) reduziu densidade de força alta e aumentou sucesso, suportando inserção confiável.</span> <span class="s" data-s="b11-p2-s2">Adicionar modelagem de conflito (A0→A1, A2→LeCo) reduziu integral de conflito e densidade de conflito condicionado a contato, indicando menos oposição sustentada.</span> <span class="s" data-s="b11-p2-s3">A combinação encurtou trajetórias bem-sucedidas e reduziu exposição acumulada de força, torque e conflito de comando.</span></p>        <h2><span class="s" data-s="b12-h">Interpretação física dos custos</span></h2>
+<p><span class="s" data-s="b12-p0-s0">O apêndice do paper fornece interpretação física dos custos de interação.</span> <span class="s" data-s="b12-p0-s1">Para sinais contínuos em um intervalo fixo, amostragem cada vez mais fina faz a soma discreta do conflito aproximar a integral contínua, e o máximo discreto da cauda aproximar o supremo contínuo.</span> <span class="s" data-s="b12-p0-s2">Os custos assim preservam duração de conflito e o evento direcional de força alta mais forte, respectivamente.</span></p><p><span class="s" data-s="b12-p1-s0">Seja n_k(P_0) a contagem de amostras com conflito de força acima de um limiar P_0 &gt; 0, e E_k a existência de uma amostra com força bruta acima de F_0 e potência de carregamento acima de P_0.</span> <span class="s" data-s="b12-p1-s1">Não-negatividade de conflito rotacional e monotonicidade do portão de força fornecem limites: n_k(P_0) é limitado pela expectativa do custo de conflito dividido por ΔtP_0, e o indicador E_k é limitado pelo custo de cauda dividido por constantes de portão.</span></p><p><span class="s" data-s="b12-p2-s0">Somação descontada e expectativa preservam ambas as desigualdades.</span> <span class="s" data-s="b12-p2-s1">Os limites resultantes descrevem exposição esperada de conflito e eventos de carregamento contínuo de força alta.</span> <span class="s" data-s="b12-p2-s2">Retirada e correções ortogonais à força permanecem não penalizadas pelo termo direcional.</span> <span class="s" data-s="b12-p2-s3">O paper também mostra que o operador de Bellman de política fixa permanece uma contração após adicionar custos de interação limitados, preservando convergência para função de valor única.</span></p>        <h2><span class="s" data-s="b13-h">O que o paper não mostra: limitações e escopo</span></h2>
+<p><span class="s" data-s="b13-p0-s0">Os experimentos usaram fixações fixas e conjuntos de avaliação limitados.</span> <span class="s" data-s="b13-p0-s1">Transferência entre robôs e efetuadores finais não foi testada.</span> <span class="s" data-s="b13-p0-s2">Robustez a perturbações, movimento de peças de trabalho, fricção e mudanças de folga de acoplamento permanecem para serem avaliadas sob variações controladas.</span> <span class="s" data-s="b13-p0-s3">O paper declara explicitamente essas limitações.</span></p><p><span class="s" data-s="b13-p1-s0">Todas as tarefas envolveram conectores rígidos com geometrias bem definidas.</span> <span class="s" data-s="b13-p1-s1">Montagem de peças deformáveis, cabos flexíveis ou componentes com variabilidade dimensional não foram abordadas.</span> <span class="s" data-s="b13-p1-s2">O método também assume disponibilidade de leituras de força/torque de alta taxa, o que pode não estar presente em todos os sistemas robóticos.</span></p><p><span class="s" data-s="b13-p2-s0">O aprendizado foi conduzido com um operador humano fornecendo demonstrações e correções online.</span> <span class="s" data-s="b13-p2-s1">A quantidade de supervisão humana necessária e o tempo total de aprendizado (incluindo tempo humano) não são comparados diretamente entre métodos.</span> <span class="s" data-s="b13-p2-s2">ConRFT inclui fase offline que não aparece no tempo online reportado nas figuras.</span></p><p><span class="s" data-s="b13-p3-s0">Os parâmetros de admitância foram escolhidos manualmente e mantidos fixos.</span> <span class="s" data-s="b13-p3-s1">O paper não explora como diferentes escolhas de inércia virtual, amortecimento ou deadbands afetariam desempenho de aprendizado ou qualidade de contato final.</span> <span class="s" data-s="b13-p3-s2">Sensibilidade a esses hiperparâmetros permanece uma questão em aberto.</span></p>        <h2><span class="s" data-s="b14-h">Conclusão: controle complacente como supervisor de aprendizado</span></h2>
+<p><span class="s" data-s="b14-p0-s0">LeCo ensina uma política visual a aproveitar admitância fixa convertendo interação em tempo de execução em recompensas de aprendizado por reforço.</span> <span class="s" data-s="b14-p0-s1">Uma integral de conflito captura oposição sustentada entre carregamento pela política e descarregamento por admitância, enquanto um custo de cauda direcional retém eventos breves de carregamento de força alta.</span> <span class="s" data-s="b14-p0-s2">Os parâmetros do controlador, interface de política e estrutura de implantação permanecem inalterados.</span></p><p><span class="s" data-s="b14-p1-s0">Quatro tarefas reais de montagem de conectores mostraram aquisição autônoma melhorada e cargas de contato reduzidas.</span> <span class="s" data-s="b14-p1-s1">Ablações identificaram papéis complementares: modelagem de cauda suporta inserção confiável, e modelagem de conflito reduz oposição dentro de comportamento produtivo.</span> <span class="s" data-s="b14-p1-s2">Sua combinação encurta trajetórias bem-sucedidas e reduz exposição acumulada de força, torque e conflito de comando, sem implicar cargas instantâneas menores em todo momento.</span></p><p><span class="s" data-s="b14-p2-s0">Esses achados suportam usar um controlador complacente existente como fonte de supervisão de aprendizado, além de mecanismo de execução.</span> <span class="s" data-s="b14-p2-s1">A abordagem não requer ajuste de parâmetros de controle nem aprendizado de rigidez variável, apenas reformulação de recompensa que conecta decisões de política a consequências de contato através de agregação multirate.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">LeCo coordena política visual (10 Hz) com controle de admitância fixo (100 Hz) usando custos de conflito e cauda de força alta agregados sobre janelas de transição.</span></li><li><span class="s" data-s="k1">Em quatro tarefas reais de montagem, LeCo alcançou 94% de sucesso com reduções de ~30% em força e ~64% em torque comparado a baselines, sem ajustar parâmetros do controlador.</span></li><li><span class="s" data-s="k2">Ablação mostra papéis complementares: custo de cauda suporta inserção confiável; custo de conflito reduz oposição sustentada entre comando de política e descarregamento do controlador.</span></li><li><span class="s" data-s="k3">Limitações: fixações fixas, conjuntos de avaliação pequenos, sem teste de transferência entre robôs ou robustez a variações de fricção e folga de acoplamento.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2609.31439" rel="noopener">Learning to Leverage Compliance: A Policy-Admittance Learning Framework for Robotic Insertion</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2609.31439" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

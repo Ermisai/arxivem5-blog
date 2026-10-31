@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DiffuPlex: acelerando modelos de diálogo falado full-duplex com predição paralela de múltiplos frames futuros — arXiv em 5</title>
+<meta name="description" content="Enquanto modelos de conversação full-duplex atuais processam cada frame de 80ms separadamente, o DiffuPlex prediz vários frames de uma vez e consome apenas o prefixo confiável, reduzindo em até 1.80× o tempo de processamento sem perder qualidade conversacional.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DiffuPlex: acelerando modelos de diálogo falado full-duplex com predição paralela de múltiplos frames futuros">
+<meta property="og:description" content="Enquanto modelos de conversação full-duplex atuais processam cada frame de 80ms separadamente, o DiffuPlex prediz vários frames de uma vez e consome apenas o prefixo confiável, reduzindo em até 1.80× o tempo de processamento sem perder qualidade conversacional.">
+<meta property="og:image" content="../../assets/papers/2610.12214/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Áudio</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.12214" rel="noopener">arXiv:2610.12214</a>
+    </div>
+    <h1><span class="s" data-s="t">DiffuPlex: acelerando modelos de diálogo falado full-duplex com predição paralela de múltiplos frames futuros</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Enquanto modelos de conversação full-duplex atuais processam cada frame de 80ms separadamente, o DiffuPlex prediz vários frames de uma vez e consome apenas o prefixo confiável, reduzindo em até 1.80× o tempo de processamento sem perder qualidade conversacional.</span></p>
+    <p class="byline">
+      <span>Kim</span>
+      <span>11 min de leitura</span>
+<span>08/10/2026</span>    </p>
+    <div class="listen" data-article="2610.12214" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=bc6GXac-jgM" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema da computação frame a frame</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Modelos de diálogo falado evoluíram de pipelines em cascata (reconhecimento de fala → processamento de texto → síntese de voz) para sistemas end-to-end que processam e geram fala diretamente.</span> <span class="s" data-s="b0-p0-s1">A maioria ainda opera em modo half-duplex: usuário e modelo se alternam, e a resposta só começa depois que o sistema detecta que o usuário parou de falar.</span> <span class="s" data-s="b0-p0-s2">Mas conversas humanas reais incluem interrupções, sobreposições e backchannels — aqueles &#39;uh-hum&#39; e &#39;certo&#39; que mostramos enquanto o outro fala.</span></p><p><span class="s" data-s="b0-p1-s0">Isso motivou modelos full-duplex como Moshi e PersonaPlex, que escutam continuamente enquanto geram fala, permitindo que ambos os lados falem ao mesmo tempo.</span> <span class="s" data-s="b0-p1-s1">O PersonaPlex, por exemplo, mantém canais paralelos para usuário e assistente e atualiza ambos a cada frame de interação de 80ms.</span> <span class="s" data-s="b0-p1-s2">Essa granularidade fina permite reações rápidas a interrupções e sobreposições, mas tem um custo: exige uma passagem completa pelo backbone temporal a cada 80ms durante toda a conversa.</span></p><p><span class="s" data-s="b0-p2-s0">O problema é que interação em granularidade fina não necessariamente exige computação fresca a cada frame.</span> <span class="s" data-s="b0-p2-s1">Analisando 38 horas de conversas telefônicas do corpus Switchboard, os autores descobriram que 95,3% do tempo conversacional ativo contém apenas um participante falando.</span> <span class="s" data-s="b0-p2-s2">Mesmo durante a fala, o conteúdo futuro é planejado além de frames individuais: preparação de resposta pode começar antes do interlocutor terminar, e o planejamento da fala se estende além de palavras isoladas.</span></p><p><span class="s" data-s="b0-p3-s0">Essas observações sugerem que vários frames futuros de interação podem ser preditos juntos.</span> <span class="s" data-s="b0-p3-s1">Em geração de texto, essa redundância já é explorada através de speculative decoding e modelos de difusão.</span> <span class="s" data-s="b0-p3-s2">Mas estender predição paralela para fala full-duplex é desafiador: a fala futura do usuário, necessária para verificar o rascunho do assistente, ainda não chegou.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.12214/figure1.webp" alt="Enquanto modelos convencionais avançam um frame de cada vez (esquerda), o DiffuPlex prediz múltiplos frames futuros em uma única passagem, consome um prefixo retido e revisa apenas o futuro não reproduzido quando a entrada do usuário diverge da predição." loading="lazy">
+          <figcaption>
+            Enquanto modelos convencionais avançam um frame de cada vez (esquerda), o DiffuPlex prediz múltiplos frames futuros em uma única passagem, consome um prefixo retido e revisa apenas o futuro não reproduzido quando a entrada do usuário diverge da predição.
+            <span class="source">Figura 1 do paper · Kim, arXiv:2610.12214</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">A ideia central: predição mascarada do futuro com revisão sob demanda</span></h2>
+<p><span class="s" data-s="b2-p0-s0">O DiffuPlex substitui o rollout autorregressivo frame a frame por predição mascarada de um bloco futuro curto.</span> <span class="s" data-s="b2-p0-s1">A cada passagem pelo backbone temporal — que os autores chamam de backbone wake — o sistema prediz um bloco de frames futuros tanto do usuário quanto do assistente, substituindo entradas futuras indisponíveis por tokens MASK aprendidos.</span></p><p><span class="s" data-s="b2-p1-s0">O sistema então retém um prefixo contíguo confiável do rascunho do assistente e o reproduz na taxa de interação original enquanto a fala do usuário continua chegando.</span> <span class="s" data-s="b2-p1-s1">As predições do usuário são armazenadas para verificação de consistência.</span> <span class="s" data-s="b2-p1-s2">Se a entrada observada do usuário diverge da predição, o DiffuPlex mantém todos os frames do assistente que já foram reproduzidos e revisa apenas o futuro não reproduzido.</span></p><p><span class="s" data-s="b2-p2-s0">Essa abordagem é inspirada em speculative decoding, mas adaptada para o contexto único de fala full-duplex.</span> <span class="s" data-s="b2-p2-s1">Em vez de verificar tokens de texto contra um modelo maior, o DiffuPlex verifica predições de fala do usuário contra a entrada real que chega.</span> <span class="s" data-s="b2-p2-s2">A diferença crucial é que a verificação acontece de forma contínua e assíncrona, conforme a fala do usuário é capturada.</span></p><p><span class="s" data-s="b2-p3-s0">Os autores consideram duas políticas de inferência sobre o mesmo preditor.</span> <span class="s" data-s="b2-p3-s1">O DiffuPlex-LISTEN consome múltiplos frames futuros quando eles predizem silêncio do assistente, com um comprimento mínimo retido de 6 frames.</span> <span class="s" data-s="b2-p3-s2">Já o DiffuPlex-SPEAK também pode consumir fala predita do assistente, usando um mínimo de apenas 2 frames.</span> <span class="s" data-s="b2-p3-s3">Ambas as políticas garantem que a predição em h=1 é sempre retida, assegurando que cada wake avance a interação por pelo menos um frame de 80ms.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.12214/figure2.webp" alt="Arquitetura do DiffuPlex: uma passagem pelo backbone prediz um bloco futuro mascarado com rascunho do assistente e predições do usuário. O prefixo confiante é consumido e, quando a entrada real diverge, apenas o futuro não reproduzido é revisado." loading="lazy">
+          <figcaption>
+            Arquitetura do DiffuPlex: uma passagem pelo backbone prediz um bloco futuro mascarado com rascunho do assistente e predições do usuário. O prefixo confiante é consumido e, quando a entrada real diverge, apenas o futuro não reproduzido é revisado.
+            <span class="source">Figura 2 do paper · Kim, arXiv:2610.12214</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b4-h">Como funciona: mascaramento, confiança e revisão</span></h2>
+<p><span class="s" data-s="b4-p0-s0">O DiffuPlex parte do personaplex-rl-seamless, uma variante pós-treinada com reinforcement learning do PersonaPlex.</span> <span class="s" data-s="b4-p0-s1">Os autores congelam o backbone original e treinam apenas os embeddings MASK específicos por stream e parâmetros LoRA com gating futuro no dataset Seamless Interaction, que contém interações diádicas face a face em larga escala.</span></p><p><span class="s" data-s="b4-p1-s0">A predição mascarada funciona assim: a cada wake, o modelo recebe o histórico real até o presente e tokens MASK para posições futuras.</span> <span class="s" data-s="b4-p1-s1">Ele então prediz simultaneamente os próximos W frames (até 16 no setup padrão) para ambos os streams — usuário e assistente.</span> <span class="s" data-s="b4-p1-s2">Para o assistente, isso gera um rascunho de fala; para o usuário, gera predições que serão verificadas contra a entrada real.</span></p><p><span class="s" data-s="b4-p2-s0">A retenção baseada em confiança determina quantos frames do rascunho do assistente serão consumidos.</span> <span class="s" data-s="b4-p2-s1">O sistema calcula scores de confiança para cada posição predita e retém um prefixo contíguo onde todos os frames excedem um threshold τconf = 0.80.</span> <span class="s" data-s="b4-p2-s2">Isso significa que o modelo só se compromete com predições nas quais tem alta confiança, evitando erros em cascata.</span></p><p><span class="s" data-s="b4-p3-s0">A revisão acontece quando a fala real do usuário diverge das predições armazenadas.</span> <span class="s" data-s="b4-p3-s1">O sistema compara continuamente a entrada observada com as predições do usuário e, quando a divergência excede um threshold τrev = -0.5, descarta apenas o futuro não reproduzido do assistente e gera novo conteúdo condicionado na entrada real.</span> <span class="s" data-s="b4-p3-s2">Frames do assistente já reproduzidos são preservados — não há como &#39;desfalar&#39; o que já foi dito.</span></p><p><span class="s" data-s="b4-p4-s0">Essa combinação de predição paralela, consumo seletivo e revisão cirúrgica permite que o DiffuPlex avance múltiplos frames por wake enquanto mantém a capacidade de reagir rapidamente quando a conversa toma rumos inesperados.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b5-t">Frames avançados por wake</span></h3>
+          <p><span class="s" data-s="b5-c-s0">O DiffuPlex-LISTEN avança em média 1.91 frames por passagem pelo backbone, enquanto o DiffuPlex-SPEAK avança 2.23 frames.</span> <span class="s" data-s="b5-c-s1">Isso significa que, em vez de processar cada frame de 80ms separadamente, o sistema processa quase o dobro de frames de uma vez, reduzindo drasticamente a frequência de invocações do modelo.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b6-h">Resultados: aceleração substancial com comportamento preservado</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Os autores avaliaram o DiffuPlex em quatro dimensões: interação full-duplex, capacidade geral de linguagem falada, avaliação humana e eficiência de inferência.</span> <span class="s" data-s="b6-p0-s1">Para interação full-duplex, usaram o Full-Duplex-Bench v1.0, que testa tratamento de pausas, backchanneling, turn-taking e interrupções do usuário, além do v1.5 para fala sobreposta e interferente.</span></p><p><span class="s" data-s="b6-p1-s0">Os números de eficiência são impressionantes.</span> <span class="s" data-s="b6-p1-s1">O DiffuPlex-LISTEN alcança speedup de 1.46× no wall-clock de deployment e 1.61× no Core LM (o tempo de processamento do modelo de linguagem principal).</span> <span class="s" data-s="b6-p1-s2">O DiffuPlex-SPEAK é ainda mais rápido: 1.59× no wall-clock e 1.80× no Core LM.</span> <span class="s" data-s="b6-p1-s3">Importante: todas as invocações do backbone completaram dentro do intervalo de interação de 80ms, garantindo operação em tempo real.</span></p><p><span class="s" data-s="b6-p2-s0">Na avaliação de interação full-duplex, o DiffuPlex-LISTEN preserva o comportamento do modelo base quase perfeitamente.</span> <span class="s" data-s="b6-p2-s1">Nas métricas de pausa (Synthetic e Candor), turn-over rate, frequência de backchannel e timing, os números são comparáveis ao personaplex-rl-seamless.</span> <span class="s" data-s="b6-p2-s2">O score de apropriação de resposta a interrupções (Judge) é 4.328 para ambos, indicando que a qualidade das respostas não degrada.</span></p><p><span class="s" data-s="b6-p3-s0">O DiffuPlex-SPEAK mostra trade-offs interessantes.</span> <span class="s" data-s="b6-p3-s1">Ele é mais rápido, mas introduz algumas degradações.</span> <span class="s" data-s="b6-p3-s2">A latência de resposta a interrupções aumenta ligeiramente de 0.281s para 0.347s, e há pequenas mudanças nas métricas de turn-taking.</span> <span class="s" data-s="b6-p3-s3">Isso faz sentido: consumir fala predita do assistente é mais arriscado que consumir apenas silêncio predito.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.12214/table10.webp" alt="Resultados completos de runtime mostrando que o DiffuPlex-SPEAK atinge 2.23 frames por wake (c), resultando em speedups de 1.59× no wall-clock e 1.80× no Core LM comparado ao backbone autorregressivo." loading="lazy">
+          <figcaption>
+            Resultados completos de runtime mostrando que o DiffuPlex-SPEAK atinge 2.23 frames por wake (c), resultando em speedups de 1.59× no wall-clock e 1.80× no Core LM comparado ao backbone autorregressivo.
+            <span class="source">Tabela 10 do paper · Kim, arXiv:2610.12214</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Avaliação humana: naturalidade versus velocidade</span></h2>
+<p><span class="s" data-s="b8-p0-s0">A avaliação humana, conduzida via Amazon Mechanical Turk, mediu dois aspectos: naturalidade da fala (NMOS) e qualidade do diálogo (DMOS).</span> <span class="s" data-s="b8-p0-s1">Participantes ouviram respostas do assistente após interrupções do usuário e avaliaram a conversa completa.</span></p><p><span class="s" data-s="b8-p1-s0">O personaplex-rl-seamless base obteve NMOS de 3.93 ± 0.12 e DMOS de 4.09 ± 0.14.</span> <span class="s" data-s="b8-p1-s1">O DiffuPlex-LISTEN praticamente mantém esses números: 3.92 ± 0.11 para NMOS e 4.08 ± 0.13 para DMOS.</span> <span class="s" data-s="b8-p1-s2">As diferenças estão dentro da margem de erro, indicando que a política conservadora de consumir apenas silêncio predito preserva tanto a naturalidade da fala quanto a qualidade conversacional.</span></p><p><span class="s" data-s="b8-p2-s0">O DiffuPlex-SPEAK apresenta um trade-off mais visível.</span> <span class="s" data-s="b8-p2-s1">O DMOS se mantém em 4.07 ± 0.13, mostrando que a qualidade conversacional é preservada.</span> <span class="s" data-s="b8-p2-s2">Mas o NMOS cai para 3.54 ± 0.12, uma degradação estatisticamente significativa na naturalidade da fala.</span> <span class="s" data-s="b8-p2-s3">Isso sugere que consumir fala predita do assistente introduz artefatos perceptíveis, mesmo quando a estrutura conversacional permanece intacta.</span></p><p><span class="s" data-s="b8-p3-s0">Vale notar que o baseline Moshi, apesar de ser um modelo full-duplex pioneiro, obteve NMOS de 3.52 ± 0.15 e DMOS de 2.86 ± 0.20 — números substancialmente menores que todos os modelos baseados em PersonaPlex.</span> <span class="s" data-s="b8-p3-s1">Isso ilustra o progresso recente em modelos de diálogo falado.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.12214/figure3.webp" alt="Trade-offs entre eficiência e qualidade de interação sob execução diferida. O DiffuPlex supera baselines que simplesmente pulam frames (forçados a silêncio), mantendo melhor latência e comportamento conversacional." loading="lazy">
+          <figcaption>
+            Trade-offs entre eficiência e qualidade de interação sob execução diferida. O DiffuPlex supera baselines que simplesmente pulam frames (forçados a silêncio), mantendo melhor latência e comportamento conversacional.
+            <span class="source">Figura 3 do paper · Kim, arXiv:2610.12214</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">Comparação com baselines: pular frames não funciona</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Para testar se ganhos computacionais similares poderiam ser obtidos simplesmente pulando algumas invocações do backbone autorregressivo, os autores implementaram baselines de execução diferida (deferred execution).</span> <span class="s" data-s="b10-p0-s1">Esses baselines avançam R frames de uma vez (R ∈ {2, 4, 6, 8}), mas forçam frames diferidos a silêncio.</span></p><p><span class="s" data-s="b10-p1-s0">Os resultados mostram que pular frames degrada significativamente o comportamento de interação.</span> <span class="s" data-s="b10-p1-s1">Mesmo com R=2 (avançando apenas 2 frames por vez), as métricas de pausa e turn-taking se deterioram.</span> <span class="s" data-s="b10-p1-s2">Com R=8, o modelo essencialmente perde a capacidade de reagir apropriadamente a interrupções e mudanças de turno.</span></p><p><span class="s" data-s="b10-p2-s0">O DiffuPlex, em contraste, mantém o comportamento de interação enquanto avança 1.91 ou 2.23 frames por wake.</span> <span class="s" data-s="b10-p2-s1">A diferença fundamental é que o DiffuPlex prediz ativamente o futuro e revisa quando necessário, em vez de simplesmente ignorar frames.</span> <span class="s" data-s="b10-p2-s2">Isso permite que ele mantenha a reatividade mesmo quando processa múltiplos frames simultaneamente.</span></p><p><span class="s" data-s="b10-p3-s0">Os autores também testaram baselines que usam detectores de atividade de voz (Silero) ou controladores de turno (Smart Turn) para decidir quando pular frames.</span> <span class="s" data-s="b10-p3-s1">Esses métodos melhoram sobre o deferred execution simples, mas ainda ficam atrás do DiffuPlex em termos de preservação do comportamento de interação.</span></p>        <h2><span class="s" data-s="b11-h">Capacidade geral: mantendo o desempenho em tarefas de linguagem falada</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Além de interação full-duplex, os autores avaliaram se o DiffuPlex preserva capacidades gerais de linguagem falada usando VoiceBench e OpenAudioBench.</span> <span class="s" data-s="b11-p0-s1">Essas avaliações testam compreensão de fala, seguimento de instruções e geração de respostas apropriadas em diversos contextos.</span></p><p><span class="s" data-s="b11-p1-s0">Os resultados mostram que tanto DiffuPlex-LISTEN quanto DiffuPlex-SPEAK mantêm desempenho comparável ao modelo base nessas tarefas.</span> <span class="s" data-s="b11-p1-s1">Isso é importante porque demonstra que a aceleração via predição mascarada não compromete a compreensão ou geração de linguagem do modelo.</span></p><p><span class="s" data-s="b11-p2-s0">Os autores reportam resultados tanto para o stream de texto do assistente (s→t) quanto para transcrições da fala gerada (s→s).</span> <span class="s" data-s="b11-p2-s1">Ambas as modalidades mostram preservação de capacidade, indicando que a qualidade da fala gerada não degrada de forma que afete a inteligibilidade ou correção do conteúdo.</span></p><p><span class="s" data-s="b11-p3-s0">Essa preservação de capacidade geral é crucial para aplicações práticas.</span> <span class="s" data-s="b11-p3-s1">Um modelo que acelera interação mas perde compreensão ou geração de linguagem teria utilidade limitada.</span> <span class="s" data-s="b11-p3-s2">O DiffuPlex demonstra que é possível obter ganhos computacionais substanciais sem sacrificar essas capacidades fundamentais.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b12-t">Todos os wakes dentro do prazo</span></h3>
+          <p><span class="s" data-s="b12-c-s0">Um resultado crítico: todas as invocações do backbone medidas completaram dentro do intervalo de interação de 80ms.</span> <span class="s" data-s="b12-c-s1">Isso garante que o DiffuPlex pode operar em tempo real sem acumular latência, mesmo enquanto prediz múltiplos frames futuros por wake.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b13-h">Análises de ablação: confiança e revisão são complementares</span></h2>
+<p><span class="s" data-s="b13-p0-s0">Os autores conduziram análises de ablação para entender o papel de cada componente.</span> <span class="s" data-s="b13-p0-s1">Remover a retenção baseada em confiança (sempre consumindo o máximo de frames preditos) aumenta a velocidade mas degrada substancialmente a qualidade de interação.</span> <span class="s" data-s="b13-p0-s2">Isso confirma que consumir predições de baixa confiança leva a erros que se propagam.</span></p><p><span class="s" data-s="b13-p1-s0">Remover a revisão baseada no usuário (nunca revisando predições quando a entrada real diverge) também degrada o desempenho, especialmente em cenários com interrupções e mudanças inesperadas de direção conversacional.</span> <span class="s" data-s="b13-p1-s1">Isso mostra que a capacidade de revisar é essencial para manter reatividade.</span></p><p><span class="s" data-s="b13-p2-s0">A análise de diferentes thresholds de confiança (τconf) e revisão (τrev) revela trade-offs esperados.</span> <span class="s" data-s="b13-p2-s1">Thresholds de confiança mais altos resultam em consumo mais conservador e maior preservação de qualidade, mas menor aceleração.</span> <span class="s" data-s="b13-p2-s2">Thresholds mais baixos aumentam a velocidade mas introduzem mais erros.</span></p><p><span class="s" data-s="b13-p3-s0">Os autores também identificam que a degradação em fala predita mais profunda no futuro é parcialmente causada pela falta de condicionamento em tokens de áudio autorregressivos.</span> <span class="s" data-s="b13-p3-s1">O modelo prediz múltiplos frames simultaneamente sem o benefício de ter gerado e condicionado nos frames intermediários, o que pode levar a artefatos em predições mais distantes.</span></p>        <h2><span class="s" data-s="b14-h">Limitações e trabalho futuro</span></h2>
+<p><span class="s" data-s="b14-p0-s0">O paper é honesto sobre limitações.</span> <span class="s" data-s="b14-p0-s1">A degradação de naturalidade no DiffuPlex-SPEAK mostra que consumir fala predita do assistente é mais arriscado que consumir apenas silêncio.</span> <span class="s" data-s="b14-p0-s2">Os autores sugerem que melhorar o condicionamento autorregressivo em predições futuras poderia mitigar isso.</span></p><p><span class="s" data-s="b14-p1-s0">Os experimentos foram conduzidos em um único GPU NVIDIA RTX A6000, e os speedups reportados são específicos a esse hardware.</span> <span class="s" data-s="b14-p1-s1">Speedups em outros hardwares (especialmente GPUs mais recentes ou hardware especializado) podem diferir.</span> <span class="s" data-s="b14-p1-s2">Os autores medem tempo de streaming wall-clock, tempo GPU end-to-end e tempo Core LM separadamente para fornecer uma visão mais completa.</span></p><p><span class="s" data-s="b14-p2-s0">O DiffuPlex foi avaliado usando um prompt de voz oficial fornecido com o backbone, sem construir novas identidades de falante ou tentar imitar indivíduos específicos.</span> <span class="s" data-s="b14-p2-s1">Como com outros modelos generativos de fala, há potencial para uso indevido em geração de fala sintética enganosa, e o uso deve seguir salvaguardas apropriadas.</span></p><p><span class="s" data-s="b14-p3-s0">O trabalho também não explora profundamente como o DiffuPlex se comporta em conversas muito longas ou em domínios muito diferentes do dataset de treinamento (Seamless Interaction).</span> <span class="s" data-s="b14-p3-s1">Generalização para outros idiomas além dos incluídos no Seamless também não é extensivamente testada.</span></p><p><span class="s" data-s="b14-p4-s0">Finalmente, os autores congelam o backbone e treinam apenas embeddings MASK e parâmetros LoRA.</span> <span class="s" data-s="b14-p4-s1">Uma abordagem de fine-tuning completo poderia potencialmente melhorar a qualidade das predições mascaradas, mas aumentaria significativamente o custo de treinamento.</span></p>        <h2><span class="s" data-s="b15-h">O que isso significa para diálogo falado em tempo real</span></h2>
+<p><span class="s" data-s="b15-p0-s0">O DiffuPlex demonstra que predição paralela de múltiplos frames futuros pode fornecer um caminho para geração full-duplex em tempo real mais eficiente computacionalmente.</span> <span class="s" data-s="b15-p0-s1">Isso é importante porque modelos de diálogo falado estão se tornando mais sofisticados e computacionalmente caros, e a necessidade de processar cada frame de 80ms separadamente cria um gargalo significativo.</span></p><p><span class="s" data-s="b15-p1-s0">A abordagem é particularmente promissora porque explora a estrutura temporal natural da conversação.</span> <span class="s" data-s="b15-p1-s1">Humanos não planejam fala frame a frame — planejamos em unidades maiores e ajustamos conforme necessário.</span> <span class="s" data-s="b15-p1-s2">O DiffuPlex captura essa intuição através de predição de blocos futuros com revisão sob demanda.</span></p><p><span class="s" data-s="b15-p2-s0">Os resultados mostram que há um espaço de design entre o DiffuPlex-LISTEN (mais conservador, preserva naturalidade) e DiffuPlex-SPEAK (mais agressivo, maior aceleração).</span> <span class="s" data-s="b15-p2-s1">Aplicações diferentes podem escolher pontos diferentes nesse espectro dependendo de suas prioridades de latência versus qualidade.</span></p><p><span class="s" data-s="b15-p3-s0">O trabalho também sugere direções futuras.</span> <span class="s" data-s="b15-p3-s1">Melhorar o condicionamento autorregressivo em predições futuras, explorar janelas de lookahead adaptativas baseadas no contexto conversacional, e integrar predição mascarada com outras técnicas de aceleração (como quantização ou destilação) são caminhos naturais para investigação adicional.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">DiffuPlex prediz múltiplos frames futuros de interação em uma única passagem, consumindo apenas o prefixo confiável e revisando quando a entrada real diverge, alcançando speedups de 1.59× a 1.80×.</span></li><li><span class="s" data-s="k1">DiffuPlex-LISTEN preserva naturalidade da fala e qualidade conversacional enquanto DiffuPlex-SPEAK acelera mais mas degrada naturalidade, mostrando trade-offs claros entre velocidade e qualidade.</span></li><li><span class="s" data-s="k2">Simplesmente pular frames degrada interação; a predição ativa do futuro com revisão é essencial para manter reatividade enquanto reduz computação sequencial.</span></li><li><span class="s" data-s="k3">Todas as invocações do backbone completam dentro de 80ms, garantindo operação em tempo real, e a capacidade geral de linguagem falada é preservada em benchmarks padrão.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.12214" rel="noopener">DiffuPlex: Accelerating Full-Duplex Spoken Dialog Models via Rolling Masked Diffusion</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.12214" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

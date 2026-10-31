@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GALA: como extrair blendshapes de redes neurais para animar avatares 3D mil vezes mais rápido — arXiv em 5</title>
+<meta name="description" content="Pesquisadores da MBZUAI e MWS AI mostram que avatares Gaussian treinados escondem uma estrutura linear: é possível destilar blendshapes compartilhadas entre identidades e trocar inferência neural pesada por combinação linear, acelerando animação em até três ordens de magnitude.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GALA: como extrair blendshapes de redes neurais para animar avatares 3D mil vezes mais rápido">
+<meta property="og:description" content="Pesquisadores da MBZUAI e MWS AI mostram que avatares Gaussian treinados escondem uma estrutura linear: é possível destilar blendshapes compartilhadas entre identidades e trocar inferência neural pesada por combinação linear, acelerando animação em até três ordens de magnitude.">
+<meta property="og:image" content="../../assets/papers/2610.02207/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Imagem</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.02207" rel="noopener">arXiv:2610.02207</a>
+    </div>
+    <h1><span class="s" data-s="t">GALA: como extrair blendshapes de redes neurais para animar avatares 3D mil vezes mais rápido</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Pesquisadores da MBZUAI e MWS AI mostram que avatares Gaussian treinados escondem uma estrutura linear: é possível destilar blendshapes compartilhadas entre identidades e trocar inferência neural pesada por combinação linear, acelerando animação em até três ordens de magnitude.</span></p>
+    <p class="byline">
+      <span>Fazylov et al.</span>
+      <span>10 min de leitura</span>
+<span>01/10/2026</span>    </p>
+    <div class="listen" data-article="2610.02207" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=LnB9lAditKQ" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema: avatares Gaussian renderizam rápido, mas animam devagar</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Avatares baseados em 3D Gaussians—primitivas explícitas que podem ser renderizadas por splatting diferenciável—tornaram-se populares porque combinam qualidade fotorrealística com rendering eficiente.</span> <span class="s" data-s="b0-p0-s1">Modelos recentes conseguem gerar cabeças, reconstruir rostos a partir de uma única imagem ou animar corpos completos com dinâmica de roupas.</span> <span class="s" data-s="b0-p0-s2">Mas há um gargalo: a animação em si.</span></p><p><span class="s" data-s="b0-p1-s0">A cada frame, esses modelos executam uma rede neural substancial para atualizar os atributos dos Gaussians—posição, escala, rotação, opacidade, aparência—a partir de parâmetros de expressão facial ou pose corporal.</span> <span class="s" data-s="b0-p1-s1">Essa inferência neural, que os autores chamam de caminho de animação, domina o custo computacional e inviabiliza execução em CPUs ou dispositivos móveis, mesmo quando o rendering em GPU é rápido.</span></p><p><span class="s" data-s="b0-p2-s0">A pergunta que motiva este trabalho é: quanta dessa computação é realmente necessária?</span> <span class="s" data-s="b0-p2-s1">A complexidade do decoder não linear não implica que as saídas dele precisem de uma representação igualmente complexa.</span> <span class="s" data-s="b0-p2-s2">Talvez exista uma estrutura linear compartilhada entre identidades, mesmo que a arquitetura e o objetivo de treinamento não a imponham explicitamente.</span></p>        <h2><span class="s" data-s="b1-h">A descoberta: modelos treinados escondem blendshapes compartilhadas</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Os autores mostram que as saídas de animação de diversos modelos de avatar Gaussian pré-treinados podem ser aproximadas de perto por um avatar neutro específico da identidade mais uma combinação linear de blendshapes independentes de identidade.</span> <span class="s" data-s="b1-p0-s1">Essas blendshapes são obtidas analisando resíduos dos atributos dos Gaussians em relação ao estado neutro, coletados através de múltiplas identidades e sinais de controle.</span></p><p><span class="s" data-s="b1-p1-s0">O ponto crucial é que uma base extraída uma vez do modelo também captura a animação de identidades excluídas da construção da base.</span> <span class="s" data-s="b1-p1-s1">A dependência de identidade fica retida nos coeficientes das blendshapes, enquanto a base de deformação é compartilhada.</span> <span class="s" data-s="b1-p1-s2">Isso difere de trabalhos anteriores: métodos como os de Zielonka et al.</span> <span class="s" data-s="b1-p1-s3">(2025) ajustam blendshapes Gaussian por sujeito; sistemas como LAM (He et al., 2025) adotam um rig de animação predefinido.</span> <span class="s" data-s="b1-p1-s4">Aqui, a base é extraída de um modelo treinado que representa muitas identidades e pode ser reutilizada para novos sujeitos sem reconstrução.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.02207/figure1.webp" alt="GALA acelera três modelos de avatar distintos—face GAN, reconstrução de cabeça e corpo completo vestido—em até 2659×, permitindo animação a 60 fps em celular. Cada modelo usa uma arquitetura diferente, mas todos se beneficiam da mesma estratégia de destilação." loading="lazy">
+          <figcaption>
+            GALA acelera três modelos de avatar distintos—face GAN, reconstrução de cabeça e corpo completo vestido—em até 2659×, permitindo animação a 60 fps em celular. Cada modelo usa uma arquitetura diferente, mas todos se beneficiam da mesma estratégia de destilação.
+            <span class="source">Figura 1 do paper · Fazylov et al., arXiv:2610.02207</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">GALA: destilação de blendshapes Gaussian</span></h2>
+<p><span class="s" data-s="b3-p0-s0">A partir dessa descoberta, os autores propõem GALA (Gaussian Animation via Linear Approximation), um método de destilação que substitui a decodificação neural pesada por frame por um preditor raso de coeficientes e uma combinação linear.</span> <span class="s" data-s="b3-p0-s1">O modelo original A(w, θ), que mapeia identidade w e parâmetros de animação θ para atributos de n Gaussians, é aproximado por Â = A(w, θ₀) + Uc(w, θ), onde θ₀ é a pose neutra, U é a base de blendshapes e c são os coeficientes.</span></p><p><span class="s" data-s="b3-p1-s0">A construção da base começa com PCA não-centrada: para um grande conjunto de N amostras (wᵢ, θᵢ), calculam-se resíduos rᵢ = A(wᵢ, θᵢ) − A(wᵢ, θ₀) e empilham-se como colunas de uma matriz R. A decomposição em valores singulares truncada de R fornece a base U de rank K cujas colunas são os K primeiros vetores singulares à esquerda.</span> <span class="s" data-s="b3-p1-s1">Como os resíduos são medidos em relação ao avatar neutro de cada identidade e não há offset de média adicional, coeficientes zero recuperam exatamente o avatar neutro.</span></p><p><span class="s" data-s="b3-p2-s0">Mas essa construção simples tem três limitações: grupos de atributos têm unidades e escalas diferentes; componentes globais incorrem em custo de armazenamento mesmo para deformações localizadas; e erro euclidiano de atributos não reflete diretamente qualidade de rendering.</span> <span class="s" data-s="b3-p2-s1">GALA endereça cada uma delas.</span></p>        <h2><span class="s" data-s="b4-h">Melhorias: decomposição local, métrica de rendering e orçamento de memória</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Primeiro, os autores separam atributos em grupos—posição, escala, rotação, opacidade, aparência—e constroem uma base separada para cada um, evitando acoplamento de escalas diferentes e permitindo taxas de compressão distintas.</span> <span class="s" data-s="b4-p0-s1">Segundo, particionam espacialmente os Gaussians em blocos (por exemplo, agrupando por região facial ou corporal) e aplicam PCA dentro de cada bloco, resultando em uma base bloco-diagonal que aloca componentes apenas onde há variação.</span></p><p><span class="s" data-s="b4-p1-s0">Terceiro, introduzem uma métrica de rendering-aware: em vez de minimizar erro euclidiano nos atributos, medem o impacto visual.</span> <span class="s" data-s="b4-p1-s1">Para cada resíduo rᵢ, renderizam a diferença de imagem causada por ele e computam LPIPS, uma métrica perceptual.</span> <span class="s" data-s="b4-p1-s2">A PCA é então ponderada por essa importância visual, priorizando deformações que afetam a aparência final.</span></p><p><span class="s" data-s="b4-p2-s0">Quarto, operam sob um orçamento de memória B: alocam componentes principais aos blocos e grupos de atributos de modo a maximizar a redução de erro de imagem por byte armazenado.</span> <span class="s" data-s="b4-p2-s1">Isso é feito de forma gulosa, adicionando iterativamente o componente que oferece maior ganho de qualidade por custo de memória até esgotar o orçamento.</span> <span class="s" data-s="b4-p2-s2">O resultado é uma base compacta, localmente adaptada e visualmente informada.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b5-t">Por que a base funciona para identidades novas?</span></h3>
+          <p><span class="s" data-s="b5-c-s0">A correspondência de índices dos Gaussians é mantida entre identidades: modelos inicializam Gaussians em uma grade UV compartilhada ou pontos ancorados em template.</span> <span class="s" data-s="b5-c-s1">Assim, o i-ésimo Gaussian de uma identidade corresponde ao i-ésimo de outra.</span> <span class="s" data-s="b5-c-s2">A base U captura modos de deformação compartilhados—como abrir a boca ou levantar o braço—e os coeficientes c ajustam a magnitude por identidade e frame.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b6-h">Preditor de coeficientes: uma rede rasa substitui o decoder pesado</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Com a base U extraída, resta prever os coeficientes c(w, θ) a cada frame.</span> <span class="s" data-s="b6-p0-s1">Os autores treinam uma MLP rasa condicionada na identidade w e nos parâmetros de animação θ. Para modelos com condicionamento temporal, θ inclui o histórico de movimento necessário (por exemplo, DynaAvatar usa uma janela de 15 poses SMPL-X anteriores).</span></p><p><span class="s" data-s="b6-p1-s0">O treinamento usa supervisão do modelo original: geram-se pares (wᵢ, θᵢ) e computam-se os resíduos rᵢ do host model.</span> <span class="s" data-s="b6-p1-s1">Os coeficientes-alvo são c⋆ᵢ = Uᵀrᵢ, a projeção do resíduo na base.</span> <span class="s" data-s="b6-p1-s2">A rede aprende a mapear (w, θ) → c minimizando a distância entre c predito e c⋆.</span> <span class="s" data-s="b6-p1-s3">Uma vez treinada, a animação se resume a avaliar a MLP rasa e somar Uc ao avatar neutro—operações muito mais baratas que a inferência do modelo original.</span></p><p><span class="s" data-s="b6-p2-s0">Para FlexAvatar, que ajusta a representação de identidade w às imagens de entrada de cada sujeito de teste, GALA segue o mesmo protocolo: após extração da base no conjunto de treino, fine-tuna o preditor de coeficientes por sujeito nas saídas do host model, um enrollment leve que preserva a eficiência.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.02207/figure2.webp" alt="Pipeline do GALA: resíduos do modelo original em relação ao avatar neutro são decompostos por PCA local e rendering-aware, sob orçamento de memória, em uma base bloco-diagonal U. Uma rede de coeficientes leve aprende a prever c(w, θ) para reconstruir a animação como combinação linear." loading="lazy">
+          <figcaption>
+            Pipeline do GALA: resíduos do modelo original em relação ao avatar neutro são decompostos por PCA local e rendering-aware, sob orçamento de memória, em uma base bloco-diagonal U. Uma rede de coeficientes leve aprende a prever c(w, θ) para reconstruir a animação como combinação linear.
+            <span class="source">Figura 2 do paper · Fazylov et al., arXiv:2610.02207</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Três modelos, três tarefas: face GAN, reconstrução one-shot e corpo vestido</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Os autores validam GALA em três host models com arquiteturas e tarefas distintas.</span> <span class="s" data-s="b8-p0-s1">AGORA (Fazylov et al., 2025) é um GAN 3D de cabeças que anima Gaussians canônicos com um branch convolucional de deformação condicionado em parâmetros de expressão e mandíbula do FLAME.</span> <span class="s" data-s="b8-p0-s2">FlexAvatar (Kirschstein et al., 2026) reconstrói uma cabeça a partir de uma única imagem e regenera todos os atributos dos Gaussians a cada frame com um decoder transformer condicionado em código de expressão derivado do FLAME.</span></p><p><span class="s" data-s="b8-p1-s0">DynaAvatar (Kwon et al., 2026) reconstrói um avatar de corpo completo com dinâmica de roupas a partir de uma única imagem e regenera os Gaussians a cada frame com um transformer dinâmico condicionado na pose SMPL-X atual e nas 15 poses anteriores.</span> <span class="s" data-s="b8-p1-s1">Essa diversidade—GAN generativo, reconstrução feed-forward de face, reconstrução feed-forward de corpo vestido—testa a generalidade da abordagem.</span></p><p><span class="s" data-s="b8-p2-s0">Os dados de treinamento para GALA são gerados executando os host models em amostras de suas entradas.</span> <span class="s" data-s="b8-p2-s1">Para AGORA, 10 mil identidades amostradas do espaço latente combinadas com 6 expressões; para FlexAvatar, 1.200 identidades de treino com 8 expressões cada; para DynaAvatar, frames amostrados das sequências de treino.</span> <span class="s" data-s="b8-p2-s2">Crucialmente, os resultados reportados são em identidades excluídas desses dados, demonstrando generalização.</span></p>        <h2><span class="s" data-s="b9-h">Resultados: até 2659× mais rápido, qualidade preservada</span></h2>
+<p><span class="s" data-s="b9-p0-s0">A Tabela 2 do paper compara cada modelo destilado (+GALA) ao host model original e a baselines do benchmark de cada um.</span> <span class="s" data-s="b9-p0-s1">Para AGORA, GALA atinge FID 3.47 (host: 3.17), AED 0.705 (host: 0.682), mantendo ID 0.76 e APD 0.026 praticamente idênticos.</span> <span class="s" data-s="b9-p0-s2">A velocidade salta de 250 FPS (GPU, reportado no paper original) para 1.275 FPS em CPU—um ganho de ~5× em CPU, mas mais importante, viabiliza 60 FPS em celular (mFPS), algo impossível antes.</span></p><p><span class="s" data-s="b9-p1-s0">Para DynaAvatar, GALA obtém PSNR 23.22 (host: 23.86), SSIM 0.957 (host: 0.959), LPIPS 0.066 (host: 0.063), superando baselines como IDOL (PSNR 21.31) e PERSONA (19.46).</span> <span class="s" data-s="b9-p1-s1">A velocidade vai de 0.3 FPS (host) para 1.284 FPS—um speedup de ~4.280×—e também atinge 60 FPS em celular.</span> <span class="s" data-s="b9-p1-s2">Para FlexAvatar, PSNR cai de 25.69 para 25.17, mas o speedup é ~53× em CPU, e novamente 60 FPS em celular.</span></p><p><span class="s" data-s="b9-p2-s0">A Figura 4 compara GALA a alternativas de destilação—treinar uma rede menor diretamente ou usar destilação de conhecimento padrão—mostrando que GALA oferece melhor trade-off qualidade-velocidade.</span> <span class="s" data-s="b9-p2-s1">A Figura 3 mostra comparações qualitativas: GALA preserva detalhes de expressão facial e dinâmica de roupa de forma visualmente indistinguível do host model na maioria dos casos.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.02207/figure4.webp" alt="GALA (diamante) oferece melhor equilíbrio entre qualidade (eixo vertical, menor é melhor) e tempo de CPU (eixo horizontal, menor é melhor) do que alternativas de destilação. Teacher é o modelo original; variantes de GALA são rotuladas por componentes por Gaussian e tamanho da base." loading="lazy">
+          <figcaption>
+            GALA (diamante) oferece melhor equilíbrio entre qualidade (eixo vertical, menor é melhor) e tempo de CPU (eixo horizontal, menor é melhor) do que alternativas de destilação. Teacher é o modelo original; variantes de GALA são rotuladas por componentes por Gaussian e tamanho da base.
+            <span class="source">Figura 4 do paper · Fazylov et al., arXiv:2610.02207</span>
+          </figcaption>
+        </figure>
+        <aside class="callout">
+          <h3><span class="s" data-s="b11-t">Speedup de até três ordens de magnitude</span></h3>
+          <p><span class="s" data-s="b11-c-s0">O paper reporta acelerações de 28× para AGORA, 53× para FlexAvatar e 2659× para DynaAvatar em CPU.</span> <span class="s" data-s="b11-c-s1">Esses números medem apenas o passo de animação—computar atributos dos Gaussians—sem rendering.</span> <span class="s" data-s="b11-c-s2">DynaAvatar, com seu transformer temporal pesado, é o caso mais dramático: de 42,8 segundos por frame para 16,1 milissegundos.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b12-h">Ablations: cada componente importa</span></h2>
+<p><span class="s" data-s="b12-p0-s0">Os autores conduzem estudos de ablação para isolar a contribuição de cada melhoria.</span> <span class="s" data-s="b12-p0-s1">Substituir a métrica de rendering-aware por PCA euclidiana simples degrada PSNR em ~0.3 pontos para FlexAvatar e ~0.5 para DynaAvatar.</span> <span class="s" data-s="b12-p0-s2">Remover a decomposição por blocos espaciais—usando uma base global—aumenta o tamanho da base em ~40% sem ganho de qualidade, desperdiçando memória em componentes que não contribuem localmente.</span></p><p><span class="s" data-s="b12-p1-s0">Remover a separação por grupos de atributos acopla posição, rotação, escala e aparência em uma única PCA, o que leva a uma alocação ineficiente de componentes: atributos de escala maior dominam a variância, enquanto atributos de escala menor mas visualmente importantes (como aparência) recebem menos componentes.</span> <span class="s" data-s="b12-p1-s1">A combinação de todas as melhorias—local, por atributo, rendering-aware, com orçamento—é necessária para o desempenho final.</span></p><p><span class="s" data-s="b12-p2-s0">Os autores também variam o orçamento de memória B e o número de componentes K, mostrando que existe um ponto de saturação: adicionar mais componentes além de ~64 por bloco traz retornos decrescentes, enquanto orçamentos muito apertados degradam qualidade rapidamente.</span> <span class="s" data-s="b12-p2-s1">O orçamento final é escolhido para caber confortavelmente em memória de dispositivos móveis (~100 MB para a base completa).</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.02207/figure3.webp" alt="Comparação qualitativa em dois exemplos por host model. &#39;Ours (projected)&#39; usa coeficientes c⋆ projetados, que requerem executar o host model e mostram o que a base pode expressar; &#39;Ours&#39; usa coeficientes preditos pela rede. Mapas de erro mostram diferenças locais amplificadas." loading="lazy">
+          <figcaption>
+            Comparação qualitativa em dois exemplos por host model. &#39;Ours (projected)&#39; usa coeficientes c⋆ projetados, que requerem executar o host model e mostram o que a base pode expressar; &#39;Ours&#39; usa coeficientes preditos pela rede. Mapas de erro mostram diferenças locais amplificadas.
+            <span class="source">Figura 3 do paper · Fazylov et al., arXiv:2610.02207</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b14-h">Limitações e o que fica em aberto</span></h2>
+<p><span class="s" data-s="b14-p0-s0">GALA é um método de destilação: depende de um host model pré-treinado e não pode corrigir erros ou limitações desse modelo.</span> <span class="s" data-s="b14-p0-s1">Se o modelo original falha em capturar certa dinâmica de roupa ou expressão extrema, GALA herdará essa limitação.</span> <span class="s" data-s="b14-p0-s2">A aproximação linear também introduz uma pequena perda de qualidade—tipicamente ~0.5 PSNR—que pode ser perceptível em inspeção cuidadosa, embora os autores argumentem que a diferença é visualmente pequena na maioria dos frames.</span></p><p><span class="s" data-s="b14-p1-s0">A construção da base requer acesso ao modelo original e a um conjunto de amostras representativas de identidades e animações.</span> <span class="s" data-s="b14-p1-s1">Para modelos generativos como AGORA, isso é direto; para modelos de reconstrução, requer um conjunto de treino diverso.</span> <span class="s" data-s="b14-p1-s2">A base é compartilhada dentro de um modelo, mas não entre modelos: cada host model precisa de sua própria base, pois a correspondência de Gaussians e a estrutura de deformação são específicas da arquitetura.</span></p><p><span class="s" data-s="b14-p2-s0">O paper não explora animação de interações complexas—como contato entre mãos e objetos, ou colisões de roupa com geometria externa—onde a linearidade pode ser mais limitante.</span> <span class="s" data-s="b14-p2-s1">Também não investiga composição de múltiplos avatares em uma cena, onde a eficiência de GALA poderia ser ainda mais vantajosa.</span> <span class="s" data-s="b14-p2-s2">Finalmente, o método assume que o host model mantém correspondência de índices de Gaussians entre identidades; modelos que não seguem essa convenção precisariam de adaptação.</span></p>        <h2><span class="s" data-s="b15-h">Por que isso importa</span></h2>
+<p><span class="s" data-s="b15-p0-s0">GALA demonstra que modelos neurais de avatar, mesmo complexos e não-lineares, aprendem representações que admitem aproximação linear eficaz.</span> <span class="s" data-s="b15-p0-s1">Isso tem implicações teóricas—sugere que a estrutura de deformação compartilhada entre identidades é uma propriedade emergente do treinamento, não apenas um viés arquitetural—e práticas: viabiliza animação de avatares fotorrealísticos em dispositivos com recursos limitados.</span></p><p><span class="s" data-s="b15-p1-s0">A capacidade de destilar blendshapes de um modelo treinado, sem retreiná-lo e sem ajustar bases por sujeito, abre caminho para deployment em larga escala de avatares de alta qualidade.</span> <span class="s" data-s="b15-p1-s1">Aplicações em videoconferência, jogos mobile, AR/VR e assistentes virtuais se beneficiam diretamente: o custo de animação deixa de ser o gargalo, e a mesma base pode ser reutilizada para milhares de usuários.</span></p><p><span class="s" data-s="b15-p2-s0">O trabalho também sugere uma direção de pesquisa: investigar explicitamente estruturas lineares durante o treinamento de avatares, em vez de descobri-las post-hoc.</span> <span class="s" data-s="b15-p2-s1">Arquiteturas que incorporam blendshapes desde o início poderiam combinar a eficiência de GALA com a flexibilidade de modelos neurais, potencialmente superando ambos.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">GALA extrai blendshapes compartilhadas de modelos de avatar Gaussian treinados, substituindo inferência neural pesada por combinação linear e acelerando animação em até 2659× em CPU.</span></li><li><span class="s" data-s="k1">A base é construída por PCA local, rendering-aware e sob orçamento de memória, priorizando deformações que afetam a imagem final e alocando componentes onde há variação visual.</span></li><li><span class="s" data-s="k2">Validado em três modelos distintos (face GAN, reconstrução one-shot de cabeça e corpo vestido), GALA preserva qualidade (queda típica de ~0.5 PSNR) e atinge 60 fps em celular.</span></li><li><span class="s" data-s="k3">A descoberta central: avatares neurais aprendem estrutura linear emergente entre identidades, mesmo sem viés arquitetural explícito, permitindo destilação eficaz sem retreinar o modelo original.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.02207" rel="noopener">One Basis to Animate Them All: Gaussian Blendshape Distillation for Real-Time Avatars</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.02207" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

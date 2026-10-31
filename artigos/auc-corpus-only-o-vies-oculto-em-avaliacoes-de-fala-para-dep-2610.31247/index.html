@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AUC Corpus-only: O viés oculto em avaliações de fala para depressão — arXiv em 5</title>
+<meta name="description" content="Um diagnóstico que revela como a identidade do conjunto de dados, e não o conteúdo da fala, pode prever depressão em modelos de fala, expondo falhas em avaliações agrupadas.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AUC Corpus-only: O viés oculto em avaliações de fala para depressão">
+<meta property="og:description" content="Um diagnóstico que revela como a identidade do conjunto de dados, e não o conteúdo da fala, pode prever depressão em modelos de fala, expondo falhas em avaliações agrupadas.">
+<meta property="og:image" content="../../assets/papers/2610.31247/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Áudio</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.31247" rel="noopener">arXiv:2610.31247</a>
+    </div>
+    <h1><span class="s" data-s="t">AUC Corpus-only: O viés oculto em avaliações de fala para depressão</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um diagnóstico que revela como a identidade do conjunto de dados, e não o conteúdo da fala, pode prever depressão em modelos de fala, expondo falhas em avaliações agrupadas.</span></p>
+    <p class="byline">
+      <span>Polak et al.</span>
+      <span>6 min de leitura</span>
+<span>22/10/2026</span>    </p>
+    <div class="listen" data-article="2610.31247" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=_X3YV3GgFF8" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema da avaliação agrupada em fala clínica</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Avaliação de modelos de aprendizado de máquina para detecção de depressão baseada em fala depende criticamente de como os dados são estruturados.</span> <span class="s" data-s="b0-p0-s1">Na prática, conjuntos de dados clínicos de fala são frequentemente pequenos e heterogêneos.</span> <span class="s" data-s="b0-p0-s2">Para obter estatísticas estáveis e permitir comparações justas entre diferentes abordagens, pesquisadores frequentemente agrupam (pooling) múltiplos corpora em um único conjunto de dados.</span> <span class="s" data-s="b0-p0-s3">Essa prática é atraente porque aumenta o volume de dados, mas introduz uma complexidade sutil e perigosa: a identidade do corpus torna-se uma variável preditiva.</span></p><p><span class="s" data-s="b0-p1-s0">Quando corpora são agrupados, as dobras de validação cruzada podem conter falantes diferentes, mas compartilham condições específicas de aquisição, linguagem, elicitação (como a fala foi coletada) e, crucialmente, distribuições de rótulos.</span> <span class="s" data-s="b0-p1-s1">Se a prevalência de depressão (taxa de casos positivos) varia significativamente entre os corpora, um modelo pode aprender a explorar essa informação de fonte.</span> <span class="s" data-s="b0-p1-s2">Isso não é um bug do algoritmo, mas uma consequência direta da estrutura dos dados.</span> <span class="s" data-s="b0-p1-s3">O modelo encontra um atalho (shortcut) que é estável no benchmark, mas não reflete o sinal de depressão real.</span></p><p><span class="s" data-s="b0-p2-s0">Este artigo investiga esse mecanismo populacional específico.</span> <span class="s" data-s="b0-p2-s1">A hipótese central é que, se os corpora são acusticamente identificáveis e possuem prevalências de classe diferentes, a mera identidade do corpus induz um sinal de classificação.</span> <span class="s" data-s="b0-p2-s2">Um sujeito de um corpus com alta prevalência pode receber uma pontuação mais alta do que um de um corpus com baixa prevalência, antes mesmo de qualquer cue acústico de depressão ser utilizado.</span> <span class="s" data-s="b0-p2-s3">A questão é: quanta discriminação está disponível apenas a partir da identidade do corpus e das taxas de base específicas de cada fonte?</span></p>        <h2><span class="s" data-s="b1-h">O Diagnóstico AUC Corpus-only</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Para quantificar esse viés potencial, os autores derivam um diagnóstico chamado &#39;corpus-only AUC&#39;.</span> <span class="s" data-s="b1-p0-s1">Este é um valor teórico que mede a capacidade de discriminação disponível exclusivamente a partir da identidade do corpus e das prevalências de classe empíricas, sem usar nenhum sinal de fala.</span> <span class="s" data-s="b1-p0-s2">A fórmula é fechada e computável diretamente da composição do corpus.</span> <span class="s" data-s="b1-p0-s3">Se este valor for alto, significa que há uma oportunidade significativa de atalho: um classificador ingênuo que usa apenas a informação de &#39;de qual corpus este falante veio&#39; pode obter um desempenho AUC substancialmente acima do acaso.</span></p><p><span class="s" data-s="b1-p1-s0">O cálculo considera a probabilidade de um positivo de um corpus ser classificado antes de um negativo de outro, baseada nas distribuições de prevalência.</span> <span class="s" data-s="b1-p1-s1">Por exemplo, se o Corpus A tem 50% de prevalência e o Corpus B tem 10%, há uma probabilidade matemática não trivial de que um aleatório do A seja &#39;mais positivo&#39; do que um aleatório do B, apenas pela estatística das classes.</span> <span class="s" data-s="b1-p1-s2">Este diagnóstico serve como um limite inferior para o viés que pode ser explorado por modelos que aprendem representações acústicas.</span></p><p><span class="s" data-s="b1-p2-s0">Além do diagnóstico teórico, os autores realizam um auditoria empírica.</span> <span class="s" data-s="b1-p2-s1">Eles treinam sondas (probes) multinomiais para prever a identidade do corpus a partir de seis famílias de representações de fala, incluindo características manuais (eGeMAPS) e representações auto-supervisionadas (SSL) como WavLM, HuBERT, XLS-R e mHuBERT.</span> <span class="s" data-s="b1-p2-s2">A ideia é verificar se os modelos modernos de aprendizado de representação conseguem, de fato, acessar e utilizar o sinal de identidade do corpus.</span></p>        <h2><span class="s" data-s="b2-h">Resultados: Identidade Recuperável e Viés de Avaliação</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Os resultados da auditoria são contundentes.</span> <span class="s" data-s="b2-p0-s1">As sondas multinomiais preveem a identidade do corpus com uma acurácia estratificada de 5-fold entre 97.5% e 99.8%, comparado a uma baseline de maioria de apenas 27.5%.</span> <span class="s" data-s="b2-p0-s2">Isso demonstra que as representações acústicas atuais preservam informações fortes sobre a fonte de aquisição.</span> <span class="s" data-s="b2-p0-s3">Mesmo ao remover o maior corpus (EATD), a identidade dos restantes é recuperável com 99.5-100% de acurácia.</span> <span class="s" data-s="b2-p0-s4">O diagnóstico corpus-only AUC calculado para os cinco corpora combinados resulta em 0.697, um valor significativamente acima de 0.5 (aleatório).</span></p><p><span class="s" data-s="b2-p1-s0">O impacto disso na avaliação de modelos de depressão é mensurável.</span> <span class="s" data-s="b2-p1-s1">Os autores comparam dois protocolos de avaliação: validação cruzada agrupada (pooled 5-fold CV) e avaliação por corpus mantido fora (LOCO - Leave-One-Corpus-Out).</span> <span class="s" data-s="b2-p1-s2">No protocolo agrupado, as dobras de treino e teste podem vir de corpora diferentes, mas o modelo vê a distribuição geral.</span> <span class="s" data-s="b2-p1-s3">No protocolo LOCO, o modelo é treinado em N-1 corpora e testado no N-ésimo, simulando uma mudança de domínio mais rigorosa.</span></p><p><span class="s" data-s="b2-p2-s0">Como mostra a Tabela 2, a validação cruzada agrupada supera consistentemente a avaliação LOCO em todas as seis famílias de representações.</span> <span class="s" data-s="b2-p2-s1">A diferença (delta) varia de +0.154 para eGeMAPS até +0.290 para XLS-R.</span> <span class="s" data-s="b2-p2-s2">Isso significa que o desempenho relatado em avaliações agrupadas é artificialmente inflado.</span> <span class="s" data-s="b2-p2-s3">O modelo não está generalizando para novas populações ou condições de aquisição; ele está explorando as correlações espúrias entre a identidade do corpus e a prevalência de classe presentes no conjunto agrupado.</span></p>        <h2><span class="s" data-s="b3-h">Isolando o Mecanismo: Permutação e Prevalência</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Para confirmar que o viés observado é de fato causado pelas taxas de base (prevalence) e não apenas por diferenças acústicas gerais, os autores realizam experimentos de controle.</span> <span class="s" data-s="b3-p0-s1">Eles permutam os rótulos de depressão dentro de cada corpus.</span> <span class="s" data-s="b3-p0-s2">Isso remove a estrutura do rótulo real (a correlação entre fala e depressão), mas preserva as prevalências de classe originais.</span> <span class="s" data-s="b3-p0-s3">Se o viés persistir ou aumentar nessa configuração, isso prova que o modelo está usando a informação de prevalência como atalho.</span></p><p><span class="s" data-s="b3-p1-s0">Os resultados mostram que a discrepância entre pooled e LOCO aumenta conforme a estrutura do diagnóstico.</span> <span class="s" data-s="b3-p1-s1">Além disso, eles testam a igualação de prevalência (prevalence equalisation).</span> <span class="s" data-s="b3-p1-s2">Ao reamostrar os dados para que todos os corpora tenham a mesma taxa de casos positivos, a discrepância entre pooled e LOCO é reduzida substancialmente para eGeMAPS e WavLM-Base.</span> <span class="s" data-s="b3-p1-s3">Isso é uma evidência causal forte: as taxas de base específicas do corpus são o motor do viés.</span></p><p><span class="s" data-s="b3-p2-s0">Em contraste, um controle de tamanho de amostra igualado (sample-size-matched), onde apenas o número de amostras é balanceado mas as prevalências permanecem desiguais, não reduz a discrepância.</span> <span class="s" data-s="b3-p2-s1">Isso descarta a hipótese de que o viés seria causado apenas por desbalanceamento de classes ou tamanho de corpus.</span> <span class="s" data-s="b3-p2-s2">O mecanismo é específico: a correlação entre a identidade da fonte e a probabilidade a priori de depressão.</span></p>        <h2><span class="s" data-s="b4-h">Limitações e Implicações</span></h2>
+<p><span class="s" data-s="b4-p0-s0">É importante notar o escopo deste estudo.</span> <span class="s" data-s="b4-p0-s1">A análise foca em cinco corpora de depressão em três idiomas, totalizando 590 falantes.</span> <span class="s" data-s="b4-p0-s2">Embora isso seja representativo para o campo de fala clínica, os resultados podem não se generalizar para todos os tipos de dados de fala ou outras condições clínicas.</span> <span class="s" data-s="b4-p0-s3">O estudo não propõe uma nova arquitetura de modelo, mas sim uma nova métrica de diagnóstico.</span> <span class="s" data-s="b4-p0-s4">Ele não resolve o problema da heterogeneidade dos dados, mas o torna visível.</span></p><p><span class="s" data-s="b4-p1-s0">Os autores não exploram se a igualação de prevalência é sempre a solução ideal.</span> <span class="s" data-s="b4-p1-s1">Em cenários clínicos reais, as prevalências podem variar naturalmente entre populações.</span> <span class="s" data-s="b4-p1-s2">Forçar igualdade pode mascarar diferenças reais ou introduzir viés de amostragem.</span> <span class="s" data-s="b4-p1-s3">O ponto principal é a transparência: ao agrupar dados, devemos reportar a composição e usar avaliações LOCO para validar a generalização.</span></p><p><span class="s" data-s="b4-p2-s0">Além disso, o estudo assume que as representações acústicas são fixas ou pré-treinadas.</span> <span class="s" data-s="b4-p2-s1">Não avalia se técnicas de adaptação de domínio ou normalização acústica mais avançadas poderiam mitigar a recuperação da identidade do corpus.</span> <span class="s" data-s="b4-p2-s2">No entanto, o fato de mesmo SSLs modernos, que são projetados para ser invariantes a condições, falharem em esconder a identidade do corpus, sugere que o viés é estrutural nos dados, não apenas no modelo.</span></p>        <h2><span class="s" data-s="b5-h">Conclusão</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Este paper introduz uma ferramenta diagnóstica simples, mas poderosa, para auditoria de avaliações de fala clínica.</span> <span class="s" data-s="b5-p0-s1">Ao demonstrar que a identidade do corpus e suas prevalências de classe criam um atalho mensurável, ele desafia a validade de métricas baseadas apenas em validação cruzada agrupada.</span> <span class="s" data-s="b5-p0-s2">A alta recuperabilidade da identidade do corpus nas representações atuais, combinada com a redução do viés via igualação de prevalência, fornece uma explicação robusta para a degradação de desempenho em testes de domínio cruzado.</span></p><p><span class="s" data-s="b5-p1-s0">A mensagem central é de honestidade metodológica.</span> <span class="s" data-s="b5-p1-s1">Avaliações agrupadas podem produzir números atraentes, mas que não refletem a capacidade real do modelo de lidar com novas populações.</span> <span class="s" data-s="b5-p1-s2">Para avançar a detecção de depressão baseada em fala de forma confiável, a comunidade deve adotar diagnósticos corpus-aware e protocolos de avaliação que isolam a generalização real da exploração de atalhos estatísticos.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Corpora clínicos agrupados criam atalhos: a identidade da fonte e a prevalência de classe permitem prever diagnósticos sem ouvir a fala.</span></li><li><span class="s" data-s="k1">A validação cruzada agrupada superestima drasticamente o desempenho em relação à validação por corpus (LOCO), indicando falta de generalização.</span></li><li><span class="s" data-s="k2">Igualar a prevalência de classes entre corpora reduz o viés, provando que as taxas de base são o mecanismo principal do erro.</span></li><li><span class="s" data-s="k3">Recomenda-se o uso de diagnósticos corpus-aware e avaliações LOCO para claims de generalização em dados de fala clínica.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.31247" rel="noopener">A corpus-only AUC diagnostic for pooled speech-based depression detection</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.31247" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Modelos de Linguagem e o Jogo da Wikipedia: Navegação em Grafos Sem APIs — arXiv em 5</title>
+<meta name="description" content="O paper testa se LLMs e modelos de embedding conseguem navegar entre artigos da Wikipedia e literatura científica usando apenas links internos, comparando desempenho com humanos em grafos locais.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Modelos de Linguagem e o Jogo da Wikipedia: Navegação em Grafos Sem APIs">
+<meta property="og:description" content="O paper testa se LLMs e modelos de embedding conseguem navegar entre artigos da Wikipedia e literatura científica usando apenas links internos, comparando desempenho com humanos em grafos locais.">
+<meta property="og:image" content="../../assets/papers/2610.13948/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>LLMs</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.13948" rel="noopener">arXiv:2610.13948</a>
+    </div>
+    <h1><span class="s" data-s="t">Modelos de Linguagem e o Jogo da Wikipedia: Navegação em Grafos Sem APIs</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">O paper testa se LLMs e modelos de embedding conseguem navegar entre artigos da Wikipedia e literatura científica usando apenas links internos, comparando desempenho com humanos em grafos locais.</span></p>
+    <p class="byline">
+      <span>Hickey et al.</span>
+      <span>7 min de leitura</span>
+<span>09/10/2026</span>    </p>
+    <div class="listen" data-article="2610.13948" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Navegação Semântica</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A recuperação de informação em coleções de documentos massivas e não indexáveis é um desafio crescente.</span> <span class="s" data-s="b0-p0-s1">Modelos de linguagem (LLMs) são frequentemente invocados para automatizar tarefas que exigem conhecimento especializado, mas sua capacidade de navegar semanticamente entre conceitos desconexos ainda é pouco compreendida.</span> <span class="s" data-s="b0-p0-s2">Este estudo, conduzido pelo Instituto Alan Turing, investiga se esses modelos podem realizar buscas estruturadas em grafos de conhecimento, simulando a forma como humanos conectam ideias.</span></p><p><span class="s" data-s="b0-p1-s0">O experimento central utiliza o &#39;Jogo da Wikipedia&#39;, uma tarefa clássica onde o objetivo é chegar a um artigo-alvo partindo de um artigo inicial, clicando apenas em links internos.</span> <span class="s" data-s="b0-p1-s1">A tarefa exige que o agente avalie continuamente a relevância semântica dos links disponíveis.</span> <span class="s" data-s="b0-p1-s2">Enquanto embeddings de frases são projetados para medir similaridade textual, os LLMs têm a potencial vantagem de simular estratégias de planejamento, o que poderia torná-los superiores na navegação.</span></p><p><span class="s" data-s="b0-p2-s0">Estudos anteriores avaliaram LLMs nesse jogo, mas muitas vezes dependiam de APIs externas ou usavam subconjuntos pequenos dos dados.</span> <span class="s" data-s="b0-p2-s1">Isso limita a reprodutibilidade e a escala.</span> <span class="s" data-s="b0-p2-s2">Os autores propõem uma abordagem diferente: construir grafos locais completos de Wikipedia e de literatura acadêmica (via OpenAlex), permitindo que os modelos naveguem sem latência de API ou limites de cota, oferecendo um benchmark mais fiel ao uso real em pipelines de dados.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.13948/figure1.webp" alt="Comparação das propriedades dos grafos: tamanho e conectividade das versões de Wikipedia e dos domínios científicos do OpenAlex utilizados no estudo." loading="lazy">
+          <figcaption>
+            Comparação das propriedades dos grafos: tamanho e conectividade das versões de Wikipedia e dos domínios científicos do OpenAlex utilizados no estudo.
+            <span class="source">Figura 1 do paper · Hickey et al., arXiv:2610.13948</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">Construindo o Terreno de Teste</span></h2>
+<p><span class="s" data-s="b2-p0-s0">A Wikipedia é, essencialmente, um grafo gigante.</span> <span class="s" data-s="b2-p0-s1">A versão em inglês possui mais de seis milhões de artigos e quase 300 milhões de links.</span> <span class="s" data-s="b2-p0-s2">Os autores mapearam essa estrutura para criar um ambiente de teste controlado.</span> <span class="s" data-s="b2-p0-s3">Eles selecionaram cinco idiomas diferentes e cinco domínios da literatura acadêmica (Biologia, Medicina, Física, etc.) do dataset OpenAlex.</span> <span class="s" data-s="b2-p0-s4">Isso permite avaliar se a capacidade de navegação generaliza para além do conhecimento geral da Wikipedia.</span></p><p><span class="s" data-s="b2-p1-s0">A construção desses grafos é crucial.</span> <span class="s" data-s="b2-p1-s1">Ao invés de fazer chamadas assíncronas para APIs, o código disponibilizado pelos autores permite a navegação local.</span> <span class="s" data-s="b2-p1-s2">Isso elimina ruídos externos e permite medir o tempo de decisão do modelo com precisão.</span> <span class="s" data-s="b2-p1-s3">O grafo da Wikipedia é denso e altamente conectado, enquanto os grafos do OpenAlex são mais esparsos, com menos links por artigo e títulos mais técnicos.</span> <span class="s" data-s="b2-p1-s4">Essa diferença estrutural é um fator chave para interpretar os resultados.</span></p><p><span class="s" data-s="b2-p2-s0">Os modelos testados incluem embeddings de frases, métodos baseados em TF-IDF (term frequency-inverse document frequency, que mede a importância de palavras) e diversos LLMs, desde versões menores até as maiores disponíveis.</span> <span class="s" data-s="b2-p2-s1">O benchmark humano foi incluído para estabelecer uma linha de base realista.</span> <span class="s" data-s="b2-p2-s2">O objetivo não é apenas ver quem chega mais rápido, mas entender como as diferentes arquiteturas abordam a incerteza da navegação.</span></p>        <h2><span class="s" data-s="b3-h">Metodologia: Como os Modelos Jogam</span></h2>
+<p><span class="s" data-s="b3-p0-s0">A configuração do jogo impõe um limite de cem passos.</span> <span class="s" data-s="b3-p0-s1">O modelo falha se atingir esse limite, se entrar em um beco sem saída (artigo sem links internos) ou se alucinar links que não existem.</span> <span class="s" data-s="b3-p0-s2">Para os embeddings, a estratégia é geralmente gulosa: escolher o link que maximiza a similaridade com o artigo alvo.</span> <span class="s" data-s="b3-p0-s3">Para os LLMs, a entrada é o texto do artigo atual e o alvo, e a saída é a escolha do próximo link.</span></p><p><span class="s" data-s="b3-p1-s0">Os LLMs têm acesso ao contexto completo do artigo, o que lhes permite identificar entidades e conceitos-chave.</span> <span class="s" data-s="b3-p1-s1">Diferente dos embeddings, que operam em vetores fixos, os LLMs podem usar raciocínio chain-of-thought (cadeia de pensamento) para planejar rotas.</span> <span class="s" data-s="b3-p1-s2">No entanto, o estudo mostra que mesmo com raciocínio, os modelos enfrentam dificuldades significativas em grafos complexos.</span> <span class="s" data-s="b3-p1-s3">A eficiência não é apenas sobre precisão, mas sobre a quantidade de passos necessários para convergir.</span></p><p><span class="s" data-s="b3-p2-s0">Os autores também testaram a robustez dos modelos em diferentes idiomas.</span> <span class="s" data-s="b3-p2-s1">Isso é importante porque a distribuição de dados de treinamento varia enormemente entre línguas de alto e baixo recurso.</span> <span class="s" data-s="b3-p2-s2">Se um modelo é treinado predominantemente em inglês, espera-se que seu desempenho degrade em outros idiomas, a menos que a arquitetura seja verdadeiramente multilingue e balanceada.</span> <span class="s" data-s="b3-p2-s3">O experimento verifica se a &#39;intuição&#39; de navegação é transferível.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.13948/figure2.webp" alt="Taxa de sucesso dos LLMs na Wikipedia em inglês. Mostra a fração de jogos resolvidos em cem passos, comparando humanos, embeddings e grandes modelos." loading="lazy">
+          <figcaption>
+            Taxa de sucesso dos LLMs na Wikipedia em inglês. Mostra a fração de jogos resolvidos em cem passos, comparando humanos, embeddings e grandes modelos.
+            <span class="source">Figura 2 do paper · Hickey et al., arXiv:2610.13948</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Resultados: Humanos vs. Máquinas</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os resultados principais são surpreendentemente modestos.</span> <span class="s" data-s="b5-p0-s1">Nenhum modelo superou significativamente os humanos em termos de taxa de sucesso.</span> <span class="s" data-s="b5-p0-s2">Os melhores LLMs, incluindo GPT-o3 mini, GPT-4o, QwQ:32B e DeepSeek-R1:70B, alcançaram taxas de sucesso comparáveis às dos humanos.</span> <span class="s" data-s="b5-p0-s3">No entanto, quando se olha para a eficiência, a diferença é abismal.</span> <span class="s" data-s="b5-p0-s4">Os modelos levaram, em média, mais passos para chegar ao destino que os humanos.</span></p><p><span class="s" data-s="b5-p1-s0">Isso sugere que, embora os modelos tenham o conhecimento factual necessário, eles não possuem a mesma &#39;intuição&#39; heurística que os humanos.</span> <span class="s" data-s="b5-p1-s1">Os humanos são melhores em descartar caminhos irrelevantes rapidamente.</span> <span class="s" data-s="b5-p1-s2">Os modelos, por outro lado, tendem a explorar mais o espaço de busca, às vezes ficando presos em subgrafos densos que não levam ao alvo.</span> <span class="s" data-s="b5-p1-s3">A distribuição de passos mostra que os humanos são mais consistentes na eficiência.</span></p><p><span class="s" data-s="b5-p2-s0">Um achado interessante foi o desempenho de modelos de raciocínio.</span> <span class="s" data-s="b5-p2-s1">O QwQ:32B, um modelo focado em raciocínio, competiu de perto com o GPT-4o.</span> <span class="s" data-s="b5-p2-s2">Isso indica que técnicas de planejamento podem compensar o tamanho menor do modelo.</span> <span class="s" data-s="b5-p2-s3">Curiosamente, o Llama:8B superou o Llama:70B em algumas métricas, o que pode indicar que o processo de treinamento do modelo maior não foi otimizado para tarefas de navegação estruturada, ou que ele sofre mais com ruído no contexto.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b6-t">O Paradoxo do Tamanho do Modelo</span></h3>
+          <p><span class="s" data-s="b6-c-s0">O estudo encontrou uma anomalia: o Llama:8B performou melhor que o Llama:70B em certas métricas de navegação.</span> <span class="s" data-s="b6-c-s1">Isso contradiz a noção de que modelos maiores são sempre superiores.</span> <span class="s" data-s="b6-c-s2">Os autores sugerem que o treinamento do modelo maior pode não ter sido ajustado para tarefas de decisão sequencial, ou que a capacidade de generalização do modelo menor é mais robusta para este tipo específico de grafo.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b7-h">Generalização: Idiomas e Domínios</span></h2>
+<p><span class="s" data-s="b7-p0-s0">A variação por idioma foi significativa.</span> <span class="s" data-s="b7-p0-s1">Alguns modelos performaram melhor na Wikipedia em francês do que na em inglês.</span> <span class="s" data-s="b7-p0-s2">Os autores argumentam que isso não significa que os modelos são melhores em francês, mas sim que o grafo da Wikipedia francesa é menor e melhor conectado.</span> <span class="s" data-s="b7-p0-s3">Grafos menores são intrinsecamente mais fáceis de navegar, pois há menos caminhos possíveis e menos chances de se perder em ramificações irrelevantes.</span> <span class="s" data-s="b7-p0-s4">Isso destaca a importância da topologia do grafo sobre a fluência do modelo.</span></p><p><span class="s" data-s="b7-p1-s0">Ao testar no OpenAlex, os modelos mostraram capacidade de generalização.</span> <span class="s" data-s="b7-p1-s1">Apesar dos grafos científicos serem mais esparsos e os títulos mais técnicos, alguns LLMs mantiveram taxas de sucesso dentro da margem de erro da Wikipedia em inglês.</span> <span class="s" data-s="b7-p1-s2">Isso é um sinal positivo: os modelos não estão apenas memorizando links da Wikipedia, mas aplicando o conceito de navegação semântica a novos domínios.</span> <span class="s" data-s="b7-p1-s3">No entanto, a eficiência caiu drasticamente em comparação com os humanos.</span></p><p><span class="s" data-s="b7-p2-s0">A comparação com benchmarks anteriores, como o LLM-WikiRace, revela diferenças metodológicas.</span> <span class="s" data-s="b7-p2-s1">Estudos anteriores usaram conjuntos de jogos &#39;fáceis&#39;, onde humanos falham pouco.</span> <span class="s" data-s="b7-p2-s2">Este estudo usou um conjunto mais diversificado, expondo as limitações reais dos modelos.</span> <span class="s" data-s="b7-p2-s3">A permissão para retroceder (backtracking) melhora a eficiência dos modelos, mas os humanos ainda mantêm uma vantagem natural na tomada de decisão rápida sem necessidade de correção explícita.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.13948/figure4.webp" alt="Desempenho dos modelos variando entre idiomas e tópicos científicos. Mostra como a taxa de sucesso oscila dependendo da conectividade do grafo e da língua." loading="lazy">
+          <figcaption>
+            Desempenho dos modelos variando entre idiomas e tópicos científicos. Mostra como a taxa de sucesso oscila dependendo da conectividade do grafo e da língua.
+            <span class="source">Figura 4 do paper · Hickey et al., arXiv:2610.13948</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Limitações e Implicações</span></h2>
+<p><span class="s" data-s="b9-p0-s0">O estudo não responde se os modelos podem navegar em artigos publicados após a data de treinamento.</span> <span class="s" data-s="b9-p0-s1">Os autores exploraram isso com uma amostra pequena de artigos de 2024, mas os resultados não foram conclusivos o suficiente para serem destacados como principal achado.</span> <span class="s" data-s="b9-p0-s2">Isso deixa em aberto a capacidade dos modelos de lidar com conhecimento temporalmente recente em grafos dinâmicos.</span></p><p><span class="s" data-s="b9-p1-s0">Outra limitação é a dependência da qualidade dos links.</span> <span class="s" data-s="b9-p1-s1">Se os links na Wikipedia ou no OpenAlex forem mal construídos ou ambíguos, os modelos herdam esses erros.</span> <span class="s" data-s="b9-p1-s2">Humanos podem ignorar links ruins com base em contexto implícito, mas modelos baseados em texto podem ser enganados por links enganosos.</span> <span class="s" data-s="b9-p1-s3">A robustez do grafo é tão importante quanto a inteligência do modelo.</span></p><p><span class="s" data-s="b9-p2-s0">Para praticantes, a mensagem é clara: não confie cegamente em LLMs para navegação automática em grandes bases de conhecimento.</span> <span class="s" data-s="b9-p2-s1">Eles podem ter sucesso, mas serão lentos e propensos a ciclos.</span> <span class="s" data-s="b9-p2-s2">A combinação de embeddings para filtragem inicial e LLMs para decisão final pode ser uma estratégia viável, mas requer ajuste fino.</span> <span class="s" data-s="b9-p2-s3">O código aberto fornecido pelos autores permite que a comunidade continue a testar e melhorar essas abordagens.</span></p>        <h2><span class="s" data-s="b10-h">Conclusão</span></h2>
+<p><span class="s" data-s="b10-p0-s0">O &#39;Jogo da Wikipedia&#39; revela que, embora os LLMs possuam a informação semântica necessária para navegar, eles não replicam a eficiência humana.</span> <span class="s" data-s="b10-p0-s1">A diferença não é de capacidade, mas de estratégia.</span> <span class="s" data-s="b10-p0-s2">Humanos usam heurísticas rápidas; modelos usam busca exaustiva ou similaridade vetorial.</span> <span class="s" data-s="b10-p0-s3">Os melhores modelos atuais, como GPT-4o e QwQ:32B, estão próximos dos humanos em sucesso, mas distantes em eficiência.</span></p><p><span class="s" data-s="b10-p1-s0">Este trabalho estabelece um novo padrão para avaliação de navegação em grafos, ao fornecer infraestrutura local e aberta.</span> <span class="s" data-s="b10-p1-s1">Ele mostra que o desempenho é altamente dependente da topologia do grafo e do domínio.</span> <span class="s" data-s="b10-p1-s2">Para cientistas de dados, isso significa que a escolha do modelo deve considerar a estrutura dos dados de destino, não apenas a qualidade geral do modelo.</span> <span class="s" data-s="b10-p1-s3">A navegação automática é possível, mas ainda requer supervisão humana ou estratégias híbridas para ser prática.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Nenhum modelo superou significativamente os humanos, mas os melhores LLMs alcançaram taxas de sucesso comparáveis, embora com mais passos.</span></li><li><span class="s" data-s="k1">Os autores construíram grafos locais de Wikipedia e OpenAlex, eliminando a dependência de APIs de terceiros para testes robustos.</span></li><li><span class="s" data-s="k2">Modelos de raciocínio (como QwQ:32B) competiram com GPT-4o, sugerindo que estratégias de planejamento ajudam na navegação.</span></li><li><span class="s" data-s="k3">O desempenho variou drasticamente por idioma e domínio, indicando que a conectividade do grafo impacta mais que a fluência do modelo.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.13948" rel="noopener">Can Language Models Play the Wikipedia Game?</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.13948" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

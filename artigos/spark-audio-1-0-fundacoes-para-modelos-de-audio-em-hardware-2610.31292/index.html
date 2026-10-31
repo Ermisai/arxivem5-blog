@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spark-Audio 1.0: Fundações para Modelos de Áudio em Hardware Nacional — arXiv em 5</title>
+<meta name="description" content="Análise técnica do Spark-Audio 1.0, um modelo de linguagem multimodal que integra reconhecimento de fala e compreensão de áudio treinado inteiramente em chips chineses, utilizando uma arquitetura híbrida de codificador denso e LLM MoE.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spark-Audio 1.0: Fundações para Modelos de Áudio em Hardware Nacional">
+<meta property="og:description" content="Análise técnica do Spark-Audio 1.0, um modelo de linguagem multimodal que integra reconhecimento de fala e compreensão de áudio treinado inteiramente em chips chineses, utilizando uma arquitetura híbrida de codificador denso e LLM MoE.">
+<meta property="og:image" content="../../assets/papers/2610.31292/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Áudio</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.31292" rel="noopener">arXiv:2610.31292</a>
+    </div>
+    <h1><span class="s" data-s="t">Spark-Audio 1.0: Fundações para Modelos de Áudio em Hardware Nacional</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Análise técnica do Spark-Audio 1.0, um modelo de linguagem multimodal que integra reconhecimento de fala e compreensão de áudio treinado inteiramente em chips chineses, utilizando uma arquitetura híbrida de codificador denso e LLM MoE.</span></p>
+    <p class="byline">
+      <span>Zhang et al.</span>
+      <span>10 min de leitura</span>
+<span>22/10/2026</span>    </p>
+    <div class="listen" data-article="2610.31292" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=bRXZ_i2pdRU" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Desafio da Independência em Modelos de Áudio</span></h2>
+<p><span class="s" data-s="b0-p0-s0">O campo de modelos de fundação de fala (speech foundation models) tem evoluído rapidamente, movendo-se de sistemas especializados em reconhecimento automático de fala (ASR) para sistemas unificados que entendem contexto, emoção e intenção.</span> <span class="s" data-s="b0-p0-s1">No entanto, a maioria desses avanços depende de ecossistemas de hardware e software restritos, criando uma dependência crítica de infraestrutura estrangeira.</span> <span class="s" data-s="b0-p0-s2">O paper Spark-Audio 1.0, da iFlytek, aborda diretamente essa vulnerabilidade estratégica, apresentando um modelo competitivo treinado inteiramente em aceleradores de IA domésticos, especificamente os chips Huawei Ascend 910B e Hygon BW1000.</span></p><p><span class="s" data-s="b0-p1-s0">A motivação vai além da soberania tecnológica.</span> <span class="s" data-s="b0-p1-s1">Sistemas tradicionais de ASR são otimizados para transcrever sinais acústicos em texto literal, ignorando paralinguística, identidade do falante e eventos sonoros ambientais.</span> <span class="s" data-s="b0-p1-s2">A demanda do mercado real exige um entendimento holístico da fala, capaz de realizar reconhecimento, tradução, compreensão de áudio e diálogo em uma única arquitetura.</span> <span class="s" data-s="b0-p1-s3">O Spark-Audio 1.0 propõe-se a ser essa base geral, unificando percepção acústica e raciocínio linguístico.</span></p><p><span class="s" data-s="b0-p2-s0">Um ponto crucial levantado pelos autores é a eficiência de dados.</span> <span class="s" data-s="b0-p2-s1">Assume-se frequentemente que desempenho competitivo requer volumes massivos de dados e modelos enormes, o que eleva custos e barreiras de entrada.</span> <span class="s" data-s="b0-p2-s2">O Spark-Audio 1.0 é treinado com 13 milhões de horas de áudio e grandes corpora de texto, mas utiliza menos dados de áudio do que o concorrente Qwen3.5-Omni-Flash, mesmo assim alcançando performance comparável ou superior em várias métricas.</span> <span class="s" data-s="b0-p2-s3">Isso desafia a noção de que escala bruta de dados é o único caminho para a excelência em modelos de áudio.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.31292/figure1.webp" alt="Arquitetura do modelo e currículo de treinamento em três etapas do codificador de áudio, mostrando a integração entre o encoder baseado em Whisper e o LLM MoE." loading="lazy">
+          <figcaption>
+            Arquitetura do modelo e currículo de treinamento em três etapas do codificador de áudio, mostrando a integração entre o encoder baseado em Whisper e o LLM MoE.
+            <span class="source">Figura 1 do paper · Zhang et al., arXiv:2610.31292</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">Arquitetura Híbrida: Encoder Denso e LLM MoE</span></h2>
+<p><span class="s" data-s="b2-p0-s0">A arquitetura do Spark-Audio 1.0 é projetada para balancear a complexidade computacional da percepção de áudio com a capacidade de raciocínio de um LLM.</span> <span class="s" data-s="b2-p0-s1">O modelo acopla um codificador de áudio denso de 0,65 bilhões de parâmetros a um Large Language Model (LLM) baseado em Mixture-of-Experts (MoE) com 30 bilhões de parâmetros totais, dos quais apenas 3 bilhões são ativados por token.</span> <span class="s" data-s="b2-p0-s2">Essa estrutura MoE permite que o modelo escalone sua capacidade de processamento linguístico sem um custo linear de inferência, selecionando dinamicamente subconjuntos de especialistas para cada entrada.</span></p><p><span class="s" data-s="b2-p1-s0">O codificador de áudio é o componente central da percepção.</span> <span class="s" data-s="b2-p1-s1">Ele é baseado na arquitetura Whisper large-v3, mas com modificações significativas para suportar streaming unificado e não-streaming.</span> <span class="s" data-s="b2-p1-s2">O objetivo do encoder não é apenas extrair características acústicas, mas gerar representações semânticas ricas que possam ser mapeadas para o espaço de tokens do LLM.</span> <span class="s" data-s="b2-p1-s3">A escolha de um encoder denso de tamanho moderado (0,65B) em vez de um encoder massivo sugere uma aposta na eficiência e na qualidade da representação em vez da complexidade bruta da front-end.</span></p><p><span class="s" data-s="b2-p2-s0">A integração entre o áudio e o texto ocorre através de um processo de projeção contínua.</span> <span class="s" data-s="b2-p2-s1">As representações contínuas do áudio são convertidas em tokens discretos ou semânticos que o LLM pode processar nativamente.</span> <span class="s" data-s="b2-p2-s2">Isso permite que o modelo realize tarefas como reconhecimento de fala, tradução de fala para texto, compreensão de áudio e diálogo baseado em texto ou fala em um único framework unificado, eliminando a necessidade de pipelines modulares complexos e propensos a erros de propagação.</span></p>        <h2><span class="s" data-s="b3-h">O Codificador Aprimorado por Representação</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Um dos contributos técnicos mais interessantes do paper é a melhoria do framework BEST-RQ (BERT-based Speech Pre-Training with Random-projection Quantizer).</span> <span class="s" data-s="b3-p0-s1">O BEST-RQ original utiliza quantização aleatória para aprender representações discretas de áudio.</span> <span class="s" data-s="b3-p0-s2">Os autores do Spark-Audio 1.0 introduzem uma variante &#39;representation-enhanced&#39; que injeta priors semânticos diretamente nos alvos de predição.</span> <span class="s" data-s="b3-p0-s3">Isso é feito substituindo a entrada do quantizador por representações semânticas profundas e congeladas de um encoder ASR multilíngue pré-treinado baseado no Whisper large-v3.</span></p><p><span class="s" data-s="b3-p1-s0">Essa modificação é sutil, mas poderosa.</span> <span class="s" data-s="b3-p1-s1">Ao usar representações semânticas congeladas, o modelo não introduz um tokenizer adicional treinável, o que simplifica a arquitetura e reduz o risco de instabilidade no treinamento.</span> <span class="s" data-s="b3-p1-s2">O resultado é um conjunto de alvos discretos mais compactos e uma tarefa de predição mais discriminativa.</span> <span class="s" data-s="b3-p1-s3">Isso fortalece a modelagem da estrutura temporal fina do áudio, permitindo que o modelo capture nuances temporais que poderiam ser perdidas em uma quantização puramente acústica.</span></p><p><span class="s" data-s="b3-p2-s0">O treinamento do codificador segue um currículo em três etapas progressivamente expansivas.</span> <span class="s" data-s="b3-p2-s1">Na primeira etapa, auto-supervisionada, o modelo é exposto a um corpus inicial.</span> <span class="s" data-s="b3-p2-s2">Nas etapas subsequentes, o corpus é expandido e o modelo é refinado através de treinamento supervisionado multi-tarefa.</span> <span class="s" data-s="b3-p2-s3">Essa abordagem de currículo permite que o modelo aprenda primeiro padrões gerais e depois refine suas capacidades para tarefas específicas, como reconhecimento de dialetos ou compreensão de áudio complexa, sem sofrer de esquecimento catastrófico ou overfitting prematuro.</span></p>        <h2><span class="s" data-s="b4-h">Estratégia de Treinamento: Pré-treinamento e Pós-treinamento</span></h2>
+<p><span class="s" data-s="b4-p0-s0">O treinamento do modelo completo segue uma estratégia de duas fases principais: pré-treinamento em etapas e pós-treinamento.</span> <span class="s" data-s="b4-p0-s1">No pré-treinamento, o codificador de áudio e o LLM são alinhados para que as representações de áudio possam ser interpretadas pelo modelo de linguagem.</span> <span class="s" data-s="b4-p0-s2">Isso é feito através de um processo de pré-treinamento em etapas, onde o modelo aprende a correlacionar sequências de áudio com sequências de texto correspondentes.</span></p><p><span class="s" data-s="b4-p1-s0">A fase de pós-treinamento é crucial para a capacidade do modelo de seguir instruções e interagir naturalmente.</span> <span class="s" data-s="b4-p1-s1">Os autores combinam Supervised Fine-Tuning (SFT) com On-Policy Distillation.</span> <span class="s" data-s="b4-p1-s2">O SFT ajusta o modelo para tarefas específicas usando dados rotulados de alta qualidade, enquanto a distilação on-policy permite que o modelo aprenda com suas próprias gerações, refinando sua capacidade de diálogo e compreensão de contexto.</span> <span class="s" data-s="b4-p1-s3">Essa combinação ajuda a melhorar a coerência e a relevância das respostas do modelo em cenários de interação real.</span></p><p><span class="s" data-s="b4-p2-s0">O volume de dados é impressionante: 13 milhões de horas de áudio combinadas com grandes corpora de texto.</span> <span class="s" data-s="b4-p2-s1">No entanto, a qualidade e a diversidade dos dados são tão importantes quanto a quantidade.</span> <span class="s" data-s="b4-p2-s2">O dataset inclui não apenas fala clara, mas também dialetos, ruído ambiente e contextos de fala natural, o que é essencial para a robustez do modelo em cenários do mundo real.</span> <span class="s" data-s="b4-p2-s3">A inclusão de dados de 99 idiomas e 202 dialetos demonstra um compromisso com a cobertura multilíngue e multidialectal, uma área onde muitos modelos ocidentais ainda têm lacunas.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.31292/table4.webp" alt="Desempenho do Spark-Audio em benchmarks públicos, mostrando superioridade em reconhecimento multilíngue e tradução de fala para texto." loading="lazy">
+          <figcaption>
+            Desempenho do Spark-Audio em benchmarks públicos, mostrando superioridade em reconhecimento multilíngue e tradução de fala para texto.
+            <span class="source">Tabela 4 do paper · Zhang et al., arXiv:2610.31292</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b6-h">Avaliação em Benchmarks Públicos</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Os autores avaliaram o Spark-Audio 1.0 em uma ampla gama de benchmarks públicos para ASR (Reconhecimento Automático de Fala), S2TT (Tradução de Fala para Texto) e compreensão de áudio.</span> <span class="s" data-s="b6-p0-s1">Em benchmarks multilíngues como FLEURS, o modelo alcançou as menores taxas de erro reportadas para chinês e inglês, com CER de 1,88% e WER de 2,25%, respectivamente.</span> <span class="s" data-s="b6-p0-s2">Esses resultados posicionam o Spark-Audio na vanguarda da tecnologia de ASR, superando modelos concorrentes em precisão de transcrição.</span></p><p><span class="s" data-s="b6-p1-s0">Para o reconhecimento de dialetos e línguas regionais, o modelo demonstrou capacidades notáveis, aproveitando o treinamento extensivo em 202 dialetos.</span> <span class="s" data-s="b6-p1-s1">Em benchmarks como KeSpeech, que avalia variedades de mandarim e dialetos regionais, o Spark-Audio 1.0 mostrou robustez significativa, superando modelos que não foram treinados especificamente para essa diversidade linguística.</span> <span class="s" data-s="b6-p1-s2">Isso destaca a vantagem da abordagem de treinamento em larga escala e diversificada.</span></p><p><span class="s" data-s="b6-p2-s0">Na tradução de fala para texto (S2TT), o modelo foi avaliado nas direções chinês-inglês e inglês-chinês usando o benchmark FLEURS.</span> <span class="s" data-s="b6-p2-s1">Os resultados mostraram que o Spark-Audio 1.0 é competitivo com o Qwen3.5-Omni-Flash, alcançando pontuações BLEU comparáveis.</span> <span class="s" data-s="b6-p2-s2">Isso é particularmente notável considerando que o Spark-Audio foi treinado com menos dados de áudio, sugerindo que a arquitetura e a estratégia de treinamento são mais eficientes na extração de informações relevantes para tradução.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.31292/table5.webp" alt="Resultados em avaliações internas, destacando alta precisão em diálogos falados e tradução em cenários reais de aplicação." loading="lazy">
+          <figcaption>
+            Resultados em avaliações internas, destacando alta precisão em diálogos falados e tradução em cenários reais de aplicação.
+            <span class="source">Tabela 5 do paper · Zhang et al., arXiv:2610.31292</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Avaliações Internas e Cenários do Mundo Real</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Além dos benchmarks públicos, os autores realizaram avaliações internas usando conjuntos de dados derivados de cenários reais de aplicação, como transcrição de reuniões, atendimento ao cliente e interação em veículos inteligentes.</span> <span class="s" data-s="b8-p0-s1">Essas avaliações são críticas para entender o desempenho do modelo em condições não ideais, como ruído de fundo, fala rápida e sobreposição de falantes.</span> <span class="s" data-s="b8-p0-s2">O Spark-Audio 1.0 demonstrou vantagens claras nessas tarefas, superando o Qwen3.5-Omni-Flash em reconhecimento de fala em ambientes ruidosos e de baixo volume.</span></p><p><span class="s" data-s="b8-p1-s0">Na interação falada, o modelo foi avaliado usando uma métrica de Full-Score Rate (FSR), que mede a porcentagem de respostas que recebem a pontuação máxima de um juiz baseado em DeepSeek.</span> <span class="s" data-s="b8-p1-s1">O Spark-Audio 1.0 alcançou altas taxas de FSR em diálogos gerais e de seguimento de instruções, indicando uma capacidade robusta de manter conversas coerentes e relevantes.</span> <span class="s" data-s="b8-p1-s2">Isso é um indicador forte de que o modelo não apenas transcreve, mas realmente entende o contexto da conversa.</span></p><p><span class="s" data-s="b8-p2-s0">As avaliações internas também cobriram a tradução de fala para texto em cenários complexos, onde a precisão linguística e a preservação do tom são essenciais.</span> <span class="s" data-s="b8-p2-s1">O modelo mostrou desempenho consistente, reforçando sua utilidade para aplicações práticas que exigem não apenas precisão, mas também naturalidade e adequação ao contexto.</span> <span class="s" data-s="b8-p2-s2">Esses resultados sugerem que o Spark-Audio 1.0 está pronto para implantação em produtos reais, onde a robustez e a confiabilidade são tão importantes quanto a precisão em benchmarks controlados.</span></p>        <h2><span class="s" data-s="b9-h">Capacidades de Texto e Raciocínio</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Embora o foco principal seja o áudio, o Spark-Audio 1.0 também foi avaliado em tarefas puramente baseadas em texto para caracterizar suas capacidades de conhecimento geral, resolução de problemas matemáticos, geração de código e seguimento de instruções.</span> <span class="s" data-s="b9-p0-s1">Os benchmarks incluíram MMLU-Pro, CMMLU, C-Eval para conhecimento, MATH-500 e GSM8K para matemática, HumanEval para código, e IFEval para seguimento de instruções.</span></p><p><span class="s" data-s="b9-p1-s0">Os resultados mostraram que o Spark-Audio 1.0 é competitivo com o Qwen3.5-Omni-Flash em tarefas de texto, mantendo um alto nível de desempenho em conhecimento geral e resolução de problemas.</span> <span class="s" data-s="b9-p1-s1">Isso é esperado, dado que o modelo utiliza um LLM MoE de 30B parâmetros como backbone.</span> <span class="s" data-s="b9-p1-s2">No entanto, o paper admite que há espaço para melhoria, particularmente em seguimento de instruções complexas e raciocínio auditivo avançado.</span></p><p><span class="s" data-s="b9-p2-s0">A integração de capacidades de texto fortes permite que o modelo realize tarefas como sumarização de áudio, extração de informações e geração de resumos baseados em transcrições.</span> <span class="s" data-s="b9-p2-s1">Isso expande o escopo de aplicação do modelo além do simples reconhecimento de fala, permitindo que ele atue como um assistente inteligente capaz de processar e sintetizar informações de áudio de forma contextualizada.</span> <span class="s" data-s="b9-p2-s2">A capacidade de raciocínio sobre o conteúdo do áudio é um diferencial importante para aplicações de análise de dados e suporte à decisão.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b10-t">Limitações Reconhecidas</span></h3>
+          <p><span class="s" data-s="b10-c-s0">Os autores admitem que o Spark-Audio 1.0 ainda tem dificuldades em seguir instruções complexas e em raciocínio auditivo avançado.</span> <span class="s" data-s="b10-c-s1">Além disso, o modelo foi avaliado principalmente em cenários de fala curta a média, com trabalho futuro focado em reconhecimento de fala de longa duração (horas) e reconhecimento de múltiplos falantes.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b11-h">Viabilidade de Hardware Nacional e Implicações</span></h2>
+<p><span class="s" data-s="b11-p0-s0">O sucesso do treinamento do Spark-Audio 1.0 em hardware doméstico, como os chips Huawei Ascend 910B e Hygon BW1000, é talvez a contribuição mais estratégica do paper.</span> <span class="s" data-s="b11-p0-s1">Ele demonstra que é possível treinar modelos de fundação competitivos sem depender de infraestrutura estrangeira, como as GPUs NVIDIA dominantes no mercado.</span> <span class="s" data-s="b11-p0-s2">Isso tem implicações profundas para a segurança nacional e a independência tecnológica de países que enfrentam restrições de exportação de hardware de ponta.</span></p><p><span class="s" data-s="b11-p1-s0">O paper não entra em detalhes técnicos profundos sobre as otimizações de software necessárias para rodar o treinamento nesses chips, mas o fato de o modelo ser funcional e competitivo sugere que as ferramentas de desenvolvimento de software domésticas estão amadurecendo rapidamente.</span> <span class="s" data-s="b11-p1-s1">Isso pode incentivar outros pesquisadores e empresas a explorar caminhos alternativos de desenvolvimento de IA, reduzindo a dependência de ecossistemas fechados.</span></p><p><span class="s" data-s="b11-p2-s0">A eficiência do modelo em termos de dados e parâmetros também é um ponto importante.</span> <span class="s" data-s="b11-p2-s1">Ao alcançar desempenho comparável a modelos maiores e mais caros, o Spark-Audio 1.0 sugere que a engenharia de modelo e a qualidade dos dados podem ser mais importantes do que a escala bruta.</span> <span class="s" data-s="b11-p2-s2">Isso pode levar a uma democratização do desenvolvimento de modelos de áudio, onde equipes menores e com recursos limitados podem competir com grandes laboratórios.</span></p>        <h2><span class="s" data-s="b12-h">Conclusão e Futuro do Trabalho</span></h2>
+<p><span class="s" data-s="b12-p0-s0">O Spark-Audio 1.0 representa um avanço significativo no campo dos modelos de fundação de áudio, especialmente no contexto da independência tecnológica.</span> <span class="s" data-s="b12-p0-s1">Ao combinar uma arquitetura híbrida eficiente com um treinamento robusto em dados diversificados, o modelo alcança desempenho competitivo em uma ampla gama de tarefas de áudio e texto.</span> <span class="s" data-s="b12-p0-s2">Sua capacidade de funcionar em hardware doméstico abre novas possibilidades para o desenvolvimento de IA segura e soberana.</span></p><p><span class="s" data-s="b12-p1-s0">Os autores identificam áreas claras para trabalho futuro, incluindo o uso mais eficaz de dados de áudio, a expansão da cobertura de condições acústicas e a melhoria da compreensão de áudio espacialmente consciente.</span> <span class="s" data-s="b12-p1-s1">A extensão do modelo para reconhecimento de fala de longa duração e de múltiplos falantes é um próximo passo lógico, dada a demanda do mercado por essas capacidades.</span></p><p><span class="s" data-s="b12-p2-s0">Em resumo, o Spark-Audio 1.0 não é apenas um novo modelo, mas uma prova de conceito para um caminho tecnológico alternativo.</span> <span class="s" data-s="b12-p2-s1">Ele desafia a narrativa de que a liderança em IA depende exclusivamente de hardware e dados ocidentais, oferecendo um modelo viável e competitivo baseado em recursos domésticos.</span> <span class="s" data-s="b12-p2-s2">Para desenvolvedores e cientistas de dados, o paper serve como um estudo de caso valioso sobre como construir modelos eficientes e robustos através de engenharia cuidadosa e estratégia de treinamento inovadora.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">O Spark-Audio 1.0 é treinado 100% em infraestrutura doméstica (Huawei Ascend 910B e Hygon BW1000), demonstrando viabilidade técnica sem dependência de hardware ocidental.</span></li><li><span class="s" data-s="k1">A arquitetura combina um codificador de áudio de 0,65B parâmetros com um LLM MoE de 30B parâmetros, permitindo processamento unificado de fala e texto.</span></li><li><span class="s" data-s="k2">O modelo suporta reconhecimento em 99 idiomas e 202 dialetos, superando o Qwen3.5-Omni-Flash em reconhecimento multilíngue e diálogo falado.</span></li><li><span class="s" data-s="k3">Limitações incluem dificuldades em seguir instruções complexas e raciocínio auditivo avançado, indicando espaço para melhorias em capacidades de raciocínio.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.31292" rel="noopener">Spark-Audio 1.0 Technical Report</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.31292" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>
