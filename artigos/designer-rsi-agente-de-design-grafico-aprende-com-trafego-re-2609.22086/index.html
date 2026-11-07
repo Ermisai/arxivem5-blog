@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Designer-RSI: agente de design gráfico aprende com tráfego real sem atualizar pesos do modelo — arXiv em 5</title>
+<meta name="description" content="Um sistema que controla ferramentas de design profissional acumula procedimentos reutilizáveis em linguagem natural, evoluindo uma memória externa a partir de 1.406 prompts reais sem rótulos humanos nem fine-tuning.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Designer-RSI: agente de design gráfico aprende com tráfego real sem atualizar pesos do modelo">
+<meta property="og:description" content="Um sistema que controla ferramentas de design profissional acumula procedimentos reutilizáveis em linguagem natural, evoluindo uma memória externa a partir de 1.406 prompts reais sem rótulos humanos nem fine-tuning.">
+<meta property="og:image" content="../../assets/papers/2609.22086/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Agentes</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2609.22086" rel="noopener">arXiv:2609.22086</a>
+    </div>
+    <h1><span class="s" data-s="t">Designer-RSI: agente de design gráfico aprende com tráfego real sem atualizar pesos do modelo</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um sistema que controla ferramentas de design profissional acumula procedimentos reutilizáveis em linguagem natural, evoluindo uma memória externa a partir de 1.406 prompts reais sem rótulos humanos nem fine-tuning.</span></p>
+    <p class="byline">
+      <span>Du et al.</span>
+      <span>11 min de leitura</span>
+<span>18/09/2026</span>    </p>
+    <div class="listen" data-article="2609.22086" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema: design gráfico é longo, editável e difícil de avaliar</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Modelos generativos produzem imagens realistas a partir de texto, mas design gráfico profissional exige artefatos estruturados — camadas, vetores, máscaras — que o designer possa inspecionar e editar depois.</span> <span class="s" data-s="b0-p0-s1">Isso transforma a tarefa em um problema de decisão sequencial: o agente arranja assets, manipula tipografia, constrói máscaras, aplica efeitos e revisa decisões anteriores sem perder a editabilidade.</span> <span class="s" data-s="b0-p0-s2">Um único design pode exigir dezenas de operações interdependentes.</span></p><p><span class="s" data-s="b0-p1-s0">Aprender isso a partir de tráfego real é difícil por três razões.</span> <span class="s" data-s="b0-p1-s1">Primeiro, o feedback terminal — a imagem final — identifica mal qual decisão causou sucesso ou falha, um problema clássico de atribuição de crédito em horizontes longos.</span> <span class="s" data-s="b0-p1-s2">Segundo, os resultados são difíceis de verificar: os prompts misturam requisitos concretos (texto, cores, posições) com critérios subjetivos (hierarquia, composição, estilo) que avaliadores automáticos capturam apenas parcialmente.</span> <span class="s" data-s="b0-p1-s3">Terceiro, ao contrário de código com testes executáveis, design não tem oráculo de sucesso.</span></p><p><span class="s" data-s="b0-p2-s0">Aprendizado supervisionado precisa de demonstrações caras; otimização baseada em recompensa precisa lidar com atribuição de crédito e sinais ruidosos, especialmente quando o modelo de fundação está hospedado externamente ou é impraticável atualizar.</span> <span class="s" data-s="b0-p2-s1">Este paper propõe uma alternativa: tratar a memória procedural em torno de um modelo congelado como o alvo de aprendizado.</span></p>        <h2><span class="s" data-s="b1-h">A ideia: memória procedural que evolui sem mexer nos pesos</span></h2>
+<p><span class="s" data-s="b1-p0-s0">O sistema Designer-RSI mantém o modelo de linguagem congelado e acumula experiência em um banco externo de habilidades (skill bank) escritas em linguagem natural.</span> <span class="s" data-s="b1-p0-s1">Cada habilidade é um procedimento reutilizável — por exemplo, &#39;double exposure: extrair sujeito, construir máscaras, misturar outro asset, refinar&#39; — que o modelo pode adaptar, reordenar ou aplicar parcialmente.</span> <span class="s" data-s="b1-p0-s2">Uma habilidade fica entre uma chamada de ferramenta atômica e uma trajetória inteira: específica o suficiente para guiar execução, geral o suficiente para transferir.</span></p><p><span class="s" data-s="b1-p1-s0">A memória evolui em duas direções.</span> <span class="s" data-s="b1-p1-s1">Widening (alargamento) identifica subtarefas recorrentes que o banco atual não cobre e as destila em novas habilidades.</span> <span class="s" data-s="b1-p1-s2">Deepening (aprofundamento) revisa habilidades existentes que aparecem repetidamente em falhas, contrastando execuções que falharam com usos bem-sucedidos da mesma habilidade.</span> <span class="s" data-s="b1-p1-s3">Nenhum dos dois mecanismos atualiza pesos; apenas a biblioteca de habilidades muda.</span></p><p><span class="s" data-s="b1-p2-s0">O agente controla equivalentes de Adobe Photoshop, Illustrator e InDesign através de mais de 230 ferramentas.</span> <span class="s" data-s="b1-p2-s1">O modelo de fundação, as ferramentas, o renderizador, o avaliador e os papéis de evolução permanecem fixos.</span> <span class="s" data-s="b1-p2-s2">Mas uma mudança só persiste se melhorar o sistema, o que é difícil porque avaliadores baseados em LLM têm vieses documentados de posição e ordem.</span> <span class="s" data-s="b1-p2-s3">A solução é um replay gate: cada candidato a habilidade — nova ou revisada — é testado em um conjunto de prompts; a mudança é aceita apenas se consertar falhas sem regredir sucessos observados.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.22086/figure1.webp" alt="Visão geral do sistema. À esquerda, o agente recupera habilidades do banco, executa ferramentas e recebe nota automática. À direita, estatísticas e históricos alimentam widening e deepening, validados por replay gate antes de entrar no banco." loading="lazy">
+          <figcaption>
+            Visão geral do sistema. À esquerda, o agente recupera habilidades do banco, executa ferramentas e recebe nota automática. À direita, estatísticas e históricos alimentam widening e deepening, validados por replay gate antes de entrar no banco.
+            <span class="source">Figura 1 do paper · Du et al., arXiv:2609.22086</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Widening: criar habilidades para lacunas recorrentes</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Widening começa com subtarefas não cobertas: quando o agente falha, um modelo de reflexão analisa a trajetória e identifica o que faltou — por exemplo, &#39;aplicar gradiente radial&#39; ou &#39;alinhar texto em curva&#39;.</span> <span class="s" data-s="b3-p0-s1">Essas subtarefas são agrupadas por similaridade semântica usando embeddings; clusters recorrentes (que aparecem pelo menos k_min vezes no tráfego) viram candidatos a novas habilidades.</span></p><p><span class="s" data-s="b3-p1-s0">Cada candidato é destilado em linguagem natural: o modelo recebe os históricos do cluster e gera uma habilidade genérica que captura o padrão comum.</span> <span class="s" data-s="b3-p1-s1">Esse candidato passa pelo replay gate: é testado em um subconjunto dos prompts que motivaram sua criação.</span> <span class="s" data-s="b3-p1-s2">Se a nova habilidade aumentar a taxa de sucesso sem prejudicar casos que já funcionavam, ela entra no banco.</span> <span class="s" data-s="b3-p1-s3">Caso contrário, é descartada.</span></p><p><span class="s" data-s="b3-p2-s0">Widening expande cobertura, mas introduz ruído: habilidades recém-criadas não passaram por verificação em múltiplas tentativas e podem causar recuperações falso-positivas.</span> <span class="s" data-s="b3-p2-s1">Por isso, widening e deepening são complementares.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.22086/figure2.webp" alt="Pipeline de widening. Subtarefas não cobertas são agrupadas em lacunas recorrentes, destiladas em habilidades candidatas e admitidas ao banco através do replay gate." loading="lazy">
+          <figcaption>
+            Pipeline de widening. Subtarefas não cobertas são agrupadas em lacunas recorrentes, destiladas em habilidades candidatas e admitidas ao banco através do replay gate.
+            <span class="source">Figura 2 do paper · Du et al., arXiv:2609.22086</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Deepening: refinar habilidades que falham</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Deepening foca em habilidades que já existem no banco mas aparecem repetidamente em trajetórias que falharam.</span> <span class="s" data-s="b5-p0-s1">Para cada habilidade problemática, o sistema coleta dois conjuntos de históricos: execuções que usaram a habilidade e falharam, e execuções que usaram a mesma habilidade e tiveram sucesso.</span></p><p><span class="s" data-s="b5-p1-s0">Um modelo de reflexão contrasta os dois conjuntos e gera uma versão revisada da habilidade — por exemplo, adicionando um passo de validação, reordenando operações ou especificando melhor um parâmetro.</span> <span class="s" data-s="b5-p1-s1">Essa revisão também passa pelo replay gate: é testada nos piores prompts que falharam com a versão antiga.</span> <span class="s" data-s="b5-p1-s2">Se a revisão consertar falhas sem regredir sucessos, ela substitui a habilidade antiga no banco.</span> <span class="s" data-s="b5-p1-s3">Se for rejeitada, o sistema pode disparar um ciclo opcional de exploração one-shot para tentar uma reescrita mais radical.</span></p><p><span class="s" data-s="b5-p2-s0">Deepening converte cobertura em confiabilidade: habilidades que expandiram o banco via widening são refinadas até funcionarem de forma robusta.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.22086/figure3.webp" alt="Pipeline de deepening. Habilidades propensas a falhas são revisadas contrastando históricos ruins e bons. O candidato entra no banco apenas se vencer no replay gate nos piores prompts que falharam. Rejeição pode disparar exploração one-shot." loading="lazy">
+          <figcaption>
+            Pipeline de deepening. Habilidades propensas a falhas são revisadas contrastando históricos ruins e bons. O candidato entra no banco apenas se vencer no replay gate nos piores prompts que falharam. Rejeição pode disparar exploração one-shot.
+            <span class="source">Figura 3 do paper · Du et al., arXiv:2609.22086</span>
+          </figcaption>
+        </figure>
+        <aside class="callout">
+          <h3><span class="s" data-s="b7-t">Replay gate: o filtro que evita regressão</span></h3>
+          <p><span class="s" data-s="b7-c-s0">Avaliadores baseados em LLM têm vieses de posição e ordem.</span> <span class="s" data-s="b7-c-s1">O replay gate testa cada mudança candidata em um conjunto fixo de prompts: a mudança é aceita apenas se consertar falhas sem prejudicar sucessos já observados.</span> <span class="s" data-s="b7-c-s2">Isso estabiliza a evolução e impede que ruído de avaliação corrompa o banco.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b8-h">Configuração experimental: cinco rodadas, 1.406 prompts reais</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Os autores comparam o sistema EVOLVE (com banco de habilidades) contra BASE (sem habilidades), mantendo o agente subjacente fixo.</span> <span class="s" data-s="b8-p0-s1">Três modelos de fundação foram testados: Claude-Opus-4.6 e Claude-Sonnet-4 via Amazon Bedrock, e Qwen3.6-27B via vLLM em 8 GPUs A100.</span> <span class="s" data-s="b8-p0-s2">Configurações de raciocínio ficaram fixas em geração, evolução e avaliação; os modelos Claude usaram baixo esforço de pensamento, limitado a 2.000 e 5.000 tokens para Opus e Sonnet, respectivamente.</span> <span class="s" data-s="b8-p0-s3">Todos tiveram cap de 900 segundos por prompt.</span></p><p><span class="s" data-s="b8-p1-s0">Cada rodada de evolução consumiu cerca de 300 prompts de design extraídos de tráfego real de usuários e variantes aumentadas por LLM, repassados pelo agente para produzir trajetórias avaliadas que alimentam widening e deepening.</span> <span class="s" data-s="b8-p1-s1">Um prompt de design é uma solicitação em linguagem natural descrevendo o artefato, requisitos concretos (texto, cores, posições) e objetivos estilísticos; pode ter de poucas palavras a um parágrafo completo.</span></p><p><span class="s" data-s="b8-p2-s0">A avaliação usou um conjunto separado de 200 prompts escritos por humanos, disjunto dos prompts de evolução e fixo nas cinco rodadas: após cada rodada, o banco resultante foi congelado e testado no mesmo conjunto, de modo que reescritas, adições e desempenho por rodada fossem medidos contra um alvo constante.</span> <span class="s" data-s="b8-p2-s1">O banco começou com 76 habilidades derivadas de documentação e cresceu para 139 ao longo de cinco rodadas, totalizando 1.869 trajetórias avaliadas automaticamente, sem atualização de pesos e sem rótulos humanos.</span></p>        <h2><span class="s" data-s="b9-h">Benchmarks externos: T2I geral e design especializado</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Os autores avaliaram duas categorias de benchmarks, amostrando 300 prompts de cada.</span> <span class="s" data-s="b9-p0-s1">Para capacidade geral de texto para imagem (T2I), usaram GenEval2 (raciocínio composicional sobre objetos e relações espaciais), DPG-Bench (seguimento denso de prompt) e OneIG-EN/OneIG-ZH (alinhamento sujeito-elemento multilíngue e renderização de texto).</span> <span class="s" data-s="b9-p0-s2">Métricas: média geométrica de Soft-TIFA no GenEval2, média aritmética de Soft-TIFA no DPG-Bench e VQAScore no OneIG, julgados por Qwen3-VL-8B-Instruct sobre gerações bem-sucedidas.</span></p><p><span class="s" data-s="b9-p1-s0">Para capacidade de design, amostraram dados de avaliação de OpenCOLE, GraphicBench, CreatiDesign e BannerRequest400, que cobrem planejamento multi-passo, restrições de layout e texto, e qualidade visual.</span> <span class="s" data-s="b9-p1-s1">Aqui reportaram taxas de vitória pareadas EVOLVE-vs-BASE julgadas por GPT-5.4 em comparação cega de duas ordens para mitigar viés de posição.</span></p>        <h2><span class="s" data-s="b10-h">Resultados em T2I geral: até +26,6 pontos de taxa de sucesso</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Em tarefas gerais de T2I, equipar agentes com o banco de habilidades evoluído trouxe melhorias substanciais.</span> <span class="s" data-s="b10-p0-s1">Três conclusões principais: primeiro, qualidade de geração melhorou em média em todos os modelos.</span> <span class="s" data-s="b10-p0-s2">EVOLVE elevou a qualidade média em +3,83, +7,70 e +9,67 para Claude-Opus-4.6, Claude-Sonnet-4 e Qwen3.6-27B, respectivamente, embora benchmarks individuais possam regredir.</span> <span class="s" data-s="b10-p0-s3">Os scores absolutos altos do Qwen devem ser interpretados junto com sua taxa de sucesso mais baixa, já que qualidade é avaliada apenas em saídas bem-sucedidas e reflete desproporcionalmente prompts mais fáceis.</span></p><p><span class="s" data-s="b10-p1-s0">Segundo, EVOLVE melhora confiabilidade de execução na maioria dos benchmarks.</span> <span class="s" data-s="b10-p1-s1">O efeito é mais forte para Claude-Sonnet-4, cuja taxa de sucesso subiu de 72,7% para 99,3% no GenEval2 (+26,6 pontos percentuais) e de 82,7% para 100% no DPG-Bench (+17,3 pontos).</span> <span class="s" data-s="b10-p1-s2">Terceiro, overhead de latência permanece modesto: EVOLVE adiciona apenas 3,4% a 6,2% de overhead médio de latência entre os modelos, e pode ocasionalmente reduzir tempo de geração (por exemplo, 113 para 82 segundos para Sonnet no DPG-Bench).</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b11-t">Claude-Sonnet-4: de 72,7% a 99,3% de sucesso no GenEval2</span></h3>
+          <p><span class="s" data-s="b11-c-s0">A melhoria mais dramática ocorreu no Claude-Sonnet-4, que viu sua taxa de execução bem-sucedida saltar mais de 26 pontos percentuais no GenEval2 e atingir 100% de sucesso no DPG-Bench.</span> <span class="s" data-s="b11-c-s1">Isso mostra que a memória procedural pode compensar limitações de um modelo menor em tarefas estruturadas.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b12-h">Resultados em design especializado: até 71,7% de vitórias</span></h2>
+<p><span class="s" data-s="b12-p0-s0">Em tarefas especializadas de design gráfico, o agente EVOLVE superou BASE de forma consistente.</span> <span class="s" data-s="b12-p0-s1">Para Claude-Opus-4.6, a evolução garantiu 67,6% de taxa de vitória geral, com pico de 71,7% no CreatiDesign.</span> <span class="s" data-s="b12-p0-s2">Claude-Sonnet-4 alcançou 61,8% de vitória geral.</span> <span class="s" data-s="b12-p0-s3">Qwen3.6-27B obteve 62,8% geral, mas teve desempenho próximo ao empate no GraphicBench (49,0%).</span></p><p><span class="s" data-s="b12-p1-s0">Essas margens indicam que a evolução é particularmente eficaz em resolver restrições de design complexas e multi-passo que geração zero-shot padrão luta para lidar.</span> <span class="s" data-s="b12-p1-s1">Os benchmarks de design cobrem desde planejamento de layout até renderização precisa de texto e composição visual, áreas onde procedimentos reutilizáveis oferecem vantagem clara sobre raciocínio ad-hoc.</span></p>        <h2><span class="s" data-s="b13-h">Dinâmica de evolução: widening e deepening são complementares</span></h2>
+<p><span class="s" data-s="b13-p0-s0">A evolução de habilidades alterna entre widening e deepening sem agendamento manual, guiada por um trade-off cobertura-confiabilidade.</span> <span class="s" data-s="b13-p0-s1">Primeiro, widening exige recorrência: uma habilidade faltante só é criada após k_min falhas repetidas no tráfego.</span> <span class="s" data-s="b13-p0-s2">Segundo, widening não refinado introduz ruído: habilidades recém-criadas expandem cobertura mas carecem de verificação multi-tentativa, ocasionalmente causando recuperações falso-positivas ou degradação de desempenho.</span></p><p><span class="s" data-s="b13-p1-s0">Os autores testaram os dois mecanismos isoladamente em 200 prompts retidos do benchmark de tráfego de usuários.</span> <span class="s" data-s="b13-p1-s1">Widening sozinho alcançou 49,4% de taxa de vitória sobre o agente sem habilidades; deepening sozinho alcançou 48,6%.</span> <span class="s" data-s="b13-p1-s2">A combinação dos dois atingiu 58,5% (p=0,025), confirmando que widening e deepening são eficazes em combinação: criar expande cobertura, reescrever converte essa cobertura em confiabilidade.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.22086/figure7.webp" alt="Comparação qualitativa em seis prompts de design. Linha de cima: BASE (sem habilidades). Linha de baixo: EVOLVE (com banco de habilidades). Busca de assets é a mesma; linhas diferem apenas em quais assets o agente seleciona e como os manipula." loading="lazy">
+          <figcaption>
+            Comparação qualitativa em seis prompts de design. Linha de cima: BASE (sem habilidades). Linha de baixo: EVOLVE (com banco de habilidades). Busca de assets é a mesma; linhas diferem apenas em quais assets o agente seleciona e como os manipula.
+            <span class="source">Figura 7 do paper · Du et al., arXiv:2609.22086</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b15-h">Exemplos qualitativos: double exposure, logos e composições</span></h2>
+<p><span class="s" data-s="b15-p0-s0">A figura 7 mostra seis comparações lado a lado.</span> <span class="s" data-s="b15-p0-s1">No prompt &#39;Create Adobe logo with double exposure effect of flowers&#39;, BASE produz uma composição simples; EVOLVE aplica corretamente máscaras e blending para criar o efeito de dupla exposição.</span> <span class="s" data-s="b15-p0-s2">No prompt &#39;Make a logo for Indian Coffee House&#39;, BASE gera texto genérico; EVOLVE constrói um logo estruturado com tipografia adequada e elementos visuais.</span></p><p><span class="s" data-s="b15-p1-s0">Em &#39;A dog on the beach and add an eagle&#39;, BASE coloca os dois elementos de forma desarticulada; EVOLVE compõe a cena com hierarquia visual clara.</span> <span class="s" data-s="b15-p1-s1">Em &#39;Soccer player&#39;s silhouette on the grass field&#39;, BASE falha em criar a silhueta; EVOLVE extrai o sujeito, constrói máscara e posiciona sobre o campo.</span> <span class="s" data-s="b15-p1-s2">Esses exemplos ilustram como procedimentos reutilizáveis — extração de sujeito, construção de máscara, blending, composição hierárquica — transferem entre prompts diferentes.</span></p>        <h2><span class="s" data-s="b16-h">O que o paper não mostra: limitações e escopo</span></h2>
+<p><span class="s" data-s="b16-p0-s0">Primeiro, o sistema depende de um avaliador automático para gerar recompensas, e o paper reconhece que avaliadores baseados em LLM capturam critérios subjetivos apenas parcialmente.</span> <span class="s" data-s="b16-p0-s1">O replay gate mitiga vieses de posição e ordem, mas não elimina ruído de avaliação; mudanças no avaliador podem afetar a evolução.</span></p><p><span class="s" data-s="b16-p1-s0">Segundo, os experimentos usaram modelos de fronteira (Claude Opus/Sonnet e Qwen3.6-27B) e não está claro como o sistema se comportaria com modelos menores ou menos capazes.</span> <span class="s" data-s="b16-p1-s1">O Qwen teve taxas de sucesso mais baixas em alguns benchmarks, sugerindo que a memória procedural pode não compensar totalmente limitações de capacidade base.</span></p><p><span class="s" data-s="b16-p2-s0">Terceiro, o paper não explora quantas rodadas de evolução são necessárias para convergência, nem se o banco de habilidades continua melhorando indefinidamente ou satura.</span> <span class="s" data-s="b16-p2-s1">As cinco rodadas mostraram ganhos consistentes, mas a curva de aprendizado de longo prazo permanece em aberto.</span> <span class="s" data-s="b16-p2-s2">Quarto, o sistema foi avaliado em inglês e chinês (OneIG-ZH), mas não em outras línguas; a transferência multilíngue de habilidades não foi testada sistematicamente.</span></p><p><span class="s" data-s="b16-p3-s0">Quinto, o paper não compara com fine-tuning supervisionado ou reinforcement learning from human feedback (RLHF), que seriam baselines naturais se demonstrações ou preferências humanas estivessem disponíveis.</span> <span class="s" data-s="b16-p3-s1">A vantagem do Designer-RSI é operar sem rótulos humanos e sem atualizar pesos, mas o custo dessa restrição em relação a métodos que têm acesso a supervisão humana não foi quantificado.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b17-t">Memória procedural vs. fine-tuning</span></h3>
+          <p><span class="s" data-s="b17-c-s0">O paper não compara com fine-tuning ou RLHF.</span> <span class="s" data-s="b17-c-s1">A vantagem do Designer-RSI é operar sem rótulos humanos e sem atualizar pesos de modelos hospedados externamente, mas o custo dessa restrição em relação a métodos supervisionados permanece desconhecido.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b18-h">Por que isso importa</span></h2>
+<p><span class="s" data-s="b18-p0-s0">Designer-RSI mostra que é possível adaptar agentes continuamente a partir de tráfego real sem fine-tuning, rótulos humanos ou acesso a pesos do modelo.</span> <span class="s" data-s="b18-p0-s1">Isso é relevante para cenários em que modelos de fundação são hospedados externamente (via API) ou atualizações de peso são caras ou impraticáveis.</span> <span class="s" data-s="b18-p0-s2">A memória procedural em linguagem natural é interpretável: designers podem inspecionar, editar ou desabilitar habilidades individuais, algo impossível com pesos de rede neural.</span></p><p><span class="s" data-s="b18-p1-s0">O replay gate oferece uma solução prática para evolução sob feedback ruidoso e não verificável, um problema comum em domínios criativos e subjetivos.</span> <span class="s" data-s="b18-p1-s1">A complementaridade entre widening e deepening — expansão de cobertura seguida de refinamento — pode generalizar para outros domínios de agentes de longo horizonte, como automação de escritório, suporte técnico ou criação de conteúdo.</span></p><p><span class="s" data-s="b18-p2-s0">Finalmente, o paper demonstra que 230+ ferramentas de software profissional podem ser controladas por um modelo de linguagem através de memória procedural, abrindo caminho para agentes que operam aplicativos complexos sem precisar de modelos especializados por aplicativo.</span> <span class="s" data-s="b18-p2-s1">A abordagem é modular: ferramentas, modelo, avaliador e mecanismos de evolução podem ser substituídos independentemente.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Sistema evolui banco de 76 para 139 habilidades em linguagem natural a partir de 1.406 prompts reais, sem fine-tuning nem rótulos humanos, elevando taxa de sucesso de 72,7% a 99,3% no GenEval2 (Claude-Sonnet-4).</span></li><li><span class="s" data-s="k1">Widening cria habilidades para lacunas recorrentes; deepening refina habilidades que falham. Combinados, atingem 58,5% de vitórias vs. agente sem habilidades (p=0,025); isolados, 49,4% e 48,6%.</span></li><li><span class="s" data-s="k2">Replay gate filtra mudanças: aceita apenas revisões que consertam falhas sem regredir sucessos, estabilizando evolução sob feedback ruidoso de avaliadores automáticos.</span></li><li><span class="s" data-s="k3">Overhead de latência é modesto (3,4% a 6,2%). Memória procedural é interpretável: habilidades podem ser inspecionadas, editadas ou desabilitadas, ao contrário de pesos de rede neural.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2609.22086" rel="noopener">Designer-RSI: Evolving Procedural Memory from User Traffic for Agentic Graphic Design</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2609.22086" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

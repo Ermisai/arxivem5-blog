@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DoubtLess: Redução de Tokens em Modelos de Raciocínio sem Treinamento — arXiv em 5</title>
+<meta name="description" content="Um método de decodificação que usa um modelo menor para guiar um maior a ser mais conciso, reduzindo tokens de raciocínio em 31% sem perder precisão.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DoubtLess: Redução de Tokens em Modelos de Raciocínio sem Treinamento">
+<meta property="og:description" content="Um método de decodificação que usa um modelo menor para guiar um maior a ser mais conciso, reduzindo tokens de raciocínio em 31% sem perder precisão.">
+<meta property="og:image" content="../../assets/papers/2610.18862/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>LLMs</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.18862" rel="noopener">arXiv:2610.18862</a>
+    </div>
+    <h1><span class="s" data-s="t">DoubtLess: Redução de Tokens em Modelos de Raciocínio sem Treinamento</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um método de decodificação que usa um modelo menor para guiar um maior a ser mais conciso, reduzindo tokens de raciocínio em 31% sem perder precisão.</span></p>
+    <p class="byline">
+      <span>Luo et al.</span>
+      <span>5 min de leitura</span>
+<span>13/10/2026</span>    </p>
+    <div class="listen" data-article="2610.18862" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=UMxPS9E14Qk" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Custo do Raciocínio em Cadeia</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Modelos de linguagem de raciocínio, como Qwen3 e DeepSeek-R1, alcançam alto desempenho em tarefas complexas gerando longas cadeias de pensamento (CoT, do inglês Chain of Thought).</span> <span class="s" data-s="b0-p0-s1">No entanto, essa abordagem tem um custo significativo: a geração excessiva de tokens.</span> <span class="s" data-s="b0-p0-s2">Os modelos frequentemente escrevem mais do que o necessário para resolver um problema, gastando recursos computacionais e tempo de inferência em verificações redundantes.</span> <span class="s" data-s="b0-p0-s3">Estudos mostram que, em execuções corretas, entre 32% e 69% do CoT é escrito após a resposta correta já ter aparecido.</span> <span class="s" data-s="b0-p0-s4">Grande parte desse texto adicional consiste em re-derivações e re-verificações de resultados que o modelo já alcançou, adicionando tokens sem adicionar informação útil.</span></p>        <h2><span class="s" data-s="b1-h">Limitações dos Métodos Existentes</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Para mitigar esse problema, abordagens anteriores podem ser divididas em duas categorias: baseadas em treinamento e de tempo de inferência.</span> <span class="s" data-s="b1-p0-s1">As primeiras adicionam penalidades de comprimento ou limites de tokens ao reforço por aprendizado por reforço (RLHF) ou fazem fine-tuning em traços curtos.</span> <span class="s" data-s="b1-p0-s2">Embora eficazes, elas exigem que os pesos do modelo sejam alterados, necessitando de um novo ciclo de treinamento para cada nova versão do modelo.</span> <span class="s" data-s="b1-p0-s3">As abordagens de tempo de inferência, por outro lado, tentam controlar a saída durante a geração.</span> <span class="s" data-s="b1-p0-s4">Isso inclui pedir brevidade no prompt, bloquear palavras-chave como &#39;wait&#39; (espera), parar a geração antecipadamente ou adicionar um vetor de direcionamento fixo aos estados ocultos do modelo.</span> <span class="s" data-s="b1-p0-s5">Essas técnicas têm falhas: prompts dependem da obediência do modelo, bloqueios de palavras são rígidos demais, paradas antecipadas podem cortar raciocínio útil e vetores fixos não se adaptam ao contexto dinâmico.</span></p>        <h2><span class="s" data-s="b2-h">A Ideia do DoubtLess</span></h2>
+<p><span class="s" data-s="b2-p0-s0">O paper propõe o DoubtLess, um método de decodificação livre de treinamento que utiliza um modelo de raciocínio muito menor para guiar o modelo grande.</span> <span class="s" data-s="b2-p0-s1">A premissa é simples: um modelo pequeno, que compartilha o tokenizador do modelo grande, lê o texto gerado até o momento duas vezes sob instruções opostas.</span> <span class="s" data-s="b2-p0-s2">Na primeira, ele é instruído a ser um &#39;pensador breve&#39;, indo direto à resposta sem re-derivações.</span> <span class="s" data-s="b2-p0-s3">Na segunda, é instruído a ser um &#39;pensador verboso&#39;, verificando cada passo e considerando alternativas.</span> <span class="s" data-s="b2-p0-s4">A diferença entre os vetores de logitos (logits) resultantes dessas duas gerações é calculada e adicionada aos logitos do modelo grande, escalonada por um fator de força α. Isso cria uma direção dinâmica que empurra o modelo grande para longe das re-verificações redundantes.</span></p>        <h2><span class="s" data-s="b3-h">Mecanismo Detalhado</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O funcionamento do DoubtLess pode ser entendido através da matemática da decodificação.</span> <span class="s" data-s="b3-p0-s1">Dado um prompt x, o modelo grande M gera tokens sequencialmente.</span> <span class="s" data-s="b3-p0-s2">Em cada passo t, o modelo pequeno D gera dois vetores de logitos: z_brief e z_verbose.</span> <span class="s" data-s="b3-p0-s3">O vetor de direção é definido como a diferença entre eles.</span> <span class="s" data-s="b3-p0-s4">Esse vetor é somado aos logitos base do modelo grande, z_base.</span> <span class="s" data-s="b3-p0-s5">A amostragem do próximo token é feita a partir dessa distribuição modificada, restrita ao conjunto top-p do modelo grande.</span> <span class="s" data-s="b3-p0-s6">Isso garante que o modelo grande nunca escolha um token que consideraria impossível ou extremamente improvável por conta própria; ele apenas vê a probabilidade de certos tokens ser reduzida ou aumentada pelo modelo pequeno.</span> <span class="s" data-s="b3-p0-s7">A diferença de logitos equivale a uma diferença de log-probabilidades, reponderando a distribuição original.</span></p>        <h2><span class="s" data-s="b4-h">Dinâmica Contextual</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Uma vantagem crucial do DoubtLess sobre métodos anteriores é a dinâmica.</span> <span class="s" data-s="b4-p0-s1">Como o modelo pequeno recalcula a direção a cada passo, baseado no contexto atual, o direcionamento se adapta.</span> <span class="s" data-s="b4-p0-s2">Antes da resposta correta aparecer, o &#39;pensador breve&#39; e o &#39;pensador verboso&#39; tendem a concordar sobre os próximos passos lógicos, resultando em uma direção próxima de zero.</span> <span class="s" data-s="b4-p0-s3">Isso significa que o raciocínio inicial não é prejudicado.</span> <span class="s" data-s="b4-p0-s4">No entanto, após a resposta correta ser encontrada, os dois pensadores divergem: o breve quer parar, o verboso quer verificar.</span> <span class="s" data-s="b4-p0-s5">Essa divergência cria uma força que suprime palavras que iniciam novas verificações, reduzindo efetivamente o texto redundante sem cortar o raciocínio necessário.</span></p>        <h2><span class="s" data-s="b5-h">Resultados nos Benchmarks</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os autores avaliaram o DoubtLess em sete benchmarks de matemática competitiva, ciências de nível de pós-graduação e programação competitiva.</span> <span class="s" data-s="b5-p0-s1">O modelo base foi o Qwen3-32B.</span> <span class="s" data-s="b5-p0-s2">Os resultados mostram que o DoubtLess reduz os tokens de raciocínio em 31% sem perda de precisão.</span> <span class="s" data-s="b5-p0-s3">Isso supera cinco métodos de linha de base de tempo de inferência.</span> <span class="s" data-s="b5-p0-s4">O método de prompt conciso foi o mais próximo, mas o DoubtLess removeu mais tokens em seis dos sete benchmarks.</span> <span class="s" data-s="b5-p0-s5">Outros métodos, como NoWait e ThinkBrake, reduziram tokens, mas sofreram quedas significativas de precisão em alguns benchmarks, enquanto o DoubtLess manteve a acurácia estável.</span></p>        <h2><span class="s" data-s="b6-h">Generalização e Agentes de Código</span></h2>
+<p><span class="s" data-s="b6-p0-s0">A eficácia do DoubtLess não se limita ao Qwen3.</span> <span class="s" data-s="b6-p0-s1">O método foi testado em duas outras famílias de modelos, EXAONE-4.0 e Granite-4.2, usando modelos pequenos de suas respectivas famílias para direcionamento.</span> <span class="s" data-s="b6-p0-s2">Nesses casos, o DoubtLess removeu cerca de três vezes mais tokens do que o prompt conciso, sem perda de precisão.</span> <span class="s" data-s="b6-p0-s3">Isso destaca uma limitação dos prompts: a eficácia depende de quão bem o modelo segue instruções de brevidade, o que varia entre famílias.</span> <span class="s" data-s="b6-p0-s4">O DoubtLess, por modificar diretamente a distribuição de probabilidade, é mais robusto a essas variações.</span> <span class="s" data-s="b6-p0-s5">Além disso, em um agente de depuração de código auto-reparável no HumanEval+, o DoubtLess reduziu os tokens de pensamento por turno em 20% e melhorou a taxa de sucesso em 2.0 pontos.</span></p>        <h2><span class="s" data-s="b7-h">Análise do que é Removido</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Uma análise detalhada revela que a maioria dos tokens removidos pelo DoubtLess ocorre após a primeira aparição da resposta correta.</span> <span class="s" data-s="b7-p0-s1">Especificamente, 65% a 89% dos tokens economizados são gerados após a resposta.</span> <span class="s" data-s="b7-p0-s2">Isso confirma a hipótese de que o método é eficaz em cortar re-verificações redundantes.</span> <span class="s" data-s="b7-p0-s3">Antes da resposta, o método deixa o raciocínio quase inalterado, preservando a capacidade do modelo de chegar à solução.</span> <span class="s" data-s="b7-p0-s4">Após a resposta, ele atua como um filtro, impedindo que o modelo entre em loops de verificação que não adicionam valor.</span> <span class="s" data-s="b7-p0-s5">Isso é consistente com a observação de que verificações feitas durante o trabalho ou a primeira verificação são úteis, mas repetições subsequentes são geralmente desnecessárias.</span></p>        <h2><span class="s" data-s="b8-h">Limitações e Considerações Finais</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Apesar dos resultados promissores, o DoubtLess tem limitações.</span> <span class="s" data-s="b8-p0-s1">O método requer a execução de um modelo pequeno adicional a cada passo de decodificação do modelo grande, o que pode aumentar a latência de inferência, embora o modelo pequeno seja muito menor.</span> <span class="s" data-s="b8-p0-s2">A eficácia depende da qualidade do modelo pequeno e da similaridade de tokenizadores.</span> <span class="s" data-s="b8-p0-s3">Além disso, o paper não aborda a aplicação em tarefas que não envolvem raciocínio passo a passo, como geração de texto criativo ou tradução.</span> <span class="s" data-s="b8-p0-s4">O DoubtLess é específico para modelos que produzem CoT.</span> <span class="s" data-s="b8-p0-s5">Os autores também notam que, quando combinado com métodos de compressão baseados em treinamento, o DoubtLess pode reduzir ainda mais os tokens, sugerindo que há sinergia entre abordagens de tempo de inferência e treinamento.</span> <span class="s" data-s="b8-p0-s6">O código está disponível para replicação dos resultados.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">DoubtLess é um método de decodificação livre de treinamento que usa um modelo pequeno para reduzir tokens desnecessários em modelos grandes.</span></li><li><span class="s" data-s="k1">O mecanismo compara instruções &#39;breve&#39; e &#39;verbose&#39; para criar um vetor de direção que suprime verificações redundantes.</span></li><li><span class="s" data-s="k2">Reduz 31% dos tokens de raciocínio no Qwen3-32B sem perda de precisão, superando métodos baseados em prompts ou vetores fixos.</span></li><li><span class="s" data-s="k3">A economia ocorre principalmente após a resposta correta ser encontrada, cortando re-verificações desnecessárias.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.18862" rel="noopener">DoubtLess: Training-Free Contrastive Decoding for Efficient Reasoning</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.18862" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

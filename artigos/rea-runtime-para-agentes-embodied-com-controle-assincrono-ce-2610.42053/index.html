@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>REA: Runtime para Agentes Embodied com Controle Assíncrono Cérebro-Cerebelo — arXiv em 5</title>
+<meta name="description" content="O paper apresenta o REA, um runtime que orquestra modelos de linguagem lentos (cérebro) e políticas de controle rápidas (cerebelo) de forma assíncrona, eliminando gargalos de latência e falhas silenciosas em robótica.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="REA: Runtime para Agentes Embodied com Controle Assíncrono Cérebro-Cerebelo">
+<meta property="og:description" content="O paper apresenta o REA, um runtime que orquestra modelos de linguagem lentos (cérebro) e políticas de controle rápidas (cerebelo) de forma assíncrona, eliminando gargalos de latência e falhas silenciosas em robótica.">
+<meta property="og:image" content="../../assets/papers/2610.42053/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Agentes</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.42053" rel="noopener">arXiv:2610.42053</a>
+    </div>
+    <h1><span class="s" data-s="t">REA: Runtime para Agentes Embodied com Controle Assíncrono Cérebro-Cerebelo</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">O paper apresenta o REA, um runtime que orquestra modelos de linguagem lentos (cérebro) e políticas de controle rápidas (cerebelo) de forma assíncrona, eliminando gargalos de latência e falhas silenciosas em robótica.</span></p>
+    <p class="byline">
+      <span>Zhou et al.</span>
+      <span>7 min de leitura</span>
+<span>30/10/2026</span>    </p>
+    <div class="listen" data-article="2610.42053" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=rI3FPLH04j8" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Dilema do Controle Robótico: Precisão vs. Velocidade</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A robótica moderna enfrenta um problema fundamental de arquitetura: a lacuna entre o raciocínio de alto nível e a execução motora de baixo nível.</span> <span class="s" data-s="b0-p0-s1">Modelos de fundação (Foundation Models) tornaram-se notavelmente confiáveis para planejamento e raciocínio abstrato, atuando como o que os autores chamam de &#34;cérebro&#34; (System 2).</span> <span class="s" data-s="b0-p0-s2">No entanto, eles são inerentemente lentos e custosos computacionalmente, tornando-os inadequados para atuar como controladores finos em tempo real.</span></p><p><span class="s" data-s="b0-p1-s0">Por outro lado, políticas reativas, como Visuo-Linguísticas-Acionistas (VLAs) e controladores de corpo inteiro, oferecem reflexos rápidos e eficientes, semelhantes ao &#34;cerebelo&#34; (System 1 ou System 0).</span> <span class="s" data-s="b0-p1-s1">Essas políticas são ótimas para execução, mas lutam para generalizar em cenários novos ou complexos.</span> <span class="s" data-s="b0-p1-s2">A ideia de combinar um cérebro deliberativo com um cerebelo reativo parece natural, mas a implementação prática esbarra em obstáculos de coordenação assíncrona.</span></p><p><span class="s" data-s="b0-p2-s0">O principal problema reside na incompatibilidade das pilhas de software e na dificuldade de sincronização.</span> <span class="s" data-s="b0-p2-s1">Em abordagens tradicionais, um agente que chama uma política rápida pode sofrer bloqueios (stalls) devido à latência do modelo lento.</span> <span class="s" data-s="b0-p2-s2">Inversamente, se a política rápida chama o agente em caso de erro, ela pode entrar em loops de falha persistente ou, pior, ignorar falhas silenciosas onde a política falha sem gerar um sinal de erro explícito.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.42053/figure3.webp" alt="Comparação de três formas de acoplar um cérebro lento a políticas rápidas: (a) latência em cada passo, (b) interrupção por erros persistentes, e (c) o REA que despacha baseado em memória de rota." loading="lazy">
+          <figcaption>
+            Comparação de três formas de acoplar um cérebro lento a políticas rápidas: (a) latência em cada passo, (b) interrupção por erros persistentes, e (c) o REA que despacha baseado em memória de rota.
+            <span class="source">Figura 3 do paper · Zhou et al., arXiv:2610.42053</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">Introduzindo o REA: Uma Runtime Unificada</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Para resolver esses problemas, os pesquisadores propõem o REA (Routed Embodied Agent), um runtime unificado projetado para fazer três tipos de políticas cooperarem sob uma única regra de ouro: nenhuma política em execução deve esperar pelo cérebro.</span> <span class="s" data-s="b2-p0-s1">O REA não consulta o modelo de linguagem em cada falha, mas sim em momentos estratégicos definidos por um mecanismo de roteamento inteligente.</span></p><p><span class="s" data-s="b2-p1-s0">A arquitetura do REA é dividida em três níveis contratuais.</span> <span class="s" data-s="b2-p1-s1">O System 0 consiste em políticas reativas de baixa latência.</span> <span class="s" data-s="b2-p1-s2">O System 1 é o roteador encarnado (Embodied Router), responsável por decidir qual política executar com base em dados históricos.</span> <span class="s" data-s="b2-p1-s3">O System 2 é o agente deliberativo, que atua apenas quando necessário para recuperação ou planejamento complexo.</span></p><p><span class="s" data-s="b2-p2-s0">Essa separação permite que o sistema opere de forma assíncrona.</span> <span class="s" data-s="b2-p2-s1">Em vez de uma chamada síncrona bloqueante, o REA utiliza uma memória de rota (route memory) que armazena o sucesso medido de cada política para tarefas específicas.</span> <span class="s" data-s="b2-p2-s2">Isso permite que o roteador selecione a melhor política disponível sem precisar consultar o modelo lento no momento da execução, mantendo a fluidez do controle.</span></p>        <h2><span class="s" data-s="b3-h">Mecanismo: Memória de Rota e Gate de Julgamento</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O coração do REA é a combinação da memória de rota com um gate de julgamento acionado por fronteira (boundary-triggered judge gate).</span> <span class="s" data-s="b3-p0-s1">A memória de rota é construída durante uma fase de desenvolvimento, onde o sistema registra quais políticas têm maior probabilidade de sucesso para quais tipos de tarefas.</span> <span class="s" data-s="b3-p0-s2">Quando uma nova tarefa é apresentada, o roteador (System 1) consulta essa memória para selecionar a política inicial, evitando a latência de consulta ao cérebro.</span></p><p><span class="s" data-s="b3-p1-s0">Durante a execução, o gate de julgamento monitora a execução da política.</span> <span class="s" data-s="b3-p1-s1">Se a política falhar ou se o sistema detectar uma anomalia na fronteira de execução, o gate pode acionar o System 2 (cérebro) para intervir.</span> <span class="s" data-s="b3-p1-s2">Isso é crucial para lidar com falhas silenciosas, onde a política rápida continua executando, mas de forma subótima ou incorreta, sem gerar um erro explícito que interrompa o loop.</span></p><p><span class="s" data-s="b3-p2-s0">Além disso, o REA implementa uma escada de escalada de orçamento compartilhado (shared-budget escalation ladder) para recuperação limitada.</span> <span class="s" data-s="b3-p2-s1">Se a política inicial falhar, o sistema pode tentar outras políticas na sua pool antes de recorrer ao agente de alto nível.</span> <span class="s" data-s="b3-p2-s2">Isso evita que o sistema entre em loops infinitos de tentativas falhas, garantindo que o recurso computacional seja usado de forma eficiente e bounded.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b4-t">Regra de Ouro: Não Espere pelo Cérebro</span></h3>
+          <p><span class="s" data-s="b4-c-s0">O princípio central do REA é que nenhuma política em execução deve bloquear esperando pelo modelo de linguagem.</span> <span class="s" data-s="b4-c-s1">A comunicação é assíncrona e baseada em eventos, garantindo que a latência do raciocínio de alto nível não impacte a estabilidade do controle de baixo nível.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b5-h">Avaliação no LIBERO-Pro: Eficiência e Precisão</span></h2>
+<p><span class="s" data-s="b5-p0-s0">O REA foi avaliado em 3.000 episódios de teste em 60 tarefas do benchmark LIBERO-Pro.</span> <span class="s" data-s="b5-p0-s1">Os resultados mostram que o sistema atinge uma taxa de sucesso de 95,9%, superando a melhor política individual em seu próprio pool (94,7%).</span> <span class="s" data-s="b5-p0-s2">O ganho não vem apenas de uma pool maior de políticas, mas da capacidade de roteamento inteligente de selecionar a política certa para a tarefa certa.</span></p><p><span class="s" data-s="b5-p1-s0">Em termos de eficiência, o REA reduziu o número de passos de controle em 25% e o tempo de controle em 17% em comparação com os baselines.</span> <span class="s" data-s="b5-p1-s1">Isso demonstra que o roteamento baseado em memória de rota não apenas melhora a precisão, mas também a eficiência computacional, evitando chamadas desnecessárias ao modelo lento.</span></p><p><span class="s" data-s="b5-p2-s0">A análise ablation mostra que a memória de rota é o componente mais crítico.</span> <span class="s" data-s="b5-p2-s1">Sem ela, o desempenho cai significativamente, mesmo com o gate de julgamento.</span> <span class="s" data-s="b5-p2-s2">Isso confirma que a pré-computação do sucesso das políticas é essencial para a operação assíncrona eficiente.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.42053/table1.webp" alt="Tabela principal mostrando que o REA atinge 95,9% de sucesso no LIBERO-Pro com menos passos, superando baselines individuais como Agents SDK e métodos de geração de código." loading="lazy">
+          <figcaption>
+            Tabela principal mostrando que o REA atinge 95,9% de sucesso no LIBERO-Pro com menos passos, superando baselines individuais como Agents SDK e métodos de geração de código.
+            <span class="source">Tabela 1 do paper · Zhou et al., arXiv:2610.42053</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Transferência e RoboTwin 2.0: Políticas Mistas</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Um aspecto interessante do REA é sua capacidade de operar com políticas de diferentes origens.</span> <span class="s" data-s="b7-p0-s1">No estudo RoboTwin 2.0, o sistema foi testado com 100 episódios, alcançando 84% de sucesso com políticas VLA e 86% com políticas VLA+code.</span> <span class="s" data-s="b7-p0-s2">Isso supera o baseline mais forte de VLA individual (MEDex), que atingiu 80%.</span></p><p><span class="s" data-s="b7-p1-s0">Isso prova que o REA pode orquestrar políticas aprendidas e programáticas dentro do mesmo runtime.</span> <span class="s" data-s="b7-p1-s1">A memória de rota permite que o sistema aprenda quais tipos de políticas (geradas por código ou aprendidas por dados) funcionam melhor para quais sub-tarefas, permitindo uma flexibilidade que métodos monolíticos não oferecem.</span></p><p><span class="s" data-s="b7-p2-s0">A transferência para o benchmark BEHAVIOR-1K também foi bem-sucedida, onde o REA alcançou as maiores taxas de sucesso observadas entre os métodos comparados.</span> <span class="s" data-s="b7-p2-s1">Isso sugere que a abordagem assíncrona é robusta e generalizável para diferentes ambientes simulados.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.42053/figure7.webp" alt="Resultados de portabilidade do REA em diferentes benchmarks e robôs, mostrando altas taxas de sucesso com intervalos de confiança de Wilson." loading="lazy">
+          <figcaption>
+            Resultados de portabilidade do REA em diferentes benchmarks e robôs, mostrando altas taxas de sucesso com intervalos de confiança de Wilson.
+            <span class="source">Figura 7 do paper · Zhou et al., arXiv:2610.42053</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Experimentos no Mundo Real: Unitree G1 e AlohaMini2</span></h2>
+<p><span class="s" data-s="b9-p0-s0">A validação final do REA ocorreu em robôs reais.</span> <span class="s" data-s="b9-p0-s1">No robô humanóide Unitree G1, o sistema foi capaz de realizar tarefas complexas, como empurrar uma cadeira, demonstrando a transferência do simulador para o mundo real.</span> <span class="s" data-s="b9-p0-s2">As imagens mostram o robô executando a tarefa com sucesso, sem quedas ou comportamentos erráticos.</span></p><p><span class="s" data-s="b9-p1-s0">No robô AlohaMini2, o REA foi testado em tarefas de colocação de blocos.</span> <span class="s" data-s="b9-p1-s1">Os resultados mostraram que o sistema conseguiu realizar a sequência de aproximação, levantamento, colocação e liberação de forma consistente, superando outros métodos em termos de sucesso e estabilidade.</span></p><p><span class="s" data-s="b9-p2-s0">Esses experimentos reais são cruciais porque demonstram que a arquitetura assíncrona não é apenas teórica.</span> <span class="s" data-s="b9-p2-s1">A latência do modelo de linguagem não compromete a estabilidade física do robô, e o roteamento inteligente ajuda a lidar com as incertezas do mundo real, como ruído nos sensores e variações na dinâmica do robô.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.42053/figure13.webp" alt="REA em robôs reais: (a,b) Unitree G1 empurrando uma cadeira; (c) AlohaMini2 realizando colocação de blocos com sucesso." loading="lazy">
+          <figcaption>
+            REA em robôs reais: (a,b) Unitree G1 empurrando uma cadeira; (c) AlohaMini2 realizando colocação de blocos com sucesso.
+            <span class="source">Figura 13 do paper · Zhou et al., arXiv:2610.42053</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b11-h">Limitações e Escopo</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Apesar dos resultados promissores, o paper tem limitações.</span> <span class="s" data-s="b11-p0-s1">A memória de rota depende de dados de desenvolvimento para ser construída.</span> <span class="s" data-s="b11-p0-s2">Isso significa que o sistema requer uma fase de coleta de dados e calibração antes de ser implantado em novas tarefas.</span> <span class="s" data-s="b11-p0-s3">A generalização para tarefas completamente novas, sem dados de desenvolvimento, pode não ser tão eficaz.</span></p><p><span class="s" data-s="b11-p1-s0">Além disso, o sistema depende da qualidade dos modelos de linguagem e das políticas de controle.</span> <span class="s" data-s="b11-p1-s1">Se o modelo de linguagem (System 2) tiver erros de raciocínio ou as políticas (System 1/0) tiverem viéses sistemáticos, o roteamento pode não ser capaz de compensar completamente esses problemas.</span></p><p><span class="s" data-s="b11-p2-s0">O paper também não aborda extensivamente a escalabilidade para pools de políticas extremamente grandes.</span> <span class="s" data-s="b11-p2-s1">Embora o roteamento seja eficiente, o custo de manutenção da memória de rota pode crescer com o número de políticas e tarefas.</span> <span class="s" data-s="b11-p2-s2">Futuros trabalhos podem precisar explorar métodos mais eficientes para atualização e compressão dessa memória.</span></p>        <h2><span class="s" data-s="b12-h">Conclusão: Uma Arquitetura Híbrida Madura</span></h2>
+<p><span class="s" data-s="b12-p0-s0">O REA representa um passo significativo na direção de arquiteturas robóticas híbridas maduras.</span> <span class="s" data-s="b12-p0-s1">Ao separar claramente as responsabilidades do raciocínio de alto nível e do controle de baixo nível, e ao garantir que a comunicação entre eles seja assíncrona e eficiente, o sistema supera as limitações das abordagens monolíticas.</span></p><p><span class="s" data-s="b12-p1-s0">Os resultados no LIBERO-Pro, RoboTwin 2.0 e em robôs reais demonstram que a combinação de roteamento baseado em memória e gates de julgamento pode melhorar significativamente a taxa de sucesso e a eficiência computacional.</span></p><p><span class="s" data-s="b12-p2-s0">Para desenvolvedores e pesquisadores em robótica, o REA oferece um blueprint prático para integrar modelos de fundação em sistemas de controle em tempo real, sem sacrificar a velocidade ou a estabilidade.</span> <span class="s" data-s="b12-p2-s1">A abordagem não é uma revolução teórica, mas uma engenharia robusta de um problema prático antigo.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">REA elimina gargalos de latência ao garantir que políticas de controle nunca esperem pelo modelo de linguagem (System 2), operando de forma assíncrona.</span></li><li><span class="s" data-s="k1">A memória de rota pré-computada permite selecionar a melhor política para cada tarefa, aumentando o sucesso em 1,2% sobre o melhor baseline individual no LIBERO-Pro.</span></li><li><span class="s" data-s="k2">O sistema orquestra políticas aprendidas (VLAs) e programáticas (código) no mesmo runtime, alcançando 86% de sucesso no RoboTwin 2.0.</span></li><li><span class="s" data-s="k3">A arquitetura foi validada em robôs reais (Unitree G1, AlohaMini2), demonstrando transferência eficaz do simulador para o mundo físico.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.42053" rel="noopener">REA: A Routed Embodied Agent Runtime for Asynchronous Brain-Cerebellum Control</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.42053" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

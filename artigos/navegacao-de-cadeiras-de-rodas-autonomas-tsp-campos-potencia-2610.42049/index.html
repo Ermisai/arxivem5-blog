@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Navegação de cadeiras de rodas autônomas: TSP, Campos Potenciais e Árvores RRT em ambientes dinâmicos — arXiv em 5</title>
+<meta name="description" content="Este paper propõe um framework híbrido para navegação multiobjetivo em cadeiras de rodas autônomas, combinando planejamento global via TSP com evasão local via Campos Potenciais, RRT e A*, avaliando robustez em ambientes com pedestres.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Navegação de cadeiras de rodas autônomas: TSP, Campos Potenciais e Árvores RRT em ambientes dinâmicos">
+<meta property="og:description" content="Este paper propõe um framework híbrido para navegação multiobjetivo em cadeiras de rodas autônomas, combinando planejamento global via TSP com evasão local via Campos Potenciais, RRT e A*, avaliando robustez em ambientes com pedestres.">
+<meta property="og:image" content="../../assets/papers/2610.42049/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Robótica</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.42049" rel="noopener">arXiv:2610.42049</a>
+    </div>
+    <h1><span class="s" data-s="t">Navegação de cadeiras de rodas autônomas: TSP, Campos Potenciais e Árvores RRT em ambientes dinâmicos</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Este paper propõe um framework híbrido para navegação multiobjetivo em cadeiras de rodas autônomas, combinando planejamento global via TSP com evasão local via Campos Potenciais, RRT e A*, avaliando robustez em ambientes com pedestres.</span></p>
+    <p class="byline">
+      <span>Leblebicioğlu et al.</span>
+      <span>8 min de leitura</span>
+<span>30/10/2026</span>    </p>
+    <div class="listen" data-article="2610.42049" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=-Z-0WfZBLHI" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">contexto_e_problema</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A autonomia na mobilidade urbana e interna é um desafio clássico da robótica móvel, especialmente quando o agente é uma cadeira de rodas autônoma (ARW).</span> <span class="s" data-s="b0-p0-s1">Diferente de veículos autônomos em estradas, as ARWs operam em ambientes densamente povoados, com pedestres imprevisíveis, obstáculos estáticos e dinâmicos, e a necessidade crítica de interagir socialmente sem causar desconforto ou perigo.</span> <span class="s" data-s="b0-p0-s2">O objetivo não é apenas chegar ao destino, mas fazê-lo de forma segura, suave e eficiente, permitindo que usuários com limitações motoras recuperem independência sem fadiga física ou dependência de cuidadores.</span></p><p><span class="s" data-s="b0-p1-s0">O problema central abordado neste trabalho é a navegação multiobjetivo em ambientes dinâmicos.</span> <span class="s" data-s="b0-p1-s1">Uma tarefa típica pode envolver visitar várias estações intermediárias (como um bebedouro, uma porta ou um elevador) antes de alcançar o destino final.</span> <span class="s" data-s="b0-p1-s2">Isso transforma o problema de planejamento de caminho em uma combinação complexa: determinar a ordem ótima de visita (um problema de otimização combinatória) e, simultaneamente, garantir a evasão de obstáculos em tempo real, lidando com a incerteza do movimento humano.</span></p><p><span class="s" data-s="b0-p2-s0">Estudos anteriores frequentemente focam em cenários simplificados ou ignoram a complexidade da interação humano-robô.</span> <span class="s" data-s="b0-p2-s1">Métodos baseados apenas em Campos Potenciais (PF) tendem a falhar em mínimos locais em ambientes complexos.</span> <span class="s" data-s="b0-p2-s2">Métodos baseados em grafos, como A*, são eficientes em ambientes estáticos, mas podem ser rígidos diante de obstáculos móveis repentinos.</span> <span class="s" data-s="b0-p2-s3">Este paper propõe uma arquitetura híbrida que tenta unir o melhor dos dois mundos: planejamento global eficiente e reatividade local robusta.</span></p>        <h2><span class="s" data-s="b1-h">metodologia_hibrida</span></h2>
+<p><span class="s" data-s="b1-p0-s0">O framework proposto, denominado TSP-PF-RRT e TSP-PF-A*, é estruturado em três camadas principais.</span> <span class="s" data-s="b1-p0-s1">A primeira camada é o planejamento global, que utiliza o Problema do Caixeiro Viajante (TSP) para determinar a sequência ótima de visitação dos waypoints (estações intermediárias).</span> <span class="s" data-s="b1-p0-s2">O TSP minimiza a distância total percorrida ao definir a ordem das paradas, resolvendo o aspecto combinatório da tarefa multiobjetivo.</span> <span class="s" data-s="b1-p0-s3">Este plano global serve como uma referência de alta nível para as camadas inferiores.</span></p><p><span class="s" data-s="b1-p1-s0">A segunda camada é o planejador local baseado em Campos Potenciais (PF).</span> <span class="s" data-s="b1-p1-s1">O PF atua como um mecanismo de controle que guia o robô ao longo da trajetória global definida pelo TSP, enquanto desvia de obstáculos.</span> <span class="s" data-s="b1-p1-s2">O campo potencial é composto por forças atrativas que puxam o robô em direção ao waypoint de destino e forças repulsivas que o empurram para longe de obstáculos detectados.</span> <span class="s" data-s="b1-p1-s3">Além disso, uma força tangencial é utilizada para alinhar a orientação do robô com a trajetória global, evitando que ele se desvie excessivamente do caminho planejado.</span></p><p><span class="s" data-s="b1-p2-s0">A terceira camada introduz a robustez contra obstáculos dinâmicos e complexos através de planejadores locais heurísticos: Rapidly-exploring Random Tree (RRT) ou A*.</span> <span class="s" data-s="b1-p2-s1">Quando o campo potencial encontra dificuldades, como armadilhas em espaços confinados ou obstáculos móveis que perturbam o equilíbrio das forças, esses algoritmos entram em ação.</span> <span class="s" data-s="b1-p2-s2">Eles geram caminhos viáveis locais que permitem ao robô contornar obstáculos estáticos e dinâmicos, realinhando-se posteriormente com a trajetória global.</span> <span class="s" data-s="b1-p2-s3">A escolha entre RRT e A* define as duas variantes do framework avaliadas neste estudo.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.42049/figure2.webp" alt="Ilustração da estratégia híbrida: o TSP define a ordem das paradas e o Campo Potencial guia a navegação local, integrando forças tangenciais e de atração." loading="lazy">
+          <figcaption>
+            Ilustração da estratégia híbrida: o TSP define a ordem das paradas e o Campo Potencial guia a navegação local, integrando forças tangenciais e de atração.
+            <span class="source">Figura 2 do paper · Leblebicioğlu et al., arXiv:2610.42049</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">detalhes_algoritmicos</span></h2>
+<p><span class="s" data-s="b3-p0-s0">A implementação do TSP utiliza um algoritmo de otimização por Enxame de Partículas (PSO) para encontrar a sequência de visita de 11 waypoints, começando na posição inicial, visitando cada estação uma vez e terminando no objetivo final.</span> <span class="s" data-s="b3-p0-s1">O PSO é escolhido por sua eficiência em espaços de busca não lineares e multimodais, comum em problemas de roteamento.</span> <span class="s" data-s="b3-p0-s2">A saída do PSO é uma sequência de pontos que define a &#39;espinha dorsal&#39; do trajeto.</span></p><p><span class="s" data-s="b3-p1-s0">No nível local, o Campo Potencial (PF) é configurado para manter o robô próximo à trajetória global.</span> <span class="s" data-s="b3-p1-s1">As forças Ftangent (tangencial) e Fpull (de atração) trabalham juntas para garantir que o robô siga a direção esperada.</span> <span class="s" data-s="b3-p1-s2">A componente repulsiva do PF é calculada com base na distância aos obstáculos detectados pelos sensores (LiDAR, câmeras estéreo).</span> <span class="s" data-s="b3-p1-s3">A inovação aqui não é o PF em si, mas sua integração com planejadores de busca mais robustos.</span></p><p><span class="s" data-s="b3-p2-s0">O RRT (Rapidly-exploring Random Tree) é um planejador baseado em amostragem que constrói uma árvore de caminhos explorando aleatoriamente o espaço de configuração.</span> <span class="s" data-s="b3-p2-s1">Ele é particularmente eficaz em espaços de alta dimensionalidade e ambientes complexos, onde a topologia é desconhecida ou muda rapidamente.</span> <span class="s" data-s="b3-p2-s2">O RRT é computacionalmente mais custoso, mas oferece maior flexibilidade para encontrar caminhos em meio a obstáculos densos.</span> <span class="s" data-s="b3-p2-s3">Já o A* é um algoritmo de busca em grafos que encontra o caminho de menor custo em um mapa discretizado.</span> <span class="s" data-s="b3-p2-s4">É mais rápido e determinista, mas assume um ambiente estático e pode ter dificuldade em re-planear rapidamente se o mapa mudar drasticamente devido a pedestres.</span></p>        <h2><span class="s" data-s="b4-h">avaliacao_experimental</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Para avaliar a eficácia do framework, os autores realizaram simulações de Monte Carlo.</span> <span class="s" data-s="b4-p0-s1">O uso de simulações é justificável porque o movimento de pedestres é estocástico e difícil de reproduzir exatamente em testes físicos repetidos.</span> <span class="s" data-s="b4-p0-s2">Duas cenários foram testados: &#39;crowded&#39; (movimentado) e &#39;extra-crowded&#39; (extremamente movimentado), contendo obstáculos estáticos e dinâmicos heterogêneos.</span> <span class="s" data-s="b4-p0-s3">Em cada cenário, foram realizadas 10 simulações independentes para cada algoritmo (TSP-PF-RRT e TSP-PF-A*), seguindo a mesma trajetória global de 8 waypoints definida pelo PSO.</span></p><p><span class="s" data-s="b4-p1-s0">As métricas de desempenho focaram em dois aspectos críticos: segurança e eficiência.</span> <span class="s" data-s="b4-p1-s1">A segurança foi medida pelo número de colisões com obstáculos durante a navegação.</span> <span class="s" data-s="b4-p1-s2">A eficiência foi medida pela distância total percorrida pelo robô.</span> <span class="s" data-s="b4-p1-s3">Uma distância maior indica que o robô teve que realizar manobras de desvio mais extensas para evitar obstáculos, o que pode aumentar o tempo de viagem e o desgaste do sistema.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.42049/figure4.webp" alt="Comparação das trajetórias geradas por PF-RRT (vermelho) e PF-A* (azul) em um ambiente movimentado, mostrando a capacidade de desvio de cada método." loading="lazy">
+          <figcaption>
+            Comparação das trajetórias geradas por PF-RRT (vermelho) e PF-A* (azul) em um ambiente movimentado, mostrando a capacidade de desvio de cada método.
+            <span class="source">Figura 4 do paper · Leblebicioğlu et al., arXiv:2610.42049</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b6-h">resultados</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Os resultados quantitativos, apresentados na Tabela 1 do paper, revelam diferenças significativas entre as duas abordagens, especialmente em cenários de alta densidade.</span> <span class="s" data-s="b6-p0-s1">No cenário &#39;crowded&#39;, o TSP-PF-RRT percorreu uma distância média de 319 metros com zero colisões.</span> <span class="s" data-s="b6-p0-s2">Já o TSP-PF-A* percorreu 340 metros e sofreu 2,8 colisões em média.</span> <span class="s" data-s="b6-p0-s3">Isso indica que, mesmo em ambientes moderadamente ocupados, o RRT conseguiu navegar com maior precisão e segurança.</span></p><p><span class="s" data-s="b6-p1-s0">A diferença torna-se mais dramática no cenário &#39;extra-crowded&#39;.</span> <span class="s" data-s="b6-p1-s1">O TSP-PF-RRT manteve a marca de zero colisões, embora tenha aumentado a distância percorrida para 525 metros, o que é esperado devido à necessidade de manobras de desvio mais complexas.</span> <span class="s" data-s="b6-p1-s2">Por outro lado, o TSP-PF-A* sofreu 7,4 colisões em média, percorrendo 533,7 metros.</span> <span class="s" data-s="b6-p1-s3">O aumento no número de colisões do A* sugere que sua natureza baseada em grafos estáticos torna-o vulnerável quando a topologia do ambiente muda rapidamente devido ao movimento dos pedestres.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b7-t">Segurança vs. Eficiência</span></h3>
+          <p><span class="s" data-s="b7-c-s0">O TSP-PF-RRT alcançou zero colisões em ambos os cenários, enquanto o TSP-PF-A* falhou em evitar colisões no cenário mais denso.</span> <span class="s" data-s="b7-c-s1">A distância percorrida foi ligeiramente menor para o RRT, indicando que sua capacidade de re-planear localmente é mais eficiente em evitar gargalos do que o A* estático.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b8-h">analise_critica</span></h2>
+<p><span class="s" data-s="b8-p0-s0">A superioridade do RRT no cenário dinâmico pode ser explicada pela sua natureza probabilística e sua capacidade de explorar o espaço de forma não estruturada.</span> <span class="s" data-s="b8-p0-s1">Enquanto o A* depende de uma grade pré-definida, o RRT pode encontrar caminhos em espaços contínuos e complexos, adaptando-se melhor a obstáculos móveis.</span> <span class="s" data-s="b8-p0-s2">No entanto, essa robustez vem com um custo: o RRT é computacionalmente mais demandante.</span> <span class="s" data-s="b8-p0-s3">Em sistemas embarcados com recursos limitados, como uma cadeira de rodas, a latência de cálculo pode ser um fator crítico.</span></p><p><span class="s" data-s="b8-p1-s0">O uso de Campos Potenciais como camada intermediária é uma escolha interessante para suavizar a transição entre o planejamento global e a evasão local.</span> <span class="s" data-s="b8-p1-s1">As forças tangenciais ajudam a manter o robô alinhado com o caminho, evitando que ele se desvie desnecessariamente.</span> <span class="s" data-s="b8-p1-s2">No entanto, os PFs são conhecidos por sofrerem com mínimos locais, onde o robô fica preso entre forças repulsivas de obstáculos adjacentes.</span> <span class="s" data-s="b8-p1-s3">A integração com o RRT ou A* serve justamente para escapar desses mínimos, mas o sucesso dessa escape depende da sensibilidade dos parâmetros de tuning.</span></p>        <h2><span class="s" data-s="b9-h">limitacoes_e_futuro</span></h2>
+<p><span class="s" data-s="b9-p0-s0">O paper reconhece várias limitações e direções futuras.</span> <span class="s" data-s="b9-p0-s1">Atualmente, o framework foi validado apenas em simulações de Monte Carlo.</span> <span class="s" data-s="b9-p0-s2">A transição para o mundo real envolve desafios adicionais, como ruído nos sensores, atrasos de comunicação e a necessidade de classificação de obstáculos.</span> <span class="s" data-s="b9-p0-s3">Pedestres, outras cadeiras de rodas e objetos estáticos devem ser tratados de forma diferente, exigindo estratégias de interação comportamental mais sofisticadas.</span></p><p><span class="s" data-s="b9-p1-s0">Os autores sugerem a integração de mapas globais no computador de bordo e o uso de sensores GNSS, LiDAR e câmeras estéreo para navegação em ambientes externos.</span> <span class="s" data-s="b9-p1-s1">Além disso, propõem que o sistema permita aos usuários especificar destinos em um mapa, dando controle sobre a ordem de visitação dos waypoints.</span> <span class="s" data-s="b9-p1-s2">Isso adiciona uma camada de usabilidade, mas também aumenta a complexidade do planejamento.</span></p><p><span class="s" data-s="b9-p2-s0">Outra limitação é a suposição de que o ambiente é parcialmente observável.</span> <span class="s" data-s="b9-p2-s1">Em cenários reais, a percepção pode ser obstruída por obstáculos grandes ou condições de iluminação.</span> <span class="s" data-s="b9-p2-s2">A robustez do framework em situações de percepção degradada não foi avaliada.</span> <span class="s" data-s="b9-p2-s3">Além disso, a segurança em cenários de &#39;armadilha&#39;, onde o robô é cercado por pedestres em movimento, ainda é um problema aberto, como indicado pelas colisões do A*.</span></p>        <h2><span class="s" data-s="b10-h">conclusao</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Este paper apresenta uma contribuição válida para o campo da navegação de robôs móveis em ambientes humanos.</span> <span class="s" data-s="b10-p0-s1">A combinação de TSP para planejamento global e PF para controle local, reforçada por planejadores de busca como RRT, oferece uma solução robusta para problemas multiobjetivo.</span> <span class="s" data-s="b10-p0-s2">Os resultados mostram que o RRT é superior ao A* em ambientes dinâmicos, embora com maior custo computacional.</span></p><p><span class="s" data-s="b10-p1-s0">Para desenvolvedores e pesquisadores, o takeaway principal é a importância da arquitetura híbrida.</span> <span class="s" data-s="b10-p1-s1">Abordagens puramente baseadas em PF ou em grafos estáticos são insuficientes para a navegação autônoma segura em ambientes reais.</span> <span class="s" data-s="b10-p1-s2">A integração de camadas de planejamento com diferentes níveis de abstração e complexidade computacional é essencial para equilibrar eficiência e segurança.</span></p><p><span class="s" data-s="b10-p2-s0">O trabalho abre caminho para futuras pesquisas em classificação de obstáculos, interação humano-robô e implementação em hardware real.</span> <span class="s" data-s="b10-p2-s1">A validação em cenários reais com usuários finais será o próximo passo crítico para determinar se a robustez observada em simulação se traduz em confiança e conforto para os usuários de cadeiras de rodas autônomas.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Framework híbrido combina TSP (global), PF (local) e RRT/A* (evasão) para navegação multiobjetivo segura.</span></li><li><span class="s" data-s="k1">TSP-PF-RRT evitou colisões em cenários dinâmicos, superando o TSP-PF-A*, que sofreu colisões em ambientes densos.</span></li><li><span class="s" data-s="k2">RRT é mais robusto a obstáculos móveis, mas mais custoso computacionalmente que o A* estático.</span></li><li><span class="s" data-s="k3">Validação foi feita em simulações; implementação real requer classificação de obstáculos e integração sensorial avançada.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.42049" rel="noopener">A Hybrid Path Planning Framework for Assistive Wheelchair Navigation in Dynamic Pedestrian Environments</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.42049" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

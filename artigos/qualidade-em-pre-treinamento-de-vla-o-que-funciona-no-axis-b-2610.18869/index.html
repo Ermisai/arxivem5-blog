@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Qualidade em Pré-treinamento de VLA: O que Funciona no AXIS-Bench — arXiv em 5</title>
+<meta name="description" content="Um estudo empírico sistemático compara ponderação, filtragem e condicionamento de qualidade em demonstrações subótimas para pré-treinamento de modelos Vision-Language-Action.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Qualidade em Pré-treinamento de VLA: O que Funciona no AXIS-Bench">
+<meta property="og:description" content="Um estudo empírico sistemático compara ponderação, filtragem e condicionamento de qualidade em demonstrações subótimas para pré-treinamento de modelos Vision-Language-Action.">
+<meta property="og:image" content="../../assets/papers/2610.18869/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Robótica</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.18869" rel="noopener">arXiv:2610.18869</a>
+    </div>
+    <h1><span class="s" data-s="t">Qualidade em Pré-treinamento de VLA: O que Funciona no AXIS-Bench</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um estudo empírico sistemático compara ponderação, filtragem e condicionamento de qualidade em demonstrações subótimas para pré-treinamento de modelos Vision-Language-Action.</span></p>
+    <p class="byline">
+      <span>Yan et al.</span>
+      <span>8 min de leitura</span>
+<span>13/10/2026</span>    </p>
+    <div class="listen" data-article="2610.18869" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=mkfz3zdz1ZU" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Qualidade nas Demonstrações Humanas</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Os modelos Vision-Language-Action (VLA) são a nova fronteira para robôs que precisam realizar tarefas complexas baseadas em instruções naturais.</span> <span class="s" data-s="b0-p0-s1">A arquitetura padrão para treinar esses sistemas envolve duas etapas distintas: um pré-treinamento massivo em um conjunto diversificado de demonstrações multitarefa, seguido de um fine-tuning (ajuste fino) específico para a tarefa alvo.</span> <span class="s" data-s="b0-p0-s2">O objetivo do pré-treinamento é aprender representações gerais de manipulação, enquanto o fine-tuning adapta o modelo ao domínio específico.</span></p><p><span class="s" data-s="b0-p1-s0">No entanto, as demonstrações humanas, mesmo quando coletadas por especialistas, são inerentemente subótimas.</span> <span class="s" data-s="b0-p1-s1">Um operador pode hesitar, fazer desvios desnecessários ou mover um objeto de forma ineficiente antes de alcançá-lo.</span> <span class="s" data-s="b0-p1-s2">Essas imperfeições geram chunks de ação que contribuem pouco para o progresso em direção ao objetivo.</span> <span class="s" data-s="b0-p1-s3">Ignorar essa variabilidade de qualidade pode prejudicar o aprendizado do modelo, fazendo-o imitar comportamentos ineficientes como se fossem ideais.</span></p><p><span class="s" data-s="b0-p2-s0">A comunidade de aprendizado de robótica já estuda o uso de sinais de qualidade para melhorar o treinamento.</span> <span class="s" data-s="b0-p2-s1">As três abordagens principais são: ponderação (weighting), onde demonstrações de alta qualidade têm maior peso na função de perda; filtragem (filtering), onde apenas as melhores demonstrações são mantidas; e condicionamento (conditioning), onde o modelo recebe tags explícitas de qualidade como entrada adicional.</span> <span class="s" data-s="b0-p2-s2">Apesar de existirem estudos isolados, faltam comparações sistemáticas que controlassem o tamanho dos dados e o orçamento de treinamento para isolar o efeito de cada técnica.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.18869/figure2.webp" alt="Fluxo do AXIS-Bench: demonstrações humanas fornecem observações e ações, enquanto estados de objetos e contatos permitem calcular a qualidade offline, usada no pré-treinamento e validada no mundo real." loading="lazy">
+          <figcaption>
+            Fluxo do AXIS-Bench: demonstrações humanas fornecem observações e ações, enquanto estados de objetos e contatos permitem calcular a qualidade offline, usada no pré-treinamento e validada no mundo real.
+            <span class="source">Figura 2 do paper · Yan et al., arXiv:2610.18869</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">O AXIS-Bench: Um Benchmark Controlado</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Para responder a perguntas fundamentais sobre como a qualidade deve ser utilizada, os autores introduzem o AXIS-Bench.</span> <span class="s" data-s="b2-p0-s1">Este benchmark é construído sobre o dataset de teleoperação simulada AXIS, contendo 19 mil demonstrações.</span> <span class="s" data-s="b2-p0-s2">O diferencial crucial do AXIS-Bench é a disponibilidade de metadados de estado: além das imagens RGB e das ações executadas, o dataset registra os estados dos objetos e os pontos de contato do robô ao longo do tempo.</span></p><p><span class="s" data-s="b2-p1-s0">Esses dados de estado permitem recalcular métricas de qualidade de forma offline e consistente para todas as trajetórias.</span> <span class="s" data-s="b2-p1-s1">Isso elimina a subjetividade de avaliações humanas e garante que todas as comparações entre métodos sejam feitas sobre as mesmas trajetórias base.</span> <span class="s" data-s="b2-p1-s2">O benchmark suporta 24 tarefas alvo e permite que pesquisadores alinhem o ambiente simulado com seus próprios espaços de trabalho reais, re-renderizando as demonstrações sob novas configurações de câmera e layout.</span></p><p><span class="s" data-s="b2-p2-s0">O estudo foca em três backbones VLA populares: π0.5, SmolVLA e X-VLA.</span> <span class="s" data-s="b2-p2-s1">Em cada comparação, os autores mantêm fixos o conjunto de dados de pré-treinamento (5.000 demonstrações) e o orçamento de treinamento.</span> <span class="s" data-s="b2-p2-s2">Isso é crítico, pois muitos ganhos aparentes em qualidade podem ser apenas artefatos de usar mais dados ou treinar por mais tempo.</span> <span class="s" data-s="b2-p2-s3">O objetivo é medir o ganho marginal de cada estratégia de uso da qualidade, controlando esses fatores de confusão.</span></p>        <h2><span class="s" data-s="b3-h">Mecanismos: Definindo e Usando a Qualidade</span></h2>
+<p><span class="s" data-s="b3-p0-s0">A qualidade no AXIS-Bench é derivada do estado do ambiente, não de recompensas artificiais.</span> <span class="s" data-s="b3-p0-s1">Os autores definem duas métricas de progresso baseadas em recompensa (reward) derivada do estado.</span> <span class="s" data-s="b3-p0-s2">A primeira é &#39;object-centric&#39;, que mede o progresso geral em relação ao objeto alvo.</span> <span class="s" data-s="b3-p0-s3">A segunda é &#39;approach-aware&#39;, que distingue duas fases: a fase de abordagem (aproximação do objeto) e a fase de manipulação (contato e interação).</span> <span class="s" data-s="b3-p0-s4">A transição entre essas fases é marcada pelo primeiro contato sustentado do robô com o objeto.</span></p><p><span class="s" data-s="b3-p1-s0">Essas recompensas de estado são agregadas em etiquetas de qualidade em duas granularidades diferentes.</span> <span class="s" data-s="b3-p1-s1">Na granularidade de chunk, a qualidade é calculada para pequenos segmentos temporais de ação.</span> <span class="s" data-s="b3-p1-s2">Isso permite identificar partes específicas da trajetória que são ineficientes.</span> <span class="s" data-s="b3-p1-s3">Na granularidade de episódio, a qualidade resume o desempenho de toda a demonstração de uma vez.</span> <span class="s" data-s="b3-p1-s4">A escolha entre chunk e episódio afeta diretamente como o modelo aprende: se foca em correções locais ou em padrões globais.</span></p><p><span class="s" data-s="b3-p2-s0">As estratégias de aprendizado aplicam essas etiquetas de forma distinta.</span> <span class="s" data-s="b3-p2-s1">No ponderamento, usa-se uma abordagem estilo AWR (Advantage Weighted Regression), onde o peso da amostra na perda é proporcional à sua qualidade.</span> <span class="s" data-s="b3-p2-s2">No filtragem, retêm-se apenas os top 50% das demonstrações mais qualificadas.</span> <span class="s" data-s="b3-p2-s3">No condicionamento, as etiquetas de qualidade são injetadas no modelo como tokens adicionais.</span> <span class="s" data-s="b3-p2-s4">Isso permite que o modelo aprenda a distinguir implicitamente entre trajetórias boas e ruins, ajustando sua política condicionalmente à tag fornecida.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.18869/figure5.webp" alt="Comparação de ganhos de desempenho: o condicionamento supera a filtragem e o ponderamento na maioria dos modelos, mostrando vantagens significativas sobre a Clonagem Comportamental simples." loading="lazy">
+          <figcaption>
+            Comparação de ganhos de desempenho: o condicionamento supera a filtragem e o ponderamento na maioria dos modelos, mostrando vantagens significativas sobre a Clonagem Comportamental simples.
+            <span class="source">Figura 5 do paper · Yan et al., arXiv:2610.18869</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Resultados: Condicionamento e Granularidade</span></h2>
+<p><span class="s" data-s="b5-p0-s0">O primeiro achado robusto é que o condicionamento por episódio com consciência de abordagem (approach-aware) supera a Clonagem Comportamental simples (plain BC) em média across os três modelos avaliados.</span> <span class="s" data-s="b5-p0-s1">Aplain BC treina o modelo para imitar as ações humanas sem qualquer sinal de qualidade, tratando todas as demonstrações como igualmente válidas.</span> <span class="s" data-s="b5-p0-s2">O condicionamento, ao contrário, permite que o modelo aprenda a diferenciar comportamentos, resultando em uma taxa de sucesso média superior.</span> <span class="s" data-s="b5-p0-s3">Isso sugere que ensinar o modelo a reconhecer a qualidade é mais eficaz do que apenas selecionar ou pesar dados.</span></p><p><span class="s" data-s="b5-p1-s0">A granularidade das etiquetas interage complexamente com o método e o backbone.</span> <span class="s" data-s="b5-p1-s1">Em média, o condicionamento se beneficia mais de etiquetas de nível de episódio, enquanto o filtragem performa melhor com etiquetas de nível de chunk.</span> <span class="s" data-s="b5-p1-s2">Isso faz sentido intuitivo: o filtragem remove demonstrações inteiras ruins, então uma métrica global (episódio) é suficiente.</span> <span class="s" data-s="b5-p1-s3">Já o condicionamento, ao processar a sequência completa, pode explorar a estrutura temporal fornecida pelas tags de episódio.</span></p><p><span class="s" data-s="b5-p2-s0">No entanto, essa preferência não é universal.</span> <span class="s" data-s="b5-p2-s1">Para alguns backbones específicos, as preferências se invertem.</span> <span class="s" data-s="b5-p2-s2">O SmolVLA, por exemplo, mostrou sensibilidade diferente às granularidades em comparação ao π0.5.</span> <span class="s" data-s="b5-p2-s3">Isso alerta contra a aplicação cega de receitas prontas.</span> <span class="s" data-s="b5-p2-s4">A arquitetura do modelo influencia como ele processa e utiliza informações auxiliares de qualidade.</span> <span class="s" data-s="b5-p2-s5">O que funciona para um modelo pode ser neutro ou até prejudicial para outro, dependendo de sua capacidade de representação e inductive biases.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b6-t">O Efeito do Fine-Tuning Constante</span></h3>
+          <p><span class="s" data-s="b6-c-s0">Após o pré-treinamento com condicionamento, os autores testaram protocolos de fine-tuning.</span> <span class="s" data-s="b6-c-s1">Usar uma tag de qualidade constante durante o fine-tuning melhorou a taxa de sucesso média em comparação ao fine-tuning simples, mesmo quando a inferência final não usava tags.</span> <span class="s" data-s="b6-c-s2">Isso indica que o pré-treinamento condicional cria uma representação interna mais robusta que persiste durante a adaptação.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b7-h">Validação no Mundo Real</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Benchmarks puramente simulados podem sofrer de lacunas de realidade (sim-to-real gap).</span> <span class="s" data-s="b7-p0-s1">Para validar a utilidade prática do AXIS-Bench, os autores realizaram experimentos no mundo real.</span> <span class="s" data-s="b7-p0-s2">Eles utilizaram um braço robótico Franka FR3 e um setup de mesa padrão.</span> <span class="s" data-s="b7-p0-s3">O processo envolveu alinhar o espaço de trabalho simulado com o físico, re-renderizar as demonstrações de pré-treinamento para corresponder às novas configurações de câmera e coletar demonstrações reais para o fine-tuning nas tarefas alvo.</span></p><p><span class="s" data-s="b7-p1-s0">Os resultados reais foram significativos.</span> <span class="s" data-s="b7-p1-s1">Um modelo π0.5 base, sem pré-treinamento, atingiu uma taxa de sucesso de apenas 9,6% nas tarefas alvo.</span> <span class="s" data-s="b7-p1-s2">Após o pré-treinamento no AXIS-Bench usando as melhores estratégias identificadas (condicionamento abordagem-episódio) e subsequentemente fine-tuned com demonstrações reais, a taxa de sucesso saltou para 31,7%.</span> <span class="s" data-s="b7-p1-s3">Este aumento de mais de 20 pontos percentuais demonstra que o aprendizado de representações de qualidade em simulação transfere efetivamente para o domínio físico.</span></p><p><span class="s" data-s="b7-p2-s0">A capacidade de re-renderizar trajetórias é crucial para essa validação.</span> <span class="s" data-s="b7-p2-s1">Como o AXIS-Bench fornece estados de objetos e contatos replayáveis, é possível gerar novas imagens de observação que correspondem exatamente à perspectiva e iluminação do setup experimental real, sem necessidade de recolher novos dados de demonstração para o pré-treinamento.</span> <span class="s" data-s="b7-p2-s2">Isso reduz drasticamente o custo de adaptação para novos ambientes.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.18869/figure9.webp" alt="Impacto real: o pré-treinamento com simulação eleva o sucesso de 9,6% para 31,7%, validando a eficácia do método de condicionamento de qualidade." loading="lazy">
+          <figcaption>
+            Impacto real: o pré-treinamento com simulação eleva o sucesso de 9,6% para 31,7%, validando a eficácia do método de condicionamento de qualidade.
+            <span class="source">Figura 9 do paper · Yan et al., arXiv:2610.18869</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Limitações e Escopo</span></h2>
+<p><span class="s" data-s="b9-p0-s0">É importante notar que este estudo foca em tarefas de manipulação de mesa (tabletop manipulation) em ambientes estruturados.</span> <span class="s" data-s="b9-p0-s1">As dinâmicas de contato e a visibilidade dos objetos são diferentes de tarefas de locomoção ou manipulação em ambientes desordenados.</span> <span class="s" data-s="b9-p0-s2">As métricas de qualidade baseadas em estado podem ser mais fáceis de calcular em simulações controladas como MuJoCo do que em dados reais complexos, onde a detecção de contato e estado do objeto é ruidosa.</span></p><p><span class="s" data-s="b9-p1-s0">O estudo também não explora a interação entre qualidade e outros tipos de ruído, como erros de percepção ou falhas de actuação.</span> <span class="s" data-s="b9-p1-s1">A qualidade aqui é definida como sub-otimização intencional ou hesitação humana, não como falhas do sistema.</span> <span class="s" data-s="b9-p1-s2">Além disso, o uso de condicionamento adiciona complexidade ao pipeline de inferência, exigindo a geração ou seleção de tags de qualidade em tempo real, o que pode não ser trivial em sistemas autônomos sem supervisão.</span></p><p><span class="s" data-s="b9-p2-s0">Outra limitação é a dependência de backbones específicos.</span> <span class="s" data-s="b9-p2-s1">Embora três VLAs populares tenham sido testados, a generalização para arquiteturas emergentes ou modelos de escala muito maior permanece em aberto.</span> <span class="s" data-s="b9-p2-s2">A descoberta de que as preferências de granularidade variam entre modelos sugere que a otimização da estratégia de qualidade deve ser feita per-modelo, não como uma solução única.</span></p>        <h2><span class="s" data-s="b10-h">Conclusão e Lições para Desenvolvedores</span></h2>
+<p><span class="s" data-s="b10-p0-s0">O paper &#39;What Matters in Quality-Aware VLA Pretraining&#39; oferece uma lição clara: a qualidade dos dados importa, mas como você a utiliza importa mais.</span> <span class="s" data-s="b10-p0-s1">Simplesmente filtrar os piores dados não é a estratégia mais eficaz.</span> <span class="s" data-s="b10-p0-s2">Em vez disso, informar o modelo sobre a qualidade através de condicionamento, especialmente quando combinado com uma definição de progresso que distingue abordagem de manipulação, leva a políticas mais robustas.</span></p><p><span class="s" data-s="b10-p1-s0">Para desenvolvedores e cientistas de dados que trabalham com VLA, a mensagem prática é evitar a clonagem comportamental ingênua.</span> <span class="s" data-s="b10-p1-s1">Investir na coleta ou cálculo de sinais de qualidade, mesmo que aproximados, pode valer a pena.</span> <span class="s" data-s="b10-p1-s2">Se possível, utilize condicionamento em vez de filtragem pura.</span> <span class="s" data-s="b10-p1-s3">E esteja ciente de que a granularidade da sua etiqueta de qualidade deve ser ajustada ao seu backbone específico.</span></p><p><span class="s" data-s="b10-p2-s0">O AXIS-Bench fornece a infraestrutura para reproduzir e estender esses resultados.</span> <span class="s" data-s="b10-p2-s1">Ao disponibilizar dados reutilizáveis e protocolos padronizados, ele reduz a barreira de entrada para pesquisas em aprendizado de qualidade.</span> <span class="s" data-s="b10-p2-s2">Para equipes que buscam melhorar a transferência sim-to-real, a validação real apresentada aqui serve como um caso de uso convincente para investir em pré-treinamento de alta qualidade antes do fine-tuning específico.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Condicionamento por episódio com consciência de abordagem supera a Clonagem Comportamental simples em média.</span></li><li><span class="s" data-s="k1">A granularidade ideal da etiqueta de qualidade depende do método e do backbone do modelo.</span></li><li><span class="s" data-s="k2">O AXIS-Bench permite re-renderizar trajetórias para validação real em novos ambientes.</span></li><li><span class="s" data-s="k3">Pré-treinamento em simulação eleva o sucesso real de 9,6% para 31,7% no fine-tuning.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.18869" rel="noopener">What Matters in Quality-Aware VLA Pretraining: A Benchmark and Empirical Study</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.18869" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

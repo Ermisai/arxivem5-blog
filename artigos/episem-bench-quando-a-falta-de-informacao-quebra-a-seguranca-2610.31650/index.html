@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EpiSEM-Bench: Quando a falta de informação quebra a segurança de agentes LLM — arXiv em 5</title>
+<meta name="description" content="Um novo benchmark expõe como agentes de LLM executam ações proibidas quando fatos críticos de segurança são omitidos pelas ferramentas, e avalia se eles conseguem recuperar essas informações.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="EpiSEM-Bench: Quando a falta de informação quebra a segurança de agentes LLM">
+<meta property="og:description" content="Um novo benchmark expõe como agentes de LLM executam ações proibidas quando fatos críticos de segurança são omitidos pelas ferramentas, e avalia se eles conseguem recuperar essas informações.">
+<meta property="og:image" content="../../assets/papers/2610.31650/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Agentes</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.31650" rel="noopener">arXiv:2610.31650</a>
+    </div>
+    <h1><span class="s" data-s="t">EpiSEM-Bench: Quando a falta de informação quebra a segurança de agentes LLM</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um novo benchmark expõe como agentes de LLM executam ações proibidas quando fatos críticos de segurança são omitidos pelas ferramentas, e avalia se eles conseguem recuperar essas informações.</span></p>
+    <p class="byline">
+      <span>Zhang et al.</span>
+      <span>10 min de leitura</span>
+<span>22/10/2026</span>    </p>
+    <div class="listen" data-article="2610.31650" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=D_N8bKNDt28" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema da evidência ausente em agentes autônomos</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Agentes baseados em Grandes Modelos de Linguagem (LLMs) estão se tornando cada vez mais comuns para executar tarefas complexas que envolvem ferramentas externas.</span> <span class="s" data-s="b0-p0-s1">Eles leem documentos, inspecionam recursos e operam em nome do usuário.</span> <span class="s" data-s="b0-p0-s2">Antes de realizar uma ação crítica, como enviar um pagamento, compartilhar um arquivo confidencial ou excluir um serviço, o agente precisa confirmar que a operação é permitida no ambiente atual.</span> <span class="s" data-s="b0-p0-s3">Essa decisão depende inteiramente dos fatos retornados por suas ferramentas: limites de autorização, direitos de acesso do destinatário ou dependências de um serviço em execução.</span></p><p><span class="s" data-s="b0-p1-s0">O problema central identificado neste paper não é a alucinação ou a mentira do modelo.</span> <span class="s" data-s="b0-p1-s1">O cenário crítico ocorre quando a resposta da ferramenta omite um fato relevante para a segurança.</span> <span class="s" data-s="b0-p1-s2">Se um fato crítico falta, o agente pode realizar uma ação proibida, mesmo que o pedido do usuário seja benigno e todas as afirmações retornadas pela ferramenta sejam verdadeiras.</span> <span class="s" data-s="b0-p1-s3">Benchmarks existentes focam em utilidade ou robustez a observações adversariais, mas não isolam a omissão de evidência como uma intervenção específica que não requer instruções de ataque.</span></p><p><span class="s" data-s="b0-p2-s0">Para avaliar corretamente essa vulnerabilidade, é necessário distinguir entre o estado de segurança do mundo real e as evidências visíveis ao agente.</span> <span class="s" data-s="b0-p2-s1">O benchmark EpiSEM-Bench foi criado para preencher essa lacuna.</span> <span class="s" data-s="b0-p2-s2">Ele permite medir a execução insegura, os limites de segurança e a capacidade de recuperação de evidências em cenários onde fatos críticos estão faltando.</span> <span class="s" data-s="b0-p2-s3">O objetivo não é apenas ver se o agente falha, mas entender como ele lida com a incerteza epistêmica.</span></p><p><span class="s" data-s="b0-p3-s0">Este tipo de avaliação é crucial porque a completude da tarefa (task completion) sozinha não é uma métrica de segurança.</span> <span class="s" data-s="b0-p3-s1">Um agente pode completar uma tarefa com sucesso ao executar uma ação proibida.</span> <span class="s" data-s="b0-p3-s2">Da mesma forma, a evitação de execução insegura sozinha pode premiar o recuso indiscriminado a todas as ações.</span> <span class="s" data-s="b0-p3-s3">O EpiSEM-Bench busca um equilíbrio, separando as condições de segurança do mundo das evidências disponíveis para a tomada de decisão do agente.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.31650/figure1.webp" alt="Visão geral do EpiSEM-Bench. O benchmark compara a execução em um mundo inseguro e um gêmeo seguro, compartilhando objetivo, ferramentas e máscara de omissão. Fatos de segurança tornam a ação proibida no mundo inseguro e permitida no gêmeo." loading="lazy">
+          <figcaption>
+            Visão geral do EpiSEM-Bench. O benchmark compara a execução em um mundo inseguro e um gêmeo seguro, compartilhando objetivo, ferramentas e máscara de omissão. Fatos de segurança tornam a ação proibida no mundo inseguro e permitida no gêmeo.
+            <span class="source">Figura 1 do paper · Zhang et al., arXiv:2610.31650</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">A arquitetura do benchmark: pares de mundos e átomos de evidência</span></h2>
+<p><span class="s" data-s="b2-p0-s0">O EpiSEM-Bench consiste em 300 pares de tarefas não seguras/seguras distribuídos em seis domínios.</span> <span class="s" data-s="b2-p0-s1">Cada par compreende dois &#39;mundos&#39; que compartilham o mesmo objetivo do usuário, a mesma interface de ferramentas e a mesma máscara de omissão, mas diferem no estado que torna a operação alvo proibida ou permitida.</span> <span class="s" data-s="b2-p0-s2">Por exemplo, um limite diferente de autorização pode tornar um pagamento proibido em um mundo e permitido no outro, sem alterar o valor ou o destinatário da transação.</span></p><p><span class="s" data-s="b2-p1-s0">Essa construção permite que a permissão sensível à ação seja o requisito central.</span> <span class="s" data-s="b2-p1-s1">O agente precisa usar evidências ambientais para selecionar resultados diferentes para a mesma operação.</span> <span class="s" data-s="b2-p1-s2">O benchmark utiliza um oráculo executável que verifica as ações contra o estado completo, mas não bloqueia operações proibidas em nome do agente.</span> <span class="s" data-s="b2-p1-s3">Isso garante que decisões inseguras permaneçam observáveis, separando a decisão do agente da proteção fornecida pelo ambiente.</span></p><p><span class="s" data-s="b2-p2-s0">Para manipular a evidência de forma granular, os autores introduzem o conceito de &#39;átomos de evidência&#39;.</span> <span class="s" data-s="b2-p2-s1">Cada átomo representa um fato sobre um objeto no ambiente, anotado com identificador, sujeito, predicado, valor específico do mundo e as respostas das ferramentas que o expõem.</span> <span class="s" data-s="b2-p2-s2">Os átomos são classificados em críticos (relevantes para a regra de segurança) e irrelevantes (que não afetam a legalidade ou os parâmetros da ação).</span></p><p><span class="s" data-s="b2-p3-s0">A supressão é aplicada através de uma máscara que remove todas as exposições anotadas desses átomos ao longo do rollout do agente.</span> <span class="s" data-s="b2-p3-s1">Isso inclui leituras repetidas de ferramentas ordinárias.</span> <span class="s" data-s="b2-p3-s2">O estado privado, a regra de segurança, o pedido do usuário e os esquemas das ferramentas permanecem inalterados.</span> <span class="s" data-s="b2-p3-s3">A supressão de nível de fato preserva o contexto operacional ao redor da evidência ausente, evitando que a remoção de uma resposta inteira de ferramenta misture a falta de evidência de segurança com a incapacidade de realizar a operação.</span></p>        <h2><span class="s" data-s="b3-h">Métricas multidimensionais para avaliação de segurança</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Avaliar agentes em cenários de evidência ausente requer métricas que capturem nuances além de &#39;sucesso&#39; ou &#39;falha&#39;.</span> <span class="s" data-s="b3-p0-s1">O EpiSEM-Bench define seis métricas principais, projetadas para serem lidas em conjunto.</span> <span class="s" data-s="b3-p0-s2">A primeira etapa avalia o desempenho com evidência completa.</span> <span class="s" data-s="b3-p0-s3">A Taxa de Sucesso no Mundo Seguro Completo (Full SWS) mede a conclusão legítima da tarefa, enquanto a Taxa de Comprometimento Inseguro Completo (Full UCR) registra a execução proibida quando todas as evidências estão disponíveis.</span></p><p><span class="s" data-s="b3-p1-s0">Essa dupla métrica estabelece a linha de base, revelando se o agente tende à execução indiscriminada ou ao recuso indiscriminado antes mesmo de introduzir a omissão.</span> <span class="s" data-s="b3-p1-s1">Em seguida, o benchmark avalia a vulnerabilidade à omissão.</span> <span class="s" data-s="b3-p1-s2">Na fase de Evidência Suprimida (SE), fatos críticos permanecem indisponíveis.</span> <span class="s" data-s="b3-p1-s3">A Taxa de Comprometimento Inseguro Crítico (Critical UCR) identifica tarefas onde o agente executou uma ação proibida devido à omissão de fatos críticos.</span></p><p><span class="s" data-s="b3-p2-s0">Para quantificar a resiliência, a Margem do Limite de Segurança (SBM) caracteriza a cardinalidade mínima de omissões observada que leva à falha.</span> <span class="s" data-s="b3-p2-s1">Isso ajuda a determinar se o agente falha com a perda de um único fato ou se tolera múltiplas omissões antes de tomar uma decisão insegura.</span> <span class="s" data-s="b3-p2-s2">Essas métricas descrevem a vulnerabilidade observada à omissão de evidência.</span></p><p><span class="s" data-s="b3-p3-s0">A terceira etapa introduz a possibilidade de recuperação.</span> <span class="s" data-s="b3-p3-s1">Na fase de Evidência Recuperável (RE), as mesmas omissões se aplicam, mas o agente tem acesso a uma fonte de auditoria independente para buscar fatos faltantes.</span> <span class="s" data-s="b3-p3-s2">A Taxa de Comprometimento Inseguro na Recuperação (Recovery UCR) mede a execução insegura mesmo com essa oportunidade.</span> <span class="s" data-s="b3-p3-s3">Finalmente, a Recuperação Útil em Pares (PUR) exige que o agente adquira a evidência e, em seguida, se abstenha no mundo proibido e complete a tarefa no gêmeo permitido.</span> <span class="s" data-s="b3-p3-s4">Essa métrica distingue a simples evitação de ação da recuperação ativa e correta de informações.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b4-t">O risco da supressão persistente</span></h3>
+          <p><span class="s" data-s="b4-c-s0">A máscara de omissão é aplicada continuamente durante o rollout do agente.</span> <span class="s" data-s="b4-c-s1">Isso impede que o agente contorne a falta de informação simplesmente lendo a mesma ferramenta novamente, forçando-o a lidar genuinamente com a incerteza ou a buscar ativamente novas fontes de evidência.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b5-h">Resultados: a falha generalizada na omissão crítica</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os autores avaliaram dez modelos populares usando o EpiSEM-Bench.</span> <span class="s" data-s="b5-p0-s1">Os resultados iniciais com evidência completa mostraram que a maioria dos modelos consegue completar tarefas permitidas (Full SWS) e evitar execuções proibidas (Full UCR baixo) quando todas as informações estão presentes.</span> <span class="s" data-s="b5-p0-s2">No entanto, a introdução da supressão de fatos críticos revelou uma fragilidade significativa.</span> <span class="s" data-s="b5-p0-s3">A Critical UCR aumentou drasticamente para a maioria dos modelos, indicando que a ausência de um único fato de segurança era suficiente para levar à execução de ações proibidas.</span></p><p><span class="s" data-s="b5-p1-s0">O benchmark também revelou que a resistência à omissão de evidência não se traduz necessariamente em recuperação útil.</span> <span class="s" data-s="b5-p1-s1">Embora o acesso à recuperação de evidências tenha reduzido a execução insegura para todos os dez modelos, o comportamento variou amplamente.</span> <span class="s" data-s="b5-p1-s2">Alguns agentes buscaram ativamente os fatos faltantes e os usaram para agir de forma apropriada, enquanto outros ignoraram a oportunidade ou não conseguiram integrar a nova informação à sua decisão.</span></p><p><span class="s" data-s="b5-p2-s0">A métrica de Recuperação Útil em Pares (PUR) destacou essa discrepância.</span> <span class="s" data-s="b5-p2-s1">Modelos com altas taxas de conclusão e baixa execução insegura na fase de supressão não necessariamente alcançaram altas pontuações em PUR.</span> <span class="s" data-s="b5-p2-s2">Isso sugere que a capacidade de evitar uma ação perigosa não garante que o agente tenha o raciocínio necessário para recuperar a informação faltante e distinguir corretamente entre o mundo proibido e o permitido.</span></p><p><span class="s" data-s="b5-p3-s0">A Margem do Limite de Segurança (SBM) também variou.</span> <span class="s" data-s="b5-p3-s1">Alguns modelos falhavam com a omissão de apenas um fato crítico, enquanto outros toleravam a perda de vários fatos antes de cometer um erro.</span> <span class="s" data-s="b5-p3-s2">Essa variação indica que diferentes arquiteturas de agentes e diferentes conjuntos de dados de treinamento influenciam a robustez epistêmica de maneiras distintas e não uniformes.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.31650/table1.webp" alt="Tabela principal com resultados de 10 modelos. Mostra taxas de falha e recuperação sob evidência completa e omitida, destacando a variação na Critical UCR e Recovery UCR." loading="lazy">
+          <figcaption>
+            Tabela principal com resultados de 10 modelos. Mostra taxas de falha e recuperação sob evidência completa e omitida, destacando a variação na Critical UCR e Recovery UCR.
+            <span class="source">Tabela 1 do paper · Zhang et al., arXiv:2610.31650</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Perfis de segurança: utilidade versus precaução</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Uma análise mais profunda dos resultados revela perfis de segurança distintos para cada modelo.</span> <span class="s" data-s="b7-p0-s1">O EpiSEM-Bench permite visualizar essas trade-offs.</span> <span class="s" data-s="b7-p0-s2">Alguns modelos priorizam a utilidade, mantendo altas taxas de conclusão de tarefas, mas sofrem com altas taxas de comprometimento inseguro quando a evidência está ausente.</span> <span class="s" data-s="b7-p0-s3">Outros modelos priorizam a precaução, recusando-se a executar ações mesmo quando a evidência completa permitiria a execução, resultando em baixa taxa de sucesso no mundo seguro.</span></p><p><span class="s" data-s="b7-p1-s0">Esses perfis mostram que não existe uma solução única para a segurança de agentes.</span> <span class="s" data-s="b7-p1-s1">Um modelo que é robusto à omissão de evidência pode ser excessivamente cauteloso, falhando em tarefas legítimas.</span> <span class="s" data-s="b7-p1-s2">Por outro lado, um modelo altamente eficaz em tarefas permitidas pode ser extremamente vulnerável a omissões sutis.</span> <span class="s" data-s="b7-p1-s3">O benchmark expõe essas compensações de forma clara, permitindo que desenvolvedores escolham modelos com base no perfil de risco aceitável para sua aplicação.</span></p><p><span class="s" data-s="b7-p2-s0">A figura de perfis de segurança dos modelos ilustra essa complexidade.</span> <span class="s" data-s="b7-p2-s1">Eixos que representam a complementaridade da UCR (100% menos a taxa de falha) mostram combinações distintas de segurança, conclusão de tarefas e recuperação de evidências.</span> <span class="s" data-s="b7-p2-s2">Modelos que se destacam em uma dimensão frequentemente têm pontos fracos em outra.</span> <span class="s" data-s="b7-p2-s3">Isso reforça a necessidade de avaliação multidimensional, em vez de confiar em métricas únicas de desempenho.</span></p><p><span class="s" data-s="b7-p3-s0">Os autores também notaram que a recuperação de evidências nem sempre leva à ação correta.</span> <span class="s" data-s="b7-p3-s1">Alguns agentes, ao obterem os fatos faltantes, ainda assim falhavam em distinguir entre o mundo proibido e o permitido, ou não aplicavam a informação corretamente à decisão final.</span> <span class="s" data-s="b7-p3-s2">Isso indica que a capacidade de buscar informação é necessária, mas não suficiente, para a segurança epistêmica.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.31650/figure3.webp" alt="Perfis de segurança dos modelos. Eixos de 0-100% mostram a relação entre conclusão de tarefas, segurança (inverso da UCR) e recuperação de evidências úteis, revelando trade-offs únicos." loading="lazy">
+          <figcaption>
+            Perfis de segurança dos modelos. Eixos de 0-100% mostram a relação entre conclusão de tarefas, segurança (inverso da UCR) e recuperação de evidências úteis, revelando trade-offs únicos.
+            <span class="source">Figura 3 do paper · Zhang et al., arXiv:2610.31650</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Limitações e escopo do estudo</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Apesar de sua contribuição significativa, o EpiSEM-Bench tem limitações.</span> <span class="s" data-s="b9-p0-s1">O benchmark é composto por 300 pares de tarefas em seis domínios.</span> <span class="s" data-s="b9-p0-s2">Embora esses domínios cubram áreas relevantes como finanças, acesso a dados e operações de sistema, eles não representam a totalidade dos usos potenciais de agentes LLM.</span> <span class="s" data-s="b9-p0-s3">A generalização dos resultados para outros domínios ou configurações de ferramentas mais complexas pode não ser direta.</span></p><p><span class="s" data-s="b9-p1-s0">Além disso, o benchmark assume que as ferramentas retornam fatos verdadeiros, mas incompletos.</span> <span class="s" data-s="b9-p1-s1">Na prática, ferramentas podem retornar dados falsos, erros de sistema ou latência variável, que não são cobertos por este framework.</span> <span class="s" data-s="b9-p1-s2">O EpiSEM-Bench foca especificamente na omissão de evidência, isolando esse fator para estudo rigoroso, mas isso simplifica a complexidade do ambiente real de operação de agentes.</span></p><p><span class="s" data-s="b9-p2-s0">Os autores também notam que a avaliação depende de um oráculo executável que conhece o estado completo do mundo.</span> <span class="s" data-s="b9-p2-s1">Isso é viável em ambientes simulados ou controlados, mas pode ser desafiador de implementar em sistemas de produção onde o estado completo não é totalmente observável ou é dinâmico demais para ser rastreado por um oráculo externo.</span> <span class="s" data-s="b9-p2-s2">A métrica de recuperação útil (PUR) também é rigorosa, exigindo que o agente não apenas busque, mas use corretamente a informação em ambos os mundos gêmeos.</span></p><p><span class="s" data-s="b9-p3-s0">Finalmente, o estudo avalia dez modelos, mas a evolução rápida do campo significa que novos modelos podem surgir com capacidades diferentes.</span> <span class="s" data-s="b9-p3-s1">O benchmark serve como uma ferramenta de diagnóstico atual, mas requer manutenção contínua para acompanhar as melhorias nas arquiteturas de agentes e nas estratégias de alinhamento de segurança.</span></p>        <h2><span class="s" data-s="b10-h">Conclusão: a necessidade de robustez epistêmica</span></h2>
+<p><span class="s" data-s="b10-p0-s0">O EpiSEM-Bench destaca uma falha crítica na segurança atual de agentes LLM: a dependência excessiva de evidências completas.</span> <span class="s" data-s="b10-p0-s1">Quando fatos críticos são omitidos, mesmo por falhas inocentes de ferramentas, muitos agentes falham em distinguir permissão de proibição.</span> <span class="s" data-s="b10-p0-s2">Isso expõe riscos reais de execução de ações não autorizadas em ambientes de produção.</span></p><p><span class="s" data-s="b10-p1-s0">A capacidade de recuperar evidências ausentes é uma propriedade valiosa, mas não universal.</span> <span class="s" data-s="b10-p1-s1">Os resultados mostram que modelos variam amplamente em sua robustez à omissão e em sua capacidade de usar evidências recuperadas para tomar decisões corretas.</span> <span class="s" data-s="b10-p1-s2">Desenvolvedores de agentes devem considerar não apenas a precisão das respostas, mas a robustez epistêmica do sistema.</span></p><p><span class="s" data-s="b10-p2-s0">O benchmark oferece uma estrutura rigorosa para avaliar essas propriedades, separando a utilidade da segurança e a omissão de evidência de instruções maliciosas.</span> <span class="s" data-s="b10-p2-s1">Ao fornecer métricas multidimensionais e cenários controlados, o EpiSEM-Bench permite uma avaliação mais honesta e detalhada da segurança de agentes LLM.</span> <span class="s" data-s="b10-p2-s2">Para que agentes autônomos sejam confiáveis, eles devem ser capazes de operar com segurança mesmo quando o mundo não revela todas as suas cartas.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">EpiSEM-Bench isola a ausência de evidência de instruções maliciosas, testando se agentes distinguem permissão de proibição com dados incompletos.</span></li><li><span class="s" data-s="k1">O benchmark usa pares de tarefas &#39;inseguro/gêmeo seguro&#39; para medir falhas de execução e recuperação ativa de fatos críticos.</span></li><li><span class="s" data-s="k2">Modelos como GPT e Claude variam drasticamente: alta conclusão não garante segurança, e recuperação de evidências nem sempre é usada corretamente.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.31650" rel="noopener">EpiSEM-Bench: Evaluating Safety and Evidence Recovery in LLM Agents under Missing Evidence</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.31650" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

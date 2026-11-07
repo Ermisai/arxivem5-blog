@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PRIME: Estimativa de Progresso Robusto em Robótica com Grafos de Experiência — arXiv em 5</title>
+<meta name="description" content="O paper propõe PRIME, um estimador de progresso que usa grafos de estados para distinguir avanços reais de erros humanos em demonstrações imperfeitas, melhorando o treino de políticas em tarefas de alta precisão.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PRIME: Estimativa de Progresso Robusto em Robótica com Grafos de Experiência">
+<meta property="og:description" content="O paper propõe PRIME, um estimador de progresso que usa grafos de estados para distinguir avanços reais de erros humanos em demonstrações imperfeitas, melhorando o treino de políticas em tarefas de alta precisão.">
+<meta property="og:image" content="../../assets/papers/2610.23769/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Robótica</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.23769" rel="noopener">arXiv:2610.23769</a>
+    </div>
+    <h1><span class="s" data-s="t">PRIME: Estimativa de Progresso Robusto em Robótica com Grafos de Experiência</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">O paper propõe PRIME, um estimador de progresso que usa grafos de estados para distinguir avanços reais de erros humanos em demonstrações imperfeitas, melhorando o treino de políticas em tarefas de alta precisão.</span></p>
+    <p class="byline">
+      <span>Wang et al.</span>
+      <span>8 min de leitura</span>
+<span>16/10/2026</span>    </p>
+    <div class="listen" data-article="2610.23769" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=IXK97RVquQA" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Precisão em Robótica e a Falácia do Progresso Linear</span></h2>
+<p><span class="s" data-s="b0-p0-s0">O Aprendizado por Reforço (RL) no mundo real tem se mostrado uma via promissora para ensinar habilidades complexas de manipulação robótica.</span> <span class="s" data-s="b0-p0-s1">No entanto, tarefas de alta precisão, como inserir um conector de carga em uma porta estreita ou encaixar um pino em um furo exato, exigem feedback denso e preciso.</span> <span class="s" data-s="b0-p0-s2">Sinais binários de sucesso ou falha não são suficientes; o robô precisa saber, passo a passo, se está se aproximando ou se afastando do objetivo.</span></p><p><span class="s" data-s="b0-p1-s0">Os métodos atuais de estimativa de progresso frequentemente assumem que todas as ações dentro de uma demonstração expert contribuem igualmente para o sucesso final.</span> <span class="s" data-s="b0-p1-s1">Essa premissa é falha.</span> <span class="s" data-s="b0-p1-s2">Em cenários reais, mesmo operadores humanos introduzem comportamentos subótimos: desvios laterais não intencionais (drifting), movimentos além do alvo (overshooting) ou pausas desnecessárias (idling).</span> <span class="s" data-s="b0-p1-s3">Métodos tradicionais interpretam esses erros como progresso ou estagnação, corrompendo o sinal de recompensa.</span></p><p><span class="s" data-s="b0-p2-s0">Além disso, a abordagem ingênua de descartar trajetórias inteiras que falham é ineficiente.</span> <span class="s" data-s="b0-p2-s1">Uma trajetória pode ser bem-sucedida no geral, mas conter passos ruins que confundem o aprendizado.</span> <span class="s" data-s="b0-p2-s2">O paper identifica que a falta de uma priori global sobre os critérios de avaliação da tarefa é a raiz do problema.</span> <span class="s" data-s="b0-p2-s3">Sem essa visão holística, é impossível distinguir um avanço genuíno de um erro momentâneo.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.23769/figure1.webp" alt="Ilustração do impacto de comportamentos subótimos. O gráfico superior mostra que filtrar apenas trajetórias falhas não resolve o problema de passos ruins dentro de trajetórias bem-sucedidas. O gráfico inferior compara a estimativa de progresso temporal com a abordagem passo a passo do PRIME." loading="lazy">
+          <figcaption>
+            Ilustração do impacto de comportamentos subótimos. O gráfico superior mostra que filtrar apenas trajetórias falhas não resolve o problema de passos ruins dentro de trajetórias bem-sucedidas. O gráfico inferior compara a estimativa de progresso temporal com a abordagem passo a passo do PRIME.
+            <span class="source">Figura 1 do paper · Wang et al., arXiv:2610.23769</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">A Solução: PRIME e a Distância Geodésica</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Os autores propõem o PRIME (Progress Estimation from Imprecise Demonstrations).</span> <span class="s" data-s="b2-p0-s1">A ideia central é tratar o progresso não como uma função do tempo, mas como uma medida de distância no espaço de estados.</span> <span class="s" data-s="b2-p0-s2">Especificamente, eles buscam aproximar a distância geodésica até o sucesso.</span> <span class="s" data-s="b2-p0-s3">A distância geodésica é o caminho mais curto através de uma variedade executável (o conjunto de movimentos fisicamente possíveis e semanticamente corretos), em vez da distância euclidiana direta, que muitas vezes corta por estados inviáveis.</span></p><p><span class="s" data-s="b2-p1-s0">Para calcular essa distância, o PRIME não olha para uma única trajetória.</span> <span class="s" data-s="b2-p1-s1">Em vez disso, ele agrega experiência de múltiplas demonstrações.</span> <span class="s" data-s="b2-p1-s2">A hipótese é que, coletando dados suficientes de diferentes tentativas (mesmo que imperfeitas), é possível mapear a estrutura global da tarefa.</span> <span class="s" data-s="b2-p1-s3">Se um estado A está fisicamente próximo do estado B em termos visuais e de configuração do robô, eles devem ser conectados no espaço de aprendizado, independentemente de terem ocorrido em momentos diferentes ou em tentativas distintas.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.23769/figure3.webp" alt="Visão geral do PRIME: cada passo é um nó. Arestas conectam estados de diferentes trajetórias se forem visual e geometricamente similares. A distância ao sucesso é o caminho mais curto no grafo ponderado." loading="lazy">
+          <figcaption>
+            Visão geral do PRIME: cada passo é um nó. Arestas conectam estados de diferentes trajetórias se forem visual e geometricamente similares. A distância ao sucesso é o caminho mais curto no grafo ponderado.
+            <span class="source">Figura 3 do paper · Wang et al., arXiv:2610.23769</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b4-h">Construção do Grafo de Experiência</span></h2>
+<p><span class="s" data-s="b4-p0-s0">O núcleo do PRIME é a construção de um grafo ponderado.</span> <span class="s" data-s="b4-p0-s1">Os nós do grafo são os estados observados, compostos por observações visuais multi-câmera e a configuração do robô (posição do TCP e das garras).</span> <span class="s" data-s="b4-p0-s2">Para extrair representações robustas desses estados, o método utiliza o DINOv3, um modelo de representação visual auto-supervisionado.</span> <span class="s" data-s="b4-p0-s3">O DINOv3 é escolhido por sua capacidade de distinguir estados semanticamente distintos mesmo que visualmente similares, e por ter priores de pose fortes.</span></p><p><span class="s" data-s="b4-p1-s0">As arestas do grafo representam transições possíveis.</span> <span class="s" data-s="b4-p1-s1">Existem dois tipos de conexões.</span> <span class="s" data-s="b4-p1-s2">Primeiro, conexões temporais dentro da mesma demonstração, que preservam a ordem natural dos eventos.</span> <span class="s" data-s="b4-p1-s3">Segundo, conexões cruzadas entre diferentes demonstrações.</span> <span class="s" data-s="b4-p1-s4">Uma aresta cruzada é estabelecida apenas se dois estados de trajetórias diferentes forem compatíveis.</span> <span class="s" data-s="b4-p1-s5">A condição de compatibilidade exige proximidade na configuração do robô e consistência visual.</span></p><p><span class="s" data-s="b4-p2-s0">Matematicamente, a similaridade visual é medida pela distância angular dos embeddings do DINOv3.</span> <span class="s" data-s="b4-p2-s1">Se a distância visual for baixa e a diferença na configuração do robô estiver dentro de um limiar, uma aresta é criada.</span> <span class="s" data-s="b4-p2-s2">O peso dessa aresta é a distância espacial, tratada como um custo de transição.</span> <span class="s" data-s="b4-p2-s3">Isso garante que transições fisicamente irreversíveis ou semanticamente distantes tenham custos altos ou não sejam conectadas, preservando a integridade física do mapa de progresso.</span></p>        <h2><span class="s" data-s="b5-h">Estimativa de Progresso via Caminho Mais Curto</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Uma vez construído o grafo, a estimativa de progresso para qualquer estado é definida como a distância do caminho mais curto (shortest-path) desse estado até o estado de sucesso (ou o conjunto de estados de sucesso).</span> <span class="s" data-s="b5-p0-s1">Esse cálculo aproxima a distância geodésica mencionada anteriormente.</span> <span class="s" data-s="b5-p0-s2">Se um robô está em um estado A e o caminho mais curto no grafo até o sucesso passa por estados B e C, então a distância é a soma dos custos dessas arestas.</span></p><p><span class="s" data-s="b5-p1-s0">Essa abordagem tem uma propriedade crucial: ela não assume progresso monótono ao longo do tempo.</span> <span class="s" data-s="b5-p1-s1">Se o robô executa um movimento de drifting (desvio lateral), o estado resultante estará conectado a nós que estão mais distantes do sucesso no grafo, aumentando a distância estimada.</span> <span class="s" data-s="b5-p1-s2">Isso penaliza corretamente o erro.</span> <span class="s" data-s="b5-p1-s3">Da mesma forma, se o robô idle (para), o estado permanece o mesmo, e a distância estimada não muda, refletindo estagnação em vez de progresso falso.</span></p><p><span class="s" data-s="b5-p2-s0">O uso de caminhos mais curtos em um grafo construído a partir de múltiplas trajetórias permite que o sistema aprenda atalhos e rotas válidas que podem não ter sido seguidos perfeitamente em nenhuma única demonstração humana.</span> <span class="s" data-s="b5-p2-s1">O grafo atua como um mapa de viabilidade, onde a distância é uma medida confiável de quão próximo o robô está de cumprir a tarefa, baseada na experiência coletiva.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.23769/figure4.webp" alt="Avaliação qualitativa do progresso. Em execuções bem-sucedidas, o PRIME fornece uma estimativa suave e monótona. Em execuções subótimas, ele detecta recuos (undershoots) aumentando a distância estimada e mantém a distância constante durante pausas (idling), ao contrário de métodos baseados apenas no tempo." loading="lazy">
+          <figcaption>
+            Avaliação qualitativa do progresso. Em execuções bem-sucedidas, o PRIME fornece uma estimativa suave e monótona. Em execuções subótimas, ele detecta recuos (undershoots) aumentando a distância estimada e mantém a distância constante durante pausas (idling), ao contrário de métodos baseados apenas no tempo.
+            <span class="source">Figura 4 do paper · Wang et al., arXiv:2610.23769</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Integração com Aprendizado de Política</span></h2>
+<p><span class="s" data-s="b7-p0-s0">O PRIME não é apenas um metricador; ele é integrado ao ciclo de aprendizado da política robótica.</span> <span class="s" data-s="b7-p0-s1">A distância estimada pelo grafo é usada para gerar sinais de recompensa densos.</span> <span class="s" data-s="b7-p0-s2">Em vez de esperar o fim da tarefa para dar uma recompensa binária, o agente recebe feedback contínuo sobre se cada ação reduziu a distância geodésica até o sucesso.</span></p><p><span class="s" data-s="b7-p1-s0">Isso é particularmente útil para o Aprendizado por Reforço Offline (Offline RL) e para o Treinamento por Imitação Supervisionada (SFT).</span> <span class="s" data-s="b7-p1-s1">No SFT, o modelo aprende a mapear estados para ações, mas o PRIME ajuda a filtrar quais passos são realmente instrutivos.</span> <span class="s" data-s="b7-p1-s2">Passos que aumentam a distância no grafo são tratados como ruído ou penalizados, permitindo que o modelo aprenda a evitar comportamentos subótimos mesmo que eles ocorram em demonstrações humanas rotineiras.</span></p><p><span class="s" data-s="b7-p2-s0">O paper destaca que a qualidade da representação visual (DINOv3) é crítica.</span> <span class="s" data-s="b7-p2-s1">Sem uma boa separação semântica no espaço latente, as conexões cruzadas do grafo poderiam ligar estados visualmente similares mas semanticamente opostos (por exemplo, um objeto sendo segurado corretamente vs. sendo deixado cair de um ângulo similar).</span> <span class="s" data-s="b7-p2-s2">O DINOv3 mitiga isso, garantindo que as conexões do grafo reflitam a física e a semântica da tarefa.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.23769/figure2.webp" alt="Resultados quantitativos. O gráfico à esquerda mostra a taxa de sucesso em tarefas reais. O PRIME supera significativamente os baselines, especialmente em tarefas de alta precisidade como Charger Insertion. O gráfico à direita ilustra como o PRIME reflete avanços parciais e recuos." loading="lazy">
+          <figcaption>
+            Resultados quantitativos. O gráfico à esquerda mostra a taxa de sucesso em tarefas reais. O PRIME supera significativamente os baselines, especialmente em tarefas de alta precisidade como Charger Insertion. O gráfico à direita ilustra como o PRIME reflete avanços parciais e recuos.
+            <span class="source">Figura 2 do paper · Wang et al., arXiv:2610.23769</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Resultados Experimentais</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Os autores avaliaram o PRIME em quatro tarefas de manipulação real com um robô Piper-X: abertura de gaveta, encaixe de pino-furo (padrão e difícil), e inserção de conector de carga.</span> <span class="s" data-s="b9-p0-s1">Eles compararam o método contra baselines como Behavior Cloning (BC), RECAP, SARM, ViVa e RoboMeter, além de recompensas esparsas 0/1.</span></p><p><span class="s" data-s="b9-p1-s0">Os resultados mostram que o PRIME é consistentemente superior.</span> <span class="s" data-s="b9-p1-s1">Na tarefa de inserção de carga (Charger Insertion), que exige alta precisão, o PRIME atingiu uma taxa de sucesso de 66,7% com dados de especialista, contra 26,7% do melhor baseline (RoboMeter).</span> <span class="s" data-s="b9-p1-s2">Com dados ruidosos (não qualificados para imitação pura), o PRIME ainda alcançou 50% de sucesso, enquanto a maioria dos outros métodos falhou abaixo de 33%.</span> <span class="s" data-s="b9-p1-s3">Isso demonstra a robustez do método a dados imperfeitos.</span></p><p><span class="s" data-s="b9-p2-s0">Um ponto crucial é a melhoria em cenários de alta precisão.</span> <span class="s" data-s="b9-p2-s1">Na tarefa Peg-in-Hole (Hard), o ganho foi de até 3,5x em relação aos baselines.</span> <span class="s" data-s="b9-p2-s2">O paper argumenta que a vantagem do PRIME se torna mais pronunciada quanto maior a precisão exigida, pois é nesses cenários que os erros humanos sutis (drifting, overshooting) têm o maior impacto negativo, e a distinção fina proporcionada pelo grafo é mais necessária.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b10-t">Número Chave: 5x de Melhoria</span></h3>
+          <p><span class="s" data-s="b10-c-s0">Em tarefas de inserção de cabos de alta precisão, o PRIME alcançou até 5 vezes a taxa de sucesso de políticas treinadas apenas com Supervised Fine-Tuning (SFT) em dados de demonstração, mesmo quando esses dados continham erros humanos significativos.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b11-h">Análise de Ablação e Sensibilidade</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Os autores realizaram análises de ablação para entender a contribuição de cada componente.</span> <span class="s" data-s="b11-p0-s1">A remoção das arestas cruzadas (usando apenas a estrutura temporal da trajetória) degradou o desempenho, confirmando que a agregação de experiência global é essencial para aprender a distância geodésica correta.</span> <span class="s" data-s="b11-p0-s2">Da mesma forma, o uso de uma métrica de distância euclidiana simples no espaço de embeddings, em vez do caminho mais curto no grafo, resultou em estimativas de progresso imprecisas, pois não capturava a estrutura não-linear da tarefa.</span></p><p><span class="s" data-s="b11-p1-s0">Eles também testaram a sensibilidade aos hiperparâmetros de similaridade visual e configuração.</span> <span class="s" data-s="b11-p1-s1">Os resultados mostraram que o método é relativamente robusto a pequenas variações nesses limiares, desde que eles sejam suficientemente restritivos para evitar conexões físicas impossíveis.</span> <span class="s" data-s="b11-p1-s2">A construção do grafo adiciona uma sobrecarga computacional modesta, mas viável para o treinamento offline, onde o tempo de computação não é tão crítico quanto na inferência em tempo real.</span></p>        <h2><span class="s" data-s="b12-h">Limitações e Considerações Finais</span></h2>
+<p><span class="s" data-s="b12-p0-s0">Apesar dos resultados promissores, o paper reconhece limitações.</span> <span class="s" data-s="b12-p0-s1">O método depende da qualidade e da quantidade dos dados de demonstração.</span> <span class="s" data-s="b12-p0-s2">Se as demonstrações forem extremamente limitadas ou não cobrirem uma variedade suficiente de estados, o grafo pode ficar desconectado ou incompleto, levando a estimativas de progresso errôneas.</span> <span class="s" data-s="b12-p0-s3">Além disso, o uso do DINOv3, embora eficaz, requer recursos computacionais para extração de features, o que pode ser um gargalo em sistemas com restrições severas de hardware.</span></p><p><span class="s" data-s="b12-p1-s0">Outra limitação é o foco em tarefas de manipulação estática ou de baixa dinâmica.</span> <span class="s" data-s="b12-p1-s1">O paper não aborda explicitamente como o método se comportaria em tarefas com objetos em movimento rápido ou interações físicas complexas e imprevisíveis, onde a representação de estado pode mudar drasticamente em poucos milissegundos.</span> <span class="s" data-s="b12-p1-s2">A generalização para outros tipos de robôs ou ambientes também não foi extensivamente testada.</span></p><p><span class="s" data-s="b12-p2-s0">Em conclusão, o PRIME oferece um paradigma melhorado para a estimativa de progresso em robótica.</span> <span class="s" data-s="b12-p2-s1">Ao abandonar a suposição ingênua de progresso linear e adotar uma visão baseada em grafos de experiência, ele permite que políticas aprendam de forma mais eficiente a partir de dados humanos imperfeitos.</span> <span class="s" data-s="b12-p2-s2">Isso reduz a necessidade de coleta massiva de dados perfeitos e abre caminho para o aprendizado de habilidades de alta precisão em cenários reais.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">O PRIME constrói um grafo de experiências conectando estados visual e geometricamente similares, aproximando a distância geodésica até o sucesso.</span></li><li><span class="s" data-s="k1">O método ignora a suposição de que todas as ações contribuem igualmente, filtrando comportamentos subótimos como &#39;drifting&#39; e &#39;idling&#39; em nível de passo.</span></li><li><span class="s" data-s="k2">Em tarefas de inserção de cabos e pino-furo, o PRIME aumentou a taxa de sucesso em até 5x comparado a métodos de imitação padrão.</span></li><li><span class="s" data-s="k3">A abordagem é robusta a dados ruidosos, permitindo o uso de demonstrações humanas imperfeitas sem descartar trajetórias inteiras.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.23769" rel="noopener">Not All Actions Contribute Equally: Learning Precise Progress Estimation from Imprecise Demonstrations</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.23769" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

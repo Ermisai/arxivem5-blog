@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RoboArchitect: Automatizando a Armação de Agentes Robóticos com Memória Persistente — arXiv em 5</title>
+<meta name="description" content="Este paper demonstra que otimizar o código de controle (harness) ao redor de uma política congelada pode superar o fine-tuning, criando agentes robóticos especialistas sem atualizar pesos do modelo.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RoboArchitect: Automatizando a Armação de Agentes Robóticos com Memória Persistente">
+<meta property="og:description" content="Este paper demonstra que otimizar o código de controle (harness) ao redor de uma política congelada pode superar o fine-tuning, criando agentes robóticos especialistas sem atualizar pesos do modelo.">
+<meta property="og:image" content="../../assets/papers/2610.42141/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Robótica</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.42141" rel="noopener">arXiv:2610.42141</a>
+    </div>
+    <h1><span class="s" data-s="t">RoboArchitect: Automatizando a Armação de Agentes Robóticos com Memória Persistente</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Este paper demonstra que otimizar o código de controle (harness) ao redor de uma política congelada pode superar o fine-tuning, criando agentes robóticos especialistas sem atualizar pesos do modelo.</span></p>
+    <p class="byline">
+      <span>Wu et al.</span>
+      <span>7 min de leitura</span>
+<span>30/10/2026</span>    </p>
+    <div class="listen" data-article="2610.42141" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=M8Pyae1v2fg" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Custo Oculto da Adaptação Robótica</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A integração de modelos de linguagem em agentes robóticos tem mostrado resultados promissores, mas a adaptação desses sistemas a novos ambientes ou hardware permanece um gargalo significativo.</span> <span class="s" data-s="b0-p0-s1">Tradicionalmente, ajustar uma política robótica para um novo cenário exige a coleta de novas demonstrações e o fine-tuning (treinamento adicional) dos pesos do modelo.</span> <span class="s" data-s="b0-p0-s2">Esse processo é demorado, custoso e, muitas vezes, impraticável quando se lida com múltiplas configurações de robôs ou tarefas distintas.</span></p><p><span class="s" data-s="b0-p1-s0">Uma alternativa emergente envolve o uso de &#39;harnesses&#39; (ou arneses) — estruturas de código que medeiam quando e como chamar o modelo de política, qual contexto fornecer e como interpretar a saída.</span> <span class="s" data-s="b0-p1-s1">Sistemas recentes, como VoLo e Harness VLA, demonstram que envolver uma política congelada (frozen policy) em uma harness bem projetada pode oferecer ganhos substanciais de desempenho sem a necessidade de atualizar os pesos do modelo base.</span></p><p><span class="s" data-s="b0-p2-s0">No entanto, o projeto dessas harnesses ainda é, predominantemente, uma tarefa manual.</span> <span class="s" data-s="b0-p2-s1">Engenheiros seguem um ciclo de tentativa e erro: executam o agente, observam falhas, diagnosticam causas e modificam o código de controle.</span> <span class="s" data-s="b0-p2-s2">Esse loop é lento e difícil de escalar, especialmente quando se trata de analisar longas gravações de rollouts (execuções do robô).</span> <span class="s" data-s="b0-p2-s3">Os autores deste paper questionam se todo esse processo de engenharia pode ser automatizado.</span></p>        <h2><span class="s" data-s="b1-h">Introduzindo o RoboArchitect</span></h2>
+<p><span class="s" data-s="b1-p0-s0">O RoboArchitect é uma proposta para automatizar o design e a otimização de harnesses ao redor de políticas robóticas congeladas.</span> <span class="s" data-s="b1-p0-s1">Em vez de depender de especialistas humanos para escrever e refinar o código de controle, o sistema utiliza um modelo de codificação para observar as execuções do robô, diagnosticar modos de falha e iterativamente revisar a harness.</span></p><p><span class="s" data-s="b1-p1-s0">A premissa central é que a otimização da harness oferece uma alternativa eficaz ao fine-tuning.</span> <span class="s" data-s="b1-p1-s1">Ao transformar uma política geral em um especialista para uma configuração específica através da lógica de controle, é possível alcançar desempenho superior, especialmente em cenários onde a política original não foi treinada especificamente para o benchmark de teste.</span></p><p><span class="s" data-s="b1-p2-s0">O sistema não atualiza nenhum peso do modelo de política.</span> <span class="s" data-s="b1-p2-s1">Em vez disso, ele evolui o código que envolve o modelo, permitindo que o robô se adapte a novas cenas e tarefas apenas através da mudança na lógica de decisão e no uso de ferramentas auxiliares de visão e linguagem.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.42141/figure2.webp" alt="Diagrama do RoboArchitect: um modelo de código evolui a &#39;arnês&#39; de um robô sem treinar o modelo base, partindo de uma política VLA bruta até um agente especializado com memória persistente." loading="lazy">
+          <figcaption>
+            Diagrama do RoboArchitect: um modelo de código evolui a &#39;arnês&#39; de um robô sem treinar o modelo base, partindo de uma política VLA bruta até um agente especializado com memória persistente.
+            <span class="source">Figura 2 do paper · Wu et al., arXiv:2610.42141</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Mecanismo: Como a Evolução da Harness Funciona</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O núcleo do RoboArchitect é um loop de otimização automatizado.</span> <span class="s" data-s="b3-p0-s1">O sistema começa com uma política base congelada, tipicamente um modelo Vision-Language-Action (VLA).</span> <span class="s" data-s="b3-p0-s2">A cada iteração, o modelo de codificação recebe acesso às gravações passo a passo (rollouts) das execuções do robô.</span> <span class="s" data-s="b3-p0-s3">Com base nesses registros, ele identifica onde e por que o robô falhou.</span></p><p><span class="s" data-s="b3-p1-s0">O diagnóstico não se limita a detectar o erro; o modelo propõe uma versão atualizada da harness para corrigir o problema.</span> <span class="s" data-s="b3-p1-s1">Essa harness evoluida é então testada em um conjunto de episódios de treinamento.</span> <span class="s" data-s="b3-p1-s2">O processo se repete, permitindo que a harness refine sua lógica de controle iterativamente.</span></p><p><span class="s" data-s="b3-p2-s0">Para evitar o overfitting (sobreajuste) aos episódios específicos de treinamento, os autores dividem rigorosamente os benchmarks em conjuntos de treinamento e conjuntos mantidos em reserva (held-out).</span> <span class="s" data-s="b3-p2-s1">A avaliação ocorre em dois cenários distintos: cenas inéditas (onde as tarefas são as mesmas, mas a disposição dos objetos muda) e tarefas inéditas (onde os objetivos são diferentes, testando a transferência de habilidades manipulativas).</span></p>        <h2><span class="s" data-s="b4-h">Resultados: Superando o Fine-Tuning</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Os resultados apresentados pelo RoboArchitect são significativos.</span> <span class="s" data-s="b4-p0-s1">Ao envolver políticas congeladas em harnesses evoluídas, o sistema elevou a taxa de sucesso média de 9,7% para 43,3% em cenas inéditas, um aumento de 4,5 vezes.</span> <span class="s" data-s="b4-p0-s2">Em tarefas inéditas, a taxa de sucesso saltou de 12,7% para 40,2%, um aumento de 3,2 vezes.</span> <span class="s" data-s="b4-p0-s3">Esses ganhos foram observados através de múltiplos benchmarks e políticas diferentes.</span></p><p><span class="s" data-s="b4-p1-s0">Um ponto crucial é que os maiores ganhos ocorreram quando a política era aplicada em configurações fora da distribuição de treinamento (out-of-domain).</span> <span class="s" data-s="b4-p1-s1">Nesses casos, a harness evoluída não apenas adaptou a política geral, mas frequentemente superou a versão do mesmo modelo que havia sido fine-tuned no benchmark.</span> <span class="s" data-s="b4-p1-s2">Isso sugere que a otimização da lógica de controle pode ser mais eficiente do que o ajuste fino dos pesos do modelo para certas adaptações.</span></p><p><span class="s" data-s="b4-p2-s0">O sistema também demonstrou capacidade de criar estratégias de controle intuitivas.</span> <span class="s" data-s="b4-p2-s1">Por exemplo, em situações onde o braço do robô travava, a harness aprendeu a levantar o braço para liberar o bloqueio.</span> <span class="s" data-s="b4-p2-s2">Em outros casos, quando um obstáculo bloqueava o caminho vertical, a harness optou por alcançar horizontalmente, uma estratégia que não era óbvia na política base.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.42141/figure1.webp" alt="Gráfico mostrando o salto de sucesso de 9,7% para 43,3% em cenas inéditas usando a arnês evoluída, superando frequentemente a mesma política fine-tuned no benchmark." loading="lazy">
+          <figcaption>
+            Gráfico mostrando o salto de sucesso de 9,7% para 43,3% em cenas inéditas usando a arnês evoluída, superando frequentemente a mesma política fine-tuned no benchmark.
+            <span class="source">Figura 1 do paper · Wu et al., arXiv:2610.42141</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b6-h">Memória Persistente Emergente</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Além da otimização da lógica de controle, o RoboArchitect demonstrou a capacidade de evoluir sua própria memória persistente.</span> <span class="s" data-s="b6-p0-s1">A harness aprendeu a armazenar experiências úteis durante os episódios de treinamento para utilizá-las em decisões futuras.</span></p><p><span class="s" data-s="b6-p1-s0">Um exemplo claro foi o armazenamento de profundidades de preensão efetivas.</span> <span class="s" data-s="b6-p1-s1">Em vez de tentar preensão em qualquer profundidade, a harness evoluída lembrava qual profundidade funcionava melhor para objetos específicos e aplicava esse conhecimento em episódios subsequentes.</span> <span class="s" data-s="b6-p1-s2">Isso transforma a harness de um simples roteador de comandos em um agente com história e aprendizado contínuo, mesmo sem alterar os pesos do modelo de política.</span></p><p><span class="s" data-s="b6-p2-s0">Essa memória persistente é acessada frequentemente durante as execuções e fornece informações acionáveis que guiam ações futuras, aumentando a eficiência e a taxa de sucesso do robô em tarefas complexas.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.42141/figure10.webp" alt="Curvas de aprendizado mostrando a melhoria contínua do robô a cada iteração de otimização da arnês, com a versão final superando a arnês de uma única tentativa em quase todos os conjuntos mantidos em reserva." loading="lazy">
+          <figcaption>
+            Curvas de aprendizado mostrando a melhoria contínua do robô a cada iteração de otimização da arnês, com a versão final superando a arnês de uma única tentativa em quase todos os conjuntos mantidos em reserva.
+            <span class="source">Figura 10 do paper · Wu et al., arXiv:2610.42141</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Avaliação em Diversos Ambientes</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Os autores avaliaram o RoboArchitect em uma variedade de benchmarks, incluindo LIBERO-Pro-10, RoboCerebra, VLABench, RoboCasa-365 e SimplerEnv.</span> <span class="s" data-s="b8-p0-s1">As políticas testadas incluíram MolmoAct-2, OpenVLA-7B, π0.5, entre outras.</span> <span class="s" data-s="b8-p0-s2">A avaliação cobriu diferentes níveis de distância entre os dados de treinamento da política e o benchmark de avaliação, desde configurações in-distribution até completamente fora da distribuição.</span></p><p><span class="s" data-s="b8-p1-s0">Um experimento adicional evoluiu uma única harness unificada que funcionava através de múltiplos benchmarks simultaneamente, envolvendo diferentes embodiments de robôs (como Franka Panda, WidowX e o manipulador móvel do Google).</span> <span class="s" data-s="b8-p1-s1">Isso demonstrou que o sistema pode descobrir mecanismos de agente compartilhados e estruturas de memória persistentes que são robustas a variações no hardware e no simulador.</span></p><p><span class="s" data-s="b8-p2-s0">Os resultados indicam que há uma margem significativa de melhoria no desempenho de manipulação robótica que reside na arquitetura do agente (a harness) e não apenas na política de baixo nível.</span> <span class="s" data-s="b8-p2-s1">Automatizar o design dessa arquitetura pode desbloquear esse potencial sem a necessidade de recursos computacionais massivos para re-treinamento.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b9-t">Limitações do Estudo</span></h3>
+          <p><span class="s" data-s="b9-c-s0">O RoboArchitect foi avaliado exclusivamente em ambientes de simulação.</span> <span class="s" data-s="b9-c-s1">Embora a interface de entrada (imagens, profundidade) seja padrão, a transferência para robôs reais requer validação adicional.</span> <span class="s" data-s="b9-c-s2">Além disso, o estudo limita-se a um teto fixo de 5 iterações de otimização, deixando em aberto se mais iterações trariam ganhos adicionais ou se há um ponto de saturação.</span> <span class="s" data-s="b9-c-s3">Tarefas com dinâmica de contato mais complexa, como manipulação destreza de mão ou uso de ferramentas, também não foram exploradas.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b10-h">Implicações para o Futuro da Robótica</span></h2>
+<p><span class="s" data-s="b10-p0-s0">O trabalho do RoboArchitect sugere uma mudança de paradigma na forma como abordamos a adaptação de agentes robóticos.</span> <span class="s" data-s="b10-p0-s1">Em vez de focar exclusivamente no aumento da capacidade dos modelos de política ou na coleta massiva de dados para fine-tuning, a otimização da lógica de controle emergente pode ser uma via mais eficiente e escalável.</span></p><p><span class="s" data-s="b10-p1-s0">A capacidade de um sistema de diagnosticar falhas e auto-revisar seu próprio código de controle abre caminho para agentes robóticos mais autônomos e resilientes.</span> <span class="s" data-s="b10-p1-s1">A memória persistente evolvida automaticamente adiciona uma camada de inteligência contextual que é crucial para tarefas de longa duração.</span></p><p><span class="s" data-s="b10-p2-s0">Embora as limitações, como a dependência de simulação e o número fixo de iterações, devam ser endereçadas em trabalhos futuros, o RoboArchitect estabelece uma prova de conceito sólida de que a engenharia de harnesses automatizada é uma área promissora para o avanço da robótica baseada em IA.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.42141/table3.webp" alt="Tabela detalhando como a memória persistente do robô armazena dados úteis para ações futuras, mostrando frequência de leitura e utilidade das informações armazenadas." loading="lazy">
+          <figcaption>
+            Tabela detalhando como a memória persistente do robô armazena dados úteis para ações futuras, mostrando frequência de leitura e utilidade das informações armazenadas.
+            <span class="source">Tabela 3 do paper · Wu et al., arXiv:2610.42141</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b12-h">Conclusão</span></h2>
+<p><span class="s" data-s="b12-p0-s0">O RoboArchitect apresenta uma abordagem inovadora para a adaptação de agentes robóticos, demonstrando que a otimização automatizada de harnesses pode superar métodos tradicionais de fine-tuning.</span> <span class="s" data-s="b12-p0-s1">Ao evoluir a lógica de controle e a memória persistente ao redor de políticas congeladas, o sistema alcança ganhos substanciais de desempenho em cenários diversos e desafiadores.</span></p><p><span class="s" data-s="b12-p1-s0">Os resultados destacam que a arquitetura do agente é um componente crítico para o sucesso da manipulação robótica, e que sua otimização automática pode desbloquear potencial significativo sem a necessidade de atualizações de pesos do modelo.</span> <span class="s" data-s="b12-p1-s1">Este trabalho convida a comunidade a reconsiderar o equilíbrio entre o desenvolvimento de políticas mais complexas e o refinamento inteligente das estruturas que as envolvem.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">O RoboArchitect usa um modelo de código para evoluir iterativamente a &#39;arnês&#39; de controle de um robô, diagnosticando falhas e revisando o código.</span></li><li><span class="s" data-s="k1">Em benchmarks variados, a arnês evoluída elevou a taxa de sucesso de 9,7% para 43,3% em cenas inéditas, superando versões fine-tuned.</span></li><li><span class="s" data-s="k2">O sistema desenvolveu memória persistente automática, armazenando experiências como profundidades de preensão para decisões futuras.</span></li><li><span class="s" data-s="k3">Limitações incluem escopo em simulação e um teto fixo de 5 iterações de otimização, deixando a escalabilidade aberta para investigação.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.42141" rel="noopener">RoboArchitect: Automating the Design of Robotic Agents with Persistent Memory</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.42141" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

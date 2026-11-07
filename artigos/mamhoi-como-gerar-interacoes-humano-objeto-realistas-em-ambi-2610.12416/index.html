@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MAMHOI: como gerar interações humano-objeto realistas em ambientes 3D complexos usando affordances — arXiv em 5</title>
+<meta name="description" content="Pesquisadores da Nanyang Technological University propõem fatorar a geração de interações humano-objeto em dois problemas separados — onde a ação é viável na cena e como executá-la — usando affordances como interface entre ambos.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MAMHOI: como gerar interações humano-objeto realistas em ambientes 3D complexos usando affordances">
+<meta property="og:description" content="Pesquisadores da Nanyang Technological University propõem fatorar a geração de interações humano-objeto em dois problemas separados — onde a ação é viável na cena e como executá-la — usando affordances como interface entre ambos.">
+<meta property="og:image" content="../../assets/papers/2610.12416/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Imagem</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.12416" rel="noopener">arXiv:2610.12416</a>
+    </div>
+    <h1><span class="s" data-s="t">MAMHOI: como gerar interações humano-objeto realistas em ambientes 3D complexos usando affordances</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Pesquisadores da Nanyang Technological University propõem fatorar a geração de interações humano-objeto em dois problemas separados — onde a ação é viável na cena e como executá-la — usando affordances como interface entre ambos.</span></p>
+    <p class="byline">
+      <span>Lei et al.</span>
+      <span>11 min de leitura</span>
+<span>08/10/2026</span>    </p>
+    <div class="listen" data-article="2610.12416" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=fUja8GxAt_E" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema de colocar humanos e objetos em cenas reais</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Gerar movimento humano realista já é difícil.</span> <span class="s" data-s="b0-p0-s1">Gerar movimento de um humano manipulando um objeto — pegando uma caixa, empurrando uma cadeira — é mais difícil ainda.</span> <span class="s" data-s="b0-p0-s2">Mas gerar esse movimento dentro de uma sala cheia de móveis, sem que a pessoa atravesse paredes ou a caixa passe pelo sofá, é um problema que combina física, geometria e entendimento de tarefas.</span></p><p><span class="s" data-s="b0-p1-s0">Modelos generativos recentes conseguem sintetizar interações humano-objeto (HOI, de human-object interaction) com qualidade impressionante quando treinados em ambientes vazios ou simplificados.</span> <span class="s" data-s="b0-p1-s1">O desafio aparece quando você precisa adaptar essas interações a cenas 3D complexas: o humano precisa se aproximar do objeto sem colidir com móveis, e o objeto precisa se mover por regiões livres até o destino final.</span></p><p><span class="s" data-s="b0-p2-s0">A raiz do problema está nos dados.</span> <span class="s" data-s="b0-p2-s1">Datasets de humanos em cenas capturam bem como as pessoas se movem em ambientes reais, evitando obstáculos.</span> <span class="s" data-s="b0-p2-s2">Datasets de interações humano-objeto capturam a dinâmica fina de contato e manipulação.</span> <span class="s" data-s="b0-p2-s3">Mas dados que combinam humanos, objetos e cenas complexas — com diversidade de movimentos, geometrias de objetos e layouts — são raros e caros de coletar.</span></p><p><span class="s" data-s="b0-p3-s0">Métodos anteriores tentaram preencher essa lacuna de várias formas: alguns usam waypoints de objeto ou refinamento de trajetória para respeitar a cena; outros criam pares sintéticos de cena e interação e treinam geradores condicionados diretamente.</span> <span class="s" data-s="b0-p3-s1">Trabalhos recentes mostram que é possível combinar dados de humano-objeto e humano-cena através de treinamento híbrido, sem exigir exemplos completos de humano-objeto-cena.</span> <span class="s" data-s="b0-p3-s2">Mas resta uma questão de modelagem: como conectar o raciocínio sobre viabilidade da interação na cena com a dinâmica detalhada de movimento, quando a supervisão mais forte para cada um vem de fontes diferentes?</span></p>        <h2><span class="s" data-s="b1-h">A ideia: fatorar através de affordances</span></h2>
+<p><span class="s" data-s="b1-p0-s0">O MAMHOI (Motion-Affordance-Mediated Human–Object Interaction) responde essa pergunta fatorando o problema em dois estágios, conectados por uma representação intermediária chamada affordance de movimento.</span> <span class="s" data-s="b1-p0-s1">Em vez de aprender uma única distribuição sobre movimento humano, manipulação de objeto e geometria de cena, o método separa entendimento de cena da síntese de movimento.</span></p><p><span class="s" data-s="b1-p1-s0">A affordance aqui é uma região espacial 2D que indica onde a interação pode acontecer de forma viável, dado o layout da cena, a posição do objeto e o objetivo da tarefa.</span> <span class="s" data-s="b1-p1-s1">Ela não prescreve a trajetória exata do humano ou do objeto, mas comunica as restrições espaciais impostas pela cena.</span> <span class="s" data-s="b1-p1-s2">Essa representação serve como interface explícita entre dois modelos: um que entende a cena e prevê a affordance, e outro que gera o movimento humano-objeto condicionado nessa affordance.</span></p><p><span class="s" data-s="b1-p2-s0">Matematicamente, o objetivo é modelar p(x | ctask, cscene), onde x é a sequência de movimento humano-objeto, ctask são as condições da tarefa (instrução em linguagem natural, geometria do objeto, estado inicial) e cscene é a geometria da cena.</span> <span class="s" data-s="b1-p2-s1">O MAMHOI fatora essa distribuição como uma integral sobre affordances A: a probabilidade de x dado ctask e cscene é aproximadamente a integral de p(x | A, ctask) vezes p(A | c&#39;task, cscene).</span> <span class="s" data-s="b1-p2-s2">Aqui, c&#39;task contém apenas a informação necessária para prever a affordance — no caso, o caminho planejado do objeto P e o texto da instrução.</span></p><p><span class="s" data-s="b1-p3-s0">Essa fatoração permite aprender entendimento de cena e síntese de interação de forma independente, usando datasets complementares.</span> <span class="s" data-s="b1-p3-s1">O modelo de cena pode ser treinado em dados de humano-cena, e o modelo de movimento pode ser treinado em dados de humano-objeto sem cena.</span> <span class="s" data-s="b1-p3-s2">A affordance prevista transfere as restrições da cena para o gerador de movimento, sem exigir pares completos de humano-objeto-cena durante o treinamento.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.12416/figure1.webp" alt="Visão geral do MAMHOI: o método aprende de priors de interação sem cena e os transfere para ambientes complexos através de affordances de movimento. Isso permite interações fisicamente plausíveis em cenas cheias e com objetos diversos." loading="lazy">
+          <figcaption>
+            Visão geral do MAMHOI: o método aprende de priors de interação sem cena e os transfere para ambientes complexos através de affordances de movimento. Isso permite interações fisicamente plausíveis em cenas cheias e com objetos diversos.
+            <span class="source">Figura 1 do paper · Lei et al., arXiv:2610.12416</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Representação dos dados</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Cada segmento de interação é representado por movimento humano H, movimento do objeto O, geometria do objeto G, condições esparsas de movimento Cmotion e uma condição de affordance a. O movimento humano consiste em posições 3D de juntas e rotações contínuas em representação 6D.</span> <span class="s" data-s="b3-p0-s1">O movimento do objeto é dado pelo centróide e rotação.</span> <span class="s" data-s="b3-p0-s2">Ambos são transformados para um sistema de coordenadas canônico centrado no humano, removendo ambiguidade de orientação global e alinhando movimento com a representação da cena.</span></p><p><span class="s" data-s="b3-p1-s0">A geometria do objeto é codificada usando um descritor BPS (Basis Point Set) de 1024 pontos em 3D, seguindo o trabalho CHOIS.</span> <span class="s" data-s="b3-p1-s1">As condições esparsas Cmotion incluem o estado inicial humano-objeto, waypoints esparsos do objeto e o estado final desejado do objeto.</span></p><p><span class="s" data-s="b3-p2-s0">A affordance tem duas formas.</span> <span class="s" data-s="b3-p2-s1">A nível de sequência, o modelo de cena prevê um mapa 2D binário A que cobre a região de interação.</span> <span class="s" data-s="b3-p2-s2">Para o gerador de movimento, essa affordance é convertida em uma condição local 3D: três grades de ocupação voxelizadas de 32×32×32, centradas na pelve do humano, na posição atual do objeto e no objetivo do objeto.</span> <span class="s" data-s="b3-p2-s3">Esses voxels capturam restrições espaciais locais relevantes para o estado, tarefa e objetivo, e são concatenados em um tensor 3×32×32×32.</span> <span class="s" data-s="b3-p2-s4">Instrução de texto, geometria do objeto e affordance são codificadas por CLIP, uma MLP e um encoder ViT de voxels, respectivamente, e condicionam o modelo conjuntamente.</span></p>        <h2><span class="s" data-s="b4-h">Modelo de entendimento de cena</span></h2>
+<p><span class="s" data-s="b4-p0-s0">O primeiro componente do MAMHOI é o modelo de entendimento de cena, que prevê a affordance de movimento.</span> <span class="s" data-s="b4-p0-s1">Dada uma cena representada por um mapa de profundidade 2D, um caminho planejado do objeto P (fornecido por um planejador externo) e uma instrução em linguagem natural, o modelo produz um mapa binário 2D Â que indica onde a interação pode acontecer de forma viável.</span></p><p><span class="s" data-s="b4-p1-s0">A arquitetura codifica o mapa de profundidade da cena usando uma U-Net residual 2D.</span> <span class="s" data-s="b4-p1-s1">O caminho do objeto P é transformado em uma sequência de features posicionais por um encoder de caminho.</span> <span class="s" data-s="b4-p1-s2">A instrução é codificada via CLIP.</span> <span class="s" data-s="b4-p1-s3">Essas representações são combinadas para produzir a affordance prevista.</span></p><p><span class="s" data-s="b4-p2-s0">A affordance funciona como um resumo espacial das restrições impostas pela cena.</span> <span class="s" data-s="b4-p2-s1">Ela não especifica a trajetória exata do humano ou do objeto, mas delimita a região em que a interação pode se desenrolar sem violações geométricas.</span> <span class="s" data-s="b4-p2-s2">Essa separação é crucial: o modelo de cena não precisa saber os detalhes finos de como humanos manipulam objetos, apenas onde a interação é espacialmente viável.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.12416/figure2.webp" alt="Arquitetura do MAMHOI: (A) o módulo de entendimento de cena prevê affordances a partir da cena, caminho do objeto e instrução; (B) a interface de affordance converte o mapa 2D em grades de ocupação 3D locais que condicionam o gerador de movimento por difusão." loading="lazy">
+          <figcaption>
+            Arquitetura do MAMHOI: (A) o módulo de entendimento de cena prevê affordances a partir da cena, caminho do objeto e instrução; (B) a interface de affordance converte o mapa 2D em grades de ocupação 3D locais que condicionam o gerador de movimento por difusão.
+            <span class="source">Figura 2 do paper · Lei et al., arXiv:2610.12416</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b6-h">Gerador de movimento condicionado por affordance</span></h2>
+<p><span class="s" data-s="b6-p0-s0">O segundo componente é um modelo de difusão que gera movimento humano-objeto sincronizado, condicionado na affordance prevista, na geometria do objeto, na instrução e em condições esparsas de movimento (estado inicial, waypoints, objetivo).</span></p><p><span class="s" data-s="b6-p1-s0">O gerador recebe a affordance local a — as três grades de voxels centradas na pelve, objeto atual e objetivo — e a processa através de um encoder ViT de voxels.</span> <span class="s" data-s="b6-p1-s1">Essa representação de affordance é concatenada com embeddings de geometria do objeto e texto, formando uma condição multimodal que guia a difusão.</span></p><p><span class="s" data-s="b6-p2-s0">A difusão opera sobre a sequência completa de movimento humano-objeto x0 = [H, O].</span> <span class="s" data-s="b6-p2-s1">Durante o treinamento, ruído gaussiano é adicionado progressivamente, e o modelo aprende a reverter esse processo.</span> <span class="s" data-s="b6-p2-s2">Durante a inferência, o modelo parte de ruído puro e itera até produzir uma sequência de movimento limpa, respeitando as condições fornecidas.</span></p><p><span class="s" data-s="b6-p3-s0">Crucialmente, o gerador de movimento não precisa ter acesso direto à geometria completa da cena.</span> <span class="s" data-s="b6-p3-s1">A affordance já encapsula as restrições espaciais relevantes.</span> <span class="s" data-s="b6-p3-s2">Isso permite que o gerador seja treinado em dados de humano-objeto sem cena, desde que a affordance seja fornecida ou simulada durante o treinamento.</span> <span class="s" data-s="b6-p3-s3">Na prática, durante o treinamento, affordances podem ser extraídas de dados de humano-cena ou geradas sinteticamente, permitindo que o modelo aprenda a respeitar restrições espaciais sem exigir exemplos completos de humano-objeto-cena.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b7-t">Independência condicional: a suposição central</span></h3>
+          <p><span class="s" data-s="b7-c-s0">O MAMHOI assume que, dada a affordance A, a condição de cena completa cscene se torna aproximadamente redundante para síntese de movimento: p(x | A, ctask, cscene) ≈ p(x | A, ctask).</span> <span class="s" data-s="b7-c-s1">Essa suposição de independência condicional é o que permite treinar os dois modelos separadamente.</span> <span class="s" data-s="b7-c-s2">Ela é razoável se a affordance captura todas as restrições espaciais relevantes da cena para a interação, mas é uma aproximação — detalhes geométricos finos podem ser perdidos.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b8-h">Treinamento e inferência</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Durante o treinamento, o modelo de entendimento de cena e o gerador de movimento podem ser treinados separadamente.</span> <span class="s" data-s="b8-p0-s1">O modelo de cena aprende a prever affordances a partir de dados de humano-cena, onde a affordance ground-truth pode ser derivada da trajetória observada do humano na cena.</span> <span class="s" data-s="b8-p0-s2">O gerador de movimento aprende a sintetizar interações humano-objeto a partir de dados de HOI, condicionado em affordances que podem ser extraídas desses dados ou simuladas.</span></p><p><span class="s" data-s="b8-p1-s0">Na inferência, o pipeline é sequencial.</span> <span class="s" data-s="b8-p1-s1">Primeiro, dado um mapa de profundidade da cena, um caminho planejado do objeto (produzido por um planejador de trajetória externo) e uma instrução, o modelo de cena prevê a affordance Â. Essa affordance 2D é então convertida em grades de ocupação 3D locais a, centradas nas posições relevantes ao longo da execução da tarefa.</span> <span class="s" data-s="b8-p1-s2">Finalmente, o gerador de movimento produz a sequência completa de movimento humano-objeto, condicionado em a, na geometria do objeto, na instrução e nas condições esparsas.</span></p><p><span class="s" data-s="b8-p2-s0">Essa separação modular tem vantagens práticas.</span> <span class="s" data-s="b8-p2-s1">O modelo de cena pode ser melhorado ou substituído sem retreinar o gerador de movimento.</span> <span class="s" data-s="b8-p2-s2">Novos objetos podem ser manipulados sem coletar novos dados de cena, desde que o gerador de movimento generalize para geometrias não vistas.</span> <span class="s" data-s="b8-p2-s3">E a affordance intermediária oferece interpretabilidade: é possível visualizar onde o modelo acredita que a interação pode acontecer antes de gerar o movimento.</span></p>        <h2><span class="s" data-s="b9-h">Experimentos e resultados</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Os autores construíram um conjunto de teste de interações humano-objeto em cenas complexas, combinando dados de HOI com geometrias de cena de ambientes internos.</span> <span class="s" data-s="b9-p0-s1">Eles comparam o MAMHOI com métodos anteriores, incluindo CHOIS (um modelo de HOI sem consciência de cena) e InfBaGel (que usa orientação por SDF de cena durante a inferência).</span></p><p><span class="s" data-s="b9-p1-s0">As métricas de avaliação cobrem penetração humano-cena, penetração objeto-cena, aderência à trajetória do objeto, suavidade do movimento e qualidade da interação humano-objeto (medida por distância de contato e suavidade de junta).</span> <span class="s" data-s="b9-p1-s1">Penetração objeto-cena é particularmente crítica: indica se o objeto atravessa móveis ou paredes durante a manipulação.</span></p><p><span class="s" data-s="b9-p2-s0">Os resultados quantitativos mostram que o MAMHOI reduz significativamente a penetração objeto-cena em comparação com CHOIS, mesmo quando CHOIS é refinado com orientação SDF genérica em tempo de teste.</span> <span class="s" data-s="b9-p2-s1">O MAMHOI também preserva melhor a qualidade da interação humano-objeto, com menor distância de contato e movimento de junta mais suave.</span> <span class="s" data-s="b9-p2-s2">InfBaGel, apesar de usar orientação consciente de cena, apresenta penetrações objeto-cena mais altas e qualidade de interação inferior.</span></p><p><span class="s" data-s="b9-p3-s0">Qualitativamente, as visualizações mostram que o MAMHOI produz trajetórias de objeto que navegam ao redor de obstáculos, enquanto métodos baseline frequentemente resultam em objetos atravessando móveis.</span> <span class="s" data-s="b9-p3-s1">As regiões de penetração são destacadas em amarelo e vermelho nas comparações visuais, e o MAMHOI consistentemente exibe menos e menores regiões de violação.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.12416/figure3.webp" alt="Comparação qualitativa no conjunto de teste com cenas: MAMHOI reduz penetrações objeto-cena (destacadas de amarelo a vermelho) em relação a CHOIS e InfBaGel. Gsdf indica refinamento genérico por SDF de cena aplicado em tempo de teste." loading="lazy">
+          <figcaption>
+            Comparação qualitativa no conjunto de teste com cenas: MAMHOI reduz penetrações objeto-cena (destacadas de amarelo a vermelho) em relação a CHOIS e InfBaGel. Gsdf indica refinamento genérico por SDF de cena aplicado em tempo de teste.
+            <span class="source">Figura 3 do paper · Lei et al., arXiv:2610.12416</span>
+          </figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="../../assets/papers/2610.12416/table2.webp" alt="Resultados quantitativos: MAMHOI supera métodos anteriores em penetração objeto-cena e mantém qualidade de interação humano-objeto comparável ou superior, medida por distância de contato e suavidade de junta." loading="lazy">
+          <figcaption>
+            Resultados quantitativos: MAMHOI supera métodos anteriores em penetração objeto-cena e mantém qualidade de interação humano-objeto comparável ou superior, medida por distância de contato e suavidade de junta.
+            <span class="source">Tabela 2 do paper · Lei et al., arXiv:2610.12416</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b12-h">O que o paper não mostra</span></h2>
+<p><span class="s" data-s="b12-p0-s0">O MAMHOI resolve um problema específico — gerar interações humano-objeto em cenas 3D complexas — mas tem limitações claras.</span> <span class="s" data-s="b12-p0-s1">Primeiro, o método depende de um planejador de trajetória externo para fornecer o caminho do objeto P. Esse planejador precisa produzir caminhos livres de colisão, e o MAMHOI não aprende a planejar trajetórias do zero.</span> <span class="s" data-s="b12-p0-s2">Se o caminho fornecido for inviável, a affordance prevista pode ser inadequada.</span></p><p><span class="s" data-s="b12-p1-s0">Segundo, a suposição de independência condicional — que a affordance captura todas as restrições espaciais relevantes — é uma aproximação.</span> <span class="s" data-s="b12-p1-s1">Detalhes geométricos finos da cena podem ser perdidos na conversão para o mapa 2D de affordance e nas grades de voxels locais.</span> <span class="s" data-s="b12-p1-s2">Isso pode limitar a capacidade do modelo de lidar com geometrias muito complexas ou restrições espaciais sutis.</span></p><p><span class="s" data-s="b12-p2-s0">Terceiro, os experimentos são conduzidos em ambientes internos com um conjunto limitado de tarefas (mover, carregar objetos).</span> <span class="s" data-s="b12-p2-s1">Não está claro como o método generaliza para ambientes externos, tarefas mais complexas (montagem, uso de ferramentas) ou interações que exigem múltiplos objetos simultaneamente.</span></p><p><span class="s" data-s="b12-p3-s0">Quarto, o paper não reporta tempo de inferência ou custo computacional.</span> <span class="s" data-s="b12-p3-s1">A pipeline sequencial — prever affordance, converter para 3D, gerar movimento por difusão — pode ser mais lenta que métodos end-to-end.</span> <span class="s" data-s="b12-p3-s2">Também não há análise de quantos passos de difusão são necessários para convergência ou como a qualidade varia com o número de passos.</span></p><p><span class="s" data-s="b12-p4-s0">Finalmente, a avaliação é feita em um conjunto de teste construído pelos próprios autores, combinando dados de HOI com cenas.</span> <span class="s" data-s="b12-p4-s1">Não há avaliação em benchmarks públicos de interação humano-objeto-cena, se existirem, o que dificulta comparação direta com trabalhos futuros.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b13-t">Generalização para objetos diversos</span></h3>
+          <p><span class="s" data-s="b13-c-s0">Um ponto forte do MAMHOI é a capacidade de generalizar para objetos de formas e tamanhos variados sem retreinamento.</span> <span class="s" data-s="b13-c-s1">O encoder BPS de geometria e o condicionamento por affordance permitem que o modelo adapte o movimento a objetos não vistos, desde que a affordance capture corretamente as restrões espaciais.</span> <span class="s" data-s="b13-c-s2">Mas o paper não quantifica explicitamente essa generalização fora de domínio.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b14-h">Por que isso importa</span></h2>
+<p><span class="s" data-s="b14-p0-s0">O MAMHOI representa uma abordagem de modelagem interessante para um problema de dados.</span> <span class="s" data-s="b14-p0-s1">Quando você tem supervisão forte para partes diferentes de um problema — aqui, entendimento de cena e dinâmica de interação — mas não para o problema completo, fatorar através de uma interface explícita pode ser mais eficaz do que tentar aprender tudo de uma vez com dados limitados.</span></p><p><span class="s" data-s="b14-p1-s0">A escolha de affordances como interface não é arbitrária.</span> <span class="s" data-s="b14-p1-s1">Affordances têm raízes na psicologia ecológica e robótica, representando oportunidades de ação no ambiente.</span> <span class="s" data-s="b14-p1-s2">Aqui, elas servem como um bottleneck de informação: comprimem a geometria complexa da cena em uma representação espacial que comunica apenas o que é relevante para a interação.</span> <span class="s" data-s="b14-p1-s3">Isso reduz a carga sobre o gerador de movimento e permite que ele se concentre na dinâmica humano-objeto.</span></p><p><span class="s" data-s="b14-p2-s0">Para aplicações em robótica, simulação de multidões, realidade virtual ou geração de conteúdo 3D, a capacidade de sintetizar interações humano-objeto realistas em ambientes complexos é valiosa.</span> <span class="s" data-s="b14-p2-s1">O MAMHOI mostra que é possível fazer isso sem coletar grandes volumes de dados de humano-objeto-cena, aproveitando datasets complementares existentes.</span></p><p><span class="s" data-s="b14-p3-s0">A abordagem também sugere direções futuras.</span> <span class="s" data-s="b14-p3-s1">Affordances mais ricas — talvez incluindo informação temporal ou semântica sobre funcionalidade de objetos — poderiam melhorar ainda mais a transferência de restrições de cena.</span> <span class="s" data-s="b14-p3-s2">Aprender o planejador de trajetória de objeto de forma conjunta, em vez de tratá-lo como externo, poderia fechar o loop de raciocínio.</span> <span class="s" data-s="b14-p3-s3">E estender para interações multi-objeto ou tarefas de manipulação mais complexas testaria os limites da fatoração.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">MAMHOI fatora geração de interação humano-objeto em cenas 3D através de affordances, separando entendimento de cena da síntese de movimento e permitindo treinamento com dados complementares.</span></li><li><span class="s" data-s="k1">A affordance de movimento serve como interface explícita: um mapa 2D que indica onde a interação é viável, convertido em grades de ocupação 3D locais que condicionam o gerador de movimento por difusão.</span></li><li><span class="s" data-s="k2">Reduz penetração objeto-cena comparado a métodos anteriores, mas depende de planejador externo e foi testado apenas em ambientes internos com tarefas limitadas de manipulação.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.12416" rel="noopener">MAMHOI: Factorizing Scene-Aware Human-Object Interaction through Affordances</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.12416" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

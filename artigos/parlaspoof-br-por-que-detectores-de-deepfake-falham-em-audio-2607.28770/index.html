@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ParlaSpoof-BR: por que detectores de deepfake falham em áudio político brasileiro — arXiv em 5</title>
+<meta name="description" content="Pesquisadores da UFG e UTFPR criaram o primeiro benchmark de deepfakes de áudio político em português do Brasil e mostraram que sistemas estado-da-arte erram até metade das vezes — com viés maior por método de síntese do que por gênero ou região.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ParlaSpoof-BR: por que detectores de deepfake falham em áudio político brasileiro">
+<meta property="og:description" content="Pesquisadores da UFG e UTFPR criaram o primeiro benchmark de deepfakes de áudio político em português do Brasil e mostraram que sistemas estado-da-arte erram até metade das vezes — com viés maior por método de síntese do que por gênero ou região.">
+<meta property="og:image" content="../../assets/papers/2607.28770/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Áudio</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2607.28770" rel="noopener">arXiv:2607.28770</a>
+    </div>
+    <h1><span class="s" data-s="t">ParlaSpoof-BR: por que detectores de deepfake falham em áudio político brasileiro</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Pesquisadores da UFG e UTFPR criaram o primeiro benchmark de deepfakes de áudio político em português do Brasil e mostraram que sistemas estado-da-arte erram até metade das vezes — com viés maior por método de síntese do que por gênero ou região.</span></p>
+    <p class="byline">
+      <span>Gris et al.</span>
+      <span>12 min de leitura</span>
+<span>30/07/2026</span>    </p>
+    <div class="listen" data-article="2607.28770" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=5FlEu-BMoeM" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema: deepfakes de voz na política brasileira</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Inteligência artificial generativa tornou barato fabricar áudio falso.</span> <span class="s" data-s="b0-p0-s1">Você grava alguns segundos da voz de um político e, com ferramentas públicas, consegue fazê-lo dizer qualquer coisa.</span> <span class="s" data-s="b0-p0-s2">O risco para eleições é direto: narrativas falsas circulam antes que jornalistas ou agências de checagem consigam reagir.</span></p><p><span class="s" data-s="b0-p1-s0">No Brasil, a eleição de 2022 foi marcada por campanhas coordenadas de desinformação.</span> <span class="s" data-s="b0-p1-s1">Em 2024, áudios manipulados e gerados por IA já apareceram em campanhas eleitorais.</span> <span class="s" data-s="b0-p1-s2">Com as eleições presidenciais de 2026 no horizonte, sistemas de clonagem de voz zero-shot — que exigem apenas alguns segundos de referência — estão acessíveis a qualquer pessoa.</span></p><p><span class="s" data-s="b0-p2-s0">Detectores de deepfake de áudio existem e funcionam bem em benchmarks controlados como o ASVspoof, onde atingem taxas de erro próximas de zero.</span> <span class="s" data-s="b0-p2-s1">Mas quando testados em áudio do mundo real, o desempenho despenca.</span> <span class="s" data-s="b0-p2-s2">Pior: eles dependem de pistas espúrias — estatísticas de silêncio, assinaturas de bitrate, conteúdo falado — em vez de artefatos intrínsecos à síntese de voz.</span> <span class="s" data-s="b0-p2-s3">E há indícios de que erros variam conforme gênero, idade e sotaque do falante.</span></p><p><span class="s" data-s="b0-p3-s0">Para o português brasileiro, o único corpus dedicado é o BRSpeech-DF, feito com gravações limpas de audiolivros em estúdio.</span> <span class="s" data-s="b0-p3-s1">Ele não inclui conversão de voz, manipulação parcial nem estratificação regional.</span> <span class="s" data-s="b0-p3-s2">Falta um benchmark que reflita a diversidade linguística, acústica e demográfica do país — e que capture o contexto político real onde deepfakes fazem mais estrago.</span></p>        <h2><span class="s" data-s="b1-h">ParlaSpoof-BR: um dataset de áudio parlamentar brasileiro</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Os autores — da Universidade Federal de Goiás, da Universidade Tecnológica Federal do Paraná e da Ermis — criaram o ParlaSpoof-BR, um benchmark de deepfakes de áudio derivado de gravações oficiais da Câmara dos Deputados.</span> <span class="s" data-s="b1-p0-s1">O dataset contém 139.200 arquivos de áudio, dos quais 11.200 são reais (bona fide) ou derivados de reais, e 128.000 são sintéticos (spoofed).</span></p><p><span class="s" data-s="b1-p1-s0">O dataset é balanceado: 40 locutores, metade homens e metade mulheres, distribuídos pelas cinco regiões geográficas do Brasil — Norte, Nordeste, Centro-Oeste, Sudeste e Sul.</span> <span class="s" data-s="b1-p1-s1">Cada locutor contribui com 50 enunciados de pelo menos cinco segundos, totalizando 2.000 amostras reais.</span> <span class="s" data-s="b1-p1-s2">Além disso, cinco segmentos de pelo menos dez segundos por locutor foram reservados como referência para clonagem de voz, sem sobreposição com as amostras de avaliação.</span></p><p><span class="s" data-s="b1-p2-s0">As gravações preservam a reverberação e a variabilidade de microfone das sessões parlamentares.</span> <span class="s" data-s="b1-p2-s1">Identidades dos locutores e fronteiras dos segmentos vieram diretamente dos metadados do arquivo oficial.</span> <span class="s" data-s="b1-p2-s2">Transcrições automáticas e timestamps no nível de palavra foram obtidos com o WhisperX, permitindo manipulações parciais precisas.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2607.28770/table1.webp" alt="O ParlaSpoof-BR tem 139.200 arquivos: 2.000 reais, 28.000 sintéticos (TTS e VC), 8.000 com manipulação parcial, e 101.200 variantes robustas (ruído, codec, realce). A maior parte do dataset é spoofed." loading="lazy">
+          <figcaption>
+            O ParlaSpoof-BR tem 139.200 arquivos: 2.000 reais, 28.000 sintéticos (TTS e VC), 8.000 com manipulação parcial, e 101.200 variantes robustas (ruído, codec, realce). A maior parte do dataset é spoofed.
+            <span class="source">Tabela 1 do paper · Gris et al., arXiv:2607.28770</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Três tipos de ataque: TTS, conversão de voz e manipulação parcial</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Os ataques foram gerados usando pares de locutores distintos.</span> <span class="s" data-s="b3-p0-s1">O locutor A fornece a identidade-alvo (a voz que será clonada), e o locutor B fornece o conteúdo linguístico (o que será dito).</span> <span class="s" data-s="b3-p0-s2">Essa configuração é consistente em todos os pipelines de geração.</span></p><p><span class="s" data-s="b3-p1-s0">O primeiro tipo de ataque é text-to-speech (TTS).</span> <span class="s" data-s="b3-p1-s1">Cinco modelos estado-da-arte de clonagem de voz zero-shot foram avaliados: OmniVoice, XTTS-v2, Chatterbox Multilingual V3, VoxCPM2 e Qwen3-TTS.</span> <span class="s" data-s="b3-p1-s2">Cada modelo processou as 2.000 enunciações originais, gerando 10.000 arquivos TTS no total.</span></p><p><span class="s" data-s="b3-p2-s0">O segundo tipo é conversão de voz (voice conversion, VC).</span> <span class="s" data-s="b3-p2-s1">Aqui, o áudio do locutor B é convertido para a identidade do locutor A, preservando o conteúdo linguístico.</span> <span class="s" data-s="b3-p2-s2">Cinco sistemas foram testados: Seed-VC, kNN-VC, OpenVoice-v2, X-VC e EZVC.</span> <span class="s" data-s="b3-p2-s3">Cada um processou as 2.000 enunciações, gerando mais 10.000 arquivos VC.</span></p><p><span class="s" data-s="b3-p3-s0">O terceiro tipo é manipulação parcial via infilling de áudio.</span> <span class="s" data-s="b3-p3-s1">O OmniVoice, que tem arquitetura bidirecional não-causal, permite regenerar uma região mascarada condicionada ao áudio circundante e à transcrição desejada.</span> <span class="s" data-s="b3-p3-s2">Isso evita gerar segmentos isolados sem contexto acústico.</span> <span class="s" data-s="b3-p3-s3">Quatro condições de manipulação foram criadas, cada uma com 2.000 amostras: três com razões fixas de manipulação (25%, 50% e 75% das palavras), e uma quarta com edição semântica guiada por LLM.</span></p><p><span class="s" data-s="b3-p4-s0">Nessa última condição — chamada de LLM Attack — o Claude Sonnet 4 analisa a transcrição e seleciona uma edição mínima que altera o sentido político ou factual do enunciado.</span> <span class="s" data-s="b3-p4-s1">A ideia é simular um ataque realista: em vez de resintetizar tudo, o adversário troca apenas as palavras necessárias para mudar a interpretação.</span> <span class="s" data-s="b3-p4-s2">Esse tipo de manipulação é mais difícil de detectar porque a maior parte do áudio permanece autêntica.</span></p>        <h2><span class="s" data-s="b4-h">Variantes de robustez: ruído, codec e realce</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Além dos ataques básicos, os autores criaram variantes para testar robustez a condições realistas de áudio.</span> <span class="s" data-s="b4-p0-s1">Três tipos de perturbação foram aplicados: ruído de multidão (babble noise), compressão de codec (MP3, Opus, AAC) e realce de fala (speech enhancement).</span></p><p><span class="s" data-s="b4-p1-s0">O ruído de multidão foi adicionado aos 36.000 ataques básicos em seis níveis de SNR (relação sinal-ruído), gerando 60.000 variantes.</span> <span class="s" data-s="b4-p1-s1">Três codecs foram aplicados aos 36.000 ataques e a 3.200 amostras reais, gerando 35.200 variantes.</span> <span class="s" data-s="b4-p1-s2">Realce de fala foi aplicado a 6.000 amostras reais usando três métodos (DeepFilterNet, ResembleEnhance e CleanUNet), gerando 9.200 variantes.</span></p><p><span class="s" data-s="b4-p2-s0">Essas variantes formam o conjunto de robustez, com 101.200 arquivos.</span> <span class="s" data-s="b4-p2-s1">Elas são avaliadas separadamente do conjunto principal (core set) porque sua distribuição desigual dominaria as métricas agregadas.</span> <span class="s" data-s="b4-p2-s2">O core set tem 38.000 arquivos: 2.000 reais e 36.000 ataques não-perturbados.</span></p>        <h2><span class="s" data-s="b5-h">Protocolo de avaliação e métricas</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Três detectores estado-da-arte foram testados: AASIST, AASIST-L (uma variante maior) e DF-Arena-1B.</span> <span class="s" data-s="b5-p0-s1">Todos foram treinados originalmente no ASVspoof 2019, onde atingem taxas de erro (EER) abaixo de 1,2%.</span></p><p><span class="s" data-s="b5-p1-s0">As métricas principais são: EER (Equal Error Rate, a taxa de erro quando falsos positivos e falsos negativos se igualam), AUC (área sob a curva ROC, independente de limiar), F1-score macro (média balanceada entre classes), acurácia, e precisão e recall da classe spoof.</span> <span class="s" data-s="b5-p1-s1">Como o core set tem 94,7% de amostras sintéticas, acurácia sozinha é enganosa — um detector que sempre prevê spoof teria 94,7% de acurácia, mas seria inútil.</span></p>        <h2><span class="s" data-s="b6-h">Resultados gerais: detectores falham em áudio político brasileiro</span></h2>
+<p><span class="s" data-s="b6-p0-s0">No core set, os três detectores obtiveram EERs muito superiores aos reportados no ASVspoof.</span> <span class="s" data-s="b6-p0-s1">O AASIST teve EER de 49,62%, o AASIST-L de 53,95%, e o DF-Arena-1B de 33,83%.</span> <span class="s" data-s="b6-p0-s2">Os dois primeiros ficaram próximos do acaso, com AUCs abaixo de 0,5.</span> <span class="s" data-s="b6-p0-s3">O DF-Arena-1B foi o melhor, mas ainda assim errou 42,01% das amostras reais.</span></p><p><span class="s" data-s="b6-p1-s0">O AASIST e o AASIST-L exibiram viés extremo em direção à classe spoof: classificaram quase tudo como sintético, independentemente do rótulo verdadeiro.</span> <span class="s" data-s="b6-p1-s1">As taxas de falso positivo (FPR) foram de 90,04% e 94,52%, respectivamente.</span> <span class="s" data-s="b6-p1-s2">Isso significa que nove em cada dez enunciados reais foram marcados como falsos.</span> <span class="s" data-s="b6-p1-s3">A diferença modesta entre as variantes sugere que aumentar a capacidade do modelo não resolve o problema de desajuste de domínio.</span></p><p><span class="s" data-s="b6-p2-s0">O DF-Arena-1B teve previsões mais balanceadas, mas ainda distantes do ideal.</span> <span class="s" data-s="b6-p2-s1">Sua AUC de 0,693 indica discriminação melhor que acaso, mas longe da confiabilidade necessária para uso em contextos eleitorais.</span> <span class="s" data-s="b6-p2-s2">A conclusão é clara: detectores treinados em benchmarks controlados não generalizam para áudio político brasileiro.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2607.28770/figure1.webp" alt="Matrizes de confusão dos três detectores. AASIST e AASIST-L classificam quase tudo como spoof, com FPRs acima de 90%. DF-Arena-1B discrimina melhor, mas erra 42% das amostras reais." loading="lazy">
+          <figcaption>
+            Matrizes de confusão dos três detectores. AASIST e AASIST-L classificam quase tudo como spoof, com FPRs acima de 90%. DF-Arena-1B discrimina melhor, mas erra 42% das amostras reais.
+            <span class="source">Figura 1 do paper · Gris et al., arXiv:2607.28770</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Desempenho por método de síntese: VC é mais fácil que TTS</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Quando analisado por método de síntese, o DF-Arena-1B teve desempenho melhor em conversão de voz (VC) do que em text-to-speech (TTS).</span> <span class="s" data-s="b8-p0-s1">Para VC, o EER médio foi de 17,1%, AUC de 0,885 e recall de 99,9%.</span> <span class="s" data-s="b8-p0-s2">Para TTS, o EER médio foi de 26,7%, AUC de 0,777 e recall de 81,8%.</span></p><p><span class="s" data-s="b8-p1-s0">Mas a variação dentro de cada família é enorme.</span> <span class="s" data-s="b8-p1-s1">O OpenVoice-v2 (um sistema VC) teve o menor EER de todos: 6,3%.</span> <span class="s" data-s="b8-p1-s2">Já o VoxCPM2 e o Qwen3-TTS (ambos TTS) tiveram os piores resultados, com recalls de 60,9% e 48,2%.</span> <span class="s" data-s="b8-p1-s3">Isso significa que 39,1% e 51,8% dos deepfakes gerados por esses modelos passaram despercebidos pelo detector.</span></p><p><span class="s" data-s="b8-p2-s0">Esses números mostram que o desempenho depende fortemente do gerador individual, não só da família (TTS ou VC).</span> <span class="s" data-s="b8-p2-s1">Modelos mais recentes ou com arquiteturas diferentes produzem artefatos que o detector não foi treinado para reconhecer.</span> <span class="s" data-s="b8-p2-s2">Isso é um problema sério: basta um adversário escolher o modelo certo para contornar a detecção.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b9-t">Manipulação parcial é muito mais difícil de detectar</span></h3>
+          <p><span class="s" data-s="b9-c-s0">O LLM Attack — onde apenas palavras-chave são substituídas para mudar o sentido — teve recall de apenas 9,49%.</span> <span class="s" data-s="b9-c-s1">Isso significa que 90,51% dos ataques semânticos passaram despercebidos.</span> <span class="s" data-s="b9-c-s2">Mesmo com 75% do áudio manipulado, o recall foi de 51,85%.</span> <span class="s" data-s="b9-c-s3">Detectores atuais falham quando a maior parte do áudio é autêntica.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b10-h">Manipulação parcial: o ataque mais perigoso</span></h2>
+<p><span class="s" data-s="b10-p0-s0">A manipulação parcial revelou a maior fraqueza dos detectores.</span> <span class="s" data-s="b10-p0-s1">Quando 25% das palavras foram resintetizadas, o recall do DF-Arena-1B foi de 17,27%.</span> <span class="s" data-s="b10-p0-s2">Com 50%, subiu para 35,44%.</span> <span class="s" data-s="b10-p0-s3">Com 75%, chegou a 51,85%.</span> <span class="s" data-s="b10-p0-s4">Mas no LLM Attack — onde o modelo de linguagem escolhe as palavras certas para alterar o sentido — o recall foi de apenas 9,49%.</span></p><p><span class="s" data-s="b10-p1-s0">Isso significa que 90,51% dos ataques semânticos guiados por LLM passaram despercebidos.</span> <span class="s" data-s="b10-p1-s1">Esse é o cenário mais realista e perigoso: um adversário não precisa resintetizar tudo, apenas trocar palavras-chave para inverter o significado de uma frase.</span> <span class="s" data-s="b10-p1-s2">Por exemplo, mudar &#39;votei contra&#39; para &#39;votei a favor&#39; em um discurso parlamentar.</span></p><p><span class="s" data-s="b10-p2-s0">Os autores testaram também a detecção no nível de janela temporal.</span> <span class="s" data-s="b10-p2-s1">Usando janelas deslizantes de 4 segundos com 50% de sobreposição, a acurácia do DF-Arena-1B foi de 93,15% para áudio totalmente sintético, mas caiu para 51,54% no LLM Attack.</span> <span class="s" data-s="b10-p2-s2">Mesmo quando a janela intersecta a região manipulada, o detector erra metade das vezes.</span></p><p><span class="s" data-s="b10-p3-s0">Esse resultado é crítico: detectores atuais são praticamente cegos a manipulações parciais semanticamente guiadas.</span> <span class="s" data-s="b10-p3-s1">E essas são exatamente as mais eficazes para desinformação política, porque preservam a maior parte do áudio autêntico e alteram apenas o necessário para mudar a narrativa.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2607.28770/table6.webp" alt="Acurácia no nível de janela temporal cai drasticamente com manipulação parcial. Para o LLM Attack, o DF-Arena-1B acerta apenas 51,54% das janelas que contêm áudio manipulado." loading="lazy">
+          <figcaption>
+            Acurácia no nível de janela temporal cai drasticamente com manipulação parcial. Para o LLM Attack, o DF-Arena-1B acerta apenas 51,54% das janelas que contêm áudio manipulado.
+            <span class="source">Tabela 6 do paper · Gris et al., arXiv:2607.28770</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b12-h">Análise de viés: método importa mais que demografia</span></h2>
+<p><span class="s" data-s="b12-p0-s0">Os autores investigaram se o desempenho dos detectores varia conforme características demográficas (gênero, região) ou metodológicas (modelo de síntese, grau de manipulação).</span> <span class="s" data-s="b12-p0-s1">A análise foi feita com o DF-Arena-1B usando janelas deslizantes de 4 segundos.</span></p><p><span class="s" data-s="b12-p1-s0">O resultado principal: fatores metodológicos dominam.</span> <span class="s" data-s="b12-p1-s1">A diferença de desempenho entre condições de manipulação parcial foi de 83,7 pontos percentuais.</span> <span class="s" data-s="b12-p1-s2">Entre modelos de síntese individuais, foi de 51,8 pontos.</span> <span class="s" data-s="b12-p1-s3">Já entre gêneros, a diferença foi de apenas 2,9 pontos, e entre regiões, 2,3 pontos.</span></p><p><span class="s" data-s="b12-p2-s0">Isso contrasta com estudos anteriores que encontraram viés significativo por gênero, idade ou sotaque em outros idiomas.</span> <span class="s" data-s="b12-p2-s1">No ParlaSpoof-BR, disparidades demográficas são mínimas.</span> <span class="s" data-s="b12-p2-s2">A variação está em como o áudio foi gerado, não em quem está falando.</span></p><p><span class="s" data-s="b12-p3-s0">Ainda assim, há nuances.</span> <span class="s" data-s="b12-p3-s1">O detector teve desempenho ligeiramente melhor em vozes masculinas (acurácia de 72,81%) do que femininas (69,89%).</span> <span class="s" data-s="b12-p3-s2">Entre regiões, o Sudeste teve a maior acurácia (72,69%) e o Centro-Oeste a menor (70,36%).</span> <span class="s" data-s="b12-p3-s3">Essas diferenças são pequenas, mas podem acumular em sistemas de produção.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2607.28770/table7.webp" alt="Fatores metodológicos (manipulação parcial, modelo de síntese) impactam muito mais a detecção que fatores demográficos (gênero, região). A diferença por manipulação chega a 83,7 pontos percentuais." loading="lazy">
+          <figcaption>
+            Fatores metodológicos (manipulação parcial, modelo de síntese) impactam muito mais a detecção que fatores demográficos (gênero, região). A diferença por manipulação chega a 83,7 pontos percentuais.
+            <span class="source">Tabela 7 do paper · Gris et al., arXiv:2607.28770</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b14-h">Robustez a perturbações: ruído, codec e realce</span></h2>
+<p><span class="s" data-s="b14-p0-s0">Os autores testaram como os detectores se comportam sob condições realistas de áudio.</span> <span class="s" data-s="b14-p0-s1">Três tipos de perturbação foram aplicados: ruído de multidão, compressão de codec e realce de fala.</span></p><p><span class="s" data-s="b14-p1-s0">Ruído de multidão foi adicionado em seis níveis de SNR, de 5 dB (muito ruidoso) a 30 dB (quase limpo).</span> <span class="s" data-s="b14-p1-s1">O DF-Arena-1B manteve desempenho razoável: a AUC caiu de 0,693 (sem ruído) para 0,652 com SNR de 5 dB.</span> <span class="s" data-s="b14-p1-s2">Já o AASIST e o AASIST-L, que já performavam mal no áudio limpo, degradaram ainda mais.</span></p><p><span class="s" data-s="b14-p2-s0">Compressão de codec teve efeito variável.</span> <span class="s" data-s="b14-p2-s1">MP3 e Opus causaram quedas moderadas de desempenho, enquanto AAC teve impacto maior.</span> <span class="s" data-s="b14-p2-s2">Isso sugere que alguns codecs introduzem artefatos que confundem os detectores, possivelmente porque alteram as pistas espúrias (como estatísticas de silêncio) que os modelos aprenderam a explorar.</span></p><p><span class="s" data-s="b14-p3-s0">Realce de fala teve o efeito mais interessante.</span> <span class="s" data-s="b14-p3-s1">Aplicar DeepFilterNet, ResembleEnhance ou CleanUNet a amostras reais aumentou a taxa de falsos positivos — ou seja, áudio real realçado foi mais frequentemente classificado como sintético.</span> <span class="s" data-s="b14-p3-s2">Isso indica que os detectores dependem de características de baixo nível que o realce remove, não de artefatos intrínsecos à síntese.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b15-t">Detectores dependem de pistas espúrias, não de artefatos de síntese</span></h3>
+          <p><span class="s" data-s="b15-c-s0">Quando áudio real é realçado com algoritmos de redução de ruído, a taxa de falsos positivos aumenta.</span> <span class="s" data-s="b15-c-s1">Isso confirma que detectores atuais exploram características de baixo nível (ruído de fundo, estatísticas de silêncio) em vez de artefatos intrínsecos à síntese de voz.</span> <span class="s" data-s="b15-c-s2">Eles não aprenderam o que torna um áudio sintético, mas sim o que torna um áudio de treinamento diferente.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b16-h">Limitações e trabalho futuro</span></h2>
+<p><span class="s" data-s="b16-p0-s0">O ParlaSpoof-BR é o primeiro benchmark de deepfakes de áudio político em português brasileiro, mas tem limitações.</span> <span class="s" data-s="b16-p0-s1">O dataset contém 40 locutores, balanceados por gênero e região, mas não cobre toda a diversidade linguística e acústica do país.</span> <span class="s" data-s="b16-p0-s2">Sotaques regionais dentro de cada região não foram estratificados.</span> <span class="s" data-s="b16-p0-s3">Idade dos locutores não foi controlada.</span></p><p><span class="s" data-s="b16-p1-s0">Os ataques cobrem TTS, VC e manipulação parcial, mas não incluem outras técnicas emergentes, como síntese neural end-to-end com controle prosódico fino ou modelos de linguagem de áudio como AudioLM.</span> <span class="s" data-s="b16-p1-s1">Também não foram testados ataques adversariais adaptativos, onde o adversário conhece o detector e ajusta a síntese para enganá-lo.</span></p><p><span class="s" data-s="b16-p2-s0">A análise de viés mostrou que fatores metodológicos dominam, mas não explorou interações entre fatores (por exemplo, se certos modelos de síntese têm viés maior por gênero).</span> <span class="s" data-s="b16-p2-s1">Estudos futuros podem decompor essas interações com mais granularidade.</span></p><p><span class="s" data-s="b16-p3-s0">Os autores destacam três direções para trabalho futuro.</span> <span class="s" data-s="b16-p3-s1">Primeiro, treinamento ciente de viés (bias-aware training), que force o detector a não depender de pistas espúrias.</span> <span class="s" data-s="b16-p3-s2">Segundo, adaptação a áudio político brasileiro, possivelmente com fine-tuning em ParlaSpoof-BR ou técnicas de domain adaptation.</span> <span class="s" data-s="b16-p3-s3">Terceiro, métodos de detecção eficazes em manipulações parciais, que é o cenário mais realista e perigoso.</span></p><p><span class="s" data-s="b16-p4-s0">Outra direção importante é integração com sistemas de verificação de fala (speaker verification).</span> <span class="s" data-s="b16-p4-s1">Detectores de deepfake identificam se um áudio é sintético; sistemas de verificação identificam se a voz corresponde a um locutor conhecido.</span> <span class="s" data-s="b16-p4-s2">Combinar ambos pode aumentar robustez e reduzir falsos positivos.</span></p>        <h2><span class="s" data-s="b17-h">Implicações para integridade eleitoral</span></h2>
+<p><span class="s" data-s="b17-p0-s0">Os resultados têm implicações diretas para a integridade eleitoral no Brasil.</span> <span class="s" data-s="b17-p0-s1">Detectores estado-da-arte, treinados nos melhores benchmarks disponíveis, falham em áudio político brasileiro.</span> <span class="s" data-s="b17-p0-s2">Eles erram quase metade das amostras reais e deixam passar a maioria dos ataques parciais semanticamente guiados.</span></p><p><span class="s" data-s="b17-p1-s0">Isso significa que confiar nesses sistemas para moderar conteúdo ou alertar eleitores é arriscado.</span> <span class="s" data-s="b17-p1-s1">Um detector que marca 90% do áudio real como falso causaria alarmes falsos em massa, erodindo confiança.</span> <span class="s" data-s="b17-p1-s2">Um detector que deixa passar 90% dos ataques semânticos é inútil contra desinformação direcionada.</span></p><p><span class="s" data-s="b17-p2-s0">O ParlaSpoof-BR oferece um caminho para melhorar essa situação.</span> <span class="s" data-s="b17-p2-s1">Ele fornece um benchmark público, diverso e realista para treinar e avaliar detectores no contexto brasileiro.</span> <span class="s" data-s="b17-p2-s2">Pesquisadores e desenvolvedores podem usá-lo para adaptar modelos, testar robustez e medir viés antes de implantar sistemas em produção.</span></p><p><span class="s" data-s="b17-p3-s0">Mas tecnologia sozinha não resolve o problema.</span> <span class="s" data-s="b17-p3-s1">Deepfakes de áudio são parte de um ecossistema mais amplo de desinformação, que inclui coordenação em redes sociais, amplificação por bots e exploração de vieses cognitivos.</span> <span class="s" data-s="b17-p3-s2">Detecção técnica precisa ser combinada com alfabetização midiática, checagem de fatos e regulação responsável.</span></p><p><span class="s" data-s="b17-p4-s0">O dataset está disponível publicamente para pesquisa, sob licença Creative Commons.</span> <span class="s" data-s="b17-p4-s1">Os autores esperam que ele apoie o desenvolvimento de sistemas mais robustos e justos, contribuindo para a integridade eleitoral no Brasil e em outros contextos de língua portuguesa.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Detectores estado-da-arte de deepfake de áudio têm EER de 34% a 54% em áudio político brasileiro, contra menos de 1,2% em benchmarks controlados — eles não generalizam para o mundo real.</span></li><li><span class="s" data-s="k1">Manipulação parcial guiada por LLM, que troca apenas palavras-chave para mudar o sentido, tem recall de 9,49%: 90% dos ataques semânticos passam despercebidos.</span></li><li><span class="s" data-s="k2">Fatores metodológicos (modelo de síntese, grau de manipulação) impactam até 83,7 pontos percentuais no desempenho, enquanto gênero e região impactam menos de 3 pontos.</span></li><li><span class="s" data-s="k3">ParlaSpoof-BR é o primeiro benchmark de deepfakes de áudio político em português, com 139.200 arquivos de 40 locutores balanceados por gênero e região, disponível publicamente.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2607.28770" rel="noopener">Cloned Voices, Real Consequences: Evaluating Bias in Political Deepfake Detection for Electoral Integrity in Brazil</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2607.28770" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

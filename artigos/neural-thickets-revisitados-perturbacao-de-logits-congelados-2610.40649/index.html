@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Neural Thickets Revisitados: Perturbação de Logits Congelados supera Perturbação de Pesos — arXiv em 5</title>
+<meta name="description" content="Este paper demonstra que os ganhos de performance atribuídos a &#39;especialistas&#39; no espaço de pesos de LLMs podem ser obtidos simplesmente adicionando ruído às saídas (logits) de um modelo congelado, eliminando a necessidade de alterar os pesos internos.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Neural Thickets Revisitados: Perturbação de Logits Congelados supera Perturbação de Pesos">
+<meta property="og:description" content="Este paper demonstra que os ganhos de performance atribuídos a &#39;especialistas&#39; no espaço de pesos de LLMs podem ser obtidos simplesmente adicionando ruído às saídas (logits) de um modelo congelado, eliminando a necessidade de alterar os pesos internos.">
+<meta property="og:image" content="../../assets/papers/2610.40649/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Redes neurais</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.40649" rel="noopener">arXiv:2610.40649</a>
+    </div>
+    <h1><span class="s" data-s="t">Neural Thickets Revisitados: Perturbação de Logits Congelados supera Perturbação de Pesos</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Este paper demonstra que os ganhos de performance atribuídos a &#39;especialistas&#39; no espaço de pesos de LLMs podem ser obtidos simplesmente adicionando ruído às saídas (logits) de um modelo congelado, eliminando a necessidade de alterar os pesos internos.</span></p>
+    <p class="byline">
+      <span>Dufour et al.</span>
+      <span>7 min de leitura</span>
+<span>29/10/2026</span>    </p>
+    <div class="listen" data-article="2610.40649" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=s80ycljJ9ew" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Mito dos Especialistas Locais no Espaço de Pesos</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Há algum tempo, a comunidade de Machine Learning ficou fascinada com a hipótese dos &#39;Neural Thickets&#39; (Espessuras Neurais).</span> <span class="s" data-s="b0-p0-s1">A ideia, proposta por Gan &amp; Isola, sugere que os pesos de modelos de linguagem pré-treinados de grande escala residem em vizinhanças densas de &#39;especialistas&#39; para tarefas específicas.</span> <span class="s" data-s="b0-p0-s2">Segundo essa visão, basta aplicar pequenas perturbações gaussianas aleatórias aos pesos do modelo para &#39;descobrir&#39; esses especialistas ocultos, resultando em ganhos massivos de precisão em tarefas de raciocínio, sem a necessidade de fine-tuning (ajuste fino) tradicional.</span></p><p><span class="s" data-s="b0-p1-s0">Os resultados iniciais eram impressionantes.</span> <span class="s" data-s="b0-p1-s1">Em benchmarks como o Countdown com o modelo Llama-3.1-8B-Instruct, a precisão saltou de 10,8% para 63,6% apenas perturbando os pesos.</span> <span class="s" data-s="b0-p1-s2">Isso parecia indicar uma estrutura geométrica profunda e útil no espaço de parâmetros dos modelos.</span> <span class="s" data-s="b0-p1-s3">No entanto, essa explicação geométrica carrega uma carga computacional implícita: para explorar essa &#39;espessura&#39;, teoricamente, é necessário modificar uma fração significativa do vetor de pesos, que pode ter bilhões de dimensões.</span></p><p><span class="s" data-s="b0-p2-s0">Este paper questiona se essa complexidade é realmente necessária.</span> <span class="s" data-s="b0-p2-s1">Os autores partem de uma pergunta simples, mas poderosa: será que a melhoria na performance exige perturbar toda a rede neural?</span> <span class="s" data-s="b0-p2-s2">Ou será que os ganhos observados são um artefato de outros mecanismos, como a diversidade de saída e a seleção baseada em validação?</span> <span class="s" data-s="b0-p2-s3">A resposta deles desafia a intuição estabelecida e propõe uma alternativa mais leve e, em muitos casos, mais eficaz.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.40649/figure1.webp" alt="Comparação visual entre Full-weight PSV (perturbação completa dos pesos, gerando N redes distintas) e Logit PSV (modelo congelado com viés gaussiano adicionado apenas aos logits de saída). Ambos compartilham a etapa de seleção e votação." loading="lazy">
+          <figcaption>
+            Comparação visual entre Full-weight PSV (perturbação completa dos pesos, gerando N redes distintas) e Logit PSV (modelo congelado com viés gaussiano adicionado apenas aos logits de saída). Ambos compartilham a etapa de seleção e votação.
+            <span class="source">Figura 1 do paper · Dufour et al., arXiv:2610.40649</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">A Hipótese da Perturbação de Logits</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Os autores introduzem o conceito de Perturb-Select-Vote (PSV), um template geral que abrange tanto a perturbação de pesos quanto a perturbação de saídas.</span> <span class="s" data-s="b2-p0-s1">O processo tem três etapas: gerar preditores perturbados, selecionar os membros de alto desempenho em um pequeno conjunto de validação e agregar suas previsões através de votação no teste.</span></p><p><span class="s" data-s="b2-p1-s0">A inovação central deste trabalho é o &#39;Logit PSV&#39;.</span> <span class="s" data-s="b2-p1-s1">Em vez de perturbar os parâmetros internos do modelo (que exigem cópias da rede e muito custo de inferência para gerar as variações), os autores mantêm o modelo totalmente congelado.</span> <span class="s" data-s="b2-p1-s2">Eles adicionam apenas um viés aleatório gaussiano aos logits (as pontuações brutas antes da softmax) na saída do modelo.</span> <span class="s" data-s="b2-p1-s3">Esse viés é fixo durante a geração autogressiva de cada amostra.</span></p><p><span class="s" data-s="b2-p2-s0">Essa abordagem é radicalmente diferente.</span> <span class="s" data-s="b2-p2-s1">Ela não executa nenhuma computação adicional dentro da rede neural.</span> <span class="s" data-s="b2-p2-s2">Não há forward pass modificado para gerar diferentes &#39;visões&#39; do mundo; há apenas uma redefinição da probabilidade relativa dos tokens finais.</span> <span class="s" data-s="b2-p2-s3">Se a hipótese dos Neural Thickets estivesse correta, esperaríamos que essa simplificação extrema destruísse a performance.</span> <span class="s" data-s="b2-p2-s4">Os resultados mostram exatamente o oposto: o Logit PSV iguala ou supera a perturbação completa de pesos na maioria das tarefas de raciocínio.</span></p>        <h2><span class="s" data-s="b3-h">Desconstruindo o Mecanismo: Menos é Mais</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Para entender por que a perturbação de pesos inteira não era necessária, os autores realizaram uma série de ablações.</span> <span class="s" data-s="b3-p0-s1">Eles descobriram que perturbar apenas um único bloco decoder (decoder block) do modelo já recuperava a maior parte do ganho de performance.</span> <span class="s" data-s="b3-p0-s2">Isso enfraquece a ideia de que a &#39;espessura&#39; é uma propriedade global distribuída uniformemente por todos os bilhões de parâmetros.</span></p><p><span class="s" data-s="b3-p1-s0">Ao empurrar essa observação ao extremo, eles removeram a perturbação de pesos por completo.</span> <span class="s" data-s="b3-p1-s1">O modelo permanece estático.</span> <span class="s" data-s="b3-p1-s2">A única variabilidade vem do viés adicionado aos logits.</span> <span class="s" data-s="b3-p1-s3">Nos experimentos com o modelo OLMo-3-7B-Instruct, o Logit PSV elevou a precisão no MATH-500 de 63,3% (base) para 81,3%.</span> <span class="s" data-s="b3-p1-s4">Em comparação, a perturbação completa de pesos (Full-weight PSV) atingiu 74,7%.</span> <span class="s" data-s="b3-p1-s5">Ou seja, a versão mais simples e barata superou a versão complexa.</span></p><p><span class="s" data-s="b3-p2-s0">Isso sugere que os ganhos atribuídos aos &#39;especialistas locais&#39; no espaço de pesos podem, na verdade, ser explicados pela diversidade de saída induzida pela perturbação, combinada com uma seleção rigorosa baseada em validação e uma agregação por votação.</span> <span class="s" data-s="b3-p2-s1">A perturbação dos pesos, neste contexto, age primariamente através dos deslocamentos de logits que ela induz, e não por uma mudança estrutural profunda na capacidade de raciocínio do modelo.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.40649/figure2.webp" alt="Efeito de perturbar blocos individuais do decoder. A precisão no Countdown com OLMo-3-7B-Instruct é mostrada ao perturbar um bloco de cada vez, mantendo os outros fixos, demonstrando que a informação necessária está esparsa." loading="lazy">
+          <figcaption>
+            Efeito de perturbar blocos individuais do decoder. A precisão no Countdown com OLMo-3-7B-Instruct é mostrada ao perturbar um bloco de cada vez, mantendo os outros fixos, demonstrando que a informação necessária está esparsa.
+            <span class="source">Figura 2 do paper · Dufour et al., arXiv:2610.40649</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Conectando a Métodos Conhecidos: PSV como Generalização</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Ao reinterpretar os Neural Thickets através da lente do PSV, os autores conectam esse fenômeno a métodos de inferência já estabelecidos.</span> <span class="s" data-s="b5-p0-s1">Adicionar um viés gaussiano aos logits e fazer decoding guloso (greedy decoding) define um método de amostragem perturbado-MAP.</span> <span class="s" data-s="b5-p0-s2">Selecionar membros com base no desempenho de validação é análogo à seleção guiada por verificadores (verifier-guided selection), onde se escolhe a melhor resposta entre N tentativas.</span></p><p><span class="s" data-s="b5-p1-s0">A etapa final de votação relaciona o PSV à consistência auto-consistente (self-consistency), onde múltiplas amostras são agregadas para chegar à resposta mais provável.</span> <span class="s" data-s="b5-p1-s1">Uma análise de primeira ordem nos dados do paper apoia essa visão: pequenas perturbações nos pesos atuam, em primeira ordem, principalmente através dos deslocamentos que causam nos logits.</span> <span class="s" data-s="b5-p1-s2">Isso significa que a complexidade do espaço de pesos pode ser mapeada diretamente para a simplicidade do espaço de saída.</span></p><p><span class="s" data-s="b5-p2-s0">Em modelos fortes, os autores mostram que o ajuste de temperatura na amostragem combinado com votação por maioria já iguala a performance do Full-weight PSV.</span> <span class="s" data-s="b5-p2-s1">Isso indica que a diversidade de saída e o ensembling explicam a maior parte dos ganhos.</span> <span class="s" data-s="b5-p2-s2">Em modelos mais fracos, a seleção baseada em validação torna-se crucial para filtrar membros não confiáveis antes da agregação.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b6-t">Resultado Chave: Logit PSV Supera Full-weight PSV</span></h3>
+          <p><span class="s" data-s="b6-c-s0">No benchmark MATH-500 com OLMo-3-7B-Instruct, o Logit PSV atingiu 81,3% de precisão, superando o Full-weight PSV (74,7%) e a base (63,3%).</span> <span class="s" data-s="b6-c-s1">Isso ocorre mantendo o modelo 100% congelado, sem alterar nenhum peso interno.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b7-h">Extensão para Visão Computacional</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Os autores não se limitaram a linguagem natural.</span> <span class="s" data-s="b7-p0-s1">Eles estenderam a análise para modelos de visão pré-treinados em cenários de mudança de domínio (domain shift), onde o modelo é testado em dados distribuídos diferentemente do treinamento.</span> <span class="s" data-s="b7-p0-s2">Nesse contexto, o equivalente a um &#39;especialista de tarefa&#39; é um &#39;especialista de domínio&#39;.</span></p><p><span class="s" data-s="b7-p1-s0">Os experimentos em observação da Terra mostraram que o Logit PSV melhorou substancialmente o desempenho sob mudança de domínio.</span> <span class="s" data-s="b7-p1-s1">Curiosamente, a perturbação completa dos pesos (Full-weight PSV) forneceu pouco benefício adicional além do que já era obtido com a perturbação de logits.</span> <span class="s" data-s="b7-p1-s2">Isso reforça a tese de que a estrutura local no espaço de pesos não é o motor principal dos ganhos observados; a diversidade e seleção no espaço de saída são suficientes.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.40649/table5.webp" alt="Tabela 5: Comparação cruzada entre perturbações completas e no espaço de saída. Mostra que o viés de logit (Logit PSV) atinge performance igual ou superior ao Full-weight PSV em Qwen2.5 e OLMo-3-7B-Instruct." loading="lazy">
+          <figcaption>
+            Tabela 5: Comparação cruzada entre perturbações completas e no espaço de saída. Mostra que o viés de logit (Logit PSV) atinge performance igual ou superior ao Full-weight PSV em Qwen2.5 e OLMo-3-7B-Instruct.
+            <span class="source">Tabela 5 do paper · Dufour et al., arXiv:2610.40649</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Limitações e Implicações Práticas</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Apesar dos resultados robustos, o paper admite limitações importantes.</span> <span class="s" data-s="b9-p0-s1">Os experimentos de linguagem param em modelos de 7 bilhões de parâmetros.</span> <span class="s" data-s="b9-p0-s2">Modelos maiores podem exibir efeitos no espaço de pesos que as perturbações de logits não capturam completamente.</span> <span class="s" data-s="b9-p0-s3">Além disso, o método PSV requer um conjunto de seleção rotulado e uma maneira de comparar respostas geradas para a votação, o que limita sua aplicabilidade direta à geração aberta (open-ended generation) sem verificação.</span></p><p><span class="s" data-s="b9-p1-s0">Outra limitação técnica é que a análise de primeira ordem só é válida para perturbações suficientemente pequenas (sigma baixo).</span> <span class="s" data-s="b9-p1-s1">Finalmente, assim como o Full-weight PSV, o Logit PSV requer K avaliações do modelo para cada entrada de teste, o que aumenta o custo de inferência em relação a uma única previsão.</span> <span class="s" data-s="b9-p1-s2">No entanto, o custo computacional de adicionar um viés aleatório aos logits é insignificante comparado à inferência da rede neural em si.</span></p><p><span class="s" data-s="b9-p2-s0">Do ponto de vista ético, o Logit PSV herda os vieses e modos de falha do modelo subjacente.</span> <span class="s" data-s="b9-p2-s1">Como é um método de adaptação livre de treinamento (training-free), ele poderia, em teoria, ser usado para direcionar um modelo para comportamentos indesejáveis, embora os autores tenham avaliado apenas benchmarks padrão de raciocínio e reconhecimento de imagens.</span></p>        <h2><span class="s" data-s="b10-h">Conclusão: Uma Simplificação Poderosa</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Este paper não descarta a possibilidade de existência de estrutura local útil no espaço de pesos.</span> <span class="s" data-s="b10-p0-s1">No entanto, ele demonstra convincentemente que essa estrutura não é necessária para explicar os ganhos de performance observados nos Neural Thickets.</span> <span class="s" data-s="b10-p0-s2">Ao isolar os papéis de amostragem, seleção e votação, os autores mostram que a diversidade de saída e o ensembling são os verdadeiros impulsionadores do sucesso.</span></p><p><span class="s" data-s="b10-p1-s0">O Logit PSV surge como uma alternativa simples e eficaz.</span> <span class="s" data-s="b10-p1-s1">Ele mantém o modelo congelado, requer apenas a adição de viés nas saídas e, em muitos casos, supera a perturbação completa de pesos.</span> <span class="s" data-s="b10-p1-s2">Isso conecta os Neural Thickets a métodos de inferência mais tradicionais e oferece aos desenvolvedores uma ferramenta leve para melhorar a precisão de modelos pré-treinados sem o overhead de manipular bilhões de parâmetros.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Perturbar apenas os logits de um modelo congelado (Logit PSV) iguala ou supera a perturbação completa dos pesos (Full-weight PSV) em tarefas de raciocínio.</span></li><li><span class="s" data-s="k1">Os ganhos dos Neural Thickets são explicados por diversidade de saída, seleção baseada em validação e votação, não necessariamente por especialistas no espaço de pesos.</span></li><li><span class="s" data-s="k2">Perturbar um único bloco decoder recupera a maior parte do ganho, sugerindo que a informação não está distribuída uniformemente por todos os pesos.</span></li><li><span class="s" data-s="k3">No domínio de visão computacional, a perturbação de logits também supera a perturbação de pesos completa em cenários de mudança de domínio.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.40649" rel="noopener">Rethinking Neural Thickets Without Weight Perturbations</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.40649" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

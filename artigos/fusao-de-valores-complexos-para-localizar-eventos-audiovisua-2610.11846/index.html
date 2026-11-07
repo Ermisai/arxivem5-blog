@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fusão de valores complexos para localizar eventos audiovisuais em vocabulário aberto — arXiv em 5</title>
+<meta name="description" content="Pesquisadores do IIT Kanpur e da Dolby Laboratories propõem uma arquitetura que trata similaridades áudio-texto e vídeo-texto como números complexos, melhorando a detecção de eventos audiovisuais em classes nunca vistas no treinamento.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Fusão de valores complexos para localizar eventos audiovisuais em vocabulário aberto">
+<meta property="og:description" content="Pesquisadores do IIT Kanpur e da Dolby Laboratories propõem uma arquitetura que trata similaridades áudio-texto e vídeo-texto como números complexos, melhorando a detecção de eventos audiovisuais em classes nunca vistas no treinamento.">
+<meta property="og:image" content="../../assets/papers/2610.11846/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Áudio</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.11846" rel="noopener">arXiv:2610.11846</a>
+    </div>
+    <h1><span class="s" data-s="t">Fusão de valores complexos para localizar eventos audiovisuais em vocabulário aberto</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Pesquisadores do IIT Kanpur e da Dolby Laboratories propõem uma arquitetura que trata similaridades áudio-texto e vídeo-texto como números complexos, melhorando a detecção de eventos audiovisuais em classes nunca vistas no treinamento.</span></p>
+    <p class="byline">
+      <span>Praveen et al.</span>
+      <span>11 min de leitura</span>
+<span>08/10/2026</span>    </p>
+    <div class="listen" data-article="2610.11846" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=1f_tg5lbzyY" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema: fundir áudio e vídeo sem perder informação</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Localização de eventos audiovisuais (AVEL) é a tarefa de marcar cada segundo de um vídeo com a classe de evento que está acontecendo simultaneamente na imagem e no som: uma guitarra sendo tocada, um helicóptero passando, alguém cantando.</span> <span class="s" data-s="b0-p0-s1">A versão de vocabulário aberto (OV-AVEL) vai além: o modelo precisa reconhecer classes que nunca apareceram durante o treinamento, apenas a partir de seus nomes em texto.</span></p><p><span class="s" data-s="b0-p1-s0">A receita atual usa modelos de fundação multimodais congelados — como ImageBind ou LanguageBind — que projetam áudio, vídeo e texto em um espaço compartilhado de 1024 dimensões.</span> <span class="s" data-s="b0-p1-s1">Para cada segmento de vídeo e cada classe candidata, o sistema calcula duas similaridades de cosseno: uma entre o frame visual e o nome da classe (visual-texto), outra entre o espectrograma de áudio e o nome da classe (áudio-texto).</span> <span class="s" data-s="b0-p1-s2">O gargalo está na fusão: como combinar esses dois números em uma única pontuação?</span></p><p><span class="s" data-s="b0-p2-s0">Métodos anteriores usam regras fixas e escalares: média geométrica ou média ponderada.</span> <span class="s" data-s="b0-p2-s1">Essas operações colapsam o par de similaridades em um único valor, descartando um grau de liberdade que poderia variar entre classes e segmentos.</span> <span class="s" data-s="b0-p2-s2">Além disso, os pipelines existentes jogam fora a fase do áudio: o encoder padrão do ImageBind consome apenas o espectrograma log-mel (magnitude da transformada de Fourier de curto prazo), ignorando a fase — que carrega informações sobre onsets, harmônicos e transientes que a magnitude sozinha não captura.</span></p>        <h2><span class="s" data-s="b1-h">A ideia: tratar similaridades como números complexos</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Em vez de colapsar as duas similaridades em um escalar, os autores propõem tratá-las como a parte real e a parte imaginária de um número complexo.</span> <span class="s" data-s="b1-p0-s1">A similaridade visual-texto vira a parte real; a similaridade áudio-texto vira a parte imaginária.</span> <span class="s" data-s="b1-p0-s2">Esse par complexo é então processado por uma rede neural de valores complexos (ComplexCNN) de cinco camadas, que aprende a fusão durante o treinamento.</span></p><p><span class="s" data-s="b1-p1-s0">A arquitetura tem duas contribuições testáveis.</span> <span class="s" data-s="b1-p1-s1">Primeiro, a fusão complexa de 2 streams: RGB e mel-spectrogram são codificados pelo modelo congelado, refinados por blocos de atenção temporal (os únicos pesos treináveis além da fusão), e suas similaridades com o texto formam um tensor complexo que alimenta a ComplexCNN.</span> <span class="s" data-s="b1-p1-s2">Segundo, uma extensão de 4 streams: cada modalidade ganha um stream companheiro — transformada iHSV imaginária para visão, espectrograma de fase traduzido por CycleGAN para áudio — de modo que cada modalidade forme seu próprio par complexo (conteúdo + estrutura).</span></p><p><span class="s" data-s="b1-p2-s0">A motivação para o iHSV é simétrica: se o áudio forma naturalmente um par complexo (magnitude + fase), a visão também precisa de um companheiro para que a ComplexCNN receba dois canais complexos.</span> <span class="s" data-s="b1-p2-s1">A transformada iHSV preserva a estrutura cíclica da matiz (hue) através de sin(H) e a informação cromática através da saturação S, gerando uma imagem sintética de 3 canais que o mesmo encoder congelado Ev ingere.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.11846/figure1.webp" alt="Visão geral das arquiteturas de 2 e 4 streams. À esquerda, os pipelines propostos; à direita, ganhos de 4,1 pontos em Segment-F1 e 6,6 pontos em Event-F1 no split de classes não vistas do OV-AVEBench, comparados ao baseline fine-tuned do CVPR 2025." loading="lazy">
+          <figcaption>
+            Visão geral das arquiteturas de 2 e 4 streams. À esquerda, os pipelines propostos; à direita, ganhos de 4,1 pontos em Segment-F1 e 6,6 pontos em Event-F1 no split de classes não vistas do OV-AVEBench, comparados ao baseline fine-tuned do CVPR 2025.
+            <span class="source">Figura 1 do paper · Praveen et al., arXiv:2610.11846</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Como funciona: streams visuais e de áudio como pares complexos</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Um vídeo de 10 segundos é fatiado em T=10 segmentos de um segundo.</span> <span class="s" data-s="b3-p0-s1">Cada segmento é representado por um frame RGB de 224×224 pixels e um espectrograma log-mel de 128 bins de frequência por 204 janelas de tempo.</span> <span class="s" data-s="b3-p0-s2">O modelo também recebe um conjunto de prompts de texto T = {τ₁, ..., τ_C, &#39;Background&#39;}, onde C é o número de classes candidatas (que podem ser totalmente novas no teste).</span></p><p><span class="s" data-s="b3-p1-s0">O ImageBind ViT-H congelado codifica áudio, vídeo e texto em vetores de 1024 dimensões: fa = Ea(a), fv = Ev(V), ft = Et(T).</span> <span class="s" data-s="b3-p1-s1">Esses encoders permanecem congelados; apenas os blocos de atenção temporal e a ComplexCNN são treinados.</span> <span class="s" data-s="b3-p1-s2">Isso preserva a propriedade de vocabulário aberto: uma classe nunca vista é classificada simplesmente adicionando seu nome ao conjunto de prompts na inferência.</span></p><p><span class="s" data-s="b3-p2-s0">Para a visão, a parte real vem do RGB padrão.</span> <span class="s" data-s="b3-p2-s1">Os features fv passam por um módulo de auto-atenção temporal Φv que troca informação entre os T passos de tempo, produzindo f̃v.</span> <span class="s" data-s="b3-p2-s2">A similaridade de cosseno com os features de texto gera a parte real: Svt[t,c] = cossim(f̃v[t], ft[c]).</span> <span class="s" data-s="b3-p2-s3">A parte imaginária vem do companheiro iHSV: cada frame RGB é convertido para HSV (H ∈ [0,2π], S e V ∈ [0,1]) e então transformado no triplet imaginário i(vt) = (V, S·sin(H), S).</span> <span class="s" data-s="b3-p2-s4">Esse triplet é tratado como uma imagem HSV sintética, convertido de volta para RGB, normalizado com as estatísticas do ImageBind e codificado pelo mesmo Ev congelado.</span> <span class="s" data-s="b3-p2-s5">Um segundo bloco de atenção temporal ΦI_v refina esses features, gerando a parte imaginária SI_vt.</span> <span class="s" data-s="b3-p2-s6">O stream visual emite assim um tensor complexo Zv = Svt + i·SI_vt de dimensão T×(C+1).</span></p><p><span class="s" data-s="b3-p3-s0">Para o áudio, a parte real vem do mel-spectrogram padrão, processado de forma análoga com atenção temporal Φa, produzindo Sat.</span> <span class="s" data-s="b3-p3-s1">A parte imaginária vem da fase do STFT.</span> <span class="s" data-s="b3-p3-s2">Como o ImageBind espera um mel-spectrogram de entrada, os autores usam uma CycleGAN pré-treinada e congelada (GIF→mel) que traduz a fase instantânea (IF) em um pseudo-mel de mesma forma (128×204).</span> <span class="s" data-s="b3-p3-s3">Esse pseudo-mel de fase é codificado pelo mesmo Ea congelado, refinado por Φφ e gera Spt.</span> <span class="s" data-s="b3-p3-s4">O stream de áudio emite Za = Sat + i·Spt.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.11846/figure2.webp" alt="Arquitetura de 4 streams. Cada modalidade forma um tensor complexo: Zv (RGB + i·iHSV) e Za (mel + i·fase). Os dois são empilhados e processados por uma ComplexCNN de cinco camadas; a magnitude de saída fornece as pontuações por segmento." loading="lazy">
+          <figcaption>
+            Arquitetura de 4 streams. Cada modalidade forma um tensor complexo: Zv (RGB + i·iHSV) e Za (mel + i·fase). Os dois são empilhados e processados por uma ComplexCNN de cinco camadas; a magnitude de saída fornece as pontuações por segmento.
+            <span class="source">Figura 2 do paper · Praveen et al., arXiv:2610.11846</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Fusão por rede neural complexa</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os dois tensores complexos Zv e Za, cada um de dimensão T×(C+1), são empilhados como os dois canais de entrada de uma ComplexCNN de cinco camadas.</span> <span class="s" data-s="b5-p0-s1">Redes neurais de valores complexos (CVNNs) parametrizam pesos como números complexos W = Wr + i·Wi e implementam convoluções complexas: (W * Z) = (Wr * Zr - Wi * Zi) + i·(Wr * Zi + Wi * Zr).</span> <span class="s" data-s="b5-p0-s2">Essa estrutura acopla os canais real e imaginário de forma mais restrita que uma CNN real de mesma contagem de parâmetros, impondo uma simetria que — segundo os experimentos — ajuda a generalização.</span></p><p><span class="s" data-s="b5-p1-s0">A saída da ComplexCNN é um tensor complexo de dimensão T×(C+1).</span> <span class="s" data-s="b5-p1-s1">A magnitude |Z| desse tensor fornece as pontuações finais de classe para cada segmento.</span> <span class="s" data-s="b5-p1-s2">Durante o treinamento, essas pontuações são comparadas com os rótulos ground-truth via cross-entropy.</span> <span class="s" data-s="b5-p1-s3">O sistema prevê a classe com maior magnitude para cada segmento; métricas de avaliação incluem acurácia por segmento (Acc), F1 no nível de segmento (Seg-F1) e F1 no nível de evento (Event-F1), esta última a mais estrita pois penaliza tanto falsos positivos quanto segmentos perdidos.</span></p><p><span class="s" data-s="b5-p2-s0">Uma variante de 2 streams também é testada: apenas RGB e mel, sem os companheiros iHSV e fase, mas ainda com fusão complexa.</span> <span class="s" data-s="b5-p2-s1">Essa variante isola o ganho da fusão complexa em si, separado do ganho dos streams auxiliares.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b6-t">O que é treinado, o que é congelado</span></h3>
+          <p><span class="s" data-s="b6-c-s0">Os encoders ImageBind (Ea, Ev, Et) permanecem totalmente congelados, assim como a CycleGAN que traduz fase em pseudo-mel.</span> <span class="s" data-s="b6-c-s1">Apenas quatro blocos de atenção temporal (Φv, ΦI_v, Φa, Φφ) e a ComplexCNN de cinco camadas são treinados.</span> <span class="s" data-s="b6-c-s2">Isso mantém a contagem de parâmetros treináveis baixa e preserva a capacidade de vocabulário aberto: novas classes são reconhecidas sem re-treinar os encoders.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b7-h">Resultados: estado da arte em dois benchmarks</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Os experimentos cobrem dois benchmarks de vocabulário aberto.</span> <span class="s" data-s="b7-p0-s1">OV-AVEBench é o conjunto introduzido por Zhou et al.</span> <span class="s" data-s="b7-p0-s2">(CVPR 2025) com splits de classes vistas, não vistas e total.</span> <span class="s" data-s="b7-p0-s3">AVE-OV é uma adaptação do dataset AVE clássico para o regime de vocabulário aberto, proposta pelos próprios autores deste paper.</span> <span class="s" data-s="b7-p0-s4">Em ambos, o protocolo é idêntico: encoders congelados, fusão aprendida, classes de teste nunca vistas no treinamento.</span></p><p><span class="s" data-s="b7-p1-s0">No OV-AVEBench, o modelo de 4 streams com fusão complexa atinge 66,5% de acurácia, 59,1% de Seg-F1 e 54,1% de Event-F1 no split de classes não vistas — ganhos de +1,6 / +4,1 / +6,6 pontos sobre o baseline fine-tuned do paper original.</span> <span class="s" data-s="b7-p1-s1">No split de classes vistas, os ganhos são ainda maiores: +2,4 / +5,6 / +9,1.</span> <span class="s" data-s="b7-p1-s2">No total (vistas + não vistas), o modelo proposto alcança 68,2 / 61,1 / 57,0%, superando todos os métodos anteriores (CMRA, AVE, PSP, MM-Pyramid) por margens substanciais.</span></p><p><span class="s" data-s="b7-p2-s0">No AVE-OV, os ganhos são ainda mais dramáticos.</span> <span class="s" data-s="b7-p2-s1">O baseline fine-tuned atinge 58,0 / 46,7 / 40,8% no split não visto; o modelo de 4 streams sobe para 60,7 / 51,9 / 50,4% (+2,7 / +5,2 / +9,6).</span> <span class="s" data-s="b7-p2-s2">No split visto, o salto é de 82,3 / 74,6 / 70,5% para 88,0 / 82,9 / 83,1% (+5,7 / +8,3 / +12,6).</span> <span class="s" data-s="b7-p2-s3">O baseline sem treinamento (apenas média geométrica das similaridades congeladas) colapsa neste dataset menor, atingindo apenas 31,5% de média total — confirmando que a fusão aprendida é essencial para desempenho de vocabulário aberto.</span></p><p><span class="s" data-s="b7-p3-s0">Ablações isolam as duas contribuições.</span> <span class="s" data-s="b7-p3-s1">Comparando fusão complexa vs. real com mesmo número de streams (2 ou 4), a versão complexa sempre vence: no OV-AVEBench, passar de real para complexa em 2 streams adiciona +7,9 pontos de Event-F1; no AVE-OV, +15,9 pontos.</span> <span class="s" data-s="b7-p3-s2">Adicionar os streams auxiliares (iHSV + fase CycleGAN) sobre a fusão complexa de 2 streams traz ganhos menores mas consistentes: +0,8 Event-F1 no OV-AVEBench, +2,3 no AVE-OV (split não visto).</span> <span class="s" data-s="b7-p3-s3">A fase traduzida por CycleGAN supera a fase instantânea bruta (IF) em +2,2 pontos de Event-F1, mostrando que a tradução para formato mel ajuda o encoder congelado.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.11846/table1.webp" alt="Resultados no OV-AVEBench. O modelo de 4 streams com fusão complexa (última linha) supera todos os métodos anteriores em todas as métricas, nos três splits. Números em vermelho (melhor) e azul (segundo melhor) destacam o estado da arte." loading="lazy">
+          <figcaption>
+            Resultados no OV-AVEBench. O modelo de 4 streams com fusão complexa (última linha) supera todos os métodos anteriores em todas as métricas, nos três splits. Números em vermelho (melhor) e azul (segundo melhor) destacam o estado da arte.
+            <span class="source">Tabela 1 do paper · Praveen et al., arXiv:2610.11846</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Exemplos qualitativos e transferência entre datasets</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Exemplos visuais no paper mostram predições segmento a segmento em vídeos de classes não vistas.</span> <span class="s" data-s="b9-p0-s1">Em um clipe de &#39;female singing&#39;, o baseline confunde o evento com uma classe acusticamente similar (laranja) e perde vários segmentos para background (cinza); o modelo de 2 streams recupera a maioria dos segmentos; o de 4 streams acerta todos (azul).</span> <span class="s" data-s="b9-p0-s2">Em um clipe de &#39;helicopter&#39;, o baseline perde segmentos para background; ambos os modelos propostos acertam todos.</span></p><p><span class="s" data-s="b9-p1-s0">Transferência cross-dataset testa a capacidade de generalização: treinar no split visto de um dataset e testar no split não visto de outro.</span> <span class="s" data-s="b9-p1-s1">A fusão complexa de 2 streams mantém margem positiva sobre o baseline nas duas direções (OV-AVEBench → AVE-OV e vice-versa), com ganhos de +3,6 e +8,5 pontos de média.</span> <span class="s" data-s="b9-p1-s2">O modelo de 4 streams transfere de forma desigual: cai -4,8 pontos de acurácia em OV→AVE mas ganha +2,1 em AVE→OV, sugerindo que os streams auxiliares podem sobre-ajustar ao dataset de treinamento quando este é maior.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.11846/figure6.webp" alt="Predições qualitativas em vídeos de classes não vistas. Azul = correto, laranja = classe errada, cinza = background. O baseline (segunda linha) perde ou confunde segmentos; o modelo de 4 streams (última linha) acerta todos." loading="lazy">
+          <figcaption>
+            Predições qualitativas em vídeos de classes não vistas. Azul = correto, laranja = classe errada, cinza = background. O baseline (segunda linha) perde ou confunde segmentos; o modelo de 4 streams (última linha) acerta todos.
+            <span class="source">Figura 6 do paper · Praveen et al., arXiv:2610.11846</span>
+          </figcaption>
+        </figure>
+        <aside class="callout">
+          <h3><span class="s" data-s="b11-t">Por que valores complexos ajudam?</span></h3>
+          <p><span class="s" data-s="b11-c-s0">A ablação real vs. complexa com mesmo número de parâmetros mostra que o ganho não vem apenas de capacidade extra, mas da estrutura da parametrização complexa.</span> <span class="s" data-s="b11-c-s1">Pesos complexos W = Wr + i·Wi acoplam os canais real e imaginário de forma simétrica, impondo uma restrição que — empiricamente — melhora a generalização para classes não vistas em +2,2 pontos de média no OV-AVEBench e +1,0 no AVE-OV.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b12-h">Limitações e o que fica em aberto</span></h2>
+<p><span class="s" data-s="b12-p0-s0">O paper não esconde as limitações.</span> <span class="s" data-s="b12-p0-s1">Primeiro, a transferência cross-dataset do modelo de 4 streams é irregular: ele melhora em uma direção mas piora em outra, sugerindo que os streams auxiliares (iHSV e fase CycleGAN) podem sobre-ajustar ao dataset de treinamento quando este é grande.</span> <span class="s" data-s="b12-p0-s2">Os autores especulam que a natureza mais complicada da arquitetura de 4 streams pode reduzir a capacidade de transferência.</span></p><p><span class="s" data-s="b12-p1-s0">Segundo, a escolha do companheiro visual (iHSV) e da tradução de fase (CycleGAN) é empírica, não derivada de primeiros princípios.</span> <span class="s" data-s="b12-p1-s1">Outras transformações de cor ou outras arquiteturas de tradução poderiam funcionar; o paper não explora esse espaço.</span> <span class="s" data-s="b12-p1-s2">A CycleGAN usada para traduzir fase em pseudo-mel foi treinada em um dataset não especificado e permanece congelada; não está claro como ela generalizaria para domínios de áudio muito diferentes.</span></p><p><span class="s" data-s="b12-p2-s0">Terceiro, os experimentos cobrem apenas dois benchmarks de vocabulário aberto, ambos com vídeos de 10 segundos e classes de eventos relativamente genéricas (instrumentos musicais, sons de animais, veículos).</span> <span class="s" data-s="b12-p2-s1">Não está claro como a arquitetura se comportaria em vídeos mais longos, com eventos mais sutis ou em domínios especializados (medicina, vigilância).</span> <span class="s" data-s="b12-p2-s2">O paper também não compara custo computacional: a ComplexCNN adiciona overhead em relação à média geométrica escalar?</span></p><p><span class="s" data-s="b12-p3-s0">Finalmente, o regime de vocabulário aberto testado aqui ainda é relativamente controlado: as classes de teste são nomeadas explicitamente e o modelo escolhe entre um conjunto fechado de candidatos.</span> <span class="s" data-s="b12-p3-s1">Vocabulário verdadeiramente aberto — onde o modelo precisa propor classes sem uma lista — permanece fora do escopo.</span></p>        <h2><span class="s" data-s="b13-h">O que levar deste paper</span></h2>
+<p><span class="s" data-s="b13-p0-s0">A contribuição central é conceitual: em vez de colapsar similaridades áudio-texto e vídeo-texto em um escalar com uma regra fixa, tratá-las como um número complexo e aprender a fusão com uma rede neural de valores complexos.</span> <span class="s" data-s="b13-p0-s1">Essa mudança de representação, sozinha, responde pela maior parte do ganho (+7,9 pontos de Event-F1 no OV-AVEBench, +15,9 no AVE-OV ao passar de 2 streams real para 2 streams complexa).</span></p><p><span class="s" data-s="b13-p1-s0">A segunda contribuição — enriquecer cada modalidade com um stream companheiro (iHSV para visão, fase CycleGAN para áudio) — adiciona um ganho menor e mais frágil, especialmente em transferência cross-dataset.</span> <span class="s" data-s="b13-p1-s1">Mas a ideia de formar pares complexos conteúdo-estrutura para cada modalidade é elegante e pode inspirar arquiteturas futuras.</span></p><p><span class="s" data-s="b13-p2-s0">Do ponto de vista prático, o método estabelece novo estado da arte em dois benchmarks de vocabulário aberto, com ganhos consistentes nas três métricas (Acc, Seg-F1, Event-F1) e nos três splits (visto, não visto, total).</span> <span class="s" data-s="b13-p2-s1">A arquitetura mantém os encoders congelados, o que preserva a eficiência e a capacidade de adicionar novas classes sem re-treinamento.</span> <span class="s" data-s="b13-p2-s2">Para quem trabalha com localização de eventos audiovisuais ou fusão multimodal, o paper oferece uma lição clara: representações complexas podem capturar graus de liberdade que escalares descartam, e a estrutura da parametrização complexa — não apenas a contagem de parâmetros — importa para generalização.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Fusão complexa de similaridades áudio-texto (imaginário) e vídeo-texto (real) via ComplexCNN supera regras escalares fixas, ganhando +6,6 pontos de Event-F1 em classes não vistas no OV-AVEBench.</span></li><li><span class="s" data-s="k1">Streams auxiliares (iHSV para visão, fase CycleGAN para áudio) formam pares complexos conteúdo-estrutura, adicionando ganho menor mas consistente sobre a fusão complexa de 2 streams.</span></li><li><span class="s" data-s="k2">Ablação mostra que o ganho vem da estrutura da parametrização complexa, não só de capacidade extra: CNN real com mesmos parâmetros fica atrás da ComplexCNN em +2,2 pontos de média.</span></li><li><span class="s" data-s="k3">Transferência cross-dataset é irregular para 4 streams, sugerindo sobre-ajuste dos companheiros auxiliares ao dataset de treinamento; limitação reconhecida pelos autores.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.11846" rel="noopener">Open-Vocabulary Audio-Visual Event Localization via Complex-Valued Fusion</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.11846" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

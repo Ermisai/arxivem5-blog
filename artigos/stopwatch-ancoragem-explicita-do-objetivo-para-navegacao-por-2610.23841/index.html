@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>StopWatch: Ancoragem explícita do objetivo para navegação por objetos — arXiv em 5</title>
+<meta name="description" content="O paper identifica que a falha principal em agentes de navegação por objetos não é o planejamento, mas a incapacidade de &#39;parar&#39; no lugar certo. Introduzem um pipeline de dois modelos que explicita a localização do objetivo, alcançando SOTA em benchmarks corrigidos.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="StopWatch: Ancoragem explícita do objetivo para navegação por objetos">
+<meta property="og:description" content="O paper identifica que a falha principal em agentes de navegação por objetos não é o planejamento, mas a incapacidade de &#39;parar&#39; no lugar certo. Introduzem um pipeline de dois modelos que explicita a localização do objetivo, alcançando SOTA em benchmarks corrigidos.">
+<meta property="og:image" content="../../assets/papers/2610.23841/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Robótica</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.23841" rel="noopener">arXiv:2610.23841</a>
+    </div>
+    <h1><span class="s" data-s="t">StopWatch: Ancoragem explícita do objetivo para navegação por objetos</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">O paper identifica que a falha principal em agentes de navegação por objetos não é o planejamento, mas a incapacidade de &#39;parar&#39; no lugar certo.</span> <span class="s" data-s="d-s1">Introduzem um pipeline de dois modelos que explicita a localização do objetivo, alcançando SOTA em benchmarks corrigidos.</span></p>
+    <p class="byline">
+      <span>Liu et al.</span>
+      <span>8 min de leitura</span>
+<span>16/10/2026</span>    </p>
+    <div class="listen" data-article="2610.23841" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=5nviTUMDG48" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O paradoxo da navegação por objetos</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Na navegação por objetos (Object-Goal Navigation), um agente robótico ou virtual deve encontrar uma instância de uma categoria de objeto nomeada (como &#34;vaso de flores&#34; ou &#34;cadeira&#34;) em um ambiente novo, sem um mapa prévio.</span> <span class="s" data-s="b0-p0-s1">Nos últimos anos, a comunidade de Visão Computacional tem adotado uma receita comum: pegar Modelos de Visão e Linguagem (VLMs) pré-treinados em escala web, que possuem vasto conhecimento semântico, e ajustá-los (fine-tuning) usando demonstrações de especialistas para criar uma política de navegação.</span></p><p><span class="s" data-s="b0-p1-s0">Apesar do progresso, as taxas de sucesso permanecem decepcionantemente baixas, especialmente quando o agente enfrenta categorias de objetos nunca vistas antes (open-vocabulary).</span> <span class="s" data-s="b0-p1-s1">Escalar o tamanho dos conjuntos de dados de treinamento ou melhorar o modelamento da história de observações tem trazido retornos decrescentes.</span> <span class="s" data-s="b0-p1-s2">Muitos pesquisadores observaram que a percepção e o &#34;ancoramento&#34; (grounding) — a capacidade de saber onde o objetivo está no espaço visual — são os verdadeiros limitadores, mas faltava um diagnóstico preciso do que exatamente esses agentes estavam falhando em fazer.</span></p>        <h2><span class="s" data-s="b1-h">Diagnóstico: O problema não é chegar, é parar</span></h2>
+<p><span class="s" data-s="b1-p0-s0">O paper StopWatch, de pesquisadores da Amazon FAR, NYU, UC Berkeley e CMU, oferece esse diagnóstico crucial.</span> <span class="s" data-s="b1-p0-s1">Ao analisar políticas de navegação finas-tuned, os autores descobriram que os agentes exploram bem e, frequentemente, chegam muito perto do objetivo.</span> <span class="s" data-s="b1-p0-s2">O problema dominante é a &#34;ancoragem do objetivo&#34; (goal grounding): a incapacidade do agente de perceber que o objetivo já está à vista ou de estimar corretamente a distância até ele.</span></p><p><span class="s" data-s="b1-p1-s0">Os dados são reveladores.</span> <span class="s" data-s="b1-p1-s1">Em 76% dos episódios, uma política end-to-end conseguia chegar a menos de 0,25 metros do objetivo, mas tinha uma taxa de sucesso de apenas 52%.</span> <span class="s" data-s="b1-p1-s2">Isso significa que o agente passava pelo alvo ou parava antes, sem reconhecer que havia cumprido a tarefa.</span> <span class="s" data-s="b1-p1-s3">Em contraste, quando a mesma política recebia como entrada a ancoragem do objetivo verdadeira (ground-truth), sua taxa de sucesso saltava para 89%.</span> <span class="s" data-s="b1-p1-s4">A conclusão é direta: parar no lugar certo é mais difícil do que chegar lá.</span> <span class="s" data-s="b1-p1-s5">A falha não está na capacidade de navegação, mas na percepção espacial do objetivo.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.23841/figure1.webp" alt="A figura 1 ilustra a diferença crítica: enquanto baselines exploram bem mas passam pelo objetivo, o sistema proposto para e alcança o alvo dentro de 0,25m, resultando em maior taxa de sucesso nos benchmarks limpos." loading="lazy">
+          <figcaption>
+            A figura 1 ilustra a diferença crítica: enquanto baselines exploram bem mas passam pelo objetivo, o sistema proposto para e alcança o alvo dentro de 0,25m, resultando em maior taxa de sucesso nos benchmarks limpos.
+            <span class="source">Figura 1 do paper · Liu et al., arXiv:2610.23841</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">A solução: Ancoragem explícita via pipeline de dois modelos</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Para corrigir essa falha, os autores propõem tornar a ancoragem do objetivo explícita.</span> <span class="s" data-s="b3-p0-s1">Em vez de confiar que o modelo aprenda implicitamente a detectar o objetivo a partir de pixels brutos, eles inserem uma descrição textual estruturada que informa ao agente quais objetos estão visíveis e quão distante o objetivo é. Essa abordagem é análoga ao &#34;chain-of-thought&#34; (cadeia de pensamento) usado em modelos de linguagem, mas aqui é derivada de rótulos semânticos e geométricos, não de raciocínio livre sujeito a ruído.</span></p><p><span class="s" data-s="b3-p1-s0">A arquitetura proposta é um pipeline de dois modelos separados, treinados de forma distinta.</span> <span class="s" data-s="b3-p1-s1">O primeiro é um modelo de percepção, finas-tuned a partir do Qwen3-VL-4B, cuja tarefa é analisar a imagem RGB atual e gerar o texto de ancoragem.</span> <span class="s" data-s="b3-p1-s2">O segundo é um modelo de política, finas-tuned a partir do Qwen3-VL-2B, que recebe a imagem e o texto gerado pelo primeiro modelo para decidir a próxima ação (mover, girar, parar).</span> <span class="s" data-s="b3-p1-s3">Ambos os modelos são treinados usando o mesmo texto de ancoragem extraído das anotações das cenas de treinamento, sem custo adicional de rotulagem.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.23841/figure3.webp" alt="A figura 3 compara as escolhas de design: separar a percepção da política e usar texto estruturado para ancoragem explícita, em vez de depender de um modelo único end-to-end." loading="lazy">
+          <figcaption>
+            A figura 3 compara as escolhas de design: separar a percepção da política e usar texto estruturado para ancoragem explícita, em vez de depender de um modelo único end-to-end.
+            <span class="source">Figura 3 do paper · Liu et al., arXiv:2610.23841</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Detalhes do pipeline e treinamento</span></h2>
+<p><span class="s" data-s="b5-p0-s0">O texto de ancoragem segue um formato específico que inclui a visibilidade do objetivo e a distância em faixas (ex: &#34;visible: yes&#34;, &#34;distance: &lt;0.5m&#34;).</span> <span class="s" data-s="b5-p0-s1">Durante o treinamento, o modelo de percepção é otimizado para prever esse texto corretamente para cada frame das demonstrações.</span> <span class="s" data-s="b5-p0-s2">O modelo de política é otimizado para escolher ações que maximizem o sucesso, condicionado a esse texto preciso.</span> <span class="s" data-s="b5-p0-s3">A separação é intencional: os autores experimentaram treinar um único modelo end-to-end para prever a ancoragem e a ação simultaneamente, mas os resultados foram inferiores, sugerindo que a tarefa de percepção fina requer foco dedicado.</span></p><p><span class="s" data-s="b5-p1-s0">Os modelos foram treinados em um corpus massivo de 3,1 milhões de demonstrações (250 milhões de frames) provenientes de 145 cenas do HM3D-OVON, 61 do MP3D e 123 do HSSD.</span> <span class="s" data-s="b5-p1-s1">Nenhuma cena de avaliação foi usada no treinamento.</span> <span class="s" data-s="b5-p1-s2">A ideia é que, ao testar, o modelo de percepção deve prever a ancoragem a partir de observações reais, criando uma interface textual clara entre o que o agente &#34;vê&#34; e o que ele &#34;faz&#34;.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.23841/figure4.webp" alt="A figura 4 mostra o fluxo do sistema: o modelo de percepção escreve o texto de ancoragem para cada frame, e o modelo de política lê as imagens intercaladas com esse texto para outputar a próxima ação." loading="lazy">
+          <figcaption>
+            A figura 4 mostra o fluxo do sistema: o modelo de percepção escreve o texto de ancoragem para cada frame, e o modelo de política lê as imagens intercaladas com esse texto para outputar a próxima ação.
+            <span class="source">Figura 4 do paper · Liu et al., arXiv:2610.23841</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Corrigindo os benchmarks: O que é &#34;limpo&#34;?</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Uma contribuição crítica do paper é a revisão das anotações dos benchmarks existentes.</span> <span class="s" data-s="b7-p0-s1">Os autores identificaram defeitos nas anotações originais que levavam a avaliações injustas ou imprecisas.</span> <span class="s" data-s="b7-p0-s2">Por exemplo, em alguns casos, o objetivo era marcado em posições onde não era visível ou acessível, ou onde a definição de &#34;sucesso&#34; era ambígua.</span> <span class="s" data-s="b7-p0-s3">Eles criaram um protocolo de &#34;avaliação limpa&#34; (clean protocol), onde apenas episódios que passam por uma auditoria rigorosa são considerados.</span></p><p><span class="s" data-s="b7-p1-s0">Essa correção é vital porque muitos métodos anteriores podiam parecer bons em benchmarks sujos, mas falhavam em cenários realistas.</span> <span class="s" data-s="b7-p1-s1">O paper reporta resultados sob dois protocolos: o &#34;oficial&#34; (usando os critérios originais do benchmark) e o &#34;limpo&#34; (usando os critérios corrigidos nos subconjuntos auditados).</span> <span class="s" data-s="b7-p1-s2">A maioria das comparações significativas ocorre no protocolo limpo, onde a diferença entre chegar perto e parar no local exato se torna o fator determinante para o sucesso.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.23841/table1.webp" alt="A tabela 1 compara o StopWatch com baselines. Nas colunas &#39;clean&#39;, o método proposto supera todas as outras abordagens em todas as tarefas, com ganhos significativos, especialmente em HM3D-OVON val unseen." loading="lazy">
+          <figcaption>
+            A tabela 1 compara o StopWatch com baselines. Nas colunas &#39;clean&#39;, o método proposto supera todas as outras abordagens em todas as tarefas, com ganhos significativos, especialmente em HM3D-OVON val unseen.
+            <span class="source">Tabela 1 do paper · Liu et al., arXiv:2610.23841</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Resultados: Estado da arte em seis benchmarks</span></h2>
+<p><span class="s" data-s="b9-p0-s0">O sistema StopWatch atinge o estado da arte (SOTA) em seis benchmarks de navegação por objetos, abrangendo coleções de cenas HM3D, MP3D e HSSD, tanto em tarefas de vocabulário aberto quanto fechado.</span> <span class="s" data-s="b9-p0-s1">Os ganhos são substanciais.</span> <span class="s" data-s="b9-p0-s2">No HM3D-OVON val unseen, com anotações corrigidas, o método supera o melhor baseline em 8,8 pontos percentuais de taxa de sucesso.</span></p><p><span class="s" data-s="b9-p1-s0">Em MP3D-OV, o StopWatch alcança 83,6% de sucesso, contra 77,7% do LightNav-0.</span> <span class="s" data-s="b9-p1-s1">No HSSD-OV, a taxa é de 81,2%, contra 62,9% do LightNav-0.</span> <span class="s" data-s="b9-p1-s2">Esses resultados não são marginais; eles representam uma melhoria consistente em diferentes domínios de simulação e configurações de tarefa.</span> <span class="s" data-s="b9-p1-s3">A tabela de resultados mostra que, em todos os benchmarks, o método proposto lidera sob ambos os protocolos de avaliação, mas a vantagem é mais pronunciada e confiável no protocolo limpo.</span></p>        <h2><span class="s" data-s="b10-h">Análise: Percepção vs. Política</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Um ponto interessante da análise é o desempenho do modelo de política quando alimentado com ancoragem de objetivo verdadeira (GT grounding).</span> <span class="s" data-s="b10-p0-s1">Quando a política recebe o texto perfeito sobre a localização do objetivo, sua taxa de sucesso se aproxima da de um especialista humano que gerou as demonstrações.</span> <span class="s" data-s="b10-p0-s2">Isso reforça a tese central do paper: a política de navegação em si é robusta e capaz de aprender a explorar eficientemente.</span> <span class="s" data-s="b10-p0-s3">O gargalo principal está na percepção, especificamente na capacidade de estimar a visibilidade e a distância do objetivo.</span></p><p><span class="s" data-s="b10-p1-s0">Isso tem implicações importantes para o futuro da área.</span> <span class="s" data-s="b10-p1-s1">Em vez de focar apenas em aumentar a capacidade de raciocínio espacial dos modelos end-to-end, a comunidade deve investir em melhorar a precisão da percepção semântica e geométrica.</span> <span class="s" data-s="b10-p1-s2">O pipeline de dois modelos proposto oferece uma arquitetura modular que facilita esse foco, permitindo que pesquisadores melhorem o modelo de percepção sem re-treinar toda a política de navegação.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b11-t">O custo da separação</span></h3>
+          <p><span class="s" data-s="b11-c-s0">Embora eficaz, a abordagem de dois modelos introduz uma dependência encadeada.</span> <span class="s" data-s="b11-c-s1">Se o modelo de percepção falhar em prever a ancoragem correta (ex: dizer que o objetivo não está visível quando está), o modelo de política tomará decisões subótimas, mesmo sendo capaz de navegar bem.</span> <span class="s" data-s="b11-c-s2">Isso contrasta com modelos end-to-end, onde erros podem ser compensados internamente, mas com menos interpretabilidade.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b12-h">Limitações e escopo</span></h2>
+<p><span class="s" data-s="b12-p0-s0">O paper reconhece limitações.</span> <span class="s" data-s="b12-p0-s1">O sistema foi avaliado principalmente em ambientes simulados (HM3D, MP3D, HSSD).</span> <span class="s" data-s="b12-p0-s2">A generalização para o mundo real, com ruído sensorial, iluminação variável e dinâmicas não modeladas, ainda precisa ser demonstrada.</span> <span class="s" data-s="b12-p0-s3">Além disso, a abordagem depende da disponibilidade de anotações semânticas e geométricas precisas durante o treinamento.</span> <span class="s" data-s="b12-p0-s4">Embora essas anotações sejam extraídas das cenas de treinamento, a qualidade do pipeline de percepção no teste depende da fidelidade dessas anotações em relação à realidade do ambiente.</span></p><p><span class="s" data-s="b12-p1-s0">Outra limitação é a complexidade computacional.</span> <span class="s" data-s="b12-p1-s1">Manter dois modelos grandes (Qwen3-VL-4B e Qwen3-VL-2B) em execução, com inferência sequencial (percepção seguida de política), pode ser mais lento e custoso do que um único modelo end-to-end.</span> <span class="s" data-s="b12-p1-s2">Para aplicações em tempo real com restrições de hardware, essa sobrecarga pode ser um obstáculo.</span></p>        <h2><span class="s" data-s="b13-h">Conclusão: Um passo concreto para a navegação</span></h2>
+<p><span class="s" data-s="b13-p0-s0">StopWatch faz uma contribuição valiosa ao reduzir um problema complexo de navegação por objetos a um problema de percepção mais concreto: a ancoragem do objetivo.</span> <span class="s" data-s="b13-p0-s1">Ao tornar essa ancoragem explícita através de um pipeline de dois modelos, os autores não apenas alcançam o estado da arte, mas também oferecem um diagnóstico claro para a comunidade.</span> <span class="s" data-s="b13-p0-s2">A mensagem é que, para avançar, precisamos parar de tratar a navegação como um problema puramente de planejamento e começar a investir em percepções espaciais precisas e interpretáveis.</span></p><p><span class="s" data-s="b13-p1-s0">A correção dos benchmarks também é um serviço à comunidade, estabelecendo um padrão mais rigoroso para futuras avaliações.</span> <span class="s" data-s="b13-p1-s1">Enquanto muitos métodos continuam a buscar ganhos marginais em métricas infladas, o StopWatch mostra que resolver o problema fundamental de &#34;parar no lugar certo&#34; pode trazer avanços significativos e mensuráveis.</span> <span class="s" data-s="b13-p1-s2">Para desenvolvedores e cientistas de dados trabalhando com navegação embodied, o paper sugere que a modularidade e a explícitação das etapas de percepção podem ser tão importantes quanto a escala dos modelos.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Agentes de navegação por objetos frequentemente chegam perto do alvo, mas falham em parar, pois não estimam a distância ou visibilidade do objetivo.</span></li><li><span class="s" data-s="k1">A solução é um pipeline de dois modelos: um de percepção gera texto estruturado sobre o objetivo, e um de política usa esse texto para decidir ações.</span></li><li><span class="s" data-s="k2">Os autores corrigiram defeitos de anotação em benchmarks populares, revelando que o gargalo real é a percepção, não o aprendizado da política.</span></li><li><span class="s" data-s="k3">O método alcança estado da arte em seis benchmarks, mostrando que tornar a ancoragem do objetivo explícita é mais eficaz que modelos end-to-end.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.23841" rel="noopener">StopWatch: Goal Grounding for Object-goal Navigation</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.23841" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

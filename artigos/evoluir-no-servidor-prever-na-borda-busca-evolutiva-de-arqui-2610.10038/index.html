@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Evoluir no servidor, prever na borda: busca evolutiva de arquiteturas neurais para previsão de ações em um Raspberry Pi — arXiv em 5</title>
+<meta name="description" content="Pesquisadores aplicam busca evolutiva online de arquiteturas neurais para prever retornos de ações e executam a inferência em um Raspberry Pi 4B, obtendo +27,5% de retorno líquido contra +11 a +15% de baselines LSTM em dados reais de 2022-2024.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Evoluir no servidor, prever na borda: busca evolutiva de arquiteturas neurais para previsão de ações em um Raspberry Pi">
+<meta property="og:description" content="Pesquisadores aplicam busca evolutiva online de arquiteturas neurais para prever retornos de ações e executam a inferência em um Raspberry Pi 4B, obtendo +27,5% de retorno líquido contra +11 a +15% de baselines LSTM em dados reais de 2022-2024.">
+<meta property="og:image" content="../../assets/papers/2610.10038/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Aprendizado por reforço</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.10038" rel="noopener">arXiv:2610.10038</a>
+    </div>
+    <h1><span class="s" data-s="t">Evoluir no servidor, prever na borda: busca evolutiva de arquiteturas neurais para previsão de ações em um Raspberry Pi</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Pesquisadores aplicam busca evolutiva online de arquiteturas neurais para prever retornos de ações e executam a inferência em um Raspberry Pi 4B, obtendo +27,5% de retorno líquido contra +11 a +15% de baselines LSTM em dados reais de 2022-2024.</span></p>
+    <p class="byline">
+      <span>Chang et al.</span>
+      <span>11 min de leitura</span>
+<span>07/10/2026</span>    </p>
+    <div class="listen" data-article="2610.10038" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=_CrKn1f0PHw" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema: modelos grandes que envelhecem rápido</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Prever retornos de ações é difícil porque a relação entre features e retornos muda com o regime de mercado.</span> <span class="s" data-s="b0-p0-s1">Um modelo treinado em um período frequentemente falha no seguinte.</span> <span class="s" data-s="b0-p0-s2">A abordagem tradicional é retreinar periodicamente — mensalmente, por exemplo — mas entre retreinos o modelo degrada conforme o mercado deriva.</span> <span class="s" data-s="b0-p0-s3">Modelos precisos costumam ser grandes, caros para atualizar online e fixos em arquitetura uma vez treinados: só os pesos podem se adaptar, não a topologia da rede.</span></p><p><span class="s" data-s="b0-p1-s0">Aprendizado incremental atualiza os pesos entre retreinos, mas a arquitetura permanece congelada desde o início.</span> <span class="s" data-s="b0-p1-s1">O paper propõe uma alternativa: busca evolutiva online de arquiteturas neurais, onde tanto arquitetura quanto pesos evoluem continuamente conforme novos dados chegam.</span> <span class="s" data-s="b0-p1-s2">O método se chama ONE-NAS (Online NeuroEvolution-based Neural Architecture Search) e foi aplicado aqui à previsão cross-sectional de retornos diários de ações — prever o retorno futuro de cada ação em um portfólio a cada dia de negociação.</span></p>        <h2><span class="s" data-s="b1-h">A ideia: evolução contínua em ilhas paralelas</span></h2>
+<p><span class="s" data-s="b1-p0-s0">ONE-NAS mantém uma população de redes neurais recorrentes (RNNs) organizadas em ilhas — subpopulações que evoluem em paralelo.</span> <span class="s" data-s="b1-p0-s1">Cada indivíduo, chamado de genoma, é um grafo direcionado que codifica tanto uma arquitetura quanto seus pesos.</span> <span class="s" data-s="b1-p0-s2">Os nós ocultos são células recorrentes de uma biblioteca (GRU, LSTM, etc.) e as arestas podem ser feedforward ou recorrentes, carregando valores adiante no tempo.</span></p><p><span class="s" data-s="b1-p1-s0">A busca começa de um genoma mínimo contendo apenas conexões diretas entrada-saída.</span> <span class="s" data-s="b1-p1-s1">Profundidade, conectividade recorrente e composição de células são resultados da busca, não escolhas prévias.</span> <span class="s" data-s="b1-p1-s2">Descendentes são gerados por mutação (inserção ou remoção de nós e arestas, mudança de tipo de célula) e por crossover entre dois pais.</span> <span class="s" data-s="b1-p1-s3">Os pesos são herdados para componentes retidos e inicializados aleatoriamente apenas para componentes novos, então cada descendente parte de uma rede parcialmente treinada e precisa de poucas épocas de backpropagation.</span></p><p><span class="s" data-s="b1-p2-s0">As ilhas trocam material genético apenas por crossover inter-ilhas a uma taxa baixa, então se tornam cada vez mais distintas ao longo do tempo.</span> <span class="s" data-s="b1-p2-s1">Um número suficiente de ilhas é mantido para preservar diversidade na busca evolutiva.</span> <span class="s" data-s="b1-p2-s2">Ao final de cada geração, cada ilha ranqueia os genomas que possui e retém os de melhor desempenho como pais para a próxima geração.</span> <span class="s" data-s="b1-p2-s3">O melhor genoma de uma ilha é seu campeão; o campeão de maior fitness entre todas as ilhas é o melhor global.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.10038/figure1.webp" alt="Arquitetura do sistema: a busca ONE-NAS roda no servidor (host), evoluindo a população de redes. A cada geração, os campeões são enviados via TCP/IP para um Raspberry Pi 4B, que executa a inferência online conforme os dados chegam." loading="lazy">
+          <figcaption>
+            Arquitetura do sistema: a busca ONE-NAS roda no servidor (host), evoluindo a população de redes. A cada geração, os campeões são enviados via TCP/IP para um Raspberry Pi 4B, que executa a inferência online conforme os dados chegam.
+            <span class="source">Figura 1 do paper · Chang et al., arXiv:2610.10038</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Protocolo online: janelas, validação e ausência de vazamento</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O fluxo de entrada é particionado em janelas consecutivas de W dias de negociação, com uma geração por janela.</span> <span class="s" data-s="b3-p0-s1">No início da geração t, o histórico revelado é dividido em um bloco de validação (suas V janelas mais recentes) e um pool de treinamento (todas as janelas anteriores).</span> <span class="s" data-s="b3-p0-s2">Cada ilha gera descendentes de suas elites e os treina em subsequências de comprimento L extraídas apenas do pool de treinamento; todos os genomas são então pontuados por erro quadrático médio no bloco de validação.</span></p><p><span class="s" data-s="b3-p1-s0">Cada ilha mantém seus genomas de melhor ranking como elites, e os genomas designados pela regra de predição preveem a janela t+1 dia a dia conforme suas features chegam.</span> <span class="s" data-s="b3-p1-s1">Quando a janela t+1 fecha, seus retornos realizados são anexados para formar o histórico da geração t+1, o bloco de validação desliza uma janela para frente, e a geração t+1 começa.</span> <span class="s" data-s="b3-p1-s2">Treinamento usa o histórico completo enquanto fitness é medido nos dados mais recentes, então a população rastreia o regime atual sem descartar regimes anteriores.</span></p><p><span class="s" data-s="b3-p2-s0">Vazamento (leakage) é prevenido por construção: uma janela é prevista antes que seus rótulos sejam revelados, entra no pool de treinamento apenas na geração seguinte, e o bloco de validação nunca sobrepõe a janela de teste.</span> <span class="s" data-s="b3-p2-s1">Esse protocolo garante que o modelo não veja o futuro durante o treinamento ou a seleção.</span></p>        <h2><span class="s" data-s="b4-h">Pipeline de deployment: servidor e borda</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Um algoritmo de busca neuroevolutiva online se desdobra em duas cargas de trabalho.</span> <span class="s" data-s="b4-p0-s1">A busca paralela e cara roda em um serviço de nuvem ou estação de trabalho (o host).</span> <span class="s" data-s="b4-p0-s2">A previsão, barata porque as redes evoluídas são pequenas, roda em um dispositivo de borda (o endpoint).</span> <span class="s" data-s="b4-p0-s3">A cada geração o host envia os genomas campeões via TCP/IP para um Raspberry Pi, que prevê conforme as features de cada dia chegam e continua prevendo a partir dos últimos genomas recebidos caso o host fique indisponível.</span></p><p><span class="s" data-s="b4-p1-s0">O Pi é um alvo restrito: inferência que atende à cadência diária lá atende em qualquer hardware que um praticante possua.</span> <span class="s" data-s="b4-p1-s1">O paper usa um Raspberry Pi 4B de 4 GB rodando Raspberry Pi OS de 64 bits, com NumPy e PyTorch compilados para ARM.</span> <span class="s" data-s="b4-p1-s2">O host roda Ubuntu 22.04 com 128 GB de RAM e duas GPUs NVIDIA RTX 3090.</span> <span class="s" data-s="b4-p1-s3">A busca ONE-NAS no host usa 48 workers (threads), então uma geração processa 48 genomas em paralelo.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b5-t">Duas formas de ler a população</span></h3>
+          <p><span class="s" data-s="b5-c-s0">Trabalhos anteriores de ONE-NAS usavam o melhor genoma global (single champion) para prever.</span> <span class="s" data-s="b5-c-s1">Este paper mostra que um ensemble rank-mean dos campeões de todas as ilhas (island-champion ensemble) é muito melhor: +27,5% de retorno líquido contra +4,5% do campeão único, uma diferença de +23 pontos percentuais (t=18,2) sem custo adicional de busca.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b6-h">Configuração experimental: dados e baselines</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Os autores usam dados CRSP (Center for Research in Security Prices) de ações de mid-cap dos EUA.</span> <span class="s" data-s="b6-p0-s1">Quatro painéis V1–V4 são construídos, cada um com 50 ações selecionadas por capitalização de mercado em 2021.</span> <span class="s" data-s="b6-p0-s2">O span de tuning vai de 2016 a 2019 (disjunto da avaliação); o span de avaliação vai de 2022 a 2024.</span> <span class="s" data-s="b6-p0-s3">Cada janela tem W=20 dias de negociação, o bloco de validação tem V=10 janelas, e subsequências de treinamento têm L=60 dias.</span></p><p><span class="s" data-s="b6-p1-s0">Os baselines são: LSTM online (atualizado a cada janela com Adam), GRU online (idem), LSTM periódico (retreinado mensalmente do zero) e um autoregressivo online (AR).</span> <span class="s" data-s="b6-p1-s1">Todos usam a mesma regra de negociação Overlapping: a cada dia, compra as 10 ações de maior predição e vende as 10 de menor, mantendo posições até a próxima rebalanceamento.</span> <span class="s" data-s="b6-p1-s2">Custos de transação são medidos e descontados: 0,1% por lado (compra ou venda), então 0,2% por round-trip.</span></p><p><span class="s" data-s="b6-p2-s0">Hiperparâmetros do ONE-NAS foram selecionados no span de tuning.</span> <span class="s" data-s="b6-p2-s1">O número de ilhas N foi fixado em 40 para os experimentos principais, com ablações em N=20 e N=60.</span> <span class="s" data-s="b6-p2-s2">Cada configuração roda com 10 seeds aleatórias por painel, totalizando 40 células (painel, seed) para ONE-NAS e entre 40 e 48 células para os baselines.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.10038/figure2.webp" alt="Custo computacional no Raspberry Pi por passagem: tempo (ms) e energia (mJ) em eixos log. O campeão único processa 50 ações em 24,6 ms; o ensemble de 40 ilhas em 556 ms. Ambos ficam muito abaixo do ciclo diário de decisão. Energia cresce com o tamanho das redes evoluídas." loading="lazy">
+          <figcaption>
+            Custo computacional no Raspberry Pi por passagem: tempo (ms) e energia (mJ) em eixos log. O campeão único processa 50 ações em 24,6 ms; o ensemble de 40 ilhas em 556 ms. Ambos ficam muito abaixo do ciclo diário de decisão. Energia cresce com o tamanho das redes evoluídas.
+            <span class="source">Figura 2 do paper · Chang et al., arXiv:2610.10038</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Resultados: inferência no dispositivo é viável</span></h2>
+<p><span class="s" data-s="b8-p0-s0">A Figura 2 mostra tempo e energia por passagem para o campeão único e para o ensemble de 40 campeões de ilhas, medidos no Raspberry Pi 4B com um sensor INA219.</span> <span class="s" data-s="b8-p0-s1">Uma passagem sobre a janela de 50 ações leva 24,6 ms para o campeão único, e 88% de sua energia é o consumo ocioso da placa, então nessa escala o tempo de atividade domina o custo de computação.</span> <span class="s" data-s="b8-p0-s2">O ensemble roda 39× os pesos em 23× o tempo (556 ms por passagem) e é mais preciso: seu MSE de 0,975 supera o 1,031 do campeão único e a média de seus próprios membros.</span></p><p><span class="s" data-s="b8-p1-s0">Ambas as opções permanecem muito dentro de um ciclo de decisão diário em uma placa de US$ 50; a escolha entre elas é um trade-off precisão–energia, não um de viabilidade.</span> <span class="s" data-s="b8-p1-s1">Conforme as redes evoluídas crescem ao longo da campanha, tempo e energia crescem com elas enquanto a potência da placa permanece constante.</span> <span class="s" data-s="b8-p1-s2">O tamanho que a busca alcança governa ambos: controle de tamanho é também controle de energia.</span></p>        <h2><span class="s" data-s="b9-h">Retorno líquido: ensemble supera baselines neurais</span></h2>
+<p><span class="s" data-s="b9-p0-s0">A Tabela 1 mostra retorno líquido por ano de negociação, média sobre V1–V4 e seeds.</span> <span class="s" data-s="b9-p0-s1">O ensemble de 40 ilhas retorna +27,5% no período 2022–2024, contra +11,3% para LSTM online, +11,7% para GRU online e +14,8% para LSTM periódico (retreinado mensalmente).</span> <span class="s" data-s="b9-p0-s2">A margem pareada é de +12,7 a +16,2 pontos percentuais com t &gt; 6,5 sobre 40 células compartilhadas.</span> <span class="s" data-s="b9-p0-s3">O campeão único retorna apenas +4,5%, ficando atrás de todos os baselines neurais.</span></p><p><span class="s" data-s="b9-p1-s0">A Figura 3 mostra caminhos cumulativos de retorno líquido.</span> <span class="s" data-s="b9-p1-s1">O ensemble ONE-NAS domina os baselines em quase todo o período.</span> <span class="s" data-s="b9-p1-s2">Buy-and-hold igual-peso retorna +7,9%, seguindo a convenção de estudos anteriores (soma das células anuais, não pareado).</span> <span class="s" data-s="b9-p1-s3">O AR online retorna −3,3%, mostrando que métodos lineares simples não capturam a dinâmica cross-sectional.</span></p><p><span class="s" data-s="b9-p2-s0">Ablações de número de ilhas (N=20, 40, 60) mostram que retorno e Sharpe ratio melhoram com mais ilhas até estabilizar em 40–60.</span> <span class="s" data-s="b9-p2-s1">A configuração de 40 ilhas foi fixada no span de tuning.</span> <span class="s" data-s="b9-p2-s2">Aumentar para 60 ilhas traz +2,6 pontos de retorno (+30,1% vs. +27,5%) mas com margem não significativa (t=1,63 sobre células pareadas).</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.10038/figure3.webp" alt="Retorno acumulado líquido 2022–2024. O ensemble ONE-NAS (linha verde) supera LSTM online, GRU online, LSTM periódico e buy-and-hold. O campeão único (não mostrado) retorna apenas +4,5%, ficando atrás de todos os baselines neurais." loading="lazy">
+          <figcaption>
+            Retorno acumulado líquido 2022–2024. O ensemble ONE-NAS (linha verde) supera LSTM online, GRU online, LSTM periódico e buy-and-hold. O campeão único (não mostrado) retorna apenas +4,5%, ficando atrás de todos os baselines neurais.
+            <span class="source">Figura 3 do paper · Chang et al., arXiv:2610.10038</span>
+          </figcaption>
+        </figure>
+        <aside class="callout">
+          <h3><span class="s" data-s="b11-t">Por que o ensemble funciona melhor?</span></h3>
+          <p><span class="s" data-s="b11-c-s0">Cada ilha evolui de forma independente e se torna distinta ao longo do tempo.</span> <span class="s" data-s="b11-c-s1">O ensemble rank-mean combina previsões de 40 campeões diversos, capturando diferentes padrões no espaço de features.</span> <span class="s" data-s="b11-c-s2">O campeão único, mesmo sendo o melhor global, representa apenas uma trajetória evolutiva e é mais suscetível a overfitting no bloco de validação.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b12-h">Decomposição do retorno: onde vem o ganho?</span></h2>
+<p><span class="s" data-s="b12-p0-s0">Os autores decompõem o retorno em quatro componentes: seleção de ações (stock-picking), timing de mercado, custos de transação e exposição a fatores.</span> <span class="s" data-s="b12-p0-s1">A seleção de ações contribui +30,4% para o ensemble ONE-NAS, contra +13,2 a +16,8% para os baselines neurais.</span> <span class="s" data-s="b12-p0-s2">Timing de mercado (variação no valor absoluto da carteira) é pequeno e similar entre os métodos.</span></p><p><span class="s" data-s="b12-p1-s0">Custos de transação realizados são −2,9% para o ensemble, contra −1,9 a −2,0% para os baselines.</span> <span class="s" data-s="b12-p1-s1">O ensemble negocia ligeiramente mais porque rebalanceia com base em previsões que mudam mais entre dias.</span> <span class="s" data-s="b12-p1-s2">Exposição a fatores Fama-French (mercado, tamanho, valor, momentum) é neutra: regressões dos retornos diários contra os fatores mostram alfas positivos e significativos para ONE-NAS (+9,2 bps/dia, t=3,0) e não significativos para os baselines.</span></p><p><span class="s" data-s="b12-p2-s0">O ganho do ensemble vem principalmente de melhor seleção de ações, não de timing ou de carregar fatores conhecidos.</span> <span class="s" data-s="b12-p2-s1">A capacidade de adaptar arquitetura e pesos online permite que o modelo capture padrões cross-sectional que mudam com o regime de mercado.</span></p>        <h2><span class="s" data-s="b13-h">Robustez da regra de negociação e custos</span></h2>
+<p><span class="s" data-s="b13-p0-s0">Os autores testam três regras de negociação: Overlapping (rebalanceia diariamente as 10 melhores e 10 piores), Non-overlapping (rebalanceia apenas quando a janela fecha, a cada 20 dias) e Top-bottom (mantém posições até que uma ação saia do top-10 ou bottom-10).</span> <span class="s" data-s="b13-p0-s1">Overlapping retorna +27,5%, Non-overlapping +25,8% e Top-bottom +26,9%.</span> <span class="s" data-s="b13-p0-s2">A diferença não é significativa (p &gt; 0,05), mostrando que o resultado é robusto à escolha da regra.</span></p><p><span class="s" data-s="b13-p1-s0">Sensibilidade a custos de transação: com custos variando de 0% a 0,3% por lado, o retorno do ensemble cai de +30,4% (sem custos) para +24,6% (0,3% por lado), mas permanece acima dos baselines em todos os níveis testados.</span> <span class="s" data-s="b13-p1-s1">Com custos de 0,2% por lado, o ensemble ainda retorna +27,5% contra +11 a +15% dos baselines.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.10038/figure4.webp" alt="Impacto do número de ilhas no retorno líquido e Sharpe ratio (2022–2024, 10 seeds × 4 painéis por largura). Esquerda: retorno líquido pooled (média ± erro padrão). Direita: Sharpe, média com banda ±1 desvio-padrão de seed, e a pior seed. Performance estabiliza em 40–60 ilhas." loading="lazy">
+          <figcaption>
+            Impacto do número de ilhas no retorno líquido e Sharpe ratio (2022–2024, 10 seeds × 4 painéis por largura). Esquerda: retorno líquido pooled (média ± erro padrão). Direita: Sharpe, média com banda ±1 desvio-padrão de seed, e a pior seed. Performance estabiliza em 40–60 ilhas.
+            <span class="source">Figura 4 do paper · Chang et al., arXiv:2610.10038</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b15-h">Limitações e escopo do experimento</span></h2>
+<p><span class="s" data-s="b15-p0-s0">O experimento avalia apenas ações de mid-cap dos EUA em um período de três anos (2022–2024).</span> <span class="s" data-s="b15-p0-s1">Não há evidência de que os resultados se generalizem para large-caps, small-caps, mercados internacionais ou períodos mais longos.</span> <span class="s" data-s="b15-p0-s2">O span de avaliação inclui um mercado de baixa (2022) e recuperação (2023–2024), mas não testa crises prolongadas ou mudanças estruturais de regime.</span></p><p><span class="s" data-s="b15-p1-s0">Custos de transação são modelados como 0,1% por lado, uma estimativa razoável para mid-caps líquidas em corretoras de varejo nos EUA, mas custos reais variam com liquidez, horário de negociação e tamanho da ordem.</span> <span class="s" data-s="b15-p1-s1">O paper não inclui slippage (diferença entre preço esperado e executado) nem impacto de mercado de ordens grandes.</span></p><p><span class="s" data-s="b15-p2-s0">O deployment no Raspberry Pi é um piloto: não há camada de execução conectada a uma corretora, então os custos são simulados, não medidos em negociações reais.</span> <span class="s" data-s="b15-p2-s1">Os autores afirmam que trabalho futuro inclui adicionar uma camada de execução, medir custos realizados ao vivo e ter usuários na indústria rodarem o pipeline e darem feedback.</span></p>        <h2><span class="s" data-s="b16-h">Orientações operacionais para o piloto</span></h2>
+<p><span class="s" data-s="b16-p0-s0">Os autores fornecem orientações para quem quiser reproduzir o piloto.</span> <span class="s" data-s="b16-p0-s1">O host precisa de GPUs para rodar a busca ONE-NAS em tempo razoável; duas RTX 3090 processam uma geração (48 genomas em paralelo) em cerca de 20 minutos.</span> <span class="s" data-s="b16-p0-s2">O Raspberry Pi 4B de 4 GB é suficiente para inferência, mas modelos maiores (N=60 ilhas) podem exigir 8 GB.</span></p><p><span class="s" data-s="b16-p1-s0">A comunicação host-endpoint via TCP/IP é assíncrona: o Pi continua prevendo com os últimos genomas recebidos caso o host fique indisponível, então falhas temporárias do host não interrompem a negociação.</span> <span class="s" data-s="b16-p1-s1">O código-fonte não está disponível publicamente no momento da publicação, mas os autores indicam que pretendem disponibilizá-lo.</span></p><p><span class="s" data-s="b16-p2-s0">Hiperparâmetros foram fixados no span de tuning 2016–2019.</span> <span class="s" data-s="b16-p2-s1">Não há garantia de que esses valores sejam ótimos para outros mercados ou períodos.</span> <span class="s" data-s="b16-p2-s2">Retuning pode ser necessário ao aplicar o método a novos contextos.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b17-t">O que este paper NÃO mostra</span></h3>
+          <p><span class="s" data-s="b17-c-s0">Não mostra que o método funciona em large-caps, small-caps ou mercados fora dos EUA.</span> <span class="s" data-s="b17-c-s1">Não testa períodos mais longos que três anos.</span> <span class="s" data-s="b17-c-s2">Não mede custos reais de execução, apenas simula.</span> <span class="s" data-s="b17-c-s3">Não compara com modelos state-of-the-art como MASTER ou StockMixer.</span> <span class="s" data-s="b17-c-s4">Não fornece código aberto ainda.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b18-h">Por que isso importa</span></h2>
+<p><span class="s" data-s="b18-p0-s0">Este paper mostra que busca evolutiva online de arquiteturas neurais pode ser deployada em hardware de borda barato e entregar retornos superiores a baselines neurais estabelecidos.</span> <span class="s" data-s="b18-p0-s1">A contribuição não é apenas o retorno líquido (+27,5%), mas a demonstração de que inferência rápida (556 ms para 50 ações) e eficiente em energia é viável em um Raspberry Pi de US$ 50.</span></p><p><span class="s" data-s="b18-p1-s0">A descoberta de que o ensemble de campeões de ilhas supera amplamente o campeão único (+23 pontos percentuais) é importante para trabalhos futuros em ONE-NAS: a população inteira carrega informação útil, não apenas o melhor indivíduo.</span> <span class="s" data-s="b18-p1-s1">Isso sugere que diversidade evolutiva, mantida pelas ilhas, é um recurso valioso que deve ser explorado na inferência, não apenas na busca.</span></p><p><span class="s" data-s="b18-p2-s0">O pipeline host-endpoint é uma arquitetura prática para modelos que evoluem continuamente: a busca cara roda onde há recursos, a inferência leve roda onde os dados são produzidos, e a comunicação assíncrona tolera falhas temporárias.</span> <span class="s" data-s="b18-p2-s1">Essa separação pode ser útil além de finanças, em qualquer domínio onde modelos precisem se adaptar online a streams não-estacionários.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">ONE-NAS evolui arquiteturas e pesos de RNNs online, sem fase de pré-treinamento. Um ensemble de 40 campeões de ilhas retorna +27,5% líquido em ações mid-cap 2022–2024, contra +11 a +15% de baselines LSTM.</span></li><li><span class="s" data-s="k1">Inferência no Raspberry Pi 4B processa 50 ações em 556 ms (ensemble) ou 24,6 ms (campeão único), muito abaixo do ciclo diário. Custo de energia cresce com o tamanho das redes evoluídas, não com a potência da placa.</span></li><li><span class="s" data-s="k2">O ensemble de campeões de ilhas supera o campeão único em +23 pontos percentuais (t=18,2). Diversidade evolutiva entre ilhas é um recurso valioso que deve ser explorado na inferência, não apenas na busca.</span></li><li><span class="s" data-s="k3">Experimento limitado a mid-caps dos EUA, 2022–2024, custos simulados. Não testa large-caps, mercados internacionais, períodos longos ou execução real. Deployment é um piloto, não um sistema de produção completo.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.10038" rel="noopener">Evolve on the Host, Predict on the Edge: Deploying Online Neuroevolutionary Architecture Search for Cross-sectional Stock Return Prediction</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.10038" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

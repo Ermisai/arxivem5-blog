@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CodeMidas: como transformar código-fonte em ambientes de treinamento para agentes de programação com reinforcement learning — arXiv em 5</title>
+<meta name="description" content="Pesquisadores da Xiaomi, Peking University e University of Hong Kong criaram um pipeline que extrai tarefas de treino diretamente de código implementado, sem depender de issues ou commits, e usaram 5.545 tarefas para melhorar um agente em cinco benchmarks diferentes.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CodeMidas: como transformar código-fonte em ambientes de treinamento para agentes de programação com reinforcement learning">
+<meta property="og:description" content="Pesquisadores da Xiaomi, Peking University e University of Hong Kong criaram um pipeline que extrai tarefas de treino diretamente de código implementado, sem depender de issues ou commits, e usaram 5.545 tarefas para melhorar um agente em cinco benchmarks diferentes.">
+<meta property="og:image" content="../../assets/papers/2609.22068/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Agentes</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2609.22068" rel="noopener">arXiv:2609.22068</a>
+    </div>
+    <h1><span class="s" data-s="t">CodeMidas: como transformar código-fonte em ambientes de treinamento para agentes de programação com reinforcement learning</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Pesquisadores da Xiaomi, Peking University e University of Hong Kong criaram um pipeline que extrai tarefas de treino diretamente de código implementado, sem depender de issues ou commits, e usaram 5.545 tarefas para melhorar um agente em cinco benchmarks diferentes.</span></p>
+    <p class="byline">
+      <span>Ye et al.</span>
+      <span>11 min de leitura</span>
+<span>18/09/2026</span>    </p>
+    <div class="listen" data-article="2609.22068" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=6J3ptzFH2VY" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema: de onde vêm as tarefas de treino para agentes de código?</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Treinar agentes de programação com reinforcement learning exige dois ingredientes: tarefas diversas e verificadores confiáveis.</span> <span class="s" data-s="b0-p0-s1">A diversidade ajuda o modelo a generalizar; os verificadores garantem que o agente receba recompensa apenas quando resolve o problema de verdade.</span> <span class="s" data-s="b0-p0-s2">Até agora, a maioria dos pipelines extrai essas tarefas de artefatos de desenvolvimento: issues do GitHub, pull requests, commits ou testes já escritos.</span> <span class="s" data-s="b0-p0-s3">O problema é que essa abordagem limita a quantidade e a variedade de tarefas ao que foi explicitamente documentado ou testado.</span></p><p><span class="s" data-s="b0-p1-s0">Repositórios open-source contêm milhares de funções e classes implementadas, mas nem todas têm uma issue associada ou um teste unitário.</span> <span class="s" data-s="b0-p1-s1">Se você pudesse olhar para uma função pronta e perguntar &#39;o que ela faz?&#39;, poderia transformar essa funcionalidade em uma tarefa de treino: remova a implementação, descreva o comportamento esperado, construa testes e peça ao agente para reescrevê-la.</span> <span class="s" data-s="b0-p1-s2">A ideia é simples, mas executá-la de forma confiável é difícil.</span></p><p><span class="s" data-s="b0-p2-s0">O CodeMidas, desenvolvido por uma equipe da Xiaomi, Peking University e University of Hong Kong, faz exatamente isso.</span> <span class="s" data-s="b0-p2-s1">O pipeline recebe código-fonte como única entrada específica da tarefa e produz ambientes executáveis de RL: enunciado, ambiente de desenvolvimento containerizado e testes automáticos.</span> <span class="s" data-s="b0-p2-s2">O resultado é um dataset de 5.545 tarefas de treino extraídas de 3.185 repositórios, cobrindo 23 linguagens de programação e 15 domínios técnicos.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.22068/figure1.webp" alt="O pipeline do CodeMidas tem quatro etapas: desenho da tarefa, construção de testes, checagem de consistência de execução e filtragem pós-rollout. A pirâmide mostra quantas tarefas sobrevivem a cada filtro, de 22.575 candidatas iniciais até 5.545 de alta qualidade." loading="lazy">
+          <figcaption>
+            O pipeline do CodeMidas tem quatro etapas: desenho da tarefa, construção de testes, checagem de consistência de execução e filtragem pós-rollout. A pirâmide mostra quantas tarefas sobrevivem a cada filtro, de 22.575 candidatas iniciais até 5.545 de alta qualidade.
+            <span class="source">Figura 1 do paper · Ye et al., arXiv:2609.22068</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">A ideia: usar código implementado como referência e ponto de partida</span></h2>
+<p><span class="s" data-s="b2-p0-s0">A intuição central é que código já implementado carrega informação suficiente para gerar uma tarefa de treino.</span> <span class="s" data-s="b2-p0-s1">A interface pública de uma função ou classe define o que ela deve fazer; executar o código original fornece exemplos de comportamento esperado; e o repositório ao redor pode ser adaptado em um ambiente de desenvolvimento que preserva estrutura e dependências reais.</span></p><p><span class="s" data-s="b2-p1-s0">Mas transformar isso em tarefa de RL exige cuidado.</span> <span class="s" data-s="b2-p1-s1">O enunciado precisa descrever o comportamento observável sem revelar detalhes de implementação.</span> <span class="s" data-s="b2-p1-s2">Os testes precisam aceitar soluções corretas alternativas, não apenas a implementação original.</span> <span class="s" data-s="b2-p1-s3">E o ambiente precisa ser executável de forma isolada, sem depender de serviços externos ou configurações específicas de máquina.</span></p><p><span class="s" data-s="b2-p2-s0">O CodeMidas resolve esses desafios com um pipeline agêntico: modelos de linguagem exploram o código, formulam especificações comportamentais, constroem testes baseados em execução do código original e validam os ambientes através de múltiplos rollouts de solução.</span> <span class="s" data-s="b2-p2-s1">Cada etapa usa compute agêntico para tomar decisões que seriam difíceis de codificar em regras fixas.</span></p>        <h2><span class="s" data-s="b3-h">Como funciona: quatro módulos de construção e filtragem</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O pipeline começa com 22.575 candidatos a tarefa extraídos de repositórios open-source.</span> <span class="s" data-s="b3-p0-s1">O primeiro módulo, task design, identifica funcionalidades implementadas, formula enunciados comportamentais e adapta o repositório em um ponto de partida onde a funcionalidade-alvo ainda precisa ser implementada.</span> <span class="s" data-s="b3-p0-s2">Agentes exploram o código para entender o que a função faz, quais são suas entradas e saídas, e como ela se encaixa no resto do sistema.</span></p><p><span class="s" data-s="b3-p1-s0">O segundo módulo, test construction, constrói testes informados pela execução do código original.</span> <span class="s" data-s="b3-p1-s1">O pipeline executa a implementação de referência com entradas geradas, captura as saídas e usa esses pares entrada-saída para construir asserções.</span> <span class="s" data-s="b3-p1-s2">Isso garante que os testes reflitam o comportamento real, não uma interpretação equivocada do enunciado.</span></p><p><span class="s" data-s="b3-p2-s0">O terceiro módulo, execution consistency, prepara o ambiente e verifica consistência.</span> <span class="s" data-s="b3-p2-s1">Cada tarefa é testada em duas configurações: com a implementação removida (deve falhar) e com a implementação original (deve passar).</span> <span class="s" data-s="b3-p2-s2">Se a tarefa não falha quando vazia ou não passa com o código original, ela é descartada.</span> <span class="s" data-s="b3-p2-s3">Esse filtro elimina testes frágeis, dependências quebradas e especificações ambíguas.</span></p><p><span class="s" data-s="b3-p3-s0">O quarto módulo, post-rollout filtering, usa rollouts de agentes para detectar problemas que só aparecem em uso.</span> <span class="s" data-s="b3-p3-s1">Rollouts adversariais procuram vazamento: soluções que passam nos testes sem implementar a funcionalidade, explorando brechas como código compilado ou cache.</span> <span class="s" data-s="b3-p3-s2">Solution audits revisam vereditos do verificador: um agente revisor compara a solução submetida, os resultados dos testes e o enunciado da tarefa para detectar falsos positivos e falsos negativos.</span> <span class="s" data-s="b3-p3-s3">Por fim, rollout outcome filtering mantém apenas tarefas onde alguns rollouts passam e outros falham, garantindo que a tarefa não é nem trivial nem impossível.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b4-t">Filtragem agressiva: de 22 mil para 5 mil tarefas</span></h3>
+          <p><span class="s" data-s="b4-c-s0">O CodeMidas descarta cerca de 75% dos candidatos iniciais.</span> <span class="s" data-s="b4-c-s1">Execution consistency elimina tarefas com dependências quebradas ou testes inconsistentes.</span> <span class="s" data-s="b4-c-s2">Post-rollout filtering remove tarefas com vazamento, verificadores incorretos ou taxa de sucesso extrema.</span> <span class="s" data-s="b4-c-s3">Essa filtragem agressiva é intencional: melhor ter menos tarefas confiáveis do que muitas tarefas ruidosas.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b5-h">O dataset: 5.545 tarefas em 23 linguagens e 15 domínios</span></h2>
+<p><span class="s" data-s="b5-p0-s0">O dataset final contém 5.545 tarefas de treino extraídas de 3.185 repositórios open-source.</span> <span class="s" data-s="b5-p0-s1">As tarefas cobrem 23 linguagens de programação, com Python (1.676 tarefas, 30,2%), TypeScript (1.419, 25,6%) e Go (1.032, 18,6%) sendo as mais representadas.</span> <span class="s" data-s="b5-p0-s2">As dez linguagens mais frequentes cobrem 98,2% do dataset.</span></p><p><span class="s" data-s="b5-p1-s0">As tarefas também se distribuem por 15 domínios técnicos: web development, data processing, CLI tools, APIs, testing utilities, entre outros.</span> <span class="s" data-s="b5-p1-s1">Cada tarefa consiste em um enunciado, um ambiente de desenvolvimento containerizado e um conjunto de testes executáveis.</span> <span class="s" data-s="b5-p1-s2">O ambiente preserva a estrutura real do repositório, incluindo arquivos de configuração, dependências e organização de diretórios.</span></p><p><span class="s" data-s="b5-p2-s0">Os autores verificaram que o conjunto de treino é disjunto de todos os benchmarks de avaliação usados no paper: SWE-bench Pro, DeepSWE, ProgramBench, RepoZero C2Rust e Terminal-Bench v2.1.</span> <span class="s" data-s="b5-p2-s1">Eles também separaram 200 tarefas do CodeMidas como conjunto de validação (CodeMidas Val), usado para acompanhar a dinâmica de aprendizado durante o treino.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.22068/figure2.webp" alt="Distribuição de linguagens no dataset de treino. Python, TypeScript e Go dominam, mas o conjunto cobre 23 linguagens. As dez mais frequentes representam 98,2% das 5.545 tarefas." loading="lazy">
+          <figcaption>
+            Distribuição de linguagens no dataset de treino. Python, TypeScript e Go dominam, mas o conjunto cobre 23 linguagens. As dez mais frequentes representam 98,2% das 5.545 tarefas.
+            <span class="source">Figura 2 do paper · Ye et al., arXiv:2609.22068</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Treinamento: GRPO com recompensas de execução binária</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Os autores treinaram o MiMo-V2.5, um modelo da Xiaomi, nas 5.545 tarefas do CodeMidas usando GRPO (Group Relative Policy Optimization), um algoritmo de reinforcement learning.</span> <span class="s" data-s="b7-p0-s1">A recompensa é binária: +1 se a solução passa em todos os testes, 0 caso contrário.</span> <span class="s" data-s="b7-p0-s2">Não há reward model aprendido nem verificador neural; a recompensa vem diretamente da execução dos testes.</span></p><p><span class="s" data-s="b7-p1-s0">O treino usou batch size 32 e 32 rollouts por tarefa.</span> <span class="s" data-s="b7-p1-s1">Cada rollout consiste em uma tentativa completa do agente de resolver a tarefa: ler o enunciado, explorar o repositório, escrever código, executar testes e iterar até submeter uma solução final.</span> <span class="s" data-s="b7-p1-s2">O agente tem acesso a ferramentas de navegação de código, edição de arquivos e execução de comandos no terminal.</span></p><p><span class="s" data-s="b7-p2-s0">Os autores avaliaram o modelo inicial (antes do RL) e checkpoints intermediários em cinco benchmarks externos e no CodeMidas Val.</span> <span class="s" data-s="b7-p2-s1">Todos os benchmarks usam configurações oficiais e conjuntos de tarefas públicos.</span> <span class="s" data-s="b7-p2-s2">Para ProgramBench, eles reportam Almost Solved (porcentagem de tarefas que passam em pelo menos 95% dos testes); para os outros, reportam pass rate (porcentagem de tarefas resolvidas completamente).</span></p>        <h2><span class="s" data-s="b8-h">Resultados: melhorias em todos os cinco benchmarks</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Treinar no CodeMidas melhorou a performance do MiMo-V2.5 em todos os cinco benchmarks externos.</span> <span class="s" data-s="b8-p0-s1">No DeepSWE v1.1, um benchmark de reparo de issues reais, a pass rate subiu de 10,0% para 21,7%, um ganho de 11,7 pontos percentuais.</span> <span class="s" data-s="b8-p0-s2">No ProgramBench, que mede construção de programas completos a partir de especificações, o Almost Solved score subiu de 4,5% para 21,5%, um ganho de 17 pontos.</span></p><p><span class="s" data-s="b8-p1-s0">No Terminal-Bench v2.1, que avalia trabalho em terminal (navegação, execução de comandos, scripts), a pass rate subiu de 63,7% para 72,2%, um ganho de 8,5 pontos.</span> <span class="s" data-s="b8-p1-s1">No SWE-bench Pro, a pass rate subiu de 50,3% para 54,4% (+4,1 pontos).</span> <span class="s" data-s="b8-p1-s2">No RepoZero C2Rust, que mede tradução de código C para Rust, a pass rate subiu de 40,5% para 51,8% (+11,3 pontos).</span></p><p><span class="s" data-s="b8-p2-s0">Esses ganhos cobrem tipos diversos de trabalho de software: reparo de repositórios, tradução de código, construção de programas completos e trabalho em terminal.</span> <span class="s" data-s="b8-p2-s1">Isso sugere que tarefas derivadas de funcionalidades implementadas ajudam o agente a generalizar para contextos variados, não apenas para tarefas similares às de treino.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.22068/figure5.webp" alt="Ganhos de performance em cinco benchmarks externos após treinar com CodeMidas. Barras cinzas mostram o modelo inicial; barras douradas mostram o modelo após RL. Todos os benchmarks melhoram, com destaque para ProgramBench (+17 pontos) e DeepSWE (+11,7 pontos)." loading="lazy">
+          <figcaption>
+            Ganhos de performance em cinco benchmarks externos após treinar com CodeMidas. Barras cinzas mostram o modelo inicial; barras douradas mostram o modelo após RL. Todos os benchmarks melhoram, com destaque para ProgramBench (+17 pontos) e DeepSWE (+11,7 pontos).
+            <span class="source">Figura 5 do paper · Ye et al., arXiv:2609.22068</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">Dinâmica de aprendizado: pass rate sobe junto com comprimento das trajetórias</span></h2>
+<p><span class="s" data-s="b10-p0-s0">No CodeMidas Val, a pass rate subiu de 35,0% (modelo inicial) para 44,7% durante o treino, um ganho de cerca de 10 pontos percentuais.</span> <span class="s" data-s="b10-p0-s1">A curva de aprendizado mostra que o ganho se estabiliza após o step 40, mantendo-se consistentemente acima da baseline.</span></p><p><span class="s" data-s="b10-p1-s0">Junto com a melhoria na pass rate, o comprimento médio das trajetórias aumentou de cerca de 100 mil tokens para mais de 200 mil tokens.</span> <span class="s" data-s="b10-p1-s1">Isso indica que o agente está usando mais do orçamento de interação disponível: explorando mais arquivos, executando mais comandos e iterando mais vezes antes de submeter a solução final.</span></p><p><span class="s" data-s="b10-p2-s0">Esse padrão sugere que o RL não está apenas ensinando o agente a acertar respostas memorizadas, mas a adotar comportamentos mais exploratórios e iterativos.</span> <span class="s" data-s="b10-p2-s1">Os autores investigaram isso em mais detalhe através de análise de trajetórias.</span></p>        <h2><span class="s" data-s="b11-h">Análise: escala e qualidade das tarefas importam</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Para entender o impacto da escala e da qualidade das tarefas, os autores treinaram modelos em subconjuntos do dataset.</span> <span class="s" data-s="b11-p0-s1">Eles compararam três configurações de alta qualidade (1k, 3k e 5k tarefas, todas passando pelos quatro módulos de filtragem) com uma configuração vanilla de 8k tarefas (amostradas antes da filtragem e limpeza).</span></p><p><span class="s" data-s="b11-p1-s0">Os resultados mostram que aumentar o número de tarefas de alta qualidade melhora a performance: 1k &lt; 3k &lt; 5k.</span> <span class="s" data-s="b11-p1-s1">Mais importante, o conjunto de 5k tarefas filtradas supera o conjunto de 8k tarefas vanilla, mesmo sendo menor.</span> <span class="s" data-s="b11-p1-s2">Isso confirma que a filtragem agressiva do CodeMidas não apenas remove ruído, mas melhora a eficiência do treino.</span></p><p><span class="s" data-s="b11-p2-s0">A análise também mostra que a qualidade das tarefas importa mais do que a quantidade bruta.</span> <span class="s" data-s="b11-p2-s1">Tarefas com testes inconsistentes, vazamento ou verificadores incorretos prejudicam o aprendizado, mesmo quando o dataset é maior.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b12-t">Menos pode ser mais: 5k filtradas superam 8k brutas</span></h3>
+          <p><span class="s" data-s="b12-c-s0">O dataset de 5.545 tarefas filtradas supera um conjunto de aproximadamente 8 mil tarefas não filtradas.</span> <span class="s" data-s="b12-c-s1">Isso mostra que a filtragem agressiva — execution consistency, detecção de vazamento, auditorias de solução e filtragem por taxa de sucesso — não apenas remove ruído, mas torna o treino mais eficiente.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b13-h">Mudanças de comportamento: mais exploração e mais auto-verificação</span></h2>
+<p><span class="s" data-s="b13-p0-s0">Os autores analisaram como o comportamento do agente muda durante o treino, examinando trajetórias no CodeMidas Val.</span> <span class="s" data-s="b13-p0-s1">Eles mediram dois aspectos: exploração do repositório (quantos arquivos únicos o agente lê) e auto-verificação (quantas vezes o agente escreve e executa seus próprios testes antes de submeter a solução).</span></p><p><span class="s" data-s="b13-p1-s0">Após o treino com RL, o agente explora mais arquivos do repositório: a mediana de arquivos únicos lidos por tarefa aumenta.</span> <span class="s" data-s="b13-p1-s1">Isso sugere que o agente aprendeu a buscar contexto relevante no código existente, em vez de tentar resolver a tarefa apenas com base no enunciado.</span></p><p><span class="s" data-s="b13-p2-s0">O agente também realiza mais auto-verificação: escreve e executa testes próprios com mais frequência.</span> <span class="s" data-s="b13-p2-s1">Mais importante, trajetórias que incluem auto-verificação têm taxa de sucesso significativamente maior do que trajetórias sem auto-verificação.</span> <span class="s" data-s="b13-p2-s2">Isso indica que o comportamento de testar a própria solução antes de submetê-la está associado a melhores resultados.</span></p><p><span class="s" data-s="b13-p3-s0">Os autores verificaram que essas mudanças de comportamento também aparecem em tarefas externas, não apenas no CodeMidas Val.</span> <span class="s" data-s="b13-p3-s1">Isso sugere que o agente generalizou os comportamentos aprendidos — exploração e auto-verificação — para contextos novos.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.22068/figure9.webp" alt="Exemplo de rollout mostrando exploração, escrita de código e auto-verificação. O agente lê o código que chama a função, implementa filtragem de arquivos ocultos e testa a solução com diferentes configurações de flag antes de submeter." loading="lazy">
+          <figcaption>
+            Exemplo de rollout mostrando exploração, escrita de código e auto-verificação. O agente lê o código que chama a função, implementa filtragem de arquivos ocultos e testa a solução com diferentes configurações de flag antes de submeter.
+            <span class="source">Figura 9 do paper · Ye et al., arXiv:2609.22068</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b15-h">Limitações e o que o paper não mostra</span></h2>
+<p><span class="s" data-s="b15-p0-s0">O CodeMidas tem limitações importantes.</span> <span class="s" data-s="b15-p0-s1">Primeiro, o pipeline depende de código executável: se o repositório não compila ou tem dependências quebradas, a tarefa é descartada.</span> <span class="s" data-s="b15-p0-s2">Isso exclui código legado, projetos abandonados e repositórios com configurações complexas.</span> <span class="s" data-s="b15-p0-s3">A taxa de retenção de 24,5% (5.545 de 22.575 candidatos) mostra que a maioria dos candidatos não sobrevive aos filtros.</span></p><p><span class="s" data-s="b15-p1-s0">Segundo, o paper não compara o CodeMidas diretamente com outros métodos de construção de ambientes de RL.</span> <span class="s" data-s="b15-p1-s1">Não sabemos se o ganho vem da escala (5.545 tarefas), da diversidade (23 linguagens, 15 domínios) ou da qualidade dos verificadores.</span> <span class="s" data-s="b15-p1-s2">Experimentos ablation mostram que qualidade importa, mas não isolam os efeitos de cada módulo de filtragem.</span></p><p><span class="s" data-s="b15-p2-s0">Terceiro, o treino usa apenas o MiMo-V2.5.</span> <span class="s" data-s="b15-p2-s1">Não sabemos se os ganhos se replicam com outros modelos base ou se o CodeMidas favorece arquiteturas ou tamanhos específicos.</span> <span class="s" data-s="b15-p2-s2">Os autores também não reportam custo computacional do pipeline de construção nem do treino de RL.</span></p><p><span class="s" data-s="b15-p3-s0">Quarto, os benchmarks de avaliação são todos em inglês e focados em repositórios open-source.</span> <span class="s" data-s="b15-p3-s1">Não sabemos se o método funciona para código proprietário, documentação em outras línguas ou domínios técnicos não representados no dataset de treino.</span> <span class="s" data-s="b15-p3-s2">A cobertura de 23 linguagens é ampla, mas Python, TypeScript e Go dominam (74% das tarefas).</span></p><p><span class="s" data-s="b15-p4-s0">Por fim, o paper não discute falhas qualitativas.</span> <span class="s" data-s="b15-p4-s1">Não sabemos quais tipos de tarefa o agente ainda erra sistematicamente, nem se há padrões nos erros que sobrevivem aos filtros.</span> <span class="s" data-s="b15-p4-s2">Exemplos de tarefas descartadas e análise de por que foram descartadas ajudariam a entender os limites do método.</span></p>        <h2><span class="s" data-s="b16-h">Por que isso importa</span></h2>
+<p><span class="s" data-s="b16-p0-s0">O CodeMidas mostra que código-fonte implementado pode ser transformado em ambientes de treino de RL em escala, sem depender de issues, commits ou testes pré-existentes.</span> <span class="s" data-s="b16-p0-s1">Isso abre uma fonte muito maior de tarefas de treino: milhões de repositórios open-source contêm funcionalidades implementadas que podem ser convertidas em exercícios de programação.</span></p><p><span class="s" data-s="b16-p1-s0">A abordagem também é mais geral do que métodos baseados em artefatos de desenvolvimento.</span> <span class="s" data-s="b16-p1-s1">Issues e pull requests descrevem mudanças; o CodeMidas descreve funcionalidades completas.</span> <span class="s" data-s="b16-p1-s2">Isso permite treinar agentes em tarefas de construção, não apenas de reparo ou modificação.</span></p><p><span class="s" data-s="b16-p2-s0">Os resultados sugerem que diversidade de tarefas ajuda: treinar em 23 linguagens e 15 domínios melhora performance em benchmarks variados.</span> <span class="s" data-s="b16-p2-s1">Isso é consistente com a intuição de que agentes de código precisam de exposição ampla para generalizar, não apenas de muitos exemplos de um tipo específico de tarefa.</span></p><p><span class="s" data-s="b16-p3-s0">A análise de trajetórias mostra que RL muda comportamentos, não apenas acurácia.</span> <span class="s" data-s="b16-p3-s1">O agente aprende a explorar mais e a se auto-verificar, e esses comportamentos estão associados a maior sucesso.</span> <span class="s" data-s="b16-p3-s2">Isso sugere que métricas de processo — o que o agente faz durante a resolução — podem ser tão importantes quanto métricas de resultado.</span></p><p><span class="s" data-s="b16-p4-s0">O método tem limitações claras: requer código executável, descarta a maioria dos candidatos e ainda não foi testado em larga escala com outros modelos.</span> <span class="s" data-s="b16-p4-s1">Mas demonstra uma direção promissora para escalar dados de treino de RL a partir de código existente, complementando abordagens baseadas em artefatos de desenvolvimento.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">CodeMidas constrói 5.545 tarefas de RL a partir de código implementado, sem depender de issues ou commits, cobrindo 23 linguagens e 15 domínios técnicos.</span></li><li><span class="s" data-s="k1">Treinar MiMo-V2.5 nessas tarefas melhora performance em cinco benchmarks: +11,7% no DeepSWE, +17% no ProgramBench e +8,5% no Terminal-Bench v2.1.</span></li><li><span class="s" data-s="k2">Filtragem agressiva importa: 5.545 tarefas de alta qualidade superam 8 mil tarefas não filtradas, mostrando que qualidade vence quantidade bruta.</span></li><li><span class="s" data-s="k3">Análise de trajetórias revela que o agente aprende a explorar mais o repositório e a se auto-verificar, comportamentos associados a maior taxa de sucesso.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2609.22068" rel="noopener">CodeMidas: Scaling Agentic Coding RL Environments from Code Itself</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2609.22068" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

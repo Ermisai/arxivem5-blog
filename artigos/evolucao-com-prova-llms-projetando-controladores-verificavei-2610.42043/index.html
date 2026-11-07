@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Evolução com Prova: LLMs projetando controladores verificáveis — arXiv em 5</title>
+<meta name="description" content="Um estudo sobre se modelos de linguagem podem otimizar parâmetros de controladores espaciais, gerando certificados matemáticos que garantem segurança antes da seleção.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Evolução com Prova: LLMs projetando controladores verificáveis">
+<meta property="og:description" content="Um estudo sobre se modelos de linguagem podem otimizar parâmetros de controladores espaciais, gerando certificados matemáticos que garantem segurança antes da seleção.">
+<meta property="og:image" content="../../assets/papers/2610.42043/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Robótica</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.42043" rel="noopener">arXiv:2610.42043</a>
+    </div>
+    <h1><span class="s" data-s="t">Evolução com Prova: LLMs projetando controladores verificáveis</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um estudo sobre se modelos de linguagem podem otimizar parâmetros de controladores espaciais, gerando certificados matemáticos que garantem segurança antes da seleção.</span></p>
+    <p class="byline">
+      <span>Jain et al.</span>
+      <span>7 min de leitura</span>
+<span>30/10/2026</span>    </p>
+    <div class="listen" data-article="2610.42043" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=TJhW-xsWZcQ" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Verificação em Controle Espacial</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Em missões espaciais críticas, como acoplagem ou perseguição de alvos manobráveis, a margem para erro é mínima.</span> <span class="s" data-s="b0-p0-s1">Os requisitos de missão não se limitam ao desempenho em simulação; eles exigem garantias formais sobre o comportamento do controlador.</span> <span class="s" data-s="b0-p0-s2">Isso significa que, para cada manobra, é necessário encontrar não apenas uma lei de controle, mas também um certificado matemático que prove que a propriedade desejada (como atingir a tolerância em um tempo limitado) é satisfeita sob um modelo específico do sistema.</span></p><p><span class="s" data-s="b0-p1-s0">Os métodos clássicos de projeto de controle, como LQR, H∞ e controle baseado em Lyapunov, produzem leis explícitas que engenheiros podem inspecionar.</span> <span class="s" data-s="b0-p1-s1">No entanto, escolher a família correta de controladores e seus parâmetros é um problema de otimização complexo.</span> <span class="s" data-s="b0-p1-s2">Uma lei inicial pode não admitir um certificado viável, ou o limite garantido pode ser insuficiente para a missão.</span> <span class="s" data-s="b0-p1-s3">Ajustar os parâmetros do certificado para uma lei fixa pode melhorar o limite, mas mudar a lei pode destruir a validade do certificado.</span> <span class="s" data-s="b0-p1-s4">Portanto, a busca deve ocorrer simultaneamente sobre os parâmetros do controlador e do certificado.</span></p><p><span class="s" data-s="b0-p2-s0">O aprendizado por reforço e as políticas neurais oferecem flexibilidade, mas sua natureza de &#39;caixa preta&#39; dificulta a verificação formal.</span> <span class="s" data-s="b0-p2-s1">Os autores propõem uma abordagem híbrida: usar um Modelo de Linguagem (LLM) apenas na fase de design, como um &#39;proponente&#39; que sugere parâmetros numéricos para famílias de controladores e certificados de forma fixa.</span> <span class="s" data-s="b0-p2-s2">O LLM não escreve código de controle, nem opera durante a execução.</span> <span class="s" data-s="b0-p2-s3">O artefato implantado é a lei de controle e seu certificado, passíveis de revisão humana e verificação computacional.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.42043/figure1.webp" alt="Fluxo do método Proof-Carrying Evolution (PCE): um modelo propõe controladores e certificados, que são verificados antes da seleção. Cada corrida retorna o melhor design certificado, que recebe uma prova exata no Lean." loading="lazy">
+          <figcaption>
+            Fluxo do método Proof-Carrying Evolution (PCE): um modelo propõe controladores e certificados, que são verificados antes da seleção. Cada corrida retorna o melhor design certificado, que recebe uma prova exata no Lean.
+            <span class="source">Figura 1 do paper · Jain et al., arXiv:2610.42043</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">Proof-Carrying Evolution: O Mecanismo</span></h2>
+<p><span class="s" data-s="b2-p0-s0">A abordagem chamada Proof-Carrying Evolution (PCE) adapta o conceito de código portador de prova (proof-carrying code) ao controle.</span> <span class="s" data-s="b2-p0-s1">Em PCE, um &#39;proponente&#39; (o LLM ou um operador clássico) modifica os parâmetros θ de uma lei de controle u = πθ(x) e de uma função de certificado Vθ.</span> <span class="s" data-s="b2-p0-s2">O candidato é o par (controlador, certificado).</span> <span class="s" data-s="b2-p0-s3">Um &#39;verificador&#39; verifica se as condições do certificado são satisfeitas.</span> <span class="s" data-s="b2-p0-s4">Apenas candidatos certificados são selecionados para a próxima geração, garantindo que o resultado final tenha garantias formais.</span></p><p><span class="s" data-s="b2-p1-s0">O loop de busca opera por gerações.</span> <span class="s" data-s="b2-p1-s1">Cada geração consiste em proposta, verificação e seleção.</span> <span class="s" data-s="b2-p1-s2">Os candidatos retidos formam a &#39;elite&#39;.</span> <span class="s" data-s="b2-p1-s3">Em cada geração, o proponente modifica os designs retidos para criar novos candidatos.</span> <span class="s" data-s="b2-p1-s4">Esses candidatos são verificados e pontuados.</span> <span class="s" data-s="b2-p1-s5">Em problemas lineares, a verificação usa aritmética racional exata para testar a positividade definida de formas quadráticas, fornecendo uma testemunha exata (decomposição soma-de-quadrados).</span> <span class="s" data-s="b2-p1-s6">Isso permite verificar o certificado em milissegundos, sem chamar um provador de teoremas externo.</span></p><p><span class="s" data-s="b2-p2-s0">Para problemas não lineares, como o controle de atitude em SO(3), a verificação inicial usa aritmética de ponto flutuante para manter a velocidade da busca evolutiva.</span> <span class="s" data-s="b2-p2-s1">No entanto, todo campeão reportado é re-verificado posteriormente com aritmética exata.</span> <span class="s" data-s="b2-p2-s2">Os autores também utilizam o Lean 4 para gerar provas independentes dos melhores designs de cada método, garantindo que a verificação computacional esteja alinhada com a verificação formal de alto nível.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.42043/figure5.webp" alt="Desempenho ao longo das gerações na acoplagem: os medianos dos modelos Astra e Sol caem rapidamente para os melhores limites certificados, superando os métodos clássicos." loading="lazy">
+          <figcaption>
+            Desempenho ao longo das gerações na acoplagem: os medianos dos modelos Astra e Sol caem rapidamente para os melhores limites certificados, superando os métodos clássicos.
+            <span class="source">Figura 5 do paper · Jain et al., arXiv:2610.42043</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b4-h">Configuração Experimental e Problemas</span></h2>
+<p><span class="s" data-s="b4-p0-s0">O estudo compara quatro modelos de linguagem (Astra, Sol, Opus, gpt-oss) contra métodos clássicos de busca e síntese em três problemas: acoplagem com limite de velocidade, perseguição de alvo manobrável e controle de atitude em SO(3).</span> <span class="s" data-s="b4-p0-s1">Os problemas lineares usam retroalimentação de estado linear com certificado de Lyapunov quadrático.</span> <span class="s" data-s="b4-p0-s2">O problema SO(3) usa uma lei proporcional-derivativa (PD) geométrica com certificado de grau 4.</span></p><p><span class="s" data-s="b4-p1-s0">Os autores realizam corridas pareadas com sementes compartilhadas para garantir comparabilidade.</span> <span class="s" data-s="b4-p1-s1">Em cada corrida, o objetivo é maximizar o valor certificado (por exemplo, minimizar o tempo de acoplagem garantido).</span> <span class="s" data-s="b4-p1-s2">Candidatos não certificados são rejeitados, a menos que haja poucos candidatos certificados para preencher a elite.</span> <span class="s" data-s="b4-p1-s3">Isso força a busca a focar em regiões do espaço de parâmetros onde a verificação é possível.</span></p><p><span class="s" data-s="b4-p2-s0">Os autores testam também a robustez dos designs.</span> <span class="s" data-s="b4-p2-s1">Por exemplo, eles verificam se os controladores de perseguição funcionam quando a dinâmica muda de Euler para Hold de Ordem Zero (ZOH), uma discretização mais realista.</span> <span class="s" data-s="b4-p2-s2">Além disso, avaliam o impacto de manter ou remover a regra de retenção de candidatos certificados durante a busca.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.42043/figure13.webp" alt="Comparação de desempenho relativa ao baseline Sol: barras para a esquerda indicam melhores resultados. Astra e Sol mostram custos menores e limites mais apertados." loading="lazy">
+          <figcaption>
+            Comparação de desempenho relativa ao baseline Sol: barras para a esquerda indicam melhores resultados. Astra e Sol mostram custos menores e limites mais apertados.
+            <span class="source">Figura 13 do paper · Jain et al., arXiv:2610.42043</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b6-h">Resultados: Problemas Lineares</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Nos problemas lineares (acoplagem e perseguição), os modelos mais fortes (Astra e Sol) superaram a síntese clássica (SDP alternado) em todas as 20 corridas pareadas.</span> <span class="s" data-s="b6-p0-s1">Para a acoplagem, Astra e Sol alcançaram medianas de 38.5 e 38 passos de tempo, respectivamente, enquanto a síntese clássica ficou em 52.</span> <span class="s" data-s="b6-p0-s2">Isso representa uma melhoria significativa na garantia de tempo de acoplagem.</span></p><p><span class="s" data-s="b6-p1-s0">Contudo, essa vantagem não é absoluta.</span> <span class="s" data-s="b6-p1-s1">Quando os autores introduziram um otimizador clássico que também busca os parâmetros do certificado (e não apenas do controlador), a diferença entre o otimizador clássico e os melhores LLMs desapareceu estatisticamente.</span> <span class="s" data-s="b6-p1-s2">Isso sugere que a capacidade dos LLMs de navegar no espaço de parâmetros é útil, mas a otimização conjunta de controlador e certificado é o fator crítico para o desempenho.</span></p><p><span class="s" data-s="b6-p2-s0">Modelos menores ou menos alinhados, como Opus e gpt-oss, tiveram desempenho inferior.</span> <span class="s" data-s="b6-p2-s1">Opus perdeu a maioria das corridas de acoplagem, e gpt-oss nunca superou a síntese clássica nesse problema.</span> <span class="s" data-s="b6-p2-s2">Isso indica que a qualidade do modelo de linguagem importa, mas mesmo os melhores modelos não são infalíveis sem a estrutura de verificação.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.42043/figure18.webp" alt="Análise de falhas: os modelos geram certificados válidos com mais frequência que métodos clássicos em estágios iniciais, mas falham em estágios mais rigorosos." loading="lazy">
+          <figcaption>
+            Análise de falhas: os modelos geram certificados válidos com mais frequência que métodos clássicos em estágios iniciais, mas falham em estágios mais rigorosos.
+            <span class="source">Figura 18 do paper · Jain et al., arXiv:2610.42043</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Resultados: Controle de Atitude em SO(3)</span></h2>
+<p><span class="s" data-s="b8-p0-s0">No problema de controle de atitude em SO(3), os resultados foram menos conclusivos.</span> <span class="s" data-s="b8-p0-s1">Nenhum modelo de linguagem superou detectavelmente o CMA-ES (Covariance Matrix Adaptation Evolution Strategy) quando combinado com mutação clássica.</span> <span class="s" data-s="b8-p0-s2">O CMA-ES mostrou-se robusto para esse tipo de problema não linear.</span></p><p><span class="s" data-s="b8-p1-s0">O design manual (hand-tuned) ainda produziu o maior ângulo certificado, superando a mediana de todos os métodos de busca.</span> <span class="s" data-s="b8-p1-s1">Isso destaca que, para problemas complexos em variedades não lineares, a expertise humana ainda pode ser superior, ou pelo menos difícil de replicar por buscas automáticas sem uma exploração mais ampla.</span></p><p><span class="s" data-s="b8-p2-s0">Quando os LLMs foram usados para gerar todas as propostas (sem operadores clássicos), Opus superou o CMA-ES, mas Sol performou pior.</span> <span class="s" data-s="b8-p2-s1">Isso sugere que a mistura de exploração estruturada (clássica) e criatividade semântica (LLM) pode ser mais eficaz do que confiar apenas no LLM.</span></p>        <h2><span class="s" data-s="b9-h">Limitações e Falhas de Verificação</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Os autores identificaram limitações importantes.</span> <span class="s" data-s="b9-p0-s1">A classificação dos campeões de perseguição não sobreviveu à mudança de dinâmica de Euler para Hold de Ordem Zero (ZOH).</span> <span class="s" data-s="b9-p0-s2">Isso significa que os controladores otimizados podem ser frágeis a mudanças na discretização ou no modelo dinâmico, um risco para implementação real.</span></p><p><span class="s" data-s="b9-p1-s0">Os experimentos de &#39;reparo de prova&#39; (proof-repair) mostraram que os LLMs têm dificuldade em corrigir falhas de verificação.</span> <span class="s" data-s="b9-p1-s1">Quando um certificado falha, tentar consertá-lo com o LLM só funcionou quando um plano explícito e uma identidade exata foram fornecidos.</span> <span class="s" data-s="b9-p1-s2">Sem essas informações, os LLMs falharam em fechar as obrigações de prova.</span></p><p><span class="s" data-s="b9-p2-s0">Além disso, os autores notaram que a busca precisa ser isolada do ambiente de execução.</span> <span class="s" data-s="b9-p2-s1">Mesmo com um avaliador confiável, os modelos podem acessar soluções anteriores e potencialmente vazar informações ou criar dependências indesejadas.</span> <span class="s" data-s="b9-p2-s2">A segurança da abordagem depende tanto da arquitetura de busca quanto da confiança no modelo.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b10-t">A Importância da Retenção Certificada</span></h3>
+          <p><span class="s" data-s="b10-c-s0">Em um experimento de controle de acoplagem com objetivo e operador fixos, reter candidatos certificados resultou em novos designs certificados em todas as corridas (515 de 10.120 propostas).</span> <span class="s" data-s="b10-c-s1">Sem essa regra, zero novos designs certificados foram produzidos.</span> <span class="s" data-s="b10-c-s2">Isso prova que a verificação durante a busca não é apenas um filtro, mas um guia essencial para a evolução de soluções válidas.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b11-h">Conclusão</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Proof-Carrying Evolution demonstra que LLMs podem atuar como propostos eficazes no projeto de controladores verificáveis, especialmente em problemas lineares.</span> <span class="s" data-s="b11-p0-s1">Eles superam métodos clássicos de síntese quando o certificado é fixo, mas essa vantagem diminui quando a otimização do certificado é permitida.</span></p><p><span class="s" data-s="b11-p1-s0">O método não substitui a necessidade de revisão humana ou de verificação formal posterior.</span> <span class="s" data-s="b11-p1-s1">Em vez disso, ele automatiza a busca por parâmetros que satisfazem restrições formais, reduzindo o esforço de engenharia manual.</span> <span class="s" data-s="b11-p1-s2">No entanto, a fragilidade dos designs a mudanças de modelo e a dificuldade dos LLMs em reparar provas deixam espaço para melhorias futuras.</span></p><p><span class="s" data-s="b11-p2-s0">Os autores concluem que a abordagem é promissora, mas que a escolha do modelo de linguagem e a configuração da busca são críticas.</span> <span class="s" data-s="b11-p2-s1">A integração de LLMs em pipelines de verificação formal é viável, mas requer cuidadosa engenharia de prompts e validação rigorosa.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">O método Proof-Carrying Evolution (PCE) separa a proposta de parâmetros (LLM) da verificação formal (árbitra).</span></li><li><span class="s" data-s="k1">LLMs como Astra e Sol superam métodos clássicos em problemas lineares, mas não em controle de atitude SO(3).</span></li><li><span class="s" data-s="k2">Otimizar o certificado junto com o controlador reduz a vantagem dos LLMs sobre métodos clássicos.</span></li><li><span class="s" data-s="k3">Sem a regra de retenção de candidatos certificados, a taxa de sucesso cai drasticamente.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.42043" rel="noopener">Proof-Carrying Evolution: Black-Box Search, White-Box Flight</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.42043" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

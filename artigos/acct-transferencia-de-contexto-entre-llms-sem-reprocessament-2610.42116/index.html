@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ACCT: Transferência de contexto entre LLMs sem reprocessamento — arXiv em 5</title>
+<meta name="description" content="O paper ACCT propõe um mecanismo para reutilizar o cache KV de um modelo grande em um modelo menor da mesma família, evitando o custo computacional de re-encodar o contexto.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ACCT: Transferência de contexto entre LLMs sem reprocessamento">
+<meta property="og:description" content="O paper ACCT propõe um mecanismo para reutilizar o cache KV de um modelo grande em um modelo menor da mesma família, evitando o custo computacional de re-encodar o contexto.">
+<meta property="og:image" content="../../assets/papers/2610.42116/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>LLMs</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.42116" rel="noopener">arXiv:2610.42116</a>
+    </div>
+    <h1><span class="s" data-s="t">ACCT: Transferência de contexto entre LLMs sem reprocessamento</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">O paper ACCT propõe um mecanismo para reutilizar o cache KV de um modelo grande em um modelo menor da mesma família, evitando o custo computacional de re-encodar o contexto.</span></p>
+    <p class="byline">
+      <span>Liu et al.</span>
+      <span>7 min de leitura</span>
+<span>30/10/2026</span>    </p>
+    <div class="listen" data-article="2610.42116" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=noLVfF-hHUU" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O custo oculto da heterogeneidade em LLMs</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A tendência atual em sistemas de LLMs (Large Language Models) é o abandono do modelo único para implantações heterogêneas.</span> <span class="s" data-s="b0-p0-s1">Em produção, é comum que diferentes modelos sejam invocados dinamicamente para lidar com variações na dificuldade da tarefa, requisitos de latência ou disponibilidade de recursos.</span> <span class="s" data-s="b0-p0-s2">No entanto, o contexto da conversa, documentos recuperados ou estados de tarefa frequentemente persistem através dessas trocas de modelo.</span></p><p><span class="s" data-s="b0-p1-s0">O problema central é que, quando o mesmo contexto é passado para um novo modelo alvo, este geralmente precisa processar todo o contexto novamente para construir seus estados internos necessários para a inferência.</span> <span class="s" data-s="b0-p1-s1">À medida que os contextos crescem e são reutilizados, os custos de computação repetida e construção de estado se acumulam significativamente.</span></p><p><span class="s" data-s="b0-p2-s0">Os mecanismos de cache padrão, como o KV caching, reutilizam estados para tokens precedentes durante a geração, mas não tornam esses estados reutilizáveis por outros modelos.</span> <span class="s" data-s="b0-p2-s1">O cache KV depende conjuntamente dos parâmetros e da arquitetura do modelo, tornando-os geralmente intercambiáveis apenas dentro do mesmo modelo, e não entre modelos de diferentes escalas, mesmo que pertençam à mesma família.</span></p>        <h2><span class="s" data-s="b1-h">A proposta: ACCT e a transferência assimétrica</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Para resolver essa ineficiência, os autores da Tsinghua University propõem o ACCT (Asymmetric Cross-LLM Context Transfer).</span> <span class="s" data-s="b1-p0-s1">O objetivo é permitir que um modelo alvo aproveite a computação de contexto já realizada por um modelo fonte, transferindo os estados KV de forma que o alvo possa consumi-los diretamente.</span></p><p><span class="s" data-s="b1-p1-s0">O ACCT foca na transferência de cache KV entre modelos de diferentes escalas dentro da mesma família.</span> <span class="s" data-s="b1-p1-s1">Em vez de re-encodar o contexto bruto, o sistema transforma o cache KV produzido pelo modelo fonte em estados KV esparsos que o modelo alvo pode ler.</span> <span class="s" data-s="b1-p1-s2">Isso desacopla a computação de contexto da inferência downstream.</span></p><p><span class="s" data-s="b1-p2-s0">Essa abordagem permite que o contexto seja codificado por um modelo e o raciocínio downstream seja realizado por outro, mantendo a capacidade de raciocínio do alvo enquanto evita sua re-encodificação do contexto bruto.</span> <span class="s" data-s="b1-p2-s1">A transferência deve organizar a informação em torno das necessidades de raciocínio do alvo, retendo apenas o conteúdo relevante sob um orçamento especificado.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.42116/figure1.webp" alt="Diagrama do ACCT mostrando como o contexto do modelo fonte é convertido em estados KV esparsos para o modelo alvo através dos módulos Cartographer, Allocator e Compiler." loading="lazy">
+          <figcaption>
+            Diagrama do ACCT mostrando como o contexto do modelo fonte é convertido em estados KV esparsos para o modelo alvo através dos módulos Cartographer, Allocator e Compiler.
+            <span class="source">Figura 1 do paper · Liu et al., arXiv:2610.42116</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Como funciona: Os três componentes do ACCT</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O ACCT consiste em três componentes leves que convertem representações de origem em cache KV alvo esparsos: o Cartographer, o Allocator e o Compiler.</span> <span class="s" data-s="b3-p0-s1">Juntos, eles realizam a seleção de informação, a alocação de orçamento de cache e a geração do cache alvo.</span></p><p><span class="s" data-s="b3-p1-s0">O Cartographer é responsável por pontuar os tokens de contexto para cada unidade de camada e cabeça de atenção (KV head) do modelo alvo.</span> <span class="s" data-s="b3-p1-s1">Ele utiliza as representações de contexto e consulta do modelo fonte para estabelecer prioridades de retenção dentro de cada unidade.</span> <span class="s" data-s="b3-p1-s2">Isso é crucial porque diferentes unidades alvo servem a funções diferentes, e a importância de um token varia dependendo da consulta e da posição no contexto.</span></p><p><span class="s" data-s="b3-p2-s0">O Allocator determina quantos tokens de contexto cada camada e cabeça do alvo deve reter, operando sob um orçamento total compartilhado de cache KV.</span> <span class="s" data-s="b3-p2-s1">Combinado com as pontuações do Cartographer, o Allocator decide quais estados KV da fonte serão mantidos.</span> <span class="s" data-s="b3-p2-s2">O orçamento conta os tokens retidos através das cabeças KV físicas.</span></p>        <h2><span class="s" data-s="b4-h">Detalhes técnicos: Mapeamento e Compilação</span></h2>
+<p><span class="s" data-s="b4-p0-s0">O Compiler é o componente final que transforma os estados selecionados da fonte em chaves e valores legíveis pelo alvo.</span> <span class="s" data-s="b4-p0-s1">Ele converte apenas as representações de origem selecionadas em KV correspondente às camadas e cabeças do alvo.</span> <span class="s" data-s="b4-p0-s2">Após carregar esses pares KV, o modelo alvo processa apenas a consulta e gera a resposta, sem re-encodar o contexto bruto.</span></p><p><span class="s" data-s="b4-p1-s0">O Cartographer combina estados ocultos do contexto e da consulta, informações da camada alvo e posição do token para calcular uma pontuação.</span> <span class="s" data-s="b4-p1-s1">Ele extrai o conteúdo relevante para a consulta compartilhado entre unidades para evitar interações repetitivas consulta-contexto.</span> <span class="s" data-s="b4-p1-s2">Vetores de escala e deslocamento, derivados da unidade e do conteúdo relevante, são usados para ajustar a representação do token.</span></p><p><span class="s" data-s="b4-p2-s0">O sistema preserva os índices originais dos tokens para a codificação posicional.</span> <span class="s" data-s="b4-p2-s1">O cache de contexto transferido é construído a partir do contexto e da consulta para o alvo, permitindo que a inferência ocorra sem o custo do pré-enchimento nativo.</span> <span class="s" data-s="b4-p2-s2">O processo é treinado com os modelos fonte e alvo congelados, ajustando apenas a interface de transferência.</span></p>        <h2><span class="s" data-s="b5-h">Avaliação experimental e resultados</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os autores avaliaram o ACCT em duas direções de transferência entre três famílias de modelos: Qwen3-4B e Qwen3-8B, Llama-3.2-3B e Llama-3.1-8B, e Qwen2.5-7B e Qwen2.5-32B.</span> <span class="s" data-s="b5-p0-s1">A avaliação cobriu cinco benchmarks de capacidade geral e seis tarefas altamente dependentes de contexto.</span></p><p><span class="s" data-s="b5-p1-s0">Os resultados mostram que o ACCT iguala ou excede o desempenho de inferência original do modelo alvo, mesmo quando o tamanho do cache KV é reduzido em 75%.</span> <span class="s" data-s="b5-p1-s1">Isso significa que o modelo alvo consegue realizar inferências precisas utilizando apenas uma fração dos slots de cache que utilizaria normalmente.</span></p><p><span class="s" data-s="b5-p2-s0">Em termos de eficiência, o ganho é significativo.</span> <span class="s" data-s="b5-p2-s1">Para um comprimento de contexto de aproximadamente 19K tokens, a conversão de KV do ACCT alcança um speedup de 6.5 a 21.2 vezes em comparação com o pré-enchimento de contexto do alvo.</span> <span class="s" data-s="b5-p2-s2">A latência de conversão cresce muito mais lentamente com o comprimento do contexto do que o pré-enchimento nativo.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.42116/figure2.webp" alt="Gráficos de latência mostrando que o ACCT é muito mais rápido que o pré-enchimento do modelo alvo em contextos longos, com speedups de até 21.2x." loading="lazy">
+          <figcaption>
+            Gráficos de latência mostrando que o ACCT é muito mais rápido que o pré-enchimento do modelo alvo em contextos longos, com speedups de até 21.2x.
+            <span class="source">Figura 2 do paper · Liu et al., arXiv:2610.42116</span>
+          </figcaption>
+        </figure>
+        <aside class="callout">
+          <h3><span class="s" data-s="b7-t">Redução drástica de latência</span></h3>
+          <p><span class="s" data-s="b7-c-s0">Em contextos de 19K tokens, a conversão de estado do ACCT requer apenas 4.7% a 15.3% do tempo de pré-enchimento do alvo.</span> <span class="s" data-s="b7-c-s1">Isso torna a reutilização de contexto viável mesmo para prompts extremamente longos.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b8-h">Análise de precisão e compressão</span></h2>
+<p><span class="s" data-s="b8-p0-s0">A experimentação principal utilizou uma compressão de 4x, retendo aproximadamente um quarto dos slots de cache KV do alvo sob a regra de orçamento.</span> <span class="s" data-s="b8-p0-s1">Isso inclui as 32 posições mais recentes.</span> <span class="s" data-s="b8-p0-s2">O Cartographer e o Allocator foram treinados com 5.000 exemplos do dataset SearchQA, enquanto o Compiler usou um subconjunto fixo de 500 exemplos.</span></p><p><span class="s" data-s="b8-p1-s0">Os resultados indicam que, mesmo com a compressão agressiva e a transferência entre modelos de tamanhos diferentes, a qualidade da resposta não é comprometida.</span> <span class="s" data-s="b8-p1-s1">Em várias tarefas, o desempenho do ACCT superou o do modelo alvo processando o contexto completo nativamente.</span></p><p><span class="s" data-s="b8-p2-s0">Isso demonstra que a informação crítica para a resposta pode ser extraída eficientemente do contexto fonte e mapeada para o espaço de representação do alvo, sem a necessidade de reprocessar todo o texto original.</span> <span class="s" data-s="b8-p2-s1">O método preserva a capacidade de raciocínio do alvo ao evitar a re-encodificação.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.42116/table1.webp" alt="Tabela comparando a precisão do ACCT com o modelo alvo completo, provando que o método mantém a qualidade com menos dados e compressão de 4x." loading="lazy">
+          <figcaption>
+            Tabela comparando a precisão do ACCT com o modelo alvo completo, provando que o método mantém a qualidade com menos dados e compressão de 4x.
+            <span class="source">Tabela 1 do paper · Liu et al., arXiv:2610.42116</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">Limitações e considerações</span></h2>
+<p><span class="s" data-s="b10-p0-s0">É importante notar que o ACCT é projetado especificamente para modelos da mesma família, que compartilham mapeamentos de token e arquiteturas compatíveis.</span> <span class="s" data-s="b10-p0-s1">A transferência entre famílias de modelos diferentes não foi abordada neste trabalho, pois as diferenças de tokenização e arquitetura podem exigir transformações mais complexas.</span></p><p><span class="s" data-s="b10-p1-s0">O método depende do treinamento da interface de transferência para cada direção de transferência.</span> <span class="s" data-s="b10-p1-s1">Embora os modelos fonte e alvo estejam congelados, os componentes leves (Cartographer, Allocator, Compiler) precisam ser treinados para cada par de modelos específico.</span> <span class="s" data-s="b10-p1-s2">Isso adiciona uma etapa de preparação que não é trivial, embora seja menos custosa que o treinamento completo do LLM.</span></p><p><span class="s" data-s="b10-p2-s0">A avaliação foi conduzida em um conjunto fixo de 10.000 exemplos.</span> <span class="s" data-s="b10-p2-s1">Embora os resultados sejam promissores, a generalização para outros tipos de tarefas ou domínios específicos pode variar.</span> <span class="s" data-s="b10-p2-s2">Além disso, o ganho de eficiência é mais pronunciado em contextos longos, onde o custo de pré-enchimento nativo é maior.</span></p>        <h2><span class="s" data-s="b11-h">Implicações para sistemas heterogêneos</span></h2>
+<p><span class="s" data-s="b11-p0-s0">O ACCT abre caminho para sistemas de LLMs mais flexíveis e eficientes, onde a computação de contexto pode ser um recurso reutilizável entre modelos.</span> <span class="s" data-s="b11-p0-s1">Isso permite que sistemas orquestrem diferentes modelos para diferentes estágios de raciocínio ou para diferentes requisitos de latência, sem penalizar o usuário com latências de pré-processamento elevadas.</span></p><p><span class="s" data-s="b11-p1-s0">Ao desacoplar a computação de contexto da inferência, o ACCT permite que modelos menores aproveitem o conhecimento contextual processado por modelos maiores, ou que modelos mais rápidos reutilizem contextos processados por modelos mais lentos.</span> <span class="s" data-s="b11-p1-s1">Isso é particularmente relevante para aplicações em tempo real com janelas de contexto longas.</span></p><p><span class="s" data-s="b11-p2-s0">Os autores demonstram a viabilidade de transferir computação de contexto entre modelos sob um orçamento limitado de KV.</span> <span class="s" data-s="b11-p2-s1">Isso sugere que o futuro dos sistemas de LLMs em produção pode envolver pipelines mais complexos de transferência de estado, otimizando não apenas a inferência, mas também a gestão de memória e cache entre modelos heterogêneos.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">O ACCT permite que um modelo alvo utilize o contexto processado por um modelo fonte, eliminando a necessidade de re-encodificação.</span></li><li><span class="s" data-s="k1">O método usa três componentes leves: Cartographer, Allocator e Compiler para mapear estados KV esparsos.</span></li><li><span class="s" data-s="k2">Em contextos de 19K tokens, o ACCT oferece um speedup de 6.5x a 21.2x comparado ao pré-enchimento nativo.</span></li><li><span class="s" data-s="k3">A precisão do modelo alvo é mantida ou excedida, mesmo com uma redução de 75% no tamanho do cache KV.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.42116" rel="noopener">ACCT: Asymmetric Cross-LLM Context Transfer</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.42116" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

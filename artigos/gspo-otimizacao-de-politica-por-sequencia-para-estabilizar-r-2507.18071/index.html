@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GSPO: Otimização de Política por Sequência para Estabilizar RL em LLMs — arXiv em 5</title>
+<meta name="description" content="O paper apresenta o Group Sequence Policy Optimization (GSPO), um algoritmo de RL que redefine a importância das amostras em nível de sequência para resolver colapso de treinamento em modelos grandes, especialmente MoE.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GSPO: Otimização de Política por Sequência para Estabilizar RL em LLMs">
+<meta property="og:description" content="O paper apresenta o Group Sequence Policy Optimization (GSPO), um algoritmo de RL que redefine a importância das amostras em nível de sequência para resolver colapso de treinamento em modelos grandes, especialmente MoE.">
+<meta property="og:image" content="../../assets/papers/2507.18071/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Aprendizado por reforço</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2507.18071" rel="noopener">arXiv:2507.18071</a>
+    </div>
+    <h1><span class="s" data-s="t">GSPO: Otimização de Política por Sequência para Estabilizar RL em LLMs</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">O paper apresenta o Group Sequence Policy Optimization (GSPO), um algoritmo de RL que redefine a importância das amostras em nível de sequência para resolver colapso de treinamento em modelos grandes, especialmente MoE.</span></p>
+    <p class="byline">
+      <span>Zheng et al.</span>
+      <span>6 min de leitura</span>
+<span>24/07/2025</span>    </p>
+    <div class="listen" data-article="2507.18071" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=mHuCufLiuUo" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Instabilidade em RL para LLMs</span></h2>
+<p><span class="s" data-s="b0-p0-s0">O uso de Reinforcement Learning (RL) para treinar Large Language Models (LLMs) tornou-se um paradigma central para escalar capacidades como raciocínio matemático e programação.</span> <span class="s" data-s="b0-p0-s1">No entanto, à medida que os modelos crescem em tamanho e complexidade, a estabilidade do treinamento torna-se o principal gargalo.</span> <span class="s" data-s="b0-p0-s2">Algoritmos state-of-the-art, como o Group Relative Policy Optimization (GRPO), enfrentam problemas severos de instabilidade, frequentemente resultando em colapso catastrófico do modelo, onde o desempenho degrada irreversivelmente.</span></p><p><span class="s" data-s="b0-p1-s0">Os autores identificam que a raiz dessa instabilidade não é apenas computacional, mas algorítmica.</span> <span class="s" data-s="b0-p1-s1">O GRPO e algoritmos similares utilizam uma razão de importância baseada em tokens individuais (token-level importance ratios).</span> <span class="s" data-s="b0-p1-s2">Essa abordagem falha em modelos gigantes porque ignora a dependência estrutural da geração de texto.</span> <span class="s" data-s="b0-p1-s3">A variância introduzida por essa definição de importância se acumula com o comprimento da resposta e é amplificada pelo mecanismo de clipping, levando a atualizações de política destrutivas.</span></p>        <h2><span class="s" data-s="b1-h">A Ideia Central: Importância em Nível de Sequência</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Para corrigir essa falha fundamental, o paper propõe o Group Sequence Policy Optimization (GSPO).</span> <span class="s" data-s="b1-p0-s1">A inovação chave reside na redefinição da razão de importância (importance ratio).</span> <span class="s" data-s="b1-p0-s2">Em vez de calcular a razão para cada token $y_t$ isoladamente, o GSPO define a razão baseada na probabilidade conjunta da sequência inteira $y$ dada a consulta $x$.</span> <span class="s" data-s="b1-p0-s3">Isso alinha o algoritmo com os princípios teóricos básicos do importance sampling, onde a distribuição de amostragem deve refletir a distribuição alvo globalmente.</span></p><p><span class="s" data-s="b1-p1-s0">Matematicamente, enquanto o PPO clássico e variações como o GRPO usam $w_t(\theta) = \frac{\pi_\theta(y_t|x, y_{&lt;t})}{\pi_{\theta_{old}}(y_t|x, y_{&lt;t})}$, o GSPO opera com a probabilidade da sequência $\pi_\theta(y|x)$.</span> <span class="s" data-s="b1-p1-s1">Isso significa que a importância de uma amostra é determinada por quão provável ela é sob a nova política em comparação com a antiga, considerando toda a geração de uma vez, e não passo a passo.</span> <span class="s" data-s="b1-p1-s2">Essa mudança reduz drasticamente a variância do estimador de gradiente.</span></p>        <h2><span class="s" data-s="b2-h">Mecanismo: Clipping e Vantagem em Nível de Sequência</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Além da redefinição da razão de importância, o GSPO altera como as recompensas são tratadas.</span> <span class="s" data-s="b2-p0-s1">No GRPO, a vantagem (advantage) é frequentemente estimada localmente ou normalizada de forma que pode não refletir consistentemente a qualidade global da resposta.</span> <span class="s" data-s="b2-p0-s2">O GSPO computa as recompensas normalizadas como vantagens para múltiplas respostas geradas para a mesma consulta.</span> <span class="s" data-s="b2-p0-s3">Isso garante que a recompensa e a otimização estejam alinhadas em nível de sequência.</span></p><p><span class="s" data-s="b2-p1-s0">O mecanismo de clipping, crucial para a estabilidade do PPO, é aplicado em nível de sequência.</span> <span class="s" data-s="b2-p1-s1">Em vez de clipping por token, que pode criar inconsistências onde alguns tokens são atualizados agressivamente e outros são restringidos, o GSPO aplica o clipping à razão de importância da sequência inteira.</span> <span class="s" data-s="b2-p1-s2">Isso resulta em atualizações de política mais suaves e previsíveis, evitando oscilações violentas nos parâmetros do modelo durante o treinamento.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2507.18071/figure2.webp" alt="Figura 2: A fração média de tokens clipped no treinamento do GSPO é significativamente menor e mais estável que no GRPO, indicando que o algoritmo permite atualizações de política mais amplas sem violar as restrições de proximidade." loading="lazy">
+          <figcaption>
+            Figura 2: A fração média de tokens clipped no treinamento do GSPO é significativamente menor e mais estável que no GRPO, indicando que o algoritmo permite atualizações de política mais amplas sem violar as restrições de proximidade.
+            <span class="source">Figura 2 do paper · Zheng et al., arXiv:2507.18071</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b4-h">Estabilidade e Eficiência Empírica</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Os experimentos comparativos mostram que o GSPO supera o GRPO em eficiência de treinamento e desempenho final.</span> <span class="s" data-s="b4-p0-s1">As curvas de treinamento do GSPO são mais estáveis, sem as quedas abruptas de performance observadas no GRPO em modelos de grande escala.</span> <span class="s" data-s="b4-p0-s2">Isso é particularmente evidente em benchmarks de raciocínio, onde a consistência da geração é crítica.</span> <span class="s" data-s="b4-p0-s3">A redução da variância permite o uso de taxas de aprendizado mais altas ou mais passos de otimização sem risco de divergência.</span></p><p><span class="s" data-s="b4-p1-s0">Além disso, o GSPO demonstra uma eficiência computacional superior.</span> <span class="s" data-s="b4-p1-s1">Ao eliminar a necessidade de estimativas de vantagem complexas por token ou modelos de valor adicionais (como no PPO tradicional), o algoritmo reduz a sobrecarga de memória e computação.</span> <span class="s" data-s="b4-p1-s2">Isso simplifica a infraestrutura de RL, tornando-a mais escalável para modelos com bilhões de parâmetros.</span></p>        <h2><span class="s" data-s="b5-h">O Caso Crítico: Modelos Mixture-of-Experts (MoE)</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Um dos contributos mais significativos do GSPO é sua aplicação a modelos Mixture-of-Experts (MoE).</span> <span class="s" data-s="b5-p0-s1">Modelos MoE, que ativam diferentes sub-redes para diferentes entradas, são extremamente eficientes, mas notoriamente difíceis de treinar com RL devido à esparsidade das atualizações e à instabilidade na roteamento de experts.</span> <span class="s" data-s="b5-p0-s2">O GRPO, quando aplicado a MoEs, frequentemente falha em convergir sem estratégias de estabilização complexas e manuais.</span></p><p><span class="s" data-s="b5-p1-s0">O paper demonstra que o GSPO resolve intrinsicamente esses desafios de estabilidade.</span> <span class="s" data-s="b5-p1-s1">A definição de importância em nível de sequência fornece um sinal de gradiente mais robusto para atualizar os parâmetros dos experts, mesmo quando a ativação é esparsa.</span> <span class="s" data-s="b5-p1-s2">Isso elimina a necessidade de técnicas auxiliares como &#39;Routing Replay&#39; ou outros truques de engenharia para manter o treinamento estável, simplificando drasticamente o pipeline de treinamento de MoEs.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2507.18071/figure3.webp" alt="Figura 3: Sem a estratégia de Routing Replay, o GRPO falha ao treinar modelos MoE, divergindo rapidamente. Com o GSPO, a convergência é normal e estável, demonstrando a robustez inerente do novo algoritmo para arquiteturas esparsas." loading="lazy">
+          <figcaption>
+            Figura 3: Sem a estratégia de Routing Replay, o GRPO falha ao treinar modelos MoE, divergindo rapidamente. Com o GSPO, a convergência é normal e estável, demonstrando a robustez inerente do novo algoritmo para arquiteturas esparsas.
+            <span class="source">Figura 3 do paper · Zheng et al., arXiv:2507.18071</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Impacto no Qwen3 e Infraestrutura de RL</span></h2>
+<p><span class="s" data-s="b7-p0-s0">As melhorias trazidas pelo GSPO foram fundamentais para o desenvolvimento dos modelos Qwen3.</span> <span class="s" data-s="b7-p0-s1">A estabilidade do treinamento permitiu aos pesquisadores explorar espaços de hiperparâmetros mais amplos e treinar por mais tempo, resultando em saltos significativos de performance em tarefas de raciocínio.</span> <span class="s" data-s="b7-p0-s2">O algoritmo não apenas melhora a performance, mas também simplifica o design da infraestrutura de RL, tornando-a mais acessível e menos propensa a erros de implementação.</span></p><p><span class="s" data-s="b7-p1-s0">A simplificação da infraestrutura é um benefício indireto, mas poderoso.</span> <span class="s" data-s="b7-p1-s1">Ao reduzir a necessidade de modelos de valor (como no PPO) e de estratégias de estabilização complexas (como no GRPO para MoEs), o GSPO permite que equipes de pesquisa foquem mais na qualidade dos dados de recompensa e na arquitetura do modelo, em vez de lutar contra a instabilidade numérica.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2507.18071/figure1.webp" alt="Figura 1: Curvas de treinamento de um modelo cold-start Qwen3-30B-A3B-Base. O GSPO atinge performance superior mais rapidamente e com menor variância do que o GRPO, demonstrando maior eficiência de treinamento." loading="lazy">
+          <figcaption>
+            Figura 1: Curvas de treinamento de um modelo cold-start Qwen3-30B-A3B-Base. O GSPO atinge performance superior mais rapidamente e com menor variância do que o GRPO, demonstrando maior eficiência de treinamento.
+            <span class="source">Figura 1 do paper · Zheng et al., arXiv:2507.18071</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Limitações e Escopo</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Embora o GSPO apresente vantagens claras, o paper foca principalmente em sua aplicação a LLMs autoregressivos treinados com RL.</span> <span class="s" data-s="b9-p0-s1">Não estão detalhadas extensivamente as implicações para outros tipos de modelos, como difusores ou redes neurais não sequenciais.</span> <span class="s" data-s="b9-p0-s2">Além disso, a comparação principal é feita contra o GRPO; enquanto o PPO é mencionado como baseline teórico, os experimentos empíricos não cobrem uma comparação exaustiva contra todas as variantes recentes de PPO, o que deixaria em aberto a avaliação relativa em cenários específicos de custo-benefício.</span></p><p><span class="s" data-s="b9-p1-s0">Outra consideração é a dependência de verificadores de recompensa precisos.</span> <span class="s" data-s="b9-p1-s1">Como em qualquer método de RL baseado em recompensa (RLHF/RLAIF), a qualidade do GSPO é limitada pela qualidade do sinal de recompensa $r(x,y)$.</span> <span class="s" data-s="b9-p1-s2">Se o verificador for ruidoso ou enviesado, o GSPO, apesar de sua estabilidade, pode otimizar para recompensas espúrias.</span> <span class="s" data-s="b9-p1-s3">O paper não aborda em profundidade como mitigar vieses nos verificadores, focando apenas na estabilidade do otimizador.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b10-t">Por que a razão de importância por token falha?</span></h3>
+          <p><span class="s" data-s="b10-c-s0">No GRPO, a razão de importância é calculada para cada token.</span> <span class="s" data-s="b10-c-s1">Isso ignora a correlação entre tokens em uma sequência longa.</span> <span class="s" data-s="b10-c-s2">Pequenos erros de probabilidade em tokens individuais se multiplicam exponencialmente, criando uma razão de importância total com variância extremamente alta.</span> <span class="s" data-s="b10-c-s3">O GSPO calcula a probabilidade da sequência inteira, mantendo a variância controlada e alinhada com o objetivo real de otimizar a resposta completa, não apenas a soma de partes.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b11-h">Conclusão: Uma Base para RL Escalável</span></h2>
+<p><span class="s" data-s="b11-p0-s0">O Group Sequence Policy Optimization (GSPO) representa um passo importante na evolução de algoritmos de RL para LLMs.</span> <span class="s" data-s="b11-p0-s1">Ao corrigir a aplicação incorreta do importance sampling, ele oferece uma alternativa estável e eficiente ao GRPO, especialmente para modelos grandes e arquiteturas MoE.</span> <span class="s" data-s="b11-p0-s2">A estabilidade intrínseca do GSPO permite que pesquisadores empurrem os limites do raciocínio dos modelos sem o risco constante de colapso de treinamento.</span></p><p><span class="s" data-s="b11-p1-s0">Com o GSPO estabelecido como uma fundação robusta, a comunidade de pesquisa pode focar em escalar o RL de forma mais confiável.</span> <span class="s" data-s="b11-p1-s1">As melhorias observadas no Qwen3 servem como um caso de estudo convincente de como correções algorítmicas fundamentais podem levar a avanços significativos em inteligência artificial.</span> <span class="s" data-s="b11-p1-s2">O trabalho abre caminho para futuras investigações sobre otimização sequencial e treinamento estável de modelos de linguagem.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">GSPO substitui a razão de importância por token (GRPO) por uma baseada na probabilidade da sequência inteira, reduzindo variância.</span></li><li><span class="s" data-s="k1">O clipping e a recompensa são aplicados em nível de sequência, alinhando otimização e feedback de forma mais coerente.</span></li><li><span class="s" data-s="k2">O método elimina a necessidade de estratégias complexas de estabilização para modelos Mixture-of-Experts (MoE).</span></li><li><span class="s" data-s="k3">Resultados empíricos mostram maior eficiência e estabilidade comparado ao GRPO, base para as melhorias do Qwen3.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2507.18071" rel="noopener">Group Sequence Policy Optimization</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2507.18071" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

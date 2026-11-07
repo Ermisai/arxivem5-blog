@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aprendizado Adversarial Procedural: Reduzindo Erros de Caso Extremo em Visão Computacional — arXiv em 5</title>
+<meta name="description" content="O paper apresenta o Simple-PAT, um framework que usa geradores procedurais e otimização sem gradiente para encontrar e corrigir falhas em modelos de visão, reduzindo o erro de pior caso significativamente.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Aprendizado Adversarial Procedural: Reduzindo Erros de Caso Extremo em Visão Computacional">
+<meta property="og:description" content="O paper apresenta o Simple-PAT, um framework que usa geradores procedurais e otimização sem gradiente para encontrar e corrigir falhas em modelos de visão, reduzindo o erro de pior caso significativamente.">
+<meta property="og:image" content="../../assets/papers/2611.06890/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Redes neurais</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.06890" rel="noopener">arXiv:2611.06890</a>
+    </div>
+    <h1><span class="s" data-s="t">Aprendizado Adversarial Procedural: Reduzindo Erros de Caso Extremo em Visão Computacional</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">O paper apresenta o Simple-PAT, um framework que usa geradores procedurais e otimização sem gradiente para encontrar e corrigir falhas em modelos de visão, reduzindo o erro de pior caso significativamente.</span></p>
+    <p class="byline">
+      <span>Nugent et al.</span>
+      <span>8 min de leitura</span>
+<span>04/11/2026</span>    </p>
+    <div class="listen" data-article="2611.06890" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=wmpF5jjdeyI" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema do Erro de Pior Caso</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Modelos de visão computacional modernos, especialmente os baseados em redes neurais profundas, frequentemente alcançam baixos erros médios em benchmarks padrão.</span> <span class="s" data-s="b0-p0-s1">No entanto, essa métrica de agregação esconde falhas críticas em cenas específicas que podem ser simples para humanos, mas catastróficas para a máquina.</span> <span class="s" data-s="b0-p0-s2">Em aplicações de alto risco, como veículos autônomos, robótica cirúrgica e máquinas pesadas, um único erro de percepção pode ter consequências graves.</span> <span class="s" data-s="b0-p0-s3">O desafio central não é melhorar a precisão média, mas sim identificar e mitigar esses modos de falha raros, mas perigosos.</span></p><p><span class="s" data-s="b0-p1-s0">A abordagem tradicional de aprendizado adversarial foca na perturbação de imagens existentes no dataset.</span> <span class="s" data-s="b0-p1-s1">Embora eficaz para ruídos sutis, essa técnica é limitada porque opera sobre uma base fixa de dados.</span> <span class="s" data-s="b0-p1-s2">Ela não consegue explorar o espaço completo de variações físicas válidas, como mudanças drásticas de iluminação, ângulos de visão nunca vistos antes ou deformações de forma que não estejam presentes nos exemplos originais.</span> <span class="s" data-s="b0-p1-s3">Coletar dados reais para cobrir esses casos é lento, caro e, muitas vezes, impossível de escalar.</span></p><p><span class="s" data-s="b0-p2-s0">Os autores, Jack Nugent e Jia Deng, da Princeton University, propõem uma mudança de paradigma: em vez de perturbar imagens, eles perturbam o processo de geração das imagens.</span> <span class="s" data-s="b0-p2-s1">O framework chamado Procedural Adversarial Learning (PAL) utiliza geradores procedurais, que são programas interpretáveis capazes de renderizar imagens e seus rótulos de verdade fundamental (ground truth) a partir de um vetor de parâmetros de controle.</span> <span class="s" data-s="b0-p2-s2">Isso permite a geração sob demanda de cenários infinitamente variados e fisicamente plausíveis.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.06890/figure2.webp" alt="Exemplos de amostras do PAL-Dojo, mostrando a diversidade de cenários gerados proceduralmente para tarefas como estimativa de normais e pose." loading="lazy">
+          <figcaption>
+            Exemplos de amostras do PAL-Dojo, mostrando a diversidade de cenários gerados proceduralmente para tarefas como estimativa de normais e pose.
+            <span class="source">Figura 2 do paper · Nugent et al., arXiv:2611.06890</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">O Mecanismo do PAL e o Simple-PAT</span></h2>
+<p><span class="s" data-s="b2-p0-s0">O cerne do PAL é um jogo minimax entre o aprendiz (o modelo de visão) e o adversário (o gerador procedural).</span> <span class="s" data-s="b2-p0-s1">Durante o treinamento, o modelo tenta minimizar o erro, enquanto o adversário tenta encontrar o conjunto de parâmetros no gerador procedural que maximiza esse erro.</span> <span class="s" data-s="b2-p0-s2">Diferente de métodos que usam gradientes para ajustar os parâmetros adversariais, o Simple-PAT introduz um algoritmo de otimização de ordem zero.</span> <span class="s" data-s="b2-p0-s3">Isso significa que ele não precisa calcular derivadas da função de perda em relação aos parâmetros do gerador, o que seria computacionalmente proibitivo ou impossível devido à natureza não diferenciável da renderização.</span></p><p><span class="s" data-s="b2-p1-s0">O Simple-PAT utiliza o algoritmo CMA-ES (Covariance Matrix Adaptation Evolution Strategy) para buscar no espaço de parâmetros do gerador.</span> <span class="s" data-s="b2-p1-s1">O CMA-ES é um método evolucionário que adapta uma distribuição de probabilidade sobre os parâmetros a cada iteração, focando nas regiões que produzem maior erro para o modelo atual.</span> <span class="s" data-s="b2-p1-s2">Durante o treino, o adversário gera um lote de imagens adversariais que são usadas para atualizar os pesos da rede neural.</span> <span class="s" data-s="b2-p1-s3">Isso força o modelo a aprender características robustas que generalizam para cenários difíceis, em vez de apenas memorizar padrões comuns do dataset.</span></p><p><span class="s" data-s="b2-p2-s0">Para avaliar a eficácia do método, os autores criam o PAL-Dojo, um conjunto de geradores procedurais eficientes para três tarefas principais: estimativa de normais de superfície, segmentação de imagens e estimação de pose humana.</span> <span class="s" data-s="b2-p2-s1">Esses geradores permitem controlar variáveis como layout de objetos, iluminação, pose e textura, criando um espaço de busca rico e estruturado.</span> <span class="s" data-s="b2-p2-s2">A avaliação adversarial (PAE) então busca ativamente o pior caso possível dentro desse espaço, usando um orçamento computacional limitado de consultas ao modelo.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b3-t">Otimização de Ordem Zero</span></h3>
+          <p><span class="s" data-s="b3-c-s0">Ao usar CMA-ES, o Simple-PAT evita a necessidade de backpropagation através do renderizador.</span> <span class="s" data-s="b3-c-s1">Isso é crucial porque renderizadores gráficos são frequentemente não diferenciáveis ou têm gradientes instáveis.</span> <span class="s" data-s="b3-c-s2">A otimização evolucionária trata o gerador como uma &#39;caixa preta&#39; que retorna um valor de erro, permitindo uma busca robusta no espaço de parâmetros.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b4-h">Comparação com Baselines Robustos</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Para validar o Simple-PAT, os autores o comparam com métodos de treinamento padrão e técnicas de reponderação robusta.</span> <span class="s" data-s="b4-p0-s1">As baselines incluem: Treinamento Uniforme (amostragem aleatória simples), CVaR (Conditional Value at Risk, que foca na média dos piores α% dos casos) e Tilted ERM (que pondera os gradientes exponencialmente com base no erro, aproximando uma otimização do pior caso dentro do batch).</span> <span class="s" data-s="b4-p0-s2">Esses métodos são considerados fortes na literatura de aprendizado robusto, mas operam sobre distribuições fixas ou amostras limitadas.</span></p><p><span class="s" data-s="b4-p1-s0">O experimento utiliza um protocolo de avaliação rigoroso chamado Cross-Model Evaluation.</span> <span class="s" data-s="b4-p1-s1">Em vez de avaliar cada modelo apenas nos casos adversariais que ele mesmo encontrou, os autores avaliam cada modelo nos piores casos encontrados por adversários contra *outros* modelos.</span> <span class="s" data-s="b4-p1-s2">Isso revela se a robustez é específica do modelo ou generalizável.</span> <span class="s" data-s="b4-p1-s3">O adversário tem um orçamento de 50 milhões de consultas agregadas entre todos os modelos, mas cada modelo individual é avaliado com 2 milhões de consultas, divididas entre buscas DIRECT-L e CMA-ES refinadas.</span></p><p><span class="s" data-s="b4-p2-s0">Os resultados mostram que o Simple-PAT supera consistentemente todas as baselines.</span> <span class="s" data-s="b4-p2-s1">A tabela de resultados (Table 2) apresenta o erro de pior caso (worst-case error) para quatro configurações de tarefas.</span> <span class="s" data-s="b4-p2-s2">Em todas as métricas, o Simple-PAT atinge os menores valores de erro máximo.</span> <span class="s" data-s="b4-p2-s3">A diferença estatística é significativa, com valores p de 0.0079 em todas as comparações, indicando que o desempenho superior não é fruto do acaso.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.06890/figure1.webp" alt="Gráfico comparativo mostrando que o Simple-PAT reduz drasticamente o erro de pior caso em comparação ao treinamento uniforme e outros métodos robustos." loading="lazy">
+          <figcaption>
+            Gráfico comparativo mostrando que o Simple-PAT reduz drasticamente o erro de pior caso em comparação ao treinamento uniforme e outros métodos robustos.
+            <span class="source">Figura 1 do paper · Nugent et al., arXiv:2611.06890</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b6-h">Análise dos Resultados Quantitativos</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Os números revelam ganhos substanciais na robustez.</span> <span class="s" data-s="b6-p0-s1">Comparado ao treinamento uniforme com o otimizador Muon, o Simple-PAT reduz o erro de pior caso em uma média geométrica de 3.15x.</span> <span class="s" data-s="b6-p0-s2">Quando comparado à baseline mais forte para cada tarefa específica, a redução média é de 2.63x.</span> <span class="s" data-s="b6-p0-s3">Por exemplo, na tarefa de estimativa de normais, o erro máximo caiu de 43.4 graus (Uniform Muon) para 16.0 graus (Simple-PAT).</span> <span class="s" data-s="b6-p0-s4">Na segmentação de cadeiras (Chair-Simple), o erro BCE máximo caiu de 4.76 para 0.72, uma redução de 6.64x.</span></p><p><span class="s" data-s="b6-p1-s0">É importante notar que a melhoria no pior caso não veio à custa do desempenho médio.</span> <span class="s" data-s="b6-p1-s1">Na verdade, o Simple-PAT mantém ou melhora a mediana do erro em muitas tarefas.</span> <span class="s" data-s="b6-p1-s2">Na tarefa de pose, o erro mediano do Simple-PAT é apenas 1.1 cm pior que o do treinamento uniforme, mas o erro de pior caso é 25 cm melhor.</span> <span class="s" data-s="b6-p1-s3">Isso demonstra que o modelo não está apenas &#39;superajustado&#39; aos casos difíceis, mas está aprendendo uma representação mais geral e robusta da cena.</span></p><p><span class="s" data-s="b6-p2-s0">Os autores também analisam o custo computacional.</span> <span class="s" data-s="b6-p2-s1">O processo de geração adversarial durante o treino consome recursos, mas é escalável.</span> <span class="s" data-s="b6-p2-s2">O adversário usa um orçamento de 1 milhão de consultas para DIRECT-L e 1 milhão para CMA-ES durante o treino, representando cerca de 39% do orçamento total de amostragem.</span> <span class="s" data-s="b6-p2-s3">A avaliação final usa um adversário mais poderoso com população maior e reinicializações (IPOP) para convergir melhor, mas o custo de treinamento permanece viável para redes de tamanho médio (5-7.8M parâmetros).</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.06890/figure9.webp" alt="Visualização dos casos de pior caso encontrados para a tarefa de normais, mostrando como o Simple-PAT lida melhor com superfícies complexas." loading="lazy">
+          <figcaption>
+            Visualização dos casos de pior caso encontrados para a tarefa de normais, mostrando como o Simple-PAT lida melhor com superfícies complexas.
+            <span class="source">Figura 9 do paper · Nugent et al., arXiv:2611.06890</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Aplicação a Modelos Foundation SOTA</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Além de treinar modelos do zero, os autores aplicam o framework PAL-Dojo para avaliar a robustez de modelos foundation de última geração (SOTA), como MoGe-2 e SAM 3.</span> <span class="s" data-s="b8-p0-s1">Esses modelos não foram treinados com o Simple-PAT, servindo como um teste de estresse para a arquitetura atual da visão computacional.</span> <span class="s" data-s="b8-p0-s2">Os adversários procuraram os piores casos para esses modelos e encontraram falhas significativas, muitas vezes em configurações de iluminação ou geometria que parecem triviais.</span></p><p><span class="s" data-s="b8-p1-s0">Essa avaliação destaca que, mesmo os modelos mais avançados têm pontos cegos estruturais.</span> <span class="s" data-s="b8-p1-s1">O Simple-PAT não é apenas uma técnica de treino, mas também uma ferramenta de diagnóstico poderosa.</span> <span class="s" data-s="b8-p1-s2">Ao expor esses modelos a cenários gerados proceduralmente e adversarialmente, os pesquisadores podem identificar quais tipos de variações físicas os modelos atuais falham em generalizar, guiando o desenvolvimento futuro de arquiteturas mais resilientes.</span></p><p><span class="s" data-s="b8-p2-s0">A tabela de resultados mostra que, embora os modelos SOTA tenham bom desempenho em casos típicos, seus erros de pior caso são ordens de magnitude maiores que os do Simple-PAT treinado.</span> <span class="s" data-s="b8-p2-s1">Isso reforça a ideia de que a escala de dados e o tamanho do modelo, sozinhos, não resolvem o problema da robustez de cauda longa (long-tail robustness).</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b9-t">Limitações e Escopo</span></h3>
+          <p><span class="s" data-s="b9-c-s0">O paper foca em tarefas onde a renderização procedural é viável e eficiente.</span> <span class="s" data-s="b9-c-s1">Aplicações em dados reais complexos (como fotos naturais com ruído de sensor) não são o foco.</span> <span class="s" data-s="b9-c-s2">Além disso, o adversário é limitado pelo orçamento de consultas; o &#39;pior caso&#39; encontrado é uma aproximação, não o verdadeiro pior caso global.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b10-h">Limitações e Trabalho Futuro</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Apesar dos resultados promissores, o paper reconhece limitações.</span> <span class="s" data-s="b10-p0-s1">A eficácia do PAL depende criticamente da qualidade e expressividade do gerador procedural.</span> <span class="s" data-s="b10-p0-s2">Se o gerador não puder simular certas variações físicas reais, o adversário não as encontrará.</span> <span class="s" data-s="b10-p0-s3">Isso cria um viés potencial: o modelo pode ser robusto aos cenários procedurais, mas falhar em dados reais que escapam ao modelo de geração.</span></p><p><span class="s" data-s="b10-p1-s0">Outra limitação é a dependência de um orçamento de consultas.</span> <span class="s" data-s="b10-p1-s1">A busca adversarial é computacionalmente intensiva.</span> <span class="s" data-s="b10-p1-s2">Embora o Simple-PAT seja mais eficiente que métodos baseados em gradiente direto para geradores complexos, ainda requer mais recursos que o treinamento uniforme.</span> <span class="s" data-s="b10-p1-s3">Os autores sugerem que futuras pesquisas podem explorar a estrutura compartilhada entre os casos adversariais encontrados por diferentes modelos para criar adversários ainda mais fortes e eficientes.</span></p><p><span class="s" data-s="b10-p2-s0">O código e os geradores do PAL-Dojo foram disponibilizados publicamente, permitindo que a comunidade valide e estenda o framework.</span> <span class="s" data-s="b10-p2-s1">A abordagem de aprendizado adversarial procedurals abre um caminho novo para a robustez em visão computacional, deslocando o foco da coleta de dados para a geração inteligente de cenários de teste e treino.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.06890/table2.webp" alt="Tabela de resultados mostrando a redução do erro de pior caso (Worst Case) do Simple-PAT em comparação a baselines uniformes e robustos." loading="lazy">
+          <figcaption>
+            Tabela de resultados mostrando a redução do erro de pior caso (Worst Case) do Simple-PAT em comparação a baselines uniformes e robustos.
+            <span class="source">Tabela 2 do paper · Nugent et al., arXiv:2611.06890</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b12-h">Conclusão</span></h2>
+<p><span class="s" data-s="b12-p0-s0">O Procedural Adversarial Learning (PAL) e o algoritmo Simple-PAT representam uma contribuição significativa para a busca de modelos de visão computacional robustos.</span> <span class="s" data-s="b12-p0-s1">Ao substituir a perturbação de dados estáticos pela geração procedural dinâmica e otimização de ordem zero, os autores conseguem explorar o espaço de entrada de forma muito mais ampla e profunda.</span></p><p><span class="s" data-s="b12-p1-s0">Os resultados demonstram que é possível reduzir drasticamente o erro de pior caso sem degradar o desempenho médio, um equilíbrio difícil de alcançar com métodos tradicionais.</span> <span class="s" data-s="b12-p1-s1">Para engenheiros e pesquisadores preocupados com a confiabilidade de sistemas de IA em cenários do mundo real, o PAL oferece uma ferramenta prática e teoricamente fundamentada para endurecer modelos contra falhas raras, mas críticas.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">O Simple-PAT usa geradores procedurais para criar cenários adversariais sob demanda, fugindo de datasets estáticos.</span></li><li><span class="s" data-s="k1">A otimização de ordem zero (CMA-ES) busca parâmetros que maximizam o erro do modelo durante o treino.</span></li><li><span class="s" data-s="k2">O método reduz o erro de pior caso em até 6.6x comparado ao treinamento uniforme, sem comprometer a média.</span></li><li><span class="s" data-s="k3">O PAL-Dojo oferece geradores eficientes para estimativa de normais, segmentação e pose humana.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.06890" rel="noopener">Procedural Adversarial Learning</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.06890" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

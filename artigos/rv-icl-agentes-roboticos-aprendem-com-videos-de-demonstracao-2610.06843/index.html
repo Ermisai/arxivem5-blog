@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RV-ICL: agentes robóticos aprendem com vídeos de demonstração navegando uma hierarquia em vez de assistir tudo de uma vez — arXiv em 5</title>
+<meta name="description" content="Um método sem treinamento que transforma uma demonstração de tarefa em quatro níveis de detalhe — de keyframes gerais a clipes de 20 frames — e deixa o agente LLM consultar apenas o trecho que precisa em cada etapa da execução.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RV-ICL: agentes robóticos aprendem com vídeos de demonstração navegando uma hierarquia em vez de assistir tudo de uma vez">
+<meta property="og:description" content="Um método sem treinamento que transforma uma demonstração de tarefa em quatro níveis de detalhe — de keyframes gerais a clipes de 20 frames — e deixa o agente LLM consultar apenas o trecho que precisa em cada etapa da execução.">
+<meta property="og:image" content="../../assets/papers/2610.06843/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Robótica</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.06843" rel="noopener">arXiv:2610.06843</a>
+    </div>
+    <h1><span class="s" data-s="t">RV-ICL: agentes robóticos aprendem com vídeos de demonstração navegando uma hierarquia em vez de assistir tudo de uma vez</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um método sem treinamento que transforma uma demonstração de tarefa em quatro níveis de detalhe — de keyframes gerais a clipes de 20 frames — e deixa o agente LLM consultar apenas o trecho que precisa em cada etapa da execução.</span></p>
+    <p class="byline">
+      <span>Bao et al.</span>
+      <span>12 min de leitura</span>
+<span>05/10/2026</span>    </p>
+    <div class="listen" data-article="2610.06843" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema: memória de texto não captura como fazer</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Agentes robóticos baseados em LLMs estão cada vez mais usados como camada de planejamento: eles decompõem instruções, localizam objetos e chamam políticas visuomotoras treinadas para executar os passos de contato que não podem ser resolvidos analiticamente.</span> <span class="s" data-s="b0-p0-s1">Sistemas recentes como o HarnessVLA (lançado como framework RPent) expõem uma política congelada de visão-linguagem-ação (VLA) como uma primitiva entre outras, e deixam o agente orquestrar as chamadas.</span> <span class="s" data-s="b0-p0-s2">O agente melhora entre episódios através de memória textual: receitas, lições aprendidas e regras de falha.</span></p><p><span class="s" data-s="b0-p1-s0">Esse design supera políticas VLA end-to-end quando há mudanças na distribuição dos dados.</span> <span class="s" data-s="b0-p1-s1">Mas o quanto o agente pode melhorar é limitado pelo que texto consegue registrar.</span> <span class="s" data-s="b0-p1-s2">A memória é escrita a partir dos próprios traços de execução do agente, então ela descreve as chamadas e seus resultados, não a tarefa em si.</span> <span class="s" data-s="b0-p1-s3">O agente pode registrar que uma pegada falhou, mas não como uma execução bem-sucedida se parece: qual objeto é pego primeiro, de que lado a mão se aproxima, a que altura o objeto é levantado, quando o gripper abre.</span></p><p><span class="s" data-s="b0-p2-s0">Esse conhecimento é espacial e temporal, difícil de colocar em palavras.</span> <span class="s" data-s="b0-p2-s1">Mas é fácil de mostrar: um vídeo da tarefa captura tudo isso, frame a frame.</span> <span class="s" data-s="b0-p2-s2">Esse vídeo também é barato de obter — uma demonstração humana só exige gravar uma pessoa executando a tarefa, sem rótulos de ação ou outra anotação.</span> <span class="s" data-s="b0-p2-s3">Modelos grandes conseguem aprender com demonstrações colocadas em seu contexto, em texto e com imagens intercaladas.</span> <span class="s" data-s="b0-p2-s4">Isso sugere deixar o agente assistir uma demonstração da tarefa, como uma pessoa assiste um tutorial antes de tentar algo novo.</span></p>        <h2><span class="s" data-s="b1-h">Por que simplesmente colocar o vídeo no contexto não funciona</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Mas em que forma o vídeo deve entrar na memória do agente?</span> <span class="s" data-s="b1-p0-s1">As respostas óbvias falham por três razões.</span> <span class="s" data-s="b1-p0-s2">Primeiro, comprimento: uma demonstração tem centenas de frames, e o agente relê todo o contexto a cada um de seus dezenas ou centenas de turnos.</span> <span class="s" data-s="b1-p0-s3">Contextos longos também degradam o quanto modelos usam seu conteúdo.</span> <span class="s" data-s="b1-p0-s4">Segundo, resolução: alguns keyframes são viáveis, mas eles descartam os frames ao redor de cada contato, que decidem se uma pegada segura ou um posicionamento registra.</span></p><p><span class="s" data-s="b1-p1-s0">Terceiro, timing: o que o agente precisa muda ao longo do episódio.</span> <span class="s" data-s="b1-p1-s1">Antes de agir, ele precisa da estrutura da tarefa.</span> <span class="s" data-s="b1-p1-s2">Uma vez que alcança um passo específico, precisa dos frames ao redor daquele contato particular.</span> <span class="s" data-s="b1-p1-s3">Nenhuma apresentação fixa do vídeo consegue satisfazer as três restrições ao mesmo tempo.</span></p><p><span class="s" data-s="b1-p2-s0">É aí que entra o Recursive Video In-Context Learning (RV-ICL), proposto por pesquisadores da University of Central Florida e University of Southern California.</span> <span class="s" data-s="b1-p2-s1">Em vez de apresentar a demonstração como um prefixo que o agente recebe, o método a transforma em uma hierarquia que o agente navega.</span> <span class="s" data-s="b1-p2-s2">A hierarquia é construída a partir dos sub-eventos da demonstração — pegadas, solturas, giros de botão.</span> <span class="s" data-s="b1-p2-s3">Seus níveis crescem em granularidade, de keyframes da tarefa inteira até fases, momentos e clipes curtos, e são expostos através de ferramentas read-only.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.06843/figure1.webp" alt="Visão geral do RV-ICL: a demonstração é segmentada em quatro níveis (L0 a L3), e o agente consulta apenas os trechos relevantes durante a execução. Note como o agente re-entra na hierarquia várias vezes ao longo do episódio." loading="lazy">
+          <figcaption>
+            Visão geral do RV-ICL: a demonstração é segmentada em quatro níveis (L0 a L3), e o agente consulta apenas os trechos relevantes durante a execução. Note como o agente re-entra na hierarquia várias vezes ao longo do episódio.
+            <span class="source">Figura 1 do paper · Bao et al., arXiv:2610.06843</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Como funciona a hierarquia de quatro níveis</span></h2>
+<p><span class="s" data-s="b3-p0-s0">A hierarquia tem quatro níveis, construídos offline a partir de uma única demonstração por tarefa.</span> <span class="s" data-s="b3-p0-s1">O nível L0 contém keyframes event-driven: frames capturados nos momentos em que o gripper fecha ou abre, ou quando uma junta de fixture (como uma porta de microondas) se move.</span> <span class="s" data-s="b3-p0-s2">Esses keyframes mostram a estrutura geral da tarefa, mas não como cada sub-evento é executado.</span></p><p><span class="s" data-s="b3-p1-s0">O nível L1 divide a demonstração em fases, que são os intervalos entre sub-eventos consecutivos.</span> <span class="s" data-s="b3-p1-s1">Por exemplo, uma fase pode ser &#39;carregar a caneca até o microondas&#39;, delimitada pela pegada da caneca e pela soltura dentro do microondas.</span> <span class="s" data-s="b3-p1-s2">O nível L2 contém momentos: janelas de alguns frames ao redor de cada sub-evento, capturando a transição imediata.</span> <span class="s" data-s="b3-p1-s3">O nível L3 guarda clipes de 20 frames de cada câmera, centrados em cada sub-evento.</span></p><p><span class="s" data-s="b3-p2-s0">Os níveis grossos (L0 e L1) são lidos antes do planejamento, dando ao agente uma visão da tarefa completa.</span> <span class="s" data-s="b3-p2-s1">Durante a execução, o agente re-entra na hierarquia sempre que um passo precisa de mais detalhe, e carrega apenas o clipe de seu sub-objetivo atual.</span> <span class="s" data-s="b3-p2-s2">A hierarquia é exposta através de ferramentas read-only: view_task_video retorna os keyframes L0, view_task_map retorna o mapa de fases L1 e momentos L2 em texto, e view_demo_clip carrega um clipe L3 específico, identificado pelo sub-evento ou fase.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b4-t">Uma demonstração por tarefa é suficiente</span></h3>
+          <p><span class="s" data-s="b4-c-s0">O método não exige múltiplas demonstrações ou anotações de ação.</span> <span class="s" data-s="b4-c-s1">Uma única demonstração humana gravada em vídeo, segmentada automaticamente pelos eventos de gripper e juntas, gera a hierarquia completa.</span> <span class="s" data-s="b4-c-s2">Isso torna o método barato de aplicar a novas tarefas.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b5-h">Detecção de sub-eventos e construção da hierarquia</span></h2>
+<p><span class="s" data-s="b5-p0-s0">A segmentação automática da demonstração depende de detectar sub-eventos.</span> <span class="s" data-s="b5-p0-s1">No benchmark LIBERO, os autores usam dois sinais: a largura do gripper (para detectar pegadas e solturas) e o estado de juntas de fixtures (para detectar aberturas e fechamentos de portas, gavetas ou botões).</span> <span class="s" data-s="b5-p0-s2">Um sub-evento de pegada é registrado quando a largura do gripper cai abaixo de um limiar; uma soltura quando ela sobe acima de outro limiar.</span> <span class="s" data-s="b5-p0-s3">Mudanças no estado de juntas de fixtures geram sub-eventos de abertura ou fechamento.</span></p><p><span class="s" data-s="b5-p1-s0">Uma vez detectados os sub-eventos, a construção da hierarquia é direta.</span> <span class="s" data-s="b5-p1-s1">L0 pega um frame em cada sub-evento.</span> <span class="s" data-s="b5-p1-s2">L1 rotula cada intervalo entre sub-eventos consecutivos com uma descrição textual da fase (por exemplo, &#39;approach&#39;, &#39;carry mug to microwave&#39;, &#39;push in, close the door&#39;).</span> <span class="s" data-s="b5-p1-s3">L2 extrai uma janela de frames ao redor de cada sub-evento.</span> <span class="s" data-s="b5-p1-s4">L3 corta clipes de 20 frames centrados em cada sub-evento, de cada câmera disponível.</span></p><p><span class="s" data-s="b5-p2-s0">Essa construção assume que a tarefa se decompõe em sub-tarefas que deixam traços observáveis no estado gravado.</span> <span class="s" data-s="b5-p2-s1">Tarefas cujos sub-eventos não deixam tais traços — como empurrar, limpar ou despejar — precisariam de outro detector, por exemplo um que leia a trajetória do end-effector ou consulte um modelo de visão-linguagem.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.06843/figure2.webp" alt="Arquitetura do sistema: o agente LLM acessa a hierarquia através de ferramentas read-only, enquanto ferramentas de robô executam no ambiente. A hierarquia é construída offline e carregada sob demanda." loading="lazy">
+          <figcaption>
+            Arquitetura do sistema: o agente LLM acessa a hierarquia através de ferramentas read-only, enquanto ferramentas de robô executam no ambiente. A hierarquia é construída offline e carregada sob demanda.
+            <span class="source">Figura 2 do paper · Bao et al., arXiv:2610.06843</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Como o agente usa a hierarquia durante a execução</span></h2>
+<p><span class="s" data-s="b7-p0-s0">O agente é um LLM de código (no paper, GPT-6 Astra com baixo esforço de raciocínio, rodando no Codex CLI) que orquestra ferramentas através do framework RPent.</span> <span class="s" data-s="b7-p0-s1">Antes de planejar, o agente lê os níveis L0 e L1/L2 da hierarquia, obtendo uma visão geral da tarefa e um mapa textual das fases e momentos.</span> <span class="s" data-s="b7-p0-s2">Isso fornece o contexto necessário para decompor a instrução em passos.</span></p><p><span class="s" data-s="b7-p1-s0">Durante a execução, o agente chama ferramentas de robô (como move_to, back_project para localizar objetos, ou a primitiva VLA pi0_pick) e ferramentas de demonstração.</span> <span class="s" data-s="b7-p1-s1">Quando um passo precisa de mais detalhe — por exemplo, a política VLA falha em uma pegada — o agente re-entra na hierarquia chamando view_demo_clip com o identificador do sub-evento relevante (por exemplo, &#39;grasp 1&#39;).</span> <span class="s" data-s="b7-p1-s2">A ferramenta retorna apenas o clipe L3 daquele sub-evento, não o vídeo inteiro.</span></p><p><span class="s" data-s="b7-p2-s0">Esse acesso recursivo resolve as três restrições.</span> <span class="s" data-s="b7-p2-s1">O comprimento é controlado porque apenas clipes curtos entram no contexto, e só quando necessários.</span> <span class="s" data-s="b7-p2-s2">A resolução é preservada porque os clipes L3 contêm os frames ao redor do contato.</span> <span class="s" data-s="b7-p2-s3">O timing é respeitado porque o agente escolhe qual clipe carregar com base em seu sub-objetivo atual.</span> <span class="s" data-s="b7-p2-s4">A hierarquia age como um índice navegável, não como um prefixo fixo.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.06843/figure3.webp" alt="Exemplo real de uso: a política fecha o gripper no topo da cafeteira (falha). O agente abre apenas o clipe da pegada demonstrada, vê que o demonstrador pega pela alça, e re-executa corretamente. Note que o agente não assiste o vídeo inteiro." loading="lazy">
+          <figcaption>
+            Exemplo real de uso: a política fecha o gripper no topo da cafeteira (falha). O agente abre apenas o clipe da pegada demonstrada, vê que o demonstrador pega pela alça, e re-executa corretamente. Note que o agente não assiste o vídeo inteiro.
+            <span class="source">Figura 3 do paper · Bao et al., arXiv:2610.06843</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Resultados no LIBERO-PRO: de 92.6% para 96.5%</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Os autores testaram RV-ICL no benchmark LIBERO-PRO, que tem oito células combinando três tipos de tarefa (Spatial, Object, Goal, LIBERO-10) com dois tipos de perturbação: instruction redirection (T), onde a instrução é reescrita mas a tarefa base é a mesma, e position swap (S), onde as posições dos objetos são trocadas.</span> <span class="s" data-s="b9-p0-s1">Cada célula agrega 50 episódios (10 tarefas × 5 seeds) para RV-ICL, comparados com 100 episódios dos baselines reportados por trabalhos anteriores.</span></p><p><span class="s" data-s="b9-p1-s0">O baseline mais forte é HarnessVLA com GPT-6 Astra, que alcança 92.6% de sucesso geral.</span> <span class="s" data-s="b9-p1-s1">RV-ICL adiciona a hierarquia de demonstração a esse sistema e eleva o sucesso para 96.5%, um ganho de 3.9 pontos percentuais.</span> <span class="s" data-s="b9-p1-s2">Um teste z de duas proporções nas células agregadas mostra que esse ganho é estatisticamente significativo (z = 2.97, p = 0.003 bicaudal).</span></p><p><span class="s" data-s="b9-p2-s0">Os ganhos são especialmente claros nas três células onde HarnessVLA é mais fraco.</span> <span class="s" data-s="b9-p2-s1">Goal-T sobe de 88.0% para 100.0%, LIBERO-10-T de 85.0% para 90.0%, e LIBERO-10-S de 72.0% para 84.0%.</span> <span class="s" data-s="b9-p2-s2">LIBERO-10 é a suíte de tarefas de longo horizonte do benchmark, onde cada tarefa encadeia várias pegadas e solturas.</span> <span class="s" data-s="b9-p2-s3">Os ganhos ali sugerem que o acesso recursivo é especialmente efetivo em tarefas longas, onde a necessidade de detalhe muda ao longo do episódio.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.06843/table1.webp" alt="Resultados completos no LIBERO-PRO. RV-ICL supera todos os baselines, incluindo VLAs end-to-end e sistemas agênticos anteriores. Note os ganhos maiores nas células LIBERO-10, que têm tarefas mais longas." loading="lazy">
+          <figcaption>
+            Resultados completos no LIBERO-PRO. RV-ICL supera todos os baselines, incluindo VLAs end-to-end e sistemas agênticos anteriores. Note os ganhos maiores nas células LIBERO-10, que têm tarefas mais longas.
+            <span class="source">Tabela 1 do paper · Bao et al., arXiv:2610.06843</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b11-h">Ablações: por que a hierarquia importa</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Os autores testaram quatro formas de apresentar a demonstração, todas nas duas células LIBERO-10 (as mais longas).</span> <span class="s" data-s="b11-p0-s1">A primeira é Text: HarnessVLA com memória textual apenas, sem vídeo.</span> <span class="s" data-s="b11-p0-s2">A segunda é Keyframes: apenas os keyframes L0 da demonstração.</span> <span class="s" data-s="b11-p0-s3">A terceira é Full video: o vídeo completo da demonstração, sem hierarquia.</span> <span class="s" data-s="b11-p0-s4">A quarta é RV-ICL: a hierarquia completa com acesso recursivo.</span></p><p><span class="s" data-s="b11-p1-s0">Mostrar a demonstração não é suficiente por si só.</span> <span class="s" data-s="b11-p1-s1">Keyframes elevam o sucesso em apenas 1.0 ponto em L10-T e 2.0 pontos em L10-S em relação a Text.</span> <span class="s" data-s="b11-p1-s2">O vídeo completo fica 1.0 ponto abaixo de Text em L10-T e 6.0 pontos abaixo em L10-S.</span> <span class="s" data-s="b11-p1-s3">RV-ICL é o melhor em ambas as células, com 90.0% em L10-T e 84.0% em L10-S.</span> <span class="s" data-s="b11-p1-s4">Sua vantagem é maior em L10-S, a célula mais difícil para todos os métodos, onde fica 10.0 pontos acima de Keyframes e 18.0 pontos acima de Full video.</span></p><p><span class="s" data-s="b11-p2-s0">Os três métodos de vídeo mostram a mesma demonstração em formas diferentes.</span> <span class="s" data-s="b11-p2-s1">Keyframes são grossos: mostram onde o gripper fecha e abre, mas não como uma pegada ou soltura é executada.</span> <span class="s" data-s="b11-p2-s2">Eles também são o que RV-ICL lê antes de planejar, então a diferença entre os dois vem do mapa de fases e dos clipes.</span> <span class="s" data-s="b11-p2-s3">O vídeo completo contém o detalhe, mas não tem índice, forçando o agente a encontrar o momento que precisa entre frames irrelevantes.</span> <span class="s" data-s="b11-p2-s4">RV-ICL mantém o detalhe e adiciona o índice, cujos níveis textuais dizem ao agente qual clipe pedir.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b12-t">Agentes re-entram na hierarquia em 97% dos episódios</span></h3>
+          <p><span class="s" data-s="b12-c-s0">Análise dos logs mostra que o agente chama view_demo_clip em 97% dos episódios bem-sucedidos.</span> <span class="s" data-s="b12-c-s1">A maioria das chamadas (70%) pede clipes de pegadas ou solturas, confirmando que o agente usa a hierarquia para resolver passos de contato, não apenas para planejar.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b13-h">Generalização no LIBERO-Plus e transferência entre planners</span></h2>
+<p><span class="s" data-s="b13-p0-s0">Os autores também testaram RV-ICL no LIBERO-Plus, que aplica sete tipos de perturbação a tarefas base: visual (textura, iluminação), layout (posição, rotação dos objetos) e semântica (distratores, objetos novos, redirecionamento de instrução).</span> <span class="s" data-s="b13-p0-s1">Cada dimensão tem 17 ou 18 variantes em uma única seed.</span> <span class="s" data-s="b13-p0-s2">RV-ICL mantém ou melhora o desempenho de HarnessVLA em todas as sete dimensões.</span></p><p><span class="s" data-s="b13-p1-s0">O método também foi testado com um segundo planner, Claude Code com Claude Opus 5.5, sem mudanças na hierarquia ou nas ferramentas.</span> <span class="s" data-s="b13-p1-s1">A transferência foi bem-sucedida, mostrando que RV-ICL não depende de comportamentos específicos de um modelo.</span> <span class="s" data-s="b13-p1-s2">A hierarquia é exposta através de ferramentas read-only e de uma seção de prompt no harness, então qualquer agente que o harness suporte pode usar a mesma demonstração.</span></p><p><span class="s" data-s="b13-p2-s0">Isso contrasta com métodos que dependem de fine-tuning da política ou de prompts específicos do modelo.</span> <span class="s" data-s="b13-p2-s1">RV-ICL é training-free: não treina a política VLA, não treina o LLM, e não muda a arquitetura de nenhum dos dois.</span> <span class="s" data-s="b13-p2-s2">A única adição é a hierarquia e as ferramentas que a expõem.</span></p>        <h2><span class="s" data-s="b14-h">Custo: tokens e tempo de parede</span></h2>
+<p><span class="s" data-s="b14-p0-s0">Cada visualização de demonstração adiciona tokens ao contexto do agente, e esse contexto persiste pelo resto do episódio.</span> <span class="s" data-s="b14-p0-s1">Então o custo cresce com o número de re-entradas.</span> <span class="s" data-s="b14-p0-s2">Os autores mediram o custo de um episódio em tempo de parede e tokens, mas os números específicos aparecem apenas no apêndice D do paper, não nas seções principais.</span></p><p><span class="s" data-s="b14-p1-s0">O que o paper deixa claro é que o custo é controlado pelo design da hierarquia.</span> <span class="s" data-s="b14-p1-s1">Clipes L3 têm apenas 20 frames de cada câmera, e o agente carrega apenas o clipe do sub-evento atual, não todos os clipes de uma vez.</span> <span class="s" data-s="b14-p1-s2">Isso mantém o custo por re-entrada baixo.</span> <span class="s" data-s="b14-p1-s3">O número de re-entradas varia por episódio — tarefas mais longas ou episódios com falhas intermediárias têm mais re-entradas — mas a análise de logs mostra que a maioria dos episódios tem entre 3 e 6 chamadas a view_demo_clip.</span></p>        <h2><span class="s" data-s="b15-h">Limitações e trabalho futuro</span></h2>
+<p><span class="s" data-s="b15-p0-s0">Os autores são explícitos sobre as limitações.</span> <span class="s" data-s="b15-p0-s1">Primeiro, RV-ICL assume uma demonstração por tarefa base.</span> <span class="s" data-s="b15-p0-s2">Quando um benchmark reescreve o objetivo de uma tarefa (como em instruction redirection), partes da demonstração se tornam inválidas e precisam ser sinalizadas ao agente.</span> <span class="s" data-s="b15-p0-s3">Segundo, a detecção de sub-eventos depende de traços observáveis no estado gravado.</span> <span class="s" data-s="b15-p0-s4">Tarefas cujos sub-eventos não deixam tais traços — empurrar, limpar, despejar — precisam de outro detector.</span></p><p><span class="s" data-s="b15-p1-s0">Terceiro, quando o contato é executado por uma habilidade aprendida cujo movimento difere do demonstrador, os níveis mais finos carregam pouco que o agente possa usar.</span> <span class="s" data-s="b15-p1-s1">Quarto, cada visualização de demonstração permanece no contexto pelo resto do episódio, então o custo cresce com o número de re-entradas.</span> <span class="s" data-s="b15-p1-s2">Quinto, todos os experimentos usam tarefas LIBERO com um único robô e uma única VLA, então outras embodiments e fontes de demonstração permanecem não testadas.</span></p><p><span class="s" data-s="b15-p2-s0">Sexto, os agentes são modelos proprietários acessados através de endpoints de terceiros, cujo comportamento pode mudar ao longo do tempo.</span> <span class="s" data-s="b15-p2-s1">Sétimo, as células LIBERO-PRO contêm 50 episódios e cada dimensão LIBERO-Plus tem 17 ou 18 variantes em uma seed, então um único episódio move uma célula em 2 a 6 pontos percentuais.</span> <span class="s" data-s="b15-p2-s2">Os baselines na tabela principal vêm de execuções separadas, então não podem ser comparados com RV-ICL episódio por episódio.</span></p><p><span class="s" data-s="b15-p3-s0">Finalmente, os autores notam que implantar tais agentes em robôs físicos requer sandboxing mais forte e supervisão humana, já que os agentes LLM executam comandos de shell e podem ler arquivos fora de sua tarefa.</span> <span class="s" data-s="b15-p3-s1">Todos os experimentos foram conduzidos em simulação, e as demonstrações vêm de datasets públicos de benchmark.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b16-t">Training-free: nenhum treinamento de política ou LLM</span></h3>
+          <p><span class="s" data-s="b16-c-s0">RV-ICL não muda a política VLA, não faz fine-tuning do LLM planner, e não adiciona nenhum módulo treinável.</span> <span class="s" data-s="b16-c-s1">A hierarquia é construída offline por segmentação baseada em regras, e as ferramentas são wrappers read-only.</span> <span class="s" data-s="b16-c-s2">Isso torna o método fácil de aplicar a novos sistemas.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b17-h">O que fica claro e o que fica em aberto</span></h2>
+<p><span class="s" data-s="b17-p0-s0">O paper demonstra que tratar demonstrações como um ambiente a ser consultado, em vez de como um prefixo fixo, é um ajuste natural para agentes cujas necessidades de informação mudam conforme agem.</span> <span class="s" data-s="b17-p0-s1">A hierarquia resolve o trade-off entre comprimento, resolução e timing que impede apresentações fixas de funcionarem bem.</span> <span class="s" data-s="b17-p0-s2">Os ganhos são maiores em tarefas longas, onde o agente precisa de diferentes partes da demonstração em diferentes momentos.</span></p><p><span class="s" data-s="b17-p1-s0">O que o paper não mostra é como o método escala para tarefas com muitos sub-eventos (digamos, 20 ou 30 pegadas), onde o custo acumulado de múltiplas re-entradas pode se tornar proibitivo.</span> <span class="s" data-s="b17-p1-s1">Também não está claro como o método se comporta quando a demonstração e a execução diferem substancialmente — por exemplo, se o robô de avaliação tem um gripper diferente do demonstrador, ou se a política aprendida usa uma estratégia de movimento diferente.</span></p><p><span class="s" data-s="b17-p2-s0">Outra questão em aberto é como construir a hierarquia para tarefas que não se decompõem em sub-eventos discretos, ou cujos sub-eventos não deixam traços no estado.</span> <span class="s" data-s="b17-p2-s1">O paper sugere usar trajetórias de end-effector ou modelos de visão-linguagem como detectores alternativos, mas não testa essas abordagens.</span> <span class="s" data-s="b17-p2-s2">Finalmente, todos os experimentos usam uma única demonstração por tarefa base.</span> <span class="s" data-s="b17-p2-s3">Não está claro se múltiplas demonstrações — mostrando diferentes estratégias ou lidando com diferentes layouts — poderiam ser organizadas em uma hierarquia unificada, ou se cada uma precisaria de sua própria hierarquia.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">RV-ICL transforma uma demonstração em vídeo em hierarquia de 4 níveis (keyframes, fases, momentos, clipes) e deixa o agente LLM consultar apenas o trecho relevante em cada etapa.</span></li><li><span class="s" data-s="k1">No LIBERO-PRO, o método eleva a taxa de sucesso de 92.6% para 96.5%, com ganhos maiores em tarefas longas que encadeiam várias pegadas e solturas.</span></li><li><span class="s" data-s="k2">O método é training-free: não treina a política VLA nem o LLM, apenas adiciona ferramentas read-only que expõem a hierarquia construída offline por segmentação baseada em eventos.</span></li><li><span class="s" data-s="k3">Limitações incluem dependência de sub-eventos detectáveis no estado gravado, custo crescente com re-entradas, e testes apenas em simulação com um único robô e VLA.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.06843" rel="noopener">Recursive Video In-Context Learning for Agentic Robot</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.06843" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>
