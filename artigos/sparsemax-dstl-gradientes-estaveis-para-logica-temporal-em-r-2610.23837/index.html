@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SparseMax-dSTL: Gradientes Estáveis para Lógica Temporal em Robótica — arXiv em 5</title>
+<meta name="description" content="Um novo método de otimização de trajetórias que usa projeções SparseMax para garantir que especificações de lógica temporal sejam satisfeitas, mantendo a estabilidade do gradiente mesmo em horizontes longos.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SparseMax-dSTL: Gradientes Estáveis para Lógica Temporal em Robótica">
+<meta property="og:description" content="Um novo método de otimização de trajetórias que usa projeções SparseMax para garantir que especificações de lógica temporal sejam satisfeitas, mantendo a estabilidade do gradiente mesmo em horizontes longos.">
+<meta property="og:image" content="../../assets/papers/2610.23837/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Sistemas</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.23837" rel="noopener">arXiv:2610.23837</a>
+    </div>
+    <h1><span class="s" data-s="t">SparseMax-dSTL: Gradientes Estáveis para Lógica Temporal em Robótica</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um novo método de otimização de trajetórias que usa projeções SparseMax para garantir que especificações de lógica temporal sejam satisfeitas, mantendo a estabilidade do gradiente mesmo em horizontes longos.</span></p>
+    <p class="byline">
+      <span>Damera et al.</span>
+      <span>7 min de leitura</span>
+<span>16/10/2026</span>    </p>
+    <div class="listen" data-article="2610.23837" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=rO7n2q-mMrQ" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Suavização em Lógica Temporal</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Na otimização de trajetórias para robótica, garantir que um robô siga regras complexas de segurança e missão é essencial.</span> <span class="s" data-s="b0-p0-s1">Uma abordagem comum é usar Lógica Temporal de Sinais (STL), que atribui um valor escalar chamado robustez a cada trajetória.</span> <span class="s" data-s="b0-p0-s2">Se a robustez for positiva, a trajetória satisfaz a especificação; se for negativa, ela a viola.</span> <span class="s" data-s="b0-p0-s3">O problema é que a definição exata de robustez envolve mínimos e máximos aninhados, o que a torna não diferenciável.</span> <span class="s" data-s="b0-p0-s4">Para usar solucionadores baseados em gradiente, os pesquisadores precisam suavizar esses operadores, substituindo-os por funções suaves como o log-sum-exp (LSE).</span></p><p><span class="s" data-s="b0-p1-s0">No entanto, essa suavização introduz riscos graves em cenários de segurança crítica.</span> <span class="s" data-s="b0-p1-s1">Para que um solucionador seja confiável, a aproximação suave deve ter duas propriedades fundamentais.</span> <span class="s" data-s="b0-p1-s2">Primeiro, deve ser sonora: se a trajetória viola a especificação, a robustez aproximada deve ser negativa.</span> <span class="s" data-s="b0-p1-s3">Segundo, o peso que o gradiente atribui às amostras que violam a especificação não pode desaparecer à medida que o horizonte de tempo aumenta.</span> <span class="s" data-s="b0-p1-s4">Sem essas propriedades, o otimizador pode aceitar trajetórias perigosas ou falhar em corrigir violações iminentes.</span></p><p><span class="s" data-s="b0-p2-s0">As aproximações atuais, incluindo o log-sum-exp padrão, sua variante sonora e a robustez de média generalizada (GMR), não satisfazem simultaneamente ambas as propriedades.</span> <span class="s" data-s="b0-p2-s1">O LSE padrão pode ser positivo mesmo em trajetórias que violam a especificação, levando o solucionador a aceitar soluções inseguras.</span> <span class="s" data-s="b0-p2-s2">Variantes mais seguras tendem a diluir o gradiente nas amostras violadoras conforme o tempo passa, perdendo a capacidade de guiar o robô para fora de zonas de perigo.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.23837/figure1.webp" alt="Comparação visual: LSE falha (robustez positiva em violação), enquanto SparseMax mantém a segurança e o peso do gradiente." loading="lazy">
+          <figcaption>
+            Comparação visual: LSE falha (robustez positiva em violação), enquanto SparseMax mantém a segurança e o peso do gradiente.
+            <span class="source">Figura 1 do paper · Damera et al., arXiv:2610.23837</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">Limitações das Aproximações Existentes</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Para entender a falha das abordagens tradicionais, considere um manipulador robótico que deve evitar uma zona de perigo até coletar uma peça.</span> <span class="s" data-s="b2-p0-s1">A especificação STL envolve um operador until (até), que exige que a condição de segurança seja verdadeira até que a coleta ocorra.</span> <span class="s" data-s="b2-p0-s2">Se o robô entra na zona por um breve momento antes de coletar, a trajetória é violada.</span> <span class="s" data-s="b2-p0-s3">Em um horizonte longo, há centenas de amostras onde o robô está seguro e apenas algumas onde ele viola.</span></p><p><span class="s" data-s="b2-p1-s0">O log-sum-exp (LSE) substitui o máximo de um conjunto de valores z por beta^-1 log soma de e^(beta*z_i).</span> <span class="s" data-s="b2-p1-s1">Essa função é sempre maior ou igual ao máximo exato, podendo ser positiva mesmo quando o máximo exato é negativo.</span> <span class="s" data-s="b2-p1-s2">Isso viola a propriedade de sonoridade.</span> <span class="s" data-s="b2-p1-s3">Os autores chamam isso de LSE plano.</span> <span class="s" data-s="b2-p1-s4">Para corrigir isso, pode-se subtrair o excesso máximo, log m / beta, obtendo o LSE sonoro.</span> <span class="s" data-s="b2-p1-s5">No entanto, o gradiente do LSE sonoro é uma softmax, que atribui um peso positivo a todas as amostras.</span> <span class="s" data-s="b2-p1-s6">Em um horizonte longo, o peso nas poucas amostras violadoras tende a zero, pois o gradiente se dispersa pelas muitas amostras seguras.</span></p><p><span class="s" data-s="b2-p2-s0">A Robustez de Média Generalizada (GMR) tenta preservar o sinal da robustez exata, mas sofre de problemas semelhantes de alocação de gradiente.</span> <span class="s" data-s="b2-p2-s1">Quando o horizonte cresce, a influência do gradiente nas violações críticas se torna insuficiente para orientar o otimizador a corrigir o erro.</span> <span class="s" data-s="b2-p2-s2">Isso significa que, embora a GMR seja segura em teoria, na prática ela pode falhar em tarefas de longo prazo onde a correção rápida é necessária.</span></p>        <h2><span class="s" data-s="b3-h">A Solução: Projeções SparseMax</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Os autores propõem o SparseMax-dSTL, que utiliza aproximações por baixo dos operadores mínimo e máximo.</span> <span class="s" data-s="b3-p0-s1">Em vez de suavizar todos os valores igualmente, o SparseMax projeta os pesos em um simplexo, resultando em uma distribuição de pesos esparsa.</span> <span class="s" data-s="b3-p0-s2">Isso significa que apenas um subconjunto limitado de amostras recebe peso não nulo no cálculo do gradiente.</span></p><p><span class="s" data-s="b3-p1-s0">Matematicamente, o método constrói uma robustez aproximada que é sempre menor ou igual à robustez exata.</span> <span class="s" data-s="b3-p1-s1">Isso garante a propriedade de sonoridade: se a trajetória viola a especificação (robustez exata negativa), a aproximada também será negativa.</span> <span class="s" data-s="b3-p1-s2">Além disso, o erro da aproximação é limitado por um parametro gamma, e esse limite é independente do número de amostras no horizonte.</span> <span class="s" data-s="b3-p1-s3">Isso é crucial para a estabilidade em tarefas de longa duração.</span></p><p><span class="s" data-s="b3-p2-s0">A chave está na alocação do gradiente.</span> <span class="s" data-s="b3-p2-s1">O gradiente do SparseMax é exatamente zero para todas as amostras além de um limiar dependente dos dados.</span> <span class="s" data-s="b3-p2-s2">Isso garante que as amostras violadoras, que estão associadas aos valores extremos (minimos ou maximos), recebam um peso significativo e constante, independentemente de quantas amostras seguras existam no restante do horizonte.</span> <span class="s" data-s="b3-p2-s3">O peso nas amostras violadoras tem um limite inferior positivo, evitando que o gradiente se perca em ruido ou em trajetórias seguras.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.23837/figure3.webp" alt="Graficos que provam a robustez do metodo: o peso do gradiente do SparseMax permanece estavel, ao contrario do LSE." loading="lazy">
+          <figcaption>
+            Graficos que provam a robustez do metodo: o peso do gradiente do SparseMax permanece estavel, ao contrario do LSE.
+            <span class="source">Figura 3 do paper · Damera et al., arXiv:2610.23837</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Analise Teorica e Estabilidade do Gradiente</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os autores provam formalmente que a robustez construida com SparseMax satisfaz ambas as propriedades desejadas.</span> <span class="s" data-s="b5-p0-s1">O erro por no é limitado por gamma/2, independente do numero de amostras.</span> <span class="s" data-s="b5-p0-s2">Mais importante, o peso atribuido a k amostras que estao em um gap Delta acima dos demais e pelo menos min{1, k*Delta/gamma}.</span> <span class="s" data-s="b5-p0-s3">Isso significa que, enquanto houver uma violacao significativa, o gradiente focara nela.</span></p><p><span class="s" data-s="b5-p1-s0">Em contraste, para o LSE sonoro, o peso nas amostras violadoras tende a zero a medida que o numero de outras amostras cresce, especialmente se a diferenca entre a violacao e as amostras seguras for pequena.</span> <span class="s" data-s="b5-p1-s1">Isso ocorre porque a softmax distribui a probabilidade uniformemente sobre todos os elementos, diluindo a informacao critica.</span> <span class="s" data-s="b5-p1-s2">O SparseMax, por ser esparsa, ignora as amostras que nao contribuem para o extremo, mantendo o foco na violacao.</span></p><p><span class="s" data-s="b5-p2-s0">Essa estabilidade do gradiente e vital para solucionadores baseados em gradiente, como filtros de seguranca ou politicas de aprendizado por reforco.</span> <span class="s" data-s="b5-p2-s1">Se o gradiente for zero ou muito pequeno nas amostras violadoras, o otimizador nao recebera a sinalizacao necessaria para ajustar a trajetoria e evitar o colapso ou a violacao de seguranca.</span></p>        <h2><span class="s" data-s="b6-h">Resultados Experimentais em Simulacao</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Os autores avaliaram o metodo em duas configuracoes simuladas: um unicycle planar e um manipulador de sete graus de liberdade ao lado de uma pessoa.</span> <span class="s" data-s="b6-p0-s1">No caso do manipulador, a tarefa exigia evitar uma zona de alcance humano ate coletar uma peça, manter uma distancia minima e mover-se lentamente perto da pessoa.</span></p><p><span class="s" data-s="b6-p1-s0">Os resultados mostram claramente a falha do LSE.</span> <span class="s" data-s="b6-p1-s1">Em uma trajetoria inicial que violava a especificacao, o LSE plano retornava uma robustez positiva, indicando falsamente que a trajetoria era segura.</span> <span class="s" data-s="b6-p1-s2">O LSE sonoro, embora correto em sinal, tinha um peso de gradiente nas amostras violadoras que caia de 0.22 para 0.04 a medida que o horizonte crescia de 10 para 80 segundos.</span> <span class="s" data-s="b6-p1-s3">O SparseMax manteve o peso do gradiente em 1.0, garantindo que a violacao fosse sempre detectada e corrigida.</span></p><p><span class="s" data-s="b6-p2-s0">Na otimizacao de trajetorias, o LSE falhou em retornar uma trajetoria viavel que satisfizesse a especificacao, enquanto o SparseMax encontrou uma trajetoria que satisfazia a especificacao com a margem exigida.</span> <span class="s" data-s="b6-p2-s1">O GMR tambem apresentou desempenho inferior em termos de estabilidade do gradiente, com pesos caindo drasticamente em horizontes longos.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.23837/figure5.webp" alt="Simulacao real: o peso do gradiente do LSE cai com o tempo, enquanto o SparseMax mantem a estabilidade necessaria." loading="lazy">
+          <figcaption>
+            Simulacao real: o peso do gradiente do LSE cai com o tempo, enquanto o SparseMax mantem a estabilidade necessaria.
+            <span class="source">Figura 5 do paper · Damera et al., arXiv:2610.23837</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Limitacoes e Compromissos</span></h2>
+<p><span class="s" data-s="b8-p0-s0">O SparseMax-dSTL nao e uma solucao perfeita.</span> <span class="s" data-s="b8-p0-s1">A esparsidade do gradiente significa que ele ignora completamente amostras que nao estao no extremo.</span> <span class="s" data-s="b8-p0-s2">Em uma especificacao aninhada, isso pode esconder violacoes internas de nos superiores, pois o gradiente zero nao alerta o otimizador sobre amostras que estao prestes a se tornar criticas.</span> <span class="s" data-s="b8-p0-s3">Isso e uma limitacao inerente a esparsidade.</span></p><p><span class="s" data-s="b8-p1-s0">Além disso, a aproximacao por baixo pode rejeitar trajetorias que seriam viaveis se a margem de seguranca fosse apertada.</span> <span class="s" data-s="b8-p1-s1">O erro realizado pelo SparseMax e maior do que o do LSE sonoro para o mesmo parametro de suavizacao, o que significa que ele e mais conservador.</span> <span class="s" data-s="b8-p1-s2">Em cenarios onde a viabilidade e extremamente restrita, isso pode levar a falhas de encontrabilidade, onde nenhuma trajetoria e aceita pelo otimizador.</span></p><p><span class="s" data-s="b8-p2-s0">Os autores tambem notam que os operadores sao apenas continuamente diferenciaveis uma vez, o que limita a eficiencia de solucionadores de segunda ordem.</span> <span class="s" data-s="b8-p2-s1">Trabalhos futuros visam explorar a estrutura esparsa do Hessiano do SparseMax para permitir diferenciacao automatica esparsa, melhorando o desempenho computacional em problemas de grande escala.</span></p>        <h2><span class="s" data-s="b9-h">Conclusao</span></h2>
+<p><span class="s" data-s="b9-p0-s0">O SparseMax-dSTL oferece uma contribuicao significativa para a otimizacao de trajetorias com restricoes de logica temporal.</span> <span class="s" data-s="b9-p0-s1">Ao combinar a sonoridade com a estabilidade do gradiente, ele resolve um problema pratico critico que afeta a confiabilidade de solucionadores baseados em gradiente em tarefas de longo prazo.</span></p><p><span class="s" data-s="b9-p1-s0">A abordagem demonstra que a escolha da funcao de suavizacao nao e apenas uma questao numerica, mas tem implicacoes diretas na seguranca e na capacidade de correcao do sistema.</span> <span class="s" data-s="b9-p1-s1">Para desenvolvedores de robótica autônoma e sistemas de controle critico, o SparseMax-dSTL representa uma ferramenta mais robusta do que as aproximacoes padrão, especialmente em ambientes dinamicos onde violacoes de seguranca devem ser detectadas e corrigidas imediatamente, independente da duracao da missao.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Aproximações suaves tradicionais (LSE) falham em manter a robustez sonora e o peso do gradiente em violações de longo prazo.</span></li><li><span class="s" data-s="k1">SparseMax-dSTL usa projeções esparsas para garantir que o gradiente não desapareça em amostras violadoras.</span></li><li><span class="s" data-s="k2">O método oferece limites de erro independentes do horizonte, garantindo segurança em tarefas robóticas críticas.</span></li><li><span class="s" data-s="k3">Simulações mostram que LSE retorna trajetórias inválidas, enquanto SparseMax satisfaz as especificações.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.23837" rel="noopener">SparseMax-dSTL: Sound Robustness with Horizon-Independent Gradient Allocation for Temporal Logic Trajectory Optimization</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.23837" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

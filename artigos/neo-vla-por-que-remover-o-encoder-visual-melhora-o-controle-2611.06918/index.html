@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NEO-VLA: Por que remover o encoder visual melhora o controle robótico — arXiv em 5</title>
+<meta name="description" content="O paper introduz NEO-VLA, uma arquitetura que elimina o encoder visual pré-treinado para permitir que o modelo de ação acesse representações visuais em diferentes estágios de processamento, melhorando a precisão em tarefas de manipulação.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="NEO-VLA: Por que remover o encoder visual melhora o controle robótico">
+<meta property="og:description" content="O paper introduz NEO-VLA, uma arquitetura que elimina o encoder visual pré-treinado para permitir que o modelo de ação acesse representações visuais em diferentes estágios de processamento, melhorando a precisão em tarefas de manipulação.">
+<meta property="og:image" content="../../assets/papers/2611.06918/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Robótica</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.06918" rel="noopener">arXiv:2611.06918</a>
+    </div>
+    <h1><span class="s" data-s="t">NEO-VLA: Por que remover o encoder visual melhora o controle robótico</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">O paper introduz NEO-VLA, uma arquitetura que elimina o encoder visual pré-treinado para permitir que o modelo de ação acesse representações visuais em diferentes estágios de processamento, melhorando a precisão em tarefas de manipulação.</span></p>
+    <p class="byline">
+      <span>Fan et al.</span>
+      <span>5 min de leitura</span>
+<span>04/11/2026</span>    </p>
+    <div class="listen" data-article="2611.06918" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=SsLGn7_FHFA" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O gargalo da abstração visual em robótica</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Os modelos Vision-Language-Action (VLA) modernos enfrentam um dilema estrutural fundamental.</span> <span class="s" data-s="b0-p0-s1">A premissa padrão é que a percepção deve ser primeiro comprimida por encoders visuais pré-treinados, como CLIP ou DINOv2, e apenas então o raciocínio de ação começa.</span> <span class="s" data-s="b0-p0-s2">Essa abordagem assume que a representação final do encoder contém toda a informação necessária para a tomada de decisão.</span></p><p><span class="s" data-s="b0-p1-s0">No entanto, a manipulação robótica depende criticamente de sinais visuais que são exatamente os mais vulneráveis a essa abstração.</span> <span class="s" data-s="b0-p1-s1">Geometria local, limites de objetos, profundidade e mudanças sutis de estado são frequentemente diluídos quando a imagem é forçada a passar por um bottleneck semântico.</span> <span class="s" data-s="b0-p1-s2">A pergunta que motiva este trabalho é: as políticas de ação devem herdar um ponto final visual fixo ou devem acessar diretamente o cálculo visual em evolução?</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.06918/figure1.webp" alt="Comparação entre designs tradicionais baseados em encoder e o design encoder-free do NEO-VLA, mostrando como os pixels entram diretamente no backbone." loading="lazy">
+          <figcaption>
+            Comparação entre designs tradicionais baseados em encoder e o design encoder-free do NEO-VLA, mostrando como os pixels entram diretamente no backbone.
+            <span class="source">Figura 1 do paper · Fan et al., arXiv:2611.06918</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">A arquitetura NEO-VLA</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Os autores propõem o NEO-VLA, uma estrutura nativa que remove o encoder visual separado.</span> <span class="s" data-s="b2-p0-s1">Em vez de converter pixels em features via um módulo externo, o modelo utiliza camadas de convolução patch leves para tokenizar as imagens.</span> <span class="s" data-s="b2-p0-s2">Esses tokens visuais evoluem conjuntamente com os tokens de linguagem ao longo do backbone do modelo.</span></p><p><span class="s" data-s="b2-p1-s0">Essa mudança estrutural permite que um especialista de ação (action expert), baseado em flow-matching, acesse representações visuais condicionadas à instrução em diferentes profundidades do backbone.</span> <span class="s" data-s="b2-p1-s1">Isso transforma a profundidade de leitura visual em uma escolha explícita da política, em vez de uma limitação imposta por uma interface fixa.</span></p>        <h2><span class="s" data-s="b3-h">Como o processamento nativo funciona</span></h2>
+<p><span class="s" data-s="b3-p0-s0">No fluxo do NEO-VLA, as observações de visão múltipla preservam sua proporção original e entram em um embedder de patches compartilhado.</span> <span class="s" data-s="b3-p0-s1">Não há uso de Transformers visuais, autoencoders ou codebooks de vetor-quantização.</span> <span class="s" data-s="b3-p0-s2">A entrada é direta: pixels e palavras são processados em uma arquitetura holística única.</span></p><p><span class="s" data-s="b3-p1-s0">O especialista de ação lê chaves e valores (keys and values) cacheados de várias camadas do backbone.</span> <span class="s" data-s="b3-p1-s1">Diferentemente dos modelos tradicionais, onde o acesso a camadas intermediárias de um encoder pré-treinado não reproduz o mesmo benefício, o pré-treinamento nativo do NEO-VLA molda essas representações iniciais para serem prontas para controle.</span> <span class="s" data-s="b3-p1-s2">Isso significa que a informação de baixo nível é preservada de forma funcional desde o início.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.06918/figure2.webp" alt="Fluxo de dados do NEO-VLA: pixels entram, passam por embedders de patch leves e geram ações contínuas sem intermediários visuais pesados." loading="lazy">
+          <figcaption>
+            Fluxo de dados do NEO-VLA: pixels entram, passam por embedders de patch leves e geram ações contínuas sem intermediários visuais pesados.
+            <span class="source">Figura 2 do paper · Fan et al., arXiv:2611.06918</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Análise de profundidade e camadas</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Uma das contribuições centrais do paper é a investigação de quais camadas do backbone são mais valiosas para a ação.</span> <span class="s" data-s="b5-p0-s1">As análises revelam um padrão claro dependente da profundidade.</span> <span class="s" data-s="b5-p0-s2">Com o backbone congelado, as leituras que incluem camadas iniciais superam consistentemente aquelas restritas a representações tardias.</span></p><p><span class="s" data-s="b5-p1-s0">Após o ajuste fino completo (full fine-tuning), a combinação de recursos iniciais e tardios performa melhor.</span> <span class="s" data-s="b5-p1-s1">Isso indica que o controle robusto beneficia-se do acesso a toda a hierarquia de representação visual, e não apenas ao resultado final abstrato.</span> <span class="s" data-s="b5-p1-s2">Intervenções diretas confirmam que a informação crítica para a ação emerge bem antes da representação visual final.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b6-t">O erro do acesso direto a encoders</span></h3>
+          <p><span class="s" data-s="b6-c-s0">Experimentos mostram que apenas expor features intermediárias de um encoder baseado em VLM (como Qwen3-VL) não recupera o benefício do NEO-VLA.</span> <span class="s" data-s="b6-c-s1">O acesso direto a features de camadas específicas reduziu o desempenho do backbone congelado de 79,5% para 64,9% no benchmark LIBERO.</span> <span class="s" data-s="b6-c-s2">A vantagem não está apenas em acessar features mais antigas, mas em como o pré-treinamento nativo as forma.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b7-h">Resultados no benchmark LIBERO</span></h2>
+<p><span class="s" data-s="b7-p0-s0">A avaliação foi realizada no conjunto de dados LIBERO, medindo taxas de sucesso em tarefas de manipulação.</span> <span class="s" data-s="b7-p0-s1">O NEO-VLA de 2B parâmetros foi comparado com Qwen3-VL-2B e Gemma-3-4B, ambos pré-treinados com o mesmo conjunto Open X-Embodiment.</span></p><p><span class="s" data-s="b7-p1-s0">Com o backbone congelado, o NEO-VLA atingiu 90,9% de sucesso médio, superando significativamente o Qwen3-VL (79,5%) e o Gemma-3 (84,5%).</span> <span class="s" data-s="b7-p1-s1">Curiosamente, a pontuação do NEO-VLA congelado foi comparável aos resultados de ajuste fino completo dos modelos baseados em encoder.</span> <span class="s" data-s="b7-p1-s2">Isso sugere que a representação nativa já é altamente transferível para tarefas de política sem necessidade de remodelar o backbone.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.06918/table2.webp" alt="Tabela de resultados mostrando que o NEO-VLA supera modelos baseados em encoder no benchmark LIBERO, especialmente com backbone congelado." loading="lazy">
+          <figcaption>
+            Tabela de resultados mostrando que o NEO-VLA supera modelos baseados em encoder no benchmark LIBERO, especialmente com backbone congelado.
+            <span class="source">Tabela 2 do paper · Fan et al., arXiv:2611.06918</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Impacto do ajuste fino e escala</span></h2>
+<p><span class="s" data-s="b9-p0-s0">O ajuste fino completo (full fine-tuning) do NEO-VLA melhorou ainda mais o desempenho, elevando a média para 95,3%.</span> <span class="s" data-s="b9-p0-s1">No entanto, o paper destaca que a escala adicional sozinha não recupera a lacuna observada em outros modelos.</span> <span class="s" data-s="b9-p0-s2">A arquitetura nativa oferece uma base superior que a escala bruta não pode substituir se a interface visual for inadequada.</span></p><p><span class="s" data-s="b9-p1-s0">No subset LIBERO-Long, que envolve tarefas mais complexas e de longo prazo, o NEO-VLA congelado atingiu 85,4%, excedendo os resultados de ajuste fino completo dos modelos concorrentes.</span> <span class="s" data-s="b9-p1-s1">Isso reforça a ideia de que a preservação de detalhes geométricos e espaciais desde as primeiras camadas é crucial para a execução de sequências de ação prolongadas.</span></p>        <h2><span class="s" data-s="b10-h">Limitações e o próximo gargalo</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Apesar dos avanços, o NEO-VLA não é uma solução perfeita.</span> <span class="s" data-s="b10-p0-s1">O modelo demonstra alta robustez quando a aparência ou a observação da cena muda, mas permanece desafiado quando a configuração espacial ou o objetivo da tarefa muda.</span> <span class="s" data-s="b10-p0-s2">Essa assimetria sugere que o próximo gargalo na inteligência encarnada pode não ser mais a percepção, mas a conversão do entendimento perceptual em ação flexível sob geometria e intenção variáveis.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.06918/figure6.webp" alt="Demonstrações reais do robô executando tarefas complexas com o NEO-VLA, como pegar uma xícara e despejar água ou reposicionar um objeto cilíndrico." loading="lazy">
+          <figcaption>
+            Demonstrações reais do robô executando tarefas complexas com o NEO-VLA, como pegar uma xícara e despejar água ou reposicionar um objeto cilíndrico.
+            <span class="source">Figura 6 do paper · Fan et al., arXiv:2611.06918</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b12-h">Conclusão: Representações úteis para controle</span></h2>
+<p><span class="s" data-s="b12-p0-s0">O NEO-VLA desafia a suposição comum de que a ação deve operar em representações visuais já destiladas para compreensão semântica.</span> <span class="s" data-s="b12-p0-s1">Os resultados indicam que o controle eficaz beneficia-se de reter acesso ao cálculo visual antes que ele colapse em uma representação semântica final.</span></p><p><span class="s" data-s="b12-p1-s0">A arquitetura nativa não é apenas uma remoção de encoder, mas uma reavaliação de como as representações visuais são formadas e expostas à política.</span> <span class="s" data-s="b12-p1-s1">Ao permitir que o especialista de ação acesse a hierarquia de representação completa, o NEO-VLA oferece um passo em direção a modelos que são não apenas semanticamente significativos, mas intrinsicamente úteis para o controle robótico.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Modelos VLA tradicionais comprimem a visão antes do raciocínio, perdendo detalhes geométricos cruciais para o controle.</span></li><li><span class="s" data-s="k1">O NEO-VLA processa pixels e texto juntos no backbone, permitindo acesso a features de camadas intermediárias.</span></li><li><span class="s" data-s="k2">Acesso nativo a representações iniciais supera o acesso direto a features de encoders existentes.</span></li><li><span class="s" data-s="k3">O modelo é robusto a mudanças de aparência, mas ainda luta com mudanças na configuração espacial das tarefas.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.06918" rel="noopener">From Pixels to Actions - Towards Native Vision-Language-Action Policies</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.06918" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

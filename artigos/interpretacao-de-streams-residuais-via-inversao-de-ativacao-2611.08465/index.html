@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Interpretação de Streams Residuais via Inversão de Ativação Escalada (MAEM) — arXiv em 5</title>
+<meta name="description" content="Este paper apresenta o MAEM, um metamodelo que gera texto maximamente ativador para qualquer direção no stream residual de um LLM, usando RL para otimizar similaridade de cosseno sem rótulos.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Interpretação de Streams Residuais via Inversão de Ativação Escalada (MAEM)">
+<meta property="og:description" content="Este paper apresenta o MAEM, um metamodelo que gera texto maximamente ativador para qualquer direção no stream residual de um LLM, usando RL para otimizar similaridade de cosseno sem rótulos.">
+<meta property="og:image" content="../../assets/papers/2611.08465/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>LLMs</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.08465" rel="noopener">arXiv:2611.08465</a>
+    </div>
+    <h1><span class="s" data-s="t">Interpretação de Streams Residuais via Inversão de Ativação Escalada (MAEM)</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Este paper apresenta o MAEM, um metamodelo que gera texto maximamente ativador para qualquer direção no stream residual de um LLM, usando RL para otimizar similaridade de cosseno sem rótulos.</span></p>
+    <p class="byline">
+      <span>Schamphelaere et al.</span>
+      <span>4 min de leitura</span>
+<span>05/11/2026</span>    </p>
+    <div class="listen" data-article="2611.08465" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=ubFbRE6TE6g" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Interpretação de Direções</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Na interpretabilidade de modelos de linguagem (LLMs), uma questão central é entender o que certas direções no stream residual representam.</span> <span class="s" data-s="b0-p0-s1">O stream residual é a soma das ativações que fluem entre camadas.</span> <span class="s" data-s="b0-p0-s2">Direções específicas podem corresponder a conceitos como &#34;gênero gramatical&#34;, &#34;opinião política&#34; ou até mesmo &#34;backdoors&#34; (vulnerabilidades intencionais ou acidentais).</span> <span class="s" data-s="b0-p0-s3">Para interpretar essas direções, a prática comum é buscar textos em um corpus grande que ativem fortemente essa direção.</span> <span class="s" data-s="b0-p0-s4">No entanto, essa abordagem tem um limite fundamental: ela está restrita ao que já existe no corpus.</span> <span class="s" data-s="b0-p0-s5">Se o conceito não estiver representado, ou estiver representado de forma fraca, a busca falha em encontrar um exemplo claro.</span></p>        <h2><span class="s" data-s="b1-h">A Ideia do MAEM</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Os autores propõem o Maximally-Activating Example Metamodel (MAEM).</span> <span class="s" data-s="b1-p0-s1">Em vez de buscar em um corpus estático, o MAEM é um modelo de linguagem treinado para gerar texto que maximize a ativação de uma direção alvo.</span> <span class="s" data-s="b1-p0-s2">Dada uma direção $v$ no stream residual, o MAEM gera um texto $x$ tal que a ativação do modelo sujeito (o modelo original) para $x$ tenha alta similaridade com $v$.</span> <span class="s" data-s="b1-p0-s3">Isso permite explorar o espaço de texto de forma ativa, criando exemplos &#34;hiper-ativadores&#34; que podem não existir em corpus naturais.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.08465/figure1.webp" alt="Fluxo do MAEM: o modelo gera texto para maximizar a ativação de uma direção no stream residual do modelo sujeito, com aplicações em diversas tarefas de interpretabilidade." loading="lazy">
+          <figcaption>
+            Fluxo do MAEM: o modelo gera texto para maximizar a ativação de uma direção no stream residual do modelo sujeito, com aplicações em diversas tarefas de interpretabilidade.
+            <span class="source">Figura 1 do paper · Schamphelaere et al., arXiv:2611.08465</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Mecanismo: Como o MAEM Funciona</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O MAEM é inicializado com os pesos do próprio modelo sujeito.</span> <span class="s" data-s="b3-p0-s1">A entrada é a direção $v$ (um vetor de dimensão $d$).</span> <span class="s" data-s="b3-p0-s2">Para injetar essa informação no modelo, os autores usam uma técnica de injeção de vetor: após o segundo bloco transformer do MAEM, adiciona-se um token placeholder e soma-se a direção $v$ escalada pela norma residual.</span> <span class="s" data-s="b3-p0-s3">Isso permite que o modelo &#34;veja&#34; a direção alvo durante a geração.</span></p>        <h2><span class="s" data-s="b4-h">Treinamento Supervisionado (SFT)</span></h2>
+<p><span class="s" data-s="b4-p0-s0">O treinamento começa com Supervised Fine-Tuning (SFT).</span> <span class="s" data-s="b4-p0-s1">Pares de (direção, texto) são coletados automaticamente.</span> <span class="s" data-s="b4-p0-s2">Para ativações naturais, usa-se o texto que precede a ativação em janelas curtas.</span> <span class="s" data-s="b4-p0-s3">Para features de Sparse Autoencoders (SAEs), usa-se os exemplos do corpus que mais ativam o feature.</span> <span class="s" data-s="b4-p0-s4">O objetivo é minimizar a negativa da log-verossimilhança do texto alvo, preparando o modelo para a fase de RL.</span></p>        <h2><span class="s" data-s="b5-h">Otimização por Reinforcement Learning (RL)</span></h2>
+<p><span class="s" data-s="b5-p0-s0">A fase crucial é o RL.</span> <span class="s" data-s="b5-p0-s1">O objetivo é maximizar a similaridade de cosseno entre a direção alvo $v$ e as ativações do modelo sujeito geradas pelo texto $x$.</span> <span class="s" data-s="b5-p0-s2">A recompensa é definida como o máximo de similaridade de cosseno ao longo do texto gerado.</span> <span class="s" data-s="b5-p0-s3">Diferente de outros métodos que usam LLMs como juízes, aqui a recompensa é objetiva e verificável: basta rodar o modelo sujeito sobre o texto gerado.</span> <span class="s" data-s="b5-p0-s4">Não há termo de regularização KL, apenas uma pequena penalidade de comprimento para evitar textos infinitos.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b6-t">Verificabilidade vs. Subjetividade</span></h3>
+          <p><span class="s" data-s="b6-c-s0">A grande vantagem do MAEM sobre autoencoders de linguagem natural (NLAs) é a verificabilidade.</span> <span class="s" data-s="b6-c-s1">Explicações textuais de NLAs dependem de julgamentos humanos ou de outros LLMs.</span> <span class="s" data-s="b6-c-s2">Com o MAEM, você pode confirmar se um exemplar realmente ativa a direção desejada fazendo um forward pass no modelo sujeito.</span> <span class="s" data-s="b6-c-s3">Isso reduz a subjetividade e o risco de o modelo gerar texto que parece correto, mas não ativa a direção.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b7-h">Resultados: Ativação e Generalização</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Os autores avaliaram o MAEM treinado no Qwen3.6-27B.</span> <span class="s" data-s="b7-p0-s1">Em testes com ativações mantidas em reserva (held-out), o MAEM superou a busca em corpus (10M tokens) e outros baselines como GCG e NLAs.</span> <span class="s" data-s="b7-p0-s2">O MAEM gerou textos com maior similaridade de cosseno centrado.</span> <span class="s" data-s="b7-p0-s3">Além disso, o modelo generalizou bem para domínios não vistos durante o treinamento, como código Python, Rust, SQL e línguas como japonês e chinês, mesmo tendo sido treinado apenas em dados em inglês.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.08465/figure2.webp" alt="Gráficos mostrando que o MAEM supera buscas em corpus e NLAs na ativação de direções e generaliza para 21 domínios e línguas não vistos." loading="lazy">
+          <figcaption>
+            Gráficos mostrando que o MAEM supera buscas em corpus e NLAs na ativação de direções e generaliza para 21 domínios e línguas não vistos.
+            <span class="source">Figura 2 do paper · Schamphelaere et al., arXiv:2611.08465</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Aplicações em SAEs e Steering Vectors</span></h2>
+<p><span class="s" data-s="b9-p0-s0">O MAEM foi aplicado a Sparse Autoencoder (SAE) features.</span> <span class="s" data-s="b9-p0-s1">Ele ativou 89% dos features SAE testados, superando a busca em corpus na maioria dos casos.</span> <span class="s" data-s="b9-p0-s2">Isso mostra que o MAEM consegue encontrar exemplos mais fortes do que o que está disponível em corpus naturais.</span> <span class="s" data-s="b9-p0-s3">Além disso, o MAEM foi capaz de interpretar steering vectors (vetores usados para controlar o comportamento do modelo) e até recuperar payloads de backdoors de LoRA, demonstrando utilidade em tarefas de segurança e controle.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.08465/figure6.webp" alt="O MAEM ativa 89% dos features SAE testados, superando a busca em corpus na maioria dos casos, com ativações mais fortes." loading="lazy">
+          <figcaption>
+            O MAEM ativa 89% dos features SAE testados, superando a busca em corpus na maioria dos casos, com ativações mais fortes.
+            <span class="source">Figura 6 do paper · Schamphelaere et al., arXiv:2611.08465</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b11-h">Limitações e Escopo</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Apesar dos resultados promissores, há limitações.</span> <span class="s" data-s="b11-p0-s1">O MAEM foi treinado apenas no Qwen3.6-27B.</span> <span class="s" data-s="b11-p0-s2">A generalização para outros modelos maiores ou menores não foi testada.</span> <span class="s" data-s="b11-p0-s3">Além disso, a injeção da direção $v$ pode alterar a dinâmica do modelo, e o efeito dessa injeção em diferentes profundidades da rede não foi explorado exaustivamente.</span> <span class="s" data-s="b11-p0-s4">O método também é computacionalmente intensivo, exigindo RL e múltiplas gerações para cada direção.</span></p>        <h2><span class="s" data-s="b12-h">Conclusão</span></h2>
+<p><span class="s" data-s="b12-p0-s0">O MAEM representa um avanço na interpretabilidade de LLMs ao fornecer um método escalável e verificável para gerar exemplos ativadores.</span> <span class="s" data-s="b12-p0-s1">Ao usar RL para otimizar diretamente a ativação, ele supera a dependência de corpus estáticos.</span> <span class="s" data-s="b12-p0-s2">Isso abre caminho para uma interpretação mais profunda e ativa dos mecanismos internos dos modelos, permitindo que pesquisadores explorem conceitos que podem não estar presentes em dados naturais.</span> <span class="s" data-s="b12-p0-s3">O trabalho sugere que a geração de dados específicos para interpretação pode ser mais eficaz do que a busca passiva.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">O MAEM usa RL para gerar texto que maximiza a ativação de direções específicas no stream residual, superando buscas em corpus.</span></li><li><span class="s" data-s="k1">O método é label-free e escalável, funcionando para SAE features, steering vectors e backdoors de LoRA.</span></li><li><span class="s" data-s="k2">Exemplares gerados são verificáveis via forward pass no modelo sujeito, oferecendo objetividade sobre explicações textuais.</span></li><li><span class="s" data-s="k3">O MAEM generaliza para domínios não vistos (código, matemática) e ativa 89% dos features SAE testados.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.08465" rel="noopener">Towards interpreting any residual stream direction by scaling activation inversion</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.08465" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

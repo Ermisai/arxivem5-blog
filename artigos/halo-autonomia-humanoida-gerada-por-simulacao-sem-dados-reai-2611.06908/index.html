@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HALO: Autonomia Humanoida Gerada por Simulação sem Dados Reais — arXiv em 5</title>
+<meta name="description" content="O paper apresenta HALO, um sistema que treia robôs humanoides em ambientes procedurais sintéticos, eliminando a necessidade de captura humana e transferindo zero-shot para o mundo real com 91% de acerto.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HALO: Autonomia Humanoida Gerada por Simulação sem Dados Reais">
+<meta property="og:description" content="O paper apresenta HALO, um sistema que treia robôs humanoides em ambientes procedurais sintéticos, eliminando a necessidade de captura humana e transferindo zero-shot para o mundo real com 91% de acerto.">
+<meta property="og:image" content="../../assets/papers/2611.06908/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Robótica</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.06908" rel="noopener">arXiv:2611.06908</a>
+    </div>
+    <h1><span class="s" data-s="t">HALO: Autonomia Humanoida Gerada por Simulação sem Dados Reais</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">O paper apresenta HALO, um sistema que treia robôs humanoides em ambientes procedurais sintéticos, eliminando a necessidade de captura humana e transferindo zero-shot para o mundo real com 91% de acerto.</span></p>
+    <p class="byline">
+      <span>Hu et al.</span>
+      <span>8 min de leitura</span>
+<span>04/11/2026</span>    </p>
+    <div class="listen" data-article="2611.06908" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=f3r-ASi6iVo" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Gargalo de Dados na Robótica Humanóide</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Robôs humanóides têm a capacidade física de realizar tarefas complexas, mas sua autonomia geral esbarra em um problema fundamental: a escassez de dados.</span> <span class="s" data-s="b0-p0-s1">Para que um robô execute ações úteis em ambientes não estruturados, como uma sala de estar desconhecida, ele precisa mapear pixels e linguagem natural para comandos de juntas de baixo nível.</span> <span class="s" data-s="b0-p0-s2">Isso exige supervisão pareada: cada imagem egocêntrica deve estar vinculada à instrução de linguagem e à trajetória motora exata que a satisfaz.</span></p><p><span class="s" data-s="b0-p1-s0">Abordagens tradicionais dependem de teleoperação humana ou dispositivos de captura vestíveis.</span> <span class="s" data-s="b0-p1-s1">O custo é proibitivo: uma hora de demonstração de dados requer pelo menos uma hora de trabalho humano físico.</span> <span class="s" data-s="b0-p1-s2">Isso cria um gargalo de escala.</span> <span class="s" data-s="b0-p1-s3">Enquanto textos e vídeos são abundantes como subprodutos da atividade humana, trajetórias corporais completas com contexto visual são raras e difíceis de produzir em massa.</span></p><p><span class="s" data-s="b0-p2-s0">Este paper introduz o HALO (Humanoid Autonomy, Learned in simulation, running Onboard), um sistema de autonomia que elimina o operador humano do loop de coleta de dados.</span> <span class="s" data-s="b0-p2-s1">Em vez de depender de labor de mão de obra, o HALO utiliza um pipeline de geração de dados em simulação que escala com poder computacional.</span> <span class="s" data-s="b0-p2-s2">O objetivo é criar uma política de controle que funcione a bordo do robô físico, sem necessidade de escaneamento prévio do ambiente ou mapeamento externo.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.06908/figure1.webp" alt="O robô executa comportamentos autônomos em ambientes reais nunca vistos durante o treinamento, respondendo a instruções de linguagem natural apenas com sua câmera egocêntrica." loading="lazy">
+          <figcaption>
+            O robô executa comportamentos autônomos em ambientes reais nunca vistos durante o treinamento, respondendo a instruções de linguagem natural apenas com sua câmera egocêntrica.
+            <span class="source">Figura 1 do paper · Hu et al., arXiv:2611.06908</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">Arquitetura de Autonomia em Três Camadas</span></h2>
+<p><span class="s" data-s="b2-p0-s0">O sistema HALO é composto por uma stack de autonomia dividida em três camadas distintas, cada uma operando em frequências diferentes para equilibrar planejamento de alto nível com controle de baixo nível.</span> <span class="s" data-s="b2-p0-s1">A camada mais externa é um orquestrador baseado em um Modelo de Linguagem e Visão (VLM).</span> <span class="s" data-s="b2-p0-s2">Este modelo processa a solicitação de linguagem natural e a entrada visual egocêntrica a uma taxa de aproximadamente 0,5 Hz.</span> <span class="s" data-s="b2-p0-s3">Sua função é decompor o pedido complexo em uma sequência de subtarefas, identificando a habilidade física necessária e o objeto alvo.</span></p><p><span class="s" data-s="b2-p1-s0">Na camada intermediária, o gerador de movimento opera a 3 Hz.</span> <span class="s" data-s="b2-p1-s1">Ele combina um codificador baseado em VLM com um decodificador baseado em DiT (Diffusion Transformer).</span> <span class="s" data-s="b2-p1-s2">O gerador mapeia a subtarefa ativa e os frames RGB egocêntricos para um plano de movimento cinemático de corpo inteiro.</span> <span class="s" data-s="b2-p1-s3">Este plano consiste em uma trajetória de 5 segundos, especificando 29 ângulos de juntas e a pose relativa da pelve por frame, totalizando 36 valores por passo de tempo.</span></p><p><span class="s" data-s="b2-p2-s0">Finalmente, a camada de rastreamento de movimento executa o plano na hardware físico a 50 Hz.</span> <span class="s" data-s="b2-p2-s1">O rastreador é um controlador aprendido que utiliza o plano de referência junto com dados de profundidade egocêntrica e propriocepção para emitir comandos de atuador nas juntas.</span> <span class="s" data-s="b2-p2-s2">Esta camada é crucial para garantir que o movimento gerado sinteticamente seja executado com precisão no mundo real, corrigindo discrepâncias entre o modelo e a física física.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.06908/figure2.webp" alt="Stack de autonomia onboard: o VLM planeja subtarefas, o gerador cria o plano de movimento cinemático e o rastreador executa o plano no hardware usando profundidade e propriocepção." loading="lazy">
+          <figcaption>
+            Stack de autonomia onboard: o VLM planeja subtarefas, o gerador cria o plano de movimento cinemático e o rastreador executa o plano no hardware usando profundidade e propriocepção.
+            <span class="source">Figura 2 do paper · Hu et al., arXiv:2611.06908</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b4-h">Geração Sintética de Dados sem Humanos</span></h2>
+<p><span class="s" data-s="b4-p0-s0">A inovação central do HALO reside na geração de dados de treinamento.</span> <span class="s" data-s="b4-p0-s1">O pipeline utiliza o gerador procedural INFINIGEN para criar 1.000 ambientes distintos, incluindo salas de estar, escritórios e quartos, com tamanhos e móveis variados.</span> <span class="s" data-s="b4-p0-s2">Diferente de pipelines baseados em reconstrução 3D, esta abordagem não requer escaneamento físico ou anotação manual de ativos.</span> <span class="s" data-s="b4-p0-s3">A diversidade ambiental escala com o poder computacional, não com o tempo humano.</span></p><p><span class="s" data-s="b4-p1-s0">Para criar um episódio de treinamento, o sistema decompõe a tarefa em segmentos de movimento.</span> <span class="s" data-s="b4-p1-s1">Cada segmento é parametrizado por um prompt de texto, pontos de passagem (waypoints) e uma pose-chave terminal que define a interação com o objeto.</span> <span class="s" data-s="b4-p1-s2">Por exemplo, a tarefa &#39;sentar na poltrona&#39; é dividida em &#39;andar para frente&#39;, &#39;virar&#39; e &#39;sentar&#39;.</span> <span class="s" data-s="b4-p1-s3">Waypoints guiam o robô até a frente do assento, enquanto o segmento final força uma pose sentada ancorada ao ativo alvo.</span></p><p><span class="s" data-s="b4-p2-s0">O movimento é sintetizado pelo modelo KIMODO, um modelo de difusão cinemático.</span> <span class="s" data-s="b4-p2-s1">O KIMODO gera movimentos densos para cada segmento individual, que são então costurados em uma trajetória global contínua.</span> <span class="s" data-s="b4-p2-s2">No entanto, como o KIMODO opera puramente no domínio cinemático, as trajetórias podem ser fisicamente irrealizáveis, apresentando artefatos como deslizamento de pés ou penetração no chão.</span> <span class="s" data-s="b4-p2-s3">Para mitigar isso, o sistema gera N candidatos por segmento e os pontua usando verificadores geométricos de cinemática direta.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b5-t">Verificação de Plausibilidade Física</span></h3>
+          <p><span class="s" data-s="b5-c-s0">Os verificadores descartam trajetórias com deslizamento de pés, penetração no chão, fases de voo inadequadas ou violação de limites articulares.</span> <span class="s" data-s="b5-c-s1">Apenas o candidato com a maior pontuação de plausibilidade física é retido para treinamento, garantindo a qualidade dos dados sintéticos.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b6-h">Renderização e Treinamento em Escala</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Após a geração da trajetória e o posicionamento seguro no ambiente procedural (garantindo colisões zero entre a trajetória cinemática, os móveis e o robô), o sistema procede para a renderização egocêntrica.</span> <span class="s" data-s="b6-p0-s1">As trajetórias são reproduzidas cinematicamente nas cenas geradas, renderizando a visão do robô através de uma câmera simulada.</span> <span class="s" data-s="b6-p0-s2">Esta etapa decupla a geração de movimento da renderização: o corpus pode ser renderizado em novas resoluções ou com diferentes intrínsecos de câmera sem a necessidade de regenerar o movimento subjacente.</span></p><p><span class="s" data-s="b6-p1-s0">O corpus de treinamento final compreende 300 horas de episódios.</span> <span class="s" data-s="b6-p1-s1">A síntese destes dados requer 48 horas de operação em 250 GPUs H100, sem intervenção humana.</span> <span class="s" data-s="b6-p1-s2">O gerador de dados é treinado em 64 GPUs B200, enquanto o rastreador de movimento utiliza 4 GPUs H100.</span> <span class="s" data-s="b6-p1-s3">A escala de dados é determinada exclusivamente pela capacidade computacional disponível, removendo o gargalo de mão de obra humana que limita outras abordagens.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.06908/figure3.webp" alt="Pipeline de geração de dados sintéticos: tarefas são decompostas em segmentos definidos por prompts e poses-chave, com o modelo de difusão condicional sintetizando os movimentos a partir dessas restrições." loading="lazy">
+          <figcaption>
+            Pipeline de geração de dados sintéticos: tarefas são decompostas em segmentos definidos por prompts e poses-chave, com o modelo de difusão condicional sintetizando os movimentos a partir dessas restrições.
+            <span class="source">Figura 3 do paper · Hu et al., arXiv:2611.06908</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Implementação no Hardware Real</span></h2>
+<p><span class="s" data-s="b8-p0-s0">O sistema foi implementado no robô Unitree G1, com duas modificações físicas: um suporte de cabeça personalizado carregando uma câmera OAK-1W e uma caixa traseira contendo um Mac mini M4 Pro com 64 GB de RAM.</span> <span class="s" data-s="b8-p0-s1">A percepção e o controle são distribuídos entre essas duas máquinas em um cascade assíncrono totalmente sem fio, conectado via ZeroMQ.</span></p><p><span class="s" data-s="b8-p1-s0">No loop externo, a câmera OAK-1W transmite um fluxo RGB de 120 graus (1280x800, 30 fps) para o Mac mini.</span> <span class="s" data-s="b8-p1-s1">Aqui, o orquestrador e o gerador de movimento calculam a trajetória de referência cinemática.</span> <span class="s" data-s="b8-p1-s2">Esta trajetória serve como ponto de ajuste para o loop de controle interno, que roda no Jetson Orin NX do próprio robô.</span> <span class="s" data-s="b8-p1-s3">O rastreador consome o plano junto com um fluxo de profundidade voltado para baixo (Intel RealSense D435i) para emitir comandos de baixo nível.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b9-t">Processamento de Profundidade Otimizado</span></h3>
+          <p><span class="s" data-s="b9-c-s0">Para garantir ciclos de tempo estritos, o rastreador é implementado como um processo em tempo real com kernel PREEMPT RT.</span> <span class="s" data-s="b9-c-s1">Os autores bypassam o processamento de profundidade nativo e ruidoso da câmera D435i, roteando o par IR estéreo bruto para um modelo de correspondência estéreo acelerado por TensorRT no Jetson.</span> <span class="s" data-s="b9-c-s2">Isso estima profundidade limpa a 30 Hz, evitando artefatos de desoclusão e speckle.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b10-h">Avaliação e Resultados Zero-Shot</span></h2>
+<p><span class="s" data-s="b10-p0-s0">A avaliação do HALO mede a capacidade de executar tarefas em ambientes que nunca apareceram durante o treinamento.</span> <span class="s" data-s="b10-p0-s1">Seis tarefas foram testadas: GO-TO (andar até um objeto nomeado), SIT (sentar em uma cadeira), DOOR (passar lateralmente por uma porta entreaberta), CROUCH e CRAWL (passar sob um obstáculo baixo) e PUSH (empurrar uma caixa).</span> <span class="s" data-s="b10-p0-s2">Cada tarefa foi avaliada em 100 ambientes simulados e 6 ambientes do mundo real, com 10 tentativas por tarefa por ambiente.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.06908/figure10.webp" alt="Generalização no mundo real através de pessoas, mesas e assentos diferentes. O robô executa GO-TO, CRAWL e CROUCH em cenários diversos sem re-treinamento." loading="lazy">
+          <figcaption>
+            Generalização no mundo real através de pessoas, mesas e assentos diferentes. O robô executa GO-TO, CRAWL e CROUCH em cenários diversos sem re-treinamento.
+            <span class="source">Figura 10 do paper · Hu et al., arXiv:2611.06908</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b12-h">Taxas de Sucesso e Generalização</span></h2>
+<p><span class="s" data-s="b12-p0-s0">Os resultados mostram uma transferência zero-shot impressionante.</span> <span class="s" data-s="b12-p0-s1">Na avaliação de tarefa única, o HALO alcançou uma taxa de sucesso média de 91% tanto na simulação quanto no mundo real.</span> <span class="s" data-s="b12-p0-s2">Especificamente, o robô obteve 92% de sucesso no GO-TO, 85% no SIT, 93% no DOOR, 100% no CROUCH, 90% no CRAWL e 88% no PUSH.</span> <span class="s" data-s="b12-p0-s3">A consistência entre o desempenho simulado e real sugere que o gap de simulação foi efetivamente minimizado pelo pipeline de verificação e pela diversidade procedural dos dados de treinamento.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b13-t">Desempenho em Tarefas Compostas</span></h3>
+          <p><span class="s" data-s="b13-c-s0">Em avaliações de múltiplas tarefas (longo horizonte), o desempenho caiu, mas permaneceu robusto.</span> <span class="s" data-s="b13-c-s1">Sequências como CROUCH→GO-TO→PUSH atingiram 50% de sucesso no mundo real, contra 64% na simulação.</span> <span class="s" data-s="b13-c-s2">Isso indica que a acumulação de erros ao longo de várias subtarefas é o principal desafio para a autonomia de longo prazo.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b14-h">Limitações e Trabalho Futuro</span></h2>
+<p><span class="s" data-s="b14-p0-s0">Apesar dos resultados promissores, o paper reconhece limitações significativas.</span> <span class="s" data-s="b14-p0-s1">Primeiro, embora a coleta de dados seja automatizada, o design de tarefas ainda requer intervenção humana.</span> <span class="s" data-s="b14-p0-s2">Adicionar uma nova tarefa física exige que uma pessoa escreva o prompt e autorize as poses-chave da sequência de movimento.</span> <span class="s" data-s="b14-p0-s3">O repertório do robô cresce apenas na velocidade que um humano pode especificar novas tarefas.</span></p>        <h2><span class="s" data-s="b15-h">Limitações Sensoriais e de Controle</span></h2>
+<p><span class="s" data-s="b15-p0-s0">Segundo, a entrada sensorial do robô é baseada principalmente na visão, que não fornece percepção direta de contato.</span> <span class="s" data-s="b15-p0-s1">Uma vez que um objeto sai do campo de visão da câmera ou é ocluído, a política não tem sinal de que o objeto ainda está lá, o que degrada o desempenho em tarefas ricas em contato.</span> <span class="s" data-s="b15-p0-s2">A adição de sensores táteis seria uma solução natural para este problema.</span></p>        <h2><span class="s" data-s="b16-h">Conclusão</span></h2>
+<p><span class="s" data-s="b16-p0-s0">O paper demonstra que a simulação pode servir como o motor de dados para a autonomia humanóide, removendo o operador humano do loop de coleta e desvinculando a geração de dados do trabalho físico.</span> <span class="s" data-s="b16-p0-s1">O sistema HALO transfere zero-shot para ambientes reais não vistos durante o treinamento, sem necessidade de escaneamento ou mapeamento prévio.</span> <span class="s" data-s="b16-p0-s2">A abordagem escala com compute, oferecendo um caminho viável para a generalização em robótica, embora desafios permaneçam na expansão automática do repertório de tarefas e na percepção de contato.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">HALO elimina a necessidade de dados reais capturados por humanos, usando simulação procedural para gerar 300 horas de treinamento.</span></li><li><span class="s" data-s="k1">O sistema alcança 91% de sucesso em tarefas únicas no mundo real, transferindo zero-shot da simulação para o físico.</span></li><li><span class="s" data-s="k2">A arquitetura usa um VLM para planejamento, um gerador de movimento cinemático e um rastreador aprendido para execução.</span></li><li><span class="s" data-s="k3">Limitações incluem a dependência humana para design de novas tarefas e a falta de percepção direta de contato.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.06908" rel="noopener">Perceptive Humanoid Motion from Simulation</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.06908" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sherpa: treinar professores de LLM para se adaptar a diferentes estilos de aprendizado — arXiv em 5</title>
+<meta name="description" content="Pesquisadores de Stanford, CMU e Georgia Tech desenvolveram um framework de aprendizado por reforço que treina modelos de linguagem para ensinar matemática adaptando-se às preferências de diferentes perfis de alunos, em vez de seguir regras pedagógicas fixas.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Sherpa: treinar professores de LLM para se adaptar a diferentes estilos de aprendizado">
+<meta property="og:description" content="Pesquisadores de Stanford, CMU e Georgia Tech desenvolveram um framework de aprendizado por reforço que treina modelos de linguagem para ensinar matemática adaptando-se às preferências de diferentes perfis de alunos, em vez de seguir regras pedagógicas fixas.">
+<meta property="og:image" content="../../assets/papers/2610.08778/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>LLMs</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.08778" rel="noopener">arXiv:2610.08778</a>
+    </div>
+    <h1><span class="s" data-s="t">Sherpa: treinar professores de LLM para se adaptar a diferentes estilos de aprendizado</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Pesquisadores de Stanford, CMU e Georgia Tech desenvolveram um framework de aprendizado por reforço que treina modelos de linguagem para ensinar matemática adaptando-se às preferências de diferentes perfis de alunos, em vez de seguir regras pedagógicas fixas.</span></p>
+    <p class="byline">
+      <span>Xu et al.</span>
+      <span>10 min de leitura</span>
+<span>06/10/2026</span>    </p>
+    <div class="listen" data-article="2610.08778" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=1OK5Hga0v2Q" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema: resolver não é ensinar</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Modelos de linguagem grandes já resolvem problemas de matemática e programação com competência crescente.</span> <span class="s" data-s="b0-p0-s1">Mas resolver um problema é diferente de ensinar alguém a resolvê-lo.</span> <span class="s" data-s="b0-p0-s2">Estudos recentes mostram que nenhum dos 16 modelos de fronteira avaliados alcançou mais de 56% de acerto em rubricas de tutoria escritas por especialistas.</span> <span class="s" data-s="b0-p0-s3">Pior: capacidade forte de resolução de problemas não se traduz automaticamente em ensino eficaz.</span></p><p><span class="s" data-s="b0-p1-s0">Esse descompasso importa.</span> <span class="s" data-s="b0-p1-s1">Pesquisas sobre uso de IA em educação levantam preocupações de que receber assistência eficaz em tarefas não necessariamente gera aprendizado.</span> <span class="s" data-s="b0-p1-s2">Em alguns casos, pode até reduzir o engajamento cognitivo ou prejudicar o desempenho independente posterior.</span> <span class="s" data-s="b0-p1-s3">Em vez de fortalecer a autonomia do aprendiz, LLMs podem corroê-la.</span></p><p><span class="s" data-s="b0-p2-s0">Uma abordagem comum é construir sistemas educacionais ao redor de LLMs existentes, injetando estratégias pedagógicas por meio de prompts ou estruturas externas.</span> <span class="s" data-s="b0-p2-s1">Esses sistemas podem ser úteis, mas moldam o comportamento do modelo apenas em tempo de inferência.</span> <span class="s" data-s="b0-p2-s2">Para desenvolver ensino como capacidade intrínseca do modelo, trabalhos recentes treinam LLMs especificamente como professores, usando fine-tuning supervisionado ou otimização de preferências.</span> <span class="s" data-s="b0-p2-s3">Mas essas técnicas dependem da qualidade e cobertura de demonstrações ou dados de preferência instrucionais.</span></p><p><span class="s" data-s="b0-p3-s0">Abordagens mais recentes recorrem a aprendizado por reforço, permitindo que professores aprendam de suas próprias interações com alunos simulados.</span> <span class="s" data-s="b0-p3-s1">Ainda assim, todas essas técnicas compartilham uma limitação fundamental: seus sinais de treinamento codificam noções predefinidas do que é ensinar bem, em vez de se ancorar diretamente nos resultados de aprendizado de alunos diversos.</span> <span class="s" data-s="b0-p3-s2">Na prática, estudantes diferem em preferências e necessidades, e ensino eficaz não pode ser totalmente especificado sem levar em conta essa heterogeneidade.</span></p>        <h2><span class="s" data-s="b1-h">A ideia: treinar com base na melhoria do aluno</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Os autores apresentam Sherpa, um framework de aprendizado por reforço multi-turno que treina um professor LLM para melhorar o desempenho de alunos em diferentes arquétipos.</span> <span class="s" data-s="b1-p0-s1">Em vez de predefinir o que constitui bom ensino, Sherpa separa especificação pedagógica de otimização do professor: necessidades instrucionais diversas são instanciadas no lado do aluno, enquanto o professor é otimizado com base na melhoria do aluno.</span></p><p><span class="s" data-s="b1-p1-s0">Cada episódio de ensino segue um ciclo de preparação–tutoria–teste.</span> <span class="s" data-s="b1-p1-s1">Dado um problema, o professor primeiro prepara uma solução, tutora o aluno ao longo de múltiplos turnos de interação, e recebe recompensa baseada na melhoria do aluno no teste final.</span> <span class="s" data-s="b1-p1-s2">A recompensa é simples: a diferença entre a acurácia do aluno após a tutoria e uma linha de base (a acurácia do aluno sem tutoria ou com tutoria de um modelo base).</span></p><p><span class="s" data-s="b1-p2-s0">O desafio é que modelos de alunos exibem preferências similares por estratégias instrucionais mesmo após prompting ou entre famílias de modelos diferentes, tornando-os insuficientemente diversos como arquétipos.</span> <span class="s" data-s="b1-p2-s1">Para resolver isso, os autores projetaram um mecanismo de gating que torna estratégias instrucionais consequentes: orientação que atende à preferência do aluno passa pelo gate e é encaminhada ao modelo backbone do aluno para elicitar raciocínio substantivo; orientação incompatível é bloqueada, e o aluno reclama que a estratégia não atende suas necessidades.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.08778/figure1.webp" alt="Visão geral do Sherpa: o professor interage com arquétipos de alunos através de preparação, tutoria e teste, recebendo recompensa baseada na melhoria do aluno. O arquétipo é implementado por um modelo backbone com mecanismo de gating." loading="lazy">
+          <figcaption>
+            Visão geral do Sherpa: o professor interage com arquétipos de alunos através de preparação, tutoria e teste, recebendo recompensa baseada na melhoria do aluno. O arquétipo é implementado por um modelo backbone com mecanismo de gating.
+            <span class="source">Figura 1 do paper · Xu et al., arXiv:2610.08778</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Como funciona: arquétipos de alunos com gating</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O framework define quatro arquétipos de alunos, cada um com preferências instrucionais distintas.</span> <span class="s" data-s="b3-p0-s1">O arquétipo Conceptual prefere explicações conceituais e orientação passo a passo; o Computational prefere exemplos trabalhados e cálculos explícitos; o Exploratory prefere múltiplas abordagens e comparações entre métodos; e o Minimal prefere dicas mínimas e descoberta independente.</span></p><p><span class="s" data-s="b3-p1-s0">O mecanismo de gating é crucial.</span> <span class="s" data-s="b3-p1-s1">Quando o professor envia uma mensagem ao aluno, um classificador pequeno (treinado separadamente) determina se a estratégia instrucional combina com a preferência do arquétipo.</span> <span class="s" data-s="b3-p1-s2">Se combina, a mensagem passa para o modelo backbone do aluno (Qwen3-8B nos experimentos), que processa o conteúdo e responde substantivamente.</span> <span class="s" data-s="b3-p1-s3">Se não combina, o gate bloqueia a mensagem e o aluno responde com uma reclamação genérica, indicando que a estratégia não atende suas necessidades.</span></p><p><span class="s" data-s="b3-p2-s0">Esse design força o professor a aprender quais estratégias funcionam para cada arquétipo.</span> <span class="s" data-s="b3-p2-s1">Sem o gating, todos os alunos responderiam de forma similar, e o professor não teria sinal claro de quais adaptações importam.</span> <span class="s" data-s="b3-p2-s2">Com o gating, o professor precisa identificar a preferência do aluno e ajustar sua instrução para maximizar a melhoria no teste final.</span></p><p><span class="s" data-s="b3-p3-s0">O professor é treinado usando aprendizado por reforço online.</span> <span class="s" data-s="b3-p3-s1">A cada episódio, o professor interage com um aluno sorteado aleatoriamente de um dos quatro arquétipos.</span> <span class="s" data-s="b3-p3-s2">A recompensa é calculada comparando a acurácia do aluno no teste final após a tutoria com uma linha de base (acurácia sem tutoria ou com tutoria de um modelo não treinado).</span> <span class="s" data-s="b3-p3-s3">O gradiente de política é estimado usando o algoritmo AReaL, uma implementação assíncrona de reinforcement learning que permite escalar o treinamento.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.08778/figure2.webp" alt="Exemplo de resposta a um aluno que pede comparação de abordagens: o modelo base prossegue direto para a solução; o Sherpa apresenta duas abordagens e convida o aluno a começar com uma delas, adaptando-se à preferência exploratória." loading="lazy">
+          <figcaption>
+            Exemplo de resposta a um aluno que pede comparação de abordagens: o modelo base prossegue direto para a solução; o Sherpa apresenta duas abordagens e convida o aluno a começar com uma delas, adaptando-se à preferência exploratória.
+            <span class="source">Figura 2 do paper · Xu et al., arXiv:2610.08778</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Treinamento adaptativo versus especializado</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os autores treinaram duas versões principais do professor.</span> <span class="s" data-s="b5-p0-s1">A primeira, Sherpa-DP (diversified preferences), foi treinada com todos os quatro arquétipos de alunos, forçando o modelo a aprender estratégias adaptativas.</span> <span class="s" data-s="b5-p0-s2">A segunda consistiu em quatro professores especializados, cada um treinado com apenas um arquétipo, otimizando para uma única preferência instrucional.</span></p><p><span class="s" data-s="b5-p1-s0">A hipótese era que o professor adaptativo aprenderia a identificar e se ajustar a diferentes preferências, enquanto os professores especializados maximizariam desempenho dentro de um único estilo.</span> <span class="s" data-s="b5-p1-s1">Ambos os tipos de professor foram treinados com o mesmo orçamento de amostras e usando o mesmo algoritmo de otimização.</span></p><p><span class="s" data-s="b5-p2-s0">Além disso, os autores treinaram uma versão baseline do professor usando apenas recompensas de preferência humana (sem melhoria do aluno), para isolar o efeito de otimizar diretamente para resultados de aprendizado.</span> <span class="s" data-s="b5-p2-s1">Essa ablação permite entender se treinar com base na melhoria do aluno realmente importa, ou se qualquer forma de aprendizado por reforço seria suficiente.</span></p>        <h2><span class="s" data-s="b6-h">Resultados: melhoria em todos os arquétipos</span></h2>
+<p><span class="s" data-s="b6-p0-s0">O professor adaptativo Sherpa-DP melhorou o desempenho dos alunos em todos os quatro arquétipos em média 20,5 pontos percentuais comparado ao modelo base (Qwen3-8B sem treinamento adicional como professor).</span> <span class="s" data-s="b6-p0-s1">Quando comparado a uma linha de base onde o aluno resolve o problema sem qualquer tutoria, a melhoria foi ainda maior.</span></p><p><span class="s" data-s="b6-p1-s0">Os professores especializados alcançaram ganhos ligeiramente maiores dentro de seus arquétipos específicos, como esperado.</span> <span class="s" data-s="b6-p1-s1">Por exemplo, o professor treinado apenas com alunos Conceptual melhorou a acurácia desse arquétipo de 56,7% para 78,9%, enquanto o professor adaptativo alcançou 77,2%.</span> <span class="s" data-s="b6-p1-s2">Mas o professor adaptativo manteve desempenho competitivo em todos os arquétipos, enquanto os especializados falharam quando expostos a preferências diferentes daquelas em que foram treinados.</span></p><p><span class="s" data-s="b6-p2-s0">Importante: o professor treinado apenas com recompensas de preferência humana (sem melhoria do aluno) não conseguiu melhorar consistentemente o desempenho dos alunos.</span> <span class="s" data-s="b6-p2-s1">Isso demonstra que otimizar diretamente para resultados de aprendizado é essencial, e que preferências humanas sobre respostas de ensino não capturam totalmente o que torna o ensino eficaz.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.08778/table5.webp" alt="Acurácia dos alunos após ensino: o professor adaptativo Sherpa-DP melhora desempenho em todos os arquétipos comparado ao modelo base. Professores especializados (treinados em um único arquétipo) alcançam ganhos maiores em suas especialidades, mas não generalizam." loading="lazy">
+          <figcaption>
+            Acurácia dos alunos após ensino: o professor adaptativo Sherpa-DP melhora desempenho em todos os arquétipos comparado ao modelo base. Professores especializados (treinados em um único arquétipo) alcançam ganhos maiores em suas especialidades, mas não generalizam.
+            <span class="source">Tabela 5 do paper · Xu et al., arXiv:2610.08778</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Validação externa: MathTutorBench</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Para avaliar se as melhorias se estendem além dos arquétipos simulados, os autores testaram o professor treinado no MathTutorBench, um benchmark externo que avalia qualidade pedagógica de respostas de tutoria usando rubricas escritas por especialistas.</span> <span class="s" data-s="b8-p0-s1">O benchmark cobre dimensões como clareza, encorajamento de pensamento independente, e adequação da orientação.</span></p><p><span class="s" data-s="b8-p1-s0">O professor Sherpa-DP elevou a pontuação pedagógica geral de 52,5% (modelo base) para 79,2%, um ganho de 26,7 pontos percentuais.</span> <span class="s" data-s="b8-p1-s1">Isso indica que as habilidades de ensino aprendidas através de interação com arquétipos simulados transferem para critérios pedagógicos definidos por humanos, mesmo que esses critérios não tenham sido usados durante o treinamento.</span></p><p><span class="s" data-s="b8-p2-s0">Os autores também conduziram um estudo com professores humanos, que compararam respostas do modelo base e do Sherpa-DP em pares.</span> <span class="s" data-s="b8-p2-s1">Os avaliadores humanos preferiram o Sherpa-DP em 79,6% das comparações, indicando alinhamento substancial com julgamentos humanos de ensino eficaz.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b9-t">Validação do design de arquétipos</span></h3>
+          <p><span class="s" data-s="b9-c-s0">Os autores compararam seu design de gating com alunos simplesmente promptados para ter preferências.</span> <span class="s" data-s="b9-c-s1">Alunos com gating mostraram maior melhoria quando a estratégia do professor combinava com sua preferência, e taxas de reclamação muito mais altas quando não combinava.</span> <span class="s" data-s="b9-c-s2">Alunos apenas promptados respondiam de forma similar independentemente da estratégia, confirmando que o gating é necessário para criar arquétipos realmente distintos.</span></p>
+        </aside>
+        <figure class="figure">
+          <img src="../../assets/papers/2610.08778/figure3.webp" alt="Comparação de arquétipos: painéis superiores mostram melhoria do aluno; inferiores, taxa de reclamação. Um bom design de arquétipo deve mostrar maior melhoria e menor reclamação acima da diagonal (quando estratégia combina com preferência)." loading="lazy">
+          <figcaption>
+            Comparação de arquétipos: painéis superiores mostram melhoria do aluno; inferiores, taxa de reclamação. Um bom design de arquétipo deve mostrar maior melhoria e menor reclamação acima da diagonal (quando estratégia combina com preferência).
+            <span class="source">Figura 3 do paper · Xu et al., arXiv:2610.08778</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b11-h">O que o gating realmente faz</span></h2>
+<p><span class="s" data-s="b11-p0-s0">O mecanismo de gating não é apenas um truque de engenharia; ele materializa a ideia de que estratégias instrucionais têm consequências diferentes para alunos diferentes.</span> <span class="s" data-s="b11-p0-s1">Sem ele, o sinal de recompensa seria ruidoso: o professor poderia receber recompensa alta por estratégias que funcionam para um aluno médio, mas não aprenderia a se adaptar.</span></p><p><span class="s" data-s="b11-p1-s0">Com o gating, o professor recebe feedback claro e imediato quando sua estratégia não combina com a preferência do aluno.</span> <span class="s" data-s="b11-p1-s1">A reclamação do aluno funciona como um sinal de erro que guia a exploração do professor em direção a estratégias mais apropriadas.</span> <span class="s" data-s="b11-p1-s2">Ao longo do treinamento, o professor aprende a identificar pistas sutis nas mensagens do aluno que indicam sua preferência, e ajusta sua instrução de acordo.</span></p><p><span class="s" data-s="b11-p2-s0">Os autores treinaram o classificador de gating usando exemplos sintéticos gerados por um LLM forte (Gemini), rotulando mensagens de professor de acordo com a estratégia instrucional dominante.</span> <span class="s" data-s="b11-p2-s1">O classificador alcançou alta acurácia (acima de 90% em todas as categorias), e sua aplicação durante o treinamento criou arquétipos com comportamentos claramente distintos.</span></p>        <h2><span class="s" data-s="b12-h">Limitações e trabalho futuro</span></h2>
+<p><span class="s" data-s="b12-p0-s0">O paper é honesto sobre suas limitações.</span> <span class="s" data-s="b12-p0-s1">Primeiro, os arquétipos são simplificações: alunos reais podem ter preferências que combinam múltiplos arquétipos ou que vão além das quatro categorias definidas.</span> <span class="s" data-s="b12-p0-s2">Segundo, os experimentos usam alunos simulados (LLMs condicionados), não humanos reais.</span> <span class="s" data-s="b12-p0-s3">Embora a validação com professores humanos e no MathTutorBench sugira que as habilidades transferem, o teste definitivo seria com estudantes humanos em cenários educacionais reais.</span></p><p><span class="s" data-s="b12-p1-s0">Terceiro, o framework assume que o professor pode identificar a preferência do aluno através de interação.</span> <span class="s" data-s="b12-p1-s1">Na prática, alunos podem não estar cientes de suas próprias preferências, ou podem mudar de preferência ao longo do tempo.</span> <span class="s" data-s="b12-p1-s2">Trabalhos futuros poderiam explorar como professores podem inferir preferências gradualmente, ou como lidar com preferências latentes ou instáveis.</span></p><p><span class="s" data-s="b12-p2-s0">Quarto, o treinamento foi feito em problemas de matemática de nível médio e inicial de universidade.</span> <span class="s" data-s="b12-p2-s1">Não está claro se os mesmos princípios se aplicam a outros domínios (programação, ciências, humanidades) ou a níveis de dificuldade muito diferentes.</span> <span class="s" data-s="b12-p2-s2">A generalização para outros contextos educacionais permanece uma questão aberta.</span></p><p><span class="s" data-s="b12-p3-s0">Finalmente, os autores usaram um orçamento fixo de amostras de treinamento e um único algoritmo de otimização (AReaL).</span> <span class="s" data-s="b12-p3-s1">É possível que outros algoritmos ou orçamentos maiores levem a ganhos adicionais, ou que a escolha de arquétipos e design de gating possa ser refinada com mais experimentação.</span></p>        <h2><span class="s" data-s="b13-h">Por que isso importa</span></h2>
+<p><span class="s" data-s="b13-p0-s0">Sherpa representa uma mudança de paradigma no treinamento de LLMs como professores.</span> <span class="s" data-s="b13-p0-s1">Em vez de codificar regras pedagógicas ou coletar demonstrações de ensino exemplar, o framework permite que o professor aprenda diretamente de resultados de aprendizado.</span> <span class="s" data-s="b13-p0-s2">Isso é mais próximo de como professores humanos melhoram: observando se os alunos realmente aprendem, e ajustando sua instrução de acordo.</span></p><p><span class="s" data-s="b13-p1-s0">A separação entre professor e aluno é elegante: necessidades instrucionais são representadas no lado do aluno (através de arquétipos e gating), enquanto o professor é livre para explorar estratégias que maximizam melhoria.</span> <span class="s" data-s="b13-p1-s1">Isso permite refinar os arquétipos independentemente do treinamento do professor, e facilita a extensão do framework para novas preferências ou contextos.</span></p><p><span class="s" data-s="b13-p2-s0">Os ganhos são substanciais: 20,5 pontos percentuais de melhoria média em acurácia dos alunos, 26,7 pontos no MathTutorBench, e 79,6% de preferência em comparações humanas.</span> <span class="s" data-s="b13-p2-s1">Esses números sugerem que o framework não apenas melhora métricas de tarefa, mas também alinha o comportamento do professor com julgamentos humanos de qualidade pedagógica.</span></p><p><span class="s" data-s="b13-p3-s0">O trabalho abre caminho para tutores de IA que ensinam estudantes reais.</span> <span class="s" data-s="b13-p3-s1">A validação com professores humanos e em benchmarks externos é encorajadora, mas o próximo passo crítico é testar com aprendizes humanos em ambientes educacionais reais.</span> <span class="s" data-s="b13-p3-s2">Se os ganhos observados com alunos simulados se traduzirem para humanos, Sherpa pode contribuir para sistemas de tutoria adaptativa que realmente fortalecem a autonomia e o aprendizado dos estudantes, em vez de apenas fornecer respostas.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Sherpa treina professores LLM usando aprendizado por reforço baseado na melhoria de alunos simulados com preferências distintas, em vez de regras pedagógicas fixas.</span></li><li><span class="s" data-s="k1">O mecanismo de gating faz estratégias instrucionais terem consequências: orientação compatível passa, incompatível gera reclamação, forçando o professor a se adaptar.</span></li><li><span class="s" data-s="k2">Professor adaptativo melhora acurácia dos alunos em 20,5 pontos percentuais em média e eleva pontuação pedagógica de 52,5% para 79,2% no MathTutorBench.</span></li><li><span class="s" data-s="k3">Limitações incluem uso de alunos simulados (não humanos reais), arquétipos simplificados e escopo restrito a problemas de matemática de nível médio.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.08778" rel="noopener">Sherpa: Teaching LLMs to Teach Adaptively</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.08778" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

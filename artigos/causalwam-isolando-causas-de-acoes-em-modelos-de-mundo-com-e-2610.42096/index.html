@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CausalWAM: Isolando causas de ações em modelos de mundo com esparsidade — arXiv em 5</title>
+<meta name="description" content="Este paper propõe o CausalWAM, uma abordagem que usa esparsidade para separar variáveis latentes causais de ruído em modelos de mundo, melhorando a eficiência de robôs em tarefas fechadas.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CausalWAM: Isolando causas de ações em modelos de mundo com esparsidade">
+<meta property="og:description" content="Este paper propõe o CausalWAM, uma abordagem que usa esparsidade para separar variáveis latentes causais de ruído em modelos de mundo, melhorando a eficiência de robôs em tarefas fechadas.">
+<meta property="og:image" content="../../assets/papers/2610.42096/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Agentes</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.42096" rel="noopener">arXiv:2610.42096</a>
+    </div>
+    <h1><span class="s" data-s="t">CausalWAM: Isolando causas de ações em modelos de mundo com esparsidade</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Este paper propõe o CausalWAM, uma abordagem que usa esparsidade para separar variáveis latentes causais de ruído em modelos de mundo, melhorando a eficiência de robôs em tarefas fechadas.</span></p>
+    <p class="byline">
+      <span>Cheng et al.</span>
+      <span>8 min de leitura</span>
+<span>30/10/2026</span>    </p>
+    <div class="listen" data-article="2610.42096" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=Srg8WDV9gdE" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Entanglement em Modelos de Mundo</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Modelos de Ação de Mundo (WAMs) aprendem variáveis latentes a partir de observações, como imagens, para prever a evolução de uma cena e gerar ações.</span> <span class="s" data-s="b0-p0-s1">Modelos recentes, como o Fast-WAM e o Cosmos 3, conseguem extrair essas variáveis latentes e usá-las tanto para previsão visual quanto para controle de robôs.</span> <span class="s" data-s="b0-p0-s2">No entanto, há um problema fundamental: a previsão precisa abranger toda a cena, enquanto apenas uma fração dela causa as ações executadas pelo agente.</span></p><p><span class="s" data-s="b0-p1-s0">Imagine um robô empilhando blocos.</span> <span class="s" data-s="b0-p1-s1">A ação depende da posição dos blocos e do estado do gripper.</span> <span class="s" data-s="b0-p1-s2">Mas a imagem também contém a toalha da mesa ou objetos ao fundo que não influenciam o movimento.</span> <span class="s" data-s="b0-p1-s3">Os WAMs aprendem variáveis latentes que descrevem tudo isso.</span> <span class="s" data-s="b0-p1-s4">Chamamos de variáveis latentes relevantes para a ação aquelas que realmente causam o movimento, e variáveis de incômodo (nuisance variables) aquelas que são irrelevantes para a ação, mas necessárias para a previsão visual completa.</span></p><p><span class="s" data-s="b0-p2-s0">O problema é que ajustar um WAM a demonstrações não garante que ele use apenas as variáveis causais.</span> <span class="s" data-s="b0-p2-s1">O modelo pode aprender a imitar a ação misturando variáveis relevantes com as irrelevantes.</span> <span class="s" data-s="b0-p2-s2">Sem suposições adicionais, as variáveis latentes causais não podem ser identificadas apenas pelas observações, pois dois modelos diferentes podem gerar a mesma distribuição de dados, mas com variáveis latentes transformadas de forma arbitrária.</span></p>        <h2><span class="s" data-s="b1-h">Identificabilidade via Esparsidade</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Trabalhos anteriores em Análise de Componentes Independentes Não-Lineares (ICA) tentam resolver essa ambiguidade usando variáveis auxiliares, como índices de tempo ou domínio, ou explorando dependência temporal.</span> <span class="s" data-s="b1-p0-s1">Outros usam intervenções conhecidas.</span> <span class="s" data-s="b1-p0-s2">No entanto, em cenários complexos de robótica, essas suposições frequentemente falham.</span> <span class="s" data-s="b1-p0-s3">As dinâmicas podem não ser markovianas, e intervenções controladas são caras ou impossíveis.</span></p><p><span class="s" data-s="b1-p1-s0">Os autores propõem uma abordagem diferente: restringir a estrutura de dependência através da esparsidade.</span> <span class="s" data-s="b1-p1-s1">Eles provam que, sob condições de não-degenerescência e uma restrição de esparsidade, as variáveis latentes usadas para gerar ações são uma função invertível das variáveis latentes relevantes para a ação, e apenas delas.</span> <span class="s" data-s="b1-p1-s2">Isso significa que o modelo pode identificar a estrutura causal real, até uma permutação das variáveis.</span></p><p><span class="s" data-s="b1-p2-s0">Esta identificação não requer dependência temporal suficiente, nem suposições sobre como os regimes não observados evoluem, e vale mesmo quando as variáveis relevantes são estatisticamente dependentes do resto.</span> <span class="s" data-s="b1-p2-s1">A chave é que a esparsidade força o cabeçalho de ação a depender de poucas dimensões latentes, isolando assim as causas reais da ação do ruído de fundo.</span></p>        <h2><span class="s" data-s="b2-h">Método: Causal WAM (CWAM)</span></h2>
+<p><span class="s" data-s="b2-p0-s0">O CausalWAM (CWAM) é implementado adicionando um caminho de roteamento esparsa ao cabeçalho de ação de um WAM pré-treinado.</span> <span class="s" data-s="b2-p0-s1">O objetivo de modelagem do mundo permanece inalterado, mas o mecanismo de geração de ação é modificado.</span> <span class="s" data-s="b2-p0-s2">Especificamente, o modelo aprende a selecionar um subconjunto compacto de variáveis latentes, chamado estado compacto Ct, que contém as informações necessárias para a ação.</span></p><p><span class="s" data-s="b2-p1-s0">Na prática, isso é alcançado aplicando uma penalidade de esparsidade nas colunas da matriz de pesos do cabeçalho de ação.</span> <span class="s" data-s="b2-p1-s1">A penalidade é do tipo group penalty, que atua em nível de colunas, servindo como uma aproximação da restrição teórica.</span> <span class="s" data-s="b2-p1-s2">As coordenadas com os maiores pesos absolutos médios são selecionadas para formar Ct.</span> <span class="s" data-s="b2-p1-s3">Isso cria um roteamento esparsa que conecta apenas as variáveis latentes causais ao gerador de ações.</span></p><p><span class="s" data-s="b2-p2-s0">O modelo é treinado com dados de demonstração.</span> <span class="s" data-s="b2-p2-s1">O encoder MLP mapeia as observações para o estado latente completo.</span> <span class="s" data-s="b2-p2-s2">Em seguida, a esparsidade no cabeçalho de ação força o modelo a ignorar as variáveis de incômodo.</span> <span class="s" data-s="b2-p2-s3">O resultado é que Ct se torna uma representação pura das causas da ação, enquanto o estado latente completo continua sendo usado para prever a próxima imagem, mantendo a fidelidade visual.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.42096/figure1.webp" alt="Diagrama mostra como o CWAM isola variáveis causais via roteamento esparsa para a ação. O estado compacto Ct é estimado a partir das observações e roteado ao cabeçalho de ação." loading="lazy">
+          <figcaption>
+            Diagrama mostra como o CWAM isola variáveis causais via roteamento esparsa para a ação. O estado compacto Ct é estimado a partir das observações e roteado ao cabeçalho de ação.
+            <span class="source">Figura 1 do paper · Cheng et al., arXiv:2610.42096</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b4-h">Validação Teórica em Dados Sintéticos</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Para validar a teoria, os autores realizaram experimentos em processos de ação de mundo sintéticos com variáveis latentes conhecidas.</span> <span class="s" data-s="b4-p0-s1">O setup envolve 20 variáveis latentes, das quais 4 são relevantes para a ação.</span> <span class="s" data-s="b4-p0-s2">O objetivo era verificar se o estado compacto Ct recuperava corretamente o bloco de variáveis causais.</span></p><p><span class="s" data-s="b4-p1-s0">Os resultados mostram que as coordenadas selecionadas pelo CWAM com esparsidade decodificam as variáveis latentes relevantes para a ação tão bem quanto a leitura densa (usando todas as variáveis).</span> <span class="s" data-s="b4-p1-s1">Além disso, o excesso de informação sobre as variáveis de incômodo é próximo de zero, indicando que Ct não contém informação irrelevante sobre o ruído.</span></p><p><span class="s" data-s="b4-p2-s0">Em contraste, modelos sem esparsidade, como um VAE MLP padrão ou uma leitura densa, decodificam as variáveis de incômodo muito além do necessário.</span> <span class="s" data-s="b4-p2-s1">Isso confirma que a esparsidade é essencial para separar as causas das ações do ruído de fundo, conforme previsto pelo Teorema 2 do paper.</span></p>        <h2><span class="s" data-s="b5-h">Resultados em Robótica e Simulação</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os autores avaliaram o CWAM no RoboCasa365, LIBERO e em um robô real Franka.</span> <span class="s" data-s="b5-p0-s1">A métrica principal foi o sucesso em ciclo fechado.</span> <span class="s" data-s="b5-p0-s2">O CWAM foi comparado com uma baseline baseada no Cosmos 3, ajustada de forma idêntica, mas sem o roteador esparsa.</span></p><p><span class="s" data-s="b5-p1-s0">Os resultados mostram que o CWAM supera a baseline em todas as famílias de habilidades do RoboCasa365, no LIBERO e na tarefa de empilhamento de cubos no robô real.</span> <span class="s" data-s="b5-p1-s1">O ganho é particularmente grande em tarefas como abrir gavetas, onde a separação clara entre variáveis causais e ruído é crucial para o sucesso.</span></p><p><span class="s" data-s="b5-p2-s0">Análises adicionais mostraram que os tokens roteados esparsamente mantêm a maior parte do sucesso do modelo completo.</span> <span class="s" data-s="b5-p2-s1">Isso indica que a informação causal isolada é suficiente para a ação, e que o ruído visual pode, de fato, ser ignorado sem prejudicar o desempenho, desde que a previsão visual seja mantida pelo estado completo.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.42096/figure2.webp" alt="Gráficos demonstram que o CWAM supera a baseline Cosmos 3 em sucesso em ciclo fechado no RoboCasa365, LIBERO e no robô Franka real." loading="lazy">
+          <figcaption>
+            Gráficos demonstram que o CWAM supera a baseline Cosmos 3 em sucesso em ciclo fechado no RoboCasa365, LIBERO e no robô Franka real.
+            <span class="source">Figura 2 do paper · Cheng et al., arXiv:2610.42096</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Visualização do Foco Causal</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Para entender o que o modelo está aprendendo, os autores visualizaram a massa de roteamento em diferentes frames.</span> <span class="s" data-s="b7-p0-s1">As visualizações mostram que, na maioria dos frames, a massa de roteamento cai sobre o objeto sendo movido e seu alvo.</span></p><p><span class="s" data-s="b7-p1-s0">Isso confirma que o mecanismo de esparsidade está funcionando como esperado: o modelo está focando nas variáveis latentes correspondentes aos objetos relevantes para a ação, ignorando o fundo e outros elementos da cena.</span> <span class="s" data-s="b7-p1-s1">Essa interpretação visual reforça a validade teórica e prática da abordagem proposta.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.42096/figure3.webp" alt="Visualização mostra o modelo focando apenas nos objetos relevantes para a ação. A massa de roteamento cai sobre o objeto sendo movido e seu alvo." loading="lazy">
+          <figcaption>
+            Visualização mostra o modelo focando apenas nos objetos relevantes para a ação. A massa de roteamento cai sobre o objeto sendo movido e seu alvo.
+            <span class="source">Figura 3 do paper · Cheng et al., arXiv:2610.42096</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Limitações e Conclusões</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Apesar dos resultados promissores, o paper reconhece limitações.</span> <span class="s" data-s="b9-p0-s1">A principal é a falta de identificabilidade componente-a-componente, o que significa que as variáveis latentes individuais não são totalmente desambiguadas.</span> <span class="s" data-s="b9-p0-s2">Isso pode não ser um problema para separar ações, mas seria útil para intervenções precisas.</span> <span class="s" data-s="b9-p0-s3">Além disso, a abordagem depende da suposição de esparsidade, que pode não valer em todos os cenários.</span></p><p><span class="s" data-s="b9-p1-s0">Os autores concluem que o CausalWAM representa um passo inicial importante para a compreensão causal de ações em modelos de mundo.</span> <span class="s" data-s="b9-p1-s1">Eles destacam que a esparsidade permite a identificação de causas a partir de decomposição observacional, sem necessidade de intervenções ou supervisão adicional.</span> <span class="s" data-s="b9-p1-s2">Isso abre caminho para futuras pesquisas em WAMs causais.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b10-t">Por que esparsidade?</span></h3>
+          <p><span class="s" data-s="b10-c-s0">A esparsidade não é apenas uma técnica de regularização, mas uma restrição estrutural que permite a identificabilidade causal.</span> <span class="s" data-s="b10-c-s1">Sem ela, o modelo pode aprender representações que misturam causas e ruído, levando a falhas em tarefas de controle.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b11-h">Implicações para Robótica</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Para a robótica, a separação clara entre variáveis causais e de incômodo é vital.</span> <span class="s" data-s="b11-p0-s1">Robôs que operam em ambientes dinâmicos e não estruturados precisam ser robustos a mudanças no fundo da cena.</span> <span class="s" data-s="b11-p0-s2">O CWAM oferece um mecanismo para isso, permitindo que o controle seja baseado apenas nas variáveis relevantes, aumentando a generalização e a eficiência.</span></p><p><span class="s" data-s="b11-p1-s0">Os resultados no Franka real demonstram que a abordagem não é apenas teórica, mas prática.</span> <span class="s" data-s="b11-p1-s1">O ganho em sucesso em ciclo fechado sugere que a esparsidade ajuda o robô a tomar decisões mais rápidas e precisas, ignorando distrações visuais.</span></p>        <h2><span class="s" data-s="b12-h">Comparação com Baselines</span></h2>
+<p><span class="s" data-s="b12-p0-s0">O CWAM foi comparado com um VAE MLP padrão e com leituras densas de modelos sem esparsidade.</span> <span class="s" data-s="b12-p0-s1">Os resultados mostram que, embora esses modelos possam prever a próxima imagem com precisão, eles falham em isolar as variáveis causais.</span> <span class="s" data-s="b12-p0-s2">Isso leva a uma menor eficiência em tarefas de controle, onde a precisão da ação é mais importante do que a fidelidade visual completa.</span></p><p><span class="s" data-s="b12-p1-s0">A tabela 1 do paper mostra que o CWAM com esparsidade tem um Delta_nuis próximo de zero, enquanto os modelos sem esparsidade têm valores altos.</span> <span class="s" data-s="b12-p1-s1">Isso confirma que a esparsidade é eficaz em remover a influência de variáveis irrelevantes.</span></p>        <h2><span class="s" data-s="b13-h">O Papel do Roteamento Esparsa</span></h2>
+<p><span class="s" data-s="b13-p0-s0">O roteamento esparsa é o componente chave do CWAM.</span> <span class="s" data-s="b13-p0-s1">Ele permite que o modelo selecione dinamicamente quais variáveis latentes são relevantes para a ação em cada passo de tempo.</span> <span class="s" data-s="b13-p0-s2">Isso é feito através da penalidade de esparsidade no cabeçalho de ação, que força a maioria dos pesos a zero.</span></p><p><span class="s" data-s="b13-p1-s0">Esse mecanismo é diferente de abordagens anteriores que usam variáveis auxiliares ou intervenções.</span> <span class="s" data-s="b13-p1-s1">O CWAM aprende a esparsidade diretamente dos dados de demonstração, sem necessidade de supervisão adicional ou suposições fortes sobre a dinâmica do ambiente.</span></p>        <h2><span class="s" data-s="b14-h">Generalização e Robustez</span></h2>
+<p><span class="s" data-s="b14-p0-s0">Os experimentos em diferentes ambientes (RoboCasa365, LIBERO, Franka) mostram que o CWAM é robusto a variações no setup.</span> <span class="s" data-s="b14-p0-s1">O modelo generaliza bem para tarefas não vistas durante o treinamento, sugerindo que a estrutura causal aprendida é fundamental e não específica de um único ambiente.</span></p><p><span class="s" data-s="b14-p1-s0">Além disso, o CWAM mantém seu desempenho mesmo quando as variáveis de incômodo evoluem de forma imprevisível.</span> <span class="s" data-s="b14-p1-s1">Isso é consistente com a teoria, que não requer suposições sobre a evolução dos regimes não observados.</span></p>        <h2><span class="s" data-s="b15-h">Futuras Direções de Pesquisa</span></h2>
+<p><span class="s" data-s="b15-p0-s0">Os autores sugerem que futuras pesquisas podem explorar a identificabilidade componente-a-componente, o que permitiria intervenções mais precisas.</span> <span class="s" data-s="b15-p0-s1">Além disso, a abordagem pode ser estendida para outros tipos de modelos de mundo e tarefas de controle.</span></p><p><span class="s" data-s="b15-p1-s0">Outra direção é investigar se a esparsidade pode ser substituída por outras restrições estruturais que também permitam a identificação causal.</span> <span class="s" data-s="b15-p1-s1">Isso poderia levar a modelos ainda mais flexíveis e eficientes.</span></p>        <h2><span class="s" data-s="b16-h">Conclusão Final</span></h2>
+<p><span class="s" data-s="b16-p0-s0">O CausalWAM é uma contribuição significativa para a área de modelos de mundo e robótica.</span> <span class="s" data-s="b16-p0-s1">Ao usar esparsidade para isolar variáveis causais, o modelo melhora a eficiência e a robustez do controle em ambientes complexos.</span> <span class="s" data-s="b16-p0-s2">Os resultados teóricos e experimentais validam a abordagem, abrindo caminho para futuras pesquisas em IA causal.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">CausalWAM usa esparsidade no cabeçalho de ação para identificar variáveis latentes causais, separando-as de variáveis irrelevantes (ruído).</span></li><li><span class="s" data-s="k1">A teoria prova que, sob restrições de esparsidade, as variáveis de ação são uma função invertível das causas reais, sem precisar de intervenções ou dependência temporal forte.</span></li><li><span class="s" data-s="k2">Experimentos em dados sintéticos e robôs reais (Franka) mostram que o roteamento esparsa melhora o sucesso em ciclo fechado em comparação com baselines como Cosmos 3.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.42096" rel="noopener">CausalWAM: Learning the Causes of Actions in World Action Models</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.42096" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

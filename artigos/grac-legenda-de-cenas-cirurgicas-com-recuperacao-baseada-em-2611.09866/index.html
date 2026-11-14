@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GRAC: Legenda de Cenas Cirúrgicas com Recuperação Baseada em Grafos — arXiv em 5</title>
+<meta name="description" content="Um modelo que representa operações como grafos de interações instrumento-tecido e usa exemplos recuperados do treinamento para gerar descrições mais precisas e factualmente corretas.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GRAC: Legenda de Cenas Cirúrgicas com Recuperação Baseada em Grafos">
+<meta property="og:description" content="Um modelo que representa operações como grafos de interações instrumento-tecido e usa exemplos recuperados do treinamento para gerar descrições mais precisas e factualmente corretas.">
+<meta property="og:image" content="../../assets/papers/2611.09866/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Imagem</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.09866" rel="noopener">arXiv:2611.09866</a>
+    </div>
+    <h1><span class="s" data-s="t">GRAC: Legenda de Cenas Cirúrgicas com Recuperação Baseada em Grafos</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um modelo que representa operações como grafos de interações instrumento-tecido e usa exemplos recuperados do treinamento para gerar descrições mais precisas e factualmente corretas.</span></p>
+    <p class="byline">
+      <span>Dhakal et al.</span>
+      <span>7 min de leitura</span>
+<span>06/11/2026</span>    </p>
+    <div class="listen" data-article="2611.09866" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=b__mXPSfutg" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Desafio da Documentação Cirúrgica Automatizada</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Os vídeos de procedimentos cirúrgicos são uma fonte rica de informação para treinamento, avaliação de desempenho e análise de fluxo de trabalho.</span> <span class="s" data-s="b0-p0-s1">No entanto, extrair significado desses vídeos exige revisão manual extensiva e expertise clínica.</span> <span class="s" data-s="b0-p0-s2">Relatórios operatórios automáticos poderiam aliviar esse fardo, mas gerar descrições precisas é complexo.</span> <span class="s" data-s="b0-p0-s3">A principal dificuldade reside em mapear atividades visuais estruturadas para linguagem natural, especialmente quando os dados anotados são limitados.</span></p><p><span class="s" data-s="b0-p1-s0">Procedimentos cirúrgicos exibem padrões recorrentes de uso de instrumentos, ações e interações anatômicas.</span> <span class="s" data-s="b0-p1-s1">Isso sugere que descrições de cenas já observadas podem servir como conhecimento prévio útil.</span> <span class="s" data-s="b0-p1-s2">Abordagens baseadas em recuperação (Retrieval-Augmented Generation) oferecem uma direção promissora, incorporando exemplos relevantes do conjunto de treinamento ao processo de geração.</span> <span class="s" data-s="b0-p1-s3">O desafio é garantir que a recuperação não seja apenas baseada em aparência visual, mas nas atividades cirúrgicas reais, considerando que instrumentos semelhantes podem realizar ações diferentes em estruturas distintas.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.09866/figure1.webp" alt="Visão geral do GRAC: o grafo de cena cirúrgica de entrada é codificado para capturar interações e recuperar grafos de cena anteriores similares com suas legendas. O modelo compara os grafos recuperados com a cena atual para guiar a geração da legenda." loading="lazy">
+          <figcaption>
+            Visão geral do GRAC: o grafo de cena cirúrgica de entrada é codificado para capturar interações e recuperar grafos de cena anteriores similares com suas legendas. O modelo compara os grafos recuperados com a cena atual para guiar a geração da legenda.
+            <span class="source">Figura 1 do paper · Dhakal et al., arXiv:2611.09866</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">Representação da Cena Cirúrgica como Grafo</span></h2>
+<p><span class="s" data-s="b2-p0-s0">O ponto de partida do GRAC é a representação da cena cirúrgica como um grafo estruturado.</span> <span class="s" data-s="b2-p0-s1">Cada frame de vídeo é modelado como um grafo G = (V, E, Xv, Xe).</span> <span class="s" data-s="b2-p0-s2">Os nós V representam instrumentos cirúrgicos e uma estrutura de tecido principal.</span> <span class="s" data-s="b2-p0-s3">As arestas E descrevem as conexões e interações entre eles.</span> <span class="s" data-s="b2-p0-s4">As matrizes de características Xv e Xe contêm features extraídas de bounding boxes anotadas, usando ResNet-18 para regiões de interesse (ROI) e features de interação.</span></p><p><span class="s" data-s="b2-p1-s0">Uma distinção importante é que as features de aresta não zero representam interações ativas (não ociosas) entre tecido e instrumento.</span> <span class="s" data-s="b2-p1-s1">Isso permite que o modelo capture não apenas quais instrumentos estão presentes, mas como eles estão interagindo com o tecido.</span> <span class="s" data-s="b2-p1-s2">Essa representação estruturada é fundamental, pois vai além da detecção de objetos simples, incorporando a topologia da cena cirúrgica.</span></p>        <h2><span class="s" data-s="b3-h">Codificador de Grafo e Memória de Consulta</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Para processar essa estrutura, o GRAC utiliza um Edge-Aware Graph Attention Network (GATv2).</span> <span class="s" data-s="b3-p0-s1">Este codificador consiste em duas camadas GATv2, cada uma com quatro heads de atenção de dimensão 128, produzindo representações de nós de 512 dimensões.</span> <span class="s" data-s="b3-p0-s2">Durante a passagem de mensagens, as características dos nós são atualizadas através de agregação ponderada por atenção dos vizinhos, com as informações de aresta guiando essa agregação.</span> <span class="s" data-s="b3-p0-s3">Isso permite que as representações dos nós sejam atualizadas de acordo com as interações observadas entre instrumento e tecido.</span></p><p><span class="s" data-s="b3-p1-s0">O resultado é uma representação em nível de grafo hg, mas o GRAC preserva também o contexto global e as interações individuais.</span> <span class="s" data-s="b3-p1-s1">Ele constrói uma memória de consulta (Query Memory) usando três tipos de tokens: um token em nível de grafo (hg), tokens de nós contextualizados (H) e tokens de interação derivados das features de aresta originais.</span> <span class="s" data-s="b3-p1-s2">Cada nó contribui com um token, e cada interação anotada contribui com dois tokens de aresta direcionada.</span> <span class="s" data-s="b3-p1-s3">A sequência é preenchida para um comprimento fixo de 19 tokens, suficiente para acomodar todos os grafos nos benchmarks EndoVis-18 e TORS sem truncamento.</span></p>        <h2><span class="s" data-s="b4-h">Recuperação Contrastiva Guiada por Legendas</span></h2>
+<p><span class="s" data-s="b4-p0-s0">O coração do método é o módulo de recuperação.</span> <span class="s" data-s="b4-p0-s1">O GRAC mantém um banco de memória B contendo pares (grafo, legenda) do conjunto de treinamento.</span> <span class="s" data-s="b4-p0-s2">Para um grafo de consulta G, o modelo seleciona K=3 exemplos de grafo-legendas recuperados R(G).</span> <span class="s" data-s="b4-p0-s3">A recuperação não é baseada apenas em similaridade visual, mas em atividades cirúrgicas similares.</span> <span class="s" data-s="b4-p0-s4">Durante o treinamento, os candidatos de recuperação da própria sequência cirúrgica do query são excluídos para evitar auto-recuperação e matches por duplicidade próxima.</span></p><p><span class="s" data-s="b4-p1-s0">Os autores introduzem uma estratégia de aprendizado contrastivo supervisionado por legendas.</span> <span class="s" data-s="b4-p1-s1">Isso significa que as embeddings dos grafos de atividades cirúrgicas similares são trazidas para mais perto umas das outras no espaço latente.</span> <span class="s" data-s="b4-p1-s2">O objetivo é que o modelo recupere exemplos anteriores que descrevam atividades semelhantes, não apenas cenas visualmente parecidas.</span> <span class="s" data-s="b4-p1-s3">Isso é crucial, pois instrumentos semelhantes podem realizar ações diferentes ou interagir com estruturas anatômicas distintas.</span></p>        <h2><span class="s" data-s="b5-h">Comparação de Grafos para Geração de Legendas</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Apenas recuperar exemplos não é suficiente; é preciso comparar a cena atual com os exemplos recuperados.</span> <span class="s" data-s="b5-p0-s1">O GRAC desenvolve um mecanismo de comparação alinhado por instrumentos.</span> <span class="s" data-s="b5-p0-s2">Ele captura as diferenças entre os grafos de cena atuais e os recuperados e incorpora essas informações nas representações das legendas recuperadas.</span> <span class="s" data-s="b5-p0-s3">Essa comparação guia o gerador de legendas (um Transformer decoder) a produzir descrições que reflitam a atividade cirúrgica observada, ajustando a informação recuperada às especificidades do momento atual.</span></p><p><span class="s" data-s="b5-p1-s0">A geração da legenda é formulada como Pθ(Y | G, R(G)), onde Y é a sequência de legendas gerada.</span> <span class="s" data-s="b5-p1-s1">O decoder recebe a memória de consulta (Q) e as representações das legendas recuperadas condicionadas pela comparação dos grafos.</span> <span class="s" data-s="b5-p1-s2">Isso permite que o modelo use o conhecimento prévio dos exemplos recuperados, mas o adapte à cena específica, evitando a cópia direta de legendas que podem não corresponder perfeitamente à ação atual.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.09866/figure3.webp" alt="Ablação do GRAC no EndoVis-18: mostra que cada componente (codificação de interações, recuperação de legendas, comparação de grafos) contribui incrementalmente para o desempenho final em CIDEr-D." loading="lazy">
+          <figcaption>
+            Ablação do GRAC no EndoVis-18: mostra que cada componente (codificação de interações, recuperação de legendas, comparação de grafos) contribui incrementalmente para o desempenho final em CIDEr-D.
+            <span class="source">Figura 3 do paper · Dhakal et al., arXiv:2611.09866</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Resultados no Benchmark EndoVis-18</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Avaliamos o GRAC no benchmark EndoVis-18, comparando-o com baselines convencionais e modelos baseados em grafos como SGT (Surgical Graph Transformer).</span> <span class="s" data-s="b7-p0-s1">O GRAC atingiu um CIDEr-D de 5.88, superando significativamente o SGT (4.23) e o Transformer convencional (3.36).</span> <span class="s" data-s="b7-p0-s2">Em métricas de qualidade de linguagem, como BLEU-4 (0.715) e METEOR (0.541), o GRAC também liderou.</span> <span class="s" data-s="b7-p0-s3">A diferença estatística foi confirmada com análise de bootstrap pareado (p &lt; 0.001), indicando que a melhoria não é devido ao acaso.</span></p><p><span class="s" data-s="b7-p1-s0">Além da qualidade textual, a precisão factual é crítica em contextos médicos.</span> <span class="s" data-s="b7-p1-s1">O GRAC alcançou uma exatidão de conjunto de tripletas (instrumento-ação-alvo) de 52.6%, comparado a 32.7% do SGT e 26.2% do baseline mais forte convencional.</span> <span class="s" data-s="b7-p1-s2">Isso representa uma melhoria substancial na capacidade do modelo de descrever corretamente quais instrumentos estão realizando quais ações em quais tecidos.</span> <span class="s" data-s="b7-p1-s3">A taxa de instrumentos incorretos ou extras (alucinações) foi menor no GRAC (0.210) do que no SGT (0.260) e outros baselines.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.09866/figure4.webp" alt="Exemplos qualitativos do EndoVis-18: (a) recuperação correta; (b) recuperação com ação errada que o GRAC corrige; (c) recuperação incorreta que o GRAC evita mencionar erroneamente." loading="lazy">
+          <figcaption>
+            Exemplos qualitativos do EndoVis-18: (a) recuperação correta; (b) recuperação com ação errada que o GRAC corrige; (c) recuperação incorreta que o GRAC evita mencionar erroneamente.
+            <span class="source">Figura 4 do paper · Dhakal et al., arXiv:2611.09866</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Análise de Erros e Limitações</span></h2>
+<p><span class="s" data-s="b9-p0-s0">A análise de erros revela nuances importantes.</span> <span class="s" data-s="b9-p0-s1">O GRAC corrigiu 26 erros de instrumentos em comparação com oito regressões, indicando que a representação condicional de grafos ajuda a prevenir menções incorretas de instrumentos.</span> <span class="s" data-s="b9-p0-s2">No entanto, corrigir erros de ação permanece desafiador.</span> <span class="s" data-s="b9-p0-s3">Quando a legenda recuperada com maior classificação contém os instrumentos corretos, mas uma ação incorreta, o GRAC reproduz essa ação em 54-71% dos frames examinados.</span> <span class="s" data-s="b9-p0-s4">Isso sugere que a correspondência correta de instrumentos não garante necessariamente a interpretação correta da atividade cirúrgica associada.</span></p><p><span class="s" data-s="b9-p1-s0">Outra limitação observada é a sensibilidade ao número de exemplos recuperados.</span> <span class="s" data-s="b9-p1-s1">Aumentar o número de exemplos além de três reduziu o desempenho, e incorporar frames vizinhos não ofereceu melhoria sobre a configuração de frame único.</span> <span class="s" data-s="b9-p1-s2">Isso indica que a relevância da informação contextual é mais importante do que sua quantidade.</span> <span class="s" data-s="b9-p1-s3">O modelo funciona melhor com poucos, mas altamente relevantes, exemplos recuperados, em vez de uma grande janela de contexto.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b10-t">Impacto da Recuperação de Legendas</span></h3>
+          <p><span class="s" data-s="b10-c-s0">Apenas reproduzir a legenda recuperada de maior classificação resulta em CIDEr-D de 5.332 e exatidão de tripletas de 0.461.</span> <span class="s" data-s="b10-c-s1">O GRAC completo supera isso (5.88 e 0.526), mostrando que combinar legendas recuperadas com informações específicas do grafo de consulta traz benefícios além da simples reutilização de texto.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b11-h">Ablação: O Papel da Comparação de Grafos</span></h2>
+<p><span class="s" data-s="b11-p0-s0">As ablações mostram que as features de interação (arestas) e as legendas recuperadas contribuem complementariamente.</span> <span class="s" data-s="b11-p0-s1">Incorporar features de aresta aumenta o CIDEr-D de 4.870 para 5.632, destacando a importância da informação relacional.</span> <span class="s" data-s="b11-p0-s2">Adicionar a recuperação de legendas melhora ainda mais para 5.805.</span> <span class="s" data-s="b11-p0-s3">A adição das features de comparação de grafos (com supervisão de compatibilidade) não aumentou significativamente o CIDEr-D (5.883 vs 5.805, p=0.054), mas reduziu significativamente a alucinação de instrumentos (de 0.049 para 0.037, p=0.003).</span></p><p><span class="s" data-s="b11-p1-s0">Isso sugere que a supervisão de compatibilidade ajuda o modelo a usar as features de comparação principalmente para melhorar a precisão factual em nível de instrumento, em vez de aumentar a qualidade agregada da legenda.</span> <span class="s" data-s="b11-p1-s1">A melhoria na qualidade da linguagem pode ser limitada pelo vocabulário restrito das legendas cirúrgicas e pela alta recorrência de atividades, onde a cópia de legendas similares já é uma estratégia eficaz.</span></p>        <h2><span class="s" data-s="b12-h">Generalização e Considerações Finais</span></h2>
+<p><span class="s" data-s="b12-p0-s0">O GRAC também foi avaliado no conjunto de dados TORS (da Universidade de Chicago), onde alcançou um CIDEr-D de 5.06, superando o baseline mais forte (3.80).</span> <span class="s" data-s="b12-p0-s1">Isso demonstra alguma generalização para diferentes tipos de procedimentos cirúrgicos.</span> <span class="s" data-s="b12-p0-s2">No entanto, as comparações com resultados publicados de SGT++ requerem cautela devido a diferenças nos features de entrada e protocolos de avaliação.</span> <span class="s" data-s="b12-p0-s3">O GRAC usa seleção de checkpoints baseada em desenvolvimento, enquanto os protocolos publicados de SGT usam seleção baseada no benchmark.</span></p><p><span class="s" data-s="b12-p1-s0">Em resumo, o GRAC demonstra que combinar representações estruturadas de cenas cirúrgicas (grafos) com exemplos recuperados melhora a descrição de cenas cirúrgicas.</span> <span class="s" data-s="b12-p1-s1">A abordagem é particularmente eficaz em reduzir alucinações de instrumentos e melhorar a precisão factual.</span> <span class="s" data-s="b12-p1-s2">No entanto, a correção de erros de ação permanece um desafio aberto, indicando a necessidade de alinhamentos mais confiáveis entre as interações cirúrgicas recuperadas e a cena de consulta.</span> <span class="s" data-s="b12-p1-s3">O trabalho mostra o potencial da recuperação aumentada em domínios estruturados e com conhecimento prévio recorrente.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">O GRAC supera métodos tradicionais em CIDEr-D (5.88 vs 4.23) ao combinar grafos de cena com recuperação de legendas anteriores.</span></li><li><span class="s" data-s="k1">A precisão factual de tripletas (instrumento-ação-alvo) aumenta significativamente, reduzindo alucinações de instrumentos.</span></li><li><span class="s" data-s="k2">A recuperação guiada por legendas funciona melhor com poucos exemplos (K=3), sugerindo relevância sobre quantidade.</span></li><li><span class="s" data-s="k3">Corrigir erros de ação permanece difícil, mesmo quando os instrumentos são identificados corretamente.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.09866" rel="noopener">GRAC: Graph-Based Retrieval-Augmented Captioning for Surgical Scene Description</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.09866" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ChunkAct: Action Chunking para eficiência em robótica agêntica — arXiv em 5</title>
+<meta name="description" content="O ChunkAtinge 83,8% de sucesso no LIBERO-Pro com 2,9x menos chamadas ao LLM, compilando memória em chunks executáveis para reduzir latência e custo.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ChunkAct: Action Chunking para eficiência em robótica agêntica">
+<meta property="og:description" content="O ChunkAtinge 83,8% de sucesso no LIBERO-Pro com 2,9x menos chamadas ao LLM, compilando memória em chunks executáveis para reduzir latência e custo.">
+<meta property="og:image" content="../../assets/papers/2610.18874/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Robótica</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.18874" rel="noopener">arXiv:2610.18874</a>
+    </div>
+    <h1><span class="s" data-s="t">ChunkAct: Action Chunking para eficiência em robótica agêntica</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">O ChunkAtinge 83,8% de sucesso no LIBERO-Pro com 2,9x menos chamadas ao LLM, compilando memória em chunks executáveis para reduzir latência e custo.</span></p>
+    <p class="byline">
+      <span>Xu et al.</span>
+      <span>7 min de leitura</span>
+<span>13/10/2026</span>    </p>
+    <div class="listen" data-article="2610.18874" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=2RLh1xkuG6U" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O custo oculto da generalização em robótica agêntica</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A robótica agêntica emergiu como um paradigma promissor para manipulação robótica, colocando um modelo de linguagem grande (LLM) no loop de controle do robô.</span> <span class="s" data-s="b0-p0-s1">Diferente das políticas tradicionais que mapeiam pixels e comandos de linguagem diretamente para comandos motores, essa abordagem equipa o LLM com ferramentas de percepção, movimento e visão-linguagem-ação (VLA), além de uma memória de experiências anteriores.</span> <span class="s" data-s="b0-p0-s2">O resultado é uma capacidade notável de generalizar para novas tarefas sem necessidade de retreinamento específico.</span></p><p><span class="s" data-s="b0-p1-s0">No entanto, essa generalização vem a um preço alto em eficiência computacional e financeira.</span> <span class="s" data-s="b0-p1-s1">Em cada passo de interação, o agente observa a cena, consulta sua memória, raciocina e emite uma única chamada de ferramenta.</span> <span class="s" data-s="b0-p1-s2">Cada primitiva de movimento requer uma rodada dedicada de raciocínio do LLM sobre todo o histórico de interação.</span> <span class="s" data-s="b0-p1-s3">Isso significa que o custo de um episódio cresce linearmente com o número de primitivas necessárias para completar a tarefa.</span></p><p><span class="s" data-s="b0-p2-s0">A análise dos autores revela que esse raciocínio é frequentemente redundante.</span> <span class="s" data-s="b0-p2-s1">Uma vez que um sub-objetivo é escolhido e seus alvos localizados, as primitivas subsequentes seguem uma rotina já prescrita pela memória.</span> <span class="s" data-s="b0-p2-s2">O LLM tende a deliberar sobre cada passo e constantemente retorna à memória para orientação, mesmo quando a decisão já foi tomada implicitamente.</span> <span class="s" data-s="b0-p2-s3">Essa redundância não só aumenta o custo, mas também torna a recuperação de memória e o raciocínio menos confiáveis à medida que o contexto cresce.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.18874/figure1.webp" alt="Comparação entre o fluxo anterior, que invoca o LLM a cada primitiva, e o ChunkAct, que invoca o planejador uma vez para lançar um chunk de ação autônomo." loading="lazy">
+          <figcaption>
+            Comparação entre o fluxo anterior, que invoca o LLM a cada primitiva, e o ChunkAct, que invoca o planejador uma vez para lançar um chunk de ação autônomo.
+            <span class="source">Figura 1 do paper · Xu et al., arXiv:2610.18874</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">ChunkAct: Compilando memória em chunks executáveis</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Para resolver essa ineficiência, os autores apresentam o ChunkAct, que introduz o conceito de &#39;action chunking&#39; (agrupamento de ações) à robótica agêntica.</span> <span class="s" data-s="b2-p0-s1">A ideia central é internalizar a memória do agente em sequências de ação generalizáveis que executam sem a participação passo a passo do planejador LLM.</span> <span class="s" data-s="b2-p0-s2">Em vez de chamar o LLM para cada pequeno movimento, o sistema compila offline a memória em chunks executáveis.</span></p><p><span class="s" data-s="b2-p1-s0">O processo opera em duas fases distintas.</span> <span class="s" data-s="b2-p1-s1">Offline, o ChunkAct compila a memória do agente em chunks de ação.</span> <span class="s" data-s="b2-p1-s2">Isso significa que as rotinas conhecidas são transformadas em códigos executáveis que o robô pode seguir autonomamente.</span> <span class="s" data-s="b2-p1-s3">Online, durante a execução da tarefa, uma única chamada ao LLM lança um chunk de primitivas encadeadas.</span> <span class="s" data-s="b2-p1-s4">Esse chunk executa de forma autônoma e retorna o controle apenas em caso de falha, sinalizado por um código de erro tipado.</span></p><p><span class="s" data-s="b2-p2-s0">Essa arquitetura desacopla o LLM da execução rotineira.</span> <span class="s" data-s="b2-p2-s1">O planejador é reservado apenas para decisões que realmente exigem raciocínio, como a seleção de sub-objetivos ou o replanejamento quando um chunk falha.</span> <span class="s" data-s="b2-p2-s2">Consequentemente, o custo da computação do LLM escala com o número de decisões tomadas, e não com o número total de primitivas de movimento em um episódio.</span> <span class="s" data-s="b2-p2-s3">Isso representa uma mudança fundamental na arquitetura de controle, tratando a execução motora como um processo compilado e não como uma série de inferências contínuas.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.18874/figure3.webp" alt="Os dois estágios do ChunkAct: à esquerda, a compilação offline da memória em chunks executáveis; à direita, a execução online onde o LLM invoca o chunk via única chamada de função." loading="lazy">
+          <figcaption>
+            Os dois estágios do ChunkAct: à esquerda, a compilação offline da memória em chunks executáveis; à direita, a execução online onde o LLM invoca o chunk via única chamada de função.
+            <span class="source">Figura 3 do paper · Xu et al., arXiv:2610.18874</span>
+          </figcaption>
+        </figure>
+        <aside class="callout">
+          <h3><span class="s" data-s="b4-t">Redução drástica de tokens e chamadas</span></h3>
+          <p><span class="s" data-s="b4-c-s0">No benchmark LIBERO-Pro, o ChunkAct reduziu em 2,9 vezes o número de chamadas ao LLM, em 4,4 vezes os tokens de entrada e em 2,3 vezes os tokens de saída, comparado ao estado da arte anterior (Harness VLA).</span></p>
+        </aside>
+        <h2><span class="s" data-s="b5-h">Análise de eficiência e resultados no LIBERO-Pro</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os autores avaliaram o ChunkAct em dois benchmarks da família LIBERO: o LIBERO-Pro e o LIBERO-Plus.</span> <span class="s" data-s="b5-p0-s1">O LIBERO-Pro perturba as suites de tarefas originais (Spatial, Object, Goal e LIBERO-10) com redirecionamento de instruções e troca de posições de objetos, criando um cenário desafiador para testar a generalização.</span> <span class="s" data-s="b5-p0-s2">O LIBERO-Plus varia tarefas ao longo de sete eixos, incluindo layout de objetos, ponto de vista da câmera, iluminação e ruído de sensores.</span></p><p><span class="s" data-s="b5-p1-s0">No LIBERO-Pro, o ChunkAttingiu uma taxa de sucesso de 83,8%, superando o método anterior mais forte, Harness VLA, em 5,0 pontos percentuais.</span> <span class="s" data-s="b5-p1-s1">Essa melhoria não foi obtida às custas de eficiência; pelo contrário, o método exigiu significativamente menos recursos computacionais.</span> <span class="s" data-s="b5-p1-s2">Enquanto o Harness VLA requeria uma média de 24,2 chamadas ao LLM e 2,2 milhões de tokens de entrada por episódio, o ChunkAct operou com apenas 8,3 chamadas e 0,5 milhões de tokens de entrada.</span></p><p><span class="s" data-s="b5-p2-s0">A tabela de resultados detalha o ganho em eficiência.</span> <span class="s" data-s="b5-p2-s1">O número de tokens de saída também caiu de 8,5k para 3,7k por episódio.</span> <span class="s" data-s="b5-p2-s2">Essa economia é particularmente relevante considerando os custos de API.</span> <span class="s" data-s="b5-p2-s3">Para uma tarefa simples de pegar e colocar, o custo estimado com GPT-6 Astra caía de aproximadamente $22 por episódio para uma fração significativa, tornando a escalabilidade de agentes baseados em LLM muito mais viável financeiramente.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.18874/table1.webp" alt="Taxa de sucesso de tarefa no LIBERO-Pro, mostrando que o ChunkAct supera o Harness VLA em todas as categorias de perturbação." loading="lazy">
+          <figcaption>
+            Taxa de sucesso de tarefa no LIBERO-Pro, mostrando que o ChunkAct supera o Harness VLA em todas as categorias de perturbação.
+            <span class="source">Tabela 1 do paper · Xu et al., arXiv:2610.18874</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Ablação e o papel do raciocínio do LLM</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Para entender melhor a contribuição do raciocínio do LLM, os autores realizaram uma ablação comparando o desempenho com e sem o esforço de raciocínio alto (high reasoning effort) do modelo GPT-5.6-sol.</span> <span class="s" data-s="b7-p0-s1">Quando o raciocínio alto foi removido, o desempenho do Harness VLA caiu drasticamente de 78,8% para 56,0%.</span> <span class="s" data-s="b7-p0-s2">No entanto, o ChunkAct manteve um desempenho robusto de 80,0%, mesmo sem o raciocínio alto, demonstrando que a estrutura de chunks compensa a falta de raciocínio em tempo real para tarefas rotineiras.</span></p><p><span class="s" data-s="b7-p1-s0">Além disso, foi testado o cenário onde o ChunkAct executa os chunks sem qualquer chamada ao planejador LLM.</span> <span class="s" data-s="b7-p1-s1">Nesse caso, o sucesso caiu para 57,5%, indicando que a capacidade de replanejamento em caso de falha ainda é crucial.</span> <span class="s" data-s="b7-p1-s2">Isso confirma que o valor do ChunkAct não está apenas em reduzir chamadas, mas em manter o LLM envolvido apenas onde ele é genuinamente necessário: para decisões de alto nível e recuperação de erros.</span></p><p><span class="s" data-s="b7-p2-s0">A análise também revela que a recuperação de memória e o raciocínio do LLM tornam-se menos confiáveis à medida que o contexto cresce.</span> <span class="s" data-s="b7-p2-s1">Ao internalizar a memória em chunks, o ChunkAttinge um equilíbrio onde o agente pode lidar com variações complexas sem o ônus computacional de processar o contexto completo a cada passo.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.18874/table2.webp" alt="Análise de eficiência e ablação do papel do LLM, mostrando o ganho em sucesso e redução de tokens ao usar ChunkAct com raciocínio alto." loading="lazy">
+          <figcaption>
+            Análise de eficiência e ablação do papel do LLM, mostrando o ganho em sucesso e redução de tokens ao usar ChunkAct com raciocínio alto.
+            <span class="source">Tabela 2 do paper · Xu et al., arXiv:2610.18874</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Generalização e transferência zero-shot</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Além do LIBERO-Pro, o ChunkAct foi avaliado no LIBERO-Plus, que apresenta variações mais complexas e realistas.</span> <span class="s" data-s="b9-p0-s1">O método demonstrou capacidade de transferência zero-shot para tarefas não vistas, alcançando uma taxa de sucesso geral de 83,9% no LIBERO-Plus.</span> <span class="s" data-s="b9-p0-s2">Isso superou significativamente outros modelos VLA end-to-end e agentes agênticos, incluindo OpenVLA, π0 e NORA.</span></p><p><span class="s" data-s="b9-p1-s0">Em configurações específicas de perturbação, como variação de câmera e layout de objetos, o ChunkAct mostrou robustez notável.</span> <span class="s" data-s="b9-p1-s1">Por exemplo, na perturbação de layout de objetos, o método alcançou 82,5% de sucesso, enquanto o melhor baseline, RIPT-VLA, atingiu 76,5%.</span> <span class="s" data-s="b9-p1-s2">Essa robustez sugere que a abordagem de compilação de memória em chunks captura invariantes essenciais das tarefas, tornando o agente menos sensível a mudanças superficiais no ambiente.</span></p><p><span class="s" data-s="b9-p2-s0">Os resultados no LIBERO-Plus reforçam a ideia de que a eficiência não precisa ser sacrificada em prol da generalização.</span> <span class="s" data-s="b9-p2-s1">Ao reduzir a dependência de raciocínio contínuo e memória explícita em tempo real, o ChunkAttinge um equilíbrio onde o agente pode lidar com variações complexas sem o ônus computacional de processar o contexto completo a cada passo.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b10-t">Limitações e escopo</span></h3>
+          <p><span class="s" data-s="b10-c-s0">O ChunkAct foi avaliado principalmente em ambientes simulados do LIBERO.</span> <span class="s" data-s="b10-c-s1">A transferência para robôs físicos reais em cenários não estruturados ainda requer validação adicional.</span> <span class="s" data-s="b10-c-s2">Além disso, a fase de compilação offline depende da qualidade da memória inicial e da capacidade do modelo de identificar padrões generalizáveis.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b11-h">Conclusão: Uma nova arquitetura para robótica agêntica</span></h2>
+<p><span class="s" data-s="b11-p0-s0">O ChunkAct representa um avanço significativo na eficiência de sistemas de robótica agêntica.</span> <span class="s" data-s="b11-p0-s1">Ao introduzir o action chunking, os autores demonstram que é possível desacoplar o raciocínio de alto nível da execução motora de baixo nível.</span> <span class="s" data-s="b11-p0-s2">Isso resulta em uma redução drástica do número de chamadas ao LLM e do consumo de tokens, sem comprometer a taxa de sucesso nas tarefas.</span></p><p><span class="s" data-s="b11-p1-s0">A abordagem de compilar a memória em chunks executáveis offline oferece um caminho promissor para escalar a robótica agêntica.</span> <span class="s" data-s="b11-p1-s1">Ao reduzir o custo computacional, torna-se viável aplicar esses agentes a tarefas mais longas e complexas, onde o custo de raciocínio contínuo seria proibitivo.</span> <span class="s" data-s="b11-p1-s2">Além disso, a melhoria na taxa de sucesso sugere que a eliminação da redundância no raciocínio pode, paradoxalmente, levar a decisões mais consistentes e confiáveis.</span></p><p><span class="s" data-s="b11-p2-s0">Embora o trabalho se concentre em benchmarks simulados, os princípios do ChunkAct têm implicações amplas para a futura integração de LLMs em sistemas robóticos físicos.</span> <span class="s" data-s="b11-p2-s1">À medida que os modelos de linguagem continuam a evoluir, a necessidade de arquiteturas eficientes que minimizem a latência e o custo de inferência se tornará cada vez mais crítica.</span> <span class="s" data-s="b11-p2-s2">O ChunkAct oferece uma solução prática e eficaz para esse desafio, estabelecendo um novo padrão para a eficiência na robótica agêntica.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">ChunkAct agrupa primitivas em chunks executáveis, reduzindo chamadas ao LLM de 24,2 para 8,3 por episódio.</span></li><li><span class="s" data-s="k1">A memória é compilada offline, eliminando a necessidade de recuperação de contexto em tempo real.</span></li><li><span class="s" data-s="k2">O método supera o estado da arte em 5 pontos percentuais no LIBERO-Pro, mantendo robustez em perturbações.</span></li><li><span class="s" data-s="k3">O custo computacional escala com o número de decisões, não com o comprimento da tarefa.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.18874" rel="noopener">ChunkAct: Action Chunking for Agentic Robotics</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.18874" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

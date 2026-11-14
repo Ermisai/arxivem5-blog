@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RPG: robô aprende sozinho a executar 22 tarefas praticando em simulação e sobe de 28,6% para 95% de sucesso — arXiv em 5</title>
+<meta name="description" content="Um framework que reconstrói tarefas de manipulação a partir de dados offline, pratica em simulação usando feedback privilegiado e diagnóstico por vídeo, e melhora um sistema de habilidades compartilhadas sem retreinar modelos—tudo antes de ir para o robô físico.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RPG: robô aprende sozinho a executar 22 tarefas praticando em simulação e sobe de 28,6% para 95% de sucesso">
+<meta property="og:description" content="Um framework que reconstrói tarefas de manipulação a partir de dados offline, pratica em simulação usando feedback privilegiado e diagnóstico por vídeo, e melhora um sistema de habilidades compartilhadas sem retreinar modelos—tudo antes de ir para o robô físico.">
+<meta property="og:image" content="../../assets/papers/2610.02204/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Robótica</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.02204" rel="noopener">arXiv:2610.02204</a>
+    </div>
+    <h1><span class="s" data-s="t">RPG: robô aprende sozinho a executar 22 tarefas praticando em simulação e sobe de 28,6% para 95% de sucesso</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um framework que reconstrói tarefas de manipulação a partir de dados offline, pratica em simulação usando feedback privilegiado e diagnóstico por vídeo, e melhora um sistema de habilidades compartilhadas sem retreinar modelos—tudo antes de ir para o robô físico.</span></p>
+    <p class="byline">
+      <span>Wang et al.</span>
+      <span>11 min de leitura</span>
+<span>01/10/2026</span>    </p>
+    <div class="listen" data-article="2610.02204" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema: robôs precisam de muito trabalho humano para funcionar em tarefas diversas</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Construir capacidades robóticas confiáveis em tarefas variadas exige esforço humano substancial: desenvolver e manter habilidades, projetar funções de recompensa, integrar percepção e controle.</span> <span class="s" data-s="b0-p0-s1">Avanços recentes em modelos de linguagem multimodais (MLLMs) permitem que agentes percebam ambientes, raciocinem sobre tarefas, gerem e executem código, e melhorem através de feedback.</span> <span class="s" data-s="b0-p0-s2">Isso abre caminho para expandir o comportamento de robôs com menos engenharia específica por tarefa.</span></p><p><span class="s" data-s="b0-p1-s0">Existe um trade-off fundamental no controle robótico baseado em modelos de linguagem.</span> <span class="s" data-s="b0-p1-s1">No paradigma Code-as-Policy, percepção e primitivas de controle são combinadas em programas executáveis.</span> <span class="s" data-s="b0-p1-s2">Esses programas rodam eficientemente e podem incorporar loops de feedback, mas suas respostas dependem de lógica explícita e interfaces de percepção.</span> <span class="s" data-s="b0-p1-s3">Por exemplo, uma verificação simbólica robusta de sucesso de agarramento pode ser difícil de especificar, enquanto um MLLM consegue avaliar o resultado a partir de imagens.</span></p><p><span class="s" data-s="b0-p2-s0">No paradigma Agent-as-Policy, o MLLM permanece no loop de controle, oferecendo raciocínio visual e semântico flexível.</span> <span class="s" data-s="b0-p2-s1">Porém, chamadas frequentes ao modelo tornam decisões de baixo nível lentas.</span> <span class="s" data-s="b0-p2-s2">Um sistema escalável deveria combinar essas forças: delegar execução repetível a código reutilizável e reservar raciocínio multimodal para decisões que se beneficiam de julgamento visual ou semântico.</span></p>        <h2><span class="s" data-s="b1-h">A ideia: Reconstruct, Practice, Go Real</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Os autores da UC Berkeley, Amazon FAR, MIT e Universidade de Chicago apresentam RPG (Reconstruct, Practice, Go Real), um framework que desenvolve e refina habilidades robóticas reutilizáveis através de prática autônoma, sem atualizar os pesos do modelo.</span> <span class="s" data-s="b1-p0-s1">RPG melhora tanto a biblioteca de habilidades compartilhadas quanto o prompt de sistema que guia um agente multimodal no uso dessas habilidades.</span> <span class="s" data-s="b1-p0-s2">Mudanças nesses componentes compartilhados persistem entre episódios e podem beneficiar outras tarefas que os reutilizam.</span></p><p><span class="s" data-s="b1-p1-s0">O framework opera em três fases.</span> <span class="s" data-s="b1-p1-s1">Na fase Reconstruct, dado um dataset offline, o sistema seleciona tarefas-fonte que expõem capacidades úteis de manipulação e constrói tarefas de prática relacionadas em simulação.</span> <span class="s" data-s="b1-p1-s2">A suíte de prática resultante pode ser expandida processando tarefas adicionais do dataset.</span> <span class="s" data-s="b1-p1-s3">Uma tarefa de prática pode cobrir parte de uma tarefa-fonte ou uma manipulação análoga; ela não precisa reproduzir a trajetória ou cena original.</span> <span class="s" data-s="b1-p1-s4">Neste trabalho, os autores usam o dataset ABC, que cobre 193 tarefas diversas.</span></p><p><span class="s" data-s="b1-p2-s0">Durante a fase Practice, RPG compara execuções do Runtime Agent e do Privileged Agent.</span> <span class="s" data-s="b1-p2-s1">Ambos usam o mesmo modelo e biblioteca de habilidades, mas o Privileged Agent recebe adicionalmente o estado completo do simulador.</span> <span class="s" data-s="b1-p2-s2">O Video Analyzer usa esses registros de execução e vídeos disponíveis do dataset para diagnosticar falhas.</span> <span class="s" data-s="b1-p2-s3">RPG então desenvolve novas habilidades simbólicas reutilizáveis, refina habilidades existentes e revisa o prompt de sistema.</span> <span class="s" data-s="b1-p2-s4">Ele avalia mudanças candidatas através das tarefas de prática e retesta mudanças mescladas antes de retê-las.</span></p><p><span class="s" data-s="b1-p3-s0">Finalmente, a fase Go Real calibra e congela o sistema resultante para implantação física, onde o Runtime Agent coordena percepção e controle através da biblioteca de habilidades compartilhadas.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.02204/figure1.webp" alt="Visão geral do RPG: reconstrói tarefas de prática a partir de dados offline, pratica em simulação desenvolvendo habilidades compartilhadas, e implanta o sistema melhorado no mundo real. Abaixo, exemplos qualitativos de execução física em tarefas diversas." loading="lazy">
+          <figcaption>
+            Visão geral do RPG: reconstrói tarefas de prática a partir de dados offline, pratica em simulação desenvolvendo habilidades compartilhadas, e implanta o sistema melhorado no mundo real. Abaixo, exemplos qualitativos de execução física em tarefas diversas.
+            <span class="source">Figura 1 do paper · Wang et al., arXiv:2610.02204</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Como funciona o ciclo de auto-melhoria</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O mecanismo central do RPG é o ciclo de prática autônoma.</span> <span class="s" data-s="b3-p0-s1">Em cada rodada, o sistema executa todas as tarefas de prática com o Runtime Agent e o Privileged Agent.</span> <span class="s" data-s="b3-p0-s2">O Runtime Agent usa apenas observações RGB-D e a biblioteca de habilidades atual, simulando as condições reais de implantação.</span> <span class="s" data-s="b3-p0-s3">O Privileged Agent tem acesso ao estado completo do simulador—posições exatas de objetos, configurações de juntas, informações de contato—permitindo diagnósticos mais precisos.</span></p><p><span class="s" data-s="b3-p1-s0">Quando uma execução falha, o Video Analyzer compara as trajetórias dos dois agentes e os vídeos do dataset.</span> <span class="s" data-s="b3-p1-s1">Ele identifica onde e por que a falha ocorreu: colisão com parede, agarramento insuficiente, trajetória de colocação inadequada.</span> <span class="s" data-s="b3-p1-s2">Com base nesse diagnóstico, o sistema propõe revisões: adicionar uma nova habilidade especializada, modificar uma habilidade existente para tratar um caso específico, ou ajustar o prompt de sistema para melhorar o planejamento de alto nível.</span></p><p><span class="s" data-s="b3-p2-s0">Cada mudança candidata é testada isoladamente em cinco sementes fixas de desenvolvimento por tarefa.</span> <span class="s" data-s="b3-p2-s1">Se a mudança melhora o desempenho sem quebrar outras tarefas, ela é aceita.</span> <span class="s" data-s="b3-p2-s2">Após coletar mudanças aceitas, o sistema as mescla e retesta o sistema integrado.</span> <span class="s" data-s="b3-p2-s3">Apenas mudanças que sobrevivem a essa validação cruzada são retidas.</span> <span class="s" data-s="b3-p2-s4">Esse processo garante que melhorias locais não degradem o desempenho global.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.02204/figure3.webp" alt="Estudo de caso em colocação de garrafa: Runtime Agent falha por colisão, diagnóstico identifica trajetória inadequada, sistema revisa habilidade pick_and_place_tall_object para incluir verificação de caminho livre, e validação cruzada confirma melhoria em outras tarefas." loading="lazy">
+          <figcaption>
+            Estudo de caso em colocação de garrafa: Runtime Agent falha por colisão, diagnóstico identifica trajetória inadequada, sistema revisa habilidade pick_and_place_tall_object para incluir verificação de caminho livre, e validação cruzada confirma melhoria em outras tarefas.
+            <span class="source">Figura 3 do paper · Wang et al., arXiv:2610.02204</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">O papel do agente privilegiado e do analisador de vídeo</span></h2>
+<p><span class="s" data-s="b5-p0-s0">A combinação do Privileged Agent e do Video Analyzer é crucial para diagnósticos precisos.</span> <span class="s" data-s="b5-p0-s1">O Privileged Agent pode verificar exatamente onde um objeto está, se um agarramento foi bem-sucedido, ou se uma trajetória vai colidir—informações difíceis de extrair apenas de imagens RGB-D ruidosas.</span> <span class="s" data-s="b5-p0-s2">Isso permite ao sistema distinguir entre falhas de percepção (o agente não viu o objeto corretamente) e falhas de execução (a habilidade não implementa a manipulação adequadamente).</span></p><p><span class="s" data-s="b5-p1-s0">O Video Analyzer usa vídeos do dataset para fornecer contexto sobre como humanos ou outros agentes resolveram tarefas similares.</span> <span class="s" data-s="b5-p1-s1">Quando o Runtime Agent falha em dobrar uma toalha, por exemplo, o analisador pode comparar com vídeos de dobradura bem-sucedida e identificar que a habilidade atual não está levantando a camada superior suficientemente antes de posicionar.</span> <span class="s" data-s="b5-p1-s2">Essa análise multimodal é mais rica que simplesmente comparar estados finais.</span></p><p><span class="s" data-s="b5-p2-s0">Os autores realizam ablações sistemáticas removendo cada componente.</span> <span class="s" data-s="b5-p2-s1">Sem o Privileged Agent, o sistema ainda melhora, mas mais lentamente e com menos precisão nos diagnósticos.</span> <span class="s" data-s="b5-p2-s2">Sem o Video Analyzer, o sistema perde o contexto visual que ajuda a entender falhas complexas.</span> <span class="s" data-s="b5-p2-s3">A combinação dos dois componentes produz os melhores resultados.</span></p>        <h2><span class="s" data-s="b6-h">Tarefas e protocolo de avaliação</span></h2>
+<p><span class="s" data-s="b6-p0-s0">O robô simulado YAM tem dois braços de 6 graus de liberdade e duas garras, recebe observações RGB-D e aceita comandos de 14 dimensões especificando posições-alvo absolutas de juntas.</span> <span class="s" data-s="b6-p0-s1">A coleção de prática contém sete tarefas CaP-X e quinze tarefas derivadas de ABC ou análogas, cobrindo transporte, ordenação, empilhamento, extração, inserção, fechamento articulado, manipulação bimanual e dobradura de tecido.</span></p><p><span class="s" data-s="b6-p1-s0">As especificações de tarefa identificam quais corpos são randomizados.</span> <span class="s" data-s="b6-p1-s1">Os limites padrão de deslocamento planar e yaw são ±3 cm e ±0,5 rad para corpos rígidos e ±4 cm e ±0,3 rad para tecido.</span> <span class="s" data-s="b6-p1-s2">Perturbações também incluem altura da mesa (±8 mm), translação de câmera (±4 mm), rotação de câmera (±0,008 rad), e ruído e viés de profundidade.</span> <span class="s" data-s="b6-p1-s3">Caixas e gavetas permanecem fixas.</span></p><p><span class="s" data-s="b6-p2-s0">O protocolo separa rigorosamente desenvolvimento e avaliação.</span> <span class="s" data-s="b6-p2-s1">A prática usa cinco sementes fixas de desenvolvimento por tarefa para verificações de candidatos e integração.</span> <span class="s" data-s="b6-p2-s2">Após a execução completa de prática de 15 rodadas estar concluída e seus sistemas salvos congelados, os autores avaliam retrospectivamente cada sistema de fim de rodada nas mesmas dez sementes reservadas por tarefa, totalizando 220 episódios por ponto na curva de resultados.</span> <span class="s" data-s="b6-p2-s3">Essas sementes são excluídas de melhoria e seleção de checkpoint.</span></p><p><span class="s" data-s="b6-p3-s0">Cada tarefa é avaliada usando sua condição de sucesso predefinida.</span> <span class="s" data-s="b6-p3-s1">A maioria das condições verifica diretamente se o objeto-alvo atinge seu estado-meta especificado.</span> <span class="s" data-s="b6-p3-s2">Colocação de garrafa só tem sucesso quando ambas as garrafas-alvo são colocadas corretamente entre os distratores.</span> <span class="s" data-s="b6-p3-s3">Dobradura de toalha tem sucesso quando a área final é 42–58% da área inicial, cantos correspondentes estão dentro de 5 cm, a camada movida está pelo menos 3 mm acima dos cantos-alvo, e a espessura máxima está abaixo de 5 cm.</span> <span class="s" data-s="b6-p3-s4">Cada episódio tem limite de 20 minutos de tempo de robô.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b7-t">Separação rigorosa entre treino e teste</span></h3>
+          <p><span class="s" data-s="b7-c-s0">As cinco sementes de desenvolvimento são usadas apenas para validar mudanças durante a prática.</span> <span class="s" data-s="b7-c-s1">As dez sementes de avaliação são completamente reservadas—nunca vistas durante melhoria.</span> <span class="s" data-s="b7-c-s2">Isso garante que os números de desempenho medem generalização real, não overfitting às inicializações de treino.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b8-h">Resultados: de 28,6% para 95% em 15 rodadas</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Nas inicializações reservadas de 22 tarefas de manipulação, RPG melhora o sucesso de tarefa de 28,6% após a primeira rodada de prática para 95,0% após 15 rodadas.</span> <span class="s" data-s="b8-p0-s1">Esse desempenho supera todos os baselines avaliados: ASPIRE atinge 75,5%, CaP-Agent0 alimentado por GPT-6 Astra Pro atinge 60,0%, a versão com Gemini atinge 48,6%, e RATs atinge 41,8%.</span></p><p><span class="s" data-s="b8-p1-s0">A curva de melhoria mostra ganhos substanciais nas primeiras rodadas.</span> <span class="s" data-s="b8-p1-s1">Após a rodada 4, quando o prompt de sistema é revisado pela primeira vez (sem edições de habilidades ainda), o desempenho salta 30,5 pontos percentuais.</span> <span class="s" data-s="b8-p1-s2">Isso demonstra que melhorias no planejamento de alto nível podem ter impacto significativo mesmo antes de refinar habilidades individuais.</span> <span class="s" data-s="b8-p1-s3">Rodadas subsequentes adicionam e modificam habilidades, com a biblioteca crescendo através de edições aceitas.</span></p><p><span class="s" data-s="b8-p2-s0">A atividade de revisão é heterogênea através das rodadas.</span> <span class="s" data-s="b8-p2-s1">Algumas rodadas adicionam várias habilidades novas, outras focam em modificar habilidades existentes.</span> <span class="s" data-s="b8-p2-s2">O prompt de sistema é revisado apenas nas rodadas 1–4; após isso, a estrutura de planejamento de alto nível se estabiliza e melhorias vêm principalmente de refinamento de habilidades.</span> <span class="s" data-s="b8-p2-s3">Essa separação entre planejamento e execução é uma característica-chave do design do RPG.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.02204/figure4.webp" alt="Esquerda: sucesso de tarefa em inicializações reservadas cresce de 28,6% para 95% em 15 rodadas, superando ASPIRE (75,5%) e CaP-Agent0 com GPT-6 (60%). Direita: atividade de revisão mostra adições e modificações de habilidades; quadrados roxos marcam revisões do prompt de sistema (rodadas 1–4)." loading="lazy">
+          <figcaption>
+            Esquerda: sucesso de tarefa em inicializações reservadas cresce de 28,6% para 95% em 15 rodadas, superando ASPIRE (75,5%) e CaP-Agent0 com GPT-6 (60%). Direita: atividade de revisão mostra adições e modificações de habilidades; quadrados roxos marcam revisões do prompt de sistema (rodadas 1–4).
+            <span class="source">Figura 4 do paper · Wang et al., arXiv:2610.02204</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">Ablações: o que cada componente contribui</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Os autores realizam ablações abrangentes para isolar a contribuição de cada componente.</span> <span class="s" data-s="b10-p0-s1">Remover o Privileged Agent reduz o desempenho final, mas o sistema ainda melhora—o Video Analyzer sozinho fornece sinal suficiente para algumas correções.</span> <span class="s" data-s="b10-p0-s2">Remover o Video Analyzer também degrada resultados, especialmente em tarefas onde contexto visual é crucial para entender falhas.</span></p><p><span class="s" data-s="b10-p1-s0">Uma comparação particularmente reveladora é a ablação library-only, que isola ganhos de revisões de habilidades.</span> <span class="s" data-s="b10-p1-s1">Nessa configuração, o sistema usa apenas a biblioteca melhorada, sem o prompt de sistema refinado ou outras mudanças.</span> <span class="s" data-s="b10-p1-s2">Isso destaca a importância da validação em nível de tarefa: habilidades individuais podem parecer corretas isoladamente, mas sua composição em tarefas completas requer verificação integrada.</span></p><p><span class="s" data-s="b10-p2-s0">As ablações também revelam que a ordem das melhorias importa.</span> <span class="s" data-s="b10-p2-s1">Revisar o prompt de sistema cedo (rodadas 1–4) estabelece uma base sólida de planejamento.</span> <span class="s" data-s="b10-p2-s2">Refinamentos subsequentes de habilidades constroem sobre essa base, tratando casos específicos que o planejamento melhorado expõe.</span> <span class="s" data-s="b10-p2-s3">Tentar refinar habilidades sem primeiro corrigir o planejamento de alto nível leva a melhorias mais lentas.</span></p>        <h2><span class="s" data-s="b11-h">Implantação física: 100% de sucesso em 30 tentativas</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Após a prática em simulação estar completa, o sistema congelado passa por um procedimento comum de calibração e adaptação de hardware—o mesmo procedimento usado para os baselines.</span> <span class="s" data-s="b11-p0-s1">Esse procedimento não envolve retreinamento ou ajuste específico por tarefa; apenas calibra parâmetros de baixo nível como offsets de câmera e limites de força.</span></p><p><span class="s" data-s="b11-p1-s0">O sistema congelado é testado em três tarefas físicas: guardar bola na gaveta, dobrar toalha e transferir tigela.</span> <span class="s" data-s="b11-p1-s1">Cada tarefa recebe dez tentativas.</span> <span class="s" data-s="b11-p1-s2">O RPG tem sucesso em todas as 30 tentativas.</span> <span class="s" data-s="b11-p1-s3">Para comparação, CaP-Agent0 com Gemini tem sucesso em 3/10 para guardar bola, 0/10 para dobrar toalha e 0/10 para transferir tigela.</span> <span class="s" data-s="b11-p1-s4">A versão com GPT-6 melhora para 4/10, 9/10 e 1/10, respectivamente.</span></p><p><span class="s" data-s="b11-p2-s0">Os autores também medem resultados de estágios intermediários nas mesmas tentativas.</span> <span class="s" data-s="b11-p2-s1">Para guardar bola na gaveta, o estágio intermediário é colocar a bola na gaveta (antes de fechá-la).</span> <span class="s" data-s="b11-p2-s2">RPG atinge 10/10 tanto no estágio intermediário quanto na tarefa completa.</span> <span class="s" data-s="b11-p2-s3">Para transferir tigela, o estágio intermediário é mover a tigela para o centro; RPG novamente atinge 10/10 em ambos.</span> <span class="s" data-s="b11-p2-s4">Esses resultados mostram que o sistema não apenas completa tarefas, mas executa cada etapa de forma confiável.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.02204/figure5.webp" alt="Sequências de execução física no robô YAM. Primeiras três linhas mostram as tarefas avaliadas quantitativamente: guardar bola na gaveta, dobrar toalha e transferir tigela. Linhas restantes mostram exemplos qualitativos adicionais de manipulação diversa." loading="lazy">
+          <figcaption>
+            Sequências de execução física no robô YAM. Primeiras três linhas mostram as tarefas avaliadas quantitativamente: guardar bola na gaveta, dobrar toalha e transferir tigela. Linhas restantes mostram exemplos qualitativos adicionais de manipulação diversa.
+            <span class="source">Figura 5 do paper · Wang et al., arXiv:2610.02204</span>
+          </figcaption>
+        </figure>
+        <aside class="callout">
+          <h3><span class="s" data-s="b13-t">Sistema congelado, sem ajuste por tarefa</span></h3>
+          <p><span class="s" data-s="b13-c-s0">Após a prática em simulação, o sistema é congelado—nenhum parâmetro é ajustado para tarefas físicas específicas.</span> <span class="s" data-s="b13-c-s1">Apenas calibração de hardware de baixo nível é aplicada, a mesma para todos os métodos.</span> <span class="s" data-s="b13-c-s2">Os 100% de sucesso refletem generalização real do aprendizado em simulação.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b14-h">O que o paper não mostra: limitações e gargalos</span></h2>
+<p><span class="s" data-s="b14-p0-s0">Os autores identificam dois gargalos principais que limitam a auto-melhoria.</span> <span class="s" data-s="b14-p0-s1">Primeiro, cada rodada coleta trajetórias do Runtime Agent e Privileged Agent através de todas as 22 tarefas, mas limites de taxa de API restringem rollouts paralelos.</span> <span class="s" data-s="b14-p0-s2">À medida que o conjunto de tarefas cresce, isso se torna um limitador de velocidade significativo.</span> <span class="s" data-s="b14-p0-s3">Trabalho futuro poderia melhorar eficiência através de agendamento de rollout consciente de quota.</span></p><p><span class="s" data-s="b14-p1-s0">Segundo, à medida que o conjunto de tarefas cresce, revisões sobrepostas a habilidades compartilhadas e dependências podem complicar a integração.</span> <span class="s" data-s="b14-p1-s1">Uma mudança que melhora uma tarefa pode inadvertidamente quebrar outra que depende do comportamento anterior da habilidade.</span> <span class="s" data-s="b14-p1-s2">O sistema atual testa mudanças mescladas, mas integração consciente de dependências poderia reduzir conflitos.</span></p><p><span class="s" data-s="b14-p2-s0">O protocolo de avaliação, embora rigoroso, cobre um escopo específico.</span> <span class="s" data-s="b14-p2-s1">As 22 tarefas são diversas dentro do domínio de manipulação de mesa, mas não representam todo o espaço de robótica.</span> <span class="s" data-s="b14-p2-s2">As três tarefas físicas demonstram transferência sim-para-real, mas são um subconjunto pequeno.</span> <span class="s" data-s="b14-p2-s3">Escalabilidade para centenas de tarefas ou ambientes radicalmente diferentes permanece uma questão em aberto.</span></p><p><span class="s" data-s="b14-p3-s0">O framework assume acesso a um dataset offline que cobre capacidades de manipulação relevantes.</span> <span class="s" data-s="b14-p3-s1">Construir a suíte de prática inicial requer esse dado.</span> <span class="s" data-s="b14-p3-s2">Para domínios onde tais datasets não existem, o custo de coleta pode ser substancial.</span> <span class="s" data-s="b14-p3-s3">Além disso, o sistema atual usa Gemini 3.8 para todos os agentes; dependência de modelos proprietários pode limitar reprodutibilidade e controle.</span></p>        <h2><span class="s" data-s="b15-h">Por que isso importa</span></h2>
+<p><span class="s" data-s="b15-p0-s0">RPG demonstra que componentes compartilhados—bibliotecas de habilidades e prompts de sistema—podem servir como alvos práticos para melhoria persistente de robôs.</span> <span class="s" data-s="b15-p0-s1">Ao contrário de abordagens que retreinam modelos inteiros, RPG melhora artefatos simbólicos que são interpretáveis, editáveis e reutilizáveis.</span> <span class="s" data-s="b15-p0-s2">Isso reduz o custo de adicionar novas capacidades e facilita debugging quando algo falha.</span></p><p><span class="s" data-s="b15-p1-s0">A separação entre planejamento de alto nível (no prompt de sistema) e execução de baixo nível (em habilidades de código) é arquiteturalmente importante.</span> <span class="s" data-s="b15-p1-s1">Ela permite que o sistema reserve raciocínio multimodal caro para decisões que realmente se beneficiam dele, enquanto delega loops de controle repetíveis a código eficiente.</span> <span class="s" data-s="b15-p1-s2">Essa divisão de trabalho é provavelmente necessária para sistemas robóticos escaláveis.</span></p><p><span class="s" data-s="b15-p2-s0">Os resultados físicos são particularmente encorajadores.</span> <span class="s" data-s="b15-p2-s1">Transferência sim-para-real permanece um desafio central em robótica, e muitos métodos que funcionam bem em simulação falham no hardware.</span> <span class="s" data-s="b15-p2-s2">Que o sistema congelado do RPG atinja 100% de sucesso em 30 tentativas físicas—após apenas calibração comum de hardware—sugere que a prática autônoma em simulação pode de fato produzir habilidades robustas para implantação real.</span></p><p><span class="s" data-s="b15-p3-s0">O framework é expandível por design.</span> <span class="s" data-s="b15-p3-s1">A suíte de prática pode crescer adicionando tarefas do dataset ABC ou outros datasets.</span> <span class="s" data-s="b15-p3-s2">Habilidades desenvolvidas para um conjunto de tarefas podem beneficiar tarefas futuras que as reutilizam.</span> <span class="s" data-s="b15-p3-s3">Essa composicionalidade é essencial para construir sistemas robóticos que melhorem continuamente ao longo do tempo, em vez de requerer reengenharia para cada nova tarefa.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">RPG melhora sucesso de 28,6% para 95% em 22 tarefas praticando em simulação com feedback privilegiado e diagnóstico por vídeo, sem retreinar modelos.</span></li><li><span class="s" data-s="k1">Sistema congelado atinge 100% de sucesso em 30 tentativas físicas após calibração comum, superando CaP-Agent0 com GPT-6 (60% em simulação, resultados mistos em física).</span></li><li><span class="s" data-s="k2">Revisão do prompt de sistema nas rodadas 1–4 adiciona +30,5 pontos percentuais; refinamentos posteriores de habilidades constroem sobre essa base de planejamento.</span></li><li><span class="s" data-s="k3">Limitações: limites de API restringem rollouts paralelos; crescimento do conjunto de tarefas complica integração de revisões sobrepostas a habilidades compartilhadas.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.02204" rel="noopener">Reconstruct, Practice, Go Real: Guided Self-Improvement for Embodied Agents</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.02204" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

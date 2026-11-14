@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sobre a Confiabilidade de Rótulos Pseudo-Maioria em Aprendizado por Reforço em Teste — arXiv em 5</title>
+<meta name="description" content="Este artigo analisa os riscos de usar votação majoritária para adaptar modelos de linguagem sem rótulos externos e apresenta o PC-Dr.DPO, um método que mitiga o colapso do modelo ajustando a robustez por prompt.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Sobre a Confiabilidade de Rótulos Pseudo-Maioria em Aprendizado por Reforço em Teste">
+<meta property="og:description" content="Este artigo analisa os riscos de usar votação majoritária para adaptar modelos de linguagem sem rótulos externos e apresenta o PC-Dr.DPO, um método que mitiga o colapso do modelo ajustando a robustez por prompt.">
+<meta property="og:image" content="../../assets/papers/2611.09872/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Aprendizado por reforço</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.09872" rel="noopener">arXiv:2611.09872</a>
+    </div>
+    <h1><span class="s" data-s="t">Sobre a Confiabilidade de Rótulos Pseudo-Maioria em Aprendizado por Reforço em Teste</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Este artigo analisa os riscos de usar votação majoritária para adaptar modelos de linguagem sem rótulos externos e apresenta o PC-Dr.DPO, um método que mitiga o colapso do modelo ajustando a robustez por prompt.</span></p>
+    <p class="byline">
+      <span>Wang et al.</span>
+      <span>7 min de leitura</span>
+<span>06/11/2026</span>    </p>
+    <div class="listen" data-article="2611.09872" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=qR8-fBZj1kg" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Adaptação sem Rótulos</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Os grandes modelos de linguagem (LLMs) alcançaram desempenho notável em raciocínio e planejamento, mas seu treinamento pós-alinhamento é predominantemente offline.</span> <span class="s" data-s="b0-p0-s1">Isso significa que os parâmetros do modelo são fixados antes da implantação e não se adaptam a mudanças na distribuição de entrada no momento do teste.</span> <span class="s" data-s="b0-p0-s2">Essa limitação é crítica em domínios novos ou especializados, onde dados de adaptação rotulados e verificadores externos confiáveis podem estar indisponíveis.</span></p><p><span class="s" data-s="b0-p1-s0">Para contornar essa limitação, surgiu o Aprendizado por Reforço em Teste (TTRL, do inglês Test-Time Reinforcement Learning).</span> <span class="s" data-s="b0-p1-s1">O TTRL adapta um modelo pré-treinado em prompts de domínio-alvo não rotulados usando recompensas geradas pelo próprio modelo.</span> <span class="s" data-s="b0-p1-s2">Essas recompensas são construídas a partir de sinais de certeza, como entropia de previsão, ou sinais baseados em ensemble, como consistência de votação majoritária e acordo entre visões alternativas de uma entrada.</span></p><p><span class="s" data-s="b0-p2-s0">Embora esses métodos possam melhorar o raciocínio sem rótulos de verdade (ground-truth), seu sucesso depende criticamente da confiabilidade da auto-supervisão gerada.</span> <span class="s" data-s="b0-p2-s1">Trabalhos anteriores relatam melhorias mesmo sob recompensas imperfeitas ou espúrias, enquanto outros destacam riscos como memorização, contaminação de dados e padrões de colapso.</span> <span class="s" data-s="b0-p2-s2">A falta de um framework formal que caracterize quando os rótulos pseudo-gerados são confiáveis limita o design principado de algoritmos de adaptação em tempo de teste.</span></p>        <h2><span class="s" data-s="b1-h">A Votação Majoritária e Seus Erros Inerentes</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Neste trabalho, os autores analisam a supervisão por votação majoritária para o TTRL com otimização direta de preferência online (online DPO).</span> <span class="s" data-s="b1-p0-s1">Eles identificam duas fontes distintas de erro na votação majoritária: o viés da maioria populacional e a variação de rollouts finitos.</span></p><p><span class="s" data-s="b1-p1-s0">O viés da maioria populacional ocorre quando a resposta modal (mais frequente) da política de comportamento é incorreta.</span> <span class="s" data-s="b1-p1-s1">Esse erro é, em geral, não identificável sem supervisão externa, pois não há um rótulo verdadeiro para comparar.</span> <span class="s" data-s="b1-p1-s2">Portanto, não pode ser corrigido diretamente durante a adaptação não supervisionada.</span></p><p><span class="s" data-s="b1-p2-s0">A variação de rollouts finitos ocorre quando a maioria observada em uma amostra limitada de gerações difere da verdadeira moda populacional.</span> <span class="s" data-s="b1-p2-s1">Isso reflete a sensibilidade à amostragem e varia entre prompts dependendo de quão decisivamente a política de comportamento favorece sua resposta modal sobre as concorrentes.</span> <span class="s" data-s="b1-p2-s2">Essa heterogeneidade ao nível do prompt é crucial para a construção de preferências.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.09872/figure1.webp" alt="Distribuição da concordância da resposta modal por prompt. A ampla distribuição indica ruído heterogêneo: alguns prompts têm unanimidade, outros têm distribuições fragmentadas, tornando os rótulos pseudo-sensíveis à amostragem." loading="lazy">
+          <figcaption>
+            Distribuição da concordância da resposta modal por prompt. A ampla distribuição indica ruído heterogêneo: alguns prompts têm unanimidade, outros têm distribuições fragmentadas, tornando os rótulos pseudo-sensíveis à amostragem.
+            <span class="source">Figura 1 do paper · Wang et al., arXiv:2611.09872</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Heterogeneidade do Ruído e a Falha dos Métodos Existentes</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Como mostrado na Figura 1, a fração de rollouts que produzem a resposta final mais frequente varia substancialmente entre problemas.</span> <span class="s" data-s="b3-p0-s1">Para alguns prompts, os grupos de rollout são quase unânimes.</span> <span class="s" data-s="b3-p0-s2">Para outros, as distribuições de resposta são altamente fragmentadas.</span> <span class="s" data-s="b3-p0-s3">Para estes últimos, o rótulo pseudo-selecionado é mais sensível à amostra de rollout particular e pode mudar sob remostragem.</span></p><p><span class="s" data-s="b3-p1-s0">Métodos existentes de otimização de preferência robusta a ruídos geralmente empregam um modelo de ruído compartilhado em nível de dataset ou um objetivo robusto globalmente normalizado sobre pares de preferência.</span> <span class="s" data-s="b3-p1-s1">Consequentemente, eles não adaptam explicitamente a força da robustez à confiabilidade dependente do prompt induzida pela amostragem de rollouts finitos durante a adaptação em tempo de teste.</span></p><p><span class="s" data-s="b3-p2-s0">Essa desconexão leva a problemas.</span> <span class="s" data-s="b3-p2-s1">Se o modelo trata todos os prompts com a mesma confiança, ele pode atualizar seus parâmetros agressivamente com base em rótulos pseudo-ruídos de prompts instáveis, levando a um colapso do desempenho.</span> <span class="s" data-s="b3-p2-s2">A Figura 4 ilustra esse colapso auto-reforçador, onde a precisão dos rótulos pseudo cai, mas a confiança do modelo aumenta, resultando em uma queda eventual da precisão de validação para zero.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.09872/figure4.webp" alt="Colapso auto-reforçador durante a adaptação. A precisão dos rótulos pseudo cai, mas a confiança do modelo aumenta, levando à queda da precisão de validação para zero. Isso justifica a necessidade de robustez condicional." loading="lazy">
+          <figcaption>
+            Colapso auto-reforçador durante a adaptação. A precisão dos rótulos pseudo cai, mas a confiança do modelo aumenta, levando à queda da precisão de validação para zero. Isso justifica a necessidade de robustez condicional.
+            <span class="source">Figura 4 do paper · Wang et al., arXiv:2611.09872</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">PC-Dr.DPO: Robustez Condicional ao Prompt</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Para abordar essa lacuna, os autores propõem o PC-Dr.DPO (Prompt-Conditional Distributionally Robust DPO).</span> <span class="s" data-s="b5-p0-s1">O PC-Dr.DPO realiza reweighting robusto separadamente dentro do grupo de rollout de cada prompt.</span> <span class="s" data-s="b5-p0-s2">Ele adapta uma temperatura de robustidade específica ao prompt usando a confiabilidade observada do voto.</span></p><p><span class="s" data-s="b5-p1-s0">A ideia central é tornar as atualizações provenientes de prompts sensíveis à amostragem mais conservadoras.</span> <span class="s" data-s="b5-p1-s1">Se a votação majoritária em um prompt é fragmentada (baixa confiabilidade observada), o método reduz o peso das preferências derivadas desse prompt, protegendo o modelo de aprender ruídos de amostragem.</span> <span class="s" data-s="b5-p1-s2">Se a votação é unânime (alta confiabilidade), o modelo pode aprender mais agressivamente.</span></p>        <h2><span class="s" data-s="b6-h">Mitigando o Esquecimento via Cache</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Além da reweighting robusta, os autores introduzem um mecanismo baseado em cache para reduzir o esquecimento não supervisionado durante a adaptação online.</span> <span class="s" data-s="b6-p0-s1">Em cenários de TTRL, o modelo pode &#39;esquecer&#39; soluções que já dominava ao se adaptar a novos dados ruidosos.</span></p><p><span class="s" data-s="b6-p1-s0">O mecanismo de cache armazena prompts cujas soluções foram identificadas como corretas ou estáveis.</span> <span class="s" data-s="b6-p1-s1">Durante a adaptação, o modelo revisita esses prompts armazenados, reforçando o conhecimento adquirido e evitando a degradação de habilidades previamente estabelecidas.</span> <span class="s" data-s="b6-p1-s2">A Figura 5 demonstra que o replay de cache melhora a precisão dos rótulos e evita o esquecimento, mantendo a precisão estável ao longo do tempo de adaptação.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.09872/figure5.webp" alt="Efeito do replay de cache na adaptação. O gráfico mostra a dinâmica cumulativa de prompts em cache e a precisão dos rótulos pseudo, demonstrando que o mecanismo evita o esquecimento e mantém a estabilidade." loading="lazy">
+          <figcaption>
+            Efeito do replay de cache na adaptação. O gráfico mostra a dinâmica cumulativa de prompts em cache e a precisão dos rótulos pseudo, demonstrando que o mecanismo evita o esquecimento e mantém a estabilidade.
+            <span class="source">Figura 5 do paper · Wang et al., arXiv:2611.09872</span>
+          </figcaption>
+        </figure>
+        <aside class="callout">
+          <h3><span class="s" data-s="b8-t">Detalhes de Implementação</span></h3>
+          <p><span class="s" data-s="b8-c-s0">O PC-Dr.DPO foi implementado no framework veRL.</span> <span class="s" data-s="b8-c-s1">Para cada prompt, foram amostrados m=32 rollouts, e oito pares de preferência foram construídos para cada atualização de política.</span> <span class="s" data-s="b8-c-s2">O modelo base utilizado foi o Qwen2.5-Math-1.5B-Instruct, mas os testes cobriram cinco backbones diferentes.</span> <span class="s" data-s="b8-c-s3">A taxa de aprendizado foi de 5e-7 com Adam.</span> <span class="s" data-s="b8-c-s4">Os rollouts foram gerados com temperatura T=0.8 e top-p=0.9.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b9-h">Resultados Empíricos</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Os autores avaliaram o PC-Dr.DPO em seis benchmarks de raciocínio matemático e intensivo em conhecimento: AIME24, AIME25, AMC23, MATH500, GPQA-Diamond e MMLU-Pro (subconjunto de matemática).</span> <span class="s" data-s="b9-p0-s1">Os testes foram realizados em cinco backbones de modelos: Qwen2.5-1.5B, Qwen2.5-3B, Qwen2.5-7B, Qwen2.5-Math-1.5B e Llama-3.2-3B.</span></p><p><span class="s" data-s="b9-p1-s0">O PC-Dr.DPO correspondeu ou superou a baseline mais forte de TTRL em 24 dos 30 configurações de modelo-benchmark.</span> <span class="s" data-s="b9-p1-s1">As baselines comparadas foram RENT (baseada em certeza), TTRL e Co-Reward (baseadas em ensemble).</span> <span class="s" data-s="b9-p1-s2">Em muitos casos, os métodos baselines sofreram colapso (indicado por * na Tabela 1), enquanto o PC-Dr.DPO manteve a estabilidade.</span></p><p><span class="s" data-s="b9-p2-s0">Por exemplo, no benchmark AMC com Qwen2.5-Math-1.5B-Instruct, o PC-Dr.DPO alcançou 55.9% de precisão, superando o TTRL (53.7%) e o Co-Reward (49.1%).</span> <span class="s" data-s="b9-p2-s1">No MMLU-Pro, o PC-Dr.DPO alcançou 69.2%, superando significativamente o TTRL (65.9%) e o Co-Reward (71.0% foi o melhor, mas o PC-Dr.DPO foi competitivo).</span> <span class="s" data-s="b9-p2-s2">Em configurações onde outros métodos colapsaram, como no AIME25 com Qwen2.5-1.5B, o PC-Dr.DPO ainda produziu resultados utilizáveis.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.09872/table1.webp" alt="Precisão de adaptação em tempo de teste (%). O PC-Dr.DPO (destacado) mostra desempenho superior ou comparável na maioria dos testes, enquanto métodos baselines frequentemente colapsam (indicado por *)." loading="lazy">
+          <figcaption>
+            Precisão de adaptação em tempo de teste (%). O PC-Dr.DPO (destacado) mostra desempenho superior ou comparável na maioria dos testes, enquanto métodos baselines frequentemente colapsam (indicado por *).
+            <span class="source">Tabela 1 do paper · Wang et al., arXiv:2611.09872</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b11-h">Análise de Ablação e Dinâmica de Adaptação</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Os autores realizaram uma análise de ablação para entender a contribuição de cada componente do PC-Dr.DPO.</span> <span class="s" data-s="b11-p0-s1">Eles demonstraram que a reweighting condicional ao prompt é essencial para a estabilidade.</span> <span class="s" data-s="b11-p0-s2">Sem ela, o modelo tende a overfit em prompts ruidosos, levando a uma queda de desempenho.</span></p><p><span class="s" data-s="b11-p1-s0">A Figura 2 mostra a dinâmica de adaptação do Qwen2.5-Math-1.5B-Instruct no benchmark AMC.</span> <span class="s" data-s="b11-p1-s1">O gráfico esquerdo mostra a fração de problemas no conjunto inicial de maioria-voto-solvável que são recuperados pela política adaptada.</span> <span class="s" data-s="b11-p1-s2">O modelo recupera progressivamente a maioria das soluções inicialmente disponíveis.</span> <span class="s" data-s="b11-p1-s3">O gráfico do meio mostra a diferença entre o número de problemas resolvidos pela política atual e a referência inicial, indicando recuperação total.</span> <span class="s" data-s="b11-p1-s4">O gráfico à direita decompondo os problemas resolvidos em recuperados e novos descobertos.</span></p><p><span class="s" data-s="b11-p2-s0">Isso sugere que o PC-Dr.DPO não apenas melhora o desempenho, mas também preserva o conhecimento existente, recuperando soluções que já estavam acessíveis via votação majoritária, enquanto ocasionalmente descobre novas soluções fora do conjunto inicial.</span></p>        <h2><span class="s" data-s="b12-h">Limitações e Considerações Finais</span></h2>
+<p><span class="s" data-s="b12-p0-s0">Apesar dos resultados promissores, o paper tem limitações.</span> <span class="s" data-s="b12-p0-s1">A análise foca especificamente na votação majoritária com online DPO.</span> <span class="s" data-s="b12-p0-s2">Outros métodos de auto-supervisão, como aqueles baseados em entropia ou verificação formal, não foram analisados neste framework.</span> <span class="s" data-s="b12-p0-s3">Além disso, o viés da maioria populacional permanece não identificável; se a resposta modal for sistematicamente incorreta, o PC-Dr.DPO não pode corrigir esse viés fundamental sem supervisão externa.</span></p><p><span class="s" data-s="b12-p1-s0">Os experimentos foram realizados em um único nó com oito GPUs NVIDIA H100, o que pode limitar a escalabilidade para modelos muito maiores ou conjuntos de dados massivos.</span> <span class="s" data-s="b12-p1-s1">A adaptação foi feita com um orçamento fixo de adaptação para cada benchmark, e a precisão final foi relatada, sem seleção do melhor checkpoint intermediário.</span> <span class="s" data-s="b12-p1-s2">Isso evita favorecer métodos que melhoram inicialmente mas colapsam depois, refletindo um cenário prático onde o início da degradação não é conhecido antecipadamente.</span></p><p><span class="s" data-s="b12-p2-s0">Em resumo, o PC-Dr.DPO oferece uma abordagem robusta para adaptar LLMs em tempo de teste usando votação majoritária, mitigando os efeitos da variação de rollouts finitos.</span> <span class="s" data-s="b12-p2-s1">Ao condicionar a robustez à confiabilidade observada e usar cache para evitar esquecimento, o método demonstra vantagem consistente sobre baselines existentes em diversos benchmarks e backbones.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b13-t">O que o Paper Não Mostra</span></h3>
+          <p><span class="s" data-s="b13-c-s0">O paper não analisa a eficácia do PC-Dr.DPO em tarefas de geração de texto livre, apenas em raciocínio matemático e conhecimento.</span> <span class="s" data-s="b13-c-s1">Também não explora a sensibilidade do método a diferentes temperaturas de amostragem ou tamanhos de rollout além dos configurados.</span> <span class="s" data-s="b13-c-s2">O viés populacional permanece um limite teórico não resolvido.</span></p>
+        </aside>
+
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">A votação majoritária em TTRL sofre de ruído heterogêneo: alguns prompts têm rótulos confiáveis, outros são sensíveis à amostragem, levando a colapsos se tratados uniformemente.</span></li><li><span class="s" data-s="k1">O PC-Dr.DPO mitiga isso condicionando a robustez da atualização ao nível de confiança observado por prompt, tornando atualizações de prompts instáveis mais conservadoras.</span></li><li><span class="s" data-s="k2">Um mecanismo de cache replay é introduzido para evitar o esquecimento não supervisionado, mantendo a precisão estável durante a adaptação online.</span></li><li><span class="s" data-s="k3">O método corresponde ou supera baselines fortes em 24 de 30 configurações, especialmente em cenários onde outros métodos colapsam devido a rótulos pseudo-ruídos.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.09872" rel="noopener">On the Reliability of Majority-Vote Pseudo-Labels in Test-Time Reinforcement Learning</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.09872" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>XStack: Avaliando a migração de repositórios ML de PyTorch para JAX — arXiv em 5</title>
+<meta name="description" content="O benchmark XStack testa se agentes de IA podem migrar repositórios inteiros de PyTorch/GPU para JAX/TPU, revelando que a verificação funcional é o gargalo principal.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="XStack: Avaliando a migração de repositórios ML de PyTorch para JAX">
+<meta property="og:description" content="O benchmark XStack testa se agentes de IA podem migrar repositórios inteiros de PyTorch/GPU para JAX/TPU, revelando que a verificação funcional é o gargalo principal.">
+<meta property="og:image" content="../../assets/papers/2611.08472/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Agentes</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.08472" rel="noopener">arXiv:2611.08472</a>
+    </div>
+    <h1><span class="s" data-s="t">XStack: Avaliando a migração de repositórios ML de PyTorch para JAX</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">O benchmark XStack testa se agentes de IA podem migrar repositórios inteiros de PyTorch/GPU para JAX/TPU, revelando que a verificação funcional é o gargalo principal.</span></p>
+    <p class="byline">
+      <span>Cai et al.</span>
+      <span>10 min de leitura</span>
+<span>05/11/2026</span>    </p>
+    <div class="listen" data-article="2611.08472" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=W1g5AmYbUOo" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema da fragmentação de hardware e software</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Imagine encontrar um repositório de código que implementa exatamente a arquitetura de modelo ou o pipeline de dados que sua equipe precisa.</span> <span class="s" data-s="b0-p0-s1">O artigo que o acompanha reporta resultados fortes, o código está público e o experimento já foi validado.</span> <span class="s" data-s="b0-p0-s2">Há apenas um problema crítico: o código foi escrito para uma infraestrutura que sua equipe não possui.</span> <span class="s" data-s="b0-p0-s3">Seu laboratório tem acesso a TPUs (Tensor Processing Units) do Google, mas o repositório assume GPUs da NVIDIA e utiliza o framework PyTorch.</span></p><p><span class="s" data-s="b0-p1-s0">Embora, em teoria, a ideia científica não dependa dessa escolha de implementação, na prática você fica preso.</span> <span class="s" data-s="b0-p1-s1">Usar esse trabalho significa reescrever o modelo, o otimizador, o pipeline de dados e a avaliação em JAX, já que esse é o stack principal que os TPUs utilizam.</span> <span class="s" data-s="b0-p1-s2">Além disso, tudo precisa funcionar sob um compilador diferente (XLA), uma hierarquia de memória distinta e um modelo de execução distribuída diferente.</span> <span class="s" data-s="b0-p1-s3">O que parece um detalhe de implementação torna-se uma barreira significativa para a reutilização da ciência.</span></p><p><span class="s" data-s="b0-p2-s0">Essa barreira é real e crescente.</span> <span class="s" data-s="b0-p2-s1">Até o final de 2025, os TPUs representavam cerca de 18,2% da computação global de IA, totalizando 3,81 milhões de unidades equivalentes a H100.</span> <span class="s" data-s="b0-p2-s2">No entanto, apenas 4,2% do código lançado com papers de ML em 2024 utilizava JAX.</span> <span class="s" data-s="b0-p2-s3">A maioria esmagadora ainda vive no ecossistema PyTorch/GPU.</span> <span class="s" data-s="b0-p2-s4">Isso cria uma necessidade prática urgente: mover sistemas funcionais entre stacks de software e hardware.</span> <span class="s" data-s="b0-p2-s5">O objetivo final é libertar o código de ML de seu ecossistema original, permitindo que pesquisadores acessem diferentes hardwares sem refazer todo o trabalho de engenharia.</span></p><p><span class="s" data-s="b0-p3-s0">Acreditamos que agentes de codificação automatizados devem ser capazes de eliminar essa barreira.</span> <span class="s" data-s="b0-p3-s1">O problema não é apenas traduzir sintaxe, mas cruzar fronteiras de framework e máquina.</span> <span class="s" data-s="b0-p3-s2">O benchmark XStack (Cross-Stack Benchmark) foi introduzido para testar diretamente essa capacidade: um agente recebe um repositório PyTorch funcional e uma máquina TPU limpa, e deve entregar um repositório JAX equivalente que reproduza os resultados originais.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.08472/figure1.webp" alt="Visão geral do benchmark XStack: o agente explora um repositório PyTorch, lê o código, executa a fonte original, depois constrói e testa uma versão JAX em TPUs. Os gráficos mostram as taxas de aprovação dos melhores agentes e a relação entre custo total e desempenho." loading="lazy">
+          <figcaption>
+            Visão geral do benchmark XStack: o agente explora um repositório PyTorch, lê o código, executa a fonte original, depois constrói e testa uma versão JAX em TPUs. Os gráficos mostram as taxas de aprovação dos melhores agentes e a relação entre custo total e desempenho.
+            <span class="source">Figura 1 do paper · Cai et al., arXiv:2611.08472</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">Por que benchmarks existentes não bastam</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Benchmarks anteriores de resolução de problemas (issue-resolution) geralmente começam com código quebrado e pedem que o agente o conserte.</span> <span class="s" data-s="b2-p0-s1">Outros benchmarks de conversão (conversion) comparam o código traduzido com o original na mesma máquina.</span> <span class="s" data-s="b2-p0-s2">Nenhum deles testa o cenário realista de migrar um sistema inteiro que já funciona em uma infraestrutura para outra completamente diferente.</span></p><p><span class="s" data-s="b2-p1-s0">A migração entre PyTorch e JAX não é uma simples tradução de sintaxe.</span> <span class="s" data-s="b2-p1-s1">Existem diferenças fundamentais na execução.</span> <span class="s" data-s="b2-p1-s2">No PyTorch, a execução é muitas vezes definida por passos (define-by-run), onde os objetos mantêm seus pesos e as funções operam sobre eles.</span> <span class="s" data-s="b2-p1-s3">No JAX, o código é tipicamente definido uma vez e compilado pelo XLA (Accelerated Linear Algebra) antes da execução, o que permite otimizações agressivas, mas exige uma mentalidade diferente de programação, especialmente em relação à imutabilidade e à gestão explícita de estados.</span></p><p><span class="s" data-s="b2-p2-s0">Além disso, a hierarquia de memória e os modelos de execução distribuída variam drasticamente entre GPUs NVIDIA e TPUs Google.</span> <span class="s" data-s="b2-p2-s1">Um agente que apenas traduz o código linha por linha não conseguirá lidar com essas nuances.</span> <span class="s" data-s="b2-p2-s2">O desafio é preservar o comportamento exato do sistema original enquanto se move toda a infraestrutura para um hardware que o código original não suporta.</span> <span class="s" data-s="b2-p2-s3">Isso requer que o agente não apenas escreva código, mas também entenda e adapte o pipeline de treinamento e avaliação.</span></p><p><span class="s" data-s="b2-p3-s0">O XStack foi desenhado para capturar essa complexidade.</span> <span class="s" data-s="b2-p3-s1">Cada tarefa no benchmark fornece ao agente um repositório PyTorch funcional e uma máquina TPU limpa.</span> <span class="s" data-s="b2-p3-s2">O agente deve reconstruir o código em JAX e garantir que o experimento original seja executado do início ao fim, atingindo o resultado publicado.</span> <span class="s" data-s="b2-p3-s3">A pergunta central é direta: um agente pode migrar um repositório de ML funcional para um novo framework e hardware corretamente?</span></p>        <h2><span class="s" data-s="b3-h">Como funciona o benchmark XStack</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O pipeline do XStack é estruturado em duas fases para garantir justiça e rigor.</span> <span class="s" data-s="b3-p0-s1">Na Fase 1, o agente recebe o repositório PyTorch e a máquina TPU.</span> <span class="s" data-s="b3-p0-s2">Ele não tem acesso ao resultado numérico esperado (o &#39;ground truth&#39;) nem à receita exata do experimento principal.</span> <span class="s" data-s="b3-p0-s3">Sua tarefa é explorar o código-fonte, entender a lógica e construir a versão JAX do zero.</span> <span class="s" data-s="b3-p0-s4">O agente pode explorar, ler o código, executar a fonte original para entender o comportamento e então escrever e testar o código JAX.</span></p><p><span class="s" data-s="b3-p1-s0">Após o agente entregar seu código, a Fase 2 entra em jogo.</span> <span class="s" data-s="b3-p1-s1">O código do agente é executado em uma máquina TPU fresca.</span> <span class="s" data-s="b3-p1-s2">Se a execução falhar ou os resultados não corresponderem aos originais, o sistema fornece ao agente uma ajuda limitada: a receita do experimento principal (o script de treinamento e avaliação).</span> <span class="s" data-s="b3-p1-s3">Isso alinha o agente com o que será avaliado, permitindo que ele corrija erros de integração ou configuração, mas não permite que ele receba o código-fonte corrigido.</span></p><p><span class="s" data-s="b3-p2-s0">A avaliação é feita por dois critérios principais.</span> <span class="s" data-s="b3-p2-s1">Primeiro, a execução deve ser bem-sucedida tecnicamente (sem erros de runtime).</span> <span class="s" data-s="b3-p2-s2">Segundo, os resultados numéricos gerados pelo código JAX devem corresponder aos resultados publicados no artigo original, dentro de uma margem de tolerância aceitável.</span> <span class="s" data-s="b3-p2-s3">Os autores também utilizam &#39;model judges&#39; (outros modelos de linguagem avaliadores) para verificar a fidelidade semântica do código migrado, assegurando que a lógica não foi alterada apenas para passar nos testes numéricos.</span></p><p><span class="s" data-s="b3-p3-s0">Esta estrutura de &#39;frozen second phase&#39; (segunda fase congelada) é intencional.</span> <span class="s" data-s="b3-p3-s1">Ao fornecer a receita do experimento apenas após a primeira tentativa, o benchmark evita que o agente &#39;cola&#39; a resposta, forçando-o a demonstrar capacidade real de engenharia de software e adaptação de framework.</span> <span class="s" data-s="b3-p3-s2">A tabela 2 do paper detalha o que cada parte vê: o agente nunca vê o alvo de graduação inicial, garantindo que a migração seja feita de forma genuína.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.08472/figure2.webp" alt="Pipeline de migração XStack: o agente migra o repositório PyTorch para JAX em uma TPU nua. Se falhar, a fase de alinhamento fornece o script principal do experimento para correções focadas, antes da verificação final dos resultados." loading="lazy">
+          <figcaption>
+            Pipeline de migração XStack: o agente migra o repositório PyTorch para JAX em uma TPU nua. Se falhar, a fase de alinhamento fornece o script principal do experimento para correções focadas, antes da verificação final dos resultados.
+            <span class="source">Figura 2 do paper · Cai et al., arXiv:2611.08472</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Resultados: Agentes ainda não são confiáveis</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os resultados do XStack são claros: agentes de codificação atuais não são totalmente confiáveis para esta tarefa.</span> <span class="s" data-s="b5-p0-s1">Entre os sete agentes avaliados de cinco laboratórios diferentes, a taxa média de aprovação foi de apenas 31%.</span> <span class="s" data-s="b5-p0-s2">Isso significa que, em dois terços dos casos, o agente falhou em entregar um repositório JAX funcional e correto.</span></p><p><span class="s" data-s="b5-p1-s0">O agente mais bem-sucedido, Claude Opus 5, atingiu uma taxa de aprovação de 75% após a Fase 2.</span> <span class="s" data-s="b5-p1-s1">Isso é impressionante, mas ainda deixa 25% dos repositórios migrados com falhas.</span> <span class="s" data-s="b5-p1-s2">Outros modelos, como GPT-5.6-sol, atingiram 45%, enquanto todos os outros ficaram em 40% ou menos.</span> <span class="s" data-s="b5-p1-s3">É importante notar que a maioria dos agentes teve um desempenho muito pior na Fase 1, sem o auxílio da receita do experimento, destacando a dificuldade de migrar sem orientação explícita do pipeline de teste.</span></p><p><span class="s" data-s="b5-p2-s0">A Figura 4 do paper ilustra essa disparidade.</span> <span class="s" data-s="b5-p2-s1">As barras claras mostram o desempenho após a Fase 1, e as escuras após a Fase 2.</span> <span class="s" data-s="b5-p2-s2">A adição da receita do experimento ajudou todos os agentes a passar em mais repositórios, mas o ganho não foi uniforme.</span> <span class="s" data-s="b5-p2-s3">Alguns agentes melhoraram significativamente, enquanto outros ainda lutavam com erros fundamentais de lógica ou integração.</span></p><p><span class="s" data-s="b5-p3-s0">Esses números indicam que, embora os agentes estejam começando a quebrar a barreira entre frameworks, eles ainda estão longe de serem uma solução plug-and-play para pesquisadores.</span> <span class="s" data-s="b5-p3-s1">A migração de repositórios inteiros é uma tarefa de horizonte longo (long-horizon) e complexa, que envolve muitos componentes interdependentes.</span> <span class="s" data-s="b5-p3-s2">Um erro em qualquer um deles pode fazer todo o experimento falhar.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.08472/figure4.webp" alt="Taxa de aprovação por agente: Claude Opus 5 lidera com 75% após a fase 2, enquanto outros modelos variam entre 5% e 45%. A fase 2 adiciona passes para todos os agentes ao alinhar o agente com o experimento principal." loading="lazy">
+          <figcaption>
+            Taxa de aprovação por agente: Claude Opus 5 lidera com 75% após a fase 2, enquanto outros modelos variam entre 5% e 45%. A fase 2 adiciona passes para todos os agentes ao alinhar o agente com o experimento principal.
+            <span class="source">Figura 4 do paper · Cai et al., arXiv:2611.08472</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">O custo da migração e a fronteira de Pareto</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Um aspecto crucial do XStack é a medição do custo.</span> <span class="s" data-s="b7-p0-s1">Migrar código não é apenas uma questão de sucesso ou fracasso; é também uma questão de recursos computacionais e financeiros.</span> <span class="s" data-s="b7-p0-s2">O paper analisa a relação entre a taxa de aprovação e o custo total gasto em chamadas de API e execução de código.</span></p><p><span class="s" data-s="b7-p1-s0">Os resultados mostram que a taxa de aprovação cresce linearmente com o logaritmo do custo.</span> <span class="s" data-s="b7-p1-s1">Isso significa que, para cada aumento exponencial no custo, há um ganho linear no sucesso.</span> <span class="s" data-s="b7-p1-s2">A Figura 1 (parte inferior direita) mostra essa relação, com uma linha tracejada representando o ajuste linear e a sombra indicando a fronteira de Pareto, que representa a melhor taxa de aprovação alcançada a um custo específico.</span></p><p><span class="s" data-s="b7-p2-s0">Essa descoberta é importante porque sugere que, embora seja possível aumentar a taxa de sucesso gastando mais dinheiro (mais iterações, mais tentativas), há um limite prático.</span> <span class="s" data-s="b7-p2-s1">Agentes que gastam muito dinheiro sem melhorar sua estratégia de verificação atingem uma meseta de desempenho.</span> <span class="s" data-s="b7-p2-s2">A fronteira de Pareto mostra quais agentes são mais eficientes, ou seja, quais alcançam a melhor taxa de aprovação com o menor custo.</span></p><p><span class="s" data-s="b7-p3-s0">Para pesquisadores e engenheiros, isso implica que a migração automatizada ainda é cara.</span> <span class="s" data-s="b7-p3-s1">Se você precisa migrar um repositório crítico, não pode simplesmente confiar em um agente genérico; você precisa de agentes de alta qualidade (como o Claude Opus 5) e estar preparado para gastar recursos significativos em iterações de correção.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b8-t">O gargalo é a verificação, não a geração</span></h3>
+          <p><span class="s" data-s="b8-c-s0">A análise dos autores revela um padrão claro: a diferença entre sucesso e falha não está na capacidade do agente de escrever código JAX, mas na capacidade de verificar se o código escrito é fiel, completo e funcional no ambiente real.</span> <span class="s" data-s="b8-c-s1">Agentes que executam o experimento original e comparam os resultados tendem a passar.</span> <span class="s" data-s="b8-c-s2">Agentes que entregam código não testado tendem a falhar.</span> <span class="s" data-s="b8-c-s3">A verificação rigorosa é o fator determinante.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b9-h">Limitações e o que o paper não mostra</span></h2>
+<p><span class="s" data-s="b9-p0-s0">É crucial entender o escopo do XStack.</span> <span class="s" data-s="b9-p0-s1">O benchmark foca exclusivamente na migração de PyTorch/GPU para JAX/TPU.</span> <span class="s" data-s="b9-p0-s2">Isso significa que os resultados não podem ser generalizados para outras migrações, como TensorFlow para PyTorch, ou para hardwares diferentes, como ASICs personalizados ou CPUs.</span> <span class="s" data-s="b9-p0-s3">A complexidade da migração varia drasticamente dependendo das diferenças entre os frameworks e hardwares envolvidos.</span></p><p><span class="s" data-s="b9-p1-s0">Além disso, o benchmark avalia apenas repositórios que já possuem resultados publicados e validados.</span> <span class="s" data-s="b9-p1-s1">Isso garante que exista um &#39;ground truth&#39; para comparação, mas também significa que o XStack não testa a capacidade do agente de criar novos algoritmos ou modelos do zero.</span> <span class="s" data-s="b9-p1-s2">O foco é na engenharia de software e na adaptação de sistemas existentes, não na pesquisa de ponta.</span></p><p><span class="s" data-s="b9-p2-s0">Outra limitação é a dependência de &#39;model judges&#39; para a avaliação semântica.</span> <span class="s" data-s="b9-p2-s1">Embora úteis, esses avaliadores baseados em LLMs podem introduzir vieses ou erros.</span> <span class="s" data-s="b9-p2-s2">A correspondência numérica é mais objetiva, mas a margem de tolerância para &#39;sucesso&#39; pode ser debatida.</span> <span class="s" data-s="b9-p2-s3">Se um modelo JAX produz um resultado ligeiramente diferente devido a diferenças de precisão numérica ou ordem de operações, isso é considerado falha?</span> <span class="s" data-s="b9-p2-s4">O paper define critérios claros, mas a nuance técnica permanece.</span></p><p><span class="s" data-s="b9-p3-s0">Finalmente, o XStack não avalia a eficiência computacional do código migrado.</span> <span class="s" data-s="b9-p3-s1">Um agente pode entregar um código JAX que funciona e produz os resultados corretos, mas que é significativamente mais lento ou consome mais memória que a versão original otimizada.</span> <span class="s" data-s="b9-p3-s2">O foco do benchmark é a correção funcional e a fidelidade aos resultados, não a otimização de performance.</span></p>        <h2><span class="s" data-s="b10-h">Conclusão: Um passo em direção à liberdade de hardware</span></h2>
+<p><span class="s" data-s="b10-p0-s0">O XStack representa um passo significativo em direção à medição do progresso na migração de código de ML entre frameworks e hardwares.</span> <span class="s" data-s="b10-p0-s1">Ao estabelecer um benchmark realista e rigoroso, os autores fornecem uma métrica clara para avaliar a capacidade dos agentes de codificação de lidar com tarefas complexas de engenharia de software.</span></p><p><span class="s" data-s="b10-p1-s0">Os resultados mostram que ainda estamos longe de uma solução perfeita.</span> <span class="s" data-s="b10-p1-s1">A taxa de sucesso de 75% para o melhor agente é promissora, mas insuficiente para a produção em larga escala.</span> <span class="s" data-s="b10-p1-s2">A necessidade de verificação rigorosa e a alta correlação com o custo indicam que a automação total ainda requer supervisão humana e recursos significativos.</span></p><p><span class="s" data-s="b10-p2-s0">No entanto, o XStack também mostra que a barreira está começando a ceder.</span> <span class="s" data-s="b10-p2-s1">Agentes podem, de fato, migrar sistemas de ML através das fronteiras do framework e do hardware.</span> <span class="s" data-s="b10-p2-s2">Isso sugere que, com melhorias contínuas nos modelos e nos métodos de verificação, poderemos um dia alcançar a liberdade de hardware desejada, onde o código de pesquisa científica pode ser executado em qualquer infraestrutura disponível, sem barreiras de implementação.</span></p><p><span class="s" data-s="b10-p3-s0">O lançamento do XStack convida a comunidade a continuar medindo esse progresso.</span> <span class="s" data-s="b10-p3-s1">Ao fornecer um benchmark aberto e rigoroso, os autores incentivam o desenvolvimento de agentes mais robustos e confiáveis, contribuindo para um ecossistema de ML mais flexível e acessível.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">A migração entre stacks (PyTorch para JAX) envolve mais que tradução de código; exige adaptação a diferentes hardwares e compiladores.</span></li><li><span class="s" data-s="k1">Agentes atuais falham em 69% dos casos; o melhor modelo (Claude Opus 5) atinge apenas 75% de sucesso após refinamento.</span></li><li><span class="s" data-s="k2">A verificação rigorosa contra o resultado original é o fator determinante para o sucesso, não apenas a geração de código.</span></li><li><span class="s" data-s="k3">O custo financeiro escala linearmente com o logaritmo da taxa de aprovação, indicando que mais iterações não resolvem problemas fundamentais.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.08472" rel="noopener">XStack: A Benchmark for ML Repo Migration</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.08472" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

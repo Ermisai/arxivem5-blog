@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BEAKER: Avaliando cérebros embutidos em laboratórios químicos autônomos — arXiv em 5</title>
+<meta name="description" content="O benchmark BEAKER expõe a lacuna entre a compreensão procedural de MLLMs e a percepção executiva necessária para robôs químicos, mostrando que modelos atuais falham em ações finas e segurança.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BEAKER: Avaliando cérebros embutidos em laboratórios químicos autônomos">
+<meta property="og:description" content="O benchmark BEAKER expõe a lacuna entre a compreensão procedural de MLLMs e a percepção executiva necessária para robôs químicos, mostrando que modelos atuais falham em ações finas e segurança.">
+<meta property="og:image" content="../../assets/papers/2611.06911/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Robótica</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.06911" rel="noopener">arXiv:2611.06911</a>
+    </div>
+    <h1><span class="s" data-s="t">BEAKER: Avaliando cérebros embutidos em laboratórios químicos autônomos</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">O benchmark BEAKER expõe a lacuna entre a compreensão procedural de MLLMs e a percepção executiva necessária para robôs químicos, mostrando que modelos atuais falham em ações finas e segurança.</span></p>
+    <p class="byline">
+      <span>Lin et al.</span>
+      <span>8 min de leitura</span>
+<span>04/11/2026</span>    </p>
+    <div class="listen" data-article="2611.06911" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=9DC15HZ9lVs" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Desafio da Automação Química Real</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Os Laboratórios Químicos Autônomos (SDCLs, na sigla em inglês) estão transformando a descoberta científica.</span> <span class="s" data-s="b0-p0-s1">Em vez de depender de tentativa e erro manual, esses sistemas usam dispositivos automatizados para executar experimentos, observar resultados e usar feedback de dados para guiar operações subsequentes.</span> <span class="s" data-s="b0-p0-s2">No centro desse sistema está o que os autores chamam de &#39;cérebro embutido&#39;: um Modelo de Linguagem Multimodal (MLLM) que conecta a percepção visual ao raciocínio de ação, considerando restrições físicas, procedurais e de segurança.</span></p><p><span class="s" data-s="b0-p1-s0">O problema é que a maioria dos benchmarks existentes para MLLMs foca em segurança, detecção de anomalias ou compreensão científica geral.</span> <span class="s" data-s="b0-p1-s1">Eles não avaliam a capacidade executiva real necessária para um robô operar em um laboratório.</span> <span class="s" data-s="b0-p1-s2">Reconhecer um frasco de Erlenmeyer não é suficiente; o modelo precisa saber se ele está pronto para operar, se a conexão suporta o próximo passo e se uma mudança de estado indica progresso ou falha.</span></p><p><span class="s" data-s="b0-p2-s0">Para preencher essa lacuna, os autores introduzem o BEAKER (Benchmark for evaluating Embodied Actionability, Knowledge, Experimentation, and Reasoning).</span> <span class="s" data-s="b0-p2-s1">É um conjunto de dados curado por especialistas humanos, sem geração ou anotação assistida por IA, projetado para diagnosticar se os MLLMs podem passar da compreensão de cena para o raciocínio fundamentado na execução.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.06911/figure1.webp" alt="Visão geral do desempenho dos modelos no BEAKER. O gráfico de radar mostra a diferença entre capacidades. A pontuação humana é de 93,3, enquanto o melhor modelo (GPT-5.5) atinge 55,4, revelando uma lacuna significativa." loading="lazy">
+          <figcaption>
+            Visão geral do desempenho dos modelos no BEAKER. O gráfico de radar mostra a diferença entre capacidades. A pontuação humana é de 93,3, enquanto o melhor modelo (GPT-5.5) atinge 55,4, revelando uma lacuna significativa.
+            <span class="source">Figura 1 do paper · Lin et al., arXiv:2611.06911</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">Como o BEAKER é Construído</span></h2>
+<p><span class="s" data-s="b2-p0-s0">A construção do BEAKER é intencionalmente rigorosa e manual.</span> <span class="s" data-s="b2-p0-s1">O pipeline consiste em quatro etapas: coleta de dados, curadoria por especialistas, autoria de perguntas e respostas (QA) e controle de qualidade.</span> <span class="s" data-s="b2-p0-s2">Diferente de benchmarks modernos que usam LLMs para gerar amostras sintéticas, o BEAKER depende exclusivamente de químicos e especialistas em IA embutida para criar 1.000 amostras de QA.</span></p><p><span class="s" data-s="b2-p1-s0">O benchmark cobre 11 tipos de tarefas, divididas em duas modalidades: imagens e vídeos.</span> <span class="s" data-s="b2-p1-s1">As tarefas são agrupadas em quatro dimensões de capacidade principais: Ação (Actionability), Conhecimento (Knowledge), Experimentação (Experimentation) e Raciocínio (Reasoning).</span> <span class="s" data-s="b2-p1-s2">Cada dimensão tem um peso diferente na pontuação final, refletindo a importância relativa dessas habilidades na execução de laboratório.</span></p><p><span class="s" data-s="b2-p2-s0">Os autores destacam que a curadoria manual garante que as questões reflitam nuances reais do laboratório, como o nível exato de um líquido ou o estado de conexão de um tubo, que são contextuais e não podem ser generalizados facilmente.</span> <span class="s" data-s="b2-p2-s1">Isso contrasta com benchmarks anteriores que frequentemente usam dados genéricos ou simulados, falhando em capturar a complexidade física da química.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.06911/figure2.webp" alt="Fluxo de criação do BEAKER. A parte superior mostra o pipeline de quatro etapas curado por especialistas. A parte inferior ilustra exemplos das quatro dimensões de capacidade, mostrando a entrada, a pergunta, a resposta correta (GT) e a previsão do modelo." loading="lazy">
+          <figcaption>
+            Fluxo de criação do BEAKER. A parte superior mostra o pipeline de quatro etapas curado por especialistas. A parte inferior ilustra exemplos das quatro dimensões de capacidade, mostrando a entrada, a pergunta, a resposta correta (GT) e a previsão do modelo.
+            <span class="source">Figura 2 do paper · Lin et al., arXiv:2611.06911</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b4-h">As Quatro Dimensões de Avaliação</span></h2>
+<p><span class="s" data-s="b4-p0-s0">O BEAKER decompõe a execução do laboratório em quatro pilares.</span> <span class="s" data-s="b4-p0-s1">O primeiro é Ação (Actionability), que avalia a capacidade do modelo de determinar onde agir.</span> <span class="s" data-s="b4-p0-s2">Isso inclui o &#39;Affordance Grounding&#39; (AFG), que pergunta onde agarrar um objeto (como o corpo de um frasco) e o Planejamento de Trajetória (TRAJ), que exige identificar caminhos viáveis para movimentos robóticos.</span> <span class="s" data-s="b4-p0-s3">Aqui, a métrica é baseada na sobreposição (IoU) da região de ação prevista versus a correta.</span></p><p><span class="s" data-s="b4-p1-s0">O segundo pilar é Conhecimento (Knowledge).</span> <span class="s" data-s="b4-p1-s1">Ele avalia a identificação de equipamentos e reagentes (ERI) e o reconhecimento de estados experimentais (SR).</span> <span class="s" data-s="b4-p1-s2">Um modelo precisa saber não apenas o nome do equipamento, mas seu estado atual (cheio, vazio, conectado).</span> <span class="s" data-s="b4-p1-s3">Também inclui Segurança Experimental e Padronização (ESS), verificando se o modelo reconhece normas de segurança críticas no ambiente.</span></p><p><span class="s" data-s="b4-p2-s0">O terceiro pilar é Experimentação (Experimentation).</span> <span class="s" data-s="b4-p2-s1">Este é o mais pesado em termos de peso na pontuação final (0,35).</span> <span class="s" data-s="b4-p2-s2">Ele cobre a configuração de aparatos experimentais (EAS), operações experimentais (EOP) e raciocínio sobre operações em vídeos curtos (SVOR) e médios (MVTS).</span> <span class="s" data-s="b4-p2-s3">A ênfase aqui está na sequência lógica de passos físicos necessários para realizar um experimento.</span></p><p><span class="s" data-s="b4-p3-s0">O quarto pilar é Raciocínio (Reasoning).</span> <span class="s" data-s="b4-p3-s1">Focado em tarefas de vídeo longo, avalia o Raciocínio de Sequência Temporal (TSR) e o Raciocínio de Procedimento Experimental de Vídeo Longo (LVPR).</span> <span class="s" data-s="b4-p3-s2">O modelo deve entender a progressão temporal de um experimento complexo, inferindo o estado atual e o próximo passo provável com base em uma sequência temporal extensa.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b5-t">A Lacuna de Ação</span></h3>
+          <p><span class="s" data-s="b5-c-s0">A tarefa de Affordance Grounding (AFG) teve pontuações uniformemente baixas em todos os 28 modelos avaliados (escala 0-50).</span> <span class="s" data-s="b5-c-s1">Isso indica que, embora os modelos possam identificar objetos, eles têm dificuldade extrema em determinar onde e como agarrá-los fisicamente, um requisito crítico para robótica.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b6-h">Metodologia de Avaliação</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Os autores avaliaram 28 MLLMs distintos, incluindo modelos de propósito geral (como GPT-5.5 e Claude Opus), modelos orientados à ciência, especializados em química e modelos de cérebro embutido.</span> <span class="s" data-s="b6-p0-s1">A avaliação foi realizada offline, em configurações de QA de turno único, utilizando prompts padronizados e formatos de saída específicos para cada tarefa.</span></p><p><span class="s" data-s="b6-p1-s0">Os modelos foram testados via APIs remotas ou implantação local em 16 GPUs NVIDIA A100.</span> <span class="s" data-s="b6-p1-s1">Para vídeos, a amostragem de frames foi cuidadosamente configurada: 8 frames para vídeos curtos, 32 para vídeos médios e 128 frames organizados em 32 grids de quatro frames para vídeos longos.</span> <span class="s" data-s="b6-p1-s2">A temperatura foi fixada em 0,7 quando configurável, e as imagens foram inseridas em sua resolução original.</span></p><p><span class="s" data-s="b6-p2-s0">Para estabelecer uma linha de base humana, três especialistas em química, não envolvidos na criação do benchmark, responderam a todas as 1.000 perguntas independentemente.</span> <span class="s" data-s="b6-p2-s1">A pontuação humana média foi de 93,3.</span> <span class="s" data-s="b6-p2-s2">A pontuação final do BEAKER agrega as pontuações das tarefas hierarquicamente, com pesos definidos por consenso de especialistas para refletir a importância relativa de cada capacidade na execução de laboratório.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.06911/table1.webp" alt="Comparação com benchmarks científicos anteriores. O BEAKER é o único que cobre todas as tarefas de execução real, enquanto outros focam apenas em segurança, detecção de anomalias ou compreensão geral." loading="lazy">
+          <figcaption>
+            Comparação com benchmarks científicos anteriores. O BEAKER é o único que cobre todas as tarefas de execução real, enquanto outros focam apenas em segurança, detecção de anomalias ou compreensão geral.
+            <span class="source">Tabela 1 do paper · Lin et al., arXiv:2611.06911</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Resultados: Especialistas vs. Generalistas</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Os resultados revelaram uma descoberta contraintuitiva: modelos de propósito geral superaram consistentemente modelos especializados em química.</span> <span class="s" data-s="b8-p0-s1">O GPT-5.5 atingiu a maior pontuação geral (55,4), seguido pelo Claude Opus 4.7 (59,2 na escala normalizada, mas com desempenho geral inferior ao GPT em algumas métricas específicas de ação).</span> <span class="s" data-s="b8-p0-s2">Modelos como ChemVLM-8B e ChemVLM-26B, treinados especificamente para química, tiveram desempenhos muito abaixo da média, com pontuações gerais em torno de 28-30.</span></p><p><span class="s" data-s="b8-p1-s0">Isso sugere que a base multimodal robusta e o raciocínio geral dos modelos de grande escala são mais valiosos para tarefas executivas complexas do que o conhecimento de domínio químico isolado.</span> <span class="s" data-s="b8-p1-s1">O conhecimento químico pode ser recuperado via RAG (Recuperação Aumentada por Geração) ou instruções, mas a capacidade de perceber nuances visuais e planejar ações físicas parece depender da arquitetura geral do modelo.</span></p><p><span class="s" data-s="b8-p2-s0">Modelos de &#39;cérebro embutido&#39; (como ACE-Brain e RoboBrain) mostraram melhorias em tarefas específicas de ação em relação a seus modelos base, mas essas melhorias foram limitadas a tarefas específicas e não se traduziram em uma vantagem geral significativa contra os modelos de propósito geral.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.06911/table2.webp" alt="Ranking detalhado dos 28 modelos. Destaca-se a dominância dos modelos de propósito geral (GPT-5.5, Claude Opus) sobre os especializados em química (ChemVLM) e a variação significativa entre as dimensões de capacidade." loading="lazy">
+          <figcaption>
+            Ranking detalhado dos 28 modelos. Destaca-se a dominância dos modelos de propósito geral (GPT-5.5, Claude Opus) sobre os especializados em química (ChemVLM) e a variação significativa entre as dimensões de capacidade.
+            <span class="source">Tabela 2 do paper · Lin et al., arXiv:2611.06911</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">Análise das Falhas: Onde os Modelos Falham</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Uma análise detalhada das pontuações por dimensão expõe as fraquezas específicas dos modelos.</span> <span class="s" data-s="b10-p0-s1">A dimensão de Ação (Actionability) foi a mais baixa, com média de 22,2 em todos os 28 modelos.</span> <span class="s" data-s="b10-p0-s2">Isso confirma que o &#39;Affordance Grounding&#39; e o &#39;Trajectory Planning&#39; são os maiores gargalos.</span> <span class="s" data-s="b10-p0-s3">Os modelos falham em localizar regiões operáveis com precisão (IoU &lt; 35%).</span></p><p><span class="s" data-s="b10-p1-s0">A dimensão de Conhecimento (Knowledge) teve média de 41,6.</span> <span class="s" data-s="b10-p1-s1">Os modelos tiveram dificuldade em reconhecer equipamentos de laboratório de granularidade fina e estados de segurança.</span> <span class="s" data-s="b10-p1-s2">Isso é crítico, pois um erro de reconhecimento pode levar a acidentes ou falhas experimentais silenciosas.</span></p><p><span class="s" data-s="b10-p2-s0">Experimentação (58,0) e Raciocínio (53,8) tiveram desempenhos moderados.</span> <span class="s" data-s="b10-p2-s1">Os modelos conseguem seguir procedimentos experimentais grosseiros em vídeos, mas lutam para ordenar passos em procedimentos de comprimento médio e para reconhecer estados sutis.</span> <span class="s" data-s="b10-p2-s2">A lacuna entre a compreensão procedural bruta e a percepção precisa fundamentada na ação é clara.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b11-t">Gap Humano-Modelo</span></h3>
+          <p><span class="s" data-s="b11-c-s0">A diferença entre a pontuação humana (93,3) e o melhor modelo (GPT-5.5 com 55,4) é de aproximadamente 34 pontos na escala de 0-100.</span> <span class="s" data-s="b11-c-s1">Isso representa uma lacuna de 34,1% da escala total, indicando que os modelos atuais estão longe da autonomia humana em ambientes de laboratório físico.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b12-h">Limitações e Direções Futuras</span></h2>
+<p><span class="s" data-s="b12-p0-s0">O BEAKER tem limitações inerentes.</span> <span class="s" data-s="b12-p0-s1">A avaliação é offline e em turno único, o que não captura a natureza iterativa e de loop fechado dos laboratórios autônomos reais.</span> <span class="s" data-s="b12-p0-s2">Um modelo pode responder corretamente a uma pergunta isolada, mas falhar em corrigir erros ao longo de uma sequência de experimentos.</span> <span class="s" data-s="b12-p0-s3">Além disso, o uso de amostragem de frames para vídeos pode perder detalhes temporais finos que são críticos para a segurança e a precisão.</span></p><p><span class="s" data-s="b12-p1-s0">Os autores reconhecem que a curadoria manual, embora garantisse qualidade, limitou o tamanho do conjunto de dados a 1.000 amostras.</span> <span class="s" data-s="b12-p1-s1">Expansões futuras podem envolver a criação de ambientes de simulação química para avaliação em loop fechado, onde os modelos interagem com um simulador de laboratório e recebem feedback real sobre o sucesso das ações.</span></p><p><span class="s" data-s="b12-p2-s0">Outra limitação é o viés potencial dos especialistas humanos na criação das questões.</span> <span class="s" data-s="b12-p2-s1">Embora o processo tenha sido rigoroso, a diversidade de protocolos experimentais e equipamentos pode não estar totalmente representada.</span> <span class="s" data-s="b12-p2-s2">O benchmark foca em química clássica de laboratório, e pode não ser diretamente aplicável a novas áreas, como química de fluxo contínuo ou biologia sintética complexa, sem adaptações.</span></p>        <h2><span class="s" data-s="b13-h">Conclusão</span></h2>
+<p><span class="s" data-s="b13-p0-s0">O BEAKER estabelece um novo padrão para avaliar MLLMs em contextos de automação científica.</span> <span class="s" data-s="b13-p0-s1">Ao focar na execução fundamentada na ação, ele revela que a compreensão visual e o conhecimento de domínio não são suficientes para a robótica de laboratório.</span> <span class="s" data-s="b13-p0-s2">A capacidade de &#39;afordância&#39; e planejamento de trajetória é o próximo grande obstáculo a ser superado.</span></p><p><span class="s" data-s="b13-p1-s0">Para desenvolvedores e cientistas de dados que trabalham com IA embutida, o BEAKER serve como um diagnóstico claro: otimize seus modelos para a percepção de ação fina e não apenas para o reconhecimento de objetos.</span> <span class="s" data-s="b13-p1-s1">A lacuna entre o que os modelos sabem e o que eles podem fazer fisicamente é vasta, e preencher essa lacuna exigirá avanços na integração de percepção multimodal com planejamento de ação física.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">BEAKER é o primeiro benchmark curado por especialistas para avaliar MLLMs como &#39;cérebros&#39; em laboratórios químicos autônomos, focando em execução, não apenas em segurança.</span></li><li><span class="s" data-s="k1">Modelos de propósito geral superam modelos especializados em química, revelando que a base multimodal é mais crucial que o domínio específico para tarefas executivas.</span></li><li><span class="s" data-s="k2">A principal falha dos modelos atuais é o &#39;Affordance Grounding&#39;: eles identificam objetos, mas não sabem onde agarrar ou como planejar trajetórias físicas viáveis.</span></li><li><span class="s" data-s="k3">Existe uma lacuna de 34,1 pontos na escala de 0-100 entre o melhor modelo (GPT-5.5) e humanos, indicando que a automação total ainda está distante.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.06911" rel="noopener">BEAKER: An Expert-Curated Benchmark for Embodied Brains in Self-Driving Chemical Laboratories</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.06911" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

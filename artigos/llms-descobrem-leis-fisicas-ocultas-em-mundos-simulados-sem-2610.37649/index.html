@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LLMs descobrem leis físicas ocultas em mundos simulados sem pistas — arXiv em 5</title>
+<meta name="description" content="O framework LongChang testa se modelos de linguagem podem iniciar investigações científicas autônomas em ambientes com física alterada, revelando limites atuais na formação de hipóteses.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LLMs descobrem leis físicas ocultas em mundos simulados sem pistas">
+<meta property="og:description" content="O framework LongChang testa se modelos de linguagem podem iniciar investigações científicas autônomas em ambientes com física alterada, revelando limites atuais na formação de hipóteses.">
+<meta property="og:image" content="../../assets/papers/2610.37649/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>LLMs</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.37649" rel="noopener">arXiv:2610.37649</a>
+    </div>
+    <h1><span class="s" data-s="t">LLMs descobrem leis físicas ocultas em mundos simulados sem pistas</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">O framework LongChang testa se modelos de linguagem podem iniciar investigações científicas autônomas em ambientes com física alterada, revelando limites atuais na formação de hipóteses.</span></p>
+    <p class="byline">
+      <span>Yang et al.</span>
+      <span>9 min de leitura</span>
+<span>27/10/2026</span>    </p>
+    <div class="listen" data-article="2610.37649" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=0ci8I-PDqIU" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">A busca pela descoberta científica autônoma</span></h2>
+<p><span class="s" data-s="b0-p0-s0">O processo de descoberta científica tradicional frequentemente começa com uma observação inesperada que desafia o conhecimento estabelecido.</span> <span class="s" data-s="b0-p0-s1">Um cientista nota algo fora do padrão, formula uma pergunta e desenha experimentos para investigar.</span> <span class="s" data-s="b0-p0-s2">Tradicionalmente, isso exige intuição humana, criatividade e uma compreensão profunda do contexto.</span> <span class="s" data-s="b0-p0-s3">Com o avanço dos Modelos de Linguagem Grandes (LLMs), surgiu a esperança de que essas ferramentas pudessem automatizar ou acelerar partes desse processo, desde a geração de hipóteses até o design de experimentos.</span> <span class="s" data-s="b0-p0-s4">No entanto, a maioria dos benchmarks atuais coloca o modelo em uma posição reativa: ele recebe uma tarefa específica, como &#34;descubra a lei da gravidade neste ambiente&#34;, ou recebe dicas explícitas sobre o que procurar.</span></p><p><span class="s" data-s="b0-p1-s0">O paper &#34;Can LLMs Uncover Hidden Physical Laws through Free Exploration?&#34; propõe uma mudança de paradigma mais exigente.</span> <span class="s" data-s="b0-p1-s1">Em vez de tarefas guiadas, os autores introduzem o LongChang, um framework que cria mundos simulados onde uma ou mais leis físicas são alteradas em relação à nossa realidade.</span> <span class="s" data-s="b0-p1-s2">O objetivo é avaliar se um LLM, atuando como um explorador, pode notar comportamentos inesperos, formular suas próprias perguntas de pesquisa e conduzir experimentos para descobrir essas leis ocultas, tudo isso sem receber tarefas específicas ou pistas sobre quais leis foram modificadas.</span> <span class="s" data-s="b0-p1-s3">É um teste de curiosidade artificial e raciocínio científico autônomo.</span></p><p><span class="s" data-s="b0-p2-s0">O nome LongChang é uma referência filosófica.</span> <span class="s" data-s="b0-p2-s1">Inspirado na introspecção do filósofo Wang Yangming em uma caverna em Longchang, onde ele reconsiderou como buscar conhecimento, o framework busca replicar esse processo de descoberta independente.</span> <span class="s" data-s="b0-p2-s2">A premissa é que a verdadeira inteligência científica não reside apenas em responder perguntas feitas, mas em saber quais perguntas valem a pena ser feitas quando confrontado com o desconhecido.</span> <span class="s" data-s="b0-p2-s3">Este artigo explora os mecanismos por trás dessa tentativa e os resultados surpreendentemente modestos obtidos até agora.</span></p>        <h2><span class="s" data-s="b1-h">O ambiente LongChang: mundos contrafactuais</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Para testar essa capacidade, os autores construíram um ambiente de simulação baseado no MuJoCo, um simulador de corpos rígidos amplamente utilizado em robótica e física computacional.</span> <span class="s" data-s="b1-p0-s1">O cenário central é uma &#34;sala de vidro&#34; virtual onde objetos podem ser manipulados.</span> <span class="s" data-s="b1-p0-s2">A inovação não está na simulação em si, mas na configuração das leis físicas que regem esse mundo.</span> <span class="s" data-s="b1-p0-s3">O LongChang utiliza um conjunto base composto por um cenário de controle normal e 14 cenários onde exatamente uma lei física é alterada.</span></p><p><span class="s" data-s="b1-p1-s0">Essas alterações são sutis, mas mensuráveis.</span> <span class="s" data-s="b1-p1-s1">Por exemplo, em um cenário, objetos mais pesados podem cair mais lentamente do que objetos leves, invertendo a intuição newtoniana comum.</span> <span class="s" data-s="b1-p1-s2">Em outro, a gravidade pode oscilar com o tempo, ou a força de arrasto pode depender da velocidade ao quadrado de forma não linear.</span> <span class="s" data-s="b1-p1-s3">Outras alterações incluem forças laterais automáticas, limites de velocidade, zonas de aceleração, ou mesmo a troca de cores ao contato entre objetos.</span> <span class="s" data-s="b1-p1-s4">Essas leis são &#34;escondidas&#34; do agente explorador (o LLM que interage com o mundo), mas são conhecidas pelo sistema para avaliação posterior.</span></p><p><span class="s" data-s="b1-p2-s0">Essa configuração contrafactual é crucial.</span> <span class="s" data-s="b1-p2-s1">Se as leis fossem complexas demais ou múltiplas alterações ocorressem simultaneamente, seria impossível isolar a causa de um efeito.</span> <span class="s" data-s="b1-p2-s2">Ao alterar apenas uma lei por cenário, os autores criam um problema de inferência causal claro: o modelo deve observar o comportamento do mundo, notar a anomalia em relação à física clássica e deduzir qual regra está quebrada.</span> <span class="s" data-s="b1-p2-s3">Isso transforma a descoberta científica em um problema de detecção de anomalias e validação de hipóteses, quantificável e reprodutível.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.37649/figure2.webp" alt="Ciclo automatizado do LongChang: o LLM explorador interage com o mundo, constrói ferramentas e é avaliado por outros agentes LLM sem intervenção humana, evoluindo o cenário com base nos resultados." loading="lazy">
+          <figcaption>
+            Ciclo automatizado do LongChang: o LLM explorador interage com o mundo, constrói ferramentas e é avaliado por outros agentes LLM sem intervenção humana, evoluindo o cenário com base nos resultados.
+            <span class="source">Figura 2 do paper · Yang et al., arXiv:2610.37649</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Mecanismo: o ciclo de exploração autônoma</span></h2>
+<p><span class="s" data-s="b3-p0-s0">A arquitetura do LongChang é composta por múltiplos agentes LLM trabalhando em conjunto em um ciclo contínuo e automatizado.</span> <span class="s" data-s="b3-p0-s1">Não há humanos anotando dados ou validando experimentos passo a passo.</span> <span class="s" data-s="b3-p0-s2">O ciclo começa com o agente explorador, que recebe acesso ao ambiente simulado.</span> <span class="s" data-s="b3-p0-s3">Diferente de modelos que apenas geram texto, este agente pode executar ações físicas: empurrar objetos, soltar itens, e, crucialmente, construir ferramentas.</span> <span class="s" data-s="b3-p0-s4">Essas ferramentas são descritas em linguagem natural e traduzidas para comandos de simulação, permitindo que o modelo crie instrumentos para medir grandezas físicas, como pêndulos para medir a direção da gravidade ou rampas para testar atrito.</span></p><p><span class="s" data-s="b3-p1-s0">Após uma fase de exploração, onde o modelo realiza ações e observa os resultados, ele gera um relatório.</span> <span class="s" data-s="b3-p1-s1">Este relatório é então passado para um agente avaliador.</span> <span class="s" data-s="b3-p1-s2">Este segundo LLM não apenas lê o texto, mas cruza as afirmações do explorador com os registros de exploração e as leis físicas subjacentes do cenário.</span> <span class="s" data-s="b3-p1-s3">O avaliador verifica se a conclusão do explorador é correta e, mais importante, se ela é suportada pelas evidências experimentais coletadas.</span> <span class="s" data-s="b3-p1-s4">Uma descoberta só é considerada válida se houver uma linha lógica clara entre a observação, o experimento realizado e a inferência feita.</span></p><p><span class="s" data-s="b3-p2-s0">Se a descoberta for parcial ou errada, o sistema não para.</span> <span class="s" data-s="b3-p2-s1">Os registros de exploração e as correções do avaliador são usados por um terceiro agente, o designer de cenários, para evoluir o ambiente.</span> <span class="s" data-s="b3-p2-s2">O objetivo é gerar novos desafios ou refinar os existentes para abordar as lacunas de conhecimento identificadas.</span> <span class="s" data-s="b3-p2-s3">Por exemplo, se o modelo falhou em notar uma anomalia específica, o designer pode ajustar o cenário para tornar essa anomalia mais proeminente ou introduzir variáveis que forcem o modelo a reconsiderar suas hipóteses.</span> <span class="s" data-s="b3-p2-s4">Este ciclo de construção, exploração, avaliação e evolução ocorre sem intervenção humana, permitindo que o sistema &#34;aprenda&#34; com seus próprios erros e avanços.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.37649/figure4.webp" alt="Exemplo de ferramenta construída pelo modelo: um pêndulo cuja ângulo de dobradiça é usado para testar se a gravidade local está inclinada, lendo -8 graus no estado ilustrado." loading="lazy">
+          <figcaption>
+            Exemplo de ferramenta construída pelo modelo: um pêndulo cuja ângulo de dobradiça é usado para testar se a gravidade local está inclinada, lendo -8 graus no estado ilustrado.
+            <span class="source">Figura 4 do paper · Yang et al., arXiv:2610.37649</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Resultados: a dificuldade da curiosidade artificial</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os resultados do estudo são reveladores sobre o estado atual da capacidade de raciocínio científico dos LLMs.</span> <span class="s" data-s="b5-p0-s1">Doze modelos diferentes foram avaliados no framework LongChang.</span> <span class="s" data-s="b5-p0-s2">A expectativa inicial poderia ser que modelos maiores e mais recentes tivessem um desempenho significativamente melhor, dado seu vasto treinamento em dados científicos.</span> <span class="s" data-s="b5-p0-s3">No entanto, a realidade foi mais austera.</span> <span class="s" data-s="b5-p0-s4">Apenas um dos 12 modelos, o GPT-6-Astra, conseguiu alcançar uma taxa de descoberta de 16,7%.</span> <span class="s" data-s="b5-p0-s5">Os outros 11 modelos pontuaram zero, falhando completamente em identificar qualquer uma das leis físicas alteradas de forma correta e sustentada.</span></p><p><span class="s" data-s="b5-p1-s0">Essa taxa de 16,7% para o melhor modelo não indica uma conquista completa.</span> <span class="s" data-s="b5-p1-s1">Ela significa que, em cerca de um quinto dos casos, o modelo conseguiu notar a anomalia, formular uma hipótese plausível e validar essa hipótese com experimentos.</span> <span class="s" data-s="b5-p1-s2">Para os demais casos, o modelo falhou.</span> <span class="s" data-s="b5-p1-s3">Os registros de exploração mostram dois tipos principais de falha.</span> <span class="s" data-s="b5-p1-s4">Primeiro, muitos modelos simplesmente ignoraram as anomalias observadas.</span> <span class="s" data-s="b5-p1-s5">Eles manipularam objetos, mas não formularam perguntas sobre o porquê do comportamento estranho, falhando na etapa crítica de transformar observação em pergunta de pesquisa.</span> <span class="s" data-s="b5-p1-s6">Segundo, alguns modelos tentaram investigar, mas chegaram a conclusões parciais ou incorretas, identificando que algo estava errado, mas não conseguindo especificar a lei física exata ou suas condições de aplicabilidade.</span></p><p><span class="s" data-s="b5-p2-s0">Esses resultados sugerem que a capacidade de gerar hipóteses científicas robustas a partir de dados brutos de simulação é um gargalo significativo.</span> <span class="s" data-s="b5-p2-s1">Os LLMs podem ser excelentes em recuperar conhecimento já existente ou seguir instruções claras, mas a etapa de &#34;perguntar o que não sabemos&#34; permanece extremamente difícil.</span> <span class="s" data-s="b5-p2-s2">A falta de sucesso generalizado indica que a intuição física embutida nos modelos não é suficiente para lidar com cenários contrafactuais complexos sem orientação explícita.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.37649/figure6.webp" alt="Caso de estudo: o modelo testa explicações concorrentes para descobrir a lei física oculta, demonstrando a tentativa de distinguir entre hipóteses rivais através de experimentos controlados." loading="lazy">
+          <figcaption>
+            Caso de estudo: o modelo testa explicações concorrentes para descobrir a lei física oculta, demonstrando a tentativa de distinguir entre hipóteses rivais através de experimentos controlados.
+            <span class="source">Figura 6 do paper · Yang et al., arXiv:2610.37649</span>
+          </figcaption>
+        </figure>
+        <aside class="callout">
+          <h3><span class="s" data-s="b7-t">O desafio da inferência causal</span></h3>
+          <p><span class="s" data-s="b7-c-s0">A descoberta científica não é apenas sobre coletar dados, mas sobre isolar variáveis.</span> <span class="s" data-s="b7-c-s1">No LongChang, o modelo deve decidir quais objetos mover e quais ferramentas construir para testar uma hipótese específica.</span> <span class="s" data-s="b7-c-s2">A falha em fazer isso corretamente leva a dados ruidosos que não permitem distinguir entre explicações rivais.</span> <span class="s" data-s="b7-c-s3">O paper mostra que a maioria dos LLMs não consegue planejar experimentos que eliminem variáveis de confusão de forma eficaz.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b8-h">Análise do desempenho: por que a maioria falha?</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Para entender por que apenas um modelo teve sucesso, os autores analisaram o comportamento dos agentes.</span> <span class="s" data-s="b8-p0-s1">A análise dos registros de exploração revela que muitos modelos tendem a explorar de forma aleatória ou focada em tarefas triviais, como empilhar objetos ou fazer colisões simples, sem buscar ativamente desvios da norma.</span> <span class="s" data-s="b8-p0-s2">Isso contrasta com o comportamento humano de cientistas, que frequentemente buscam ativamente condições extremas ou incomuns para testar os limites de suas teorias.</span> <span class="s" data-s="b8-p0-s3">A ausência de uma motivação intrínseca para &#34;quebrar&#34; o modelo ou encontrar limites parece ser um obstáculo fundamental.</span></p><p><span class="s" data-s="b8-p1-s0">Além disso, a construção de ferramentas mostrou-se um desafio não trivial.</span> <span class="s" data-s="b8-p1-s1">Embora o LongChang permita que os LLMs descrevam ferramentas, a tradução dessas descrições para ações físicas precisas na simulação introduz ruído.</span> <span class="s" data-s="b8-p1-s2">Um erro na descrição de um pêndulo ou de uma mola pode levar a dados experimentais incorretos, levando o modelo a conclusões erradas mesmo que sua lógica fosse correta.</span> <span class="s" data-s="b8-p1-s3">Isso cria um efeito cascata: falha na instrumentação leva a falha na análise, que leva a falha na descoberta.</span></p><p><span class="s" data-s="b8-p2-s0">O modelo GPT-6-Astra, que teve sucesso parcial, demonstrou uma capacidade superior de manter um estado de memória de longo prazo sobre as anomalias observadas e de refinar suas hipóteses ao longo de múltiplos ciclos de exploração.</span> <span class="s" data-s="b8-p2-s1">Ele foi capaz de notar que, em certos cenários, a massa afetava a queda de maneira inesperada e projetou experimentos comparativos para isolar a variável massa.</span> <span class="s" data-s="b8-p2-s2">No entanto, mesmo este modelo avançado falhou em muitos casos, indicando que a barreira não é apenas de capacidade computacional, mas de arquitetura de raciocínio e planejamento.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.37649/table3.webp" alt="Tabela de desempenho: GPT-6-Astra foi o único modelo a descobrir leis físicas entre os 12 avaliados, com uma taxa de 16,7%, enquanto os demais marcaram zero." loading="lazy">
+          <figcaption>
+            Tabela de desempenho: GPT-6-Astra foi o único modelo a descobrir leis físicas entre os 12 avaliados, com uma taxa de 16,7%, enquanto os demais marcaram zero.
+            <span class="source">Tabela 3 do paper · Yang et al., arXiv:2610.37649</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">Limitações e considerações éticas</span></h2>
+<p><span class="s" data-s="b10-p0-s0">O paper reconhece várias limitações importantes.</span> <span class="s" data-s="b10-p0-s1">Primeiro, o ambiente é altamente simplificado.</span> <span class="s" data-s="b10-p0-s2">As leis físicas alteradas são isoladas e bem definidas, ao contrário da complexidade caótica do mundo real.</span> <span class="s" data-s="b10-p0-s3">Em cenários reais, múltiplas variáveis interagem de formas não lineares e desconhecidas, tornando a inferência causal muito mais difícil.</span> <span class="s" data-s="b10-p0-s4">O sucesso parcial no LongChang não implica que os LLMs estejam prontos para descobrir novas leis físicas na natureza, onde as respostas não são conhecidas a priori para validação.</span></p><p><span class="s" data-s="b10-p1-s0">Segundo, a avaliação depende de um agente LLM (o avaliador) para julgar a correção das descobertas.</span> <span class="s" data-s="b10-p1-s1">Isso introduz o risco de viés ou erro do próprio avaliador.</span> <span class="s" data-s="b10-p1-s2">Embora o paper tente mitigar isso cruzando dados com as leis subjacentes, a dependência de modelos de linguagem para validação lógica ainda é uma área de pesquisa aberta.</span> <span class="s" data-s="b10-p1-s3">Erros na avaliação poderiam levar a falsos positivos ou negativos, distorcendo a métrica de sucesso.</span></p><p><span class="s" data-s="b10-p2-s0">Em termos éticos, o estudo destaca que o LongChang não requer anotação humana nem teste com participantes reais, eliminando preocupações com privacidade ou consentimento.</span> <span class="s" data-s="b10-p2-s1">No entanto, a automação do processo científico levanta questões sobre a autoria e a responsabilidade por descobertas feitas por agentes autônomos.</span> <span class="s" data-s="b10-p2-s2">Se um LLM descobrir uma lei física, quem é o cientista?</span> <span class="s" data-s="b10-p2-s3">O paper não aborda profundamente essas implicações sociais, focando principalmente na viabilidade técnica da descoberta autônoma.</span></p>        <h2><span class="s" data-s="b11-h">Conclusão: o caminho para a ciência autônoma</span></h2>
+<p><span class="s" data-s="b11-p0-s0">O LongChang representa um passo significativo na avaliação da capacidade dos LLMs de atuar como parceiros científicos autônomos.</span> <span class="s" data-s="b11-p0-s1">Ao remover as pistas e tarefas pré-definidas, o framework expõe as limitações fundamentais dos modelos atuais na formação de hipóteses e no design experimental.</span> <span class="s" data-s="b11-p0-s2">O fato de apenas um modelo ter conseguido alguma descoberta, e mesmo assim de forma limitada, serve como um lembrete honesto de que a inteligência artificial ainda está longe de replicar a curiosidade e o raciocínio causal dos cientistas humanos.</span></p><p><span class="s" data-s="b11-p1-s0">Contudo, o framework também oferece uma plataforma valiosa para pesquisa futura.</span> <span class="s" data-s="b11-p1-s1">A capacidade de gerar cenários infinitos e ciclos de exploração automáticos permite testar novas arquiteturas de modelos, técnicas de memória e estratégias de planejamento.</span> <span class="s" data-s="b11-p1-s2">Ao identificar onde os modelos falham — seja na observação, na formulação de perguntas ou na validação —, os pesquisadores podem direcionar esforços para melhorar essas áreas específicas.</span> <span class="s" data-s="b11-p1-s3">A descoberta científica autônoma é um objetivo de longo prazo, e o LongChang fornece a régua necessária para medir o progresso nessa jornada.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">O framework LongChang simula mundos com leis físicas alteradas para testar a capacidade de LLMs de descobrir essas leis sem instruções prévias.</span></li><li><span class="s" data-s="k1">Somente um dos 12 modelos avaliados (GPT-6-Astra) conseguiu identificar alguma lei alterada, com taxa de descoberta de 16,7%.</span></li><li><span class="s" data-s="k2">O sistema opera em ciclo fechado, onde agentes LLM avaliam experimentos e evoluem os cenários automaticamente.</span></li><li><span class="s" data-s="k3">Resultados indicam que LLMs atuais têm dificuldade em transformar anomalias observadas em perguntas de pesquisa válidas e sustentadas por evidências.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.37649" rel="noopener">Can LLMs Uncover Hidden Physical Laws through Free Exploration?</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.37649" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

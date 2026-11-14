@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ViT-H: Controle de Humanoides por Vídeo com Feedback de Rastreamento — arXiv em 5</title>
+<meta name="description" content="Um framework que gera movimentos humanoides diretamente de vídeos monoculares usando difusão, otimizando a executabilidade física via feedback de rastreamento, eliminando a necessidade de reconstrução humana intermediária.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ViT-H: Controle de Humanoides por Vídeo com Feedback de Rastreamento">
+<meta property="og:description" content="Um framework que gera movimentos humanoides diretamente de vídeos monoculares usando difusão, otimizando a executabilidade física via feedback de rastreamento, eliminando a necessidade de reconstrução humana intermediária.">
+<meta property="og:image" content="../../assets/papers/2610.32966/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Robótica</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.32966" rel="noopener">arXiv:2610.32966</a>
+    </div>
+    <h1><span class="s" data-s="t">ViT-H: Controle de Humanoides por Vídeo com Feedback de Rastreamento</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um framework que gera movimentos humanoides diretamente de vídeos monoculares usando difusão, otimizando a executabilidade física via feedback de rastreamento, eliminando a necessidade de reconstrução humana intermediária.</span></p>
+    <p class="byline">
+      <span>He et al.</span>
+      <span>6 min de leitura</span>
+<span>23/10/2026</span>    </p>
+    <div class="listen" data-article="2610.32966" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=4AZjoVFNXTY" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Cascata de Erros em Pipelines Modulares</span></h2>
+<p><span class="s" data-s="b0-p0-s0">O sonho de controlar robôs humanoides complexos a partir de vídeos humanos é atraente pela escalabilidade.</span> <span class="s" data-s="b0-p0-s1">Bancos de dados de captura de movimento são limitados em diversidade e escala comparados à internet.</span> <span class="s" data-s="b0-p0-s2">No entanto, a abordagem padrão para resolver isso é o pipeline de reconstrução-retargeting-rastreamento.</span> <span class="s" data-s="b0-p0-s3">Primeiro, um modelo de visão computacional reconstrói a pose humana 3D a partir do vídeo.</span> <span class="s" data-s="b0-p0-s4">Em seguida, uma etapa de retargeting adapta essa pose para a morfologia do robô.</span> <span class="s" data-s="b0-p0-s5">Por fim, uma política de controle tenta rastrear essa referência gerada.</span></p><p><span class="s" data-s="b0-p1-s0">Esse pipeline modular tem uma falha estrutural fundamental: a separação dos estágios.</span> <span class="s" data-s="b0-p1-s1">A reconstrução humana é otimizada para a anatomia humana, não para a dinâmica do robô.</span> <span class="s" data-s="b0-p1-s2">O retargeting opera apenas sobre a saída da reconstrução, sem acesso às evidências visuais originais.</span> <span class="s" data-s="b0-p1-s3">Erros acumulam-se entre as etapas.</span> <span class="s" data-s="b0-p1-s4">Uma pose humana plausível pode se tornar dinamicamente inviável ou fisicamente inconsistente após o retargeting, tornando a tarefa do rastreador final muito mais difícil ou impossível de executar com precisão.</span></p>        <h2><span class="s" data-s="b1-h">A Ideia Central: Geração Direta e Feedback de Execução</span></h2>
+<p><span class="s" data-s="b1-p0-s0">O paper ViT-H, de pesquisadores da Universidade de Pequim e institutos afiliados, propõe uma mudança de paradigma: geração e rastreamento (generation-and-tracking).</span> <span class="s" data-s="b1-p0-s1">Em vez de reconstruir o humano e depois adaptar, o modelo gera diretamente a referência de movimento no espaço de ação do humanoid (Unitree G1), condicionada ao vídeo de entrada.</span> <span class="s" data-s="b1-p0-s2">Isso elimina o gargalo da reconstrução humana intermediária.</span></p><p><span class="s" data-s="b1-p1-s0">O diferencial técnico não é apenas a geração direta, mas o ciclo de feedback.</span> <span class="s" data-s="b1-p1-s1">Os autores utilizam o próprio rastreador de movimento para avaliar a qualidade da referência gerada.</span> <span class="s" data-s="b1-p1-s2">Se o rastreador consegue executar a motion com sucesso, isso serve como um sinal de recompensa.</span> <span class="s" data-s="b1-p1-s3">Esse feedback é usado para pós-treinar o gerador, alinhando as distribuições de movimento gerado com o que é fisicamente executável pelo robô.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.32966/figure1.webp" alt="ViT-H transfere movimentos humanos de vídeos monoculares para o robô Unitree G1. Linhas superiores mostram controle offline; inferiores mostram teleoperação em tempo real com latência sub-400ms." loading="lazy">
+          <figcaption>
+            ViT-H transfere movimentos humanos de vídeos monoculares para o robô Unitree G1. Linhas superiores mostram controle offline; inferiores mostram teleoperação em tempo real com latência sub-400ms.
+            <span class="source">Figura 1 do paper · He et al., arXiv:2610.32966</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Arquitetura do Modelo: Difusão e Autoregressão</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O núcleo do ViT-H é um gerador de movimentos baseado em modelos de difusão (diffusion model), similar ao DDPM de Ho et al.</span> <span class="s" data-s="b3-p0-s1">(2020).</span> <span class="s" data-s="b3-p0-s2">Este modelo é condicionado por características do vídeo, incluindo orientações da câmera, bounding boxes, keypoints e features da imagem.</span> <span class="s" data-s="b3-p0-s3">Ele gera sequências de movimentos do humanoid diretamente.</span> <span class="s" data-s="b3-p0-s4">O pré-treinamento ocorre em pares de vídeo-movimento e dados apenas de movimento, aprendendo a mapear a aparência visual para a dinâmica corporal.</span></p><p><span class="s" data-s="b3-p1-s0">Para aplicações em tempo real, os autores introduzem uma variante autoregressiva.</span> <span class="s" data-s="b3-p1-s1">Em vez de gerar todo o vídeo de uma vez, o modelo produz movimentos em segmentos temporais.</span> <span class="s" data-s="b3-p1-s2">Cada segmento é condicionado não apenas ao vídeo, mas também aos segmentos anteriores gerados.</span> <span class="s" data-s="b3-p1-s3">Isso permite teleoperação online, onde o robô reage continuamente ao fluxo de vídeo, mantendo uma latência inferior a 400 milissegundos.</span></p>        <h2><span class="s" data-s="b4-h">Pós-Treinamento com Otimização de Preferência Direta (DPO)</span></h2>
+<p><span class="s" data-s="b4-p0-s0">A inovação mais crítica do paper é o método de pós-treinamento.</span> <span class="s" data-s="b4-p0-s1">Os autores utilizam a Otimização de Preferência Direta (Direct Preference Optimization - DPO), uma técnica popular em alinhamento de LLMs, adaptada para robótica.</span> <span class="s" data-s="b4-p0-s2">Eles não precisam de anotações manuais de qualidade.</span> <span class="s" data-s="b4-p0-s3">Em vez disso, executam as referências geradas pelo modelo em um simulador (MuJoCo) usando uma política de rastreamento.</span></p><p><span class="s" data-s="b4-p1-s0">Se o rastreador consegue seguir a referência com sucesso (dentro de uma métrica de erro específica), essa amostra é considerada uma &#39;preferência positiva&#39;.</span> <span class="s" data-s="b4-p1-s1">Se falha, é uma &#39;preferência negativa&#39;.</span> <span class="s" data-s="b4-p1-s2">Pares de preferências são construídos e usados para ajustar o gerador de difusão.</span> <span class="s" data-s="b4-p1-s3">Isso fecha o loop: o gerador aprende a produzir movimentos que o rastreador consegue executar, não apenas movimentos que parecem visualmente corretos para um humano.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.32966/figure2.webp" alt="Visão geral do ViT-H. O gerador baseado em difusão mapeia características do vídeo diretamente para movimentos G1. O pós-treinamento usa candidatos de movimento e feedback de rastreamento para otimizar a executabilidade via DPO." loading="lazy">
+          <figcaption>
+            Visão geral do ViT-H. O gerador baseado em difusão mapeia características do vídeo diretamente para movimentos G1. O pós-treinamento usa candidatos de movimento e feedback de rastreamento para otimizar a executabilidade via DPO.
+            <span class="source">Figura 2 do paper · He et al., arXiv:2610.32966</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b6-h">Configuração Experimental e Baselines</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Os experimentos foram realizados no robô físico Unitree G1 e no simulador MuJoCo.</span> <span class="s" data-s="b6-p0-s1">O gerador foi pré-treinado em uma mistura de datasets como AMASS, BONES-SEED, BEDLAM e Human3.6M.</span> <span class="s" data-s="b6-p0-s2">Durante o pós-treinamento, utilizaram dados de vídeo da internet sem anotações de movimento, aproveitando a escalabilidade do método DPO, que não requer ground-truth de movimento humano.</span></p><p><span class="s" data-s="b6-p1-s0">Para comparação, os autores testaram contra pipelines modulares state-of-the-art, como GVHMR e GEM para reconstrução, combinados com o retargeter GMR e o rastreador SONIC.</span> <span class="s" data-s="b6-p1-s1">Eles também incluíram variantes de seus próprios modelos sem o pós-treinamento (ablação) para isolar o ganho do feedback de execução.</span> <span class="s" data-s="b6-p1-s2">As métricas avaliadas incluem erro de posição articular (MPJPE), taxa de sucesso do rastreamento (Succ.) e jitter.</span></p>        <h2><span class="s" data-s="b7-h">Resultados: Qualidade e Executabilidade</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Os resultados quantitativos mostram que o ViT-H supera os pipelines modulares.</span> <span class="s" data-s="b7-p0-s1">Na tabela de qualidade de movimento (MPJPE), o ViT-H offline alcança erros significativamente menores que GVHMR+GMR e GEM+GMR.</span> <span class="s" data-s="b7-p0-s2">Na tabela de executabilidade, a taxa de sucesso do rastreamento no MuJoCo para o ViT-H offline é de 90,2%, comparado a 61,7% para o melhor baseline modular (GVHMR+GMR).</span> <span class="s" data-s="b7-p0-s3">Isso demonstra que gerar movimentos nativos para o robô é mais eficaz do que adaptar movimentos humanos.</span></p><p><span class="s" data-s="b7-p1-s0">O pós-treinamento com DPO traz ganhos adicionais substanciais.</span> <span class="s" data-s="b7-p1-s1">No conjunto de dados &#39;video-only&#39; (vídeos da internet sem ground-truth), a taxa de sucesso do rastreador para a variante online aumentou de 49,6% (sem pós-treinamento) para 63,8% (com DPO).</span> <span class="s" data-s="b7-p1-s2">Isso confirma que o feedback de execução melhora a capacidade do modelo de generalizar para vídeos não vistos e sem anotações.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.32966/table1.webp" alt="Tabela 1: Comparação quantitativa da qualidade do movimento. ViT-H apresenta menores erros MPJPE e PA-MPJPE comparado a baselines modulares como GVHMR e GEM." loading="lazy">
+          <figcaption>
+            Tabela 1: Comparação quantitativa da qualidade do movimento. ViT-H apresenta menores erros MPJPE e PA-MPJPE comparado a baselines modulares como GVHMR e GEM.
+            <span class="source">Tabela 1 do paper · He et al., arXiv:2610.32966</span>
+          </figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="../../assets/papers/2610.32966/table2.webp" alt="Tabela 2: Comparação quantitativa da executabilidade. ViT-H alcança taxas de sucesso de rastreamento superiores a 90% em datasets com ground-truth, aproximando-se da performance do ground-truth ideal (GT + GMR)." loading="lazy">
+          <figcaption>
+            Tabela 2: Comparação quantitativa da executabilidade. ViT-H alcança taxas de sucesso de rastreamento superiores a 90% em datasets com ground-truth, aproximando-se da performance do ground-truth ideal (GT + GMR).
+            <span class="source">Tabela 2 do paper · He et al., arXiv:2610.32966</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">Análise do Feedback e Escalabilidade</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Os autores analisaram como diferentes fontes de recompensa afetam o DPO.</span> <span class="s" data-s="b10-p0-s1">Usar apenas o rastreador implantável (sem observações privilegiadas) já fornece ganhos, mas adicionar observações globais de movimento melhora ainda mais a estabilidade.</span> <span class="s" data-s="b10-p0-s2">O estudo de escalabilidade mostrou que o desempenho do ViT-H melhora consistentemente com o aumento do tamanho do modelo e do volume de dados de pré-treinamento e pós-treinamento.</span></p><p><span class="s" data-s="b10-p1-s0">Um ponto interessante é a transferência do feedback.</span> <span class="s" data-s="b10-p1-s1">O pós-treinamento foi feito com um rastreador específico (fine-tuned do SONIC), mas os ganhos de executabilidade se transferiram para outros rastreadores não vistos durante o treinamento.</span> <span class="s" data-s="b10-p1-s2">Isso sugere que o gerador aprendeu características fundamentais de dinâmica corporal que são robustas a diferentes controladores de baixo nível.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b11-t">Latência em Tempo Real</span></h3>
+          <p><span class="s" data-s="b11-c-s0">A variante autoregressiva do ViT-H permite teleoperação online com latência sub-400ms.</span> <span class="s" data-s="b11-c-s1">Isso é crucial para aplicações de teleoperação humana, onde o atraso entre o gesto do operador e a resposta do robô deve ser mínimo para manter a sensação de presença e controle preciso.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b12-h">Limitações e Trabalho Futuro</span></h2>
+<p><span class="s" data-s="b12-p0-s0">Apesar dos avanços, o paper reconhece limitações claras.</span> <span class="s" data-s="b12-p0-s1">O framework atual não modela poses de mãos destros (dexterous hands), restringindo a capacidade do robô de realizar manipulação fina de objetos.</span> <span class="s" data-s="b12-p0-s2">O foco está em movimentos de corpo inteiro e locomoção.</span> <span class="s" data-s="b12-p0-s3">Além disso, o estudo de escalabilidade foi limitado pelos recursos computacionais e dados disponíveis, não explorando o limite teórico do modelo.</span></p><p><span class="s" data-s="b12-p1-s0">Os autores apontam que trabalhos futuros devem incluir a extensão do framework para manipulação destrosa, exploração de algoritmos de pós-treinamento alternativos e feedback de múltiplos rastreadores.</span> <span class="s" data-s="b12-p1-s1">A integração de feedback de interação com o ambiente também parece ser um próximo passo natural, já que o current ViT-H foca principalmente na execução da trajetória corporal, não na interação física complexa com objetos.</span></p>        <h2><span class="s" data-s="b13-h">Conclusão</span></h2>
+<p><span class="s" data-s="b13-p0-s0">ViT-H demonstra que eliminar a reconstrução humana intermediária e alinhar diretamente o gerador com a executabilidade física via feedback de rastreamento é uma estratégia superior para controle de humanoides.</span> <span class="s" data-s="b13-p0-s1">Ao usar DPO, os autores conseguem melhorar a qualidade dos movimentos em vídeos da internet sem anotações, um cenário comum no mundo real.</span> <span class="s" data-s="b13-p0-s2">O framework escala bem e permite teleoperação em tempo real, estabelecendo um novo padrão para a conversão vídeo-para-controle em robótica de corpo inteiro.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">ViT-H mapeia vídeos monoculares diretamente para movimentos do robô Unitree G1, pulando a etapa de reconstrução de postura humana.</span></li><li><span class="s" data-s="k1">O modelo é pós-treinado com DPO usando feedback de sucesso de rastreamento, melhorando a executabilidade física.</span></li><li><span class="s" data-s="k2">Variantes online e offline alcançam taxas de sucesso superiores a 88% em benchmarks, superando pipelines modulares tradicionais.</span></li><li><span class="s" data-s="k3">Limitações incluem a ausência de modelagem de mãos destros e dependência de dados de treinamento específicos.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.32966" rel="noopener">ViT-H: Generative Video-To-Humanoid Control with Motion Tracking Feedback</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.32966" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

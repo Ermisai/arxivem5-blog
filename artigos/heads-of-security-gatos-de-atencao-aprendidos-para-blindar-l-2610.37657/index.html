@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Heads of Security: Gatos de Atenção Aprendidos para Blindar LLMs contra Injeção de Prompt — arXiv em 5</title>
+<meta name="description" content="Um novo método de defesa que modifica a arquitetura de atenção de modelos de linguagem para separar instruções confiáveis de dados externos, reduzindo drasticamente a taxa de sucesso de ataques adaptativos sem comprometer a utilidade do modelo.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Heads of Security: Gatos de Atenção Aprendidos para Blindar LLMs contra Injeção de Prompt">
+<meta property="og:description" content="Um novo método de defesa que modifica a arquitetura de atenção de modelos de linguagem para separar instruções confiáveis de dados externos, reduzindo drasticamente a taxa de sucesso de ataques adaptativos sem comprometer a utilidade do modelo.">
+<meta property="og:image" content="../../assets/papers/2610.37657/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Segurança</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.37657" rel="noopener">arXiv:2610.37657</a>
+    </div>
+    <h1><span class="s" data-s="t">Heads of Security: Gatos de Atenção Aprendidos para Blindar LLMs contra Injeção de Prompt</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um novo método de defesa que modifica a arquitetura de atenção de modelos de linguagem para separar instruções confiáveis de dados externos, reduzindo drasticamente a taxa de sucesso de ataques adaptativos sem comprometer a utilidade do modelo.</span></p>
+    <p class="byline">
+      <span>Shilov et al.</span>
+      <span>9 min de leitura</span>
+<span>27/10/2026</span>    </p>
+    <div class="listen" data-article="2610.37657" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=hArClvpRXFg" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Fronteira de Confiança em LLMs</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Modelos de linguagem grandes (LLMs) estão cada vez mais integrados a ecossistemas que acessam dados externos, como ferramentas de busca, APIs e documentos da web.</span> <span class="s" data-s="b0-p0-s1">Essa integração amplia drasticamente a superfície de ataque, especialmente para o que chamamos de injeção de prompt indireta.</span> <span class="s" data-s="b0-p0-s2">Nesse cenário, um atacante planta instruções maliciosas em conteúdo externo que o modelo lê.</span> <span class="s" data-s="b0-p0-s3">O problema fundamental é que o LLM não consegue distinguir, por si só, qual parte do texto é uma instrução legítima do usuário e qual parte é apenas dados brutos a serem processados.</span> <span class="s" data-s="b0-p0-s4">Ele trata ambos como comandos potenciais, o que permite que um atacante manipule o comportamento do modelo simplesmente alterando o contexto externo.</span></p><p><span class="s" data-s="b0-p1-s0">Os modelos de fronteira (frontier models) têm se tornado mais robustos a esses ataques, mas a injeção de prompt permanece como um problema não resolvido, especialmente para modelos de código aberto.</span> <span class="s" data-s="b0-p1-s1">Ataques adaptativos continuam a ter sucesso mesmo contra sistemas extensivamente avaliados.</span> <span class="s" data-s="b0-p1-s2">As defesas atuais geralmente dependem de fine-tuning (ajuste fino) ou de arquiteturas que tentam impor uma hierarquia de instruções.</span> <span class="s" data-s="b0-p1-s3">No entanto, muitas dessas abordagens degradam a utilidade do modelo em tarefas complexas ou falham contra ataques sofisticados que se adaptam à defesa.</span> <span class="s" data-s="b0-p1-s4">A injeção de prompt exige mecanismos complementares, e a separação estrita entre instrução e dados (instruction-data separation) é uma das abordagens mais promissoras, criando uma fronteira rígida de confiança.</span></p>        <h2><span class="s" data-s="b1-h">Heads of Security: Uma Intervenção na Arquitetura de Atenção</span></h2>
+<p><span class="s" data-s="b1-p0-s0">O paper &#39;Heads of Security&#39; (HoS), desenvolvido por pesquisadores do Imperial College London, Tübingen AI Center, Max Planck Institute e Fraunhofer HHI, propõe uma solução que atua diretamente na arquitetura do transformer.</span> <span class="s" data-s="b1-p0-s1">Em vez de apenas ajustar os pesos do modelo com dados de treinamento, o HoS introduz um conjunto pequeno de &#39;gatos de atenção&#39; aprendidos por cabeça (attention head).</span> <span class="s" data-s="b1-p0-s2">A premissa é baseada em observações de interpretabilidade: cabeças de atenção em LLMs são especializadas em funções diferentes, como cópia no contexto, supressão de cópia e seguimento de instruções.</span> <span class="s" data-s="b1-p0-s3">Isso sugere que é possível treinar cabeças específicas para lidar com a separação de confiança sem prejudicar outras capacidades do modelo.</span></p><p><span class="s" data-s="b1-p1-s0">O HoS funciona atribuindo a cada token na sequência um &#39;canal&#39; de confiança: TRUSTED (instruções do sistema e do usuário), UNTRUSTED (saídas de ferramentas e dados externos) e TEMPLATE (tokens de formato de chat).</span> <span class="s" data-s="b1-p1-s1">O mecanismo central é uma tabela de bias aprendida para cada cabeça de atenção em cada camada.</span> <span class="s" data-s="b1-p1-s2">Essa tabela, chamada de gate logits, controla quanto atenção cada cabeça deve dar a tokens de um canal específico quando está processando tokens de outro canal.</span> <span class="s" data-s="b1-p1-s3">Ao ajustar esses biases durante o treinamento, o modelo aprende a &#39;fechar&#39; a atenção para tokens não confiáveis em cabeças responsáveis por seguir instruções, enquanto mantém a atenção aberta em outras cabeças que processam o conteúdo para raciocínio.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.37657/figure1.webp" alt="Ilustração do mecanismo HoS: um gato de atenção aprende a redirecionar o peso da softmax de tokens não confiáveis (vermelho) para tokens confiáveis (verde), mantendo a estrutura do prompt original." loading="lazy">
+          <figcaption>
+            Ilustração do mecanismo HoS: um gato de atenção aprende a redirecionar o peso da softmax de tokens não confiáveis (vermelho) para tokens confiáveis (verde), mantendo a estrutura do prompt original.
+            <span class="source">Figura 1 do paper · Shilov et al., arXiv:2610.37657</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Mecanismo Detalhado: Gatos Condicionais por Canal</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Para entender a matemática por trás do HoS, precisamos olhar para o cálculo de atenção padrão.</span> <span class="s" data-s="b3-p0-s1">Em um transformer, cada cabeça projeta vetores de query (Q), key (K) e value (V).</span> <span class="s" data-s="b3-p0-s2">O peso de atenção é calculado via softmax de QK^T.</span> <span class="s" data-s="b3-p0-s3">O HoS modifica isso adicionando um bias logarítmico aprendido antes do softmax.</span> <span class="s" data-s="b3-p0-s4">Especificamente, para cada par de canais de origem (key) e destino (query), o modelo aprende um valor g. Durante a inferência, o logaritmo da sigmoide desse valor, log(σ(g)), é adicionado aos logits de atenção.</span> <span class="s" data-s="b3-p0-s5">Como o softmax é invariante a deslocamentos constantes, apenas as diferenças entre os valores dos gatos importam.</span> <span class="s" data-s="b3-p0-s6">Se um gato é próximo de zero (sigmoide próxima de 0), o log é muito negativo, efetivamente zerando o peso de atenção para aqueles tokens após a exponenciação.</span> <span class="s" data-s="b3-p0-s7">Se o gato é próximo de um, o log é próximo de zero, e a atenção flui normalmente.</span></p><p><span class="s" data-s="b3-p1-s0">Essa abordagem é elegante porque é leve.</span> <span class="s" data-s="b3-p1-s1">O número de parâmetros adicionados é apenas L * C^2 * h, onde L é o número de camadas, C é o número de canais de confiança (geralmente 3) e h é o número de cabeças por camada.</span> <span class="s" data-s="b3-p1-s2">Isso é insignificante comparado ao tamanho total do modelo.</span> <span class="s" data-s="b3-p1-s3">Além disso, o mecanismo é flexível.</span> <span class="s" data-s="b3-p1-s4">Se todos os tokens de entrada pertencerem ao mesmo canal, o softmax cancela o deslocamento comum, processando a entrada exatamente como no modelo base.</span> <span class="s" data-s="b3-p1-s5">Isso garante que o HoS não altere o comportamento do modelo em cenários onde não há ambiguidade de confiança.</span> <span class="s" data-s="b3-p1-s6">Para modelos como o GPT-OSS, que possuem um &#39;attention sink&#39; explícito (um token que atua como sumidouro de atenção), o método é adaptado para tratar esse sink como um canal separado.</span></p>        <h2><span class="s" data-s="b4-h">Treinamento e Separação de Funções</span></h2>
+<p><span class="s" data-s="b4-p0-s0">O treinamento do HoS foca exclusivamente nos parâmetros dos gatos.</span> <span class="s" data-s="b4-p0-s1">O objetivo é ensinar o modelo a manter o acesso a instruções confiáveis enquanto suprime a influência de instruções injetadas em dados não confiáveis.</span> <span class="s" data-s="b4-p0-s2">A chave aqui é que os gatos são aprendidos independentemente para cada cabeça.</span> <span class="s" data-s="b4-p0-s3">Isso permite uma distribuição de funções: cabeças que são especializadas em seguir instruções aprendem a ignorar tokens não confiáveis, enquanto cabeças que são especializadas em compreender o contexto ou extrair fatos aprendem a manter a atenção nos dados não confiáveis.</span> <span class="s" data-s="b4-p0-s4">Isso resolve o dilema clássico de defesa: como ler o dado malicioso sem obedecê-lo.</span></p><p><span class="s" data-s="b4-p1-s0">Os autores demonstram que essa separação não é apenas teórica.</span> <span class="s" data-s="b4-p1-s1">Ao analisar os pesos aprendidos, é possível observar que cabeças específicas redirecionam significativamente a atenção de tokens não confiáveis para tokens confiáveis quando a query é de confiança.</span> <span class="s" data-s="b4-p1-s2">Isso confirma que o modelo está realmente reaprendendo sua dinâmica de atenção para refletir a fronteira de confiança imposta externamente.</span> <span class="s" data-s="b4-p1-s3">O treinamento não requer grandes conjuntos de dados de ataques; ele se beneficia de exemplos onde a distinção entre instrução e dados é clara, permitindo que o modelo generalize para situações adversas.</span></p>        <h2><span class="s" data-s="b5-h">Resultados: Robustez contra Ataques Adaptativos</span></h2>
+<p><span class="s" data-s="b5-p0-s0">A avaliação do HoS foi realizada em dois modelos de grande porte: Llama-3.3-70B-Instruct e GPT-OSS-20B.</span> <span class="s" data-s="b5-p0-s1">Os autores compararam o HoS contra o SecAlign++ (uma defesa baseada em fine-tuning) e o ASIDE (uma defesa baseada em arquitetura similar, mas com abordagem diferente).</span> <span class="s" data-s="b5-p0-s2">Os testes incluíram ataques estáticos e ataques adaptativos de última geração.</span> <span class="s" data-s="b5-p0-s3">O ataque adaptativo RL-Hammer, que usa aprendizado por reforço para gerar injeções otimizadas contra um modelo alvo específico, mostrou a eficácia do HoS de forma dramática.</span> <span class="s" data-s="b5-p0-s4">Contra o GPT-OSS-20B indefeso, o RL-Hammer atingiu uma taxa de sucesso de ataque (ASR) de 97%.</span> <span class="s" data-s="b5-p0-s5">Com o SecAlign, a ASR caiu para 85%.</span> <span class="s" data-s="b5-p0-s6">Com o HoS, a ASR caiu para apenas 10%.</span> <span class="s" data-s="b5-p0-s7">Para o Llama-3.3-70B, a redução foi de 99% para 1%.</span></p><p><span class="s" data-s="b5-p1-s0">Essa robustez se estende a ataques de caixa branca (white-box), onde o atacante tem acesso aos pesos do modelo.</span> <span class="s" data-s="b5-p1-s1">Os autores utilizaram o ataque Claudini, uma técnica avançada de otimização de sufixos, e a fortaleceram através de um loop de autoresearch usando GPT-5.6-Sol para gerar variantes específicas contra o HoS.</span> <span class="s" data-s="b5-p1-s2">Mesmo com essa otimização direcionada, o HoS permaneceu resistente.</span> <span class="s" data-s="b5-p1-s3">O ataque precisou de 3 vezes mais FLOPs (operações de ponto flutuante) para alcançar a mesma taxa de sucesso no HoS que no modelo indefeso ou no SecAlign.</span> <span class="s" data-s="b5-p1-s4">Isso indica que a defesa do HoS não é apenas um obstáculo superficial, mas altera fundamentalmente a superfície de ataque, tornando a otimização adversária muito mais custosa e difícil.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.37657/figure2.webp" alt="Gráfico de robustez de caixa branca: o HoS requer um volume de computação (FLOPs) significativamente maior para o atacante alcançar a mesma taxa de sucesso de ataque comparado ao modelo base e ao SecAlign." loading="lazy">
+          <figcaption>
+            Gráfico de robustez de caixa branca: o HoS requer um volume de computação (FLOPs) significativamente maior para o atacante alcançar a mesma taxa de sucesso de ataque comparado ao modelo base e ao SecAlign.
+            <span class="source">Figura 2 do paper · Shilov et al., arXiv:2610.37657</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Utilidade Preservada: O Trade-off Segurança-Performance</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Uma crítica comum a defesas de injeção de prompt é que elas frequentemente degradam a utilidade do modelo em tarefas legítimas.</span> <span class="s" data-s="b7-p0-s1">O SecAlign, por exemplo, mostrou degradação em configurações de few-shot (aprendizado com poucos exemplos).</span> <span class="s" data-s="b7-p0-s2">O ASIDE, embora robusto, teve problemas sérios com o uso de ferramentas, alcançando apenas 10% de utilidade em benchmarks agênticos.</span> <span class="s" data-s="b7-p0-s3">O HoS, ao contrário, preservou a utilidade do modelo base em benchmarks padrão como MMLU-Pro e GSM8K.</span> <span class="s" data-s="b7-p0-s4">Nos benchmarks agênticos com ataques estáticos, o HoS e o SecAlign performaram de forma similar e melhoraram substancialmente o trade-off segurança-utilidade em relação ao modelo base.</span></p><p><span class="s" data-s="b7-p1-s0">Os autores argumentam que isso ocorre porque o HoS não remove o conteúdo não confiável; ele apenas muda onde a atenção é focada para decisões de ação.</span> <span class="s" data-s="b7-p1-s1">O modelo ainda pode &#39;ler&#39; e &#39;raciocinar&#39; sobre os dados injetados em cabeças de atenção apropriadas, mas não &#39;obedece&#39; a eles em cabeças de seguimento de instrução.</span> <span class="s" data-s="b7-p1-s2">Isso é crucial para agentes de IA que precisam processar informações externas para tomar decisões.</span> <span class="s" data-s="b7-p1-s3">A Figura 4 mostra que o HoS domina o SecAlign na curva de Pareto, oferecendo maior utilidade para o mesmo nível de segurança, ou maior segurança para o mesmo nível de utilidade.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.37657/figure4.webp" alt="Curvas de Pareto mostrando que o Heads of Security (HoS) oferece um equilíbrio superior entre segurança e utilidade em benchmarks agênticos como AgentDojo e WASP comparado ao SecAlign." loading="lazy">
+          <figcaption>
+            Curvas de Pareto mostrando que o Heads of Security (HoS) oferece um equilíbrio superior entre segurança e utilidade em benchmarks agênticos como AgentDojo e WASP comparado ao SecAlign.
+            <span class="source">Figura 4 do paper · Shilov et al., arXiv:2610.37657</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Percepção de Papel e Limitações</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Os autores também investigaram se o HoS melhora a &#39;percepção de papel&#39; do modelo.</span> <span class="s" data-s="b9-p0-s1">Em tarefas benignas (não maliciosas), modelos padrão frequentemente confundem saídas de ferramentas com instruções do usuário.</span> <span class="s" data-s="b9-p0-s2">A análise do HoS mostrou que ele melhora significativamente essa percepção, reduzindo a &#39;userness&#39; percebida dos tokens de injeção dentro das saídas de ferramentas.</span> <span class="s" data-s="b9-p0-s3">Isso sugere que a defesa não apenas bloqueia ataques, mas também torna o modelo mais preciso em entender a estrutura semântica de suas entradas.</span></p><p><span class="s" data-s="b9-p1-s0">Apesar dos resultados promissores, o paper tem limitações.</span> <span class="s" data-s="b9-p1-s1">O HoS foi avaliado principalmente em modelos decoder-only e em cenários onde a fronteira de confiança pode ser definida de forma discreta (confiável vs. não confiável).</span> <span class="s" data-s="b9-p1-s2">Em cenários mais complexos, onde a confiança é granular ou contínua, a eficácia do método pode variar.</span> <span class="s" data-s="b9-p1-s3">Além disso, o treinamento requer um passo adicional de ajuste dos gatos, embora esse custo seja baixo.</span> <span class="s" data-s="b9-p1-s4">O paper não explora extensivamente a transferência de ataques entre modelos de famílias diferentes, embora os resultados sugiram alguma robustez.</span> <span class="s" data-s="b9-p1-s5">Finalmente, a defesa depende da correta atribuição de canais de confiança; se um atacante conseguir enganar o classificador de canais, a eficácia do HoS pode ser comprometida.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.37657/figure5.webp" alt="Análise de percepção de papel: o HoS reduz a &#39;userness&#39; percebida de tokens de injeção em saídas de ferramentas, ajudando o modelo a distinguir entre dados e instruções." loading="lazy">
+          <figcaption>
+            Análise de percepção de papel: o HoS reduz a &#39;userness&#39; percebida de tokens de injeção em saídas de ferramentas, ajudando o modelo a distinguir entre dados e instruções.
+            <span class="source">Figura 5 do paper · Shilov et al., arXiv:2610.37657</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b11-h">Conclusão: Uma Nova Direção para Defesas de Arquitetura</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Heads of Security representa uma mudança de paradigma na defesa contra injeção de prompt.</span> <span class="s" data-s="b11-p0-s1">Em vez de depender apenas de dados de treinamento ou de prompts de sistema complexos, o HoS modifica a dinâmica interna de atenção do modelo para impor uma separação estrutural entre instrução e dados.</span> <span class="s" data-s="b11-p0-s2">Os resultados mostram que essa abordagem é não apenas eficaz contra ataques adaptativos de última geração, mas também preserva a utilidade do modelo em tarefas complexas, superando defesas baseadas em fine-tuning e outras abordagens arquiteturais existentes.</span></p><p><span class="s" data-s="b11-p1-s0">Para desenvolvedores e cientistas de dados, o HoS oferece uma via promissora para implementar defesas robustas em LLMs abertos.</span> <span class="s" data-s="b11-p1-s1">A leveza dos parâmetros adicionados e a compatibilidade com arquiteturas existentes tornam a técnica viável para implementação prática.</span> <span class="s" data-s="b11-p1-s2">No entanto, a segurança de LLMs é uma corrida armamentista contínua.</span> <span class="s" data-s="b11-p1-s3">O HoS eleva o custo para os atacantes, mas não elimina a necessidade de outras camadas de defesa, como monitoramento de saída e validação de entrada.</span> <span class="s" data-s="b11-p1-s4">À medida que os ataques evoluem para explorar nuances semânticas e contextuais mais sutis, defesas baseadas em arquitetura como o HoS serão essenciais para manter a integridade dos agentes de IA.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">O HoS insere &#39;gatos&#39; aprendidos nas camadas de atenção para redirecionar o foco do modelo de tokens não confiáveis para instruções confiáveis.</span></li><li><span class="s" data-s="k1">Em testes contra ataques adaptativos de última geração, o HoS reduziu a taxa de sucesso do ataque de 97% para apenas 10% no GPT-OSS-20B.</span></li><li><span class="s" data-s="k2">Diferente de métodos de fine-tuning, o HoS preserva a capacidade do modelo de raciocinar sobre dados externos sem seguir comandos injetados.</span></li><li><span class="s" data-s="k3">O método exige um custo computacional significativamente maior para ser contornado por ataques de caixa branca em comparação com defesas existentes.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.37657" rel="noopener">Heads of Security: Learned Attention Gates Improve Prompt Injection Robustness</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.37657" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

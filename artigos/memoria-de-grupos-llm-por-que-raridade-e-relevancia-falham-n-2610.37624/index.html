@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Memória de Grupos LLM: Por que Raridade e Relevância Falham na Tomada de Decisão — arXiv em 5</title>
+<meta name="description" content="Um novo benchmark, CrossProfile, revela que heurísticas intuitivas para comprimir discussões de agentes LLM falham sistematicamente, expondo vieses de &#39;prova social&#39; e a fragilidade de selecionar fatos por frequência ou relevância.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Memória de Grupos LLM: Por que Raridade e Relevância Falham na Tomada de Decisão">
+<meta property="og:description" content="Um novo benchmark, CrossProfile, revela que heurísticas intuitivas para comprimir discussões de agentes LLM falham sistematicamente, expondo vieses de &#39;prova social&#39; e a fragilidade de selecionar fatos por frequência ou relevância.">
+<meta property="og:image" content="../../assets/papers/2610.37624/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>LLMs</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.37624" rel="noopener">arXiv:2610.37624</a>
+    </div>
+    <h1><span class="s" data-s="t">Memória de Grupos LLM: Por que Raridade e Relevância Falham na Tomada de Decisão</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um novo benchmark, CrossProfile, revela que heurísticas intuitivas para comprimir discussões de agentes LLM falham sistematicamente, expondo vieses de &#39;prova social&#39; e a fragilidade de selecionar fatos por frequência ou relevância.</span></p>
+    <p class="byline">
+      <span>Imel et al.</span>
+      <span>7 min de leitura</span>
+<span>27/10/2026</span>    </p>
+    <div class="listen" data-article="2610.37624" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=2ZjR8VXLt2k" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Memória em Grupos de Agentes</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Quando múltiplos agentes de linguagem (LLMs) discutem um problema, o conjunto de evidências necessário para uma decisão correta muitas vezes está distribuído entre eles.</span> <span class="s" data-s="b0-p0-s1">Alguns fatos são compartilhados por todos, enquanto outros são privados, conhecidos apenas por um ou poucos agentes.</span> <span class="s" data-s="b0-p0-s2">O desafio surge quando um modelo final precisa tomar uma decisão baseada apenas em uma memória comprimida dessa discussão.</span> <span class="s" data-s="b0-p0-s3">Como escolher o que manter?</span></p><p><span class="s" data-s="b0-p1-s0">Duas heurísticas naturais surgem imediatamente: manter os fatos mais raros (afinal, se todos sabem, talvez não sejam informativos) ou manter os fatos relevantes para os critérios de decisão.</span> <span class="s" data-s="b0-p1-s1">Em tarefas clássicas de &#39;perfil oculto&#39; (hidden-profile tasks), essas duas estratégias parecem alinhadas: os fatos úteis são frequentemente privados, e os enganosos são compartilhados.</span> <span class="s" data-s="b0-p1-s2">Isso cria uma ilusão de eficácia.</span> <span class="s" data-s="b0-p1-s3">Se um sistema escolhe fatos raros e acerta, não sabemos se acertou pela raridade ou porque os fatos raros eram, de fato, os corretos.</span></p><p><span class="s" data-s="b0-p2-s0">Este paper, intitulado &#39;Rare, Relevant, and Still Wrong: How Memory Fails LLM Group Decisions&#39;, investiga exatamente essa falácia.</span> <span class="s" data-s="b0-p2-s1">Os autores demonstram que, sem um controle rigoroso sobre quem possui qual fato, é impossível avaliar se as heurísticas de memória funcionam.</span> <span class="s" data-s="b0-p2-s2">Eles introduzem o CrossProfile, um benchmark projetado para desconectar a prevalência de um fato de sua utilidade decisória.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.37624/figure1.webp" alt="Ilustra o design do benchmark: como fatos úteis e enganosos são distribuídos entre agentes para testar a memória. A propriedade dos fatos muda, mas o texto permanece fixo." loading="lazy">
+          <figcaption>
+            Ilustra o design do benchmark: como fatos úteis e enganosos são distribuídos entre agentes para testar a memória. A propriedade dos fatos muda, mas o texto permanece fixo.
+            <span class="source">Figura 1 do paper · Imel et al., arXiv:2610.37624</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">O Benchmark CrossProfile: Isolando Variáveis</span></h2>
+<p><span class="s" data-s="b2-p0-s0">O CrossProfile é um benchmark diagnóstico composto por 60 templates com chaves de resposta verificadas automaticamente, totalizando 480 tarefas.</span> <span class="s" data-s="b2-p0-s1">A inovação central não está nos temas das discussões, mas no design experimental.</span> <span class="s" data-s="b2-p0-s2">Para cada template, os autores criam oito variantes cruzadas onde a &#39;propriedade&#39; dos fatos (se são compartilhados ou privados) é alterada, enquanto o texto dos fatos e seus papéis decisórios (suporte, engano ou irrelevante) permanecem fixos.</span></p><p><span class="s" data-s="b2-p1-s0">Isso permite testar políticas de memória contra um inventário conhecido de evidências.</span> <span class="s" data-s="b2-p1-s1">Uma política de memória, neste contexto, é um algoritmo que comprime a transcrição completa da discussão em um orçamento limitado de tokens.</span> <span class="s" data-s="b2-p1-s2">As estratégias avaliadas incluem: selecionar fatos raros primeiro (Rarest-first, R1), selecionar fatos relevantes primeiro (Relevance-first, R1-rel), selecionar pela primeira menção (First mention, B4), sumarização genérica (Evidence summary, B3) e seleção aleatória (Random).</span></p><p><span class="s" data-s="b2-p2-s0">Ao cruzar a propriedade dos fatos de suporte, engano e irrelevância, o design expõe onde cada heurística falha.</span> <span class="s" data-s="b2-p2-s1">Se a raridade fosse inerentemente boa, ela deveria funcionar em todos os cenários.</span> <span class="s" data-s="b2-p2-s2">Se a relevância fosse suficiente, ela deveria filtrar corretamente.</span> <span class="s" data-s="b2-p2-s3">O CrossProfile mostra que nenhuma dessas suposições se sustenta quando se controla rigorosamente a distribuição da informação.</span></p>        <h2><span class="s" data-s="b3-h">A Ilusão da Raridade (Rarest-first)</span></h2>
+<p><span class="s" data-s="b3-p0-s0">A heurística R1 assume que fatos pouco mencionados são mais valiosos.</span> <span class="s" data-s="b3-p0-s1">Em benchmarks anteriores, como o HiddenBench, o R1 apresentava desempenho superior (88,2% no Qwen e 87,7% no Llama).</span> <span class="s" data-s="b3-p0-s2">No entanto, essa vantagem era confundida pela estrutura das tarefas: no HiddenBench, os fatos privados (raros) sempre apoiavam a resposta correta, e os compartilhados sempre favoreciam a resposta errada.</span></p><p><span class="s" data-s="b3-p1-s0">O CrossProfile revela que o R1 é, em média, tão bom quanto a seleção aleatória (64,0% vs 64,5% no Qwen; 63,0% vs 63,4% no Llama).</span> <span class="s" data-s="b3-p1-s1">A diferença crucial está na dependência da propriedade dos fatos de engano.</span> <span class="s" data-s="b3-p1-s2">Quando os fatos de suporte são privados e os de engano são compartilhados (o cenário clássico de perfil oculto), o R1 atinge 90-97% de acurácia.</span> <span class="s" data-s="b3-p1-s3">Mas quando a situação se inverte, o R1 cai para 18-40%, pois prioriza os fatos de engano que agora são raros.</span></p><p><span class="s" data-s="b3-p2-s0">O resultado é que a raridade não é uma propriedade intrínseca de utilidade; é uma aposta sobre quem detém os fatos enganosos.</span> <span class="s" data-s="b3-p2-s1">Se os fatos enganosos forem privados, a política R1 leva o modelo à ruína.</span> <span class="s" data-s="b3-p2-s2">A acurácia segue o equilíbrio de evidências que a memória consegue preservar, não a política de seleção em si.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.37624/figure2.webp" alt="Fluxo do pipeline: como os fatos são distribuídos, discutidos e comprimidos em memória para a decisão final." loading="lazy">
+          <figcaption>
+            Fluxo do pipeline: como os fatos são distribuídos, discutidos e comprimidos em memória para a decisão final.
+            <span class="source">Figura 2 do paper · Imel et al., arXiv:2610.37624</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">A Falácia da Relevância (Relevance-first)</span></h2>
+<p><span class="s" data-s="b5-p0-s0">A segunda heurística comum é manter os fatos relevantes para os critérios de decisão.</span> <span class="s" data-s="b5-p0-s1">A lógica é que fatos irrelevantes devem ser descartados para economizar espaço de memória.</span> <span class="s" data-s="b5-p0-s2">No entanto, o conceito de &#39;relevância&#39; no CrossProfile inclui fatos de engano (decoys).</span> <span class="s" data-s="b5-p0-s3">Esses fatos são verdadeiros e diretamente relacionados aos critérios de decisão, mas favorecem a opção errada.</span></p><p><span class="s" data-s="b5-p1-s0">Um filtro de relevância perfeito, que mantém todos os fatos relevantes e descarta os irrelevantes, falha em admitir esses enganos.</span> <span class="s" data-s="b5-p1-s1">No cenário clássico de perfil oculto (suporte privado, engano compartilhado), mesmo um filtro de relevância ideal perde de 23 a 31 pontos de acurácia em comparação com a seleção por raridade.</span> <span class="s" data-s="b5-p1-s2">Isso ocorre porque a relevância não distingue entre evidência que apoia a resposta correta e evidência que apoia a incorreta.</span></p><p><span class="s" data-s="b5-p2-s0">A média agregada mostra que o R1-rel tem desempenho superior ao R1 em média (devido ao equilíbrio de cenários), mas em células específicas onde o engano é compartilhado e o suporte é privado, a seleção por relevância é inferior à seleção por raridade.</span> <span class="s" data-s="b5-p2-s1">A conclusão é que a relevância é necessária, mas insuficiente.</span> <span class="s" data-s="b5-p2-s2">Sem saber o &#39;lado&#39; que o fato apoia, mantê-lo é um risco.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b6-t">O Viés da Prova Social</span></h3>
+          <p><span class="s" data-s="b6-c-s0">Além das falhas na seleção de memória, o modelo tomador de decisão introduz um terceiro erro: ele atribui peso extra a fatos atribuídos a muitos agentes.</span> <span class="s" data-s="b6-c-s1">Isso é uma forma de &#39;prova social&#39;.</span> <span class="s" data-s="b6-c-s2">Ao remover as tags de atribuição ou reatribuí-las aleatoriamente, a acurácia no cenário clássico aumenta de 13 a 24 pontos.</span> <span class="s" data-s="b6-c-s3">O modelo confia na quantidade de apoiadores, não na qualidade da evidência.</span></p>
+        </aside>
+        <figure class="figure">
+          <img src="../../assets/papers/2610.37624/figure4.webp" alt="Mostra que filtrar por relevância é insuficiente, pois seleciona fatos enganosos, reduzindo a acurácia." loading="lazy">
+          <figcaption>
+            Mostra que filtrar por relevância é insuficiente, pois seleciona fatos enganosos, reduzindo a acurácia.
+            <span class="source">Figura 4 do paper · Imel et al., arXiv:2610.37624</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">O Viés de Atribuição e Prova Social</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Os autores identificaram um viés crítico no modelo que toma a decisão final.</span> <span class="s" data-s="b8-p0-s1">Este modelo tende a dar mais peso a fatos que são atribuídos a múltiplos agentes, mesmo quando as fontes não são independentes.</span> <span class="s" data-s="b8-p0-s2">Esse comportamento imita a &#39;prova social&#39; humana: se todos dizem algo, deve ser verdade.</span></p><p><span class="s" data-s="b8-p1-s0">Em experimentos de ablação, quando as tags de atribuição (quem disse o quê) foram removidas da memória, ou quando foram reatribuídas aleatoriamente mantendo a ordem das linhas, a acurácia no cenário clássico aumentou significativamente (13 a 24 pontos).</span> <span class="s" data-s="b8-p1-s1">Isso prova que o modelo não está apenas processando o conteúdo semântico, mas sendo enganado pela metadados sociais da discussão.</span></p><p><span class="s" data-s="b8-p2-s0">Este viés é particularmente perigoso em configurações onde fatos enganosos são compartilhados.</span> <span class="s" data-s="b8-p2-s1">Como muitos agentes &#39;confirmam&#39; o fato enganoso, o modelo final tende a confiar nele, mesmo que a evidência privada (e correta) esteja presente na memória.</span> <span class="s" data-s="b8-p2-s2">A estrutura de atribuição distorce o equilíbrio de evidências que a política de memória tentou preservar.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.37624/figure5.webp" alt="Prova que a &#39;prova social&#39; (tags de quem disse) engana o modelo; removê-las aumenta a acurácia." loading="lazy">
+          <figcaption>
+            Prova que a &#39;prova social&#39; (tags de quem disse) engana o modelo; removê-las aumenta a acurácia.
+            <span class="source">Figura 5 do paper · Imel et al., arXiv:2610.37624</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">Limitações e Perda de Evidência</span></h2>
+<p><span class="s" data-s="b10-p0-s0">O paper também destaca uma limitação fundamental: em discussões naturais, a evidência pode ser perdida antes mesmo de qualquer política de memória agir.</span> <span class="s" data-s="b10-p0-s1">Os autores observaram que, em alguns casos, a transcrição completa da discussão resultou em menor acurácia do que não ter nenhuma nota.</span> <span class="s" data-s="b10-p0-s2">Isso sugere que a própria dinâmica da geração de texto pelos agentes pode obscurecer ou contradizer as evidências críticas antes que elas sejam comprimidas.</span></p><p><span class="s" data-s="b10-p1-s0">Além disso, o CrossProfile é um benchmark diagnóstico.</span> <span class="s" data-s="b10-p1-s1">Ele isola variáveis específicas (propriedade, relevância, atribuição) em um ambiente controlado.</span> <span class="s" data-s="b10-p1-s2">Isso significa que os resultados podem não generalizar diretamente para discussões abertas e não estruturadas, onde a ordem de aparição, o custo de tokens e a coerência narrativa desempenham papéis diferentes.</span> <span class="s" data-s="b10-p1-s3">No entanto, a utilidade do benchmark está exatamente nesse isolamento: ele mostra que falhas previsíveis existem mesmo em condições ideais de controle.</span></p><p><span class="s" data-s="b10-p2-s0">Os testes foram realizados em modelos Qwen2.5-7B, Llama-3.1-8B e dois modelos DeepSeek (V4.1-Flash e V4-Pro).</span> <span class="s" data-s="b10-p2-s1">O padrão de falha foi consistente entre os modelos hospedados, indicando que o problema não é específico de uma arquitetura, mas sim das heurísticas de memória e do viés de atribuição inerentes à forma como esses modelos processam informações sociais.</span></p>        <h2><span class="s" data-s="b11-h">Conclusões para Design de Agentes</span></h2>
+<p><span class="s" data-s="b11-p0-s0">A mensagem central do paper é que nem a raridade nem a relevância são padrões seguros para a memória de grupos de LLM.</span> <span class="s" data-s="b11-p0-s1">A raridade ajuda apenas quando os fatos raros apoiam a resposta correta, e a relevância falha ao admitir fatos enganosos que são tematicamente pertinentes.</span> <span class="s" data-s="b11-p0-s2">Além disso, o modelo tomador de decisão é vulnerável a vieses de prova social, dando peso indevido a fatos atribuídos a muitos agentes.</span></p><p><span class="s" data-s="b11-p1-s0">Para projetar sistemas de agentes mais robustos, os autores sugerem que os designs de memória devem focar no equilíbrio de evidências entre as opções, e não na prevalência ou tópico.</span> <span class="s" data-s="b11-p1-s1">Além disso, sistemas que apresentam a quantidade de agentes que apoiaram um fato como evidência para ele devem ser evitados, a menos que as fontes sejam independentes.</span> <span class="s" data-s="b11-p1-s2">Avaliações futuras devem variar quem detém quais evidências e verificar se essas evidências realmente chegaram à discussão.</span></p><p><span class="s" data-s="b11-p2-s0">O CrossProfile serve como um aviso: ganhos de precisão em benchmarks tradicionais podem mascarar falhas estruturais na forma como a informação é comprimida e ponderada.</span> <span class="s" data-s="b11-p2-s1">Sem diagnosticar esses pontos de falha, a confiança em sistemas de agentes multiplas pode ser enganosa.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b12-t">Takeaway para Desenvolvedores</span></h3>
+          <p><span class="s" data-s="b12-c-s0">Não assuma que fatos raros são mais informativos nem que fatos relevantes são corretos.</span> <span class="s" data-s="b12-c-s1">Em grupos de LLM, a compressão de memória deve priorizar o equilíbrio de evidências, e as tags de autoria devem ser tratadas com ceticismo para evitar viés de prova social.</span></p>
+        </aside>
+
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">A seleção de fatos por raridade (Rarest-first) não é superior à seleção aleatória em média; sua eficácia depende inteiramente de quem detém os fatos enganosos.</span></li><li><span class="s" data-s="k1">Filtrar por relevância é insuficiente, pois fatos enganosos são frequentemente relevantes para o critério de decisão, confundindo o modelo.</span></li><li><span class="s" data-s="k2">Modelos LLM exibem viés de &#39;prova social&#39;, dando peso excessivo a fatos atribuídos a múltiplos agentes, o que reduz a acurácia decisória.</span></li><li><span class="s" data-s="k3">O benchmark CrossProfile permite isolar falhas de memória ao cruzar a propriedade dos fatos com sua utilidade, revelando vieses ocultos em avaliações tradicionais.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.37624" rel="noopener">Rare, Relevant, and Still Wrong: How Memory Fails LLM Group Decisions</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.37624" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

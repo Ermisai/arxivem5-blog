@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Latent Sparse Attention: Subquadrático para contextos ultra-largos — arXiv em 5</title>
+<meta name="description" content="Como o LSA substitui o gargalo de indexação quadrática por clustering em espaço latente, permitindo atenção esparsa eficiente e precisa em contextos de até 10 milhões de tokens.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Latent Sparse Attention: Subquadrático para contextos ultra-largos">
+<meta property="og:description" content="Como o LSA substitui o gargalo de indexação quadrática por clustering em espaço latente, permitindo atenção esparsa eficiente e precisa em contextos de até 10 milhões de tokens.">
+<meta property="og:image" content="../../assets/papers/2610.42147/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>LLMs</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.42147" rel="noopener">arXiv:2610.42147</a>
+    </div>
+    <h1><span class="s" data-s="t">Latent Sparse Attention: Subquadrático para contextos ultra-largos</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Como o LSA substitui o gargalo de indexação quadrática por clustering em espaço latente, permitindo atenção esparsa eficiente e precisa em contextos de até 10 milhões de tokens.</span></p>
+    <p class="byline">
+      <span>Kubicek et al.</span>
+      <span>6 min de leitura</span>
+<span>30/10/2026</span>    </p>
+    <div class="listen" data-article="2610.42147" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=yONm6QcfyuU" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O gargalo da atenção em contextos ultra-largos</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A evolução dos modelos de linguagem grandes (LLMs) está migrando de tarefas pontuais para fluxos de trabalho agênticos de longo alcance.</span> <span class="s" data-s="b0-p0-s1">Cenários como engenharia de software autônoma e pesquisa científica aberta exigem janelas de contexto massivas, frequentemente excedendo 1 milhão de tokens.</span> <span class="s" data-s="b0-p0-s2">Embora modelos recentes tenham estendido suas capacidades para além desse limite, o custo computacional da atenção full-attention cresce quadraticamente com o tamanho do contexto no prefill e linearmente no decode.</span></p><p><span class="s" data-s="b0-p1-s0">Para mitigar esse custo, a atenção esparsa tornou-se o padrão.</span> <span class="s" data-s="b0-p1-s1">Em vez de cada query (consulta) atender a todas as keys (chaves) anteriores, um indexador seleciona um subconjunto relevante.</span> <span class="s" data-s="b0-p1-s2">No entanto, em escalas ultra-largas, o próprio processo de indexação tornou-se o novo gargalo.</span> <span class="s" data-s="b0-p1-s3">Em contextos de 10 milhões de tokens, até 98% do tempo de prefill em uma camada de atenção esparsa é gasto apenas identificando quais chaves selecionar, anulando os ganhos de eficiência da atenção em si.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.42147/figure2.webp" alt="Gráfico que ilustra como, em contextos ultra-largos, o indexador consome a maior parte do tempo de computação, tornando-se o gargalo principal da atenção esparsa tradicional." loading="lazy">
+          <figcaption>
+            Gráfico que ilustra como, em contextos ultra-largos, o indexador consome a maior parte do tempo de computação, tornando-se o gargalo principal da atenção esparsa tradicional.
+            <span class="source">Figura 2 do paper · Kubicek et al., arXiv:2610.42147</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">Latent Sparse Attention (LSA): A ideia central</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Os autores propõem o Latent Sparse Attention (LSA), uma abordagem que elimina a necessidade de escanear ou pontuar todas as chaves individuais para cada query.</span> <span class="s" data-s="b2-p0-s1">Em vez disso, o LSA agrupa as chaves em clusters em um espaço latente aprendido.</span> <span class="s" data-s="b2-p0-s2">A query pontua os centróides desses clusters, permitindo que o modelo selecione apenas os grupos de chaves mais relevantes, em vez de processar cada token individualmente.</span></p><p><span class="s" data-s="b2-p1-s0">Essa mudança de paradigma permite dois mecanismos de busca: Flat e Tree.</span> <span class="s" data-s="b2-p1-s1">Na busca Flat, a query pontua todos os centróides de nível único.</span> <span class="s" data-s="b2-p1-s2">Na busca Tree, utiliza-se uma hierarquia de clusters, onde a query navega pela árvore de agrupamentos.</span> <span class="s" data-s="b2-p1-s3">A busca hierárquica é crucial para alcançar complexidade subquadrática, pois reduz drasticamente o número de comparações necessárias à medida que o contexto cresce, contornando a limitação linear dos indexadores tradicionais.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.42147/figure1.webp" alt="Diagrama do fluxo LSA: as chaves são agrupadas em buckets e pontuadas pelos centróides. A query atende apenas às chaves de longo alcance selecionadas, além de janelas locais e sink." loading="lazy">
+          <figcaption>
+            Diagrama do fluxo LSA: as chaves são agrupadas em buckets e pontuadas pelos centróides. A query atende apenas às chaves de longo alcance selecionadas, além de janelas locais e sink.
+            <span class="source">Figura 1 do paper · Kubicek et al., arXiv:2610.42147</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b4-h">Implementação: D-LSA e N-LSA</span></h2>
+<p><span class="s" data-s="b4-p0-s0">O paper detalha duas variantes de implementação para integrar o LSA em arquiteturas existentes ou novas.</span> <span class="s" data-s="b4-p0-s1">A primeira é a Distilled-LSA (D-LSA), projetada para ser aplicada a modelos já pré-treinados.</span> <span class="s" data-s="b4-p0-s2">O D-LSA adiciona matrizes de projeção leves por camada e utiliza técnicas de distilação para aprender a estrutura de clustering sem re-treinar todo o modelo.</span> <span class="s" data-s="b4-p0-s3">Isso preserva a inteligência adquirida durante o treinamento original, adaptando-a apenas para a nova estrutura de atenção.</span></p><p><span class="s" data-s="b4-p1-s0">A segunda variante é a Native-LSA (N-LSA), que é treinada nativamente do zero usando apenas a perda de next-token prediction (NTP).</span> <span class="s" data-s="b4-p1-s1">Diferente de métodos que dependem de distilação de modelos maiores ou dados sintéticos complexos, o N-LSA aprende a estrutura de clustering diretamente através da tarefa final de previsão de tokens.</span> <span class="s" data-s="b4-p1-s2">Isso simplifica o pipeline de treinamento, embora exija que o modelo seja treinado desde o início com a arquitetura LSA.</span></p>        <h2><span class="s" data-s="b5-h">Resultados de desempenho e precisão</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os experimentos foram conduzidos em modelos de grande escala, como o GLM-5.3-FLASH e o QWEN-3.8-27B, avaliando contextos de até 10 milhões de tokens.</span> <span class="s" data-s="b5-p0-s1">Os resultados mostram ganhos significativos de velocidade.</span> <span class="s" data-s="b5-p0-s2">Para o D-LSA no GLM-5.3-FLASH, uma camada de atenção única apresentou um speedup de 22.7x no prefill e 4.6x no decode em comparação à atenção esparsa original.</span> <span class="s" data-s="b5-p0-s3">Quando comparado à full-attention no QWEN-3.8-27B, os ganhos foram ainda mais expressivos: 72.4x no prefill e 42.5x no decode.</span></p><p><span class="s" data-s="b5-p1-s0">Esses ganhos de velocidade se traduzem em melhorias práticas na experiência do usuário.</span> <span class="s" data-s="b5-p1-s1">O tempo até o primeiro token (TTFT) foi reduzido em 2.2x para o GLM e 9.2x para o QWEN, utilizando o D-LSA.</span> <span class="s" data-s="b5-p1-s2">Esses números demonstram que a redução do custo de indexação não é apenas teórica, mas impacta diretamente a latência percebida em aplicações de produção.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.42147/figure6.webp" alt="Gráficos de velocidade mostrando o speedup do D-LSA em uma camada de atenção global. O prefill é acelerado em até 72x e o decode em 42x em relação à baseline." loading="lazy">
+          <figcaption>
+            Gráficos de velocidade mostrando o speedup do D-LSA em uma camada de atenção global. O prefill é acelerado em até 72x e o decode em 42x em relação à baseline.
+            <span class="source">Figura 6 do paper · Kubicek et al., arXiv:2610.42147</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Manutenção da precisão em escala</span></h2>
+<p><span class="s" data-s="b7-p0-s0">A principal preocupação ao reduzir a complexidade computacional é a perda de qualidade.</span> <span class="s" data-s="b7-p0-s1">O LSA foi avaliado em benchmarks estabelecidos, como o RULER, e em um novo benchmark chamado PaperTrail, desenvolvido pelos autores para testar a compreensão científica de longo alcance.</span> <span class="s" data-s="b7-p0-s2">O PaperTrail exige que o modelo encontre e conecte fatos através de artigos científicos não vistos durante o treinamento.</span></p><p><span class="s" data-s="b7-p1-s0">Os resultados indicam que o D-LSA mantém precisão semelhante à atenção cheia e às baselines esparsas tradicionais, mesmo em contextos de 10 milhões de tokens.</span> <span class="s" data-s="b7-p1-s1">Isso valida que o clustering em espaço latente consegue capturar as dependências semânticas necessárias, sem perder informações críticas dispersas pelo contexto longo.</span> <span class="s" data-s="b7-p1-s2">O N-LSA, por sua vez, mostrou-se capaz de igualar a precisão da full-attention com um speedup de treinamento de 1.6x por camada em contextos de 128k tokens.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.42147/figure5.webp" alt="Gráficos de precisão demonstrando que o D-LSA mantém qualidade comparável à full-attention e baselines esparsas em tarefas de conhecimento e semântica." loading="lazy">
+          <figcaption>
+            Gráficos de precisão demonstrando que o D-LSA mantém qualidade comparável à full-attention e baselines esparsas em tarefas de conhecimento e semântica.
+            <span class="source">Figura 5 do paper · Kubicek et al., arXiv:2610.42147</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Limitações e considerações práticas</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Apesar dos avanços, o paper reconhece limitações importantes.</span> <span class="s" data-s="b9-p0-s1">O LSA reduz o custo de encontrar as chaves, mas não o custo de armazená-las.</span> <span class="s" data-s="b9-p0-s2">O cache KV (Key-Value) ainda cresce linearmente com o contexto, o que significa que a memória GPU permanece um gargalo crítico.</span> <span class="s" data-s="b9-p0-s3">Além disso, o método é ortogonal a técnicas de compressão de cache ou previsão de múltiplos tokens, podendo ser combinado com elas no futuro.</span></p><p><span class="s" data-s="b9-p1-s0">Outra observação crítica diz respeito à busca hierárquica (Tree).</span> <span class="s" data-s="b9-p1-s1">Os autores notaram que, além de 1 milhão de tokens no GLM-5.3-FLASH, a busca em árvore perde precisão mais rapidamente do que a busca plana (Flat).</span> <span class="s" data-s="b9-p1-s2">A busca em árvore só supera a busca plana no decode a partir de cerca de 5 milhões de tokens com uma única requisição.</span> <span class="s" data-s="b9-p1-s3">Isso sugere que a escolha entre Flat e Tree deve ser feita com base no tamanho do contexto e na carga de trabalho específica.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b10-t">O custo da busca em árvore</span></h3>
+          <p><span class="s" data-s="b10-c-s0">A busca hierárquica (Tree) no LSA oferece complexidade subquadrática, mas introduz uma compensação (trade-off) de precisão em contextos intermediários.</span> <span class="s" data-s="b10-c-s1">Ela só se torna superior à busca plana (Flat) em escalas muito grandes (acima de 5M-10M tokens), dependendo da carga de trabalho.</span> <span class="s" data-s="b10-c-s2">Para contextos menores, a busca plana pode ser mais robusta.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b11-h">Escopo do treinamento nativo</span></h2>
+<p><span class="s" data-s="b11-p0-s0">O treinamento nativo (N-LSA) foi demonstrado em uma escala menor, com modelos de aproximadamente 0.5 bilhões de parâmetros e até 128k tokens de contexto.</span> <span class="s" data-s="b11-p0-s1">Os autores deixam em aberto se o treinamento nativo escalará efetivamente para modelos maiores, contextos mais longos e para a busca em árvore.</span> <span class="s" data-s="b11-p0-s2">Isso indica que, embora o N-LSA seja promissor como uma alternativa ao distilamento, sua eficácia em escala de frontier models ainda precisa de validação adicional.</span></p><p><span class="s" data-s="b11-p1-s0">O código, os kernels GPU para H200 e B300, e a integração com SGLang foram liberados, facilitando a reprodução dos resultados.</span> <span class="s" data-s="b11-p1-s1">Isso permite que a comunidade teste o LSA em seus próprios pipelines, especialmente para aplicações que requerem janelas de contexto massivas sem a sobrecarga computacional da atenção densa.</span></p>        <h2><span class="s" data-s="b12-h">Conclusão</span></h2>
+<p><span class="s" data-s="b12-p0-s0">O Latent Sparse Attention representa um passo prático para viabilizar a atenção em contextos ultra-largos.</span> <span class="s" data-s="b12-p0-s1">Ao substituir a varredura linear de chaves por um clustering em espaço latente, o LSA ataca diretamente o gargalo de indexação que limita a eficiência da atenção esparsa tradicional.</span> <span class="s" data-s="b12-p0-s2">Com a D-LSA, é possível habilitar contextos de milhões de tokens em modelos existentes com ganhos de velocidade significativos e perda mínima de precisão.</span> <span class="s" data-s="b12-p0-s3">O N-LSA oferece um caminho alternativo para treinamento nativo, embora seus limites de escalabilidade ainda sejam uma área de pesquisa aberta.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">O LSA substitui a busca linear por clustering hierárquico, reduzindo o custo de indexação de O(T) para subquadrático no prefill.</span></li><li><span class="s" data-s="k1">D-LSA permite distilar o método em modelos pré-treinados sem re-treinamento completo, mantendo a precisão original.</span></li><li><span class="s" data-s="k2">Em contextos de 10M tokens, o D-LSA acelera o prefill em até 72x e o decode em 42x comparado à atenção cheia.</span></li><li><span class="s" data-s="k3">O N-LSA treina nativamente apenas com a perda de next-token prediction, alcançando precisão equivalente à atenção cheia.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.42147" rel="noopener">Latent Sparse Attention: Towards Subquadratic Ultra-Long Context Attention</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.42147" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

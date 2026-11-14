@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rethinking Batch Composition: Promoting Feature Diversity for Speech Enhancement — arXiv em 5</title>
+<meta name="description" content="Este paper propõe uma estratégia de amostragem de mini-lotes que garante diversidade acústica baseada em características da fala limpa, melhorando a robustez de modelos de aprimoramento de fala sem alterar a arquitetura do modelo.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Rethinking Batch Composition: Promoting Feature Diversity for Speech Enhancement">
+<meta property="og:description" content="Este paper propõe uma estratégia de amostragem de mini-lotes que garante diversidade acústica baseada em características da fala limpa, melhorando a robustez de modelos de aprimoramento de fala sem alterar a arquitetura do modelo.">
+<meta property="og:image" content="../../assets/papers/2610.21803/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Áudio</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.21803" rel="noopener">arXiv:2610.21803</a>
+    </div>
+    <h1><span class="s" data-s="t">Rethinking Batch Composition: Promoting Feature Diversity for Speech Enhancement</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Este paper propõe uma estratégia de amostragem de mini-lotes que garante diversidade acústica baseada em características da fala limpa, melhorando a robustez de modelos de aprimoramento de fala sem alterar a arquitetura do modelo.</span></p>
+    <p class="byline">
+      <span>Hou et al.</span>
+      <span>7 min de leitura</span>
+<span>15/10/2026</span>    </p>
+    <div class="listen" data-article="2610.21803" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=rPZ3SaEVVbk" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Homogeneidade nos Lotes de Treinamento</span></h2>
+<p><span class="s" data-s="b0-p0-s0">O aprimoramento de fala (Speech Enhancement, SE) é uma tarefa crítica em processamento de sinais de áudio, cujo objetivo é restaurar a qualidade e a inteligibilidade da fala degradada por ruído, reverberação e outras distorções acústicas.</span> <span class="s" data-s="b0-p0-s1">Nos últimos anos, abordagens baseadas em aprendizado profundo dominaram este campo, tanto em modelos discriminativos, que mapeiam espectros degradados para limpos, quanto em modelos generativos, como difusão e flow matching.</span></p><p><span class="s" data-s="b0-p1-s0">Apesar do desempenho geral forte, esses modelos exibem variações significativas de performance dependendo das condições de entrada.</span> <span class="s" data-s="b0-p1-s1">Fatores como tipo de ruído, relação sinal-ruído (SNR) e características do locutor influenciam diretamente a dificuldade da tarefa.</span> <span class="s" data-s="b0-p1-s2">Estratégias existentes tentam mitigar isso através de arquiteturas complexas, como misturas de especialistas, ou condicionando o modelo a embeddings de locutor.</span></p><p><span class="s" data-s="b0-p2-s0">No entanto, estudos recentes indicam que mesmo controlando ruído, SNR e locutor, certas amostras de fala permanecem desafiadoras.</span> <span class="s" data-s="b0-p2-s1">Isso sugere que a fonte de variabilidade não está apenas nas condições externas, mas nas características intrínsecas do sinal de fala limpa.</span> <span class="s" data-s="b0-p2-s2">O problema central que este paper aborda é a forma como os dados são apresentados aos modelos durante o treinamento.</span></p>        <h2><span class="s" data-s="b1-h">A Hipótese: Características Intrínsecas da Fala Limpa</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Em trabalhos anteriores, os autores demonstraram que características da fala limpa, como a estrutura de formantes e a loudness (intensidade sonora), estão fortemente correlacionadas com o desempenho do aprimoramento.</span> <span class="s" data-s="b1-p0-s1">Especificamente, a frequência do terceiro formante (F3) mostrou-se um preditor robusto da dificuldade de aprimoramento.</span></p><p><span class="s" data-s="b1-p1-s0">A prática padrão no treinamento de redes neurais para SE é o uso de mini-lotes amostrados aleatoriamente.</span> <span class="s" data-s="b1-p1-s1">Embora essa abordagem forneça uma cobertura imparcial do conjunto de dados ao longo de muitas iterações, cada mini-lote individual pode ter uma composição acústica limitada.</span> <span class="s" data-s="b1-p1-s2">Se um lote contém predominantemente amostras com características acústicas semelhantes, as atualizações de gradiente serão dominadas por uma faixa restrita de dificuldade de aprimoramento.</span></p><p><span class="s" data-s="b1-p2-s0">Essa falta de diversidade intra-lote pode impedir o modelo de aprender a generalizar para diferentes tipos intrínsecos de fala.</span> <span class="s" data-s="b1-p2-s1">A hipótese deste trabalho é que controlar explicitamente a distribuição dessas características intrínsecas dentro de cada mini-lote pode melhorar significativamente o treinamento e o desempenho final do modelo de SE.</span></p>        <h2><span class="s" data-s="b2-h">A Solução: Amostragem Estratificada por Características</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Os autores propõem uma estratégia de amostragem de mini-lotes estratificada por características (feature-stratified mini-batch sampling).</span> <span class="s" data-s="b2-p0-s1">Esta é uma abordagem plug-and-play que não requer modificações na arquitetura do modelo de aprimoramento, na função de perda ou no otimizador.</span> <span class="s" data-s="b2-p0-s2">A única mudança ocorre na forma como os exemplos de treinamento são selecionados para formar os lotes.</span></p><p><span class="s" data-s="b2-p1-s0">O mecanismo funciona da seguinte maneira: para cada amostra de treinamento, extrai-se uma característica definida pelo usuário da fala limpa correspondente.</span> <span class="s" data-s="b2-p1-s1">Neste estudo, a característica principal utilizada é o valor médio da terceira frequência do formante (F3).</span> <span class="s" data-s="b2-p1-s2">Os dados de treinamento são então divididos em quantis com base no valor dessa característica.</span></p><p><span class="s" data-s="b2-p2-s0">Durante o treinamento, cada mini-lote é construído de forma a garantir uma representação igual de amostras de cada quantil.</span> <span class="s" data-s="b2-p2-s1">Por exemplo, se um lote tem tamanho 8 e usamos 4 quantis, o lote conterá exatamente 2 amostras do quantil mais baixo, 2 do segundo, 2 do terceiro e 2 do mais alto.</span> <span class="s" data-s="b2-p2-s2">Isso garante que, a cada passo de gradiente, o modelo seja exposto a uma diversidade máxima de características acústicas intrínsecas.</span></p>        <h2><span class="s" data-s="b3-h">Detalhes da Implementação e Escolha de Features</span></h2>
+<p><span class="s" data-s="b3-p0-s0">É crucial notar que a característica usada para estratificação (como o F3) não é fornecida como entrada ao modelo de aprimoramento.</span> <span class="s" data-s="b3-p0-s1">Ela serve apenas para determinar a composição do lote.</span> <span class="s" data-s="b3-p0-s2">Isso significa que o modelo aprende a lidar com essa variabilidade intrinsecamente, sem um atalho baseado em metadados explícitos.</span></p><p><span class="s" data-s="b3-p1-s0">A escolha da característica para estratificação é fundamental.</span> <span class="s" data-s="b3-p1-s1">Os autores selecionaram o F3 médio porque, em estudos preliminares, ele mostrou uma correlação forte com a dificuldade de aprimoramento.</span> <span class="s" data-s="b3-p1-s2">Para validar essa escolha, os autores realizaram estudos de ablação comparando o uso do F3 com outras características, como o desvio padrão da frequência fundamental (f0), que mostrou pouca ou nenhuma correlação com o desempenho de SE.</span></p><p><span class="s" data-s="b3-p2-s0">Esta distinção é importante: nem qualquer característica acústica serve para melhorar o treinamento.</span> <span class="s" data-s="b3-p2-s1">A estratificação só traz benefícios se a característica escolhida for um bom proxy para a dificuldade intrínseca do sinal de fala que o modelo precisa aprender a restaurar.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.21803/table1.webp" alt="Tabela 1 mostra a comparação de desempenho entre amostragem aleatória e estratificada em datasets de inglês e espanhol, demonstrando melhorias consistentes nas métricas de qualidade de fala." loading="lazy">
+          <figcaption>
+            Tabela 1 mostra a comparação de desempenho entre amostragem aleatória e estratificada em datasets de inglês e espanhol, demonstrando melhorias consistentes nas métricas de qualidade de fala.
+            <span class="source">Tabela 1 do paper · Hou et al., arXiv:2610.21803</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Resultados Experimentais: Melhorias Consistentes</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os experimentos foram conduzidos em três conjuntos de dados: WSJ0 (inglês), CROWD (espanhol) e PC-GITA (espanhol, contendo fala patológica e neurotípica).</span> <span class="s" data-s="b5-p0-s1">Dois modelos de aprimoramento foram avaliados: CR (Convolutional Recurrent) e SB (Spectral Branch).</span> <span class="s" data-s="b5-p0-s2">A amostragem estratificada foi comparada contra a amostragem aleatória padrão.</span></p><p><span class="s" data-s="b5-p1-s0">Para o dataset WSJ0, a estratificação melhorou o desempenho de ambos os modelos, com ganhos mais pronunciados no modelo CR, especialmente nas métricas E-STOI e fwSSNR.</span> <span class="s" data-s="b5-p1-s1">No dataset CROWD, as melhorias foram mais evidentes no modelo SB, particularmente em PESQ, fwSSNR e SI-SDR.</span></p><p><span class="s" data-s="b5-p2-s0">Um ponto interessante surge no dataset PC-GITA, que inclui fala patológica.</span> <span class="s" data-s="b5-p2-s1">A estratificação melhorou consistentemente o modelo CR para ambos os grupos (neurotípico e patológico), indicando que a estratégia é benéfica também para casos de fala não padrão.</span> <span class="s" data-s="b5-p2-s2">O modelo SB, no entanto, não mostrou diferenças significativas entre as estratégias neste dataset específico.</span></p>        <h2><span class="s" data-s="b6-h">Análise de Ablação: A Importância da Feature Correta</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Para entender por que a estratificação funciona, os autores testaram o impacto de usar características diferentes para a estratificação.</span> <span class="s" data-s="b6-p0-s1">Na Tabela 2, comparamos o uso do F3 médio contra o desvio padrão da frequência fundamental (f0).</span> <span class="s" data-s="b6-p0-s2">O F3, sendo correlacionado com a dificuldade de SE, resultou em melhorias significativas.</span> <span class="s" data-s="b6-p0-s3">Já o f0, que não mostrou correlação forte com a dificuldade de aprimoramento, não trouxe benefícios comparáveis.</span></p><p><span class="s" data-s="b6-p1-s0">Este resultado valida a hipótese de que a estratificação não é mágica; ela depende da qualidade da característica escolhida.</span> <span class="s" data-s="b6-p1-s1">Se a característica não capturar a variabilidade relevante para a tarefa de aprimoramento, a estratificação não terá o mesmo impacto positivo.</span> <span class="s" data-s="b6-p1-s2">Isso sugere que pesquisas futuras podem explorar outras características intrínsecas da fala que possam ser ainda mais preditivas.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.21803/table2.webp" alt="Tabela 2 compara o desempenho do modelo CR usando F3 e f0 como características de estratificação, mostrando que a escolha da feature impacta diretamente o ganho de performance." loading="lazy">
+          <figcaption>
+            Tabela 2 compara o desempenho do modelo CR usando F3 e f0 como características de estratificação, mostrando que a escolha da feature impacta diretamente o ganho de performance.
+            <span class="source">Tabela 2 do paper · Hou et al., arXiv:2610.21803</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Robustez e Custo Computacional</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Uma preocupação comum em métodos de amostragem é a estabilidade dos resultados.</span> <span class="s" data-s="b8-p0-s1">A Tabela 3 demonstra que as melhorias obtidas com a estratificação são robustas a variações estocásticas.</span> <span class="s" data-s="b8-p0-s2">Ao treinar com diferentes sementes aleatórias, o modelo treinado com amostragem estratificada manteve ganhos consistentes sobre o modelo de amostragem aleatória.</span></p><p><span class="s" data-s="b8-p1-s0">Além disso, um benefício chave desta abordagem é o baixo custo computacional.</span> <span class="s" data-s="b8-p1-s1">A estratégia requer praticamente nenhum custo adicional de computação, pois a extração da característica (F3) pode ser feita offline ou de forma leve durante o treinamento.</span> <span class="s" data-s="b8-p1-s2">Mais importante, ela deixa inalterados o modelo de aprimoramento, o objetivo de treinamento, os dados e o procedimento de otimização.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.21803/table3.webp" alt="Tabela 3 demonstra a robustez do método ao mostrar que os ganhos de performance se mantêm estáveis em diferentes sementes de treinamento, comparando random sampling vs stratified sampling." loading="lazy">
+          <figcaption>
+            Tabela 3 demonstra a robustez do método ao mostrar que os ganhos de performance se mantêm estáveis em diferentes sementes de treinamento, comparando random sampling vs stratified sampling.
+            <span class="source">Tabela 3 do paper · Hou et al., arXiv:2610.21803</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">Limitações e Escopo</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Apesar dos resultados promissores, é importante reconhecer as limitações deste trabalho.</span> <span class="s" data-s="b10-p0-s1">Os experimentos foram conduzidos principalmente em datasets de fala limpa e ruidosa em inglês e espanhol.</span> <span class="s" data-s="b10-p0-s2">A generalização para outros idiomas ou tipos de degradação acústica não explorados (como ruídos não estacionários complexos) não foi totalmente avaliada.</span></p><p><span class="s" data-s="b10-p1-s0">Além disso, a eficácia do método depende da disponibilidade de uma característica que seja um bom proxy para a dificuldade de aprimoramento.</span> <span class="s" data-s="b10-p1-s1">Para tarefas de SE onde as características intrínsecas da fala não são bem compreendidas ou não correlacionam com o erro do modelo, a aplicação dessa estratégia pode não trazer benefícios.</span> <span class="s" data-s="b10-p1-s2">A escolha da feature ainda requer algum conhecimento prévio ou validação empírica.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b11-t">Impacto Prático</span></h3>
+          <p><span class="s" data-s="b11-c-s0">A principal contribuição deste paper não é uma nova arquitetura, mas uma mudança sutil no pipeline de treinamento.</span> <span class="s" data-s="b11-c-s1">Ao garantir diversidade acústica nos lotes, os autores mostram que é possível melhorar a generalização de modelos existentes sem adicionar complexidade computacional ou necessidade de dados adicionais.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b12-h">Conclusão</span></h2>
+<p><span class="s" data-s="b12-p0-s0">Este paper apresenta uma abordagem simples, porém eficaz, para melhorar o treinamento de sistemas de aprimoramento de fala.</span> <span class="s" data-s="b12-p0-s1">Ao estratificar os mini-lotes de treinamento com base em características intrínsecas da fala limpa, como o F3, os autores promovem uma diversidade acústica que leva a melhorias consistentes em várias métricas de qualidade.</span></p><p><span class="s" data-s="b12-p1-s0">A estratégia é complementar às abordagens existentes e pode ser facilmente integrada em pipelines de treinamento atuais.</span> <span class="s" data-s="b12-p1-s1">Os resultados sugerem que a composição dos lotes de treinamento é um fator negligenciado, mas crucial, para a robustez de modelos de SE.</span> <span class="s" data-s="b12-p1-s2">Para pesquisadores e engenheiros de áudio, esta técnica oferece um caminho de baixo custo para melhorar o desempenho dos modelos sem a necessidade de redesenho arquitetural.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Amostragem estratificada por características da fala limpa melhora a diversidade dos lotes de treinamento.</span></li><li><span class="s" data-s="k1">A estratégia é plug-and-play, sem necessidade de alterar a arquitetura do modelo ou a função de perda.</span></li><li><span class="s" data-s="k2">A eficácia depende da escolha da característica; F3 mostrou-se um bom proxy para a dificuldade de aprimoramento.</span></li><li><span class="s" data-s="k3">Melhorias consistentes foram observadas em datasets de inglês e espanhol, incluindo fala patológica.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.21803" rel="noopener">Rethinking Batch Composition: Promoting Feature Diversity for Speech Enhancement</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.21803" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

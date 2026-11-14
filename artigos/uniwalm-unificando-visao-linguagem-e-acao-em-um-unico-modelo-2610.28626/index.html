@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UniWALM: Unificando Visão, Linguagem e Ação em um Único Modelo para Robótica — arXiv em 5</title>
+<meta name="description" content="O UniWALM elimina a necessidade de planejadores externos e VLMs separados, treinando um único backbone para gerar vídeo, linguagem e ações simultaneamente, usando a própria linguagem gerada como memória de trabalho.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UniWALM: Unificando Visão, Linguagem e Ação em um Único Modelo para Robótica">
+<meta property="og:description" content="O UniWALM elimina a necessidade de planejadores externos e VLMs separados, treinando um único backbone para gerar vídeo, linguagem e ações simultaneamente, usando a própria linguagem gerada como memória de trabalho.">
+<meta property="og:image" content="../../assets/papers/2610.28626/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Robótica</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.28626" rel="noopener">arXiv:2610.28626</a>
+    </div>
+    <h1><span class="s" data-s="t">UniWALM: Unificando Visão, Linguagem e Ação em um Único Modelo para Robótica</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">O UniWALM elimina a necessidade de planejadores externos e VLMs separados, treinando um único backbone para gerar vídeo, linguagem e ações simultaneamente, usando a própria linguagem gerada como memória de trabalho.</span></p>
+    <p class="byline">
+      <span>Sajnani et al.</span>
+      <span>4 min de leitura</span>
+<span>20/10/2026</span>    </p>
+    <div class="listen" data-article="2610.28626" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=4XLZBc0yBdY" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Fragmentação em Robótica Embodied</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Os modelos de robótica atuais, conhecidos como Vision-Language-Action (VLA), enfrentam um dilema arquitetônico.</span> <span class="s" data-s="b0-p0-s1">Eles geralmente tratam a percepção visual, o raciocínio linguístico e o controle motor como processos distintos.</span> <span class="s" data-s="b0-p0-s2">Para realizar uma tarefa complexa, o sistema precisa de um modelo de linguagem grande (VLM) para entender o contexto, um modelo de mundo para prever o futuro ou um planejador externo para quebrar a tarefa em subtarefas, e finalmente um controlador de baixo nível para executar o movimento.</span> <span class="s" data-s="b0-p0-s3">Essa separação não apenas aumenta a latência, mas também cria gargalos de informação.</span></p><p><span class="s" data-s="b0-p1-s0">Além disso, a memória é um ponto fraco crítico.</span> <span class="s" data-s="b0-p1-s1">Em tarefas que exigem lembrar onde algo foi visto há vários passos atrás, as abordagens atuais dependem de buffers de recuperação externos ou de keyframes privilegiados que muitas vezes não estão disponíveis no mundo real.</span> <span class="s" data-s="b0-p1-s2">Sem uma representação unificada, o robô esquece o estado anterior da tarefa assim que o quadro visual muda, levando a falhas em sequências longas.</span></p><p><span class="s" data-s="b0-p2-s0">Os autores do UniWALM, pesquisadores da Brown University, Amazon e outras instituições, propõem uma mudança de paradigma: em vez de acoplar módulos separados, eles criam um único modelo unificado que co-genera vídeo, linguagem e ação.</span> <span class="s" data-s="b0-p2-s1">A linguagem, neste framework, não é apenas um descritor externo, mas serve como memória de trabalho ativa, reutilizada passo a passo para manter o contexto da tarefa.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.28626/figure2.webp" alt="Arquitetura UniWALM: Um único backbone de Transformers (MoT) processa entradas multimodais e gera vídeos, textos e ações simultaneamente através de cabeças de difusão compartilhadas, sem estágios de planejamento externos." loading="lazy">
+          <figcaption>
+            Arquitetura UniWALM: Um único backbone de Transformers (MoT) processa entradas multimodais e gera vídeos, textos e ações simultaneamente através de cabeças de difusão compartilhadas, sem estágios de planejamento externos.
+            <span class="source">Figura 2 do paper · Sajnani et al., arXiv:2610.28626</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">A Arquitetura UniWALM: Um Único Backbone, Três Saídas</span></h2>
+<p><span class="s" data-s="b2-p0-s0">O núcleo do UniWALM é um modelo de difusão baseado em Video DiT, estendido para lidar com três modalidades: vídeo, linguagem e ação.</span> <span class="s" data-s="b2-p0-s1">Diferente de modelos híbridos que usam um VLM para gerar texto e depois alimentam esse texto em um controlador de ação, o UniWALM usa uma arquitetura de Mixture-of-Transformers (MoT) única.</span> <span class="s" data-s="b2-p0-s2">Nesta arquitetura, as representações de vídeo, linguagem e ação são co-denoisadas em uma única passagem.</span> <span class="s" data-s="b2-p0-s3">Isso significa que o modelo aprende a gerar um quadro de vídeo futuro, uma descrição textual da próxima subtarefa e os comandos de ação para os motores do robô ao mesmo tempo, todas derivadas de uma representação latente compartilhada.</span></p><p><span class="s" data-s="b2-p1-s0">O processo começa com a observação atual (frames de vídeo), a instrução da tarefa em linguagem natural, a propriocepção e, opcionalmente, uma memória visual (um frame âncora inicial).</span> <span class="s" data-s="b2-p1-s1">O backbone processa essas entradas e, através de cabeças de difusão específicas para cada modalidade, gera as saídas.</span> <span class="s" data-s="b2-p1-s2">A inovação crucial aqui é que a linguagem gerada não é descartada.</span> <span class="s" data-s="b2-p1-s3">Ela é consumida como entrada no próximo passo de tempo, criando um loop de memória linguística interna.</span></p><p><span class="s" data-s="b2-p2-s0">Essa abordagem elimina a necessidade de um planejador de alto nível separado.</span> <span class="s" data-s="b2-p2-s1">A planning emerge da própria capacidade do modelo de prever a sequência lógica de ações e descrições.</span> <span class="s" data-s="b2-p2-s2">Ao treinar o modelo para prever não apenas o próximo frame de vídeo, mas também o próximo estado da tarefa em linguagem, o modelo aprende uma estrutura de longo alcance que liga a ação imediata ao objetivo final.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b3-t">O Loop de Memória Linguística</span></h3>
+          <p><span class="s" data-s="b3-c-s0">No UniWALM, a linguagem gerada atua como memória de trabalho.</span> <span class="s" data-s="b3-c-s1">Se o modelo prevê esquerda: vazio, direita: segurar cubo, essa informação é re-injetada no próximo passo.</span> <span class="s" data-s="b3-c-s2">Isso permite que o robô rastreie o estado da tarefa sem depender de buffers externos ou chaveamentos de contexto explícitos.</span></p>
+        </aside>
+        <figure class="figure">
+          <img src="../../assets/papers/2610.28626/figure3.webp" alt="Ilustração do Flow Matching with Correction (FMC): O modelo aprende a corrigir trajetórias de ação perturbadas de volta para a trajetória limpa, melhorando a precisão do controle." loading="lazy">
+          <figcaption>
+            Ilustração do Flow Matching with Correction (FMC): O modelo aprende a corrigir trajetórias de ação perturbadas de volta para a trajetória limpa, melhorando a precisão do controle.
+            <span class="source">Figura 3 do paper · Sajnani et al., arXiv:2610.28626</span>
+          </figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="../../assets/papers/2610.28626/table3.webp" alt="Tabela 3 do paper: Comparação de taxas de sucesso no RMBench M(n). O UniWALM supera significativamente baselines como FastWAM e Mem-0 em tarefas que exigem memória de longo prazo." loading="lazy">
+          <figcaption>
+            Tabela 3 do paper: Comparação de taxas de sucesso no RMBench M(n). O UniWALM supera significativamente baselines como FastWAM e Mem-0 em tarefas que exigem memória de longo prazo.
+            <span class="source">Tabela 3 do paper · Sajnani et al., arXiv:2610.28626</span>
+          </figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="../../assets/papers/2610.28626/figure5.webp" alt="Resultados qualitativos: O UniWALM executa com sucesso tarefas de pegar e colocar, tarefas de memória complexas e manipulação dextrous bimanual, gerando linguagem consistente que guia suas ações." loading="lazy">
+          <figcaption>
+            Resultados qualitativos: O UniWALM executa com sucesso tarefas de pegar e colocar, tarefas de memória complexas e manipulação dextrous bimanual, gerando linguagem consistente que guia suas ações.
+            <span class="source">Figura 5 do paper · Sajnani et al., arXiv:2610.28626</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Limitações e Considerações Finais</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Apesar dos resultados promissores, o UniWALM não é uma solução perfeita.</span> <span class="s" data-s="b7-p0-s1">A arquitetura depende de um backbone de vídeo de alta qualidade, o que pode ser computacionalmente custoso para implantação em tempo real em hardware embarcado limitado.</span> <span class="s" data-s="b7-p0-s2">Além disso, a geração de linguagem, embora eficaz como memória, ainda pode sofrer de alucinações ou inconsistências se o modelo não for suficientemente treinado para a tarefa específica.</span></p><p><span class="s" data-s="b7-p1-s0">Os experimentos no mundo real foram realizados em ambientes controlados com objetos bem definidos.</span> <span class="s" data-s="b7-p1-s1">A generalização para cenários não estruturados, com iluminação variável, oclusões severas ou objetos desconhecidos, ainda precisa ser explorada.</span> <span class="s" data-s="b7-p1-s2">Também é importante notar que o modelo foi avaliado principalmente em tarefas de manipulação de mesa.</span> <span class="s" data-s="b7-p1-s3">Sua eficácia em tarefas de locomoção ou manipulação de maior escala permanece em aberto.</span></p><p><span class="s" data-s="b7-p2-s0">Em resumo, o UniWALM representa um passo significativo na direção de robôs embodied mais integrados e cognitivamente plausíveis.</span> <span class="s" data-s="b7-p2-s1">Ao unificar visão, linguagem e ação em um único modelo e usar a linguagem como memória de trabalho, ele demonstra que é possível superar as limitações de arquiteturas modulares fragmentadas.</span> <span class="s" data-s="b7-p2-s2">No entanto, a eficiência computacional e a robustez em ambientes do mundo real continuam sendo desafios a serem enfrentados.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b8-t">Takeaways Principais</span></h3>
+          <p><span class="s" data-s="b8-c-s0">1.</span> <span class="s" data-s="b8-c-s1">UniWALM unifica vídeo, linguagem e ação em um único backbone de difusão, eliminando planejadores externos.</span> <span class="s" data-s="b8-c-s2">2.</span> <span class="s" data-s="b8-c-s3">A linguagem gerada internamente atua como memória de trabalho, reutilizada passo a passo, melhorando tarefas de longo prazo.</span> <span class="s" data-s="b8-c-s4">3.</span> <span class="s" data-s="b8-c-s5">O método FMC aumenta a estabilidade das ações geradas sem custo de inferência.</span> <span class="s" data-s="b8-c-s6">4.</span> <span class="s" data-s="b8-c-s7">Em benchmarks de memória, o UniWALM supera significativamente métodos baseados em buffers externos.</span></p>
+        </aside>
+
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">UniWALM unifica vídeo, linguagem e ação em um único backbone de difusão, eliminando a necessidade de planejadores externos ou VLMs separados.</span></li><li><span class="s" data-s="k1">A linguagem gerada internamente atua como memória de trabalho, sendo reutilizada no próximo passo, o que melhora drasticamente o desempenho em tarefas que exigem memória de longo prazo.</span></li><li><span class="s" data-s="k2">O método Flow Matching with Correction (FMC) estabiliza as trajetórias de ação durante o treinamento, resultando em movimentos mais precisos sem custo adicional na inferência.</span></li><li><span class="s" data-s="k3">Em benchmarks de memória como o RMBench, o UniWALM supera significativamente métodos que dependem de buffers de recuperação externos ou keyframes privilegiados.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.28626" rel="noopener">UniWALM: Unified World Action Language Model for Embodied Robot Control</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.28626" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

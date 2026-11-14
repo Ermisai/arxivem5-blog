@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Holdout Best-of-N: por que reusar scores de seleção infla a métrica e quanto custa corrigir — arXiv em 5</title>
+<meta name="description" content="Best-of-N escolhe a melhor de várias respostas geradas por um modelo. Mas se você usa os mesmos scores para escolher e avaliar, superestima o desempenho. Este paper mostra quando é possível avaliar sem viés e qual o custo em variância.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Holdout Best-of-N: por que reusar scores de seleção infla a métrica e quanto custa corrigir">
+<meta property="og:description" content="Best-of-N escolhe a melhor de várias respostas geradas por um modelo. Mas se você usa os mesmos scores para escolher e avaliar, superestima o desempenho. Este paper mostra quando é possível avaliar sem viés e qual o custo em variância.">
+<meta property="og:image" content="../../assets/papers/2610.08719/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Aprendizado por reforço</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.08719" rel="noopener">arXiv:2610.08719</a>
+    </div>
+    <h1><span class="s" data-s="t">Holdout Best-of-N: por que reusar scores de seleção infla a métrica e quanto custa corrigir</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Best-of-N escolhe a melhor de várias respostas geradas por um modelo.</span> <span class="s" data-s="d-s1">Mas se você usa os mesmos scores para escolher e avaliar, superestima o desempenho.</span> <span class="s" data-s="d-s2">Este paper mostra quando é possível avaliar sem viés e qual o custo em variância.</span></p>
+    <p class="byline">
+      <span>Shah et al.</span>
+      <span>10 min de leitura</span>
+<span>06/10/2026</span>    </p>
+    <div class="listen" data-article="2610.08719" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=xruLd9yE1Xk" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema: seleção e avaliação com os mesmos dados</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Best-of-N (BoN) é uma técnica simples para melhorar a qualidade de modelos de linguagem: você gera N candidatos de resposta, pede a um juiz (modelo ou humano) que dê uma nota para cada um, e escolhe o de maior score.</span> <span class="s" data-s="b0-p0-s1">A ideia é que, mesmo que o modelo erre às vezes, gerar várias tentativas aumenta a chance de pelo menos uma ser boa.</span></p><p><span class="s" data-s="b0-p1-s0">O problema aparece na hora de medir o quanto essa estratégia funciona.</span> <span class="s" data-s="b0-p1-s1">Se você usa os mesmos scores que serviram para escolher o vencedor para também calcular a recompensa esperada, está cometendo um viés clássico: a seleção favorece realizações de ruído aleatório que, por acaso, foram altas.</span> <span class="s" data-s="b0-p1-s2">Mesmo que todos os candidatos tenham a mesma média verdadeira, o máximo observado vai subir com N. Você acaba superestimando o desempenho real.</span></p><p><span class="s" data-s="b0-p2-s0">A solução óbvia é avaliar com scores independentes, mas isso custa chamadas extras ao juiz.</span> <span class="s" data-s="b0-p2-s1">Este paper, de Shrey Shah e Yinheng Li, pergunta: dado que você já coletou K scores independentes por candidato, é possível construir um estimador não enviesado da recompensa esperada da política Best-of-N que usa J desses scores para selecionar?</span> <span class="s" data-s="b0-p2-s2">E se for possível, quanto de variância você paga por não ter viés?</span></p>        <h2><span class="s" data-s="b1-h">O que o paper estuda</span></h2>
+<p><span class="s" data-s="b1-p0-s0">O cenário é o seguinte: você tem M candidatos gerados e observa uma matriz fixa de K scores independentes para cada um.</span> <span class="s" data-s="b1-p0-s1">A política de seleção escolhe uniformemente um subconjunto de tamanho N desses M candidatos, calcula a média de J scores para cada um dos N, e fica com o candidato de maior média (quebrando empates de forma uniforme).</span> <span class="s" data-s="b1-p0-s2">O valor dessa política é a média verdadeira do juiz para o candidato escolhido, esperada sobre todos os sorteios de subconjunto, empates e realizações de score.</span></p><p><span class="s" data-s="b1-p1-s0">A pergunta central: existe um estimador baseado apenas nessa matriz fixa que seja exatamente não enviesado para o valor da política, qualquer que seja a distribuição dos scores (desde que sejam independentes e estáveis por candidato)?</span> <span class="s" data-s="b1-p1-s1">A resposta é surpreendente: sim, se e somente se J &lt; K. Ou seja, você precisa reservar pelo menos um score por candidato que não foi usado na seleção.</span></p><p><span class="s" data-s="b1-p2-s0">O método proposto, chamado Holdout, usa J = K-1 scores para selecionar e deixa um score de fora para avaliar.</span> <span class="s" data-s="b1-p2-s1">Para eliminar o viés de qual score ficou de fora, o estimador faz uma média cíclica: roda a seleção K vezes, cada vez deixando uma coluna diferente de fora, depois tira a média sobre todos os subconjuntos de tamanho N e sobre todos os empates.</span> <span class="s" data-s="b1-p2-s2">O resultado é exatamente não enviesado.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.08719/figure1.webp" alt="Holdout separa a matriz de scores em colunas para seleção (J) e avaliação (K-J). A seleção usa a média das J colunas; a avaliação usa apenas os scores que ficaram de fora. O estimador final faz média sobre splits cíclicos, subconjuntos e empates." loading="lazy">
+          <figcaption>
+            Holdout separa a matriz de scores em colunas para seleção (J) e avaliação (K-J). A seleção usa a média das J colunas; a avaliação usa apenas os scores que ficaram de fora. O estimador final faz média sobre splits cíclicos, subconjuntos e empates.
+            <span class="source">Figura 1 do paper · Shah et al., arXiv:2610.08719</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Por que J precisa ser menor que K</span></h2>
+<p><span class="s" data-s="b3-p0-s0">A impossibilidade de avaliar sem viés quando J = K vem de um argumento de grau polinomial.</span> <span class="s" data-s="b3-p0-s1">O funcional Best-of-N, visto como função das leis de score, tem grau polinomial que cresce com J. Um estimador não enviesado baseado em K observações independentes por candidato só consegue estimar funcionais de grau até K. Quando J = K, o grau excede o orçamento de observações, e nenhum estimador baseado só na matriz fixa pode ser não enviesado para toda lei de score independente.</span></p><p><span class="s" data-s="b3-p1-s0">Mas há uma saída: se você adquirir um único score fresco adicional do vencedor depois de rodar a seleção com todos os K scores, consegue avaliar a política all-K de forma não enviesada.</span> <span class="s" data-s="b3-p1-s1">A mudança no design de observação — coletar um dado novo depois de ver o resultado — quebra a impossibilidade.</span> <span class="s" data-s="b3-p1-s2">O resultado negativo é sobre a matriz fixa, não sobre o que você pode fazer com dados adicionais bem escolhidos.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b4-t">Profundidade do seletor</span></h3>
+          <p><span class="s" data-s="b4-c-s0">O paper chama J de &#39;profundidade do seletor&#39; (selector depth).</span> <span class="s" data-s="b4-c-s1">Quando J = K-1 e K cresce, a política avaliada fica cada vez mais profunda.</span> <span class="s" data-s="b4-c-s2">Isso importa porque políticas com J maior tendem a ter valor esperado maior, mas também maior variância na avaliação.</span> <span class="s" data-s="b4-c-s3">O trade-off entre viés e variância muda conforme você escolhe J.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b5-h">Quanto custa não ter viés</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Para quantificar o custo de exigir estimadores não enviesados, os autores estudam o caso de scores Gaussianos independentes com variância comum σ² e tamanhos fixos M ≥ N ≥ 2.</span> <span class="s" data-s="b5-p0-s1">No regime J = K-1 (Holdout), o risco minimax não enviesado — o erro quadrático médio do melhor estimador não enviesado no pior caso — é da ordem de σ²/√K.</span> <span class="s" data-s="b5-p0-s2">Ou seja, para reduzir o erro pela metade, você precisa quadruplicar o número de scores por candidato.</span></p><p><span class="s" data-s="b5-p1-s0">Se você relaxar a exigência de não ter viés, consegue melhorar a taxa: estimadores enviesados atingem risco da ordem de σ²/K, uma melhora de √K.</span> <span class="s" data-s="b5-p1-s1">O estimador plug-in ingênuo, que simplesmente tira a média de todos os K scores de cada candidato e seleciona o maior, é enviesado mas tem variância menor.</span> <span class="s" data-s="b5-p1-s2">Em alguns cenários, especialmente quando as médias verdadeiras são bem separadas, o viés é pequeno e o plug-in ganha em erro quadrático médio total.</span></p><p><span class="s" data-s="b5-p2-s0">Para o caso especial de dois candidatos (N = M = 2), o paper deriva o estimador não enviesado de variância mínima quando a variância é conhecida, e mostra que a constante minimax assintótica não enviesada é exatamente 1/(π√2) ≈ 0.225.</span> <span class="s" data-s="b5-p2-s1">Holdout atinge essa constante sem precisar conhecer a variância, o que é uma propriedade notável: ele é adaptativo e ótimo ao mesmo tempo.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.08719/figure2.webp" alt="Erro quadrático médio (MSE) dividido por σ² para dois candidatos Gaussianos com médias iguais. Holdout (linha sólida) não usa informação sobre a variância e ainda assim atinge a constante ótima assintótica. Curvas tracejadas assumem variância conhecida." loading="lazy">
+          <figcaption>
+            Erro quadrático médio (MSE) dividido por σ² para dois candidatos Gaussianos com médias iguais. Holdout (linha sólida) não usa informação sobre a variância e ainda assim atinge a constante ótima assintótica. Curvas tracejadas assumem variância conhecida.
+            <span class="source">Figura 2 do paper · Shah et al., arXiv:2610.08719</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Complexidade e escalabilidade</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Calcular a média cíclica sobre todos os subconjuntos, splits e empates parece caro, mas os autores mostram que dá para fazer em O(MK log M) operações.</span> <span class="s" data-s="b7-p0-s1">Isso é tratável mesmo para pools grandes.</span> <span class="s" data-s="b7-p0-s2">A ideia é agrupar os cálculos de forma inteligente, aproveitando que muitos subconjuntos compartilham a mesma estrutura de empates.</span></p><p><span class="s" data-s="b7-p1-s0">Quando a profundidade do seletor J é fixa (não cresce com K), a avaliação cíclica de scores limitados tem risco O(K⁻¹) uniforme no tamanho do pool.</span> <span class="s" data-s="b7-p1-s1">Isso significa que, se você está disposto a avaliar uma política de profundidade fixa (por exemplo, sempre J=1), consegue convergência linear em K, independentemente de quantos candidatos você gerou.</span> <span class="s" data-s="b7-p1-s2">Essa garantia uniforme é útil para planejar orçamentos de avaliação.</span></p>        <h2><span class="s" data-s="b8-h">Experimentos: conferindo a teoria</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Todos os experimentos usam scores sintéticos com leis conhecidas, o que permite comparar estimativas com valores verdadeiros calculados analiticamente.</span> <span class="s" data-s="b8-p0-s1">Primeiro, os autores testam cinco pools fixos com scores Bernoulli e alvos binomiais exatos, para verificar o tratamento de empates.</span> <span class="s" data-s="b8-p0-s2">Depois, rodam controles Gaussianos independentes com M=16 e N=4, comparando reuso (enviesado) e Holdout na mesma profundidade.</span> <span class="s" data-s="b8-p0-s3">Em todos os casos, as diferenças entre Holdout e o alvo verdadeiro ficam dentro de 1.81 erros padrão de Monte Carlo de zero.</span></p><p><span class="s" data-s="b8-p1-s0">Um experimento com profundidade fixa J=1, M=N=8 candidatos, médias uniformes e desvio padrão 0.6 compara avaliação cíclica (que usa a matriz inteira de 8K scores) com um split fixo adaptativo (que usaria 8 + K-1 chamadas se você só coletasse os scores necessários).</span> <span class="s" data-s="b8-p1-s1">A avaliação cíclica tem menor erro quadrático médio por pool, mas o split fixo tem menor variância populacional total quando você considera o custo em número de chamadas ao juiz.</span> <span class="s" data-s="b8-p1-s2">A escolha depende do que você quer otimizar.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.08719/table2.webp" alt="MSE de Holdout versus plug-in enviesado para K=16, σ=1, em nove configurações de médias e tamanhos. Quando todas as médias são iguais, Holdout vence em pools pequenos; quando há dois candidatos empatados no topo, o plug-in vence em todas as células." loading="lazy">
+          <figcaption>
+            MSE de Holdout versus plug-in enviesado para K=16, σ=1, em nove configurações de médias e tamanhos. Quando todas as médias são iguais, Holdout vence em pools pequenos; quando há dois candidatos empatados no topo, o plug-in vence em todas as células.
+            <span class="source">Tabela 2 do paper · Shah et al., arXiv:2610.08719</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">Além de dois candidatos</span></h2>
+<p><span class="s" data-s="b10-p0-s0">A Tabela 2 mostra uma fatia de um estudo Gaussiano com K=16 e variância um, comparando Holdout e o plug-in enviesado em nove células que variam M, N e o vetor de médias verdadeiras.</span> <span class="s" data-s="b10-p0-s1">Quando todas as médias são iguais (candidatos indistinguíveis), Holdout tem menor MSE para (M,N) = (4,2) e (8,4), mas perde para (8,8).</span> <span class="s" data-s="b10-p0-s2">Quando há dois candidatos empatados no topo, o plug-in ganha em todas as nove células.</span> <span class="s" data-s="b10-p0-s3">Quando as médias são bem separadas, os dois métodos concordam até a precisão numérica.</span></p><p><span class="s" data-s="b10-p1-s0">Esses resultados mostram que a escolha entre Holdout e plug-in depende do cenário.</span> <span class="s" data-s="b10-p1-s1">Se você espera que os candidatos sejam parecidos, Holdout oferece proteção contra viés.</span> <span class="s" data-s="b10-p1-s2">Se você sabe que há alguns candidatos claramente melhores, o viés do plug-in é pequeno e a redução de variância compensa.</span> <span class="s" data-s="b10-p1-s3">O paper não recomenda um método universal, mas fornece as ferramentas para entender o trade-off.</span></p>        <h2><span class="s" data-s="b11-h">Teste de estresse: dependência entre scores</span></h2>
+<p><span class="s" data-s="b11-p0-s0">A teoria assume scores independentes entre candidatos.</span> <span class="s" data-s="b11-p0-s1">Para testar o que acontece quando essa premissa falha, os autores rodam um experimento com um modelo equicorrelacionado: cada score de um candidato compartilha um choque primitivo comum com correlação ρ. Eles usam M=16, N=4, K=8, σ=0.4 e variam ρ em {0, 0.1, 0.4, 0.8}, mantendo as mesmas 40.000 pools de médias Beta(2,2) para todas as correlações.</span></p><p><span class="s" data-s="b11-p1-s0">O viés total contra o alvo de scores independentes é decomposto em dois componentes: viés de avaliação (Holdout menos o valor verdadeiro da seleção dependente) e viés de lei do seletor (valor verdadeiro da seleção dependente menos o alvo independente).</span> <span class="s" data-s="b11-p1-s1">Em ρ=0, ambos são zero dentro do erro de Monte Carlo.</span> <span class="s" data-s="b11-p1-s2">Em ρ=0.1, o viés de avaliação é +0.055 e o de lei do seletor é -0.016, resultando em +0.039 total.</span> <span class="s" data-s="b11-p1-s3">Em ρ=0.4, os componentes são +0.183 e (valor cortado no texto).</span> <span class="s" data-s="b11-p1-s4">O viés de lei do seletor é negativo porque a dependência faz a seleção favorecer candidatos com choques comuns altos, que depois regridem à média.</span> <span class="s" data-s="b11-p1-s5">Esse efeito parcialmente compensa o viés de avaliação neste experimento, mas a direção e magnitude dependem da estrutura de dependência.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b12-t">Limitação: independência é essencial</span></h3>
+          <p><span class="s" data-s="b12-c-s0">Holdout é exatamente não enviesado apenas quando os scores são independentes entre candidatos.</span> <span class="s" data-s="b12-c-s1">Se o juiz tem viés sistemático ou os scores compartilham ruído comum, o estimador fica enviesado.</span> <span class="s" data-s="b12-c-s2">O teste de estresse mostra que dependência moderada (ρ=0.1) já introduz viés de 0.04, comparável ao desvio padrão do estimador.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b13-h">Orçamentos e intervalos de confiança</span></h2>
+<p><span class="s" data-s="b13-p0-s0">O paper discute brevemente como planejar orçamentos de avaliação.</span> <span class="s" data-s="b13-p0-s1">Se você tem um número fixo de chamadas ao juiz, pode escolher entre avaliar muitos pools com poucos scores cada (alto K, baixo número de pools) ou poucos pools com muitos scores (baixo K, muitos pools).</span> <span class="s" data-s="b13-p0-s2">A taxa de convergência O(K⁻¹) para profundidade fixa sugere que aumentar K dentro de cada pool é eficiente, mas a variância entre pools também importa.</span></p><p><span class="s" data-s="b13-p1-s0">Para intervalos de confiança, os autores mencionam que a distribuição de Holdout é complicada — envolve máximos, médias cíclicas e empates — e não tem forma fechada simples.</span> <span class="s" data-s="b13-p1-s1">Bootstrap ou aproximações assintóticas são caminhos possíveis, mas o paper não desenvolve isso em detalhe.</span> <span class="s" data-s="b13-p1-s2">Na prática, você provavelmente vai querer rodar Monte Carlo ou usar desigualdades de concentração para quantificar incerteza.</span></p>        <h2><span class="s" data-s="b14-h">O que fica em aberto</span></h2>
+<p><span class="s" data-s="b14-p0-s0">O paper resolve a questão de possibilidade (J &lt; K é necessário e suficiente) e caracteriza o custo assintótico de não ter viés no caso Gaussiano.</span> <span class="s" data-s="b14-p0-s1">Mas várias perguntas ficam abertas.</span> <span class="s" data-s="b14-p0-s2">Primeiro, os experimentos são todos sintéticos; não há avaliação com juízes reais (modelos ou humanos) nem candidatos gerados por LLMs de verdade.</span> <span class="s" data-s="b14-p0-s3">A teoria não diz nada sobre como escolher K ou J na prática, dado um orçamento fixo e uma distribuição desconhecida de qualidade de candidatos.</span></p><p><span class="s" data-s="b14-p1-s0">Segundo, a análise de dependência é apenas um teste de estresse; não há teoria para quanto viés esperar sob modelos de dependência específicos, nem métodos para corrigir ou detectar violações de independência.</span> <span class="s" data-s="b14-p1-s1">Terceiro, o paper não trata de juízes enviesados ou de desalinhamento entre score do juiz e preferência humana, que são preocupações centrais em aplicações reais de RLHF.</span></p><p><span class="s" data-s="b14-p2-s0">Finalmente, a comparação com plug-in é feita apenas em MSE; não há análise de risco sob perda assimétrica (onde superestimar é pior que subestimar, ou vice-versa) nem discussão de como usar esses estimadores para tomar decisões (por exemplo, escolher entre duas políticas).</span> <span class="s" data-s="b14-p2-s1">O foco é puramente em estimar um número, não em otimizar uma política downstream.</span></p>        <h2><span class="s" data-s="b15-h">Por que isso importa</span></h2>
+<p><span class="s" data-s="b15-p0-s0">Best-of-N é uma das formas mais simples de melhorar modelos de linguagem sem retreinar, e é amplamente usada em sistemas de produção.</span> <span class="s" data-s="b15-p0-s1">Mas se você não avalia corretamente, pode estar superestimando os ganhos e tomando decisões ruins sobre quantos candidatos gerar ou qual juiz usar.</span> <span class="s" data-s="b15-p0-s2">Este paper mostra que o problema de viés é fundamental: não dá para avaliar sem viés usando todos os scores que você coletou para selecionar.</span></p><p><span class="s" data-s="b15-p1-s0">A boa notícia é que a solução — reservar um score por candidato — é simples de implementar e tem custo controlado.</span> <span class="s" data-s="b15-p1-s1">A má notícia é que o custo em variância é real: você precisa de O(K) scores para reduzir o erro como O(1/√K) sem viés, enquanto estimadores enviesados conseguem O(1/K).</span> <span class="s" data-s="b15-p1-s2">A escolha entre Holdout e plug-in depende do cenário, e este paper fornece as ferramentas teóricas e empíricas para fazer essa escolha de forma informada.</span></p><p><span class="s" data-s="b15-p2-s0">Para pesquisadores que trabalham com RLHF, reranking ou qualquer sistema que escolhe entre candidatos gerados, este paper é uma leitura essencial.</span> <span class="s" data-s="b15-p2-s1">Ele formaliza um problema que muita gente resolve na intuição e mostra onde a intuição falha.</span> <span class="s" data-s="b15-p2-s2">E para quem desenvolve benchmarks ou métricas de avaliação, a mensagem é clara: reusar scores de seleção para avaliação não é só uma aproximação conveniente, é uma fonte de viés que você precisa entender e, se possível, evitar.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Avaliar Best-of-N com os mesmos scores usados para selecionar superestima o desempenho. Estimadores não enviesados existem se e só se você reservar pelo menos um score por candidato que não foi usado na seleção.</span></li><li><span class="s" data-s="k1">Holdout usa K-1 scores para selecionar e 1 para avaliar, fazendo média cíclica. É exatamente não enviesado, mas paga custo em variância: erro O(1/√K) vs O(1/K) de métodos enviesados.</span></li><li><span class="s" data-s="k2">Experimentos sintéticos mostram que plug-in enviesado pode ter menor MSE quando candidatos têm médias separadas. A escolha depende do cenário; o paper fornece teoria para entender o trade-off, não uma receita universal.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.08719" rel="noopener">Holdout Best-of-N: Unbiased Evaluation and Its Cost</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.08719" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

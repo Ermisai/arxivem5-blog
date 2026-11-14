@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Segmentação Médica: Adaptação de Foundation Models vs. Treinamento Específico — arXiv em 5</title>
+<meta name="description" content="Um estudo controlado compara a adaptação do DINOv2 com U-Nets treinados do zero, mostrando que a vantagem dos modelos baseados em pré-treinamento reside exclusivamente na generalização fora da distribuição.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Segmentação Médica: Adaptação de Foundation Models vs. Treinamento Específico">
+<meta property="og:description" content="Um estudo controlado compara a adaptação do DINOv2 com U-Nets treinados do zero, mostrando que a vantagem dos modelos baseados em pré-treinamento reside exclusivamente na generalização fora da distribuição.">
+<meta property="og:image" content="../../assets/papers/2611.14519/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Imagem</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.14519" rel="noopener">arXiv:2611.14519</a>
+    </div>
+    <h1><span class="s" data-s="t">Segmentação Médica: Adaptação de Foundation Models vs. Treinamento Específico</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um estudo controlado compara a adaptação do DINOv2 com U-Nets treinados do zero, mostrando que a vantagem dos modelos baseados em pré-treinamento reside exclusivamente na generalização fora da distribuição.</span></p>
+    <p class="byline">
+      <span>Kutlusan et al.</span>
+      <span>4 min de leitura</span>
+<span>10/11/2026</span>    </p>
+    <div class="listen" data-article="2611.14519" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=I885lzBBsNQ" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Dilema da Generalização Clínica</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A segmentação de imagens médicas enfrenta um obstáculo silencioso mas crítico: o desvio de distribuição (distribution shift).</span> <span class="s" data-s="b0-p0-s1">Modelos treinados em um hospital frequentemente falham quando implantados em outro, devido a diferenças em scanners, protocolos e populações de pacientes.</span> <span class="s" data-s="b0-p0-s2">Enquanto a literatura recente celebra os Foundation Models (modelos base) pré-treinados em grandes conjuntos de imagens naturais como a solução para esse problema, as evidências comparativas são frequentemente limitadas.</span></p><p><span class="s" data-s="b0-p1-s0">Estudos anteriores costumam comparar modelos adaptados contra uma única baseline específica de tarefa, muitas vezes mal configurada, e avaliá-los apenas dentro da distribuição de treinamento.</span> <span class="s" data-s="b0-p1-s1">Isso cria uma ilusão de superioridade que não se sustenta em cenários clínicos reais.</span> <span class="s" data-s="b0-p1-s2">O paper &#34;Medical Image Segmentation: Foundation Model Adaptation versus Task-Specific Training&#34; propõe corrigir essa lacuna com uma comparação controlada e honesta.</span></p>        <h2><span class="s" data-s="b1-h">Desenhando a Comparação Justa</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Os autores, da Brunel University of London, estruturam o experimento em dois eixos independentes.</span> <span class="s" data-s="b1-p0-s1">O primeiro eixo, &#34;Arquitetura&#34;, compara um Foundation Model adaptado contra arquiteturas task-specific (U-Net e ResU-Net) treinadas do zero.</span> <span class="s" data-s="b1-p0-s2">O segundo eixo, &#34;Adaptação&#34;, varia a quantidade de parâmetros ajustados no Foundation Model, desde o congelamento total até o fine-tuning completo.</span></p><p><span class="s" data-s="b1-p1-s0">O Foundation Model escolhido é o DINOv2-Small, um encoder genérico de visão computacional pré-treinado em imagens naturais, sem exposição prévia a dados médicos ou máscaras de segmentação.</span> <span class="s" data-s="b1-p1-s1">Isso é intencional: se um modelo genérico pequeno for suficiente, modelos maiores ou específicos seriam redundantes.</span> <span class="s" data-s="b1-p1-s2">Os comparadores são U-Nets clássicos e ResU-Nets, configurados sob o protocolo nnU-Net, garantindo que as baselines sejam competitivas com o estado da arte.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.14519/figure1.webp" alt="Mapa do experimento: compara U-Nets treinados do zero contra o DINOv2 adaptado em três domínios médicos. A interseção ocorre no LoRA rank 32." loading="lazy">
+          <figcaption>
+            Mapa do experimento: compara U-Nets treinados do zero contra o DINOv2 adaptado em três domínios médicos. A interseção ocorre no LoRA rank 32.
+            <span class="source">Figura 1 do paper · Kutlusan et al., arXiv:2611.14519</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Metodologia: Domínios e Vazamento de Dados</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O estudo abrange três domínios médicos: colonoscopia (pólipos), ultrassom de mama e dermoscopia de pele.</span> <span class="s" data-s="b3-p0-s1">Cada domínio possui uma fonte de treinamento e múltiplos conjuntos de teste externos (out-of-distribution, OOD).</span> <span class="s" data-s="b3-p0-s2">Uma descoberta metodológica crucial foi a detecção de vazamento de dados: um conjunto de teste popular (CVC-T) continha imagens idênticas a outro benchmark (CVC-ColonDB).</span> <span class="s" data-s="b3-p0-s3">Os autores relatam isso transparentemente e recalculam as métricas excluindo esse conjunto duplicado para evitar inflação artificial de performance.</span></p>        <h2><span class="s" data-s="b4-h">Mecânica da Adaptação: LoRA e BitFit</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Em vez de retreinar todo o DINOv2, os autores testam métodos de adaptação eficiente.</span> <span class="s" data-s="b4-p0-s1">O BitFit ajusta apenas os termos de viés (bias terms), enquanto o LoRA (Low-Rank Adaptation) adiciona matrizes de baixa rank às camadas de atenção.</span> <span class="s" data-s="b4-p0-s2">Isso permite explorar quanta capacidade é realmente necessária.</span> <span class="s" data-s="b4-p0-s3">A hipótese era que a quantidade de adaptação necessária dependeria do método ou do tamanho do dataset.</span> <span class="s" data-s="b4-p0-s4">Os resultados sugerem que a capacidade necessária é determinada pela complexidade do domínio de imagem, não pelo método de adaptação em si.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.14519/figure3.webp" alt="Arquiteturas: detalha os U-Nets clássicos e o DINOv2 com LoRA, mostrando o que é treinado e o que é congelado." loading="lazy">
+          <figcaption>
+            Arquiteturas: detalha os U-Nets clássicos e o DINOv2 com LoRA, mostrando o que é treinado e o que é congelado.
+            <span class="source">Figura 3 do paper · Kutlusan et al., arXiv:2611.14519</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b6-h">Resultados: Paridade In-Domain, Déficit OOD</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Os resultados revelam uma dicotomia clara.</span> <span class="s" data-s="b6-p0-s1">Dentro da distribuição (in-domain), onde os dados de teste vêm da mesma fonte que o treinamento, não há vantagem significativa para o DINOv2 adaptado.</span> <span class="s" data-s="b6-p0-s2">O U-Net plano atinge um DSC (Dice Similarity Coefficient) de 0.8803, contra 0.8780 do DINOv2, uma diferença dentro da margem de erro de medição.</span> <span class="s" data-s="b6-p0-s3">Isso ocorre com um terço dos parâmetros e sem pré-treinamento.</span> <span class="s" data-s="b6-p0-s4">Se os dados de treinamento são abundantes e a distribuição é estável, o U-Net treinado do zero é suficiente e eficiente.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.14519/figure4.webp" alt="Gráficos de barras: mostram que o modelo adaptado supera os treinados do zero em dados externos (OOD)." loading="lazy">
+          <figcaption>
+            Gráficos de barras: mostram que o modelo adaptado supera os treinados do zero em dados externos (OOD).
+            <span class="source">Figura 4 do paper · Kutlusan et al., arXiv:2611.14519</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">A Vantagem Real: Generalização Fora da Distribuição</span></h2>
+<p><span class="s" data-s="b8-p0-s0">A situação inverte-se completamente nos conjuntos de teste externos (OOD).</span> <span class="s" data-s="b8-p0-s1">Em todos os oito conjuntos OOD testados, o DINOv2 adaptado supera as versões task-specific.</span> <span class="s" data-s="b8-p0-s2">O ganho não é uniforme: varia de -0.008 a -0.107 em déficit de performance dos U-Nets.</span> <span class="s" data-s="b8-p0-s3">Isso confirma que o valor principal dos Foundation Models não é a precisão absoluta em dados conhecidos, mas a robustez a mudanças de domínio.</span> <span class="s" data-s="b8-p0-s4">A adaptação permite que o modelo generalize melhor para novas instituições e protocolos.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b9-t">O Custo da Generalização</span></h3>
+          <p><span class="s" data-s="b9-c-s0">A adaptação não é isenta de custos.</span> <span class="s" data-s="b9-c-s1">O DINOv2 tende a perder lesões pequenas e delinear contornos finos com menos precisão do que o U-Net.</span> <span class="s" data-s="b9-c-s2">Em dados OOD, o modelo adaptado falhou em identificar 13 pólipos pequenos que o U-Net plano detectou corretamente.</span> <span class="s" data-s="b9-c-s3">A vantagem em sobreposição (DSC) mascara erros de detecção localizados.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b10-h">Eficiência da Adaptação</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Um achado importante é que pouco ajuste é necessário.</span> <span class="s" data-s="b10-p0-s1">A transição de um encoder congelado para o ajuste apenas dos biases (BitFit) captura a maior parte do benefício disponível.</span> <span class="s" data-s="b10-p0-s2">Adicionar LoRA com rank 32 (cerca de 2.7% dos parâmetros) iguala ou supera o fine-tuning completo em métricas de sobreposição.</span> <span class="s" data-s="b10-p0-s3">No entanto, o LoRA mostrou menor precisão em algumas métricas, cobrindo mais área ao redor da lesão.</span> <span class="s" data-s="b10-p0-s4">Isso sugere que a adaptação eficiente é viável, mas requer seleção cuidadosa de métricas.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.14519/figure6.webp" alt="Exemplos visuais: compara as máscaras de segmentação, destacando a precisão do DINOv2 em lesões pequenas." loading="lazy">
+          <figcaption>
+            Exemplos visuais: compara as máscaras de segmentação, destacando a precisão do DINOv2 em lesões pequenas.
+            <span class="source">Figura 6 do paper · Kutlusan et al., arXiv:2611.14519</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b12-h">Limitações e Conclusões</span></h2>
+<p><span class="s" data-s="b12-p0-s0">O estudo tem limitações.</span> <span class="s" data-s="b12-p0-s1">A comparação de adaptação é baseada em um único backbone (DINOv2-Small), e resultados podem variar para modelos maiores ou específicos para medicina.</span> <span class="s" data-s="b12-p0-s2">Além disso, a ordem de performance in-domain não se transfere confiavelmente para OOD, indicando que validações internas não garantem sucesso clínico.</span> <span class="s" data-s="b12-p0-s3">Os autores concluem que a adaptação de Foundation Models é justificada quando a generalização entre instituições é crítica, mas que a capacidade de adaptação deve ser selecionada com base no domínio alvo, não no método.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Fora da distribuição (dados de novas instituições), a adaptação do DINOv2 supera consistentemente U-Nets treinados do zero.</span></li><li><span class="s" data-s="k1">Dentro da distribuição (dados de treinamento), U-Nets competitivos alcançam desempenho equivalente com menos parâmetros.</span></li><li><span class="s" data-s="k2">A adaptação eficiente (LoRA) captura a maioria dos benefícios, sem necessidade de fine-tuning completo.</span></li><li><span class="s" data-s="k3">Modelos adaptados tendem a falhar em lesões pequenas e contornos finos comparados a arquiteturas específicas.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.14519" rel="noopener">Medical Image Segmentation: Foundation Model Adaptation versus Task-Specific Training</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.14519" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

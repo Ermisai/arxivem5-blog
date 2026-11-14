@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Redes neurais que se copiam bit a bit: auto-reprodução exata com pesos ternários e aritmética inteira — arXiv em 5</title>
+<meta name="description" content="Um paper de lógica computacional mostra como uma rede neural de threshold fixa pode armazenar outras redes em seu estado e executá-las, permitindo que uma rede armazenada reconstrua a si mesma — pesos, biases e tudo — em cada geração, sem perda de informação.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redes neurais que se copiam bit a bit: auto-reprodução exata com pesos ternários e aritmética inteira">
+<meta property="og:description" content="Um paper de lógica computacional mostra como uma rede neural de threshold fixa pode armazenar outras redes em seu estado e executá-las, permitindo que uma rede armazenada reconstrua a si mesma — pesos, biases e tudo — em cada geração, sem perda de informação.">
+<meta property="og:image" content="../../assets/papers/2610.12251/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Redes neurais</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.12251" rel="noopener">arXiv:2610.12251</a>
+    </div>
+    <h1><span class="s" data-s="t">Redes neurais que se copiam bit a bit: auto-reprodução exata com pesos ternários e aritmética inteira</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um paper de lógica computacional mostra como uma rede neural de threshold fixa pode armazenar outras redes em seu estado e executá-las, permitindo que uma rede armazenada reconstrua a si mesma — pesos, biases e tudo — em cada geração, sem perda de informação.</span></p>
+    <p class="byline">
+      <span>Norton</span>
+      <span>8 min de leitura</span>
+<span>08/10/2026</span>    </p>
+    <div class="listen" data-article="2610.12251" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=tvVRd-W40-U" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema: máquinas que copiam a si mesmas</span></h2>
+<p><span class="s" data-s="b0-p0-s0">McCulloch e Pitts inventaram redes de unidades threshold binárias nos anos 1940 como um cálculo lógico da atividade neural.</span> <span class="s" data-s="b0-p0-s1">Von Neumann usou essa notação para projetar o computador de programa armazenado e, mais tarde, perguntou: como uma máquina pode construir uma cópia de si mesma?</span> <span class="s" data-s="b0-p0-s2">Ele respondeu com um construtor universal — uma máquina que, dada a descrição de outra máquina, constrói essa máquina; e, alimentada com sua própria descrição e um mecanismo de cópia, constrói uma cópia de si mesma junto com a descrição.</span></p><p><span class="s" data-s="b0-p1-s0">Os autômatos auto-reprodutores que se seguiram — todos eles autômatos celulares — reproduzem configurações de um espaço celular sob uma regra de transição fixa.</span> <span class="s" data-s="b0-p1-s1">A regra não muda; o que se reproduz é a configuração.</span> <span class="s" data-s="b0-p1-s2">Este paper faz a mesma pergunta para redes de threshold: os pesos de uma rede neural podem ser reproduzidos exatamente pela dinâmica de outra rede neural?</span></p><p><span class="s" data-s="b0-p2-s0">A resposta é sim, e a chave está nos inteiros.</span> <span class="s" data-s="b0-p2-s1">Uma rede treinada que emite uma aproximação de seus pesos perde informação a cada geração.</span> <span class="s" data-s="b0-p2-s2">Mas uma órbita de pré-ativações inteiras carrega um conjunto de pesos bit a bit e sobrevive a qualquer perturbação de uma pré-ativação abaixo de meio.</span> <span class="s" data-s="b0-p2-s3">Este trabalho constrói uma rede ternária fixa — pesos em {-1, 0, 1} e thresholds inteiros — que mantém outras redes como dados e as executa.</span></p>        <h2><span class="s" data-s="b1-h">A arquitetura: um anel de bancos de registros</span></h2>
+<p><span class="s" data-s="b1-p0-s0">A ideia central é separar a rede que executa da rede que é executada.</span> <span class="s" data-s="b1-p0-s1">A rede fixa tem uma estrutura de estado especial: um anel de K bancos de registros, cada banco com S registros e uma fita de L células.</span> <span class="s" data-s="b1-p0-s2">Um registro representa uma unidade de threshold de duas entradas de uma rede armazenada.</span> <span class="s" data-s="b1-p0-s3">A cada passo, a rede fixa avalia um registro do banco ativo.</span></p><p><span class="s" data-s="b1-p1-s0">A rede fixa é como a regra de transição de um autômato celular: ela mantém seus pesos fixos.</span> <span class="s" data-s="b1-p1-s1">O que se reproduz é a rede armazenada — seus pesos e biases incluídos.</span> <span class="s" data-s="b1-p1-s2">A netlist fixa tem profundidade 19 e é ternária: cada peso é -1, 0 ou +1.</span> <span class="s" data-s="b1-p1-s3">O paper prova (Teorema 3.2) que essa netlist de profundidade 19 computa o passo seguinte a partir de qualquer estado, para qualquer escolha de janela, anel, banco e fita.</span></p><p><span class="s" data-s="b1-p2-s0">Uma passagem completa sobre um banco avalia a netlist armazenada nele.</span> <span class="s" data-s="b1-p2-s1">Cada unidade ternária pode ser compilada em registros (Lemas 3.3 e 3.4).</span> <span class="s" data-s="b1-p2-s2">Isso significa que qualquer rede ternária pode ser armazenada e executada pela máquina em anel.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.12251/figure1.webp" alt="A máquina em anel Mα mantém K bancos de S registros cada, com K fitas de L células. Cada registro codifica uma unidade de threshold de duas entradas. A rede fixa avalia um registro por passo, percorrendo o banco ativo." loading="lazy">
+          <figcaption>
+            A máquina em anel Mα mantém K bancos de S registros cada, com K fitas de L células. Cada registro codifica uma unidade de threshold de duas entradas. A rede fixa avalia um registro por passo, percorrendo o banco ativo.
+            <span class="source">Figura 1 do paper · Norton, arXiv:2610.12251</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">O organismo: 143 registros que se reproduzem</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O paper constrói um &#39;organismo&#39; de 143 registros que implementa o esquema de von Neumann: um construtor universal que lê a descrição de uma rede de sua fita, constrói essa rede no próximo banco, copia a descrição para a próxima fita e passa o controle para o que construiu.</span></p><p><span class="s" data-s="b3-p1-s0">Quando esse organismo é iniciado com sua própria descrição, ele se reproduz.</span> <span class="s" data-s="b3-p1-s1">As cópias se acumulam até que cada banco contenha uma, e a partir daí o estado se repete a cada K gerações (Teoremas 4.5 e 4.6).</span> <span class="s" data-s="b3-p1-s2">O organismo reconstrói a si mesmo — pesos incluídos — em cada geração, sem perda de informação.</span></p><p><span class="s" data-s="b3-p2-s0">O decodificador do organismo funciona em fases.</span> <span class="s" data-s="b3-p2-s1">Ele lê a descrição da rede bit a bit, decodifica cada &#39;codon&#39; (uma unidade de código) e escreve cada registro sob o braço de construção.</span> <span class="s" data-s="b3-p2-s2">Um modo de cópia duplica a descrição para a próxima fita.</span> <span class="s" data-s="b3-p2-s3">A separação entre construção e cópia é exatamente a de von Neumann.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.12251/figure2.webp" alt="O decodificador do organismo opera um passo por passagem. A variável z conta os bits de uma fase: um codon em &#39;codon&#39;, os oito bits que um gate determina ou os primeiros oito de um registro escapado em &#39;gate&#39;, os bits de endereço em &#39;addr&#39;." loading="lazy">
+          <figcaption>
+            O decodificador do organismo opera um passo por passagem. A variável z conta os bits de uma fase: um codon em &#39;codon&#39;, os oito bits que um gate determina ou os primeiros oito de um registro escapado em &#39;gate&#39;, os bits de endereço em &#39;addr&#39;.
+            <span class="source">Figura 2 do paper · Norton, arXiv:2610.12251</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Computador universal: SUBLEQ em profundidade 13</span></h2>
+<p><span class="s" data-s="b5-p0-s0">O paper escala a construção para um computador universal.</span> <span class="s" data-s="b5-p0-s1">SUBLEQ é um computador de instrução única: cada instrução subtrai o conteúdo de um endereço de outro, armazena o resultado e salta se o resultado for menor ou igual a zero.</span> <span class="s" data-s="b5-p0-s2">É Turing-completo.</span></p><p><span class="s" data-s="b5-p1-s0">O paper constrói uma família HA de redes ternárias que executam SUBLEQ em 2^A palavras de A bits.</span> <span class="s" data-s="b5-p1-s1">O passo tem profundidade 13 em qualquer largura de palavra.</span> <span class="s" data-s="b5-p1-s2">O membro com palavras de oito bits tem 17.598 unidades (Proposição 5.9).</span> <span class="s" data-s="b5-p1-s3">Uma leitura e o branch precisam cada um de dois níveis de unidades ternárias (Lema 5.7, Observação 5.5).</span></p><p><span class="s" data-s="b5-p2-s0">Um programa de 21 instruções constrói qualquer string de bytes a partir de uma descrição run-length dela.</span> <span class="s" data-s="b5-p2-s1">Um programa de 27 instruções — que separa construção de cópia como von Neumann fez — faz o host emitir a serialização de si mesmo, sua memória e sua fita (Teoremas 6.9 e 6.12).</span> <span class="s" data-s="b5-p2-s2">Isso é o esquema de quine em uma máquina universal: um mapa que imprime seu próprio código.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b6-t">Por que pesos ternários e inteiros?</span></h3>
+          <p><span class="s" data-s="b6-c-s0">Pesos em {-1, 0, 1} e pré-ativações inteiras dão a cada órbita uma margem de 1/2.</span> <span class="s" data-s="b6-c-s1">Replicar cada unidade r vezes multiplica a margem por r. Isso é suficiente contra ruído de qualquer tamanho nas pré-ativações.</span> <span class="s" data-s="b6-c-s2">Contra flips de saída (o tipo de ruído que von Neumann considerou), a proteção vale apenas abaixo de um limiar inversamente proporcional ao fan-in.</span></p>
+        </aside>
+        <figure class="figure">
+          <img src="../../assets/papers/2610.12251/figure3.webp" alt="Uma geração do host armazenado. Cada passagem avalia os registros de S e executa um passo do host na janela. A primeira passagem limpa o próximo banco e a próxima fita, retornando cada cabeça à célula 0. P* então lê τS duas vezes." loading="lazy">
+          <figcaption>
+            Uma geração do host armazenado. Cada passagem avalia os registros de S e executa um passo do host na janela. A primeira passagem limpa o próximo banco e a próxima fita, retornando cada cabeça à célula 0. P* então lê τS duas vezes.
+            <span class="source">Figura 3 do paper · Norton, arXiv:2610.12251</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Robustez a ruído: margens exatas</span></h2>
+<p><span class="s" data-s="b8-p0-s0">O paper analisa dois tipos de ruído.</span> <span class="s" data-s="b8-p0-s1">Primeiro, perturbações nas pré-ativações: enquanto nenhuma perturbação atingir 1/2, a órbita permanece exata.</span> <span class="s" data-s="b8-p0-s2">Replicar cada unidade r vezes multiplica essa margem por r, protegendo contra ruído de qualquer magnitude.</span></p><p><span class="s" data-s="b8-p1-s0">Segundo, flips de saída: o tipo de ruído que von Neumann considerou, onde a saída de uma unidade é invertida com certa probabilidade.</span> <span class="s" data-s="b8-p1-s1">Aqui a proteção é limitada.</span> <span class="s" data-s="b8-p1-s2">A probabilidade de erro cresce com o fan-in: o limiar de ruído tolerável é inversamente proporcional ao número de entradas.</span></p><p><span class="s" data-s="b8-p2-s0">O paper prova esses resultados em Rocq (antigo Coq), um assistente de provas.</span> <span class="s" data-s="b8-p2-s1">Isso significa que as garantias de correção e robustez são formalmente verificadas, não apenas argumentadas.</span> <span class="s" data-s="b8-p2-s2">Os tamanhos exatos e as profundidades são dados para cada parâmetro.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.12251/figure4.webp" alt="Probabilidade de erro por passo ao sair da órbita sob ruído gaussiano de leitura com desvio s, comparada aos limites da Seção 8. As linhas conectam valores computados; as barras de erro são intervalos exatos de 95% para contagem de Poisson." loading="lazy">
+          <figcaption>
+            Probabilidade de erro por passo ao sair da órbita sob ruído gaussiano de leitura com desvio s, comparada aos limites da Seção 8. As linhas conectam valores computados; as barras de erro são intervalos exatos de 95% para contagem de Poisson.
+            <span class="source">Figura 4 do paper · Norton, arXiv:2610.12251</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">O que não é reproduzido</span></h2>
+<p><span class="s" data-s="b10-p0-s0">A rede fixa em si não é reproduzida.</span> <span class="s" data-s="b10-p0-s1">Sua netlist é ternária e compila em registros pelo Lema 3.4, mas seu estado — que contém a janela, os bancos e as fitas — não cabe em sua própria janela.</span> <span class="s" data-s="b10-p0-s2">Uma rede que também reconstrói a rede que a executa precisa de outra construção.</span></p><p><span class="s" data-s="b10-p1-s0">Isso é uma limitação fundamental do esquema.</span> <span class="s" data-s="b10-p1-s1">A auto-reprodução acontece no nível da rede armazenada, não da rede fixa.</span> <span class="s" data-s="b10-p1-s2">É análogo a um autômato celular: a regra de transição não se reproduz; o que se reproduz é a configuração.</span> <span class="s" data-s="b10-p1-s3">Aqui, a netlist fixa é a regra, e a rede armazenada é a configuração.</span></p>        <h2><span class="s" data-s="b11-h">Questões em aberto</span></h2>
+<p><span class="s" data-s="b11-p0-s0">O paper deixa várias questões abertas.</span> <span class="s" data-s="b11-p0-s1">Primeira: se um passo ternário de SUBLEQ pode ter profundidade abaixo de 11, já que o Lema 5.7 e a Observação 5.5 limitam apenas uma leitura e o branch.</span> <span class="s" data-s="b11-p0-s2">Segunda: quantos registros uma rede armazenada auto-reprodutora precisa no mínimo.</span> <span class="s" data-s="b11-p0-s3">O organismo atual tem 143; há um limite inferior?</span></p><p><span class="s" data-s="b11-p1-s0">Terceira, e talvez a mais importante: quanto ruído uma execução reprodutora tolera quando as perturbações são correlacionadas ou derivam.</span> <span class="s" data-s="b11-p1-s1">A análise da Seção 8 assume independência, o que exclui esses casos.</span> <span class="s" data-s="b11-p1-s2">Na prática, ruído correlacionado e deriva são comuns, e a robustez real pode ser menor do que os limites provados sugerem.</span></p><p><span class="s" data-s="b11-p2-s0">O paper também não explora variantes da arquitetura.</span> <span class="s" data-s="b11-p2-s1">A máquina em anel é uma escolha, não a única possível.</span> <span class="s" data-s="b11-p2-s2">Estruturas de dados diferentes — pilhas, árvores, grafos — poderiam permitir auto-reprodução com propriedades diferentes, talvez com menos registros ou maior robustez a certos tipos de ruído.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b12-t">Serialização e verificação formal</span></h3>
+          <p><span class="s" data-s="b12-c-s0">O paper define um formato de serialização exato para as netlists, baseado em safetensors.</span> <span class="s" data-s="b12-c-s1">Quatro vetores de inteiros codificam bias, fan-ins, arestas (com peso no sinal) e índices de próximo estado.</span> <span class="s" data-s="b12-c-s2">Para o host SUBLEQ de oito bits, isso resulta em 2.057 bits de estado, 17.598 unidades e profundidade 13.</span> <span class="s" data-s="b12-c-s3">Todos os resultados são provados em Rocq.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b13-h">Por que isso importa</span></h2>
+<p><span class="s" data-s="b13-p0-s0">Este trabalho conecta três tradições: redes neurais, teoria da computação e auto-reprodução.</span> <span class="s" data-s="b13-p0-s1">Ele mostra que redes de threshold — o modelo clássico de McCulloch e Pitts — podem implementar o esquema de von Neumann de forma exata, sem perda de informação entre gerações.</span></p><p><span class="s" data-s="b13-p1-s0">A exatidão vem dos inteiros.</span> <span class="s" data-s="b13-p1-s1">Redes treinadas com pesos reais perdem informação a cada geração.</span> <span class="s" data-s="b13-p1-s2">Redes ternárias com pré-ativações inteiras carregam pesos bit a bit.</span> <span class="s" data-s="b13-p1-s3">Isso não é apenas uma curiosidade teórica: é uma propriedade que pode ser explorada em hardware resistente a ruído ou em sistemas que precisam de garantias formais de correção.</span></p><p><span class="s" data-s="b13-p2-s0">O paper também demonstra que pesos ternários não são uma limitação severa.</span> <span class="s" data-s="b13-p2-s1">Uma rede ternária de profundidade 13 executa um computador universal.</span> <span class="s" data-s="b13-p2-s2">Uma de profundidade 19 executa outras redes.</span> <span class="s" data-s="b13-p2-s3">Isso sugere que a quantização extrema — pesos em {-1, 0, 1} — é mais poderosa do que se poderia esperar, especialmente quando combinada com aritmética inteira e profundidade adequada.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Uma rede neural ternária fixa pode armazenar outras redes em seu estado e executá-las; um &#39;organismo&#39; de 143 registros reconstrói a si mesmo — pesos incluídos — em cada geração, sem perda.</span></li><li><span class="s" data-s="k1">Um computador universal SUBLEQ de 17.598 unidades ternárias opera em profundidade 13 e pode emitir a serialização completa de si mesmo, implementando o esquema de quine de von Neumann.</span></li><li><span class="s" data-s="k2">Pré-ativações inteiras dão margem de 1/2 contra ruído: replicar cada unidade r vezes multiplica a margem por r, protegendo contra perturbações de qualquer magnitude (mas não contra flips de saída acima de um limiar).</span></li><li><span class="s" data-s="k3">A rede fixa não se reproduz — apenas a rede armazenada o faz. Questões abertas: profundidade mínima de SUBLEQ, número mínimo de registros e robustez a ruído correlacionado ou com deriva.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.12251" rel="noopener">Universal Construction and Exact Self-Reproduction in Ternary McCulloch-Pitts Networks</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.12251" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

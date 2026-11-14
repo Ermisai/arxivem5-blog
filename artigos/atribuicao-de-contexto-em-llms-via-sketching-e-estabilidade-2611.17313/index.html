@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Atribuição de Contexto em LLMs via Sketching e Estabilidade — arXiv em 5</title>
+<meta name="description" content="Este paper propõe um algoritmo para estimar a importância de tokens em prompts de modelos de linguagem usando técnicas de sketching, reduzindo drasticamente o custo computacional em comparação com métodos exatos, sob a premissa de estabilidade.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Atribuição de Contexto em LLMs via Sketching e Estabilidade">
+<meta property="og:description" content="Este paper propõe um algoritmo para estimar a importância de tokens em prompts de modelos de linguagem usando técnicas de sketching, reduzindo drasticamente o custo computacional em comparação com métodos exatos, sob a premissa de estabilidade.">
+<meta property="og:image" content="../../assets/papers/2611.17313/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>LLMs</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.17313" rel="noopener">arXiv:2611.17313</a>
+    </div>
+    <h1><span class="s" data-s="t">Atribuição de Contexto em LLMs via Sketching e Estabilidade</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Este paper propõe um algoritmo para estimar a importância de tokens em prompts de modelos de linguagem usando técnicas de sketching, reduzindo drasticamente o custo computacional em comparação com métodos exatos, sob a premissa de estabilidade.</span></p>
+    <p class="byline">
+      <span>Liaw et al.</span>
+      <span>5 min de leitura</span>
+<span>12/11/2026</span>    </p>
+    <div class="listen" data-article="2611.17313" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Atribuição de Contexto</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Em sistemas de IA modernos, especialmente aqueles que utilizam Retrieval-Augmented Generation (RAG) ou processam documentos longos, é crucial entender quais partes do contexto (o prompt) realmente influenciaram a saída gerada.</span> <span class="s" data-s="b0-p0-s1">Isso serve para atribuir crédito a fontes externas, identificar informações redundantes que podem ser podadas para economizar tokens e até detectar ataques de envenenamento de dados.</span> <span class="s" data-s="b0-p0-s2">O problema formal é quantificar, contrafactualmente, como a remoção de partes do contexto alteraria o comportamento do modelo.</span></p><p><span class="s" data-s="b0-p1-s0">Uma abordagem padrão é a atribuição Leave-One-Out (LOO).</span> <span class="s" data-s="b0-p1-s1">Dado um prompt com n tokens, queremos saber o valor de uma função de medição escalar ϕ quando cada token i é removido individualmente.</span> <span class="s" data-s="b0-p1-s2">Se ϕ for, por exemplo, o log-probabilidade da resposta gerada, o valor LOO para o token i é a diferença entre a pontuação do prompt completo e a pontuação do prompt sem o token i. A solução trivial é executar o modelo n vezes, removendo um token de cada vez.</span> <span class="s" data-s="b0-p1-s3">Para prompts longos, isso é computacionalmente proibitivo.</span></p>        <h2><span class="s" data-s="b1-h">Limitações dos Métodos Existentes</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Abordagens anteriores tentam contornar o custo高昂 das avaliações exatas usando modelos substitutos (surrogate models), escores baseados em gradientes ou heurísticas diversas.</span> <span class="s" data-s="b1-p0-s1">Embora rápidas, essas técnicas não oferecem garantias formais de precisão para modelos de linguagem modernos.</span> <span class="s" data-s="b1-p0-s2">Elas frequentemente falham quando há interações não-lineares fortes entre os tokens ou quando a linearização local subestima o impacto real da remoção de um contexto.</span></p><p><span class="s" data-s="b1-p1-s0">O paper de Liaw, Mehta, Velegkas e Zhou, pesquisadores do Google Research e da Yale University, propõe uma solução diferente: um algoritmo probabilístico com garantias rigorosas.</span> <span class="s" data-s="b1-p1-s1">O objetivo não é apenas ser rápido, mas garantir que a estimativa dos valores LOO esteja dentro de uma margem de erro ε com probabilidade constante, usando um número significativamente menor de chamadas ao modelo.</span></p>        <h2><span class="s" data-s="b2-h">A Ideia Central: Sketching e Estabilidade</span></h2>
+<p><span class="s" data-s="b2-p0-s0">O algoritmo baseia-se na expansão de Taylor da função de medição ϕ em torno do zero (onde todos os tokens estão desativados).</span> <span class="s" data-s="b2-p0-s1">Os coeficientes dessa expansão são tensores que capturam as interações de ordem superior entre os tokens.</span> <span class="s" data-s="b2-p0-s2">A chave teórica do paper é a propriedade de &#39;estabilidade&#39;.</span> <span class="s" data-s="b2-p0-s3">Uma função é considerada estável se os normas dos seus tensores de Taylor decaem suficientemente rápido.</span> <span class="s" data-s="b2-p0-s4">Isso significa que as interações de alta ordem entre muitos tokens são pequenas, permitindo que possamos aproximar a função com precisão usando apenas ordens baixas da expansão.</span></p><p><span class="s" data-s="b2-p1-s0">Os autores demonstram que, sob essa suposição de estabilidade, é possível estimar todos os valores LOO com erro ε usando apenas O(sqrt(log(1/ε))/ε) chamadas ao modelo.</span> <span class="s" data-s="b2-p1-s1">Isso é uma melhoria significativa em relação a métodos anteriores que poderiam exigir O(1/ε²) chamadas.</span> <span class="s" data-s="b2-p1-s2">Além disso, eles provam um limite inferior Ω(sqrt(log(1/ε))/ε), mostrando que seu algoritmo é quase ótimo em termos de complexidade de consulta.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.17313/figure1.webp" alt="Gráfico que confirma a estabilidade do modelo Llama-3.2-1B. Mostra que os coeficientes de Taylor decaem conforme a ordem aumenta, validando a premissa teórica necessária para o algoritmo funcionar com eficiência." loading="lazy">
+          <figcaption>
+            Gráfico que confirma a estabilidade do modelo Llama-3.2-1B. Mostra que os coeficientes de Taylor decaem conforme a ordem aumenta, validando a premissa teórica necessária para o algoritmo funcionar com eficiência.
+            <span class="source">Figura 1 do paper · Liaw et al., arXiv:2611.17313</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b4-h">Mecanismo: Sketching de Circuitos Aritméticos</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Para implementar essa estimativa, os autores utilizam técnicas de sketching de circuitos aritméticos.</span> <span class="s" data-s="b4-p0-s1">Em vez de calcular os coeficientes de Taylor diretamente, que é intratável, eles usam amostragem aleatória para estimar projeções desses coeficientes.</span> <span class="s" data-s="b4-p0-s2">A abordagem ingênua seria aplicar diferenciação direta (forward differentiation) ao circuito do modelo.</span> <span class="s" data-s="b4-p0-s3">No entanto, isso resulta em alta variância nas estimativas, exigindo muitas amostras para convergir.</span></p><p><span class="s" data-s="b4-p1-s0">A inovação técnica principal é o que eles chamam de &#39;Backward-Forward Sketching&#39;.</span> <span class="s" data-s="b4-p1-s1">Eles observam que é possível aplicar a diferenciação direta ao circuito de backpropagação.</span> <span class="s" data-s="b4-p1-s2">A backpropagação calcula exatamente o gradiente de primeira ordem.</span> <span class="s" data-s="b4-p1-s3">Ao aplicar sketching de ordem superior a este circuito auxiliar, eles conseguam estimar fatias específicas dos tensores de Taylor (correspondentes a cada token removido) com variância muito menor do que o método de forward-only.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.17313/figure2.webp" alt="Comparação visual da precisão. A coluna do meio (backward-forward) mostra estimativas mais próximas da verdade (polinômios de Taylor de referência) e menor dispersão em comparação com o método forward-only da coluna direita." loading="lazy">
+          <figcaption>
+            Comparação visual da precisão. A coluna do meio (backward-forward) mostra estimativas mais próximas da verdade (polinômios de Taylor de referência) e menor dispersão em comparação com o método forward-only da coluna direita.
+            <span class="source">Figura 2 do paper · Liaw et al., arXiv:2611.17313</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b6-h">Por que Backward-Forward é Melhor?</span></h2>
+<p><span class="s" data-s="b6-p0-s0">A redução de variância é crucial.</span> <span class="s" data-s="b6-p0-s1">No sketching padrão, a variância do estimador escala com a norma máxima do tensor.</span> <span class="s" data-s="b6-p0-s2">No sketching backward-forward, a variância escala com a soma das normas dos vetores de fatia.</span> <span class="s" data-s="b6-p0-s3">Intuitivamente, ao esboçar fatias disjuntas em vez do tensor inteiro, reduzimos a quantidade de aleatoriedade introduzida pelo processo de amostragem.</span> <span class="s" data-s="b6-p0-s4">Isso permite que o algoritmo alcance a mesma precisão com menos chamadas ao modelo.</span></p><p><span class="s" data-s="b6-p1-s0">O algoritmo estima primeiro uma medida proxy da variância para cada token.</span> <span class="s" data-s="b6-p1-s1">Com base nisso, ele identifica os tokens com maior incerteza e avalia esses casos específicos de forma exata (ou com mais amostras), enquanto usa estimativas mais baratas para os tokens menos sensíveis.</span> <span class="s" data-s="b6-p1-s2">Essa estratégia adaptativa, combinada com a redução de variância do sketching, é o que permite atingir o limite de complexidade otimizado.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.17313/figure3.webp" alt="Validação do proxy de erro. O gráfico mostra que a estimativa teórica da variância (curvas sólidas) acompanha de perto a variância empírica observada nas simulações, permitindo confiar no controle de erro do algoritmo." loading="lazy">
+          <figcaption>
+            Validação do proxy de erro. O gráfico mostra que a estimativa teórica da variância (curvas sólidas) acompanha de perto a variância empírica observada nas simulações, permitindo confiar no controle de erro do algoritmo.
+            <span class="source">Figura 3 do paper · Liaw et al., arXiv:2611.17313</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Resultados Empíricos e Limitações</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Os autores validam sua abordagem no modelo Llama-3.2-1B.</span> <span class="s" data-s="b8-p0-s1">Eles verificam empiricamente que a função de medição do modelo exibe o decaimento de coeficientes esperado pela teoria da estabilidade.</span> <span class="s" data-s="b8-p0-s2">Isso é importante, pois a garantia teórica só se aplica se a estabilidade for verdadeira.</span> <span class="s" data-s="b8-p0-s3">Os resultados mostram que o algoritmo estima os valores LOO com precisão competitiva, superando os métodos de sketching forward-only em termos de variância para o mesmo orçamento de computação.</span></p><p><span class="s" data-s="b8-p1-s0">É importante notar as limitações.</span> <span class="s" data-s="b8-p1-s1">O método assume que a função de medição é estável.</span> <span class="s" data-s="b8-p1-s2">Embora os experimentos sugiram que LLMs modernos satisfazem essa condição, não é uma garantia universal para todos os modelos ou todas as funções de medição.</span> <span class="s" data-s="b8-p1-s3">Além disso, o paper foca em atribuição leave-one-out; extensões para remoção simultânea de grupos de tokens são mencionadas, mas o foco principal é a remoção individual.</span> <span class="s" data-s="b8-p1-s4">O algoritmo também requer a estimação dos coeficientes de Taylor, o que introduz uma complexidade adicional na implementação prática.</span></p>        <h2><span class="s" data-s="b9-h">Conclusão</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Este paper oferece uma contribuição técnica sólida para a área de interpretabilidade de modelos de linguagem.</span> <span class="s" data-s="b9-p0-s1">Ao combinar teoria de sketching, análise de circuitos aritméticos e a propriedade de estabilidade, os autores fornecem um método com garantias formais de precisão e eficiência.</span> <span class="s" data-s="b9-p0-s2">Para desenvolvedores e pesquisadores que precisam analisar a influência de contextos em LLMs sem o custo proibitivo de reavaliações exaustivas, essa abordagem representa um avanço significativo em termos de fundamentação teórica e eficiência computacional.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Atribuição Leave-One-Out (LOO) exata requer n chamadas ao modelo; o novo método reduz isso para O(sqrt(log(1/eps))/eps).</span></li><li><span class="s" data-s="k1">A técnica central é aplicar diferenciação direta ao circuito de backpropagação, reduzindo a variância do estimador.</span></li><li><span class="s" data-s="k2">O algoritmo depende da propriedade de estabilidade dos coeficientes de Taylor da função de medição.</span></li><li><span class="s" data-s="k3">Resultados empíricos no Llama-3.2-1B validam a teoria, mostrando decaimento consistente dos coeficientes.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.17313" rel="noopener">Sketching Language Models for Context Attribution</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.17313" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

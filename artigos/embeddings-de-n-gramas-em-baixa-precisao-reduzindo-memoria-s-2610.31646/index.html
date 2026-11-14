@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Embeddings de N-gramas em Baixa Precisão: Reduzindo Memória sem Perder Performance — arXiv em 5</title>
+<meta name="description" content="O paper investiga a quantização de tabelas de embeddings de n-gramas em modelos de linguagem. Mostra que usar 4 bits economiza 75% da memória com perda de performance inferior a 1%, oferecendo uma rota prática para escalar memória de contexto.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Embeddings de N-gramas em Baixa Precisão: Reduzindo Memória sem Perder Performance">
+<meta property="og:description" content="O paper investiga a quantização de tabelas de embeddings de n-gramas em modelos de linguagem. Mostra que usar 4 bits economiza 75% da memória com perda de performance inferior a 1%, oferecendo uma rota prática para escalar memória de contexto.">
+<meta property="og:image" content="../../assets/papers/2610.31646/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>LLMs</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.31646" rel="noopener">arXiv:2610.31646</a>
+    </div>
+    <h1><span class="s" data-s="t">Embeddings de N-gramas em Baixa Precisão: Reduzindo Memória sem Perder Performance</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">O paper investiga a quantização de tabelas de embeddings de n-gramas em modelos de linguagem.</span> <span class="s" data-s="d-s1">Mostra que usar 4 bits economiza 75% da memória com perda de performance inferior a 1%, oferecendo uma rota prática para escalar memória de contexto.</span></p>
+    <p class="byline">
+      <span>Chung et al.</span>
+      <span>8 min de leitura</span>
+<span>22/10/2026</span>    </p>
+    <div class="listen" data-article="2610.31646" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=pkHo3jltpFM" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Custo Oculto da Memória de N-gramas</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Modelos de linguagem modernos, especialmente os de pesos abertos, têm adotado uma técnica para melhorar seu desempenho: tabelas de embeddings de n-gramas.</span> <span class="s" data-s="b0-p0-s1">Diferente dos embeddings de tokens individuais, que representam uma única palavra ou subpalavra, essas tabelas armazenam representações aprendidas de sequências curtas de tokens consecutivos, como bigramas (pares) ou trigramas (trios).</span> <span class="s" data-s="b0-p0-s2">A ideia é simples: ao processar um texto, o modelo recupera essas representações pré-calculadas para complementar o contexto imediato, o que ajuda na previsão do próximo token.</span></p><p><span class="s" data-s="b0-p1-s0">No entanto, essa abordagem tem um preço alto em termos de uso de memória.</span> <span class="s" data-s="b0-p1-s1">Como o número possível de combinações de tokens é enorme, as tabelas precisam ser massivas para cobrir o vocabulário e as sequências relevantes.</span> <span class="s" data-s="b0-p1-s2">Um exemplo extremo é o DeepSeek-V4.1-Flash, que aloca 196 bilhões de parâmetros apenas para sua memória de n-gramas, chamada Engram.</span> <span class="s" data-s="b0-p1-s3">Esse volume de memória consome recursos significativos de GPU e limita a escalabilidade desses modelos.</span></p><p><span class="s" data-s="b0-p2-s0">O problema central que os autores deste paper abordam é se é possível reduzir drasticamente esse custo de memória sem sacrificar os ganhos de performance que essas tabelas proporcionam.</span> <span class="s" data-s="b0-p2-s1">A premissa é que, assim como a quantização de pesos de rede neural (weights) tem sido eficaz, a quantização das próprias tabelas de lookup pode ser uma solução viável.</span> <span class="s" data-s="b0-p2-s2">A questão não é apenas &#39;podemos comprimir?&#39;, mas &#39;como comprimir de forma inteligente para manter a utilidade semântica dos n-gramas?&#39;.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.31646/figure1.webp" alt="Ilustração do mecanismo de lookup de n-gramas e sua representação em baixa precisão. Observe como os índices de 2 bits selecionam valores de um codebook compartilhado, multiplicados por um fator de escala." loading="lazy">
+          <figcaption>
+            Ilustração do mecanismo de lookup de n-gramas e sua representação em baixa precisão. Observe como os índices de 2 bits selecionam valores de um codebook compartilhado, multiplicados por um fator de escala.
+            <span class="source">Figura 1 do paper · Chung et al., arXiv:2610.31646</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">Mecanismo: Como Funcionam as Tabelas de N-gramas</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Para entender a proposta, precisamos detalhar a arquitetura.</span> <span class="s" data-s="b2-p0-s1">Seguindo o método do Over-Tokenized Transformer, o modelo utiliza quatro tabelas de embeddings: duas para bigramas e duas para trigramas.</span> <span class="s" data-s="b2-p0-s2">Para cada token na sequência de entrada, o modelo identifica o bigrama e o trigramas que terminam naquele token.</span> <span class="s" data-s="b2-p0-s3">Em seguida, ele realiza quatro buscas independentes nas tabelas, recuperando quatro embeddings diferentes.</span></p><p><span class="s" data-s="b2-p1-s0">Esses quatro embeddings, cada um com dimensão d/4, são concatenados para formar um vetor de dimensão d, que é então somado ao embedding original do token atual.</span> <span class="s" data-s="b2-p1-s1">Matematicamente, isso pode ser descrito como: u_t = E[x_t] + Concat(T_1, T_2, T_3, T_4).</span> <span class="s" data-s="b2-p1-s2">As funções de hash determinam qual linha da tabela corresponde à sequência específica de tokens, permitindo que múltiplos n-gramas compartilhem o mesmo embedding se houver colisão de hash, uma técnica comum para gerenciar o espaço de estado.</span></p>        <h2><span class="s" data-s="b3-h">A Proposta: Quantização com Codebooks e Escalas</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Os autores propõem substituir o armazenamento de precisão dupla (16 bits) ou simples (32 bits) desses embeddings por uma representação de baixa precisão.</span> <span class="s" data-s="b3-p0-s1">A técnica central envolve dois componentes: um codebook (livro de códigos) compartilhado e fatores de escala individuais por embedding.</span></p><p><span class="s" data-s="b3-p1-s0">O codebook contém um conjunto pequeno de valores representativos.</span> <span class="s" data-s="b3-p1-s1">Se usarmos b bits para indexar, o codebook terá 2^b valores.</span> <span class="s" data-s="b3-p1-s2">Por exemplo, com 2 bits, temos 4 valores possíveis.</span> <span class="s" data-s="b3-p1-s3">Cada componente de cada embedding não é armazenado diretamente; em vez disso, armazena-se um índice de b bits que aponta para o valor mais próximo no codebook.</span> <span class="s" data-s="b3-p1-s4">Isso reduz drasticamente o espaço de bits por componente.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b4-t">O Papel Crucial da Escala</span></h3>
+          <p><span class="s" data-s="b4-c-s0">Como os embeddings têm magnitudes diferentes, simplesmente mapear para um codebook normalizado perde informação.</span> <span class="s" data-s="b4-c-s1">Cada embedding possui um fator de escala de 16 bits (s_r) que multiplica o valor selecionado do codebook.</span> <span class="s" data-s="b4-c-s2">A reconstrução é dada por: w_hat = s_r * c_q.</span> <span class="s" data-s="b4-c-s3">A escolha de s_r é crítica para a precisão final.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b5-h">Escolhendo os Valores do Codebook</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os autores investigaram três famílias de codebooks para determinar a melhor estratégia de quantização.</span> <span class="s" data-s="b5-p0-s1">A primeira é o codebook uniforme, com valores igualmente espaçados (por exemplo, {-1, -1/3, 1/3, 1} para 2 bits).</span> <span class="s" data-s="b5-p0-s2">A segunda utiliza quantis de uma distribuição normal padrão, concentrando mais valores perto de zero, o que pode ser benéfico se a distribuição dos embeddings for gaussiana.</span> <span class="s" data-s="b5-p0-s3">A terceira, e mais sofisticada, é o codebook ajustado via algoritmo Lloyd-Max.</span></p><p><span class="s" data-s="b5-p1-s0">O método Lloyd-Max aprende os valores do codebook diretamente a partir dos embeddings treinados do modelo.</span> <span class="s" data-s="b5-p1-s1">Os embeddings são normalizados por sua raiz quadrada da média quadrática (RMS) para permitir o compartilhamento do codebook entre diferentes embeddings.</span> <span class="s" data-s="b5-p1-s2">O algoritmo itera atribuindo componentes aos valores mais próximos do codebook e atualizando os valores do codebook como a média dos componentes atribuídos.</span> <span class="s" data-s="b5-p1-s3">Essa abordagem &#39;data-driven&#39; tende a capturar melhor a estrutura intrínseca dos dados.</span></p>        <h2><span class="s" data-s="b6-h">Ajustando a Escala dos Embeddings</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Além do codebook, a forma de calcular o fator de escala (s_r) para cada embedding individual impacta diretamente a fidelidade da reconstrução.</span> <span class="s" data-s="b6-p0-s1">Os autores testaram três métodos: escala baseada no máximo (maior valor absoluto do embedding), escala RMS (magnitude geral do vetor) e escala ajustada ao erro (minimizando o erro de quantização).</span></p><p><span class="s" data-s="b6-p1-s0">Os resultados preliminares indicaram que a escolha da escala é mais importante do que a escolha específica do codebook.</span> <span class="s" data-s="b6-p1-s1">Por exemplo, codebooks uniformes com escala baseada no máximo tiveram desempenho significativamente pior (retendo apenas 58% da melhoria de performance) comparado a codebooks ajustados ao erro, que mantiveram cerca de 86% da melhoria.</span> <span class="s" data-s="b6-p1-s2">Isso sugere que normalizar corretamente a magnitude de cada embedding antes da quantização é o passo mais crítico para preservar a informação.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.31646/figure2.webp" alt="Gráfico mostrando a relação entre memória economizada e performance retida. Em 4 bits, economiza-se ~75% da memória mantendo &gt;99% da melhoria de performance em diversos modelos." loading="lazy">
+          <figcaption>
+            Gráfico mostrando a relação entre memória economizada e performance retida. Em 4 bits, economiza-se ~75% da memória mantendo &gt;99% da melhoria de performance em diversos modelos.
+            <span class="source">Figura 2 do paper · Chung et al., arXiv:2610.31646</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Resultados: 4 Bits é o Ponto Doce</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Os experimentos foram conduzidos em cinco modelos treinados do zero: nanochat (26M e 50M parâmetros), GPT-2-family (30M) e Llama-family (31M e 322M).</span> <span class="s" data-s="b8-p0-s1">Em todos os casos, as tabelas padrão tinham cerca de 262k embeddings.</span> <span class="s" data-s="b8-p0-s2">A métrica principal foi a porcentagem da melhoria de loss de validação (comparado a um modelo sem tabelas) que foi preservada após a compressão.</span></p><p><span class="s" data-s="b8-p1-s0">O achado mais robusto é que tabelas de 4 bits economizam aproximadamente 75% da memória da tabela enquanto retêm mais de 99% da melhoria de performance proporcionada pelas tabelas de precisão completa (16 bits).</span> <span class="s" data-s="b8-p1-s1">Isso é surpreendentemente eficiente.</span> <span class="s" data-s="b8-p1-s2">Reduzir para 3 bits ainda é viável, mas 2 bits começa a causar quedas mais perceptíveis, retendo entre 85% e 91% da melhoria, apesar de economizar 86-87% da memória.</span></p>        <h2><span class="s" data-s="b9-h">Precisão Híbrida: Bigramas vs. Trigramas</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Os autores também exploraram se bigramas e trigramas têm sensibilidades diferentes à compressão.</span> <span class="s" data-s="b9-p0-s1">Eles testaram combinações de bits (2, 3 e 4 bits) para cada tipo de n-grama.</span> <span class="s" data-s="b9-p0-s2">A conclusão é que bigramas são mais sensíveis à perda de precisão do que trigramas.</span> <span class="s" data-s="b9-p0-s3">Alocar mais bits para bigramas resulta em melhor retenção de performance para o mesmo custo total de memória.</span></p><p><span class="s" data-s="b9-p1-s0">A configuração híbrida ideal encontrada foi usar 4 bits para bigramas e 3 bits para trigramas.</span> <span class="s" data-s="b9-p1-s1">Essa combinação retém 98,9-99,4% da melhoria de performance em todos os modelos testados, enquanto economiza 77-78% da memória total das tabelas.</span> <span class="s" data-s="b9-p1-s2">Isso oferece um guia prático para engenheiros: não trate todos os n-gramas da mesma forma; priorize a precisão nas sequências mais curtas e frequentes.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.31646/figure6.webp" alt="Recuperação de performance via fine-tuning. Após a compressão agressiva (2 bits), uma fase curta de ajuste fino recupera a maior parte da perda de performance." loading="lazy">
+          <figcaption>
+            Recuperação de performance via fine-tuning. Após a compressão agressiva (2 bits), uma fase curta de ajuste fino recupera a maior parte da perda de performance.
+            <span class="source">Figura 6 do paper · Chung et al., arXiv:2610.31646</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b11-h">Recuperação via Fine-Tuning</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Uma limitação da quantização estática é a perda irrevogável de informação.</span> <span class="s" data-s="b11-p0-s1">No entanto, os autores mostraram que um período curto de fine-tuning (ajuste fino) após a compressão pode recuperar uma parte significativa da performance perdida.</span> <span class="s" data-s="b11-p0-s2">Isso ocorre porque o modelo pode ajustar seus outros parâmetros para compensar as imprecisões introduzidas pelos embeddings de baixa precisão.</span> <span class="s" data-s="b11-p0-s3">Em casos extremos de 2 bits, o fine-tuning recupera grande parte da queda, tornando a abordagem ainda mais atraente para cenários onde a memória é extremamente restrita.</span></p>        <h2><span class="s" data-s="b12-h">Aplicação em Modelos Grandes e Reinvestimento</span></h2>
+<p><span class="s" data-s="b12-p0-s0">O estudo não se limitou a modelos pequenos.</span> <span class="s" data-s="b12-p0-s1">Os autores aplicaram a técnica a modelos grandes existentes, como DeepSeek-V4.1-Flash e Qwen3.8-Flash-Next.</span> <span class="s" data-s="b12-p0-s2">Nesses casos, a compressão para baixa precisão economizou entre 47% e 55% da memória das tabelas, com aumentos de perplexidade inferiores a 1,2%.</span> <span class="s" data-s="b12-p0-s3">Isso confirma que a técnica é escalável e não apenas uma curiosidade de modelos pequenos.</span></p><p><span class="s" data-s="b12-p1-s0">Além de economizar memória, os autores exploraram o conceito de &#39;reinvestimento&#39;.</span> <span class="s" data-s="b12-p1-s1">Se você economiza 75% da memória das tabelas, pode usar esse espaço para aumentar o número de embeddings (de 262k para 1M, por exemplo).</span> <span class="s" data-s="b12-p1-s2">Eles descobriram que tabelas maiores, mesmo em baixa precisão, podem superar o desempenho das tabelas menores de precisão completa.</span> <span class="s" data-s="b12-p1-s3">Ou seja, a compressão não serve apenas para economizar, mas para permitir modelos mais expressivos com o mesmo orçamento de hardware.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.31646/figure4.webp" alt="Resultados em modelos de grande escala (DeepSeek e Qwen). A compressão uniforme e híbrida mostra economia de memória consistente com impacto mínimo na perplexidade." loading="lazy">
+          <figcaption>
+            Resultados em modelos de grande escala (DeepSeek e Qwen). A compressão uniforme e híbrida mostra economia de memória consistente com impacto mínimo na perplexidade.
+            <span class="source">Figura 4 do paper · Chung et al., arXiv:2610.31646</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b14-h">Limitações e Considerações Finais</span></h2>
+<p><span class="s" data-s="b14-p0-s0">Apesar dos resultados promissores, há limitações a considerar.</span> <span class="s" data-s="b14-p0-s1">O estudo foca em modelos treinados do zero ou ajustados, e a generalização para arquiteturas muito diferentes pode exigir mais validação.</span> <span class="s" data-s="b14-p0-s2">Além disso, a recuperação via fine-tuning requer tempo de computação adicional, o que pode não ser viável em todos os ciclos de desenvolvimento.</span> <span class="s" data-s="b14-p0-s3">A escolha do codebook Lloyd-Max, embora eficaz, adiciona uma etapa de pós-processamento que precisa ser gerenciada.</span></p><p><span class="s" data-s="b14-p1-s0">Outro ponto é a complexidade de implementação.</span> <span class="s" data-s="b14-p1-s1">A recuperação de embeddings em baixa precisão requer lógica específica para multiplicar o índice pelo codebook e depois pelo fator de escala.</span> <span class="s" data-s="b14-p1-s2">Embora o custo computacional por token seja baixo, a latência de lookup em tabelas grandes e fragmentadas pode variar dependendo da implementação de hardware.</span> <span class="s" data-s="b14-p1-s3">Ainda assim, o paper estabelece que a quantização de n-gramas é uma ferramenta prática e poderosa para otimização de memória em LLMs.</span></p>        <h2><span class="s" data-s="b15-h">Conclusão</span></h2>
+<p><span class="s" data-s="b15-p0-s0">Este paper demonstra que as tabelas de embeddings de n-gramas, uma componente chave para o desempenho de LLMs modernos, podem ser comprimidas agressivamente sem prejuízo significativo.</span> <span class="s" data-s="b15-p0-s1">Ao usar codebooks ajustados e escalas adequadas, é possível reduzir o uso de memória em até 75% com 4 bits, mantendo a quase totalidade da melhoria de performance.</span> <span class="s" data-s="b15-p0-s2">Para aplicações onde o espaço é crítico, a combinação de baixa precisão, precisão híbrida (priorizando bigramas) e fine-tuning pós-compressão oferece um caminho viável para construir modelos mais eficientes e escaláveis.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Tabelas de n-gramas em 4 bits economizam ~75% da memória mantendo &gt;99% da melhoria de performance em modelos treinados do zero.</span></li><li><span class="s" data-s="k1">A escolha da escala do embedding é mais crítica para a precisão do que a estrutura do codebook; escalas ajustadas ao erro superam as uniformes.</span></li><li><span class="s" data-s="k2">Bigramas são mais sensíveis à compressão que trigramas; alocação híbrida (4 bits para bigramas, 3 para trigramas) é otimizada.</span></li><li><span class="s" data-s="k3">Em modelos grandes (DeepSeek, Qwen), a compressão economiza 47-55% da memória com impacto mínimo na perplexidade (&lt;1,2%).</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.31646" rel="noopener">Low-Bit N-Gram Embeddings for Language Models</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.31646" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

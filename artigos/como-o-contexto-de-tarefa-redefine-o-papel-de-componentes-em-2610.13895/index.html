@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Como o contexto de tarefa redefine o papel de componentes em LLMs — arXiv em 5</title>
+<meta name="description" content="Um estudo revela que cabeças de atenção em modelos de linguagem reutilizam parâmetros, mas mudam drasticamente quais fatos leem e como influenciam camadas subsequentes dependendo da instrução.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Como o contexto de tarefa redefine o papel de componentes em LLMs">
+<meta property="og:description" content="Um estudo revela que cabeças de atenção em modelos de linguagem reutilizam parâmetros, mas mudam drasticamente quais fatos leem e como influenciam camadas subsequentes dependendo da instrução.">
+<meta property="og:image" content="../../assets/papers/2610.13895/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>LLMs</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.13895" rel="noopener">arXiv:2610.13895</a>
+    </div>
+    <h1><span class="s" data-s="t">Como o contexto de tarefa redefine o papel de componentes em LLMs</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um estudo revela que cabeças de atenção em modelos de linguagem reutilizam parâmetros, mas mudam drasticamente quais fatos leem e como influenciam camadas subsequentes dependendo da instrução.</span></p>
+    <p class="byline">
+      <span>Mohapatra et al.</span>
+      <span>8 min de leitura</span>
+<span>09/10/2026</span>    </p>
+    <div class="listen" data-article="2610.13895" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Paradoxo da Reutilização de Circuitos</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Os modelos de linguagem de grande escala (LLMs) são notáveis por sua capacidade de realizar tarefas diversas usando um único conjunto fixo de parâmetros.</span> <span class="s" data-s="b0-p0-s1">Ao contrário dos modelos tradicionais que exigem retreinamento para novas funções, os LLMs adaptam-se no momento da inferência através de instruções ou exemplos no contexto (in-context learning).</span> <span class="s" data-s="b0-p0-s2">No entanto, essa flexibilidade levanta uma questão mecânica fundamental: se os mesmos componentes internos, como as cabeças de atenção, são reutilizados para tarefas diferentes, o que exatamente muda entre elas?</span></p><p><span class="s" data-s="b0-p1-s0">Análises de circuitos anteriores sugeriram que tarefas distintas podem compartilhar partes substanciais do mesmo circuito computacional.</span> <span class="s" data-s="b0-p1-s1">Isso implica que um único cabeçote de atenção pode estar presente em múltiplos fluxos de processamento.</span> <span class="s" data-s="b0-p1-s2">Mas identificar que um componente é compartilhado não explica como ele opera de maneira diferente em cada contexto.</span> <span class="s" data-s="b0-p1-s3">É como saber que o mesmo cérebro participa de tarefas distintas sem entender como as conexões entre suas regiões se reorganizam para suportar ações diferentes.</span></p><p><span class="s" data-s="b0-p2-s0">Este paper, intitulado &#34;Task Context Shapes Component Roles in Language Models&#34; e escrito por Sovesh Mohapatra e Dani S. Bassett, da University of Pennsylvania e Yale University, propõe uma analogia com a neurociência de redes.</span> <span class="s" data-s="b0-p2-s1">No cérebro, regiões compartilhadas suportam diferentes tarefas através de mudanças nas interações entre elas, conhecidas como conectividade funcional.</span> <span class="s" data-s="b0-p2-s2">Os autores aplicam essa perspectiva aos LLMs, investigando se o contexto da tarefa altera não apenas quais fatos um componente responde, mas também como sua saída influencia a computação subsequente.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.13895/figure2.webp" alt="A figura mostra como as conexões de influência entre componentes mudam drasticamente dependendo da tarefa solicitada, mesmo com fatos de grafo idênticos. Observe como os valores de influência (eixo Y) variam entre as instruções &#39;Read direct edge&#39; e &#39;Compose path&#39; para os mesmos cabeçotes H1-H3." loading="lazy">
+          <figcaption>
+            A figura mostra como as conexões de influência entre componentes mudam drasticamente dependendo da tarefa solicitada, mesmo com fatos de grafo idênticos. Observe como os valores de influência (eixo Y) variam entre as instruções &#39;Read direct edge&#39; e &#39;Compose path&#39; para os mesmos cabeçotes H1-H3.
+            <span class="source">Figura 2 do paper · Mohapatra et al., arXiv:2610.13895</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">Metodologia: Isolando o Contexto dos Dados</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Para isolar o efeito do contexto, os autores projetaram um cenário experimental rigoroso.</span> <span class="s" data-s="b2-p0-s1">Eles utilizam prompts baseados em fatos de grafos direcionados simples.</span> <span class="s" data-s="b2-p0-s2">Cada prompt apresenta três fatos sobre a presença ou ausência de arestas entre nós A, B e C (especificamente A→B, B→C e A→C).</span> <span class="s" data-s="b2-p0-s3">O modelo deve responder Verdadeiro ou Falso com base em duas tarefas distintas: &#39;Compose path&#39;, que verifica se o caminho A→B→C existe, e &#39;Read direct edge&#39;, que verifica se a aresta direta A→C existe.</span></p><p><span class="s" data-s="b2-p1-s0">A chave do experimento é que ambos os prompts compartilham exatamente os mesmos fatos de entrada e a mesma chave de resposta.</span> <span class="s" data-s="b2-p1-s1">A única diferença é a instrução da tarefa.</span> <span class="s" data-s="b2-p1-s2">Isso cria condições de &#34;resposta oposta&#34; (opposite-answer graphs), onde os mesmos dados de entrada levam a respostas corretas diferentes dependendo da instrução.</span> <span class="s" data-s="b2-p1-s3">Essa configuração é análoga a ensaios incongruentes em tomada de decisão humana, onde regras de tarefa diferentes favorecem escolhas opostas a partir dos mesmos estímulos.</span></p><p><span class="s" data-s="b2-p2-s0">Os autores medem dois conceitos distintos para cada componente do modelo: &#39;influência&#39; e &#39;importância&#39;.</span> <span class="s" data-s="b2-p2-s1">A influência é definida como a resposta assinada em um site posterior por unidade de perturbação na fonte.</span> <span class="s" data-s="b2-p2-s2">Em termos práticos, eles aplicam deslocamentos positivos e negativos nas ativações de cabeças de atenção específicas e medem como isso afeta as ativações em camadas posteriores ou o stream residual.</span> <span class="s" data-s="b2-p2-s3">A importância, por outro lado, mede a diminuição na margem de logit da resposta correta quando a ativação completa de um site é substituída por sua média.</span> <span class="s" data-s="b2-p2-s4">Enquanto a importância mede a contribuição para a resposta final, a influência mede a dinâmica causal entre componentes internos.</span></p>        <h2><span class="s" data-s="b3-h">Resultados: A Influência se Redistribui</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Os resultados mostram claramente que a mudança de instrução redistribui a influência entre os componentes compartilhados.</span> <span class="s" data-s="b3-p0-s1">Por exemplo, no modelo Falcon-H1-1.5B, a influência média do cabeçote H1 sobre H2 muda de -0,0145 sob a instrução &#39;Compose path&#39; para 0,00101 sob &#39;Read direct edge&#39;.</span> <span class="s" data-s="b3-p0-s2">O mesmo cabeçote H1 mais que dobra sua influência sobre H3 (de 0,0107 para 0,0238) e reduz sua influência sobre o site residual posterior (de 0,0446 para 0,0346).</span> <span class="s" data-s="b3-p0-s3">Esses efeitos são observados consistentemente em cinco modelos open-weight que abrangem quatro famílias diferentes (Gemma, Qwen, Llama, Falcon) e tamanhos de 1,5 a 14 bilhões de parâmetros.</span></p><p><span class="s" data-s="b3-p1-s0">Além da influência, os perfis de importância também mudam, mas em menor grau.</span> <span class="s" data-s="b3-p1-s1">Ao comparar os ângulos entre os perfis de influência e importância antes e depois da mudança de tarefa, os autores descobriram que as influências rotacionam mais do que as importâncias.</span> <span class="s" data-s="b3-p1-s2">Em Gemma, a diferença média nos ângulos foi de 30,17 graus, e em Qwen, de 11,98 graus.</span> <span class="s" data-s="b3-p1-s3">Isso sugere que a reconfiguração das interações causais internas é mais pronunciada do que a mudança na contribuição direta para a resposta final.</span></p><p><span class="s" data-s="b3-p2-s0">A análise de resposta condicional também revelou nuances importantes.</span> <span class="s" data-s="b3-p2-s1">Em modelos ajustados (fine-tuned) para tarefas de grafos, o efeito de uma intervenção factual era mais forte quando o fato alvo determinava a resposta correta.</span> <span class="s" data-s="b3-p2-s2">No entanto, a restauração downstream reduziu a seletividade da tarefa mais do que os controles, indicando que a informação é processada de forma integrada e não isolada.</span> <span class="s" data-s="b3-p2-s3">A magnitude desses efeitos variou entre Gemma-2-9B e Qwen3-14B, com Qwen mostrando efeitos de logit significativamente maiores para as mesmas intervenções.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.13895/figure4.webp" alt="Ilustra como uma edição interna redireciona o modelo para ler fatos diferentes, mantendo a instrução fixa. As células mostram a participação média da resposta nos cabeçotes H2 e H3 antes e depois da edição inicial, demonstrando uma mudança drástica na atenção para fatos distintos." loading="lazy">
+          <figcaption>
+            Ilustra como uma edição interna redireciona o modelo para ler fatos diferentes, mantendo a instrução fixa. As células mostram a participação média da resposta nos cabeçotes H2 e H3 antes e depois da edição inicial, demonstrando uma mudança drástica na atenção para fatos distintos.
+            <span class="source">Figura 4 do paper · Mohapatra et al., arXiv:2610.13895</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Editando o Estado Interno da Tarefa</span></h2>
+<p><span class="s" data-s="b5-p0-s0">O achado mais contundente do paper vem de uma intervenção direta no estado interno do modelo.</span> <span class="s" data-s="b5-p0-s1">Os autores adicionaram um vetor de mudança de tarefa (a diferença média de ativação entre as duas instruções) às ativações iniciais do modelo, sem alterar o prompt escrito ou os pesos do modelo.</span> <span class="s" data-s="b5-p0-s2">Esse &#39;hack&#39; de ativação forçou o modelo a adotar o estado interno da tarefa oposta.</span></p><p><span class="s" data-s="b5-p1-s0">Em Gemma-2-9B e Qwen3-14B, essa edição simples redirecionou completamente as respostas factuais.</span> <span class="s" data-s="b5-p1-s1">Sob a instrução escrita &#39;Read fact 1&#39;, os cabeçotes H2 e H3 tornaram-se altamente responsivos ao &#39;Fact 2&#39; após a edição.</span> <span class="s" data-s="b5-p1-s2">No Gemma, a participação da resposta ao Fact 2 aumentou em 78,9 pontos percentuais no H2 e 97,1 pontos percentuais no H3.</span> <span class="s" data-s="b5-p1-s3">O Qwen mostrou aumentos semelhantes de 68,7% e 91,8%, respectivamente.</span></p><p><span class="s" data-s="b5-p2-s0">Isso prova que o contexto da tarefa não é apenas um filtro superficial, mas redefine quais informações factuais os componentes compartilhados processam.</span> <span class="s" data-s="b5-p2-s1">O modelo manteve a resposta correta em prompts onde a tarefa interna editada correspondia à instrução escrita, mas inverteu a resposta em prompts de resposta oposta.</span> <span class="s" data-s="b5-p2-s2">Isso demonstra que o estado interno da tarefa atua como um &#39;interruptor&#39; que determina a utilidade relativa dos fatos disponíveis no contexto.</span></p>        <h2><span class="s" data-s="b6-h">Previsão e Mapas de Resposta</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Se o contexto da tarefa redefine as interações entre componentes, então previsões baseadas nessas interações devem ser mais precisas quando o contexto é correspondido.</span> <span class="s" data-s="b6-p0-s1">Os autores construíram mapas de resposta linear para cada condição de tarefa, prevendo a resposta de um cabeçote posterior a partir de uma mudança medida em um cabeçote anterior.</span></p><p><span class="s" data-s="b6-p1-s0">Ao testar esses mapas em uma intervenção factual separada, eles descobriram que o mapa específico da condição reduziu o erro quadrático médio de previsão em 53,6% no Gemma e 5,0% no Qwen, comparado à média dos dois mapas (um para cada tarefa).</span> <span class="s" data-s="b6-p1-s1">Embora a melhoria no Qwen seja modesta, a redução no Gemma é substancial, indicando que a correspondência do estado interno da tarefa é crucial para modelar com precisão como as intervenções se propagam pela rede.</span></p><p><span class="s" data-s="b6-p2-s0">Esses resultados suportam a visão de rede da computação em LLMs.</span> <span class="s" data-s="b6-p2-s1">Assim como no cérebro, onde a conectividade funcional prediz a atividade de uma região baseada em outras, nos LLMs as interações entre cabeças de atenção são altamente dependentes do contexto computacional atual.</span> <span class="s" data-s="b6-p2-s2">Ignorar essa dependência contextual leva a modelos preditivos menos precisos e a uma compreensão incompleta do mecanismo interno.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.13895/figure5.webp" alt="Prova que mapas de resposta específicos da tarefa preveem melhor o comportamento do modelo do que mapas genéricos. Os erros de previsão do H3 causados por uma intervenção no H2 são significativamente menores quando o mapa corresponde ao estado da tarefa atual." loading="lazy">
+          <figcaption>
+            Prova que mapas de resposta específicos da tarefa preveem melhor o comportamento do modelo do que mapas genéricos. Os erros de previsão do H3 causados por uma intervenção no H2 são significativamente menores quando o mapa corresponde ao estado da tarefa atual.
+            <span class="source">Figura 5 do paper · Mohapatra et al., arXiv:2610.13895</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Limitações e Escopo</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Apesar dos insights robustos, o estudo tem limitações claras.</span> <span class="s" data-s="b8-p0-s1">A análise foi conduzida em um domínio simplificado de grafos direcionados, onde a relevância factual é explícita e binária.</span> <span class="s" data-s="b8-p0-s2">Não está claro se esses padrões de reconfiguração de influência se generalizam para tarefas de linguagem natural mais complexas, como geração de texto livre ou raciocínio lógico extenso, onde a relevância da informação é mais difusa e contextual.</span></p><p><span class="s" data-s="b8-p1-s0">Além disso, as medições de influência são sensíveis à direção de ativação escolhida e ao tamanho da perturbação aplicada.</span> <span class="s" data-s="b8-p1-s1">Os autores usam um desvio de duas unidades, definido por um desvio padrão das ativações de referência.</span> <span class="s" data-s="b8-p1-s2">Mudanças nesses parâmetros poderiam alterar a magnitude observada das influências, embora a tendência de redistribuição provavelmente permaneça.</span> <span class="s" data-s="b8-p1-s3">A interpretação dos valores de influência está, portanto, atrelada a essas escolhas metodológicas específicas.</span></p><p><span class="s" data-s="b8-p2-s0">Outra limitação é que a análise de resposta condicional foi realizada em modelos fine-tuned, enquanto as intervenções factuais e de edição interna usaram modelos base (sem treinamento adicional).</span> <span class="s" data-s="b8-p2-s1">Embora isso demonstre a robustez do fenômeno em diferentes configurações, a interação exata entre fine-tuning e reconfiguração de contexto permanece menos explorada.</span> <span class="s" data-s="b8-p2-s2">O paper também não investiga se esses mapas de resposta podem ser transferidos para prompts completamente novos sem recalibração, uma questão importante para a aplicabilidade prática.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b9-t">Influência vs. Importância</span></h3>
+          <p><span class="s" data-s="b9-c-s0">Não confunda os dois conceitos medidos.</span> <span class="s" data-s="b9-c-s1">Importância é estática: quanto um componente contribui para a resposta final.</span> <span class="s" data-s="b9-c-s2">Influência é dinâmica: como a perturbação de um componente afeta outros componentes intermediários.</span> <span class="s" data-s="b9-c-s3">A mudança de tarefa altera a dinâmica (influência) mais do que a contribuição estática (importância).</span></p>
+        </aside>
+        <h2><span class="s" data-s="b10-h">Conclusão e Direções Futuras</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Este paper estabelece que os componentes compartilhados em LLMs não são apenas reutilizados, mas reconfigurados.</span> <span class="s" data-s="b10-p0-s1">O contexto da tarefa muda quais fatos os cabeçotes de atenção leem e como suas saídas influenciam a computação subsequente.</span> <span class="s" data-s="b10-p0-s2">Essa dependência contextual é fundamental para entender como os modelos usam parâmetros compartilhados para realizar computações diferentes.</span></p><p><span class="s" data-s="b10-p1-s0">Para o futuro, os autores sugerem estender essas medições para prompts mais longos e textos com múltiplos passos de raciocínio, onde a relevância factual depende de declarações intermediárias.</span> <span class="s" data-s="b10-p1-s1">Além disso, testar se os mapas de resposta podem prever respostas em novos grafos e instruções sem recalibração por prompt será crucial para determinar o quão generalizável é essa interação dependente de contexto.</span></p><p><span class="s" data-s="b10-p2-s0">Do ponto de vista prático, a compreensão da influência dependente de tarefa pode guiar intervenções mais precisas.</span> <span class="s" data-s="b10-p2-s1">Se podemos identificar quais conexões são críticas para uma tarefa específica, talvez seja possível alterar um comportamento indesejado do modelo sem prejudicar outras capacidades, mantendo a integridade do circuito compartilhado.</span> <span class="s" data-s="b10-p2-s2">Isso abre caminho para métodos de alinhamento e correção de viés mais cirúrgicos e eficazes.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Cabeças de atenção fixas mudam sua &#39;influência&#39; (como afetam o futuro) e &#39;importância&#39; (contribuição para a resposta) conforme a tarefa muda, mesmo com os mesmos dados de entrada.</span></li><li><span class="s" data-s="k1">Editar internamente o estado da tarefa faz o modelo ler fatos diferentes sem alterar o prompt escrito, provando que o contexto interno redefine o processamento.</span></li><li><span class="s" data-s="k2">Mapas de resposta linear específicos da tarefa preveem erros quadráticos médios 53,6% melhor do que mapas genéricos, indicando que a interação entre componentes é altamente dependente do contexto.</span></li><li><span class="s" data-s="k3">A análise compara cinco modelos abertos (Gemma, Qwen, Llama, Falcon) de 1,5 a 14 bilhões de parâmetros, mostrando que esse fenômeno é generalizável e não restrito a uma única arquitetura.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.13895" rel="noopener">Task Context Shapes Component Roles in Language Models</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.13895" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

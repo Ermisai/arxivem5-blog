@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AesCode: Gerando Código Visual com Recompensas Decoupled Cross-Modal — arXiv em 5</title>
+<meta name="description" content="O AesCode usa um gerador de imagens como guia estético para um modelo de código, separando a correção factual da qualidade visual através de um grafo de design e recompensas desacopladas.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AesCode: Gerando Código Visual com Recompensas Decoupled Cross-Modal">
+<meta property="og:description" content="O AesCode usa um gerador de imagens como guia estético para um modelo de código, separando a correção factual da qualidade visual através de um grafo de design e recompensas desacopladas.">
+<meta property="og:image" content="../../assets/papers/2610.18860/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>LLMs</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.18860" rel="noopener">arXiv:2610.18860</a>
+    </div>
+    <h1><span class="s" data-s="t">AesCode: Gerando Código Visual com Recompensas Decoupled Cross-Modal</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">O AesCode usa um gerador de imagens como guia estético para um modelo de código, separando a correção factual da qualidade visual através de um grafo de design e recompensas desacopladas.</span></p>
+    <p class="byline">
+      <span>Gao et al.</span>
+      <span>7 min de leitura</span>
+<span>13/10/2026</span>    </p>
+    <div class="listen" data-article="2610.18860" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=_RTUtAZLCd4" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Dilema da Geração de Artefatos Visuais como Código</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Gerar artefatos visuais ricos em informação, como slides, pôsteres e dashboards, diretamente como código (HTML/CSS) é altamente desejável.</span> <span class="s" data-s="b0-p0-s1">A saída estruturada permite edição, verificação e integração em pipelines de software.</span> <span class="s" data-s="b0-p0-s2">No entanto, modelos de linguagem e código enfrentam uma limitação fundamental: eles não possuem percepção visual nativa do canvas final.</span> <span class="s" data-s="b0-p0-s3">Eles declaram layout e cores linha por linha, o que frequentemente resulta em saídas que satisfazem as restrições de conteúdo, mas falham em planejamento espacial e qualidade estética.</span></p><p><span class="s" data-s="b0-p1-s0">Por outro lado, geradores de imagens generativas (como DALL-E ou Midjourney) excellem em composição visual e design, mas frequentemente alucinam texto, números e relações lógicas.</span> <span class="s" data-s="b0-p1-s1">Isso torna suas saídas raster não editáveis e não verificáveis.</span> <span class="s" data-s="b0-p1-s2">O paper AesCode, desenvolvido por pesquisadores da Microsoft, Yale e outras instituições, propõe um ponto intermediário: usar um gerador de imagens para fornecer orientação estética, enquanto um modelo de código garante a integridade factual.</span></p><p><span class="s" data-s="b0-p2-s0">A abordagem não trata a imagem de referência como um alvo de reprodução pixel a pixel, o que seria rígido e propenso a erros devido às alucinações do gerador de imagens.</span> <span class="s" data-s="b0-p2-s1">Em vez disso, a imagem serve como uma &#39;dica&#39; de design.</span> <span class="s" data-s="b0-p2-s2">O desafio central é treinar o modelo de código para extrair padrões de layout e estilo da imagem, sem copiar seu conteúdo factual incorreto, mantendo-se fiel ao prompt de texto original.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.18860/figure1.webp" alt="Fluxo do AesCode: prompts especificam o conteúdo necessário, enquanto imagens de referência geradas por IA oferecem orientação de design visual. O modelo gera código HTML/CSS que é renderizado no canvas." loading="lazy">
+          <figcaption>
+            Fluxo do AesCode: prompts especificam o conteúdo necessário, enquanto imagens de referência geradas por IA oferecem orientação de design visual. O modelo gera código HTML/CSS que é renderizado no canvas.
+            <span class="source">Figura 1 do paper · Gao et al., arXiv:2610.18860</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">Representação como Grafo de Design</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Para resolver o problema de alinhar código com estética sem perder a precisão, os autores introduzem a representação do alvo como um &#39;Design Graph&#39; (Grafo de Design).</span> <span class="s" data-s="b2-p0-s1">Este grafo estruturado separa explicitamente a informação semântica das dicas visuais.</span> <span class="s" data-s="b2-p0-s2">Ele define a tela como uma raiz que contém elementos funcionais (nós), como blocos de texto, tabelas, gráficos e contêineres (regiões, cards, painéis).</span></p><p><span class="s" data-s="b2-p1-s0">Cada nó possui atributos desacoplados: atributos de conteúdo (strings específicas, dados de séries temporais) e atributos visuais (caixas delimitadoras, cores, tipografia).</span> <span class="s" data-s="b2-p1-s1">As arestas do grafo definem relações estruturais, como contenção hierárquica, alinhamento espacial e ordem.</span> <span class="s" data-s="b2-p1-s2">Essa decomposição permite que o sistema avalie propriedades individualmente.</span> <span class="s" data-s="b2-p1-s3">Em vez de uma pontuação única e ambígua para &#39;beleza&#39;, o sistema pode verificar se o texto está correto e, separadamente, se o espaçamento é agradável.</span></p><p><span class="s" data-s="b2-p2-s0">O grafo de destino (G_tgt) é construído combinando os requisitos do prompt com as pistas visuais da imagem de referência (I_ref).</span> <span class="s" data-s="b2-p2-s1">A imagem de referência pode conter erros factuais, mas o grafo permite que o modelo ignore esses erros e foque apenas na estrutura e no estilo, aplicando restrições independentes ao conteúdo e à aparência.</span></p>        <h2><span class="s" data-s="b3-h">Recompensas Decoupled Cross-Modal</span></h2>
+<p><span class="s" data-s="b3-p0-s0">A inovação principal do AesCode reside em como ele calcula as recompensas para o treinamento por reforço.</span> <span class="s" data-s="b3-p0-s1">Em vez de usar uma única métrica, ele deriva recompensas complementares e desacopladas diretamente do grafo de design.</span> <span class="s" data-s="b3-p0-s2">Essas recompensas são divididas em dois canais: verificadores determinísticos e um juiz baseado em VLM (Vision-Language Model).</span></p><p><span class="s" data-s="b3-p1-s0">Os verificadores determinísticos avaliam propriedades que podem ser extraídas programaticamente do código ou do DOM renderizado.</span> <span class="s" data-s="b3-p1-s1">Existem seis verificadores principais: Execução (verifica erros fatais), Texto (verifica strings obrigatórias), Boundary (verifica contenção e proporção do canvas), Tabela/Gráfico (verifica estrutura e dados de tabelas HTML e gráficos ECharts), Layout Semântico (compara a posição de blocos de texto OCR entre a referência e o candidato) e Espaçamento em Branco (avalia a distribuição de espaço vazio).</span></p><p><span class="s" data-s="b3-p2-s0">Para propriedades não analisáveis programaticamente, como a harmonia visual geral ou relações estéticas complexas, o sistema utiliza o Visual Graph Rubric (VGR).</span> <span class="s" data-s="b3-p2-s1">Em vez de pedir ao VLM uma nota holística e instável, o VGR gera uma lista de perguntas binárias específicas para a amostra, baseadas nos nós e arestas do grafo de design.</span> <span class="s" data-s="b3-p2-s2">O VLM responde a essas perguntas (ex: &#39;O gráfico está alinhado à esquerda do texto?&#39;), e a taxa de aprovação fornece a pontuação estética (s_vgr).</span> <span class="s" data-s="b3-p2-s3">Isso transforma o julgamento visual subjetivo em critérios explícitos e verificáveis.</span></p>        <h2><span class="s" data-s="b4-h">Otimização com GDPO e SFT</span></h2>
+<p><span class="s" data-s="b4-p0-s0">O treinamento ocorre em duas fases.</span> <span class="s" data-s="b4-p0-s1">Primeiro, Supervised Fine-Tuning (SFT) com demonstrações de alta qualidade geradas por modelos fronteira (GPT-5.5) para ensinar o formato de entrada (prompt + referência) e saída (código).</span> <span class="s" data-s="b4-p0-s2">Em seguida, o treinamento por Reforço (RL) utiliza Group reward-Decoupled Normalization Policy Optimization (GDPO).</span></p><p><span class="s" data-s="b4-p1-s0">O GDPO é crucial para equilibrar os sinais de recompensa densos dos verificadores determinísticos com os sinais esparsos do VLM.</span> <span class="s" data-s="b4-p1-s1">Sem normalização por canal, os verificadores determinísticos poderiam dominar o gradiente, negligenciando a melhoria estética.</span> <span class="s" data-s="b4-p1-s2">O GDPO normaliza as recompensas por canal, permitindo que o modelo aprenda tanto a correza factual quanto a qualidade visual de forma equilibrada.</span></p><p><span class="s" data-s="b4-p2-s0">Durante o RL, o modelo gera múltiplas rollouts (amostras) para cada prompt.</span> <span class="s" data-s="b4-p2-s1">As amostras são pontuadas usando o grafo de design parseado do código renderizado.</span> <span class="s" data-s="b4-p2-s2">Apenas as amostras que excedem um limiar de recompensa são retidas para atualizar a política.</span> <span class="s" data-s="b4-p2-s3">Isso garante que o modelo aprenda com exemplos que não apenas funcionam, mas também atendem aos critérios estéticos definidos pelo grafo.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.18860/figure3.webp" alt="Comparação qualitativa: GPT-5.5 vs AesCode-32B. O AesCode mostra melhorias significativas no layout e na estética, enquanto mantém a fidelidade ao conteúdo, corrigindo erros de layout visíveis no GPT-5.5." loading="lazy">
+          <figcaption>
+            Comparação qualitativa: GPT-5.5 vs AesCode-32B. O AesCode mostra melhorias significativas no layout e na estética, enquanto mantém a fidelidade ao conteúdo, corrigindo erros de layout visíveis no GPT-5.5.
+            <span class="source">Figura 3 do paper · Gao et al., arXiv:2610.18860</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b6-h">Resultados e Benchmark</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Os autores criaram um benchmark específico para avaliar esse setting, composto por 300 prompts com imagens de referência geradas.</span> <span class="s" data-s="b6-p0-s1">O benchmark separa a correza verificável (Rule) da qualidade visual (Visual).</span> <span class="s" data-s="b6-p0-s2">A métrica Rule avalia textos, limites e estruturas de gráficos/tabelas.</span> <span class="s" data-s="b6-p0-s3">A métrica Visual avalia conteúdo, layout e estilo, com pontuações altamente consistentes com julgamentos humanos.</span></p><p><span class="s" data-s="b6-p1-s0">Os resultados mostram que imagens de referência melhoram a qualidade visual de todos os modelos, mas o AesCode extrai esse benefício de forma mais eficaz.</span> <span class="s" data-s="b6-p1-s1">Modelos abertos como Qwen3-VL, quando treinados com AesCode, mostram ganhos massivos.</span> <span class="s" data-s="b6-p1-s2">O AesCode-8B melhora a qualidade visual em 31.1 pontos percentuais em relação ao baseline Qwen3-VL-8B, e o AesCode-32B melhora em 22.4 pontos.</span></p><p><span class="s" data-s="b6-p2-s0">Em termos de correza factual, o AesCode supera modelos fechados como GPT-5.5 e Claude Opus 4.8.</span> <span class="s" data-s="b6-p2-s1">Enquanto esses modelos fechados podem ter melhor estética inicial, eles frequentemente falham em verificar a precisão dos dados nos gráficos e tabelas.</span> <span class="s" data-s="b6-p2-s2">O AesCode-32B atinge uma pontuação de 90.37 na métrica Tabela/Gráfico, demonstrando que a estrutura de grafo e os verificadores determinísticos são eficazes para garantir a integridade dos dados.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b7-t">Desempenho Superior em Métricas Visuais</span></h3>
+          <p><span class="s" data-s="b7-c-s0">O AesCode-32B alcança uma pontuação de 85.89 no score geral, superando significativamente o baseline Qwen3-VL-32B (61.10).</span> <span class="s" data-s="b7-c-s1">A melhoria de 22.4 pontos em qualidade visual é consistente com avaliações humanas, indicando que o método não apenas gera código funcional, mas também esteticamente agradável.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b8-h">Análise de Ablação e Limitações</span></h2>
+<p><span class="s" data-s="b8-p0-s0">As ablações confirmam a importância do Grafo de Design e do VGR.</span> <span class="s" data-s="b8-p0-s1">Remover o VGR ou usar uma pontuação holística de VLM resulta em quedas significativas na qualidade visual.</span> <span class="s" data-s="b8-p0-s2">O VGR, ao ancorar o julgamento visual em elementos específicos do grafo, evita que o modelo se perca em nuances estéticas que não afetam a estrutura funcional.</span></p><p><span class="s" data-s="b8-p1-s0">Além disso, o treinamento com imagens de referência como entrada e como fonte de recompensa é essencial.</span> <span class="s" data-s="b8-p1-s1">Modelos treinados apenas com prompts de texto (sem referência) têm desempenho inferior, embora ainda sejam melhores que os baselines não treinados.</span> <span class="s" data-s="b8-p1-s2">Isso sugere que o AesCode internaliza princípios de design que podem ser aplicados mesmo na ausência de uma referência explícita durante a inferência.</span></p><p><span class="s" data-s="b8-p2-s0">No entanto, o paper reconhece limitações.</span> <span class="s" data-s="b8-p2-s1">O método depende da qualidade do gerador de imagens para criar a referência e do parser para construir o grafo de design corretamente.</span> <span class="s" data-s="b8-p2-s2">Erros no parsing do código renderizado podem levar a recompensas incorretas.</span> <span class="s" data-s="b8-p2-s3">Além disso, a abordagem foca em artefatos estruturados (slides, dashboards) e não generaliza necessariamente para designs livres ou pixel-level geometry complexa.</span> <span class="s" data-s="b8-p2-s4">Desafios em relações semânticas visuais mais complexas e refinamento iterativo de geometria permanecem como áreas abertas.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b9-t">Importância do VGR nas Ablações</span></h3>
+          <p><span class="s" data-s="b9-c-s0">A tabela de ablação no Qwen3-VL-8B mostra que a remoção do VGR ou do grafo de design reduz drasticamente a pontuação final.</span> <span class="s" data-s="b9-c-s1">Isso prova que a supervisão estruturada é crucial para a alta qualidade visual, evitando que o modelo recorra a heurísticas genéricas de design.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b10-h">Conclusão</span></h2>
+<p><span class="s" data-s="b10-p0-s0">O AesCode demonstra que é possível treinar modelos de código para gerar artefatos visuais que são simultaneamente verificáveis e esteticamente competentes.</span> <span class="s" data-s="b10-p0-s1">Ao desacoplar as recompensas de conteúdo e estilo através de um grafo de design, o método evita as armadilhas de copiar alucinações de geradores de imagens, utilizando-os apenas como guias de design.</span></p><p><span class="s" data-s="b10-p1-s0">Este trabalho abre caminho para um novo paradigma onde geradores de imagens atuam como &#39;professores&#39; escaláveis de design visual para modelos generativos estruturados.</span> <span class="s" data-s="b10-p1-s1">Para desenvolvedores e cientistas de dados, isso significa que ferramentas de geração de código podem agora produzir dashboards e relatórios que não apenas funcionam, mas também comunicam informações de forma clara e visualmente atraente, reduzindo a necessidade de revisão manual de design.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Modelos de código não &#39;veem&#39; o layout; o AesCode usa uma imagem de referência gerada por IA apenas como guia estético, não como ground truth.</span></li><li><span class="s" data-s="k1">O método converte o canvas em um Grafo de Design, permitindo recompensas determinísticas para conteúdo e um VLM para estética.</span></li><li><span class="s" data-s="k2">AesCode-32B supera Qwen3-VL em 31.1 pontos de qualidade visual, alcançando níveis comparáveis a modelos fechados como GPT-5.5.</span></li><li><span class="s" data-s="k3">A supervisão via grafo evita que o modelo copie alucinações da imagem de referência, mantendo a fidelidade ao prompt de texto.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.18860" rel="noopener">AesCode: Aesthetic Code Generation with Decoupled Cross-Modal Rewards</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.18860" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

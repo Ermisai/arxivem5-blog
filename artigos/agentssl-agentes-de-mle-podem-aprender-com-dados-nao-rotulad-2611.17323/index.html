@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AgentSSL: Agentes de MLE podem aprender com dados não rotulados? — arXiv em 5</title>
+<meta name="description" content="Este paper investiga se agentes de busca de código podem automatizar pipelines de Aprendizado Semi-Supervisionado (SSL), reduzindo tanto o custo de engenharia quanto a necessidade de anotação humana.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AgentSSL: Agentes de MLE podem aprender com dados não rotulados?">
+<meta property="og:description" content="Este paper investiga se agentes de busca de código podem automatizar pipelines de Aprendizado Semi-Supervisionado (SSL), reduzindo tanto o custo de engenharia quanto a necessidade de anotação humana.">
+<meta property="og:image" content="../../assets/papers/2611.17323/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Agentes</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.17323" rel="noopener">arXiv:2611.17323</a>
+    </div>
+    <h1><span class="s" data-s="t">AgentSSL: Agentes de MLE podem aprender com dados não rotulados?</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Este paper investiga se agentes de busca de código podem automatizar pipelines de Aprendizado Semi-Supervisionado (SSL), reduzindo tanto o custo de engenharia quanto a necessidade de anotação humana.</span></p>
+    <p class="byline">
+      <span>Lin et al.</span>
+      <span>7 min de leitura</span>
+<span>12/11/2026</span>    </p>
+    <div class="listen" data-article="2611.17323" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=HfczRN76Fow" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema da dupla escassez</span></h2>
+<p><span class="s" data-s="b0-p0-s0">O aprendizado de máquina moderno depende de dois insumos caros: dados rotulados e engenharia humana.</span> <span class="s" data-s="b0-p0-s1">A rotulagem é custosa e lenta, enquanto o design de pipelines (arquiteturas, augmentations, estratégias de treino) exige expertise específica.</span> <span class="s" data-s="b0-p0-s2">Recentemente, agentes baseados em LLMs surgiram para automatizar a engenharia, tratando o desenvolvimento de ML como um problema de busca de programas.</span> <span class="s" data-s="b0-p0-s3">No entanto, esses agentes foram avaliados quase exclusivamente em cenários totalmente supervisionados, onde milhões de rótulos estão disponíveis.</span></p><p><span class="s" data-s="b0-p1-s0">Na prática, muitos domínios reais — como descoberta científica, diagnóstico médico e monitoramento ambiental — sofrem de escassez de dados rotulados, mas abundância de dados não rotulados.</span> <span class="s" data-s="b0-p1-s1">O Aprendizado Semi-Supervisionado (SSL) foi criado para explorar essa assimetria, mas métodos SSL são notoriamente sensíveis à distribuição dos dados e exigem tuning manual intenso.</span> <span class="s" data-s="b0-p1-s2">A pergunta central deste trabalho é: agentes podem reduzir tanto o custo de engenharia quanto o de anotação ao automatizar o SSL?</span></p><p><span class="s" data-s="b0-p2-s0">Os autores introduzem o AgentSSL, formulando a aplicação de SSL como um problema de busca de programas.</span> <span class="s" data-s="b0-p2-s1">Eles decompõem o desafio em duas etapas: descoberta do programa (o agente gera e refina código) e seleção do programa (escolher o melhor candidato sem um grande conjunto de validação rotulado).</span> <span class="s" data-s="b0-p2-s2">Esta estrutura permite estudar como agentes navegam no espaço de design sob supervisão limitada.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.17323/figure1.webp" alt="Ilustração do problema: agentes reduzem custo de engenharia, mas ainda dependem de dados rotulados. O AgentSSL busca reduzir ambos os custos simultaneamente." loading="lazy">
+          <figcaption>
+            Ilustração do problema: agentes reduzem custo de engenharia, mas ainda dependem de dados rotulados. O AgentSSL busca reduzir ambos os custos simultaneamente.
+            <span class="source">Figura 1 do paper · Lin et al., arXiv:2611.17323</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">Como o AgentSSL funciona</span></h2>
+<p><span class="s" data-s="b2-p0-s0">O framework AgentSSL utiliza o AIRA-Dojo como base para a busca agéntica.</span> <span class="s" data-s="b2-p0-s1">O agente recebe uma descrição da tarefa, um pequeno conjunto de dados rotulados (L) e um grande corpus não rotulado (U).</span> <span class="s" data-s="b2-p0-s2">Ele então propõe programas executáveis que mapeiam esses dados para um modelo preditor.</span> <span class="s" data-s="b2-p0-s3">Cada candidato é executado em um ambiente isolado (Apptainer), e os logs, erros e uma métrica de fitness são retornados ao agente para guiar iterações subsequentes.</span></p><p><span class="s" data-s="b2-p1-s0">Para garantir comparabilidade, a busca do agente é restrita a backbones pré-treinados (CLIP ViT-B-16 e DINOv2-B) e técnicas de fine-tuning eficiente (LoRA).</span> <span class="s" data-s="b2-p1-s1">Isso impede que o agente &#39;reinvente a roda&#39; em infraestrutura e force a exploração de estratégias SSL específicas, como pseudo-labeling, consistência de augmentations ou propagação de rótulos em grafos.</span> <span class="s" data-s="b2-p1-s2">A busca inicia com um &#39;warm-start&#39; supervisionado simples, focando a exploração nas nuances do SSL.</span></p><p><span class="s" data-s="b2-p2-s0">Os autores avaliam dois tipos de feedback para guiar a busca: métricas não supervisionadas (U) e validação ruidosa (N).</span> <span class="s" data-s="b2-p2-s1">As métricas não supervisionadas avaliam propriedades intrínsecas do modelo ou dos dados sem usar rótulos externos.</span> <span class="s" data-s="b2-p2-s2">A validação ruidosa usa um pequeno subconjunto de dados rotulados, mas introduz ruído ou viés para simular cenários onde a validação perfeita não está disponível.</span> <span class="s" data-s="b2-p2-s3">O agente utiliza uma política de busca gulosa (greedy) para selecionar os melhores candidatos a cada passo.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.17323/figure2.webp" alt="Fluxo do AgentSSL: o agente gera programas SSL baseados em dados rotulados e não rotulados, refinando-os com feedback não supervisionado ou de validação ruidosa." loading="lazy">
+          <figcaption>
+            Fluxo do AgentSSL: o agente gera programas SSL baseados em dados rotulados e não rotulados, refinando-os com feedback não supervisionado ou de validação ruidosa.
+            <span class="source">Figura 2 do paper · Lin et al., arXiv:2611.17323</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b4-h">Resultados: agentes superam humanos na descoberta</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Quando avaliados com acesso ao conjunto de teste (oracle), os programas descobertos pelo AgentSSL são competitivos com os melhores métodos SSL projetados por humanos.</span> <span class="s" data-s="b4-p0-s1">Em 8 dos 12 cenários testados (variações de datasets e configurações de &#39;shots&#39;, ou seja, quantidade de rótulos por classe), a melhor solução do agente superou a melhor baseline humana, com ganhos de até +21.8%.</span> <span class="s" data-s="b4-p0-s2">Isso demonstra que agentes podem, sim, sintetizar código que combina e adapta técnicas estabelecidas de SSL, mesmo sob feedback fraco.</span></p><p><span class="s" data-s="b4-p1-s0">Os baselines humanos incluem métodos clássicos como FixMatch e SoftMatch, além de estratégias modernas para foundation models como FineSSL, PET e V-PET.</span> <span class="s" data-s="b4-p1-s1">O fato de o agente alcançar ou exceder esses resultados sugere que o espaço de design do SSL é navegável por LLMs, mesmo quando o feedback direto de performance não está disponível durante a busca.</span></p><p><span class="s" data-s="b4-p2-s0">Contudo, é crucial notar que esses resultados de &#39;oracle&#39; escondem o desafio prático.</span> <span class="s" data-s="b4-p2-s1">Na vida real, não temos acesso ao teste para escolher o melhor programa.</span> <span class="s" data-s="b4-p2-s2">Precisamos selecionar o programa baseado apenas no feedback interno da busca.</span> <span class="s" data-s="b4-p2-s3">É aqui que a complexidade do AgentSSL se revela.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.17323/table1.webp" alt="Performance no teste oracle. O melhor agente (roxo) supera o melhor humano (amarelo) em 8 de 12 configurações, provando eficácia na descoberta." loading="lazy">
+          <figcaption>
+            Performance no teste oracle. O melhor agente (roxo) supera o melhor humano (amarelo) em 8 de 12 configurações, provando eficácia na descoberta.
+            <span class="source">Tabela 1 do paper · Lin et al., arXiv:2611.17323</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b6-h">O gargalo crítico: seleção de programas</span></h2>
+<p><span class="s" data-s="b6-p0-s0">O problema central identificado no paper é a seleção de programas.</span> <span class="s" data-s="b6-p0-s1">Quando os autores avaliam a performance dos programas escolhidos pelo agente usando apenas as métricas de feedback (sem oracle), a performance cai drasticamente.</span> <span class="s" data-s="b6-p0-s2">Em alguns casos, a queda chega a 47% em relação à performance oracle.</span> <span class="s" data-s="b6-p0-s3">Isso ocorre porque as métricas de feedback (especialmente as não supervisionadas) têm baixa ou até correlação negativa com a precisão real no teste.</span></p><p><span class="s" data-s="b6-p1-s0">A Figura 7 ilustra essa desconexão: pontos representam programas gerados durante a busca, e o eixo X mostra a métrica de feedback, enquanto o eixo Y mostra a precisão real.</span> <span class="s" data-s="b6-p1-s1">A falta de alinhamento significa que o agente pode estar otimizando para uma métrica que não reflete a utilidade prática do modelo.</span> <span class="s" data-s="b6-p1-s2">Isso é particularmente preocupante em SSL, onde as suposições de distribuição dos dados são frequentemente violadas.</span></p><p><span class="s" data-s="b6-p2-s0">Para estudar isso sistematicamente, os autores criam o ProgramSelectBench, um benchmark com 16.977 programas (gerados por agentes e humanos).</span> <span class="s" data-s="b6-p2-s1">Eles avaliam métodos de seleção não supervisionados e ativos.</span> <span class="s" data-s="b6-p2-s2">A conclusão é clara: a seleção baseada apenas em métricas internas é insuficiente para garantir a qualidade do pipeline descoberto.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.17323/figure7.webp" alt="Correlação entre métrica de feedback e precisão real. A falta de alinhamento (pontos espalhados) revela o gargalo de seleção do AgentSSL." loading="lazy">
+          <figcaption>
+            Correlação entre métrica de feedback e precisão real. A falta de alinhamento (pontos espalhados) revela o gargalo de seleção do AgentSSL.
+            <span class="source">Figura 7 do paper · Lin et al., arXiv:2611.17323</span>
+          </figcaption>
+        </figure>
+        <aside class="callout">
+          <h3><span class="s" data-s="b8-t">Atenção à métrica de feedback</span></h3>
+          <p><span class="s" data-s="b8-c-s0">A métrica de feedback do agente não é um proxy confiável para precisão.</span> <span class="s" data-s="b8-c-s1">Em cenários de SSL, otimizar para métricas não supervisionadas pode levar a programas que parecem bons internamente, mas falham na generalização.</span> <span class="s" data-s="b8-c-s2">A seleção de programas é o verdadeiro gargalo, não a geração de código.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b9-h">Mitigação: seleção ativa</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Diante da falha das métricas puramente não supervisionadas, os autores investigam a seleção ativa.</span> <span class="s" data-s="b9-p0-s1">Em vez de depender apenas de métricas internas, eles reservam uma parte dos dados rotulados (50%) especificamente para selecionar o melhor programa entre os candidatos gerados.</span> <span class="s" data-s="b9-p0-s2">Isso é comparado a treinar com 100% dos rótulos e usar seleção não supervisionada.</span></p><p><span class="s" data-s="b9-p1-s0">Os resultados mostram que a seleção ativa oferece ganhos significativos onde as métricas não supervisionadas falham.</span> <span class="s" data-s="b9-p1-s1">No entanto, há um trade-off: reservar rótulos para seleção reduz a quantidade de dados disponíveis para o treino do modelo final.</span> <span class="s" data-s="b9-p1-s2">Em cenários onde as métricas não supervisionadas funcionam bem, a seleção ativa pode até piorar a performance devido à perda de dados de treino.</span></p><p><span class="s" data-s="b9-p2-s0">Métodos de seleção ativa como IID, ActiveTesting e VMA performam bem em média, mas com alta variância.</span> <span class="s" data-s="b9-p2-s1">Métodos probabilísticos como CODA e ModelSelector são mais estáveis, mas podem convergir mais lentamente.</span> <span class="s" data-s="b9-p2-s2">A escolha da estratégia de seleção depende criticamente da qualidade da métrica de feedback e da disponibilidade de rótulos.</span></p>        <h2><span class="s" data-s="b10-h">Análise: aproveitando dados não rotulados</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Os autores também verificam se os programas descobertos pelo agente realmente utilizam os dados não rotulados.</span> <span class="s" data-s="b10-p0-s1">Ao fixar o melhor programa e variar o tamanho do corpus não rotulado, observam que a performance geralmente melhora com mais dados não rotulados.</span> <span class="s" data-s="b10-p0-s2">Isso confirma que o agente não está apenas aprendendo sobreajustado aos poucos rótulos disponíveis, mas está efetivamente explorando a estrutura dos dados não rotulados, como esperado em SSL.</span></p><p><span class="s" data-s="b10-p1-s0">A análise qualitativa dos programas gerados revela que o agente tende a combinar técnicas existentes de forma não trivial.</span> <span class="s" data-s="b10-p1-s1">Por exemplo, ele pode aplicar diferentes augmentations em vistas diferentes do mesmo dado ou usar pseudo-labels com limiares dinâmicos.</span> <span class="s" data-s="b10-p1-s2">Essa capacidade de composição é o que permite ao agente superar baselines fixas, que são projetadas para cenários mais gerais.</span></p>        <h2><span class="s" data-s="b11-h">Transferência para o mundo real</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Além dos benchmarks controlados, o AgentSSL foi avaliado em tarefas reais de detecção em ecologia.</span> <span class="s" data-s="b11-p0-s1">Esses dados são tipicamente desbalanceados e com rótulos escassos.</span> <span class="s" data-s="b11-p0-s2">Os resultados mostram que as estratégias descobertas pelo agente podem ser transferidas para domínios reais, mas com desafios adicionais.</span> <span class="s" data-s="b11-p0-s3">A distribuição dos dados naturais é mais complexa e ruidosa do que a dos benchmarks, exigindo uma seleção de programa ainda mais robusta.</span></p><p><span class="s" data-s="b11-p1-s0">Isso destaca a oportunidade e a dificuldade do AgentSSL: ele pode automatizar a adaptação de SSL para novos domínios, mas a confiança no pipeline final depende criticamente de um mecanismo de seleção confiável.</span> <span class="s" data-s="b11-p1-s1">Sem um bom validador, o risco de escolher um pipeline ineficaz é alto.</span></p>        <h2><span class="s" data-s="b12-h">Limitações e conclusões</span></h2>
+<p><span class="s" data-s="b12-p0-s0">O paper admite limitações claras.</span> <span class="s" data-s="b12-p0-s1">A busca do agente é restrita a backbones específicos (CLIP e DINOv2) e técnicas de fine-tuning, o que pode não cobrir todo o espaço de design possível.</span> <span class="s" data-s="b12-p0-s2">Além disso, o custo computacional da busca é alto; embora escalado em relação aos baselines, ainda requer horas de GPU por dataset.</span></p><p><span class="s" data-s="b12-p1-s0">A principal contribuição do AgentSSL não é apenas mostrar que agentes podem escrever código SSL, mas expor a fragilidade da validação em cenários semi-supervisionados.</span> <span class="s" data-s="b12-p1-s1">A descoberta de que a seleção de programas é o gargalo crítico é um insight valioso para a comunidade de AutoML e SSL.</span> <span class="s" data-s="b12-p1-s2">Futuros trabalhos devem focar em métricas de validação mais robustas ou em estratégias de seleção ativa mais eficientes.</span></p><p><span class="s" data-s="b12-p2-s0">Em resumo, agentes podem reduzir o custo de engenharia em SSL, mas não eliminam a necessidade de validação cuidadosa.</span> <span class="s" data-s="b12-p2-s1">A automação da descoberta é promissora, mas a automação da seleção ainda é um problema aberto.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Agentes descobrem programas SSL que superam humanos em 8 de 12 cenários, mesmo com feedback fraco.</span></li><li><span class="s" data-s="k1">O gargalo principal não é a descoberta, mas a seleção: métricas de feedback podem falhar, causando queda de 47% na performance.</span></li><li><span class="s" data-s="k2">A seleção ativa (usando um subconjunto de rótulos para escolher o melhor modelo) mitiga falhas de métricas não supervisionadas.</span></li><li><span class="s" data-s="k3">AgentSSL funciona em domínios reais como ecologia, mas exige cuidado na validação quando os dados rotulados são escassos.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.17323" rel="noopener">AgentSSL: Can MLE Agents Leverage Unlabeled Data?</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.17323" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

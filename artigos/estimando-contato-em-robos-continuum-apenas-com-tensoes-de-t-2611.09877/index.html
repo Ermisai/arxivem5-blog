@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Estimando Contato em Robôs Continuum Apenas com Tensões de Tendões via MHE — arXiv em 5</title>
+<meta name="description" content="Este paper demonstra que é possível localizar pontos de contato em robôs flexíveis usando apenas dados dos motores, desde que se modele geometricamente o obstáculo. O método supera filtros de Kalman tradicionais em precisão e robustez.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Estimando Contato em Robôs Continuum Apenas com Tensões de Tendões via MHE">
+<meta property="og:description" content="Este paper demonstra que é possível localizar pontos de contato em robôs flexíveis usando apenas dados dos motores, desde que se modele geometricamente o obstáculo. O método supera filtros de Kalman tradicionais em precisão e robustez.">
+<meta property="og:image" content="../../assets/papers/2611.09877/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Robótica</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.09877" rel="noopener">arXiv:2611.09877</a>
+    </div>
+    <h1><span class="s" data-s="t">Estimando Contato em Robôs Continuum Apenas com Tensões de Tendões via MHE</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Este paper demonstra que é possível localizar pontos de contato em robôs flexíveis usando apenas dados dos motores, desde que se modele geometricamente o obstáculo.</span> <span class="s" data-s="d-s1">O método supera filtros de Kalman tradicionais em precisão e robustez.</span></p>
+    <p class="byline">
+      <span>El-Hussieny</span>
+      <span>6 min de leitura</span>
+<span>06/11/2026</span>    </p>
+    <div class="listen" data-article="2611.09877" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=7SdrCbo1aTo" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema do Robô Cego</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Robôs continuum, especialmente os acionados por tendões, são projetados para navegar por espaços confinados onde instrumentos rígidos não chegam.</span> <span class="s" data-s="b0-p0-s1">Cirurgias minimamente invasivas e inspeções em dutos são exemplos clássicos.</span> <span class="s" data-s="b0-p0-s2">No entanto, essa flexibilidade traz um desafio sensorial fundamental: o corpo do robô toca superfícies externas, mas os sensores tradicionais estão localizados apenas nas bases dos motores.</span> <span class="s" data-s="b0-p0-s3">O robô não &#39;sente&#39; onde está tocando ao longo do seu comprimento.</span></p><p><span class="s" data-s="b0-p1-s0">Os métodos existentes tentam inferir o contato a partir de desvios de forma ou tensões medidas.</span> <span class="s" data-s="b0-p1-s1">Muitos exigem sensores de força integrados ao corpo ou câmeras externas, o que é difícil de implementar em corpos esbeltos, flexíveis e esterilizáveis.</span> <span class="s" data-s="b0-p1-s2">Outros usam filtros de Kalman Estendidos (EKF) para estimar cargas externas, mas frequentemente assumem que o ponto de contato é conhecido ou requerem medições de forma precisas.</span></p><p><span class="s" data-s="b0-p2-s0">Este artigo aborda uma limitação estrutural, não apenas de ajuste de parâmetros.</span> <span class="s" data-s="b0-p2-s1">Os autores mostram que, sem informação geométrica sobre o obstáculo, o mapeamento entre forças de contato e medições de tendões possui um espaço nulo de dimensão pelo menos sete.</span> <span class="s" data-s="b0-p2-s2">Isso significa que, matematicamente, é impossível distinguir onde o contato ocorre apenas olhando para as tensões dos tendões, a menos que se imponha uma estrutura ao problema.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.09877/figure1.webp" alt="Ilustração do problema: o robô toca uma parede, mas os sensores nos motores não detectam diretamente o contato. A figura mostra os pontos candidatos e a sensibilidade do sistema, evidenciando a ambiguidade sem restrições geométricas." loading="lazy">
+          <figcaption>
+            Ilustração do problema: o robô toca uma parede, mas os sensores nos motores não detectam diretamente o contato. A figura mostra os pontos candidatos e a sensibilidade do sistema, evidenciando a ambiguidade sem restrições geométricas.
+            <span class="source">Figura 1 do paper · El-Hussieny, arXiv:2611.09877</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">Identificabilidade e a Solução Geométrica</span></h2>
+<p><span class="s" data-s="b2-p0-s0">A contribuição central deste trabalho é provar que a força de contato se torna localmente identificável se a geometria do obstáculo for conhecida.</span> <span class="s" data-s="b2-p0-s1">Ao impor condições de não-penetração e complementaridade (a força só existe se houver contato, e é zero se houver distância), o sistema recupera a observabilidade.</span> <span class="s" data-s="b2-p0-s2">Os autores demonstram que, nessas condições, o sistema com entradas de contato desconhecidas é localmente exponencialmente fortemente detectável.</span></p><p><span class="s" data-s="b2-p1-s0">Em termos práticos, isso significa que o estimador pode distinguir entre uma deformação causada por uma força na ponta e uma deformação causada por uma força no meio do corpo, desde que saiba que existe uma parede em uma posição específica.</span> <span class="s" data-s="b2-p1-s1">A restrição geométrica elimina os graus de liberdade que antes tornavam o problema indeterminado.</span></p><p><span class="s" data-s="b2-p2-s0">Isso contrasta com trabalhos anteriores que discutiam observabilidade de componentes de força em contatos conhecidos.</span> <span class="s" data-s="b2-p2-s1">Aqui, o foco é determinar onde ao longo do corpo o contato ocorre, algo crítico para segurança e controle em ambientes não estruturados.</span></p>        <h2><span class="s" data-s="b3-h">O Estimador de Horizonte Móvel Restrito (MHE)</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Para implementar essa teoria, os autores propõem um Estimador de Horizonte Móvel Restrito (MHE, do inglês Moving Horizon Estimation).</span> <span class="s" data-s="b3-p0-s1">Diferente do EKF, que lineariza o sistema em cada passo e assume ruídos gaussianos, o MHE resolve um problema de otimização em tempo real, minimizando o erro entre as medições previstas e as reais, sujeito a restrições físicas.</span></p><p><span class="s" data-s="b3-p1-s0">O MHE codifica explicitamente as condições de não-penetração, forças não-negativas e complementaridade.</span> <span class="s" data-s="b3-p1-s1">Em vez de usar uma função de custo suave que pode violar essas restrições, o algoritmo as impõe diretamente.</span> <span class="s" data-s="b3-p1-s2">Para viabilizar a execução em tempo real, eles substituem a condição de complementaridade por uma penalidade linearizada, resolvendo o problema como um Programa Quadrático (QP) a cada amostra.</span></p><p><span class="s" data-s="b3-p2-s0">O resultado é um estimador que roda em tempo real, exigindo apenas um QP por amostra.</span> <span class="s" data-s="b3-p2-s1">Os autores também fornecem um resultado de estabilidade robusta local, garantindo que o estimador converge para o estado verdadeiro sob certas condições de erro limitado e perturbações.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b4-t">Por que MHE e não EKF?</span></h3>
+          <p><span class="s" data-s="b4-c-s0">O EKF assume linearidade local e distribuições de erro gaussianas.</span> <span class="s" data-s="b4-c-s1">Contatos são eventos não-lineares e descontínuos (força zero -&gt; força não-zero).</span> <span class="s" data-s="b4-c-s2">O MHE lida naturalmente com essas restrições hard, enquanto o EKF precisa de projeções artificiais de estado que podem introduzir viés e instabilidade, especialmente sob incerteza de modelo.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b5-h">Benchmarking e Resultados</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os autores avaliaram o método em um benchmark de elementos finitos de um robô de duas seções pressionando e deslizando contra uma parede.</span> <span class="s" data-s="b5-p0-s1">Os resultados foram contundentes: o MHE localizou o contato com erro de 0,9 mm e estimou a força com erro de 0,22 N. Em comparação, um EKF ajustado com projeção de estado teve erros de 65 mm e 0,72 N, respectivamente.</span></p><p><span class="s" data-s="b5-p1-s0">A precisão do MHE não veio apenas de um ajuste fino.</span> <span class="s" data-s="b5-p1-s1">Sob erros milimétricos na posição assumida da parede e atrito não modelado da parede, o MHE manteve a precisão, enquanto o EKF projetado falhou.</span> <span class="s" data-s="b5-p1-s2">Em 40 ensaios com incerteza de modelo aleatória, incluindo atrito de tendões não modelado, o MHE superou o EKF em força e localização em todos os casos.</span></p><p><span class="s" data-s="b5-p2-s0">Um ponto crucial é o controle: sem contato, o MHE não ofereceu vantagem significativa sobre o EKF.</span> <span class="s" data-s="b5-p2-s1">Isso confirma que o benefício do MHE vem exclusivamente da capacidade de incorporar as restrições de contato, e não de uma superioridade intrínseca do método de estimação em si.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.09877/figure3.webp" alt="Comparação temporal da estimativa de contato. O MHE (linha sólida) segue a força total e a localização ponderada pela força com muito mais precisão que o EKF, especialmente durante a transição de contato." loading="lazy">
+          <figcaption>
+            Comparação temporal da estimativa de contato. O MHE (linha sólida) segue a força total e a localização ponderada pela força com muito mais precisão que o EKF, especialmente durante a transição de contato.
+            <span class="source">Figura 3 do paper · El-Hussieny, arXiv:2611.09877</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Robustez e Limitações</span></h2>
+<p><span class="s" data-s="b7-p0-s0">A robustez do MHE é sua principal vantagem prática.</span> <span class="s" data-s="b7-p0-s1">Em testes de sensibilidade, o erro na posição da parede (RMSE da força) aumentou gradualmente, mas permaneceu baixo mesmo com erros de alguns milímetros.</span> <span class="s" data-s="b7-p0-s2">Da mesma forma, a introdução de atrito de Coulomb não modelado na parede não degradou severamente a estimativa de força normal, ao contrário do EKF, que é sensível a discrepâncias no modelo de ruído.</span></p><p><span class="s" data-s="b7-p1-s0">No entanto, o método tem limitações claras.</span> <span class="s" data-s="b7-p1-s1">Ele requer conhecimento prévio da geometria do obstáculo.</span> <span class="s" data-s="b7-p1-s2">Se o ambiente for desconhecido ou dinâmico de forma imprevisível, o estimador não pode funcionar sozinho.</span> <span class="s" data-s="b7-p1-s3">Além disso, a análise de estabilidade é local; grandes erros iniciais ou perturbações extremas podem levar o estimador a divergir.</span></p><p><span class="s" data-s="b7-p2-s0">O paper também nota que o método é computacionalmente mais pesado que o EKF, embora o QP seja resolvido em tempo real.</span> <span class="s" data-s="b7-p2-s1">A complexidade cresce com o número de pontos de contato candidatos.</span> <span class="s" data-s="b7-p2-s2">Para robôs com muitos segmentos ou pontos de contato potenciais, a otimização pode se tornar um gargalo, exigindo otimizações adicionais de código.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.09877/figure5.webp" alt="Testes de robustez. O MHE mantém a precisão (RMSE baixo) mesmo com erros na posição da parede e atrito não modelado, enquanto o EKF falha rapidamente nessas condições." loading="lazy">
+          <figcaption>
+            Testes de robustez. O MHE mantém a precisão (RMSE baixo) mesmo com erros na posição da parede e atrito não modelado, enquanto o EKF falha rapidamente nessas condições.
+            <span class="source">Figura 5 do paper · El-Hussieny, arXiv:2611.09877</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Conclusão e Perspectivas</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Este trabalho estabelece que a localização de contato em robôs continuum não é um problema de tuning, mas de modelagem estrutural.</span> <span class="s" data-s="b9-p0-s1">Ao incorporar restrições geométricas e de complementaridade em um framework de MHE, é possível recuperar a observabilidade perdida na formulação padrão.</span> <span class="s" data-s="b9-p0-s2">Os resultados experimentais validam a teoria, mostrando superioridade consistente sobre métodos baseados em EKF.</span></p><p><span class="s" data-s="b9-p1-s0">Para desenvolvedores e pesquisadores na área, a mensagem é clara: se você tem acesso à geometria do ambiente, use restrições hard em seu estimador.</span> <span class="s" data-s="b9-p1-s1">Ignorar a física do contato (não-penetração, complementaridade) leva a ambiguidades matemáticas que filtros lineares não conseguem resolver.</span></p><p><span class="s" data-s="b9-p2-s0">Trabalhos futuros podem explorar a integração deste estimador com mapeamento simultâneo do ambiente, removendo a necessidade de conhecer a geometria do obstáculo a priori.</span> <span class="s" data-s="b9-p2-s1">Também é interessante investigar a aplicação em robôs com mais de duas seções e em cenários dinâmicos mais complexos, onde a inércia e o atrito dinâmico desempenham papéis mais significativos.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.09877/table1.webp" alt="Tabela comparativa. O MHE proposto usa apenas tensões de tendões e estima forma, força e localização, superando métodos anteriores que exigem sensores adicionais ou têm estimativas menos precisas." loading="lazy">
+          <figcaption>
+            Tabela comparativa. O MHE proposto usa apenas tensões de tendões e estima forma, força e localização, superando métodos anteriores que exigem sensores adicionais ou têm estimativas menos precisas.
+            <span class="source">Tabela 1 do paper · El-Hussieny, arXiv:2611.09877</span>
+          </figcaption>
+        </figure>
+
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Contato em robôs continuum é não identificável apenas com tensões de tendões sem restrições geométricas; o espaço nulo do sistema impede a localização única.</span></li><li><span class="s" data-s="k1">O MHE (Moving Horizon Estimation) com restrições de não-penetração e complementaridade resolve o problema em tempo real via QP, superando EKFs tradicionais.</span></li><li><span class="s" data-s="k2">O método é robusto a erros de modelo e atrito não modelado, mantendo precisão de 0,9 mm na localização e 0,22 N na força em benchmarks de elementos finitos.</span></li><li><span class="s" data-s="k3">A vantagem do MHE é específica para cenários de contato; sem contato, ele não oferece vantagem sobre o EKF, confirmando que a melhoria vem das restrições impostas.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.09877" rel="noopener">Locating Contact on Tendon-Driven Continuum Robots From Tendon Measurements Alone via Constrained Moving Horizon Estimation</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.09877" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

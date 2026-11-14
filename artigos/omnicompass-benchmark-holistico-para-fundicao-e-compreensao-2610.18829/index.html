@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OmniCompass: Benchmark Holístico para Fundição e Compreensão de Vídeo Multimodal — arXiv em 5</title>
+<meta name="description" content="O OmniCompass propõe uma avaliação unificada de modelos de linguagem multimodais, medindo não apenas a precisão, mas a consistência temporal, espacial e auditiva na localização e compreensão de alvos em vídeos.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OmniCompass: Benchmark Holístico para Fundição e Compreensão de Vídeo Multimodal">
+<meta property="og:description" content="O OmniCompass propõe uma avaliação unificada de modelos de linguagem multimodais, medindo não apenas a precisão, mas a consistência temporal, espacial e auditiva na localização e compreensão de alvos em vídeos.">
+<meta property="og:image" content="../../assets/papers/2610.18829/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Vídeo</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.18829" rel="noopener">arXiv:2610.18829</a>
+    </div>
+    <h1><span class="s" data-s="t">OmniCompass: Benchmark Holístico para Fundição e Compreensão de Vídeo Multimodal</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">O OmniCompass propõe uma avaliação unificada de modelos de linguagem multimodais, medindo não apenas a precisão, mas a consistência temporal, espacial e auditiva na localização e compreensão de alvos em vídeos.</span></p>
+    <p class="byline">
+      <span>Liu et al.</span>
+      <span>8 min de leitura</span>
+<span>13/10/2026</span>    </p>
+    <div class="listen" data-article="2610.18829" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=XfSwMfr0UEY" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Avaliação Fragmentada</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A avaliação de Modelos de Linguagem Multimodais (MLLMs) tem sido historicamente fragmentada.</span> <span class="s" data-s="b0-p0-s1">Benchmarks existentes tendem a focar em apenas uma dimensão do entendimento de vídeo: ou são puramente visuais, ignorando o áudio; ou avaliam apenas perguntas de múltipla escolha, sem exigir que o modelo localize precisamente onde e quando um evento ocorre no tempo ou no espaço.</span> <span class="s" data-s="b0-p0-s2">Essa limitação impede um diagnóstico sistemático das capacidades reais dos modelos em cenários complexos, onde a percepção humana integra naturalmente pistas visuais, auditivas e linguísticas.</span></p><p><span class="s" data-s="b0-p1-s0">Os autores identificam quatro dimensões críticas que a maioria dos benchmarks atuais não cobre simultaneamente: a especificação do alvo (apenas texto ou texto com imagem de referência), o tipo de evidência do vídeo (visual ou áudio-visual nativo), a cobertura das tarefas (grounding temporal, espacial e question answering) e a duração do vídeo (curto, médio ou longo).</span> <span class="s" data-s="b0-p1-s1">Sem uma ferramenta que una essas dimensões, é impossível medir se um modelo realmente entende o vídeo ou apenas memorizou padrões superficiais de texto e imagem.</span></p><p><span class="s" data-s="b0-p2-s0">Para resolver essa lacuna, a equipe do PolyU VCLAB, em colaboração com OPPO Research Institute e outras instituições, apresenta o OmniCompass.</span> <span class="s" data-s="b0-p2-s1">Este não é apenas mais um conjunto de dados, mas um framework de avaliação holístico projetado para forçar os MLLMs a realizar tarefas de fundição (grounding) e compreensão de forma rigorosa.</span> <span class="s" data-s="b0-p2-s2">O objetivo é expor as falhas na alinhamento multimodal e na consistência lógica dos modelos atuais.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.18829/figure2.webp" alt="Visão geral do OmniCompass: o benchmark estrutura a avaliação em quatro dimensões interligadas, exigindo que os modelos localizem alvos no tempo e espaço, respondam perguntas e mantenham consistência entre especificações textuais e visuais." loading="lazy">
+          <figcaption>
+            Visão geral do OmniCompass: o benchmark estrutura a avaliação em quatro dimensões interligadas, exigindo que os modelos localizem alvos no tempo e espaço, respondam perguntas e mantenham consistência entre especificações textuais e visuais.
+            <span class="source">Figura 2 do paper · Liu et al., arXiv:2610.18829</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">Arquitetura do Benchmark: Duas Faixas, Três Tarefas</span></h2>
+<p><span class="s" data-s="b2-p0-s0">O OmniCompass é estruturado em duas faixas de avaliação distintas, cada uma projetada para testar capacidades específicas de integração multimodal.</span> <span class="s" data-s="b2-p0-s1">A primeira faixa, OmniCompass-VL, avalia modelos Visão-Linguagem.</span> <span class="s" data-s="b2-p0-s2">Ela contém 820 vídeos manualmente anotados, totalizando 2.460 instâncias de avaliação.</span> <span class="s" data-s="b2-p0-s3">Esta faixa é dividida em três tipos de duração: vídeos curtos, médios e longos, cobrindo sete domínios diferentes, desde notícias até esportes.</span> <span class="s" data-s="b2-p0-s4">O foco aqui é a capacidade do modelo de extrair evidências puramente visuais para responder a perguntas ou localizar eventos.</span></p><p><span class="s" data-s="b2-p1-s0">A segunda faixa, OmniCompass-AV, é dedicada a modelos omnimodais que suportam áudio nativo.</span> <span class="s" data-s="b2-p1-s1">Este subconjunto é mais restrito, contendo 240 vídeos e 720 instâncias, mas é narrativamente e auditivamente rico.</span> <span class="s" data-s="b2-p1-s2">A inclusão do áudio não é opcional; ela é parte integral da evidência necessária para resolver muitas das perguntas.</span> <span class="s" data-s="b2-p1-s3">Isso permite avaliar se os modelos são capazes de alinhar informações auditivas com eventos visuais, uma habilidade crucial para a compreensão contextual profunda.</span></p><p><span class="s" data-s="b2-p2-s0">Dentro de cada faixa, três tarefas complementares são executadas.</span> <span class="s" data-s="b2-p2-s1">A Fundição Temporal (TG) exige que o modelo identifique o intervalo de tempo exato em que um alvo aparece.</span> <span class="s" data-s="b2-p2-s2">A Fundição Espacial (SG) pede a localização exata do alvo dentro do quadro (bounding box ou segmentação).</span> <span class="s" data-s="b2-p2-s3">Por fim, o Question Answering (QA) testa a compreensão semântica e a capacidade de raciocínio sobre o que acontece.</span> <span class="s" data-s="b2-p2-s4">Essa combinação força o modelo a não apenas &#39;ver&#39; o vídeo, mas a estruturá-lo mentalmente no espaço e no tempo.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b3-t">A Métrica CS: Consistência é a Chave</span></h3>
+          <p><span class="s" data-s="b3-c-s0">O diferencial do OmniCompass é a métrica CS (Consistency Score).</span> <span class="s" data-s="b3-c-s1">Cada instância é avaliada sob duas configurações pareadas: uma com apenas texto e outra com texto mais uma imagem de referência do alvo.</span> <span class="s" data-s="b3-c-s2">O modelo só recebe crédito se for correto e consistente em ambas.</span> <span class="s" data-s="b3-c-s3">Se ele localiza o alvo corretamente no modo texto, mas falha ou muda a localização ao ver a imagem, a consistência é penalizada.</span> <span class="s" data-s="b3-c-s4">Isso expõe a fragilidade de modelos que dependem de heurísticas de texto em vez de compreensão visual real.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b4-h">Metodologia de Avaliação e Configuração Experimental</span></h2>
+<p><span class="s" data-s="b4-p0-s0">A rigorosidade do benchmark é reforçada pela metodologia de entrada.</span> <span class="s" data-s="b4-p0-s1">Para garantir justiça comparativa, os vídeos são processados com amostragem uniforme de quadros.</span> <span class="s" data-s="b4-p0-s2">Modelos proprietários e open-source com mais de 100 bilhões de parâmetros recebem 64 quadros, enquanto modelos menores recebem 32.</span> <span class="s" data-s="b4-p0-s3">Modelos da série GPT utilizam 49 quadros para acomodar a imagem de referência dentro de seus limites de contexto.</span> <span class="s" data-s="b4-p0-s4">Um detalhe técnico importante é a inclusão de timestamps em cada quadro, uma técnica conhecida por melhorar o alinhamento temporal dos modelos.</span></p><p><span class="s" data-s="b4-p1-s0">A avaliação abrangeu 50 MLLMs distintos, incluindo líderes proprietários como as séries Gemini (Google), GPT (OpenAI), Seed e Qwen, além de uma ampla gama de modelos open-source como Kimi-K3, GLM-5.3-Flash, DeepSeek-V4.1-Flash, Qwen open-source, InternVL3.5, e séries LLaVA.</span> <span class="s" data-s="b4-p1-s1">Na faixa AV, o foco recai sobre modelos com suporte nativo a áudio, como Qwen-Omni, Seed-2.0-Lite, MiniCPM-o e VideoLLaMA2.</span> <span class="s" data-s="b4-p1-s2">Essa diversidade permite identificar não apenas quem está na liderança, mas quais arquiteturas falham em tarefas específicas.</span></p><p><span class="s" data-s="b4-p2-s0">As anotações são feitas manualmente com verificação de qualidade em múltiplas rodadas.</span> <span class="s" data-s="b4-p2-s1">Isso garante que o ground truth (a resposta correta) seja preciso, eliminando ruídos que poderiam inflacionar artificialmente as métricas de modelos menos sofisticados.</span> <span class="s" data-s="b4-p2-s2">A estrutura de pareamento entre as especificações de texto e texto+imagem é aplicada rigorosamente: o mesmo alvo, no mesmo vídeo, com a mesma semântica de tarefa, é submetido a duas variações de entrada para testar a robustez da percepção do modelo.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.18829/figure1.webp" alt="Ranking geral no OmniCompass-VL: modelos proprietários como Gemini-3.8-Flash lideram, enquanto Kimi-K3 se destaca entre os open-source, revelando um gap significativo de desempenho." loading="lazy">
+          <figcaption>
+            Ranking geral no OmniCompass-VL: modelos proprietários como Gemini-3.8-Flash lideram, enquanto Kimi-K3 se destaca entre os open-source, revelando um gap significativo de desempenho.
+            <span class="source">Figura 1 do paper · Liu et al., arXiv:2610.18829</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b6-h">Resultados: A Liderança Proprietária e o Gap de Código Aberto</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Os resultados do OmniCompass-VL revelam uma hierarquia clara.</span> <span class="s" data-s="b6-p0-s1">O modelo Gemini-3.8-Flash da Google alcançou a pontuação mais alta entre os proprietários, com 42,8% na média geral.</span> <span class="s" data-s="b6-p0-s2">Entre os modelos de código aberto, o Kimi-K3 liderou com 39,6%.</span> <span class="s" data-s="b6-p0-s3">Embora a diferença numérica pareça pequena, ela representa uma lacuna significativa em tarefas de grounding fino.</span> <span class="s" data-s="b6-p0-s4">Modelos como GPT-5.6-Terra e GPT-5.5-Luna tiveram desempenhos mais baixos, indicando que o tamanho do modelo ou a marca não garantem automaticamente superioridade em compreensão de vídeo complexa.</span></p><p><span class="s" data-s="b6-p1-s0">Ao analisar as sub-tarefas, fica evidente que a Fundição Espacial (SG) e Temporal (TG) são os pontos mais fracos.</span> <span class="s" data-s="b6-p1-s1">Mesmo os melhores modelos tiveram dificuldades em localizar com precisão os intervalos temporais exatos.</span> <span class="s" data-s="b6-p1-s2">A métrica mtIoU (mean intersection over union) para grounding temporal mostrou que muitos modelos falham em delimitar corretamente o início e o fim de um evento, muitas vezes incluindo ruído temporal ou perdendo partes cruciais da ação.</span> <span class="s" data-s="b6-p1-s3">Isso sugere que os mecanismos de atenção dos modelos ainda não são suficientemente refinados para capturar a granularidade temporal necessária.</span></p><p><span class="s" data-s="b6-p2-s0">No Question Answering, a performance foi melhor, mas ainda longe do perfeito.</span> <span class="s" data-s="b6-p2-s1">A consistência entre as especificações de texto e texto+imagem foi um divisor de águas.</span> <span class="s" data-s="b6-p2-s2">Modelos que dependiam fortemente de pistas textuais no prompt tendiam a falhar quando a imagem de referência era introduzida, ou vice-versa.</span> <span class="s" data-s="b6-p2-s3">Isso indica uma falta de alinhamento robusto entre as representações visuais e textuais no espaço latente dos modelos.</span></p>        <h2><span class="s" data-s="b7-h">O Impacto do Áudio na Compreensão Omnimodal</span></h2>
+<p><span class="s" data-s="b7-p0-s0">A faixa OmniCompass-AV trouxe insights críticos sobre a integração de áudio.</span> <span class="s" data-s="b7-p0-s1">A Figura 7 do paper ilustra que a adição de áudio nativo melhora significativamente a precisão dos modelos em tarefas de compreensão.</span> <span class="s" data-s="b7-p0-s2">Quando os modelos são avaliados apenas com vídeo (Vision), eles perdem informações contextuais vitais.</span> <span class="s" data-s="b7-p0-s3">Com o Vision+Audio, a métrica CS sobe, demonstrando que o áudio não é apenas um complemento, mas muitas vezes a chave para desambiguar eventos visuais ambíguos.</span></p><p><span class="s" data-s="b7-p1-s0">Por exemplo, em notícias ou diálogos, a identificação de quem está falando ou o tom da voz pode ser essencial para responder perguntas sobre intenções ou ações.</span> <span class="s" data-s="b7-p1-s1">Modelos que ignoram o áudio, mesmo que tenham alta capacidade visual, têm seu desempenho severamente penalizado nesta faixa.</span> <span class="s" data-s="b7-p1-s2">A análise mostrou que a vinculação de eventos áudio-visuais (audio-visual event binding) é um dos maiores desafios atuais.</span> <span class="s" data-s="b7-p1-s3">Muitos modelos processam áudio e vídeo em streams separados que não se comunicam eficientemente durante o raciocínio.</span></p><p><span class="s" data-s="b7-p2-s0">Além disso, a consistência no ambiente AV foi ainda mais desafiadora.</span> <span class="s" data-s="b7-p2-s1">A introdução de uma terceira modalidade aumentou a complexidade do espaço de busca.</span> <span class="s" data-s="b7-p2-s2">Modelos proprietários mantiveram uma vantagem, mas o gap para os open-source aumentou nesta faixa.</span> <span class="s" data-s="b7-p2-s3">Isso sugere que o fine-tuning para multimodalidade áudio-visual é uma área onde a indústria proprietária tem investido mais recursos, ou que as arquiteturas open-source atuais ainda não escalam bem para a integração tripla (texto, imagem, áudio).</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.18829/figure7.webp" alt="Impacto das modalidades de entrada no OmniCompass-AV: a adição de áudio nativo (Vision+Audio) aumenta consistentemente a pontuação de consistência (CS) em comparação ao uso apenas de visão, destacando a dependência dos modelos em pistas auditivas." loading="lazy">
+          <figcaption>
+            Impacto das modalidades de entrada no OmniCompass-AV: a adição de áudio nativo (Vision+Audio) aumenta consistentemente a pontuação de consistência (CS) em comparação ao uso apenas de visão, destacando a dependência dos modelos em pistas auditivas.
+            <span class="source">Figura 7 do paper · Liu et al., arXiv:2610.18829</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Limitações e Direções Futuras</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Apesar de sua abrangência, o OmniCompass não é isento de limitações.</span> <span class="s" data-s="b9-p0-s1">O conjunto de dados, embora diversificado, ainda cobre apenas sete domínios.</span> <span class="s" data-s="b9-p0-s2">A generalização para outros contextos culturais ou linguísticos não foi testada extensivamente.</span> <span class="s" data-s="b9-p0-s3">Além disso, a amostragem de quadros, embora padronizada, pode não capturar movimentos rápidos ou detalhes sutis que ocorrem entre os frames selecionados, especialmente em vídeos de alta velocidade.</span></p><p><span class="s" data-s="b9-p1-s0">Outra limitação é a dependência de anotações manuais.</span> <span class="s" data-s="b9-p1-s1">Embora a qualidade seja alta, o custo de escalonar esse tipo de avaliação para conjuntos de dados massivos é proibitivo.</span> <span class="s" data-s="b9-p1-s2">O benchmark serve mais como um padrão de ouro para diagnóstico do que como um teste de throughput para milhares de modelos.</span> <span class="s" data-s="b9-p1-s3">Os autores reconhecem que métricas automáticas de consistência podem ser aprimoradas para reduzir a carga humana na validação.</span></p><p><span class="s" data-s="b9-p2-s0">Os resultados também apontam para um caminho claro para a pesquisa futura: a necessidade de melhores mecanismos de alinhamento multimodal.</span> <span class="s" data-s="b9-p2-s1">Os modelos precisam evoluir de uma simples concatenação de features visuais e textuais para uma integração profunda onde o áudio, o vídeo e o texto coexistem em um espaço semântico unificado.</span> <span class="s" data-s="b9-p2-s2">A consistência entre especificações de texto e imagem é um sintoma dessa falha de alinhamento, e resolvê-la exigirá avanços na arquitetura dos transformers e nos métodos de pré-treinamento.</span></p>        <h2><span class="s" data-s="b10-h">Conclusão</span></h2>
+<p><span class="s" data-s="b10-p0-s0">O OmniCompass estabelece um novo padrão para a avaliação de MLLMs.</span> <span class="s" data-s="b10-p0-s1">Ao unificar grounding temporal, espacial e question answering sob pares de especificações textuais e visuais, ele expõe falhas que benchmarks anteriores ocultavam.</span> <span class="s" data-s="b10-p0-s2">A descoberta de que a consistência é tão difícil quanto a precisão isolada é um achado valioso para a comunidade.</span></p><p><span class="s" data-s="b10-p1-s0">Para desenvolvedores e cientistas de dados, a mensagem é clara: a simples melhoria de acurácia em QA não é suficiente.</span> <span class="s" data-s="b10-p1-s1">A capacidade de um modelo de localizar com precisão e manter a coerência através de diferentes modalidades é o verdadeiro indicador de maturidade.</span> <span class="s" data-s="b10-p1-s2">O OmniCompass fornece a bússola (compass) necessária para navegar esse terreno complexo, apontando onde a tecnologia atual falha e onde a próxima geração de modelos precisa se concentrar.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">O benchmark introduz duas faixas de avaliação: uma focada em evidências visuais (VL) e outra em áudio-visuais (AV), cobrindo grounding temporal, espacial e perguntas abertas.</span></li><li><span class="s" data-s="k1">A métrica CS (Consistency Score) exige que o modelo produza previsões coerentes quando o alvo é especificado apenas por texto ou por texto mais imagem de referência.</span></li><li><span class="s" data-s="k2">Modelos proprietários lideram os rankings, mas a precisão no grounding fino permanece um gargalo crítico, especialmente para soluções de código aberto.</span></li><li><span class="s" data-s="k3">A inclusão de áudio nativo melhora significativamente a compreensão de eventos, revelando que muitos modelos ignoram pistas auditivas cruciais.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.18829" rel="noopener">OmniCompass: A Holistic Benchmark for Omni-Modal Video Grounding and Understanding</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.18829" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Como prever os efeitos colaterais do alinhamento: representações de valores em modelos de linguagem — arXiv em 5</title>
+<meta name="description" content="Treinar um modelo para ser empático pode torná-lo mais propenso a teorias da conspiração. Este paper mostra como prever essas interações inesperadas entre valores antes de treinar o modelo.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Como prever os efeitos colaterais do alinhamento: representações de valores em modelos de linguagem">
+<meta property="og:description" content="Treinar um modelo para ser empático pode torná-lo mais propenso a teorias da conspiração. Este paper mostra como prever essas interações inesperadas entre valores antes de treinar o modelo.">
+<meta property="og:image" content="../../assets/papers/2610.12410/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>LLMs</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.12410" rel="noopener">arXiv:2610.12410</a>
+    </div>
+    <h1><span class="s" data-s="t">Como prever os efeitos colaterais do alinhamento: representações de valores em modelos de linguagem</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Treinar um modelo para ser empático pode torná-lo mais propenso a teorias da conspiração.</span> <span class="s" data-s="d-s1">Este paper mostra como prever essas interações inesperadas entre valores antes de treinar o modelo.</span></p>
+    <p class="byline">
+      <span>Liu et al.</span>
+      <span>8 min de leitura</span>
+<span>08/10/2026</span>    </p>
+    <div class="listen" data-article="2610.12410" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=6p9lmtPvzss" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema dos efeitos colaterais no alinhamento</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Quando empresas como OpenAI ou Anthropic treinam seus modelos de linguagem, elas querem que eles exibam valores pró-sociais: ser úteis, honestos, respeitosos.</span> <span class="s" data-s="b0-p0-s1">Essas características desejadas são listadas em um documento chamado alignment target — o Model Spec da OpenAI ou a Constitution da Anthropic, por exemplo.</span> <span class="s" data-s="b0-p0-s2">O modelo então passa por técnicas de pós-treinamento (fine-tuning) como RLHF ou Constitutional AI para aprender esses comportamentos.</span></p><p><span class="s" data-s="b0-p1-s0">O problema é que treinar um modelo em um conjunto específico de valores influencia seu comportamento em contextos totalmente diferentes de maneiras inesperadas.</span> <span class="s" data-s="b0-p1-s1">Um exemplo concreto: treinar modelos para serem mais empáticos pode torná-los mais propensos a promover teorias da conspiração ou dar conselhos problemáticos.</span> <span class="s" data-s="b0-p1-s2">Mesmo valores pró-sociais podem ter efeitos colaterais negativos quando o modelo os associa a comportamentos prejudiciais.</span></p><p><span class="s" data-s="b0-p2-s0">Isso acontece porque nossa compreensão de como diferentes valores interagem durante o treinamento é muito limitada.</span> <span class="s" data-s="b0-p2-s1">Empresas tomam decisões importantes sobre quais valores incluir no alignment target principalmente através de discussões filosóficas internas, sem uma base empírica sólida.</span> <span class="s" data-s="b0-p2-s2">Mas testar todas as combinações possíveis de valores seria proibitivamente caro: exigiria treinar e avaliar modelos em milhares de configurações diferentes.</span></p>        <h2><span class="s" data-s="b1-h">A tarefa: prever generalização de alinhamento</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Os autores propõem uma solução: criar representações vetoriais de valores que permitam prever como eles interagem antes de treinar o modelo.</span> <span class="s" data-s="b1-p0-s1">A ideia é análoga ao uso de word embeddings para capturar relações semânticas entre palavras, mas aplicada a valores e traços comportamentais.</span></p><p><span class="s" data-s="b1-p1-s0">O paper introduz formalmente a tarefa de alignment generalization prediction: dado que você treinou um modelo para seguir o valor A, como isso afeta sua propensão a seguir o valor B, que não estava no treinamento?</span> <span class="s" data-s="b1-p1-s1">Por exemplo, se você treina um modelo para ser mais direto, isso o torna mais ou menos criativo?</span> <span class="s" data-s="b1-p1-s2">Mais ou menos formal?</span></p><p><span class="s" data-s="b1-p2-s0">Para responder isso em larga escala, os autores conduziram experimentos com 66 valores encontrados em alignment targets modernos.</span> <span class="s" data-s="b1-p2-s1">Para cada valor, eles treinaram modelos e mediram como o treinamento em um valor específico afetou o comportamento do modelo em todos os outros 65 valores.</span> <span class="s" data-s="b1-p2-s2">O resultado é uma matriz de generalização: uma tabela 66×66 mostrando como cada par de valores interage durante o treinamento.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.12410/figure1.webp" alt="Visão geral do estudo: treinar um modelo em um valor específico afeta seu comportamento em outros valores não treinados. O objetivo é criar representações que prevejam essas interações antes do treinamento." loading="lazy">
+          <figcaption>
+            Visão geral do estudo: treinar um modelo em um valor específico afeta seu comportamento em outros valores não treinados. O objetivo é criar representações que prevejam essas interações antes do treinamento.
+            <span class="source">Figura 1 do paper · Liu et al., arXiv:2610.12410</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Métodos de representação testados</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Os autores compararam duas famílias de métodos para criar representações de valores.</span> <span class="s" data-s="b3-p0-s1">A primeira usa descrições textuais: você pega a definição escrita do valor (por exemplo, &#39;seja empático&#39;) e gera embeddings usando modelos de linguagem ou sentence encoders.</span> <span class="s" data-s="b3-p0-s2">É o método mais óbvio e direto.</span></p><p><span class="s" data-s="b3-p1-s0">A segunda família usa ativações do modelo quando o valor é aplicado em contexto.</span> <span class="s" data-s="b3-p1-s1">A ideia é observar o que acontece dentro do modelo quando ele está efetivamente demonstrando aquele valor.</span> <span class="s" data-s="b3-p1-s2">Existem várias técnicas nessa categoria: você pode extrair ativações de camadas específicas quando o modelo gera texto seguindo aquele valor, ou calcular steering vectors que representam a direção no espaço de ativações que corresponde àquele comportamento.</span></p><p><span class="s" data-s="b3-p2-s0">Para cada método de representação, os autores calcularam a similaridade entre pares de valores (usando cosseno ou outras métricas de distância).</span> <span class="s" data-s="b3-p2-s1">A hipótese é simples: se dois valores têm representações similares, então treinar o modelo em um deles deve afetar o outro de forma previsível.</span> <span class="s" data-s="b3-p2-s2">A qualidade da representação é medida pela correlação entre a matriz de similaridades prevista e a matriz de generalização empírica obtida nos experimentos.</span></p>        <h2><span class="s" data-s="b4-h">Ativações vencem descrições por larga margem</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Os resultados são claros: métodos baseados em ativações do modelo superam significativamente os baseados em descrições textuais.</span> <span class="s" data-s="b4-p0-s1">Os melhores métodos de ativações alcançam correlações de 0.45 com a matriz de generalização empírica, enquanto métodos baseados em descrições ficam em apenas 0.05.</span></p><p><span class="s" data-s="b4-p1-s0">Isso faz sentido intuitivo.</span> <span class="s" data-s="b4-p1-s1">Uma descrição textual de um valor captura apenas como humanos conceituam aquele comportamento em linguagem natural.</span> <span class="s" data-s="b4-p1-s2">Mas o que importa para prever generalização é como o modelo internamente representa e processa aquele valor durante o treinamento.</span> <span class="s" data-s="b4-p1-s3">As ativações capturam essa estrutura interna de forma muito mais direta.</span></p><p><span class="s" data-s="b4-p2-s0">Entre os métodos de ativações, os autores testaram várias abordagens: persona vectors (vetores extraídos de gerações do modelo seguindo aquele valor), steering vectors (calculados através de técnicas de interpretabilidade), e variações usando diferentes camadas do modelo.</span> <span class="s" data-s="b4-p2-s1">Os detalhes técnicos variam, mas todos os métodos baseados em ativações superaram consistentemente as baselines textuais.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.12410/figure7.webp" alt="Todos os métodos de alinhamento testados conseguem direcionar o modelo para o valor desejado com sucesso. A questão não é se o treinamento funciona, mas como ele afeta outros valores não treinados." loading="lazy">
+          <figcaption>
+            Todos os métodos de alinhamento testados conseguem direcionar o modelo para o valor desejado com sucesso. A questão não é se o treinamento funciona, mas como ele afeta outros valores não treinados.
+            <span class="source">Figura 7 do paper · Liu et al., arXiv:2610.12410</span>
+          </figcaption>
+        </figure>
+        <aside class="callout">
+          <h3><span class="s" data-s="b6-t">O que é uma matriz de generalização?</span></h3>
+          <p><span class="s" data-s="b6-c-s0">Imagine uma tabela onde linhas e colunas são valores (honestidade, empatia, criatividade, etc).</span> <span class="s" data-s="b6-c-s1">Cada célula mostra o quanto treinar no valor da linha afeta o comportamento no valor da coluna.</span> <span class="s" data-s="b6-c-s2">Valores positivos indicam que treinar em A aumenta B; negativos indicam que diminui.</span> <span class="s" data-s="b6-c-s3">A diagonal mostra o efeito direto do treinamento no próprio valor.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b7-h">Aplicação 1: coerência de alignment targets</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Tendo estabelecido que representações baseadas em ativações preveem bem a generalização, os autores exploraram duas aplicações práticas.</span> <span class="s" data-s="b7-p0-s1">A primeira é medir a coerência de um alignment target multi-valor antes de treinar o modelo.</span></p><p><span class="s" data-s="b7-p1-s0">A ideia é simples: se você quer treinar um modelo em múltiplos valores simultaneamente, é melhor que esses valores sejam compatíveis entre si.</span> <span class="s" data-s="b7-p1-s1">Se o alignment target contém valores que puxam o modelo em direções opostas, o treinamento será mais difícil e o modelo resultante menos robusto.</span></p><p><span class="s" data-s="b7-p2-s0">Os autores definem coerência como a similaridade média entre todos os pares de valores em um alignment target, usando as representações baseadas em ativações.</span> <span class="s" data-s="b7-p2-s1">Eles então testaram se essa métrica prevê robustez do modelo: criaram 64 alignment targets diferentes, treinaram modelos em cada um, e mediram sua robustez a ataques adversariais.</span></p><p><span class="s" data-s="b7-p3-s0">O resultado: correlação de 0.43 (p = 5×10⁻⁴) entre coerência do alignment target e robustez adversarial do modelo treinado.</span> <span class="s" data-s="b7-p3-s1">Alignment targets mais coerentes — onde os valores têm representações mais similares — produzem modelos mais robustos.</span> <span class="s" data-s="b7-p3-s2">Isso valida a utilidade prática dessas representações para design de alignment targets.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.12410/figure3.webp" alt="Modelos treinados com alignment targets mais coerentes (valores com representações similares) são significativamente mais robustos a ataques adversariais. Correlação de Spearman ρ = 0.43." loading="lazy">
+          <figcaption>
+            Modelos treinados com alignment targets mais coerentes (valores com representações similares) são significativamente mais robustos a ataques adversariais. Correlação de Spearman ρ = 0.43.
+            <span class="source">Figura 3 do paper · Liu et al., arXiv:2610.12410</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Aplicação 2: taxonomia empírica de valores</span></h2>
+<p><span class="s" data-s="b9-p0-s0">A segunda aplicação é criar uma taxonomia de valores baseada em como eles realmente se comportam durante o treinamento, não em como humanos os descrevem filosoficamente.</span> <span class="s" data-s="b9-p0-s1">Taxonomias existentes de valores em LLMs são baseadas em análise conceitual ou descrições textuais.</span> <span class="s" data-s="b9-p0-s2">Mas será que valores que parecem similares conceitualmente também interagem de forma similar durante o treinamento?</span></p><p><span class="s" data-s="b9-p1-s0">Os autores introduzem VALUEMAP, um pipeline para criar taxonomias empiricamente fundamentadas.</span> <span class="s" data-s="b9-p1-s1">O processo: (1) calcular representações baseadas em ativações para um grande conjunto de valores, (2) usar clustering para agrupar valores com representações similares, (3) validar se valores no mesmo cluster realmente generalizam de forma similar nos experimentos.</span></p><p><span class="s" data-s="b9-p2-s0">Eles aplicaram VALUEMAP a 266 valores extraídos de interações reais entre humanos e IAs.</span> <span class="s" data-s="b9-p2-s1">O resultado é uma taxonomia onde valores são agrupados por dinâmicas empíricas de generalização, não por similaridade conceitual.</span> <span class="s" data-s="b9-p2-s2">Por exemplo, valores que filosoficamente parecem diferentes podem acabar no mesmo cluster se, na prática, treinar em um afeta o outro de forma similar.</span></p><p><span class="s" data-s="b9-p3-s0">Comparando com taxonomias existentes baseadas em descrições textuais, VALUEMAP prevê melhor o emaranhamento de valores durante o treinamento.</span> <span class="s" data-s="b9-p3-s1">Isso sugere que a estrutura interna de como modelos representam valores é parcialmente independente de como humanos os conceituam linguisticamente.</span></p>        <h2><span class="s" data-s="b10-h">Evidências de um espaço de valores compartilhado</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Um resultado particularmente interessante é a evidência preliminar de que diferentes modelos compartilham uma estrutura similar no espaço de valores.</span> <span class="s" data-s="b10-p0-s1">Os autores calcularam representações de valores para múltiplos modelos diferentes e compararam a geometria resultante.</span></p><p><span class="s" data-s="b10-p1-s0">Usando o teste de Mantel (uma técnica estatística para comparar matrizes de distância), eles encontraram alta correlação (ρ = 0.82) entre as estruturas de representação de valores em modelos diferentes.</span> <span class="s" data-s="b10-p1-s1">Isso significa que, embora os modelos tenham arquiteturas e treinamentos distintos, a forma como eles organizam internamente diferentes valores é surpreendentemente similar.</span></p><p><span class="s" data-s="b10-p2-s0">Se confirmado em estudos futuros, isso tem implicações importantes: significa que representações de valores calculadas em um modelo podem ser parcialmente transferíveis para outros modelos.</span> <span class="s" data-s="b10-p2-s1">Você poderia, em princípio, desenvolver um conjunto universal de representações de valores que funcione razoavelmente bem para prever generalização em diferentes modelos.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.12410/figure19.webp" alt="A geometria das representações de valores é altamente similar entre modelos diferentes (Mantel ρ = 0.82), sugerindo um espaço compartilhado de valores em LLMs." loading="lazy">
+          <figcaption>
+            A geometria das representações de valores é altamente similar entre modelos diferentes (Mantel ρ = 0.82), sugerindo um espaço compartilhado de valores em LLMs.
+            <span class="source">Figura 19 do paper · Liu et al., arXiv:2610.12410</span>
+          </figcaption>
+        </figure>
+        <aside class="callout">
+          <h3><span class="s" data-s="b12-t">Correlação de 0.45 é boa?</span></h3>
+          <p><span class="s" data-s="b12-c-s0">Uma correlação de 0.45 entre representações e generalização empírica explica cerca de 20% da variância.</span> <span class="s" data-s="b12-c-s1">Isso é razoável para uma primeira abordagem, mas deixa 80% ainda não explicados.</span> <span class="s" data-s="b12-c-s2">Os autores reconhecem que métodos futuros precisam ser mais robustos, possivelmente explorando melhor como valores são codificados nos dados de fine-tuning.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b13-h">Limitações e trabalho futuro</span></h2>
+<p><span class="s" data-s="b13-p0-s0">O paper é honesto sobre suas limitações.</span> <span class="s" data-s="b13-p0-s1">Primeiro, embora as representações baseadas em ativações sejam significativamente melhores que baselines, uma correlação de 0.45 ainda deixa muito espaço para melhoria.</span> <span class="s" data-s="b13-p0-s2">Métodos mais sofisticados provavelmente são necessários para prever generalização de forma mais robusta.</span></p><p><span class="s" data-s="b13-p1-s0">Segundo, os experimentos focam principalmente em single-value generalization: como treinar em um valor afeta outros.</span> <span class="s" data-s="b13-p1-s1">Mas alignment targets reais contêm múltiplos valores treinados simultaneamente, e as interações podem ser mais complexas.</span> <span class="s" data-s="b13-p1-s2">Os autores exploraram isso parcialmente nos experimentos de coerência, mas há muito mais a investigar.</span></p><p><span class="s" data-s="b13-p2-s0">Terceiro, o conjunto de 66 valores usado nos experimentos principais, embora grande, ainda é uma amostra limitada do espaço completo de comportamentos possíveis.</span> <span class="s" data-s="b13-p2-s1">A taxonomia de 266 valores é mais abrangente, mas não foi testada com a mesma profundidade experimental.</span></p><p><span class="s" data-s="b13-p3-s0">Os autores sugerem que trabalho futuro poderia explorar mais profundamente como diferentes traços comportamentais são codificados nos datasets de fine-tuning.</span> <span class="s" data-s="b13-p3-s1">Entender a estrutura dos dados de treinamento pode levar a representações de valores ainda mais preditivas.</span> <span class="s" data-s="b13-p3-s2">Também seria valioso aplicar VALUEMAP a configurações de treinamento mais realistas, com múltiplos valores e técnicas de alinhamento mais complexas.</span></p>        <h2><span class="s" data-s="b14-h">Por que isso importa</span></h2>
+<p><span class="s" data-s="b14-p0-s0">Este trabalho é importante porque traz empirismo para uma área dominada por discussões filosóficas.</span> <span class="s" data-s="b14-p0-s1">Decisões sobre quais valores incluir em alignment targets têm consequências reais para o comportamento de sistemas de IA usados por milhões de pessoas.</span> <span class="s" data-s="b14-p0-s2">Até agora, essas decisões eram tomadas principalmente com base em intuição e debate conceitual.</span></p><p><span class="s" data-s="b14-p1-s0">O paper mostra que é possível estudar essas questões empiricamente, medindo como valores realmente interagem durante o treinamento e desenvolvendo ferramentas para prever essas interações antes de investir recursos computacionais massivos.</span> <span class="s" data-s="b14-p1-s1">As representações baseadas em ativações oferecem uma janela para como modelos internamente organizam diferentes comportamentos.</span></p><p><span class="s" data-s="b14-p2-s0">A correlação entre coerência de alignment targets e robustez do modelo é particularmente relevante para desenvolvedores.</span> <span class="s" data-s="b14-p2-s1">Ela sugere uma métrica prática que pode ser calculada antes do treinamento para prever se um conjunto de valores vai produzir um modelo robusto ou um que seja facilmente perturbado por adversários.</span></p><p><span class="s" data-s="b14-p3-s0">Finalmente, a evidência de um espaço de valores parcialmente compartilhado entre modelos abre a possibilidade de desenvolver ferramentas e conhecimento que sejam transferíveis, não específicos a um único modelo ou empresa.</span> <span class="s" data-s="b14-p3-s1">Isso poderia acelerar significativamente nossa compreensão coletiva de como treinar modelos de linguagem alinhados de forma mais robusta e previsível.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Treinar modelos em valores específicos afeta seu comportamento em valores não treinados de formas inesperadas; representações baseadas em ativações preveem essas interações melhor que descrições textuais (0.45 vs 0.05).</span></li><li><span class="s" data-s="k1">Alignment targets mais coerentes (valores com representações similares) produzem modelos mais robustos a ataques adversariais, com correlação de 0.43.</span></li><li><span class="s" data-s="k2">Diferentes modelos compartilham estrutura similar no espaço de valores (correlação 0.82), sugerindo que representações podem ser parcialmente transferíveis entre modelos.</span></li><li><span class="s" data-s="k3">A taxonomia VALUEMAP, baseada em dinâmicas empíricas de generalização, prevê melhor interações entre valores do que taxonomias baseadas em similaridade conceitual.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.12410" rel="noopener">Predicting Alignment Generalization with Value Representations</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.12410" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

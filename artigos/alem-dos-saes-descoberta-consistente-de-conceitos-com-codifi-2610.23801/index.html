@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Além dos SAEs: Descoberta consistente de conceitos com codificação esparsa — arXiv em 5</title>
+<meta name="description" content="Autoencoders esparsos (SAEs) são padrão para interpretar modelos, mas seus dicionários variam entre execuções. O paper propõe ConSDL, usando otimização por amostra para estabilizar a descoberta de features.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Além dos SAEs: Descoberta consistente de conceitos com codificação esparsa">
+<meta property="og:description" content="Autoencoders esparsos (SAEs) são padrão para interpretar modelos, mas seus dicionários variam entre execuções. O paper propõe ConSDL, usando otimização por amostra para estabilizar a descoberta de features.">
+<meta property="og:image" content="../../assets/papers/2610.23801/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Redes neurais</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.23801" rel="noopener">arXiv:2610.23801</a>
+    </div>
+    <h1><span class="s" data-s="t">Além dos SAEs: Descoberta consistente de conceitos com codificação esparsa</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Autoencoders esparsos (SAEs) são padrão para interpretar modelos, mas seus dicionários variam entre execuções.</span> <span class="s" data-s="d-s1">O paper propõe ConSDL, usando otimização por amostra para estabilizar a descoberta de features.</span></p>
+    <p class="byline">
+      <span>Choi et al.</span>
+      <span>6 min de leitura</span>
+<span>16/10/2026</span>    </p>
+    <div class="listen" data-article="2610.23801" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=66bcW9NQNpg" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Inconsistência em SAEs</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Autoencoders esparsos (Sparse Autoencoders ou SAEs) tornaram-se a ferramenta padrão para descrever as representações internas de modelos fundacionais.</span> <span class="s" data-s="b0-p0-s1">A premissa é simples: decompor a ativação de cada neurônio em uma combinação linear esparsa de vetores de um dicionário aprendido.</span> <span class="s" data-s="b0-p0-s2">Empiricamente, esses vetores (átomos) alinham-se com conceitos interpretáveis, como cores em visão computacional ou sintaxe em processamento de linguagem natural.</span> <span class="s" data-s="b0-p0-s3">Isso permite auditorias de viés e explicações escaláveis sem um vocabulário pré-definido.</span></p><p><span class="s" data-s="b0-p1-s0">No entanto, existe uma limitação crítica que impede o uso confiável de SAEs em análise científica: a inconsistência.</span> <span class="s" data-s="b0-p1-s1">SAEs treinados nos mesmos dados e com a mesma configuração podem aprender dicionários substancialmente diferentes dependendo da semente aleatória (seed) inicial.</span> <span class="s" data-s="b0-p1-s2">Isso limita a reprodutibilidade e levanta dúvidas fundamentais: as features aprendidas refletem a verdade interna do modelo ou são artefatos do procedimento de treinamento?</span> <span class="s" data-s="b0-p1-s3">Trabalhos recentes mostram que SAEs podem falhar em recuperar features conhecidas em cenários sintéticos controlados.</span></p><p><span class="s" data-s="b0-p2-s0">Este artigo, de autores da KAIST e Helmholtz Munich, propõe uma solução para essa falha de consistência.</span> <span class="s" data-s="b0-p2-s1">Eles introduzem o Consistent Sparse Dictionary Learning (ConSDL), que substitui o encoder linear padrão por codificação esparsa por amostra (per-sample sparse coding).</span> <span class="s" data-s="b0-p2-s2">A hipótese central é que a estimativa subótima de coeficientes, gerada pelo encoder linear rápido, contribui para a instabilidade do dicionário.</span> <span class="s" data-s="b0-p2-s3">Ao otimizar os coeficientes para cada amostra individualmente antes de atualizar o dicionário, o ConSDL busca uma decomposição mais fiel e reprodutível.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.23801/figure1.webp" alt="Diagrama do ConSDL: ao contrário do encoder linear único, o método otimiza coeficientes por amostra, ajusta magnitudes e penaliza redundância entre átomos ativos simultaneamente." loading="lazy">
+          <figcaption>
+            Diagrama do ConSDL: ao contrário do encoder linear único, o método otimiza coeficientes por amostra, ajusta magnitudes e penaliza redundância entre átomos ativos simultaneamente.
+            <span class="source">Figura 1 do paper · Choi et al., arXiv:2610.23801</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">A Mecânica do ConSDL</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Para entender o ConSDL, precisamos olhar para a matemática da decomposição.</span> <span class="s" data-s="b2-p0-s1">Seja x a ativação do modelo e W_dec o dicionário de átomos.</span> <span class="s" data-s="b2-p0-s2">Um SAE padrão usa um encoder linear para prever os coeficientes esparsos a diretamente.</span> <span class="s" data-s="b2-p0-s3">Os autores apontam que essa única passagem é subótima comparada à otimização direta para o dicionário atual.</span> <span class="s" data-s="b2-p0-s4">O ConSDL remove esse encoder e resolve o problema de otimização para cada entrada x separadamente, encontrando o vetor de coeficientes a que minimiza o erro de reconstrução mais uma penalidade de esparsidade (norma L1).</span></p><p><span class="s" data-s="b2-p1-s0">A equação central envolve encontrar a &gt;= 0 que minimize ||x - W_dec * a - b_dec||^2 + lambda * ||a||_1.</span> <span class="s" data-s="b2-p1-s1">Como resolver isso eficientemente em cada passo de treinamento?</span> <span class="s" data-s="b2-p1-s2">Os autores utilizam o FISTA (Fast Iterative Shrinkage-Thresholding Algorithm).</span> <span class="s" data-s="b2-p1-s3">O FISTA realiza passos de gradiente na reconstrução seguidos de thresholding suave não-negativo para impor a esparsidade.</span> <span class="s" data-s="b2-p1-s4">Isso garante que os coeficientes usados para atualizar o dicionário sejam os melhores possíveis para aquela amostra específica, dado o dicionário atual.</span></p>        <h2><span class="s" data-s="b3-h">Correção de Viés e Redundância</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Apenas usar o FISTA não é suficiente.</span> <span class="s" data-s="b3-p0-s1">A penalidade L1, embora promova esparsidade, introduz um viés de contração (shrinkage bias).</span> <span class="s" data-s="b3-p0-s2">Ela tende a subestimar a magnitude dos coeficientes não-nulos para reduzir a penalidade.</span> <span class="s" data-s="b3-p0-s3">Se usarmos esses coeficientes contraídos para atualizar o dicionário, os átomos aprendidos serão imprecisos.</span> <span class="s" data-s="b3-p0-s4">O ConSDL resolve isso com um passo de &#39;refitting&#39; (reajuste).</span> <span class="s" data-s="b3-p0-s5">Após identificar quais átomos estão ativos (suporte S_sc), o método recalcula as magnitudes desses coeficientes mínimos apenas pelo erro de reconstrução, sem a penalidade L1.</span> <span class="s" data-s="b3-p0-s6">Isso corrige a contração sem ativar novos átomos espúrios.</span></p><p><span class="s" data-s="b3-p1-s0">Outro problema comum em SAEs é a redundância do dicionário: múltiplos átomos convergem para direções similares, representando o mesmo conceito.</span> <span class="s" data-s="b3-p1-s1">O ConSDL introduz um regularizador de similaridade co-ativa.</span> <span class="s" data-s="b3-p1-s2">Em vez de penalizar a similaridade entre todos os pares de átomos, ele penaliza apenas a similaridade entre átomos que estão ativos simultaneamente para a mesma amostra.</span> <span class="s" data-s="b3-p1-s3">Isso força o dicionário a manter átomos distintos e complementares, melhorando a utilidade da representação esparsa.</span></p>        <h2><span class="s" data-s="b4-h">Validação em Cenários Sintéticos</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Antes de testar em modelos grandes, os autores validaram o ConSDL em 16 configurações sintéticas controladas.</span> <span class="s" data-s="b4-p0-s1">O objetivo era verificar se o método podia recuperar o dicionário verdadeiro (ground-truth) e os coeficientes corretos.</span> <span class="s" data-s="b4-p0-s2">Em cenários onde métodos SAE padrão falham — especialmente com dicionários grandes e probabilidades desequilibradas de seleção de átomos — o ConSDL alcançou recuperação quase perfeita.</span> <span class="s" data-s="b4-p0-s3">Isso apoia a hipótese de que uma estimativa de coeficientes mais precisa leva diretamente a um aprendizado de dicionário mais consistente e correto.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.23801/figure3.webp" alt="Gráficos comparativos: ConSDL supera seis bases SAE em consistência de dicionário (DCS) e coeficientes (MCC) em modelos de visão e linguagem, além de melhor uso do dicionário." loading="lazy">
+          <figcaption>
+            Gráficos comparativos: ConSDL supera seis bases SAE em consistência de dicionário (DCS) e coeficientes (MCC) em modelos de visão e linguagem, além de melhor uso do dicionário.
+            <span class="source">Figura 3 do paper · Choi et al., arXiv:2610.23801</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b6-h">Resultados em Modelos Fundacionais</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Os ganhos teóricos se traduzem na prática.</span> <span class="s" data-s="b6-p0-s1">O ConSDL foi testado em backbones de visão (CLIP) e linguagem, variando larguras de dicionário e níveis de esparsidade.</span> <span class="s" data-s="b6-p0-s2">A métrica de consistência entre sementes (cross-seed consistency) melhorou significativamente.</span> <span class="s" data-s="b6-p0-s3">O ConSDL aumentou a consistência do dicionário em 17,6% e a dos coeficientes em 35,9% em média, comparado a seis métodos SAE base (incluindo ReLU SAE e others).</span> <span class="s" data-s="b6-p0-s4">Isso significa que, independentemente da semente aleatória, o ConSDL descobre os mesmos conceitos fundamentais do modelo, algo que os SAEs padrão não garantem.</span></p><p><span class="s" data-s="b6-p1-s0">Além da consistência, o ConSDL mostrou melhor utilidade explicativa.</span> <span class="s" data-s="b6-p1-s1">Em testes de probing esparsos, as features descobertas foram mais preditivas de conceitos específicos.</span> <span class="s" data-s="b6-p1-s2">Para visão, usaram datasets de classificação de objetos; para linguagem, 113 tarefas binárias de SAE-Probes.</span> <span class="s" data-s="b6-p1-s3">O ConSDL manteve a precisão superior mesmo com expansão de dicionário de 16x, demonstrando que a consistência não vem à custa da capacidade representacional.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.23801/figure5.webp" alt="Exemplo visual: ConSDL captura detalhes de &#39;garrafa de cerveja&#39; que o ReLU SAE ignora, mostrando átomos mais granulares e distintos para o mesmo conceito amplo." loading="lazy">
+          <figcaption>
+            Exemplo visual: ConSDL captura detalhes de &#39;garrafa de cerveja&#39; que o ReLU SAE ignora, mostrando átomos mais granulares e distintos para o mesmo conceito amplo.
+            <span class="source">Figura 5 do paper · Choi et al., arXiv:2610.23801</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Análise de Granularidade e Limitações</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Uma análise interessante revela que o ConSDL tende a dividir conceitos amplos em features mais granulares.</span> <span class="s" data-s="b8-p0-s1">No exemplo da &#39;garrafa de cerveja&#39;, enquanto o ReLU SAE aprendia um único átomo genérico, o ConSDL aprendeu cinco átomos distintos, cada um capturando aspectos específicos (rótulo, formato, líquido), mas todos com alta similaridade de cosseno com o átomo do ReLU.</span> <span class="s" data-s="b8-p0-s2">Isso sugere que o ConSDL não apenas é consistente, mas também descobre uma estrutura de features mais rica e detalhada, evitando a colapso de representações.</span></p><p><span class="s" data-s="b8-p1-s0">Apesar dos avanços, o paper admite limitações.</span> <span class="s" data-s="b8-p1-s1">O ConSDL é computacionalmente mais custoso que SAEs lineares, pois requer otimização iterativa (FISTA) por amostra em cada passo de treinamento.</span> <span class="s" data-s="b8-p1-s2">O paper foca em modelos de escala média e não testa a escalabilidade para modelos de trilhões de parâmetros em tempo real.</span> <span class="s" data-s="b8-p1-s3">Além disso, a técnica é específica para representações lineares; extensões para arquiteturas não-lineares ou outros tipos de regularização permanecem como trabalho futuro.</span> <span class="s" data-s="b8-p1-s4">A consistência melhorada não elimina a necessidade de validação humana dos conceitos descobertos, mas fornece uma base mais sólida para tal validação.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b9-t">Por que a consistência importa?</span></h3>
+          <p><span class="s" data-s="b9-c-s0">Em ciência, resultados não reprodutíveis são ruído.</span> <span class="s" data-s="b9-c-s1">Se dois pesquisadores treinam o mesmo SAE e encontram features diferentes, não há como comparar análises ou auditar modelos de forma padronizada.</span> <span class="s" data-s="b9-c-s2">O ConSDL transforma o SAE de uma ferramenta exploratória instável em uma ferramenta analítica confiável, essencial para auditorias de segurança e interpretação científica.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b10-h">Conclusão</span></h2>
+<p><span class="s" data-s="b10-p0-s0">O ConSDL propõe uma mudança de paradigma na aprendizagem de dicionários esparsos: parar de confiar em encoders lineares aproximados e voltar à otimização direta por amostra.</span> <span class="s" data-s="b10-p0-s1">Ao combinar codificação esparsa por amostra, refitting de coeficientes e regularização de similaridade co-ativa, os autores demonstram que é possível alcançar consistência cruzada de sementes superior em modelos de visão e linguagem.</span> <span class="s" data-s="b10-p0-s2">Este trabalho estabelece um novo padrão para SAEs, priorizando a confiabilidade e a reprodutibilidade sobre a velocidade bruta de inferência.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">SAEs padrão produzem dicionários inconsistentes entre sementes aleatórias, limitando a reprodutibilidade.</span></li><li><span class="s" data-s="k1">ConSDL usa otimização por amostra (FISTA) em vez de encoder linear para estimar coeficientes esparsos.</span></li><li><span class="s" data-s="k2">Refitting corrige o viés de contração da norma L1, melhorando a precisão da reconstrução.</span></li><li><span class="s" data-s="k3">ConSDL melhora a consistência de dicionários em 17,6% e coeficientes em 35,9% sobre bases SAE.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.23801" rel="noopener">Beyond SAEs: Consistent Concept Discovery with Sparse Coding</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.23801" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

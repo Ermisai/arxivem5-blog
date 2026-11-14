@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agentes de Uso de Computador como Generalistas Embaixados — arXiv em 5</title>
+<meta name="description" content="Um estudo mostra que agentes de IA treinados para usar interfaces gráficas podem realizar tarefas de IA encarnada (embodied AI) sem ajustes específicos, tratando ambientes físicos como softwares.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Agentes de Uso de Computador como Generalistas Embaixados">
+<meta property="og:description" content="Um estudo mostra que agentes de IA treinados para usar interfaces gráficas podem realizar tarefas de IA encarnada (embodied AI) sem ajustes específicos, tratando ambientes físicos como softwares.">
+<meta property="og:image" content="../../assets/papers/2611.09847/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Agentes</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.09847" rel="noopener">arXiv:2611.09847</a>
+    </div>
+    <h1><span class="s" data-s="t">Agentes de Uso de Computador como Generalistas Embaixados</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um estudo mostra que agentes de IA treinados para usar interfaces gráficas podem realizar tarefas de IA encarnada (embodied AI) sem ajustes específicos, tratando ambientes físicos como softwares.</span></p>
+    <p class="byline">
+      <span>Aggarwal et al.</span>
+      <span>9 min de leitura</span>
+<span>06/11/2026</span>    </p>
+    <div class="listen" data-article="2611.09847" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=EOu5MwgzCuw" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">A Hipótese da Interface Única</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A inteligência artificial tem passado por uma mudança de paradigma: modelos de propósito geral estão substituindo métodos artesanais e arquiteturas especializadas em diversas áreas.</span> <span class="s" data-s="b0-p0-s1">Desde a tradução automática até a geração de código, a tendência é clara.</span> <span class="s" data-s="b0-p0-s2">Os autores deste paper, Pranjal Aggarwal e Sean Welleck, da Carnegie Mellon University, argumentam que a IA encarnada (embodied AI) — o campo que estuda agentes que percebem e agem em ambientes físicos — está prestes a sofrer a mesma transformação.</span></p><p><span class="s" data-s="b0-p1-s0">A proposta central é audaciosa: tarefas de IA encarnada podem ser formuladas como interação com software digital.</span> <span class="s" data-s="b0-p1-s1">Em vez de construir robôs especializados ou treinar modelos específicos para cada tipo de robótica, eles propõem usar Agentes de Uso de Computador (Computer-Use Agents, CUAs).</span> <span class="s" data-s="b0-p1-s2">Esses são agentes de IA generalistas que operam softwares diversos através de screenshots, cliques de mouse e entradas de teclado.</span></p><p><span class="s" data-s="b0-p2-s0">A premissa é que operar um computador e agir em um ambiente físico compartilham desafios fundamentais.</span> <span class="s" data-s="b0-p2-s1">Ambos exigem percepção visual (visual grounding), exploração do espaço e adaptação das ações com base no feedback do ambiente.</span> <span class="s" data-s="b0-p2-s2">Se conseguirmos renderizar a visão de um ambiente físico em uma tela e fornecer controles digitais para agir nele, um CUA pode executar tarefas físicas usando a mesma interface que usa para abrir planilhas ou navegar na web.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.09847/figure1.webp" alt="Ilustração do conceito: o agente observa a tela e usa teclado/mouse. O paper argumenta que ambientes físicos, quando expostos via software, tornam-se apenas outra interface para o mesmo agente." loading="lazy">
+          <figcaption>
+            Ilustração do conceito: o agente observa a tela e usa teclado/mouse. O paper argumenta que ambientes físicos, quando expostos via software, tornam-se apenas outra interface para o mesmo agente.
+            <span class="source">Figura 1 do paper · Aggarwal et al., arXiv:2611.09847</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">O Método: Software como Ponte</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Para testar essa hipótese, os autores desenvolveram uma abordagem onde a funcionalidade específica da tarefa reside no software, não no design do agente.</span> <span class="s" data-s="b2-p0-s1">Eles construíram quatro aplicações de software distintas, cada uma simulando um ambiente físico diferente e fornecendo controles para interagir com ele.</span> <span class="s" data-s="b2-p0-s2">Em seguida, usaram um único design de agente CUA minimalista para operar todas essas aplicações.</span></p><p><span class="s" data-s="b2-p1-s0">O agente não é ajustado para cada competição ou tarefa.</span> <span class="s" data-s="b2-p1-s1">Ele recebe a descrição da tarefa, as instruções do software e quaisquer imagens de referência.</span> <span class="s" data-s="b2-p1-s2">A cada passo, o software apresenta uma observação visual (um screenshot ou vídeo) e o histórico de interação.</span> <span class="s" data-s="b2-p1-s3">O agente, baseado em um modelo de linguagem multimodal, decide uma ação de teclado ou mouse.</span> <span class="s" data-s="b2-p1-s4">O software executa essa ação, atualiza o estado do ambiente e retorna a nova observação.</span></p><p><span class="s" data-s="b2-p2-s0">Esse ciclo se repete até que o agente pressione o botão de envio na interface.</span> <span class="s" data-s="b2-p2-s1">O software então exporta a trajetória ou a previsão.</span> <span class="s" data-s="b2-p2-s2">A chave aqui é que o agente só precisa aprender a usar a interface gráfica (GUI).</span> <span class="s" data-s="b2-p2-s3">Ele não precisa conhecer a física subjacente, a geometria 3D complexa ou a lógica interna do simulador.</span> <span class="s" data-s="b2-p2-s4">Ele apenas precisa mapear o que vê na tela para as ações corretas de mouse e teclado.</span></p>        <h2><span class="s" data-s="b3-h">As Quatro Aplicações e Competições</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Os autores entraram com essa abordagem em quatro competições de workshops do ECCV 2026, cobrindo tarefas variadas de IA encarnada.</span> <span class="s" data-s="b3-p0-s1">A primeira foi o VLNVerse, que exige navegação em uma cena 3D baseada em instruções de linguagem.</span> <span class="s" data-s="b3-p0-s2">Eles construíram um visualizador de cena 3D com controles de tradução e rotação.</span> <span class="s" data-s="b3-p0-s3">O agente usa atalhos de teclado ou botões na tela para mover-se e olhar ao redor, identificando marcos para chegar ao destino.</span></p><p><span class="s" data-s="b3-p1-s0">A segunda foi o DialNav, navegação guiada por diálogo.</span> <span class="s" data-s="b3-p1-s1">Aqui, o software exibe um panorama de 360 graus com saídas numeradas.</span> <span class="s" data-s="b3-p1-s2">O agente digita perguntas para um &#39;Guia&#39; (um modelo interno do software) e clica nas saídas para se mover.</span> <span class="s" data-s="b3-p1-s3">O guia infere a localização do agente e dá direções em linguagem natural.</span> <span class="s" data-s="b3-p1-s4">O agente deve interpretar essas direções e a visão panorâmica para tomar decisões.</span></p><p><span class="s" data-s="b3-p2-s0">A terceira competição foi o OpenSUN3D, focado em segmentação 3D guiada por linguagem.</span> <span class="s" data-s="b3-p2-s1">O desafio é descrever uma ação (como &#39;abrir a gaveta&#39;) e gerar uma máscara 3D da região de interação.</span> <span class="s" data-s="b3-p2-s2">O software permite que o agente explore a varredura 3D e clique nas partes exatas dos objetos.</span> <span class="s" data-s="b3-p2-s3">O agente precisa localizar o alvo com precisão, similar a clicar em um botão pequeno em uma interface gráfica.</span></p><p><span class="s" data-s="b3-p3-s0">A quarta foi o MeViSv2, que envolve segmentação de vídeo referenciada.</span> <span class="s" data-s="b3-p3-s1">O agente deve selecionar objetos em um vídeo e revisar os rastros.</span> <span class="s" data-s="b3-p3-s2">O software fornece controles para segmentação e propagação de máscaras.</span> <span class="s" data-s="b3-p3-s3">Em todos os casos, o mesmo agente, implementado com as mesmas versões do Gemini Flash e o mesmo prompt de sistema, operou as diferentes interfaces.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.09847/figure3.webp" alt="Comparação de habilidades: tanto o uso de software quanto a IA encarnada exigem ver o entorno, localizar alvos, agir com precisão e explorar. A principal diferença é o tempo de resposta." loading="lazy">
+          <figcaption>
+            Comparação de habilidades: tanto o uso de software quanto a IA encarnada exigem ver o entorno, localizar alvos, agir com precisão e explorar. A principal diferença é o tempo de resposta.
+            <span class="source">Figura 3 do paper · Aggarwal et al., arXiv:2611.09847</span>
+          </figcaption>
+        </figure>
+        <aside class="callout">
+          <h3><span class="s" data-s="b5-t">Resultados Surpreendentes</span></h3>
+          <p><span class="s" data-s="b5-c-s0">Usando apenas um agente sem ajuste específico por competição, os autores conquistaram: 1º lugar no OpenSUN3D, 2º no MeViSv2-Text, 3º no DialNav e 6º no VLNVerse.</span> <span class="s" data-s="b5-c-s1">Isso demonstra que habilidades aprendidas em software (como grounding visual e clique preciso) transferem-se para tarefas físicas.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b6-h">Análise dos Resultados</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Os resultados nas competições foram robustos.</span> <span class="s" data-s="b6-p0-s1">No OpenSUN3D, o agente venceu com uma margem significativa, superando a melhor entrada em pontos de precisão média (AP50 e AP25).</span> <span class="s" data-s="b6-p0-s2">A capacidade de explorar uma varredura 3D e clicar na parte exata de um objeto, como uma alça de gaveta, foi crucial.</span> <span class="s" data-s="b6-p0-s3">No MeViSv2-Text, ficou em segundo lugar, destacando-se na precisão de identificar quando nenhum objeto correspondia à descrição (88,89% de precisão contra 83,33% do melhor concorrente).</span></p><p><span class="s" data-s="b6-p1-s0">No DialNav, o terceiro lugar foi alcançado com uma taxa de sucesso no ponto final de 65,26%.</span> <span class="s" data-s="b6-p1-s1">A navegação guiada por diálogo exigiu que o agente interpretasse texto e coordenasse ações de clique com as direções do guia.</span> <span class="s" data-s="b6-p1-s2">No VLNVerse, embora tenha ficado em sexto lugar na métrica de sucesso (SR@3), o agente seguiu as rotas de referência mais de perto do que a maioria das 74 entradas, com a terceira melhor pontuação em NDTW (Normalized Dynamic Time Warping).</span></p><p><span class="s" data-s="b6-p2-s0">Esses resultados sugerem que os CUAs já possuem habilidades transferíveis.</span> <span class="s" data-s="b6-p2-s1">O grounding visual (localizar onde clicar), a exploração sistemática e a precisão motora (coordenação olho-mão digital) são fundamentais tanto para usar um software complexo quanto para navegar em um ambiente físico simulado.</span> <span class="s" data-s="b6-p2-s2">O modelo não foi treinado especificamente para robótica; ele aprendeu a usar interfaces.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.09847/table1.webp" alt="Tabela de resultados oficiais: o agente &#39;Ours&#39; compete contra a melhor entrada em cada métrica, mostrando desempenho de topo em múltiplas tarefas sem tuning específico." loading="lazy">
+          <figcaption>
+            Tabela de resultados oficiais: o agente &#39;Ours&#39; compete contra a melhor entrada em cada métrica, mostrando desempenho de topo em múltiplas tarefas sem tuning específico.
+            <span class="source">Tabela 1 do paper · Aggarwal et al., arXiv:2611.09847</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">GUI vs. APIs de Texto</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Uma questão natural surge: por que usar uma interface gráfica (GUI) se podemos fornecer APIs de texto diretas para navegação e segmentação?</span> <span class="s" data-s="b8-p0-s1">Os autores investigaram isso comparando a interação via GUI contra a interação via API de texto em um subconjunto das tarefas.</span> <span class="s" data-s="b8-p0-s2">A hipótese era que agentes suficientemente capazes poderiam alcançar o mesmo desempenho com ambas as interfaces.</span></p><p><span class="s" data-s="b8-p1-s0">Os resultados mostraram que as duas interfaces tiveram desempenho dentro de quatro pontos uma da outra.</span> <span class="s" data-s="b8-p1-s1">Em algumas competições, a GUI obteve pontuações ligeiramente superiores.</span> <span class="s" data-s="b8-p1-s2">Isso indica que, para modelos modernos, a barreira de usar uma GUI não é mais insuperável.</span> <span class="s" data-s="b8-p1-s3">A lacuna entre interações apenas via GUI e assistidas por APIs está se fechando, e agentes fortes podem performar comparavelmente ou melhor via GUI.</span></p><p><span class="s" data-s="b8-p2-s0">Isso tem implicações profundas.</span> <span class="s" data-s="b8-p2-s1">Se um agente pode operar via GUI, ele pode interagir com qualquer software existente sem necessidade de desenvolvimento de APIs dedicadas.</span> <span class="s" data-s="b8-p2-s2">Isso democratiza o acesso a ferramentas complexas e reduz a necessidade de especialização por tarefa.</span> <span class="s" data-s="b8-p2-s3">O agente se torna um generalista que pode aprender a usar novas ferramentas apenas vendo a interface.</span></p>        <h2><span class="s" data-s="b9-h">O Caminho para a IA Encarnada Geral</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Os autores traçam um paralelo entre o estado atual da IA encarnada e o estado dos agentes de uso de computador há dois anos.</span> <span class="s" data-s="b9-p0-s1">Na época, agentes de computador tinham dificuldades com clique preciso e dependiam de sobreposições ou modelos de grounding separados.</span> <span class="s" data-s="b9-p0-s2">Eles ficavam atrás de agentes com APIs específicas.</span> <span class="s" data-s="b9-p0-s3">Hoje, modelos como Gemini e Claude operam computadores escrevendo coordenadas de clique como texto comum, alcançando desempenho comparável ao uso de APIs.</span></p><p><span class="s" data-s="b9-p1-s0">Essa evolução foi impulsionada por treinamento para grounding visual preciso, ambientes de reforço para aprendizado e otimização de velocidade para uso em tempo real.</span> <span class="s" data-s="b9-p1-s1">Os autores argumentam que a IA encarnada deve seguir o mesmo roteiro.</span> <span class="s" data-s="b9-p1-s2">Simuladores podem gerar dados de grounding em escala, e ambientes de simulação podem ser usados para treinamento.</span></p><p><span class="s" data-s="b9-p2-s0">A proposta é que a IA encarnada converja para um único modelo geral, assim como os agentes de computador.</span> <span class="s" data-s="b9-p2-s1">Em vez de modelos especializados para cada robô ou tarefa, teríamos um modelo que aprende a interagir com o mundo físico através de interfaces de software.</span> <span class="s" data-s="b9-p2-s2">Isso reduziria a fragmentação do campo e aceleraria o progresso.</span></p>        <h2><span class="s" data-s="b10-h">Limitações e Considerações</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Apesar dos resultados promissores, o paper reconhece limitações.</span> <span class="s" data-s="b10-p0-s1">A principal diferença entre o uso de software e o mundo físico é o tempo.</span> <span class="s" data-s="b10-p0-s2">A tela muda lentamente, enquanto o mundo físico é contínuo e dinâmico.</span> <span class="s" data-s="b10-p0-s3">Agentes baseados em GUI operam em ciclos discretos de screenshot-ação, o que pode ser mais lento ou menos adequado para tarefas que exigem controle de alta frequência no mundo real.</span></p><p><span class="s" data-s="b10-p1-s0">Além disso, o estudo foca em competições de workshops, que são ambientes controlados.</span> <span class="s" data-s="b10-p1-s1">A generalização para cenários do mundo real, com ruído, variações de iluminação e imprevistos, ainda precisa ser demonstrada em larga escala.</span> <span class="s" data-s="b10-p1-s2">O uso de simuladores como ponte é promissor, mas a transferência de simulação para realidade (sim-to-real) permanece um desafio aberto na robótica.</span></p><p><span class="s" data-s="b10-p2-s0">Outro ponto é a eficiência.</span> <span class="s" data-s="b10-p2-s1">Embora o desempenho seja competitivo, a interação via GUI pode ser menos eficiente do que APIs diretas em termos de latência e robustez.</span> <span class="s" data-s="b10-p2-s2">Erros de OCR ou falhas no reconhecimento de elementos da interface podem levar a falhas em cadeia.</span> <span class="s" data-s="b10-p2-s3">No entanto, a vantagem da generalização e da facilidade de integração com novos softwares pode compensar essas desvantagens em muitos casos.</span></p>        <h2><span class="s" data-s="b11-h">Conclusão</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Este paper oferece evidências sólidas de que agentes de uso de computador podem atuar como generalistas em tarefas de IA encarnada.</span> <span class="s" data-s="b11-p0-s1">Ao formular ambientes físicos como softwares interativos, os autores demonstraram que um único agente pode vencer competições diversas sem ajustes específicos.</span> <span class="s" data-s="b11-p0-s2">Isso sugere que as habilidades de percepção e ação aprendidas em interfaces digitais são transferíveis para o mundo físico.</span></p><p><span class="s" data-s="b11-p1-s0">A mensagem central é que a IA encarnada pode seguir o caminho dos agentes de computador: convergir para um modelo geral que opera através de interfaces.</span> <span class="s" data-s="b11-p1-s1">Isso não significa substituir robôs físicos, mas sim fornecer uma camada de inteligência generalista que pode controlar qualquer sistema, desde um navegador web até um braço robótico, desde que haja uma interface de software.</span></p><p><span class="s" data-s="b11-p2-s0">Para desenvolvedores e cientistas de dados, a implicação é clara: investir em modelos de uso de computador robustos pode ser uma estratégia válida para abordar problemas de robótica e automação física.</span> <span class="s" data-s="b11-p2-s1">A especialização excessiva em arquiteturas de robótica pode estar se tornando menos necessária, à medida que a generalização dos modelos de linguagem multimodal avança.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b12-t">O que fica em aberto</span></h3>
+          <p><span class="s" data-s="b12-c-s0">A transferência sim-to-real, a eficiência temporal em controle de alta frequência e a robustez a falhas de interface são desafios que permanecem para a aplicação prática em larga escala.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b13-h">Takeaways</span></h2>
+<p><span class="s" data-s="b13-p0-s0">Agentes de uso de computador podem realizar tarefas de IA encarnada sem tuning específico, tratando ambientes físicos como interfaces de software.</span></p><p><span class="s" data-s="b13-p1-s0">Habilidades como grounding visual e clique preciso transferem-se do digital para o físico, permitindo generalização em múltiplas tarefas.</span></p><p><span class="s" data-s="b13-p2-s0">A performance via GUI é competitiva com APIs de texto, sugerindo que agentes gerais podem operar qualquer software ou simulador.</span></p><p><span class="s" data-s="b13-p3-s0">A IA encarnada pode seguir o caminho dos agentes de computador, convergindo para um único modelo generalista em vez de arquiteturas especializadas.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Agentes de uso de computador podem realizar tarefas de IA encarnada sem tuning específico, tratando ambientes físicos como interfaces de software.</span></li><li><span class="s" data-s="k1">Habilidades como grounding visual e clique preciso transferem-se do digital para o físico, permitindo generalização em múltiplas tarefas.</span></li><li><span class="s" data-s="k2">A performance via GUI é competitiva com APIs de texto, sugerindo que agentes gerais podem operar qualquer software ou simulador.</span></li><li><span class="s" data-s="k3">A IA encarnada pode seguir o caminho dos agentes de computador, convergindo para um único modelo generalista em vez de arquiteturas especializadas.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.09847" rel="noopener">Computer-Use Agents Are Embodied Generalists</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.09847" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

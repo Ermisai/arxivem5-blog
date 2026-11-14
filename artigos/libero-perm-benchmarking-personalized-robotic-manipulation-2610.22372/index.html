@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LIBERO-PeRM: Benchmarking Personalized Robotic Manipulation — arXiv em 5</title>
+<meta name="description" content="Um novo benchmark para avaliar se robôs generalistas conseguem seguir preferências individuais, separando sucesso da tarefa de satisfação do usuário.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LIBERO-PeRM: Benchmarking Personalized Robotic Manipulation">
+<meta property="og:description" content="Um novo benchmark para avaliar se robôs generalistas conseguem seguir preferências individuais, separando sucesso da tarefa de satisfação do usuário.">
+<meta property="og:image" content="../../assets/papers/2610.22372/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Robótica</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.22372" rel="noopener">arXiv:2610.22372</a>
+    </div>
+    <h1><span class="s" data-s="t">LIBERO-PeRM: Benchmarking Personalized Robotic Manipulation</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um novo benchmark para avaliar se robôs generalistas conseguem seguir preferências individuais, separando sucesso da tarefa de satisfação do usuário.</span></p>
+    <p class="byline">
+      <span>Li et al.</span>
+      <span>6 min de leitura</span>
+<span>15/10/2026</span>    </p>
+    <div class="listen" data-article="2610.22372" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=YqxwRKICAlg" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Desafio da Personalização em Robótica</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A robótica doméstica promete transformar o cotidiano, permitindo que agentes executem tarefas complexas a partir de instruções em linguagem natural.</span> <span class="s" data-s="b0-p0-s1">No entanto, a mera conclusão de uma tarefa nominal não é suficiente para a implantação prática.</span> <span class="s" data-s="b0-p0-s2">Robôs generalistas precisam alinhar suas execuções com as preferências, hábitos e restrições individuais dos usuários.</span> <span class="s" data-s="b0-p0-s3">Isso define a manipulação personalizada (PeRM), onde as preferências introduzem requisitos de execução diversos para o mesmo objetivo.</span> <span class="s" data-s="b0-p0-s4">Por exemplo, colocar uma caneca na mesa pode exigir uma orientação específica da alça ou um local de pouso designado.</span></p><p><span class="s" data-s="b0-p1-s0">Embora os modelos Vision-Language-Action (VLA) tenham mostrado forte generalização em tarefas genéricas, falta um benchmark controlado para separar o sucesso da tarefa da satisfação da preferência.</span> <span class="s" data-s="b0-p1-s1">O paper apresenta o LIBERO-PeRM, um benchmark focado no aprendizado de preferências para agentes encorpados.</span> <span class="s" data-s="b0-p1-s2">Ele investiga cinco questões centrais: personalização zero-shot, aprendizado de preferências únicas, eficiência de aprendizado, generalização e composição de preferências sob conflitos.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.22372/figure1.webp" alt="Visão geral do LIBERO-PeRM, mostrando as cinco suites de tarefas geradas proceduralmente e as cinco questões de pesquisa fundamentais para a manipulação personalizada." loading="lazy">
+          <figcaption>
+            Visão geral do LIBERO-PeRM, mostrando as cinco suites de tarefas geradas proceduralmente e as cinco questões de pesquisa fundamentais para a manipulação personalizada.
+            <span class="source">Figura 1 do paper · Li et al., arXiv:2610.22372</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">Metodologia: Definindo e Medindo Preferências</span></h2>
+<p><span class="s" data-s="b2-p0-s0">O LIBERO-PeRM propõe uma formulação controlada e uma taxonomia de preferências observáveis em simulação.</span> <span class="s" data-s="b2-p0-s1">As preferências são divididas em três categorias: movimento (como a ação é executada), habilidade (estratégia de manipulação) e perfil do usuário (escolhas semânticas ou de objetos).</span> <span class="s" data-s="b2-p0-s2">Essa formulação é restrita a preferências expressáveis em linguagem que podem ser instanciadas no LIBERO sem alterar o objetivo da tarefa.</span> <span class="s" data-s="b2-p0-s3">Isso permite avaliação automática e reutilização entre tarefas.</span></p><p><span class="s" data-s="b2-p1-s0">O pipeline de geração de dados é construído sobre o framework LIBERO.</span> <span class="s" data-s="b2-p1-s1">Ele gera demonstrações pareadas, com e sem preferências, passando pela seleção de preferências, condições, subtarefas e trajetórias.</span> <span class="s" data-s="b2-p1-s2">O sistema deriva métricas de satisfação e metadados ricos, incluindo imagens de subobjetivos e estatísticas de trajetória.</span> <span class="s" data-s="b2-p1-s3">Diferente de benchmarks anteriores, o LIBERO-PeRM foca em demonstrações em grande escala condicionadas por preferência, permitindo uma avaliação granular do comportamento do agente.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.22372/figure3.webp" alt="Pipeline de geração de dados para manipulação personalizada, desde a seleção de preferências até a derivação de métricas de satisfação e metadados." loading="lazy">
+          <figcaption>
+            Pipeline de geração de dados para manipulação personalizada, desde a seleção de preferências até a derivação de métricas de satisfação e metadados.
+            <span class="source">Figura 3 do paper · Li et al., arXiv:2610.22372</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b4-h">Métricas de Sucesso e Satisfação</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Para avaliar os modelos, são utilizadas duas métricas principais: Taxa de Sucesso da Tarefa (SR) e Satisfação da Preferência (SA).</span> <span class="s" data-s="b4-p0-s1">O SR mede a conclusão nominal da tarefa.</span> <span class="s" data-s="b4-p0-s2">O SA mede quão bem uma preferência foi satisfeita, utilizando um Rótulo de Satisfação Discreto que varia de 0 a 1.</span> <span class="s" data-s="b4-p0-s3">A métrica SA é calculada apenas para episódios em que a tarefa foi bem-sucedida, garantindo que a satisfação da preferência seja um complemento ao sucesso funcional.</span></p><p><span class="s" data-s="b4-p1-s0">Em cenários de conflito, políticas específicas são adotadas.</span> <span class="s" data-s="b4-p1-s1">Para conflitos entre tarefa e preferência, a conclusão da tarefa original tem prioridade.</span> <span class="s" data-s="b4-p1-s2">Para conflitos entre preferências, a SA é computada usando a maior pontuação de satisfação entre as duas preferências conflitantes, com episódios de falha na tarefa contribuindo com zero.</span> <span class="s" data-s="b4-p1-s3">Essas convenções de pontuação testam a execução sob instruções inconsistentes, mas não avaliam a detecção de conflitos ou a ponderação de preferências pelo agente.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.22372/table1.webp" alt="Comparação do LIBERO-PeRM com benchmarks existentes, destacando o foco em manipulação personalizada com dados de preferência e metadados ricos." loading="lazy">
+          <figcaption>
+            Comparação do LIBERO-PeRM com benchmarks existentes, destacando o foco em manipulação personalizada com dados de preferência e metadados ricos.
+            <span class="source">Tabela 1 do paper · Li et al., arXiv:2610.22372</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b6-h">Resultados: Falha no Zero-Shot</span></h2>
+<p><span class="s" data-s="b6-p0-s0">A primeira investigação (Q1) avalia se políticas VLA prontas para uso (off-the-shelf) podem seguir preferências sem treinamento específico.</span> <span class="s" data-s="b6-p0-s1">Seis políticas foram testadas, incluindo OpenVLA-OFT, π0-fast, π0.5, GR00T-N1.6, SmolVLA e UniVLA.</span> <span class="s" data-s="b6-p0-s2">Os resultados mostram que, embora as edições mínimas de layout preservem o desempenho zero-shot na tarefa base (com π0.5 atingindo 97.6% de SR), os modelos falham em seguir as preferências condicionadas.</span></p><p><span class="s" data-s="b6-p1-s0">O π0.5, por exemplo, atinge altas taxas de sucesso em Preferências de Movimento e Habilidade (97.50% e 100.00% de SR), mas baixa satisfação de preferência (24.38% e 25.00% de SA).</span> <span class="s" data-s="b6-p1-s1">Isso indica que o modelo completa a tarefa ignorando a preferência.</span> <span class="s" data-s="b6-p1-s2">Executar com um Perfil de Usuário é ainda mais difícil, pois altera o objeto alvo ou a escolha semântica, reduzindo drasticamente o SR para políticas mais fracas e levando a satisfações próximas de zero.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.22372/table2.webp" alt="Desempenho zero-shot no LIBERO-SinglePref, mostrando que modelos SOTA falham em seguir preferências mesmo com alta taxa de sucesso na tarefa." loading="lazy">
+          <figcaption>
+            Desempenho zero-shot no LIBERO-SinglePref, mostrando que modelos SOTA falham em seguir preferências mesmo com alta taxa de sucesso na tarefa.
+            <span class="source">Tabela 2 do paper · Li et al., arXiv:2610.22372</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Aprendizado Supervisionado e Fine-Tuning</span></h2>
+<p><span class="s" data-s="b8-p0-s0">A segunda investigação (Q2) explora se o fine-tuning supervisionado (SFT) pode ensinar os modelos a satisfazer preferências em tarefas e layouts vistos.</span> <span class="s" data-s="b8-p0-s1">Utilizando LoRA (Low-Rank Adaptation), os autores compararam treinamento sequencial e misto.</span> <span class="s" data-s="b8-p0-s2">O treinamento sequencial, que ajusta primeiro no LIBERO base e depois no LIBERO-SinglePref, degrada o desempenho na tarefa base (No-Pref SR cai para 52.33%) e na satisfação da preferência.</span></p><p><span class="s" data-s="b8-p1-s0">Em contraste, o treinamento misto (Mix-LoRA), que combina dados do LIBERO base e do LIBERO-SinglePref, retém melhor o comportamento sem preferência (91.00% de SR) e melhora a robustez a prompts contextuais.</span> <span class="s" data-s="b8-p1-s1">No entanto, o treinamento misto enfraquece o aprendizado de preferências de movimento em comparação com o LoRA apenas de preferência.</span> <span class="s" data-s="b8-p1-s2">Isso revela um trade-off dependente da categoria: o treinamento misto preserva a generalidade, mas pode sacrificar a especialização em preferências específicas.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b9-t">Trade-off no Treinamento Misturado</span></h3>
+          <p><span class="s" data-s="b9-c-s0">O treinamento misto (Mix-LoRA) retém melhor o comportamento base (No-Pref SR de 91%) do que o sequencial (52.33%), mas enfraquece o aprendizado de preferências de movimento em comparação com o LoRA focado apenas em preferências.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b10-h">Generalização e Composição</span></h2>
+<p><span class="s" data-s="b10-p0-s0">A generalização de preferências aprendidas é avaliada em três níveis: in-domain, generalização de tarefa/layout e generalização de nível de preferência.</span> <span class="s" data-s="b10-p0-s1">Os resultados indicam que a generalização para layouts não vistos e tarefas diferentes permanece difícil.</span> <span class="s" data-s="b10-p0-s2">A satisfação da preferência cai significativamente quando o layout muda, sugerindo que os modelos dependem fortemente de correlações visuais específicas do ambiente de treinamento.</span></p><p><span class="s" data-s="b10-p1-s0">A composição de preferências (Q5) mostra que os modelos podem combinar múltiplas preferências parcialmente, mas a decomposição falha.</span> <span class="s" data-s="b10-p1-s1">Em cenários de conflito, a execução muitas vezes degrada em vez de produzir uma resolução clara.</span> <span class="s" data-s="b10-p1-s2">O benchmark não testa a detecção de conflitos ou a decisão de pedir orientação ao usuário, focando apenas na execução resultante.</span> <span class="s" data-s="b10-p1-s3">Isso destaca uma lacuna significativa na capacidade dos modelos atuais de lidar com instruções ambíguas ou contraditórias.</span></p>        <h2><span class="s" data-s="b11-h">Limitações e Direções Futuras</span></h2>
+<p><span class="s" data-s="b11-p0-s0">O LIBERO-PeRM tem limitações claras.</span> <span class="s" data-s="b11-p0-s1">Ele instancia preferências predefinidas, expressáveis em linguagem e mensuráveis automaticamente em simulação.</span> <span class="s" data-s="b11-p0-s2">Isso exclui inferência implícita de preferências, histórico de interação, sinais não linguísticos e preferências abertas ou em evolução.</span> <span class="s" data-s="b11-p0-s3">As demonstrações geradas podem conter vieses específicos do pipeline e da biblioteca de habilidades, apesar da randomização de estados iniciais e revisão humana.</span></p><p><span class="s" data-s="b11-p1-s0">O conjunto de composição testa apenas duas preferências, e o conjunto de conflitos não avalia a detecção ou esclarecimento.</span> <span class="s" data-s="b11-p1-s1">Estudos longitudinais com usuários reais ou avaliação em robôs físicos não foram incluídos.</span> <span class="s" data-s="b11-p1-s2">Trabalhos futuros podem estender o benchmark para configurações com três ou mais preferências, sinais não linguísticos, aquisição de preferências com humano no loop, ponderação de preferências e decisões de quando perguntar ao usuário.</span></p>        <h2><span class="s" data-s="b12-h">Conclusão</span></h2>
+<p><span class="s" data-s="b12-p0-s0">O LIBERO-PeRM estabelece um novo padrão para a avaliação de manipulação personalizada, isolando o aprendizado de preferências de tarefas genéricas.</span> <span class="s" data-s="b12-p0-s1">Os resultados mostram que, embora os modelos VLA sejam robustos em tarefas nominais, eles falham em personalização zero-shot.</span> <span class="s" data-s="b12-p0-s2">O SFT torna as preferências aprendíveis, mas o treinamento misto oferece um equilíbrio necessário entre retenção de comportamento base e adaptação.</span> <span class="s" data-s="b12-p0-s3">A generalização para novos ambientes e a resolução de conflitos permanecem como desafios abertos, indicando que a verdadeira personalização robótica ainda está em estágio inicial.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Modelos VLA falham em personalização zero-shot, completando tarefas mas ignorando preferências.</span></li><li><span class="s" data-s="k1">SFT torna preferências aprendíveis; treinamento misto preserva melhor o comportamento base.</span></li><li><span class="s" data-s="k2">Generalização para layouts inéditos e resolução de conflitos permanecem desafios abertos.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.22372" rel="noopener">LIBERO-PeRM: Benchmarking Personalized Robotic Manipulation</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.22372" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

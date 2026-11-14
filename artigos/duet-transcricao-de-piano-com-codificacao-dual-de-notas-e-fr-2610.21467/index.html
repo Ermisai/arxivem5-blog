@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DuET: Transcrição de Piano com Codificação Dual de Notas e Frames — arXiv em 5</title>
+<meta name="description" content="Um Transformer de dois codificadores que alinha timing de performance com estrutura métrica para gerar partituras precisas, combinando atenção cruzada e posicionamento temporal explícito.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DuET: Transcrição de Piano com Codificação Dual de Notas e Frames">
+<meta property="og:description" content="Um Transformer de dois codificadores que alinha timing de performance com estrutura métrica para gerar partituras precisas, combinando atenção cruzada e posicionamento temporal explícito.">
+<meta property="og:image" content="../../assets/papers/2610.21467/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Áudio</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.21467" rel="noopener">arXiv:2610.21467</a>
+    </div>
+    <h1><span class="s" data-s="t">DuET: Transcrição de Piano com Codificação Dual de Notas e Frames</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um Transformer de dois codificadores que alinha timing de performance com estrutura métrica para gerar partituras precisas, combinando atenção cruzada e posicionamento temporal explícito.</span></p>
+    <p class="byline">
+      <span>Zeng et al.</span>
+      <span>9 min de leitura</span>
+<span>15/10/2026</span>    </p>
+    <div class="listen" data-article="2610.21467" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=iE5vh2YQxRc" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Desafio da Transcrição de Partituras Automática</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A transcrição automática de piano (Automatic Piano Transcription - APT) evoluiu significativamente, mas ainda enfrenta um gargalo crítico: converter uma performance expressiva em uma partitura notada (score) é muito mais complexo do que gerar um arquivo MIDI.</span> <span class="s" data-s="b0-p0-s1">Enquanto o MIDI captura o que foi tocado (notas, durações, velocidades), a partitura exige interpretação estrutural.</span> <span class="s" data-s="b0-p0-s2">Os autores Wei Zeng e Ye Wang, da National University of Singapore, apresentam o DuET, um modelo que aborda especificamente a etapa PM2S (Performance MIDI-to-Score).</span> <span class="s" data-s="b0-p0-s3">O problema central é que o tempo de performance é fluido e expressivo, enquanto o tempo da partitura é rígido e métrico.</span> <span class="s" data-s="b0-p0-s4">Mapear um para o outro requer entender não apenas a sequência de notas, mas também o pulso (beat) e a métrica subjacentes.</span></p><p><span class="s" data-s="b0-p1-s0">Existem três desafios principais identificados no paper.</span> <span class="s" data-s="b0-p1-s1">Primeiro, a discrepância de granularidade: atributos da partitura (como início e duração da nota) estão associados a eventos de nota individuais, enquanto o pulso musical ocorre em uma grade temporal de frames, muitos dos quais não contêm onsets de notas.</span> <span class="s" data-s="b0-p1-s2">Segundo, a representação de posições relativas: em uma sequência unidimensional de notas, a distância entre índices não reflete necessariamente a separação temporal real, especialmente quando notas são simultâneas ou separadas por pausas longas.</span> <span class="s" data-s="b0-p1-s3">Terceiro, a escassez de dados para música popular: a maioria dos modelos foi treinada apenas em repertório clássico (dataset ASAP), ignorando a demanda prática por transcrições de música popular, onde a partitura oficial é frequentemente indisponível.</span></p><p><span class="s" data-s="b0-p2-s0">Para contornar esses problemas, os autores propõem uma abordagem dual.</span> <span class="s" data-s="b0-p2-s1">Em vez de tratar a transcrição como um problema puramente sequencial, o DuET integra a previsão de notas com o rastreamento de pulso (beat tracking) em nível de frame.</span> <span class="s" data-s="b0-p2-s2">Isso permite que o modelo use o contexto métrico para resolver ambiguidades no timing das notas.</span> <span class="s" data-s="b0-p2-s3">Além disso, eles introduzem novos mecanismos de posicionamento temporal que respeitam a natureza bidimensional do tempo e do pitch no piano, algo que codificações tradicionais de posição em Transformers não fazem adequadamente.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.21467/figure1.webp" alt="Arquitetura DuET: codificadores de notas e frames conectados por atenção cruzada para transcrição de partituras, mostrando a alternância na atenção do decoder." loading="lazy">
+          <figcaption>
+            Arquitetura DuET: codificadores de notas e frames conectados por atenção cruzada para transcrição de partituras, mostrando a alternância na atenção do decoder.
+            <span class="source">Figura 1 do paper · Zeng et al., arXiv:2610.21467</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">Arquitetura DuET: Dois Codificadores, Uma Partitura</span></h2>
+<p><span class="s" data-s="b2-p0-s0">O DuET é um Transformer de dois codificadores (Dual-Encoder).</span> <span class="s" data-s="b2-p0-s1">A entrada é um trecho de Performance MIDI (PMIDI), que consiste em uma sequência de notas X ordenadas pelo tempo de onset.</span> <span class="s" data-s="b2-p0-s2">Cada nota x_i contém pitch (p_i), tempo de início (t_i), duração (d_i) e velocidade (v_i).</span> <span class="s" data-s="b2-p0-s3">Paralelamente, a partir das notas e mensagens de pedal sustain, é construída uma representação de piano-roll R, dividida em frames temporais de 20ms (∆=0.02s).</span> <span class="s" data-s="b2-p0-s4">Cada frame r_j indica quais pitches estão ativos e o estado do pedal naquele instante.</span></p><p><span class="s" data-s="b2-p1-s0">O primeiro codificador, o Note Encoder, processa a sequência de notas X. Ele modela as relações individuais entre as notas, capturando dependências locais e globais na sequência de eventos musicais.</span> <span class="s" data-s="b2-p1-s1">O segundo codificador, o Frame Encoder, processa a representação de piano-roll R. Sua função é capturar o contexto temporal contínuo, incluindo os espaços vazios entre notas onde os beats (pulso) e downbeats (primeiro tempo do compasso) ocorrem.</span> <span class="s" data-s="b2-p1-s2">Essa separação é crucial porque os atributos da partitura final (como o compasso e a divisão rítmica) dependem de uma estrutura temporal regular que não é evidente apenas na sequência discreta de notas.</span></p><p><span class="s" data-s="b2-p2-s0">A inovação arquitetônica chave reside na conexão entre esses dois ramos.</span> <span class="s" data-s="b2-p2-s1">Os autores utilizam atenção cruzada bidirecional (bidirectional cross-attention) entre o Note Encoder e o Frame Encoder.</span> <span class="s" data-s="b2-p2-s2">Isso permite que as informações sobre a estrutura métrica (do frame) fluam para a interpretação das notas, e que as características das notas influenciem a identificação do pulso.</span> <span class="s" data-s="b2-p2-s3">Em seguida, um decoder autoregressivo prediz os atributos da partitura para cada nota de entrada.</span> <span class="s" data-s="b2-p2-s4">O decoder alterna sua atenção entre a memória do codificador de notas e a do codificador de frames, integrando assim a identidade da nota com seu contexto métrico.</span></p>        <h2><span class="s" data-s="b3-h">Formatação da Tarefa e Saída Alinhada</span></h2>
+<p><span class="s" data-s="b3-p0-s0">A transcrição PM2S no DuET é formulada como um mapeamento um-para-um entre as notas de entrada X e os registros de saída Y. Isso significa que o modelo não insere nem remove notas; ele reatribui atributos musicais às notas existentes.</span> <span class="s" data-s="b3-p0-s1">Para cada nota de entrada, o modelo prediz um conjunto complexo de atributos de score, conforme detalhado na Tabela 1 do paper.</span> <span class="s" data-s="b3-p0-s2">Estes incluem: índice do compasso (b_i), parte inteira e fracionária do onset no compasso (q_i, f_i), duração notada (l_i), designação de pentagrama (s_i, superior ou inferior), duração do compasso (L_i), numeração e denominação da métrica (mnum_i, mden_i), assinatura de clave (k_i), voz (u_i) e indicador de nota de graça (g_i).</span></p><p><span class="s" data-s="b3-p1-s0">Os valores de tempo na partitura (onset e duração) são medidos em unidades de semínima (quarter-note units), normalizados pelo andamento.</span> <span class="s" data-s="b3-p1-s1">A fração do onset (f_i) e a duração (l_i) são discretizadas em vocabulários finitos derivados dos dados de treino.</span> <span class="s" data-s="b3-p1-s2">Isso transforma o problema de regressão contínua em um problema de classificação, mais estável para redes neurais.</span> <span class="s" data-s="b3-p1-s3">A assinatura de clave é codificada como um número inteiro positivo (sustenidos) ou negativo (bemóis), e a métrica é predita como pares de números inteiros.</span></p><p><span class="s" data-s="b3-p2-s0">Simultaneamente, o modelo aprende uma tarefa auxiliar de rastreamento de beat e downbeat em nível de frame.</span> <span class="s" data-s="b3-p2-s1">Para cada frame j, o modelo prediz um vetor de probabilidade π_j sobre três classes: não-beat (0), beat regular (1) ou downbeat (2).</span> <span class="s" data-s="b3-p2-s2">Essa supervisão auxiliar atua como um regulador estrutural, forçando o Frame Encoder a aprender uma representação temporal alinhada com a métrica musical, o que indiretamente melhora a precisão do Note Encoder ao fornecer um mapa rítmico claro.</span></p>        <h2><span class="s" data-s="b4-h">TimeRoPE e TPRoPE: Posicionamento Temporal Explícito</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Um dos contributos teóricos mais significativos do DuET é o tratamento do posicionamento.</span> <span class="s" data-s="b4-p0-s1">Transformers padrão usam posições absolutas ou relativas baseadas no índice da sequência.</span> <span class="s" data-s="b4-p0-s2">No entanto, no contexto musical, a distância entre duas notas na sequência (índice i e j) não corresponde linearmente à distância temporal real, especialmente em passagens rubato ou com notas simultâneas.</span> <span class="s" data-s="b4-p0-s3">Usar apenas a ordem da sequência perde a informação de quanto tempo passou entre os eventos.</span></p><p><span class="s" data-s="b4-p1-s0">Para resolver isso, os autores introduzem o TimeRoPE (Time Rotary Positional Encoding) e o TPRoPE (Time-Pitch Rotary Positional Encoding).</span> <span class="s" data-s="b4-p1-s1">O TimeRoPE incorpora o tempo absoluto ou relativo da performance no embedding da nota, permitindo que o modelo distinga entre notas que estão próximas na sequência mas distantes no tempo.</span> <span class="s" data-s="b4-p1-s2">O TPRoPE vai além, codificando explicitamente as relações relativas de tempo E pitch.</span> <span class="s" data-s="b4-p1-s3">Isso é feito modificando os vetores de query e key no mecanismo de attention para incluir rotações baseadas na diferença de tempo e na diferença de pitch entre as notas.</span></p><p><span class="s" data-s="b4-p2-s0">Essa abordagem permite que o modelo entenda que duas notas separadas por uma oitava têm uma relação específica, independentemente de quantas outras notas existam entre elas na sequência.</span> <span class="s" data-s="b4-p2-s1">O TPRoPE estabelece uma referência compartilhada de tempo de performance, alinhando a representação interna do modelo com a física do piano (espaço tempo-pitch bidimensional), em vez de uma linha unidimensional abstrata.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.21467/figure3.webp" alt="Comparação qualitativa: DuET gera partituras com timing e agrupamento rítmico mais precisos do que métodos anteriores (Beyer e Dai; Liu) para a mesma performance." loading="lazy">
+          <figcaption>
+            Comparação qualitativa: DuET gera partituras com timing e agrupamento rítmico mais precisos do que métodos anteriores (Beyer e Dai; Liu) para a mesma performance.
+            <span class="source">Figura 3 do paper · Zeng et al., arXiv:2610.21467</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b6-h">Resultados Quantitativos e Ablações</span></h2>
+<p><span class="s" data-s="b6-p0-s0">A avaliação do DuET foi realizada em dois datasets: ASAP (música clássica) e Gangqinpu (música popular chinesa, criado pelos autores).</span> <span class="s" data-s="b6-p0-s1">A métrica principal é o MUSTER mean error, que mede a diferença entre a partitura predita e a ground truth em termos de timing e estrutura.</span> <span class="s" data-s="b6-p0-s2">No dataset Gangqinpu, o DuET reduziu o erro MUSTER de 6.56% (melhor baseline anterior, Beyer e Dai) para 3.64%, uma melhoria substancial de quase 45%.</span> <span class="s" data-s="b6-p0-s3">No ASAP, a melhoria foi mais modesta, caindo de 11.30% para 11.22%, mas ainda assim sendo a melhor performance registrada.</span></p><p><span class="s" data-s="b6-p1-s0">Analisando os componentes do erro (Tabela 2), o DuET destaca-se na precisão de onset e offset (timing) e na duração notada.</span> <span class="s" data-s="b6-p1-s1">No Gangqinpu, o erro de onset caiu drasticamente para 2.54%, comparado a 11.30% do baseline.</span> <span class="s" data-s="b6-p1-s2">Isso confirma que a integração do contexto de beat (frame-level) ajuda a ancorar as notas expressivas em seus tempos rítmicos corretos.</span> <span class="s" data-s="b6-p1-s3">No entanto, o DuET apresenta erros mais altos em missing notes (notas faltantes) e extra notes (notas extras) no ASAP, sugerindo que o modelo pode ter dificuldade em lidar com ruídos ou ambiguidades extremas na performance clássica em comparação com modelos mais simples.</span></p><p><span class="s" data-s="b6-p2-s0">As ablações (Tabela 3) revelam a contribuição de cada componente.</span> <span class="s" data-s="b6-p2-s1">Remover o Frame Encoder (usando apenas o Note Encoder) aumenta significativamente o erro de timing, provando que o contexto métrico é essencial.</span> <span class="s" data-s="b6-p2-s2">O uso de TimeRoPE/TPRoPE também melhora consistentemente os resultados em comparação com codificações baseadas apenas em índice ou tempo absoluto.</span> <span class="s" data-s="b6-p2-s3">A estratégia de decoder com memória alternada (alternating memory access) mostrou-se superior ao acesso fixo, permitindo que o modelo ajuste dinamicamente sua atenção entre a estrutura da nota e o pulso do compasso.</span> <span class="s" data-s="b6-p2-s4">Uma limitação importante é que o DuET não realiza inserção ou remoção de notas.</span> <span class="s" data-s="b6-p2-s5">Se o MIDI de entrada tiver notas erradas, comuns em transcrições audio-to-MIDI anteriores, o DuET propagará esses erros para a partitura.</span> <span class="s" data-s="b6-p2-s6">Ele apenas reinterpreta atributos, portanto, a qualidade final depende fortemente da precisão do estágio anterior.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.21467/table2.webp" alt="Tabela de erros PM2S: DuET reduz significativamente o erro de timing e duração no Gangqinpu, mantendo-se competitivo no ASAP." loading="lazy">
+          <figcaption>
+            Tabela de erros PM2S: DuET reduz significativamente o erro de timing e duração no Gangqinpu, mantendo-se competitivo no ASAP.
+            <span class="source">Tabela 2 do paper · Zeng et al., arXiv:2610.21467</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Pipeline Completo e Limitações</span></h2>
+<p><span class="s" data-s="b8-p0-s0">O paper descreve um pipeline completo de Audio-to-Score (A2S), mas foca metodologicamente apenas na etapa PM2S.</span> <span class="s" data-s="b8-p0-s1">O pipeline utiliza o Transkun v2 para converter áudio em Performance MIDI (incluindo expressão e pedal) e o MuseScore 4 para formatar a saída do DuET em MusicXML.</span> <span class="s" data-s="b8-p0-s2">O DuET prediz os atributos estruturais, mas decisões de notação final, como spelling de pitch (se uma nota é F# ou Gb) e feixes de notas (beaming), são delegadas ao MuseScore.</span> <span class="s" data-s="b8-p0-s3">Isso limita a capacidade do DuET de corrigir erros de notação musicológica, dependendo de um motor de notação externo.</span></p><p><span class="s" data-s="b8-p1-s0">Os resultados mostram que o DuET é particularmente eficaz em contextos onde a estrutura métrica é clara, como na música popular do dataset Gangqinpu.</span> <span class="s" data-s="b8-p1-s1">No entanto, no repertório clássico do ASAP, onde o rubato é mais livre e a métrica pode ser mais fluida, a vantagem é menor.</span> <span class="s" data-s="b8-p1-s2">Os autores admitem que a precisão na detecção de downbeats em contextos complexos ainda pode ser melhorada.</span> <span class="s" data-s="b8-p1-s3">Além disso, a generalização para outros instrumentos ou gêneros musicais não foi testada, limitando o escopo atual da contribuição.</span></p><p><span class="s" data-s="b8-p2-s0">Outra limitação é a dependência de dados de alta qualidade.</span> <span class="s" data-s="b8-p2-s1">O dataset Gangqinpu, embora novo e relevante, é específico de um gênero.</span> <span class="s" data-s="b8-p2-s2">A performance no ASAP, embora competitiva, não supera drasticamente os métodos anteriores em todas as métricas, especialmente na detecção de notas ausentes.</span> <span class="s" data-s="b8-p2-s3">Isso sugere que, para alguns aspectos da transcrição, a arquitetura dual pode não ser suficiente sem ajustes específicos para a complexidade do repertório clássico.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.21467/table3.webp" alt="Ablações: Time-Pitch RoPE e memória alternada do decoder são os componentes que mais contribuem para a redução de erros de timing." loading="lazy">
+          <figcaption>
+            Ablações: Time-Pitch RoPE e memória alternada do decoder são os componentes que mais contribuem para a redução de erros de timing.
+            <span class="source">Tabela 3 do paper · Zeng et al., arXiv:2610.21467</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">Conclusão</span></h2>
+<p><span class="s" data-s="b10-p0-s0">O DuET representa um avanço pragmático na transcrição automática de piano, ao reconhecer que a transcrição de partituras não é apenas um problema de classificação de notas, mas de alinhamento temporal com uma estrutura métrica subjacente.</span> <span class="s" data-s="b10-p0-s1">Ao combinar codificadores de notas e frames com atenção cruzada e posicionamento temporal explícito (TimeRoPE/TPRoPE), o modelo consegue gerar partituras com timing mais preciso, especialmente em gêneros com métrica definida.</span></p><p><span class="s" data-s="b10-p1-s0">A contribuição principal não é uma revolução na acurácia absoluta em todos os cenários, mas a demonstração de que o contexto de beat (frame-level) é um regulador essencial para a precisão do timing (note-level).</span> <span class="s" data-s="b10-p1-s1">Para desenvolvedores e pesquisadores em MIR, o DuET oferece uma arquitetura modular que pode ser adaptada para outros instrumentos, desde que a relação entre evento musical e estrutura rítmica seja modelada explicitamente.</span> <span class="s" data-s="b10-p1-s2">O código e os pesos estão disponíveis, permitindo a reprodução e extensão desta abordagem dual.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">DuET usa dois codificadores (notas e frames) conectados por atenção cruzada para unir timing expressivo e estrutura métrica.</span></li><li><span class="s" data-s="k1">TimeRoPE e TPRoPE codificam relações temporais e de pitch, resolvendo a ambiguidade de sequências unidimensionais.</span></li><li><span class="s" data-s="k2">Reduzu MUSTER mean error em 45% no dataset Gangqinpu, mas manteve erros de notas faltantes/extras no ASAP.</span></li><li><span class="s" data-s="k3">O modelo não insere ou remove notas; a formatação final depende do MuseScore 4, limitando a generalização.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.21467" rel="noopener">DuET: Note-Frame Dual Encoding for Piano Performance-to-Score Transcription</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.21467" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

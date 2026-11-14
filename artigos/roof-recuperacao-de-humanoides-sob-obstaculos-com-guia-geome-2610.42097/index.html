@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ROOF: Recuperação de humanoides sob obstáculos com guia geométrico — arXiv em 5</title>
+<meta name="description" content="Um método de aprendizado por reforço que permite que robôs humanoides se levantem de quedas sob mesas ou prateleiras, criando espaço e estabelecendo apoio sem precisar conhecer a geometria exata do obstáculo durante a execução.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ROOF: Recuperação de humanoides sob obstáculos com guia geométrico">
+<meta property="og:description" content="Um método de aprendizado por reforço que permite que robôs humanoides se levantem de quedas sob mesas ou prateleiras, criando espaço e estabelecendo apoio sem precisar conhecer a geometria exata do obstáculo durante a execução.">
+<meta property="og:image" content="../../assets/papers/2610.42097/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Robótica</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.42097" rel="noopener">arXiv:2610.42097</a>
+    </div>
+    <h1><span class="s" data-s="t">ROOF: Recuperação de humanoides sob obstáculos com guia geométrico</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um método de aprendizado por reforço que permite que robôs humanoides se levantem de quedas sob mesas ou prateleiras, criando espaço e estabelecendo apoio sem precisar conhecer a geometria exata do obstáculo durante a execução.</span></p>
+    <p class="byline">
+      <span>Lu et al.</span>
+      <span>8 min de leitura</span>
+<span>30/10/2026</span>    </p>
+    <div class="listen" data-article="2610.42097" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=ueMFLXHaqwE" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Queda em Ambientes Restritos</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A maioria dos trabalhos sobre recuperação de quedas em robôs humanoides foca em terrenos irregulares ou em levantar-se de posturas instáveis em solo plano.</span> <span class="s" data-s="b0-p0-s1">No entanto, existe um cenário crítico que frequentemente é ignorado: a queda sob obstáculos suspensos.</span> <span class="s" data-s="b0-p0-s2">Imagine um robô Unitree G1 caindo debaixo de uma mesa, uma prateleira ou uma caixa de equipamentos.</span> <span class="s" data-s="b0-p0-s3">O problema aqui não é apenas a inércia ou a fricção do chão, mas a restrição física imposta pelo teto do ambiente imediato.</span></p><p><span class="s" data-s="b0-p1-s0">Nessas situações, tentar executar um movimento padrão de levitação é contraproducente.</span> <span class="s" data-s="b0-p1-s1">Erguer o tronco antes de criar espaço pode empurrar o robô contra o obstáculo, aumentando a obstrução e travando o mecanismo.</span> <span class="s" data-s="b0-p1-s2">A recuperação torna-se um problema acoplado: o robô precisa simultaneamente criar folga (clearance) e organizar seus pontos de apoio para um levantamento estável.</span> <span class="s" data-s="b0-p1-s3">Se ele tentar se levantar sem antes se reposicionar ou interagir com o obstáculo, falhará.</span></p><p><span class="s" data-s="b0-p2-s0">Os controladores aprendidos anteriormente tornaram-se robustos em mitigação de quedas e locomoção, mas não abordam a dependência da cena para a escape.</span> <span class="s" data-s="b0-p2-s1">Um método que codifique uma direção de fuga específica ou uma sequência de contatos pré-definida precisaria ser redesenhado para cada tipo de obstáculo.</span> <span class="s" data-s="b0-p2-s2">A mesa fixa exige que o robô saia de baixo dela; a caixa móvel pode ser empurrada para o lado.</span> <span class="s" data-s="b0-p2-s3">Unificar esses comportamentos em uma única política é o desafio central deste paper.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.42097/figure1.webp" alt="O robô Unitree G1 demonstra duas estratégias distintas: ajustar o apoio para limpar a borda de uma mesa fixa e inclinar uma caixa rígida para criar espaço de movimento." loading="lazy">
+          <figcaption>
+            O robô Unitree G1 demonstra duas estratégias distintas: ajustar o apoio para limpar a borda de uma mesa fixa e inclinar uma caixa rígida para criar espaço de movimento.
+            <span class="source">Figura 1 do paper · Lu et al., arXiv:2610.42097</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">A Abordagem ROOF: Guia Geométrico e Prior de Movimento</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Os autores propõem o ROOF (Recovery Under Overhead Constraints), um framework baseado em Aprendizado por Reforço (RL) que utiliza uma política única treinada com PPO (Proximal Policy Optimization).</span> <span class="s" data-s="b2-p0-s1">A inovação principal não está na arquitetura do robô, mas na função de recompensa e na estrutura de treinamento.</span> <span class="s" data-s="b2-p0-s2">O objetivo é aprender quando criar espaço, como estabelecer apoio e quando completar o levantamento, utilizando apenas propriocepção (dados internos do robô) durante a execução, embora a geometria do obstáculo seja conhecida durante o treinamento.</span></p><p><span class="s" data-s="b2-p1-s0">O cerne da solução é o &#39;contact-supported geometric escape guidance&#39;.</span> <span class="s" data-s="b2-p1-s1">Em vez de prescrever um caminho de fuga, o sistema recompensa a redução incremental da sobreposição entre o robô e o obstáculo.</span> <span class="s" data-s="b2-p1-s2">Isso permite que a política descubra por conta própria se deve deslizar para fora, empurrar o objeto ou uma combinação de ambos.</span> <span class="s" data-s="b2-p1-s3">O guia mede o progresso através da redução da interseção de formas de colisão projetadas no plano do chão.</span></p><p><span class="s" data-s="b2-p2-s0">Para evitar que o robô realize movimentos caóticos ou anti-ergonômicos enquanto tenta criar espaço, o método incorpora um prior de movimento humano fixo (SMP).</span> <span class="s" data-s="b2-p2-s1">Este prior, baseado em erros de previsão de difusão, incentiva movimentos coordenados que se assemelham a como um humano se levantaria.</span> <span class="s" data-s="b2-p2-s2">A pontuação do prior é multiplicada pelas recompensas de recuperação, favorecendo trajetórias naturais, mas sem forçar o rastreamento de uma trajetória de referência rígida que poderia colidir com o obstáculo.</span></p>        <h2><span class="s" data-s="b3-h">Estrutura de Treinamento em Três Etapas</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O treinamento não ocorre de uma só vez.</span> <span class="s" data-s="b3-p0-s1">Ele é dividido em três estágios para garantir estabilidade e transferência de conhecimento.</span> <span class="s" data-s="b3-p0-s2">No Estágio I (Básico), a política aprende a recuperação em solo plano, focando em objetivos de movimento ascendente e altura.</span> <span class="s" data-s="b3-p0-s3">Isso estabelece uma base fundamental de como o robô pode se levantar de posturas baixas.</span></p><p><span class="s" data-s="b3-p1-s0">No Estágio II (Refinamento), o sistema introduz custos dependentes da postura.</span> <span class="s" data-s="b3-p1-s1">O robô aprende a transicionar de deitado para em pé, com penalidades que aumentam conforme ele se aproxima da posição vertical.</span> <span class="s" data-s="b3-p1-s2">Isso inclui custos de suavidade de movimento e estabilização.</span> <span class="s" data-s="b3-p1-s3">A política começa a entender que movimentos bruscos perto da posição ereta são indesejáveis, aprendendo a &#39;se acomodar&#39; antes de finalizar o levantamento.</span></p><p><span class="s" data-s="b3-p2-s0">O Estágio III (Adaptação) é onde a magia do ROOF acontece.</span> <span class="s" data-s="b3-p2-s1">Aqui, a política é exposta a obstáculos.</span> <span class="s" data-s="b3-p2-s2">Os objetivos do estágio anterior são mantidos, mas são adicionados o guia geométrico de escape e custos específicos de interação, como penalização por movimento dos pés durante a fase final de levantamento e por &#39;travamento&#39; de juntas (joint-stall), que ocorre quando o robô aplica torque alto sem movimento significativo, indicando que está empurrando sem progresso.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b4-t">O Detalhe da Propriocepção</span></h3>
+          <p><span class="s" data-s="b4-c-s0">Um ponto crucial é a discrepância entre treino e teste.</span> <span class="s" data-s="b4-c-s1">Durante o treinamento, a geometria exata do obstáculo é usada para calcular as recompensas geométricas.</span> <span class="s" data-s="b4-c-s2">No entanto, na implementação real (hardware), a política opera apenas com propriocepção.</span> <span class="s" data-s="b4-c-s3">Ela não &#39;vê&#39; a mesa ou a caixa; ela sente a força de contato e o estado das juntas para inferir se está criando espaço.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b5-h">Mecânica da Recompensa Geométrica</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Como o robô sabe se está progredindo sem ver o obstáculo?</span> <span class="s" data-s="b5-p0-s1">A recompensa geométrica (R_geom) é composta por três termos: progresso suportado, folga densa e separação raiz-placa.</span> <span class="s" data-s="b5-p0-s2">O termo de &#39;progresso suportado&#39; mede a melhoria na profundidade de penetração ou na separação desde o último passo válido.</span> <span class="s" data-s="b5-p0-s3">Se o robô está em contato com o obstáculo e move-se de forma a reduzir a interseção das suas caixas de colisão projetadas no chão, ele recebe uma recompensa positiva.</span></p><p><span class="s" data-s="b5-p1-s0">O termo de &#39;folga densa&#39; verifica se o robô está em contato válido (força e penetração) e recompensa a redução do número de formas de colisão sobrepostas.</span> <span class="s" data-s="b5-p1-s1">Já a &#39;separação raiz-placa&#39; incentiva o aumento da distância entre o centro de massa do robô e o obstáculo assim que o contato é confirmado.</span> <span class="s" data-s="b5-p1-s2">Esses termos são somados para formar o objetivo de escape (R_esc).</span></p><p><span class="s" data-s="b5-p2-s0">Importante: a recompensa não especifica a direção.</span> <span class="s" data-s="b5-p2-s1">Se a mesa é fixa, a política descobrirá que deslizar lateralmente reduz a sobreposição.</span> <span class="s" data-s="b5-p2-s2">Se a placa é leve e móvel, ela descobrirá que empurrá-la para o lado é mais eficaz.</span> <span class="s" data-s="b5-p2-s3">A política aprende a estratégia ótima para a cena específica baseada apenas no feedback escalar de &#39;estou criando espaço ou não?&#39;.</span></p>        <h2><span class="s" data-s="b6-h">Resultados em Simulação</span></h2>
+<p><span class="s" data-s="b6-p0-s0">A avaliação em simulação compara o método guiado contra uma baseline sem o guia geométrico.</span> <span class="s" data-s="b6-p0-s1">Em cenários com &#39;placas guiadas&#39; (obstáculos que só podem ser levantados, forçando o robô a criar espaço lateral), o ROOF alcança uma taxa de sucesso de 88,5%.</span> <span class="s" data-s="b6-p0-s2">Sem o guia geométrico, a taxa cai drasticamente para 18,9%.</span> <span class="s" data-s="b6-p0-s3">Isso demonstra que a orientação geométrica é essencial para resolver o problema acoplado de criação de espaço e levantamento.</span></p><p><span class="s" data-s="b6-p1-s0">Em cenários mais complexos com &#39;placas livres&#39;, onde o tamanho, massa e posição do obstáculo são randomizados, o método atinge 98,6% de sucesso.</span> <span class="s" data-s="b6-p1-s1">A robustez vem da generalização da política, que não depende de parâmetros fixos do obstáculo, mas sim da interação física contínua.</span> <span class="s" data-s="b6-p1-s2">A inclusão do prior de movimento humano ajuda a manter a estabilidade durante essas interações imprevisíveis.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.42097/figure2.webp" alt="Diagrama do treinamento por estágios. Observe como as recompensas de escape (Resc) são adicionadas apenas no estágio final, enquanto o prior de movimento (St) permanece ativo para guiar a coordenação." loading="lazy">
+          <figcaption>
+            Diagrama do treinamento por estágios. Observe como as recompensas de escape (Resc) são adicionadas apenas no estágio final, enquanto o prior de movimento (St) permanece ativo para guiar a coordenação.
+            <span class="source">Figura 2 do paper · Lu et al., arXiv:2610.42097</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Validação em Hardware: Unitree G1</span></h2>
+<p><span class="s" data-s="b8-p0-s0">O teste mais convincente ocorre no hardware físico, utilizando um robô Unitree G1.</span> <span class="s" data-s="b8-p0-s1">O robô foi testado em sete cenas de obstáculos do mundo real, incluindo arranjos de móveis e múltiplos objetos que não foram vistos durante o treinamento.</span> <span class="s" data-s="b8-p0-s2">A política recuperou com sucesso em 95 dos 150 tentativas (63,3%).</span></p><p><span class="s" data-s="b8-p1-s0">A queda na taxa de sucesso em relação à simulação (de 88,5% para 63,3%) é esperada e revela as limitações do método.</span> <span class="s" data-s="b8-p1-s1">As diferenças de sim-to-real, como atrito não modelado perfeitamente, folgas mecânicas e ruído nos sensores, impactam a precisão das interações físicas.</span> <span class="s" data-s="b8-p1-s2">No entanto, o fato de o robô conseguir lidar com arranjos complexos e não vistos prova a capacidade de generalização da política baseada em propriocepção.</span></p><p><span class="s" data-s="b8-p2-s0">As imagens dos testes mostram o robô lidando com escadas, caixas de madeira e blocos instáveis.</span> <span class="s" data-s="b8-p2-s1">Em alguns casos, o robô precisa ajustar seu apoio repetidamente até encontrar uma configuração estável que permita o levantamento final.</span> <span class="s" data-s="b8-p2-s2">A política não falha catastróficamente; ela tenta, recua e tenta novamente, guiada pelo feedback de contato.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.42097/figure4.webp" alt="Recuperação em cenários reais complexos: o robô enfrenta escadas, caixas de madeira e arranjos de blocos, demonstrando adaptação a obstáculos não vistos no treino." loading="lazy">
+          <figcaption>
+            Recuperação em cenários reais complexos: o robô enfrenta escadas, caixas de madeira e arranjos de blocos, demonstrando adaptação a obstáculos não vistos no treino.
+            <span class="source">Figura 4 do paper · Lu et al., arXiv:2610.42097</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">Limitações e Considerações Finais</span></h2>
+<p><span class="s" data-s="b10-p0-s0">O paper é honesto sobre as limitações.</span> <span class="s" data-s="b10-p0-s1">O método depende de um prior de movimento humano pré-treinado.</span> <span class="s" data-s="b10-p0-s2">Se o robô cair em uma postura extremamente rara que não tem analogia humana clara, o prior pode não oferecer a orientação mais eficiente, embora ainda assim seja melhor que nenhum prior.</span> <span class="s" data-s="b10-p0-s3">Além disso, a política foi treinada principalmente com um único obstáculo por vez.</span> <span class="s" data-s="b10-p0-s4">Cenários com múltiplos obstáculos interagindo entre si ou com o robô de forma complexa ainda representam um desafio aberto.</span></p><p><span class="s" data-s="b10-p1-s0">Outra limitação é a necessidade de contato.</span> <span class="s" data-s="b10-p1-s1">Se o obstáculo estiver posicionado de forma que o robô não consiga tocar nele para sentir a força (por exemplo, se estiver muito alto ou se o robô estiver preso de forma que suas mãos/pés não alcancem a superfície de contato), o guia geométrico perde eficácia, pois não há feedback de contato para validar o progresso.</span></p><p><span class="s" data-s="b10-p2-s0">Apesar disso, o ROOF representa um avanço significativo na direção de robôs humanoides autônomos que podem operar em ambientes humanos desordenados.</span> <span class="s" data-s="b10-p2-s1">Ao formular a recuperação como um problema acoplado de criação de espaço e levantamento, e ao usar recompensas geométricas densas, os autores mostram que é possível aprender comportamentos complexos de interação sem a necessidade de modelagem explícita de cada tipo de obstáculo.</span></p>        <h2><span class="s" data-s="b11-h">O Que Levar Embora</span></h2>
+<p><span class="s" data-s="b11-p0-s0">A recuperação de quedas sob obstáculos não é apenas um problema de controle de equilíbrio, mas de planejamento de interação espacial.</span> <span class="s" data-s="b11-p0-s1">O ROOF demonstra que é possível unificar a criação de folga e o levantamento em uma única política de aprendizado por reforço.</span> <span class="s" data-s="b11-p0-s2">A chave está no guia geométrico que recompensa a redução de sobreposição sem ditar a rota, combinado com um prior de movimento humano para garantir estabilidade.</span> <span class="s" data-s="b11-p0-s3">Os resultados em hardware confirmam que essa abordagem é viável, mesmo com a transferência sim-to-real e obstáculos não vistos, embora a taxa de sucesso ainda tenha margem para melhoria frente aos ambientes reais ruidosos.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">O ROOF resolve a recuperação de quedas sob obstáculos usando uma política única que acopla a criação de espaço físico com o levantamento, sem precisar conhecer a geometria exata do obstáculo durante a execução.</span></li><li><span class="s" data-s="k1">O método utiliza um guia de recompensa geométrica que incentiva a redução da sobreposição robô-objeto, permitindo que a política descubra estratégias de escape (deslizar ou empurrar) adaptadas ao cenário.</span></li><li><span class="s" data-s="k2">O treinamento em três estágios, combinado com um prior de movimento humano, garante que o robô mantenha estabilidade e coordenação mesmo durante interações físicas complexas com o ambiente.</span></li><li><span class="s" data-s="k3">Em testes reais com o Unitree G1, a política recuperou 95 de 150 tentativas em cenários diversos e não vistos, demonstrando robustez, embora a transferência sim-to-real ainda apresente desafios.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.42097" rel="noopener">ROOF: Learning Humanoid Fall Recovery under Overhead Constraints</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.42097" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AgenticBBO-Bench: o primeiro benchmark para agentes de LLM em otimização black-box — arXiv em 5</title>
+<meta name="description" content="Pesquisadores da Universidade de Nanjing criaram um benchmark unificado para avaliar agentes de linguagem em otimização black-box, mostrando que semântica ajuda mais que ferramentas numéricas extras.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AgenticBBO-Bench: o primeiro benchmark para agentes de LLM em otimização black-box">
+<meta property="og:description" content="Pesquisadores da Universidade de Nanjing criaram um benchmark unificado para avaliar agentes de linguagem em otimização black-box, mostrando que semântica ajuda mais que ferramentas numéricas extras.">
+<meta property="og:image" content="../../assets/papers/2610.12183/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Agentes</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.12183" rel="noopener">arXiv:2610.12183</a>
+    </div>
+    <h1><span class="s" data-s="t">AgenticBBO-Bench: o primeiro benchmark para agentes de LLM em otimização black-box</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Pesquisadores da Universidade de Nanjing criaram um benchmark unificado para avaliar agentes de linguagem em otimização black-box, mostrando que semântica ajuda mais que ferramentas numéricas extras.</span></p>
+    <p class="byline">
+      <span>Chen et al.</span>
+      <span>11 min de leitura</span>
+<span>08/10/2026</span>    </p>
+    <div class="listen" data-article="2610.12183" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=lAGh7EISzKY" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema: otimizar quando avaliar é caro</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Otimização black-box (BBO) aparece em problemas onde você consegue avaliar uma solução candidata, mas não tem acesso à forma analítica da função objetivo nem aos seus gradientes.</span> <span class="s" data-s="b0-p0-s1">Exemplos clássicos incluem design de moléculas, ajuste de hiperparâmetros de modelos de machine learning, configuração de bancos de dados e projeto de chips.</span> <span class="s" data-s="b0-p0-s2">O que torna esses problemas difíceis é que cada avaliação pode custar caro: treinar um modelo para medir a qualidade de um conjunto de hiperparâmetros pode levar horas; sintetizar uma molécula para testar suas propriedades pode custar milhares de dólares.</span></p><p><span class="s" data-s="b0-p1-s0">Métodos tradicionais de BBO, como otimização bayesiana e algoritmos evolutivos, trabalham principalmente com observações numéricas.</span> <span class="s" data-s="b0-p1-s1">Eles usam heurísticas predefinidas: modelos substitutos (surrogates), funções de aquisição, operadores de busca.</span> <span class="s" data-s="b0-p1-s2">O problema é que problemas reais vêm com informação adicional que esses métodos não conseguem explorar facilmente: descrições textuais da tarefa, semântica das variáveis, conhecimento de domínio.</span></p><p><span class="s" data-s="b0-p2-s0">Modelos de linguagem grandes (LLMs) oferecem uma maneira natural de incorporar essa informação junto com o histórico numérico de busca.</span> <span class="s" data-s="b0-p2-s1">Isso motivou uma linha crescente de trabalhos que usam LLMs para propor candidatos, modelar o objetivo ou apoiar etapas específicas do processo de otimização.</span> <span class="s" data-s="b0-p2-s2">Mas a maioria desses trabalhos trata o LLM como um componente fixo: a cada rodada, o algoritmo chama o LLM para executar uma operação predefinida, e o resto do loop de otimização já está especificado de antemão.</span></p>        <h2><span class="s" data-s="b1-h">A ideia: agentes que controlam o loop de otimização</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Trabalhos recentes começaram a explorar uma formulação mais agêntica, na qual o LLM interage com um ambiente de otimização em vez de servir como um operador fixo.</span> <span class="s" data-s="b1-p0-s1">Antes de submeter um candidato, o LLM pode inspecionar o estado da busca, executar código, invocar ferramentas específicas de domínio, observar suas saídas e decidir qual ação tomar a seguir.</span> <span class="s" data-s="b1-p0-s2">Crucialmente, a sequência dessas ações intermediárias é determinada online pelo LLM, não prescrita pelo algoritmo de otimização.</span> <span class="s" data-s="b1-p0-s3">Os autores chamam isso de Agentic BBO.</span></p><p><span class="s" data-s="b1-p1-s0">O problema é que colocar o LLM nesse papel agêntico torna comparações entre métodos menos diretas.</span> <span class="s" data-s="b1-p1-s1">O comportamento de busca resultante depende não só do problema de otimização, mas também de qual informação o agente observa, quais ferramentas ele pode acessar e como o harness (o sistema que gerencia a interação) funciona.</span> <span class="s" data-s="b1-p1-s2">Estudos existentes de Agentic BBO fazem escolhas diferentes ao longo dessas dimensões e são tipicamente avaliados dentro de domínios individuais, tornando seus resultados difíceis de comparar.</span></p><p><span class="s" data-s="b1-p2-s0">Este paper introduz o AgenticBBO-Bench, o primeiro benchmark cross-domain para Agentic BBO.</span> <span class="s" data-s="b1-p2-s1">Ele cobre cinco famílias de tarefas: funções sintéticas (BBOB), otimização de hiperparâmetros (HPO), ajuste de bancos de dados (DBTune), design de chips (BBOPlace) e design molecular (GuacaMol).</span> <span class="s" data-s="b1-p2-s2">Todas as tarefas seguem um protocolo unificado de orçamento finito de avaliações, permitindo comparação direta entre agentes LLM e otimizadores numéricos tradicionais.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.12183/table1.webp" alt="Os cinco domínios do benchmark cobrem espaços de busca contínuos, mistos e discretos estruturados. Três famílias expõem semântica de tarefas e variáveis; três incluem restrições de viabilidade." loading="lazy">
+          <figcaption>
+            Os cinco domínios do benchmark cobrem espaços de busca contínuos, mistos e discretos estruturados. Três famílias expõem semântica de tarefas e variáveis; três incluem restrições de viabilidade.
+            <span class="source">Tabela 1 do paper · Chen et al., arXiv:2610.12183</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Como funciona o benchmark</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O AgenticBBO-Bench define um protocolo comum: cada tarefa recebe um orçamento fixo de novas avaliações (além de um conjunto inicial de observações).</span> <span class="s" data-s="b3-p0-s1">O desempenho é medido não só pela solução final, mas por toda a trajetória best-so-far.</span> <span class="s" data-s="b3-p0-s2">Especificamente, o score combina a qualidade média normalizada ao longo da trajetória (peso 70%) com a qualidade da melhor solução final (peso 30%).</span></p><p><span class="s" data-s="b3-p1-s0">A normalização é necessária porque escalas de objetivo diferem entre tarefas.</span> <span class="s" data-s="b3-p1-s1">Para cada tarefa, os autores definem uma função de qualidade normalizada q(·) que mapeia valores de objetivo para um intervalo comum.</span> <span class="s" data-s="b3-p1-s2">O score final S é dado por: S = 0.7 · (1/B) Σ q(y*_j) + 0.3 · q(y*_B), onde B é o orçamento de avaliações e y*_j é o melhor valor observado após a j-ésima avaliação nova.</span></p><p><span class="s" data-s="b3-p2-s0">O benchmark compara duas configurações principais: Direct, onde o LLM recebe a descrição da tarefa e o histórico de otimização no contexto e gera diretamente o próximo candidato; e Agentic, onde o LLM opera em um workspace persistente com acesso a Bash/Python, acesso estruturado ao estado da busca e interfaces para submeter candidatos.</span> <span class="s" data-s="b3-p2-s1">Ambas as configurações seguem o mesmo protocolo de inicialização e orçamento de avaliações.</span></p><p><span class="s" data-s="b3-p3-s0">Os autores usam DeepSeek V4.1 Flash como modelo padrão e Codex como harness do agente.</span> <span class="s" data-s="b3-p3-s1">Todos os experimentos de ablação usam um pool comum de oito tarefas, com duas tarefas de cada família não-molecular, balanceando cobertura cross-domain e custo experimental.</span></p>        <h2><span class="s" data-s="b4-h">Resultados principais: agentes superam otimizadores tradicionais</span></h2>
+<p><span class="s" data-s="b4-p0-s0">A Tabela 2a compara Direct e Agentic com baselines numéricos representativos nas cinco famílias.</span> <span class="s" data-s="b4-p0-s1">Agentic supera Direct em todas as cinco famílias, com melhoria relativa média de 30.3%.</span> <span class="s" data-s="b4-p0-s2">As maiores melhorias aparecem em BBOB, de 0.460 para 0.661 (+43.7%), e GuacaMol, de 0.565 para 0.840 (+48.7%).</span></p><p><span class="s" data-s="b4-p1-s0">Comparado com baselines numéricos, Agentic alcança o melhor score em BBOB, BBOPlace, HPO e GuacaMol.</span> <span class="s" data-s="b4-p1-s1">TuRBO tem o melhor desempenho em DBTune.</span> <span class="s" data-s="b4-p1-s2">Esses resultados demonstram que a formulação agêntica melhora consistentemente sobre otimização LLM direta e é competitiva com otimizadores numéricos estabelecidos em domínios diversos de BBO.</span></p><p><span class="s" data-s="b4-p2-s0">Vale notar que os otimizadores numéricos tradicionais variam bastante em desempenho entre domínios.</span> <span class="s" data-s="b4-p2-s1">GP-BO (Gaussian Process Bayesian Optimization) funciona razoavelmente bem em várias tarefas, mas TuRBO domina em DBTune.</span> <span class="s" data-s="b4-p2-s2">Métodos evolutivos como CMA-ES e métodos de amostragem como TPE têm desempenho mais fraco na maioria dos domínios.</span> <span class="s" data-s="b4-p2-s3">Random e Sobol, que servem como baselines de amostragem, ficam consistentemente abaixo de todos os outros métodos.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.12183/table2.webp" alt="Agentic supera Direct em todas as famílias e alcança o melhor score em quatro das cinco. TuRBO lidera em DBTune. Traço indica que o método não se aplica àquela família." loading="lazy">
+          <figcaption>
+            Agentic supera Direct em todas as famílias e alcança o melhor score em quatro das cinco. TuRBO lidera em DBTune. Traço indica que o método não se aplica àquela família.
+            <span class="source">Tabela 2 do paper · Chen et al., arXiv:2610.12183</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b6-h">Ferramentas numéricas não ajudam consistentemente</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Uma pergunta natural é se dar ao agente acesso a ferramentas de otimização numérica melhora o desempenho.</span> <span class="s" data-s="b6-p0-s1">Os autores testaram duas variantes: + GP Suggest adiciona uma interface de proposta de candidatos baseada em Gaussian Process; + GP Tools expõe adicionalmente predição do surrogate, scoring de aquisição, diagnósticos e controles sobre a região de busca e política de aquisição.</span> <span class="s" data-s="b6-p0-s2">O agente permanece livre para aceitar, modificar ou rejeitar sugestões do GP.</span></p><p><span class="s" data-s="b6-p1-s0">A Tabela 2b mostra que ferramentas GP não melhoram consistentemente o desempenho.</span> <span class="s" data-s="b6-p1-s1">A configuração base Agentic alcança o score médio mais alto de 0.589, comparado com 0.574 para + GP Suggest e 0.538 para + GP Tools.</span> <span class="s" data-s="b6-p1-s2">Olhando além das médias, o efeito das interfaces GP varia entre tarefas, melhorando o desempenho em algumas e piorando em outras.</span></p><p><span class="s" data-s="b6-p2-s0">Para entender por quê, os autores examinaram como os agentes usam Python e ferramentas baseadas em GP durante a otimização.</span> <span class="s" data-s="b6-p2-s1">A Figura 3a mostra que Python customizado permanece comum mesmo depois que ferramentas GP são introduzidas: com + GP Tools, 35.4% das rodadas usam apenas Python e outros 17.4% usam tanto Python quanto ferramentas GP.</span> <span class="s" data-s="b6-p2-s2">Isso sugere que os agentes não simplesmente entregam a busca ao otimizador fornecido.</span></p><p><span class="s" data-s="b6-p3-s0">A Figura 3b dá um exemplo concreto na tarefa de placement de chip Bigblue1: o agente ajusta um proxy linear a partir de layouts observados, usa o padrão aprendido para construir um novo placement e continua refinando-o em rodadas posteriores, melhorando o score best-so-far de 0.551 após a primeira avaliação nova para 0.664 após quatro avaliações e 0.676 eventualmente.</span> <span class="s" data-s="b6-p3-s1">Este caso sugere que Python customizado permite ao agente construir análises específicas da tarefa a partir da trajetória observada, em vez de depender do viés indutivo fixo de um backend GP fixo.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.12183/figure3.webp" alt="Padrões de uso de ferramentas mostram que agentes continuam usando Python customizado mesmo com acesso a GP. Exemplo em Bigblue1 mostra agente construindo proxy linear próprio." loading="lazy">
+          <figcaption>
+            Padrões de uso de ferramentas mostram que agentes continuam usando Python customizado mesmo com acesso a GP. Exemplo em Bigblue1 mostra agente construindo proxy linear próprio.
+            <span class="source">Figura 3 do paper · Chen et al., arXiv:2610.12183</span>
+          </figcaption>
+        </figure>
+        <aside class="callout">
+          <h3><span class="s" data-s="b8-t">Ferramentas vs. análise customizada</span></h3>
+          <p><span class="s" data-s="b8-c-s0">Dar ao agente mais ferramentas de otimização não garante melhor desempenho.</span> <span class="s" data-s="b8-c-s1">Os resultados sugerem que agentes se beneficiam mais de análise específica da tarefa que eles mesmos constroem do que de simplesmente expor mais interfaces de otimizador.</span> <span class="s" data-s="b8-c-s2">O agente pode descobrir estrutura útil da trajetória de busca e construir sua própria estratégia em torno dela.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b9-h">Semântica ajuda, conhecimento prévio específico nem sempre</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Os autores estudaram como informação da tarefa e conhecimento prévio afetam Agentic BBO.</span> <span class="s" data-s="b9-p0-s1">Em seis tarefas do mundo real, eles compararam três configurações: Anonymous, que esconde identidades de tarefas e variáveis; Semantic, que restaura semântica de tarefas e parâmetros; e Full Prior, que adicionalmente fornece conhecimento de domínio.</span></p><p><span class="s" data-s="b9-p1-s0">Os resultados mostram que semântica consistentemente ajuda, elevando o score médio de 0.465 para 0.595.</span> <span class="s" data-s="b9-p1-s1">Conhecimento prévio adicional traz ganhos em algumas tarefas (Breast/SVM, Diabetes/RF, PostgreSQL-5), mas prejudica em outras (Sysbench-5, Adaptec1, Bigblue1), resultando em um score médio de 0.587, ligeiramente abaixo de Semantic.</span></p><p><span class="s" data-s="b9-p2-s0">A análise qualitativa revela que conhecimento prévio específico pode ser menos confiável que semântica geral.</span> <span class="s" data-s="b9-p2-s1">Por exemplo, em tarefas de placement de chip, o conhecimento prévio sugere que wirelength (comprimento dos fios) é o objetivo principal, mas o avaliador real usa uma combinação ponderada de wirelength, densidade e outras métricas.</span> <span class="s" data-s="b9-p2-s2">Quando o agente otimiza apenas wirelength, pode piorar o objetivo real.</span></p><p><span class="s" data-s="b9-p3-s0">Isso sugere que, embora semântica de tarefas e variáveis seja amplamente útil, conhecimento prévio mais específico precisa ser calibrado cuidadosamente para o objetivo real.</span> <span class="s" data-s="b9-p3-s1">Informação de domínio genérica funciona melhor que heurísticas específicas que podem não se alinhar com a função objetivo verdadeira.</span></p>        <h2><span class="s" data-s="b10-h">Otimizadores numéricos podem absorver ganhos do agente</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Uma terceira questão explorada pelos autores é: quanto do ganho de desempenho vem do LLM tomar decisões durante a busca versus simplesmente estabelecer uma boa trajetória inicial?</span> <span class="s" data-s="b10-p0-s1">Para responder isso, eles testaram uma configuração híbrida: o agente executa as primeiras rodadas de otimização e então um otimizador numérico (GP-BO) continua a partir daí.</span></p><p><span class="s" data-s="b10-p1-s0">Os resultados mostram que, em muitos casos, GP-BO pode efetivamente absorver ganhos da trajetória estabelecida pelo agente.</span> <span class="s" data-s="b10-p1-s1">Em algumas tarefas, a configuração híbrida alcança desempenho comparável ou até superior ao Agentic puro.</span> <span class="s" data-s="b10-p1-s2">Isso sugere que parte do valor do agente está em explorar o espaço de busca de maneira informada nas fases iniciais, estabelecendo uma região promissora que métodos numéricos podem então refinar eficientemente.</span></p><p><span class="s" data-s="b10-p2-s0">No entanto, isso não significa que o agente seja dispensável.</span> <span class="s" data-s="b10-p2-s1">Em tarefas onde a estrutura do problema é complexa ou a semântica é crucial, o agente continua sendo necessário durante toda a trajetória.</span> <span class="s" data-s="b10-p2-s2">A configuração híbrida funciona melhor quando o problema tem estrutura que GP-BO pode modelar bem uma vez que uma região promissora foi identificada.</span></p><p><span class="s" data-s="b10-p3-s0">Este resultado tem implicações práticas: em cenários onde cada avaliação é muito cara, pode fazer sentido usar o agente para as primeiras rodadas e então mudar para um otimizador numérico mais rápido e barato para refinamento.</span> <span class="s" data-s="b10-p3-s1">A escolha depende do trade-off entre custo de inferência do LLM e custo de avaliação do objetivo.</span></p>        <h2><span class="s" data-s="b11-h">Comparação de modelos de linguagem: desempenho e custo</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Os autores introduziram um desafio frontier de cinco tarefas dentro do AgenticBBO-Bench e avaliaram sete LLMs sob o harness Codex: GPT-6 Astra, DeepSeek-V4.1-Flash, GPT-5.6 Sol, Gemini 3.1 Pro, GLM-5.3, Kimi-K3 e DeepSeek V4 Pro.</span> <span class="s" data-s="b11-p0-s1">O desafio usa uma tarefa de cada família (exceto GuacaMol, que tem duas) para balancear cobertura de domínio e custo experimental.</span></p><p><span class="s" data-s="b11-p1-s0">GPT-6 Astra alcançou o melhor score geral de 59.1, seguido por DeepSeek-V4.1-Flash com 58.4.</span> <span class="s" data-s="b11-p1-s1">No entanto, quando se considera o custo oficial de tokens por tarefa, DeepSeek-V4.1-Flash oferece melhor custo-benefício.</span> <span class="s" data-s="b11-p1-s2">A Figura 1 mostra que modelos com desempenho de otimização similar podem incorrer em custos de inferência substancialmente diferentes.</span></p><p><span class="s" data-s="b11-p2-s0">GPT-6 Astra e DeepSeek-V4.1-Flash ficam na fronteira de Pareto de desempenho e custo entre os modelos avaliados.</span> <span class="s" data-s="b11-p2-s1">GPT-5.6 Sol e Gemini 3.1 Pro têm desempenho intermediário, enquanto GLM-5.3, Kimi-K3 e DeepSeek V4 Pro ficam abaixo da fronteira.</span> <span class="s" data-s="b11-p2-s2">Vale notar que esses custos são baseados em preços oficiais de lista e podem variar com descontos ou mudanças de preço.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.12183/figure1.webp" alt="GPT-6 Astra lidera em score absoluto, mas DeepSeek V4.1 Flash oferece melhor custo-benefício. Custos de inferência variam substancialmente entre modelos de desempenho similar." loading="lazy">
+          <figcaption>
+            GPT-6 Astra lidera em score absoluto, mas DeepSeek V4.1 Flash oferece melhor custo-benefício. Custos de inferência variam substancialmente entre modelos de desempenho similar.
+            <span class="source">Figura 1 do paper · Chen et al., arXiv:2610.12183</span>
+          </figcaption>
+        </figure>
+        <aside class="callout">
+          <h3><span class="s" data-s="b13-t">Trade-off entre desempenho e custo</span></h3>
+          <p><span class="s" data-s="b13-c-s0">A escolha do modelo de linguagem para Agentic BBO envolve um trade-off explícito entre qualidade de otimização e custo de inferência.</span> <span class="s" data-s="b13-c-s1">Em aplicações onde avaliações são extremamente caras, pagar mais por um modelo melhor pode compensar.</span> <span class="s" data-s="b13-c-s2">Em outros casos, um modelo mais barato pode ser suficiente.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b14-h">Limitações e o que fica em aberto</span></h2>
+<p><span class="s" data-s="b14-p0-s0">O benchmark cobre cinco domínios, mas cada domínio tem características específicas que podem não generalizar para todos os problemas de BBO.</span> <span class="s" data-s="b14-p0-s1">Por exemplo, as tarefas de design molecular usam representações SMILES e scorers específicos; problemas com outras representações moleculares ou objetivos diferentes podem ter comportamento distinto.</span></p><p><span class="s" data-s="b14-p1-s0">Os experimentos usam orçamentos de avaliação fixos que variam entre famílias (de 20 a 100 novas avaliações).</span> <span class="s" data-s="b14-p1-s1">Em aplicações reais, o orçamento apropriado depende do custo de avaliação e do valor de melhorias incrementais.</span> <span class="s" data-s="b14-p1-s2">O benchmark não explora sistematicamente como o desempenho relativo muda com orçamentos muito menores ou muito maiores.</span></p><p><span class="s" data-s="b14-p2-s0">O estudo de ferramentas numéricas se concentra em interfaces baseadas em Gaussian Process.</span> <span class="s" data-s="b14-p2-s1">Outras ferramentas, como métodos de amostragem, otimizadores evolutivos ou técnicas de modelagem específicas de domínio, podem ter padrões de interação diferentes com o agente.</span> <span class="s" data-s="b14-p2-s2">A conclusão de que ferramentas não ajudam consistentemente pode não se aplicar a todos os tipos de ferramentas.</span></p><p><span class="s" data-s="b14-p3-s0">A análise de conhecimento prévio mostra que informação de domínio específica pode prejudicar quando não está bem alinhada com o objetivo real.</span> <span class="s" data-s="b14-p3-s1">Mas o paper não propõe um método sistemático para calibrar ou validar conhecimento prévio antes de fornecê-lo ao agente.</span> <span class="s" data-s="b14-p3-s2">Isso permanece uma questão em aberto para trabalhos futuros.</span></p><p><span class="s" data-s="b14-p4-s0">Finalmente, todos os experimentos usam o harness Codex e um conjunto específico de interfaces de ambiente.</span> <span class="s" data-s="b14-p4-s1">Diferentes harnesses podem levar a comportamentos diferentes, e a sensibilidade a escolhas de design do harness não é explorada sistematicamente.</span> <span class="s" data-s="b14-p4-s2">Benchmarks futuros podem precisar padronizar não só as tarefas, mas também o ambiente de interação do agente.</span></p>        <h2><span class="s" data-s="b15-h">Por que isso importa</span></h2>
+<p><span class="s" data-s="b15-p0-s0">AgenticBBO-Bench é o primeiro benchmark que permite comparação direta de agentes LLM e otimizadores numéricos em otimização black-box sob um protocolo unificado.</span> <span class="s" data-s="b15-p0-s1">Isso é importante porque estudos anteriores usavam diferentes domínios, orçamentos e configurações de sistema, tornando impossível saber se diferenças de desempenho vinham do método de otimização ou das condições experimentais.</span></p><p><span class="s" data-s="b15-p1-s0">Os resultados mostram que agentes LLM são competitivos com otimizadores numéricos estabelecidos em múltiplos domínios, mas também revelam que o design do sistema agêntico importa.</span> <span class="s" data-s="b15-p1-s1">Dar ao agente mais ferramentas não garante melhor desempenho; semântica de tarefas é mais valiosa que heurísticas de domínio específicas; e parte do valor do agente pode estar em estabelecer uma boa trajetória inicial que métodos numéricos podem refinar.</span></p><p><span class="s" data-s="b15-p2-s0">Para desenvolvedores e cientistas de dados que trabalham com problemas de otimização caros, o benchmark oferece um ponto de partida para avaliar se uma abordagem agêntica faz sentido para seu problema.</span> <span class="s" data-s="b15-p2-s1">Para pesquisadores de LLMs, ele fornece um conjunto padronizado de tarefas para comparar modelos e designs de sistema em um domínio onde raciocínio, planejamento e uso de ferramentas são todos necessários.</span></p><p><span class="s" data-s="b15-p3-s0">O código está disponível publicamente, permitindo que outros reproduzam os resultados, adicionem novas tarefas ou testem novos modelos e harnesses.</span> <span class="s" data-s="b15-p3-s1">Isso deve acelerar o progresso em Agentic BBO ao tornar comparações mais diretas e confiáveis.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">AgenticBBO-Bench é o primeiro benchmark unificado para agentes LLM em otimização black-box, cobrindo cinco domínios sob protocolo comum de avaliação.</span></li><li><span class="s" data-s="k1">Agentes superam otimização LLM direta em todas as famílias e são competitivos com otimizadores numéricos em quatro das cinco, mas ferramentas extras não ajudam sempre.</span></li><li><span class="s" data-s="k2">Semântica de tarefas melhora desempenho consistentemente; conhecimento prévio específico pode prejudicar se não estiver bem alinhado com o objetivo real.</span></li><li><span class="s" data-s="k3">GPT-6 Astra e DeepSeek V4.1 Flash ficam na fronteira de Pareto de desempenho e custo entre sete modelos avaliados no desafio frontier de cinco tarefas.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.12183" rel="noopener">A Closer Look at Agentic BBO: Benchmarking LLM Agents for Black-Box Optimization</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.12183" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

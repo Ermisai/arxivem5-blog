@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Documentação compacta não melhora agentes de código quando o fonte está disponível — arXiv em 5</title>
+<meta name="description" content="Pesquisadores criaram um benchmark que mede qualidade de documentação por regeneração de código e descobriram que descrições perfeitas ajudam apenas quando o código-fonte não cabe no contexto—mas não melhoram resolução de issues reais.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Documentação compacta não melhora agentes de código quando o fonte está disponível">
+<meta property="og:description" content="Pesquisadores criaram um benchmark que mede qualidade de documentação por regeneração de código e descobriram que descrições perfeitas ajudam apenas quando o código-fonte não cabe no contexto—mas não melhoram resolução de issues reais.">
+<meta property="og:image" content="../../assets/papers/2609.31587/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Agentes</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2609.31587" rel="noopener">arXiv:2609.31587</a>
+    </div>
+    <h1><span class="s" data-s="t">Documentação compacta não melhora agentes de código quando o fonte está disponível</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Pesquisadores criaram um benchmark que mede qualidade de documentação por regeneração de código e descobriram que descrições perfeitas ajudam apenas quando o código-fonte não cabe no contexto—mas não melhoram resolução de issues reais.</span></p>
+    <p class="byline">
+      <span>Arman et al.</span>
+      <span>10 min de leitura</span>
+<span>25/09/2026</span>    </p>
+    <div class="listen" data-article="2609.31587" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=Vc10FwGPpgw" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema: agentes que editam código sem ler tudo</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Agentes de código modernos enfrentam um problema prático: repositórios grandes demais para caber inteiros no contexto.</span> <span class="s" data-s="b0-p0-s1">Um modelo com janela de 128 mil tokens não consegue carregar uma base de código de milhões de linhas.</span> <span class="s" data-s="b0-p0-s2">A solução comum é dar ao agente descrições em linguagem natural dos arquivos que ele não pode ler—uma espécie de mapa do território que ele precisa editar sem ver.</span></p><p><span class="s" data-s="b0-p1-s0">Isso levou os autores a uma hipótese natural: se as descrições forem boas o suficiente, completas e precisas, deveriam ajudar o agente a resolver issues reais.</span> <span class="s" data-s="b0-p1-s1">Afinal, uma descrição de alta fidelidade substitui o código-fonte quando este não cabe.</span> <span class="s" data-s="b0-p1-s2">O paper testa essa hipótese em quatro etapas: primeiro identifica o que torna uma descrição boa, depois constrói um benchmark para medi-la, usa o benchmark para otimizar automaticamente o prompt que gera descrições, e finalmente testa se essas descrições melhoradas ajudam na prática.</span></p><p><span class="s" data-s="b0-p2-s0">O resultado é dividido.</span> <span class="s" data-s="b0-p2-s1">A parte técnica funciona: o benchmark mede qualidade, o otimizador melhora as descrições, e elas de fato substituem código-fonte ausente.</span> <span class="s" data-s="b0-p2-s2">Mas a hipótese motivadora falha: quando o código-fonte está presente—que é como agentes normalmente operam—a documentação não melhora nada.</span> <span class="s" data-s="b0-p2-s3">Em alguns casos, piora levemente.</span></p>        <h2><span class="s" data-s="b1-h">Roundtrip: medir descrição por regeneração</span></h2>
+<p><span class="s" data-s="b1-p0-s0">O benchmark central do paper é chamado roundtrip.</span> <span class="s" data-s="b1-p0-s1">A ideia é simples: uma boa descrição de código deve conter informação suficiente para regenerar o código original.</span> <span class="s" data-s="b1-p0-s2">O processo tem três etapas.</span> <span class="s" data-s="b1-p0-s3">Primeiro, um modelo descreve um arquivo de código em linguagem natural.</span> <span class="s" data-s="b1-p0-s4">Segundo, outro modelo (ou o mesmo) recebe apenas essa descrição e tenta regenerar o código.</span> <span class="s" data-s="b1-p0-s5">Terceiro, os testes unitários originais rodam no código regenerado.</span> <span class="s" data-s="b1-p0-s6">Se passam, a descrição era completa; se falham, algo ficou de fora.</span></p><p><span class="s" data-s="b1-p1-s0">Esse método trata descrição como formato de compressão.</span> <span class="s" data-s="b1-p1-s1">A fidelidade é binária: ou o código regenerado passa nos testes (fidelidade 1.0) ou não (0.0).</span> <span class="s" data-s="b1-p1-s2">O benchmark também mede compactness, o número de palavras na descrição, porque uma descrição boa deve ser completa sem ser verborrágica.</span> <span class="s" data-s="b1-p1-s3">A métrica final combina fidelidade média com uma pequena penalidade por tamanho.</span></p><p><span class="s" data-s="b1-p2-s0">Os autores validam o benchmark em onze fixtures reais extraídos do repositório SymPy, uma biblioteca Python de matemática simbólica.</span> <span class="s" data-s="b1-p2-s1">Cada fixture é um arquivo com issue documentado e testes.</span> <span class="s" data-s="b1-p2-s2">Para controlar memorização—o risco de que o modelo já tenha visto o código durante treinamento—eles também criam três codebases sintéticas pequenas, nunca publicadas.</span> <span class="s" data-s="b1-p2-s3">Em todos os casos, a descrição é gerada do arquivo pré-fix, para que a correção não vaze pela documentação.</span></p>        <h2><span class="s" data-s="b2-h">Completude importa, tamanho não</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Os experimentos com o benchmark confirmam a tese central sobre qualidade de descrição: completude, não tamanho, é o que determina fidelidade.</span> <span class="s" data-s="b2-p0-s1">Uma descrição curta mas completa regenera código que passa nos testes; uma descrição longa mas incompleta falha.</span> <span class="s" data-s="b2-p0-s2">Os autores catalogam os modos de falha: imports omitidos, valores literais de constantes ausentes, condições de exceção não documentadas, assinaturas de função incompletas.</span></p><p><span class="s" data-s="b2-p1-s0">Esse achado justifica a métrica do benchmark.</span> <span class="s" data-s="b2-p1-s1">Se tamanho fosse o driver principal, descrições mais longas sempre pontuariam melhor.</span> <span class="s" data-s="b2-p1-s2">Mas não é o que acontece.</span> <span class="s" data-s="b2-p1-s3">Descrições verbosas que repetem informação redundante não melhoram fidelidade; descrições concisas que capturam todos os contratos e casos especiais sim.</span> <span class="s" data-s="b2-p1-s4">O benchmark recompensa descrições que são ao mesmo tempo completas e compactas.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.31587/figure2.webp" alt="O loop de otimização: um modelo proposer sugere prompts de descrição, o benchmark avalia as descrições geradas, e o prompt é mantido se a pontuação melhora. Treinamento usa três fixtures; generalização é testada em dois fixtures nunca vistos." loading="lazy">
+          <figcaption>
+            O loop de otimização: um modelo proposer sugere prompts de descrição, o benchmark avalia as descrições geradas, e o prompt é mantido se a pontuação melhora. Treinamento usa três fixtures; generalização é testada em dois fixtures nunca vistos.
+            <span class="source">Figura 2 do paper · Arman et al., arXiv:2609.31587</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b4-h">Otimização automática do prompt de descrição</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Com o benchmark funcionando, os autores tratam o prompt que gera descrições como um hiperparâmetro e o otimizam.</span> <span class="s" data-s="b4-p0-s1">O loop é simples: um modelo outer (gemini-2.5-pro) propõe um novo prompt de descrição; o benchmark avalia as descrições que esse prompt produz em um conjunto de treinamento de três fixtures; se a pontuação melhora, o prompt é mantido; caso contrário, descartado.</span> <span class="s" data-s="b4-p0-s2">O objetivo recompensa fidelidade média com pequena penalidade por tamanho de descrição.</span></p><p><span class="s" data-s="b4-p1-s0">O proposer recebe o prompt atual, sua fidelidade medida e tamanho médio de descrição, e é instruído a reescrevê-lo para pontuar mais alto.</span> <span class="s" data-s="b4-p1-s1">A temperatura do proposer é 0.4 para que propostas sucessivas difiram; os estágios de descrição e regeneração dentro do loop usam temperatura zero para pontuação determinística.</span> <span class="s" data-s="b4-p1-s2">O loop roda até convergência.</span></p><p><span class="s" data-s="b4-p2-s0">A otimização funciona.</span> <span class="s" data-s="b4-p2-s1">Partindo de um prompt baseline escrito à mão, o objetivo sobe a cada iteração.</span> <span class="s" data-s="b4-p2-s2">O loop primeiro eleva fidelidade a 1.0 no conjunto de treinamento, depois mantém fidelidade em 1.0 enquanto corta tamanho de descrição—exatamente o comportamento que a tese prevê.</span> <span class="s" data-s="b4-p2-s3">Uma vez que descrições são completas, a única forma de melhorar o objetivo é torná-las mais curtas.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.31587/figure3.webp" alt="Esquerda: objetivo e fidelidade sobem ao longo das iterações; o loop atinge fidelidade 1.0 e então reduz tamanho. Direita: o prompt descoberto eleva fidelidade de 0.5 para 1.0 em fixtures nunca otimizados, mostrando generalização." loading="lazy">
+          <figcaption>
+            Esquerda: objetivo e fidelidade sobem ao longo das iterações; o loop atinge fidelidade 1.0 e então reduz tamanho. Direita: o prompt descoberto eleva fidelidade de 0.5 para 1.0 em fixtures nunca otimizados, mostrando generalização.
+            <span class="source">Figura 3 do paper · Arman et al., arXiv:2609.31587</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b6-h">Generalização e interpretabilidade</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Para testar se as melhorias generalizam em vez de overfittar, os autores dividem os fixtures em conjunto de treinamento (três fixtures que o loop otimiza) e conjunto held-out (dois fixtures nunca vistos durante otimização).</span> <span class="s" data-s="b6-p0-s1">O prompt descoberto eleva fidelidade média de 0.5 para 1.0 nos fixtures held-out, usando menos palavras que o baseline.</span> <span class="s" data-s="b6-p0-s2">Três execuções independentes com diferentes temperaturas do proposer todas atingem fidelidade plena no treinamento e preservam isso fora da amostra.</span></p><p><span class="s" data-s="b6-p1-s0">O prompt descoberto é interpretável, e isso é a evidência mais forte de que a otimização captura sinal real.</span> <span class="s" data-s="b6-p1-s1">Onde o baseline pedia em termos gerais inputs, outputs e casos especiais, o prompt descoberto adiciona instruções específicas que mapeiam diretamente nos modos de falha catalogados: listar todos os imports precisamente, definir constantes de nível de módulo com valores literais exatos, declarar assinaturas exatas, defaults, e condições para cada exceção e caminho de retorno.</span></p><p><span class="s" data-s="b6-p2-s0">O otimizador não teve acesso à análise manual de modos de falha dos autores.</span> <span class="s" data-s="b6-p2-s1">A concordância entre as falhas catalogadas e os consertos descobertos é evidência independente de que as melhorias são genuínas.</span> <span class="s" data-s="b6-p2-s2">O prompt completo descoberto e os prompts base dos quais foi otimizado estão no material suplementar.</span></p>        <h2><span class="s" data-s="b7-h">Transferência para resolução de issues: código ausente</span></h2>
+<p><span class="s" data-s="b7-p0-s0">A otimização melhora o prompt contra o objetivo roundtrip.</span> <span class="s" data-s="b7-p0-s1">A pergunta que motivou o trabalho é se esses ganhos transferem para a tarefa que a documentação deveria servir: resolver uma issue real de repositório, no estilo do benchmark SWE-bench.</span> <span class="s" data-s="b7-p0-s2">Os autores separam dois regimes de teste.</span></p><p><span class="s" data-s="b7-p1-s0">Primeiro, código-fonte ausente: o agente recebe o texto da issue mas não o arquivo-fonte, apenas uma descrição dele.</span> <span class="s" data-s="b7-p1-s1">Esse é o cenário onde documentação deveria brilhar—é a única visão do código que o agente tem.</span> <span class="s" data-s="b7-p1-s2">Os autores testam nos onze fixtures Verified com o arquivo-fonte removido.</span> <span class="s" data-s="b7-p1-s3">O agente (Gemini Flash) recebe o texto da issue e, por condição, nenhuma documentação, uma descrição do prompt baseline, ou uma descrição do prompt otimizado.</span> <span class="s" data-s="b7-p1-s4">O agente deve produzir o arquivo completo; os testes da própria issue pontuam a tentativa, executada três vezes por fixture.</span></p><p><span class="s" data-s="b7-p2-s0">Os resultados mostram melhoria grande e real.</span> <span class="s" data-s="b7-p2-s1">Com a issue sozinha, o agente atinge fração média de testes passados de 0.08.</span> <span class="s" data-s="b7-p2-s2">Descrições baseline elevam isso para 0.21.</span> <span class="s" data-s="b7-p2-s3">Descrições otimizadas atingem 0.71 e são a melhor condição em dez de onze fixtures.</span> <span class="s" data-s="b7-p2-s4">As descrições otimizadas também são muito mais estáveis entre tentativas.</span> <span class="s" data-s="b7-p2-s5">A documentação substitui código-fonte ausente de forma eficaz.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b8-t">Resultado nulo robusto</span></h3>
+          <p><span class="s" data-s="b8-c-s0">Com código-fonte presente, documentação não melhora resolução de issues.</span> <span class="s" data-s="b8-c-s1">Testado em dois modelos (Gemini Flash e Llama local), dez repositórios, fixtures próprios e externos, contra controle positivo que confirma que a avaliação detecta melhoria genuína quando existe.</span> <span class="s" data-s="b8-c-s2">A documentação é redundante quando o original já está no contexto.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b9-h">Transferência para resolução de issues: código presente</span></h2>
+<p><span class="s" data-s="b9-p0-s0">O segundo regime é código-fonte presente, que é como agentes de código normalmente operam.</span> <span class="s" data-s="b9-p0-s1">Aqui o agente tem acesso ao arquivo que precisa editar.</span> <span class="s" data-s="b9-p0-s2">A pergunta é se adicionar documentação—descrições estáticas compactas ou contexto recuperado de tarefas passadas—melhora a resolução sobre dar ao agente apenas a issue e o código.</span></p><p><span class="s" data-s="b9-p1-s0">Os autores testam em escala: dois modelos (Gemini Flash e um Llama 3.3 70B local), dez repositórios, fixtures próprios e do SWE-bench Verified, múltiplos tipos de documentação.</span> <span class="s" data-s="b9-p1-s1">Cada célula da tabela de resultados é o número de tarefas resolvidas do total Paired—as tarefas que produziram edição pontuável sob todas as condições comparadas naquela linha.</span> <span class="s" data-s="b9-p1-s2">Isso controla para casos onde uma condição não produz edição alguma, que acontece ligeiramente mais nas condições com documentação.</span></p><p><span class="s" data-s="b9-p2-s0">O resultado é um nulo robusto.</span> <span class="s" data-s="b9-p2-s1">Em nenhuma configuração a documentação melhora resolução sobre a issue sozinha.</span> <span class="s" data-s="b9-p2-s2">Descrições estáticas compactas não ajudam.</span> <span class="s" data-s="b9-p2-s3">Contexto recuperado de tarefas passadas não ajuda.</span> <span class="s" data-s="b9-p2-s4">Em alguns casos, documentação longa piora levemente os resultados.</span> <span class="s" data-s="b9-p2-s5">O padrão se mantém através de modelos, repositórios e tipos de documentação.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.31587/table8.webp" alt="Resultado principal: resolução de issues com código-fonte presente, através de modelos, conjuntos de fixtures e tipos de documentação. Cada célula mostra tarefas resolvidas do total Paired. Documentação não melhora sobre issue sozinha." loading="lazy">
+          <figcaption>
+            Resultado principal: resolução de issues com código-fonte presente, através de modelos, conjuntos de fixtures e tipos de documentação. Cada célula mostra tarefas resolvidas do total Paired. Documentação não melhora sobre issue sozinha.
+            <span class="source">Tabela 8 do paper · Arman et al., arXiv:2609.31587</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b11-h">Controle positivo e validação</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Para confirmar que a avaliação pode detectar melhoria genuína quando existe, os autores incluem um controle positivo.</span> <span class="s" data-s="b11-p0-s1">Eles dão ao agente o diff da correção real—a mudança exata que resolve a issue—como contexto adicional.</span> <span class="s" data-s="b11-p0-s2">Isso melhora resolução significativamente, validando que o harness de avaliação é sensível a melhorias reais.</span></p><p><span class="s" data-s="b11-p1-s0">Esse controle é importante porque um resultado nulo poderia significar que o experimento não consegue detectar diferenças.</span> <span class="s" data-s="b11-p1-s1">O controle positivo mostra que consegue.</span> <span class="s" data-s="b11-p1-s2">A documentação não ajuda não porque a avaliação é insensível, mas porque a documentação realmente não adiciona valor quando o código-fonte está presente.</span></p>        <h2><span class="s" data-s="b12-h">Por que documentação não ajuda com código presente</span></h2>
+<p><span class="s" data-s="b12-p0-s0">Os dois achados—documentação ajuda com código ausente, não ajuda com código presente—são consistentes em vez de contraditórios.</span> <span class="s" data-s="b12-p0-s1">Uma descrição que permite reconstruir um arquivo é uma reformulação desse arquivo.</span> <span class="s" data-s="b12-p0-s2">Uma reformulação não adiciona nada quando o original já está no contexto; torna-se valiosa exatamente quando o original não cabe.</span></p><p><span class="s" data-s="b12-p1-s0">O que os experimentos adicionam é uma fronteira mais nítida: documentação deste tipo é um formato de compressão para código que não cabe na janela de contexto, e dentro da janela é redundante.</span> <span class="s" data-s="b12-p1-s1">Ocasionalmente prejudicial, porque uma descrição completa de um arquivo legível empurra o agente a reescrever em vez de aplicar patch—comportamento observado em alguns fixtures onde a condição com documentação produziu rewrites completos desnecessários.</span></p><p><span class="s" data-s="b12-p2-s0">Essa fronteira combina com achados independentes de que o valor de documentação injetada é condicional à tarefa: especificações de domínio elevam resolução apenas em bugs dependentes de especificação, não em genéricos; experiência corretamente selecionada ajuda enquanto contexto não filtrado não ajuda.</span> <span class="s" data-s="b12-p2-s1">Os fixtures dos autores são issues padrão e bem especificados cuja informação necessária já está na issue e no código-fonte, então uma descrição de nível de arquivo é redundante por construção.</span></p>        <h2><span class="s" data-s="b13-h">Limitações e escopo</span></h2>
+<p><span class="s" data-s="b13-p0-s0">O conjunto de fixtures roundtrip é pequeno: onze fixtures mais três codebases construídas à mão, extraídos de uma única linguagem (Python) e família de projeto (SymPy).</span> <span class="s" data-s="b13-p0-s1">Os números do lado do benchmark caracterizam o método em vez de fornecer medições com poder estatístico robusto.</span> <span class="s" data-s="b13-p0-s2">O nulo downstream, em contraste, é medido através de modelos e repositórios, mas carrega suas próprias ressalvas.</span></p><p><span class="s" data-s="b13-p1-s0">A maior execução usa um único modelo econômico (Llama local) e um comprimento de resumo perto de oitenta palavras.</span> <span class="s" data-s="b13-p1-s1">As replicações com modelo mais forte (Gemini) ficam confinadas a subconjuntos do Django.</span> <span class="s" data-s="b13-p1-s2">Tarefas onde alguma condição não produziu edição caem da comparação pareada, e as condições com documentação têm no-edit ligeiramente mais frequente, então atrito não é perfeitamente aleatório.</span></p><p><span class="s" data-s="b13-p2-s0">O benchmark de regeneração é sensível ao modelo: dois modelos open-weight que os autores tentaram pontuaram zero em todos os fixtures, falhando na regeneração por alucinar imports em vez de por qualquer razão ligada à qualidade da descrição.</span> <span class="s" data-s="b13-p2-s1">O benchmark presentemente requer um regenerador suficientemente capaz.</span> <span class="s" data-s="b13-p2-s2">O loop de otimização é prova de conceito com poucos fixtures, poucas iterações e um único proposer.</span></p><p><span class="s" data-s="b13-p3-s0">Os controles de contaminação reduzem mas não eliminam completamente a possibilidade de que exposição no treinamento infle algumas pontuações.</span> <span class="s" data-s="b13-p3-s1">Os autores são honestos sobre essas limitações e deixam claro que o trabalho estabelece o método e a fronteira, não uma medição definitiva de todos os cenários possíveis.</span></p>        <h2><span class="s" data-s="b14-h">Contribuições e conclusão</span></h2>
+<p><span class="s" data-s="b14-p0-s0">O paper faz três contribuições.</span> <span class="s" data-s="b14-p0-s1">Primeiro, um benchmark roundtrip que pontua um descritor—o sistema que produz descrição em linguagem natural—por se código regenerado apenas da descrição passa nos testes originais, junto com medida de compressão e controles para memorização.</span> <span class="s" data-s="b14-p0-s2">Segundo, uma caracterização controlada de quando documentação ajuda um agente, separando efeito de completude do de tamanho, e um loop de auto-melhoria que otimiza o descritor contra o benchmark, atinge fidelidade plena e generaliza para arquivos held-out.</span></p><p><span class="s" data-s="b14-p1-s0">Terceiro, um teste em larga escala, multi-modelo, da hipótese downstream de que documentação melhor ajuda resolução de issues, que, com controle positivo validador, retorna nulo robusto no cenário código-presente e localiza a fronteira onde documentação para de ajudar.</span></p><p><span class="s" data-s="b14-p2-s0">As partes do paper formam um argumento, e os experimentos o resolvem em direção que os autores não esperavam no início.</span> <span class="s" data-s="b14-p2-s1">Documentação ajuda um agente quando adiciona o que o agente não pode ver de outra forma.</span> <span class="s" data-s="b14-p2-s2">O benchmark roundtrip mede completude diretamente e recompensa compactness, e pode dirigir melhoria automática do escritor de descrição.</span> <span class="s" data-s="b14-p2-s3">Mas a suposição que motivou o trabalho—que tal documentação também ajudaria no cenário normal onde o agente pode ler o código—não sobreviveu a um teste em larga escala.</span></p><p><span class="s" data-s="b14-p3-s0">Os autores reportam esse resultado negativo honestamente, junto com o benchmark e otimizador que o produziram, e localizam a fronteira separando os dois regimes.</span> <span class="s" data-s="b14-p3-s1">Documentação compacta é valiosa como compressão, não como suplemento.</span> <span class="s" data-s="b14-p3-s2">Dentro da janela de contexto, é redundante.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Benchmark roundtrip mede qualidade de descrição por regeneração: código gerado da descrição deve passar nos testes originais. Completude importa, tamanho não.</span></li><li><span class="s" data-s="k1">Otimização automática de prompt atinge fidelidade 1.0 e generaliza para arquivos nunca vistos, elevando resolução de 0.08 para 0.71 quando código-fonte está ausente.</span></li><li><span class="s" data-s="k2">Com código-fonte presente, documentação não melhora resolução de issues. Testado em dois modelos, dez repositórios, com controle positivo validando sensibilidade.</span></li><li><span class="s" data-s="k3">Fronteira clara: documentação compacta é formato de compressão para código fora do contexto, redundante quando código já está disponível ao agente.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2609.31587" rel="noopener">Compact Documentation for Coding Agents: A Benchmark, an Optimizer, and Why It Does Not Transfer</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2609.31587" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

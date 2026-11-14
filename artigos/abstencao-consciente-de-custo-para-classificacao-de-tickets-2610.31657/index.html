@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Abstenção Consciente de Custo para Classificação de Tickets de TI com LLMs — arXiv em 5</title>
+<meta name="description" content="Avaliação empírica de um framework de abstenção que reduz custos operacionais em triagem de tickets, expondo as limitações de calibração e discriminação em modelos de linguagem.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Abstenção Consciente de Custo para Classificação de Tickets de TI com LLMs">
+<meta property="og:description" content="Avaliação empírica de um framework de abstenção que reduz custos operacionais em triagem de tickets, expondo as limitações de calibração e discriminação em modelos de linguagem.">
+<meta property="og:image" content="../../assets/papers/2610.31657/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>LLMs</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.31657" rel="noopener">arXiv:2610.31657</a>
+    </div>
+    <h1><span class="s" data-s="t">Abstenção Consciente de Custo para Classificação de Tickets de TI com LLMs</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Avaliação empírica de um framework de abstenção que reduz custos operacionais em triagem de tickets, expondo as limitações de calibração e discriminação em modelos de linguagem.</span></p>
+    <p class="byline">
+      <span>Gupta</span>
+      <span>8 min de leitura</span>
+<span>22/10/2026</span>    </p>
+    <div class="listen" data-article="2610.31657" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=3vUevq1CuUg" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema Oculto da Triagem de TI</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Empresas processam dezenas de milhares de tickets de suporte de TI por mês.</span> <span class="s" data-s="b0-p0-s1">O custo para resolver um ticket de voz é, em média, de US$ 17,19 na América do Norte, enquanto tickets presenciais chegam a US$ 37,52.</span> <span class="s" data-s="b0-p0-s2">O roteamento automático promete reduzir esses custos, mas a estrutura de custos é assimétrica: enviar um ticket para a fila correta é quase gratuito; enviá-lo para um triador humano tem um custo moderado; enviá-lo para a fila errada é muito mais caro devido à latência de transferência, trabalho duplicado e violação de níveis de serviço.</span></p><p><span class="s" data-s="b0-p1-s0">Dois fatores tornam essa lacuna crítica.</span> <span class="s" data-s="b0-p1-s1">Primeiro, modelos de linguagem grandes (LLMs) podem ser usados como classificadores de texto via prompting zero-shot ou few-shot, potencialmente eliminando a necessidade de treinamento específico.</span> <span class="s" data-s="b0-p1-s2">Segundo, classificadores neurais modernos, incluindo LLMs, são conhecidos por serem mal calibrados, produzindo valores de alta confiança independentemente da precisão real.</span></p><p><span class="s" data-s="b0-p2-s0">A questão operacional concreta é: um LLM promptado deve ser autorizado a rotear tickets de IT automaticamente?</span> <span class="s" data-s="b0-p2-s1">E, se sim, sob quais políticas de abstenção?</span> <span class="s" data-s="b0-p2-s2">Este trabalho avalia a abstenção consciente de custo não como uma maneira de melhorar um classificador, mas como um teste empírico de prontidão sob suposições declaradas.</span></p>        <h2><span class="s" data-s="b1-h">A Ideia: Abstenção como Guardrail</span></h2>
+<p><span class="s" data-s="b1-p0-s0">A proposta central é tratar a abstenção como uma avaliação de prontidão condicional ao custo.</span> <span class="s" data-s="b1-p0-s1">Em vez de buscar um classificador perfeito, o sistema seleciona uma política de roteamento em dados de calibração sob custos explícitos e avalia essa política congelada em dados de teste não vistos.</span> <span class="s" data-s="b1-p0-s2">O objetivo não é aumentar a acurácia bruta, mas minimizar o custo esperado por ticket.</span></p><p><span class="s" data-s="b1-p1-s0">O problema é formalizado como uma decisão $d: X \rightarrow Y \cup \{\bot\}$, onde $X$ é o texto do ticket, $Y$ é o conjunto de filas de destino e $\bot$ representa a abstenção (encaminhamento para humano).</span> <span class="s" data-s="b1-p1-s1">O custo esperado por ticket é dado por $E[c] = P(\bot)c_{triage} + P(correct, \neg \bot)c_{ok} + P(wrong, \neg \bot)c_{wrong}$.</span></p><p><span class="s" data-s="b1-p2-s0">Os autores utilizam um modelo de custo ilustrativo $(c_{ok}, c_{triage}, c_{wrong}) = (0, 1, 5)$.</span> <span class="s" data-s="b1-p2-s1">Essa proporção codifica a ordem qualitativa que motiva a abstenção: um roteamento errado é mais custoso que um triagem humana porque ainda incorre no triage após um atraso de handoff e retrabalho.</span> <span class="s" data-s="b1-p2-s2">Um roteamento correto é efetivamente gratuito.</span> <span class="s" data-s="b1-p2-s3">É crucial notar que os valores são ilustrativos, não calibrados a uma organização específica, e todas as conclusões são condicionais a essa suposição.</span></p>        <h2><span class="s" data-s="b2-h">Configuração Experimental e Preditores</span></h2>
+<p><span class="s" data-s="b2-p0-s0">A avaliação ocorre no corpus público de Classificação de Tickets de Serviço de TI, contendo 47.837 tickets em oito categorias.</span> <span class="s" data-s="b2-p0-s1">Os autores comparam quatro classificadores não-LLM treinados contra quatro grandes modelos de linguagem sob condições de zero- e few-shot prompting.</span></p><p><span class="s" data-s="b2-p1-s0">Os baseline não-LLM incluem TF-IDF com Regressão Logística (headline), SVM linear, Random Forest e DistilBERT fine-tuned.</span> <span class="s" data-s="b2-p1-s1">O DistilBERT atinge a maior acurácia entre os não-LLM (0.877 no teste completo), demonstrando a vantagem do treinamento supervisionado sobre o prompt engineering neste cenário.</span></p><p><span class="s" data-s="b2-p2-s0">Os LLMs avaliados são GPT-4o-mini, Claude Haiku 4.5, Qwen2.5-7B-Instruct e Llama-3-8B-Instruct-Lite.</span> <span class="s" data-s="b2-p2-s1">Os prompts são estruturados para retornar JSON com label e confiança.</span> <span class="s" data-s="b2-p2-s2">As variantes few-shot incluem três exemplares por classe, desenhados apenas do split de treinamento.</span> <span class="s" data-s="b2-p2-s3">Modelos proprietários foram consultados via API em 22 de maio de 2026, enquanto os open-weights usaram endpoints Together AI.</span> <span class="s" data-s="b2-p2-s4">Precisão dos pesos não foi verificada independentemente.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.31657/figure1.webp" alt="Fluxo do sistema: o modelo decide se roteia o ticket ou o encaminha para um humano. Legenda original: Fig. 1. Evaluation pipeline from ticket text to auto-routing or human triage, with prediction, confidence estimation, and abstention separated." loading="lazy">
+          <figcaption>
+            Fluxo do sistema: o modelo decide se roteia o ticket ou o encaminha para um humano. Legenda original: Fig. 1. Evaluation pipeline from ticket text to auto-routing or human triage, with prediction, confidence estimation, and abstention separated.
+            <span class="source">Figura 1 do paper · Gupta, arXiv:2610.31657</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b4-h">Resultados: A Lacuna de Performance</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Os resultados de performance base revelam uma lacuna significativa.</span> <span class="s" data-s="b4-p0-s1">Entre os não-LLM, o DistilBERT atinge 0.877 de acurácia e 0.874 de macro-F1.</span> <span class="s" data-s="b4-p0-s2">O SVM linear com TF-IDF segue com 0.863/0.864.</span> <span class="s" data-s="b4-p0-s3">Já o melhor LLM promptado, Claude Haiku 4.5 com few-shot, alcança apenas 0.477/0.459.</span> <span class="s" data-s="b4-p0-s4">No subset estratificado de 1.000 tickets, a diferença se mantém: DistilBERT 0.879 versus Haiku 0.477.</span></p><p><span class="s" data-s="b4-p1-s0">Essa lacuna não é puramente de capacidade, mas de regime de informação.</span> <span class="s" data-s="b4-p1-s1">Os modelos treinados aprendem a taxonomia de 33.486 tickets rotulados, enquanto os LLMs recebem apenas nomes de labels e, no máximo, 24 exemplos sem definições naturais das categorias.</span> <span class="s" data-s="b4-p1-s2">Labels ambíguas como &#39;Miscellaneous&#39; ou &#39;Administrative rights&#39; tornam essa distinção material.</span></p><p><span class="s" data-s="b4-p2-s0">É importante notar que o few-shot prompting ajuda três dos quatro LLMs, mas prejudica o Llama-3-8B-Instruct-Lite em 12.3 pontos percentuais.</span> <span class="s" data-s="b4-p2-s1">Inspeção das saídas cruas mostra que o modelo frequentemente emite um preâmbulo conversacional que consome o orçamento de saída antes do JSON, gerando uma taxa de erro de parse de 15.1%.</span></p>        <h2><span class="s" data-s="b5-h">Calibração vs. Discriminação</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Uma descoberta crítica diz respeito à utilidade do sinal de confiança dos LLMs.</span> <span class="s" data-s="b5-p0-s1">Todos os LLMs promptados são excessivamente confiantes: o ECE (Expected Calibration Error) bruto varia de 0.332 a 0.594.</span> <span class="s" data-s="b5-p0-s2">O GPT-4o-mini few-shot, por exemplo, atribui confiança 1.000 a todos os tickets, apesar de ter apenas 0.459 de acurácia.</span></p><p><span class="s" data-s="b5-p1-s0">A aplicação de recalibração isotônica reduz o ECE dos LLMs para [0.014, 0.049], uma redução relativa de 86-98%.</span> <span class="s" data-s="b5-p1-s1">No entanto, esse resultado não deve ser lido como melhoria na capacidade de erro.</span> <span class="s" data-s="b5-p1-s2">A regressão isotônica é monótona e altera o AUROC de correção em no máximo 0.007.</span> <span class="s" data-s="b5-p1-s3">O caso limite é o GPT-4o-mini: a confiança bruta constante 1.000 é mapeada para a constante 0.480, e tanto o AUROC quanto o AURC permanecem em 0.500 e 0.541.</span> <span class="s" data-s="b5-p1-s4">A recalibração corrige o nível de probabilidade mapeando um score não-discriminativo para a acurácia base, mas não cria informação ausente do score.</span></p><p><span class="s" data-s="b5-p2-s0">A concordância entre modelos pode carregar sinal de ranking, mas o pool de votantes importa.</span> <span class="s" data-s="b5-p2-s1">Um pool misto (incluindo o classificador supervisionado) tem melhor AUROC que um pool apenas de LLMs, mas isso importa informação supervisionada e requer múltiplas avaliações de preditores, aumentando custo e latência.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.31657/figure3.webp" alt="Gráfico que comprova a redução de 38% nos custos operacionais ao usar a política de abstenção. Legenda original: Fig. 3. TF-IDF + LR test cost over the predeclared threshold grid under (0, 1, 5). The calibration-selected τ = 0.60 yields a 38.1 % reduction (95 % CI [35.7 %, 40.4 %])." loading="lazy">
+          <figcaption>
+            Gráfico que comprova a redução de 38% nos custos operacionais ao usar a política de abstenção. Legenda original: Fig. 3. TF-IDF + LR test cost over the predeclared threshold grid under (0, 1, 5). The calibration-selected τ = 0.60 yields a 38.1 % reduction (95 % CI [35.7 %, 40.4 %]).
+            <span class="source">Figura 3 do paper · Gupta, arXiv:2610.31657</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Redução de Custo com Abstenção</span></h2>
+<p><span class="s" data-s="b7-p0-s0">O resultado principal do framework de abstenção é ilustrado no baseline TF-IDF + Regressão Logística.</span> <span class="s" data-s="b7-p0-s1">Sob o modelo de custo $(0, 1, 5)$, a seleção de um limiar de confiança nos dados de calibração reduz o custo de teste de 0.763 para 0.472, uma redução relativa de 38.1% (IC 95% [35.7%, 40.4%]).</span> <span class="s" data-s="b7-p0-s2">Isso ocorre enquanto a taxa de roteamentos errados cai de 15.3% para 3.5%.</span></p><p><span class="s" data-s="b7-p1-s0">A Figura 3 mostra a curva de custo de teste para diferentes limiares.</span> <span class="s" data-s="b7-p1-s1">O ponto selecionado pela calibração ($\tau = 0.60$) oferece o equilíbrio ótimo sob as suposições do modelo.</span> <span class="s" data-s="b7-p1-s2">Políticas congeladas selecionadas na calibração superam tanto a política de sempre rotear quanto a de sempre adiar em 14 dos 16 cenários analisados em uma análise post-hoc de parâmetros de custo.</span></p><p><span class="s" data-s="b7-p2-s0">A análise de sensibilidade pós-hoc cruza $c_{triage} \in \{0.5, 1, 1.5, 2\}$ com $c_{wrong} \in \{2, 5, 10, 20\}$, mantendo $c_{ok}=0$.</span> <span class="s" data-s="b7-p2-s1">O par $(2, 2)$ representa a fronteira de custo igual; os outros 15 pares mantêm $c_{wrong} &gt; c_{triage}$.</span> <span class="s" data-s="b7-p2-s2">Os benefícios qualitativos da abstenção não se confinam ao modelo $(0, 1, 5)$, embora haja uma leve reversão em held-out test para alguns parâmetros, reforçando a necessidade de congelar a escolha da política antes da avaliação de teste.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.31657/figure4.webp" alt="Curva que mostra o equilíbrio ideal entre precisão e quantidade de tickets processados. Legenda original: Fig. 4. TF-IDF + LR coverage–accuracy curve. The marked calibration- selected point routes 70.5 % of test tickets at 95.0 % accuracy." loading="lazy">
+          <figcaption>
+            Curva que mostra o equilíbrio ideal entre precisão e quantidade de tickets processados. Legenda original: Fig. 4. TF-IDF + LR coverage–accuracy curve. The marked calibration- selected point routes 70.5 % of test tickets at 95.0 % accuracy.
+            <span class="source">Figura 4 do paper · Gupta, arXiv:2610.31657</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">O Colapso dos LLMs sob Abstenção</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Enquanto os modelos clássicos beneficiam-se da abstenção, os LLMs promptados mostram comportamento diferente.</span> <span class="s" data-s="b9-p0-s1">No limiar analítico de break-even de probabilidade 0.80, sete configurações promptadas abdicam de todos os tickets.</span> <span class="s" data-s="b9-p0-s2">O Haiku few-shot roteia apenas 19 dos 1.000 tickets.</span></p><p><span class="s" data-s="b9-p1-s0">Isso não significa que os LLMs são inúteis, mas que seus sinais de confiança são tão fracos ou não discriminativos que, sob um custo de erro alto, a política ótima é não confiar em nenhum deles.</span> <span class="s" data-s="b9-p1-s1">A abstenção expõe quando o roteamento automático é preferível ao custo; para os LLMs neste setup, a resposta é &#39;nunca&#39; sob os custos assumidos.</span></p><p><span class="s" data-s="b9-p2-s0">Controles de concordância apenas LLM e baselines de rejeição baseados em margem/entropia separam ainda mais a questão da calibração da discriminação.</span> <span class="s" data-s="b9-p2-s1">A conclusão é que a abstenção não conserta um classificador fraco; ela revela a inadequação do sinal de confiança para a tarefa sob o modelo de custo dado.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b10-t">Limitações Críticas do Estudo</span></h3>
+          <p><span class="s" data-s="b10-c-s0">Os resultados são escopados para este dataset, design de prompt, endpoints de modelo e custos ilustrativos.</span> <span class="s" data-s="b10-c-s1">Não é um novo algoritmo de abstenção nem um certificado universal.</span> <span class="s" data-s="b10-c-s2">Generalização para corpora privados de enterprise não foi estabelecida.</span> <span class="s" data-s="b10-c-s3">O custo do modelo $(0, 1, 5)$ é ilustrativo; organizações devem estimar seus próprios custos de triage e erro.</span> <span class="s" data-s="b10-c-s4">Endpoints proprietários são snapshots de 2026, não testes longitudinais.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b11-h">Implicações para Implantação</span></h2>
+<p><span class="s" data-s="b11-p0-s0">O framework pode ser integrado a pipelines de gerenciamento de serviços de TI como uma camada de deferimento.</span> <span class="s" data-s="b11-p0-s1">No entanto, a &#39;prontidão&#39; permanece condicional: um operador deve estimar custos locais, reservar dados de calibração, congelar a política e monitorar drift.</span> <span class="s" data-s="b11-p0-s2">A política de &#39;defer-all&#39; para LLMs é um aviso sob esses inputs, não um veredito permanente sobre a família de modelos.</span></p><p><span class="s" data-s="b11-p1-s0">O framework é agnóstico à forma como o classificador subjacente foi produzido.</span> <span class="s" data-s="b11-p1-s1">A contribuição principal é um framework de avaliação reproduzível e artefatos por ticket que expõem predição, confiança, rejeição e custo como estágios separadamente auditáveis.</span> <span class="s" data-s="b11-p1-s2">Isso permite que equipes de engenharia validem empiricamente se a abstenção vale a pena para seu contexto específico, em vez de assumir que LLMs resolvem o problema de roteamento por si só.</span></p>        <h2><span class="s" data-s="b12-h">Conclusão</span></h2>
+<p><span class="s" data-s="b12-p0-s0">Este paper demonstra que a abstenção consciente de custo é uma ferramenta de avaliação de prontidão, não uma solução mágica para classificação.</span> <span class="s" data-s="b12-p0-s1">Para modelos treinados como DistilBERT e TF-IDF+LR, a abstenção reduz custos operacionais significativamente ao evitar erros caros.</span> <span class="s" data-s="b12-p0-s2">Para LLMs promptados sem fine-tuning profundo ou definições ricas de labels, os sinais de confiança são insuficientes para justificar o roteamento automático sob custos de erro elevados, levando a políticas de abstenção total.</span></p><p><span class="s" data-s="b12-p1-s0">A mensagem central é de honestidade técnica: métricas de acurácia ou macro-F1 não capturam a assimetria de custos da triagem de TI.</span> <span class="s" data-s="b12-p1-s1">A calibração (ECE) e a discriminação (AUROC) respondem a perguntas diferentes, e a recalibração não cria informação discriminativa ausente.</span> <span class="s" data-s="b12-p1-s2">A abstenção é um guardrail que expõe as limitações do modelo, permitindo decisões operacionais informadas baseadas em custos reais, não em confiança ilusória.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Abstenção não conserta classificador fraco; ela expõe quando o roteamento automático é economicamente viável sob um modelo de custo específico.</span></li><li><span class="s" data-s="k1">Isotonic regressão corrige a calibração (ECE) mas não melhora a capacidade discriminativa (AUROC) de LLMs mal calibrados.</span></li><li><span class="s" data-s="k2">Políticas de abstenção selecionadas em dados de calibração reduzem custos em 38% em baseline clássica, enquanto LLMs propõem abstenção total sob os mesmos custos.</span></li><li><span class="s" data-s="k3">O framework é um teste de prontidão empírico, não um algoritmo novo ou certificado universal de implantação.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.31657" rel="noopener">Cost-Aware Abstention for LLM-Based IT Ticket Classification</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.31657" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

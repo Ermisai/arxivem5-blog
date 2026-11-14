@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EM-FM: Unindo datasets heterogêneos de raio-X e mamografia com EM-DETR — arXiv em 5</title>
+<meta name="description" content="Como criar modelos de detecção de lesões médicas generalizáveis, integrando dados anatômicos e patológicos sem sofrer &#39;esquecimento catastrófico&#39; via estratégia aluno-professor.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="EM-FM: Unindo datasets heterogêneos de raio-X e mamografia com EM-DETR">
+<meta property="og:description" content="Como criar modelos de detecção de lesões médicas generalizáveis, integrando dados anatômicos e patológicos sem sofrer &#39;esquecimento catastrófico&#39; via estratégia aluno-professor.">
+<meta property="og:image" content="../../assets/papers/2611.14518/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Imagem</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.14518" rel="noopener">arXiv:2611.14518</a>
+    </div>
+    <h1><span class="s" data-s="t">EM-FM: Unindo datasets heterogêneos de raio-X e mamografia com EM-DETR</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Como criar modelos de detecção de lesões médicas generalizáveis, integrando dados anatômicos e patológicos sem sofrer &#39;esquecimento catastrófico&#39; via estratégia aluno-professor.</span></p>
+    <p class="byline">
+      <span>Bhat et al.</span>
+      <span>7 min de leitura</span>
+<span>10/11/2026</span>    </p>
+    <div class="listen" data-article="2611.14518" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=6hjEiwXfhbE" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema da fragmentação de dados médicos</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Sistemas de Diagnóstico Assistido por Computador (CAD) baseados em Deep Learning têm mostrado grande promessa, mas sua eficácia depende criticamente da disponibilidade de grandes conjuntos de dados bem anotados.</span> <span class="s" data-s="b0-p0-s1">No domínio da detecção de lesões médicas, a escassez de anotações abrangentes e padronizadas, somada à heterogeneidade dos datasets existentes, limita severamente o desenvolvimento de modelos fundamentais (foundation models) robustos.</span></p><p><span class="s" data-s="b0-p1-s0">Muitas abordagens tradicionais tentam treinar detectores combinando múltiplos datasets não sobrepostos.</span> <span class="s" data-s="b0-p1-s1">No entanto, essa combinação ingênua frequentemente resulta em &#39;esquecimento catastrófico&#39; (catastrophic forgetting), onde o modelo perde a capacidade de aprender características de classes anteriores ao ser exposto a novas.</span> <span class="s" data-s="b0-p1-s2">Isso degrada significativamente o desempenho tanto na classificação quanto na detecção.</span></p><p><span class="s" data-s="b0-p2-s0">No domínio de imagens naturais, técnicas de pseudo-labeling têm sido usadas para unificar espaços de rótulos.</span> <span class="s" data-s="b0-p2-s1">Contudo, em imagens médicas, especialmente Raios-X (CXRs), os desafios são distintos.</span> <span class="s" data-s="b0-p2-s2">As categorias anatômicas e de anormalidades são inerentemente não sobrepostas, mas compartilham características visuais similares, levando a interferência potencial durante o treinamento.</span> <span class="s" data-s="b0-p2-s3">Isso limita a aplicabilidade direta de métodos convencionais de pré-treinamento e pseudo-labeling.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.14518/figure1.webp" alt="Visão geral do processo de treinamento aluno-professor para criar um modelo base com GDINO. Modelos treinados em datasets específicos geram anotações fracas para conjuntos restantes, unificando o espaço de rótulos antes do treinamento final." loading="lazy">
+          <figcaption>
+            Visão geral do processo de treinamento aluno-professor para criar um modelo base com GDINO. Modelos treinados em datasets específicos geram anotações fracas para conjuntos restantes, unificando o espaço de rótulos antes do treinamento final.
+            <span class="source">Figura 1 do paper · Bhat et al., arXiv:2611.14518</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">Da base GDINO ao EM-FM</span></h2>
+<p><span class="s" data-s="b2-p0-s0">O ponto de partida deste trabalho é o Grounding DINO (GDINO), um detector de objetos de vocabulário aberto que alinha características locais da imagem com expressões textuais semânticas.</span> <span class="s" data-s="b2-p0-s1">O GDINO constrói sobre o framework GLIP, utilizando informações de &#39;grounding&#39; (ancoragem) para inicializar o treinamento do decodetor de detecção.</span> <span class="s" data-s="b2-p0-s2">Ele aprende representações semanticamente ricas, permitindo a detecção via consultas baseadas em texto, alcançado através de aprendizado contrastivo entre regiões de imagem e embeddings de modelos fundamentais.</span></p><p><span class="s" data-s="b2-p1-s0">Para aproximar esse nível de performance no domínio médico, os autores inicialmente exploraram a integração de anotações anatômicas e de anormalidades de CXRs em um único conjunto de treinamento.</span> <span class="s" data-s="b2-p1-s1">O objetivo era verificar se o aumento do número de anotações médicas melhoraria a capacidade do codificador-decodetor de identificar características clinicamente importantes.</span> <span class="s" data-s="b2-p1-s2">No entanto, devido à esparsidade de anotações específicas de classe e ao desbalanceamento, a simples combinação de datasets resultou em esquecimento catastrófico.</span></p><p><span class="s" data-s="b2-p2-s0">Para contornar isso, a proposta introduz o EM-FM (Example-Based Foundation Model), que adapta o framework EM-DETR previamente proposto pelos autores.</span> <span class="s" data-s="b2-p2-s1">O EM-DETR utiliza embeddings de exemplo (exemplar feature embeddings) gerados para cada classe, que são entrelaçados com embeddings de texto.</span> <span class="s" data-s="b2-p2-s2">O codificador e decodetor de detecção realizam atenção cruzada entre a imagem e esses embeddings entrelaçados, treinando o decodetor para buscar classes baseadas em exemplos visuais específicos, não apenas em texto genérico.</span></p>        <h2><span class="s" data-s="b3-h">Estratégia Aluno-Professor para unificar rótulos</span></h2>
+<p><span class="s" data-s="b3-p0-s0">A inovação central reside na estratégia de treinamento aluno-professor, adaptada de Zhao et al., para combinar efetivamente datasets de anatomia e anormalidades.</span> <span class="s" data-s="b3-p0-s1">Inicialmente, modelos individuais (MA, MB, MC) são treinados em seus respectivos datasets A, B e C usando rótulos específicos do domínio.</span> <span class="s" data-s="b3-p0-s2">Esses modelos servem então como &#39;professores&#39; para gerar pseudo-anotações para classes ausentes nos outros datasets.</span></p><p><span class="s" data-s="b3-p1-s0">Especificamente, para cada dataset D, os modelos professores treinados em datasets não-D (D&#39;) predizem anotações para classes ausentes em D. Predições com escores de confiança acima de um limiar específico por classe (τc) são retidas como anotações fracas (weak annotations).</span> <span class="s" data-s="b3-p1-s1">Esse limiar é definido para atingir 95% de sensibilidade na Curva Característica de Operação do Receptor (ROC) para cada classe c.</span></p><p><span class="s" data-s="b3-p2-s0">Por exemplo, o modelo MC, treinado no dataset C, prediz as 16 anormalidades no dataset A, bem como anormalidades não sobrepostas no dataset B. Esse processo se repete até que todos os datasets contenham anotações para todas as classes, efetivamente unificando o espaço de rótulos.</span> <span class="s" data-s="b3-p2-s1">Para predições de anatomia, seleciona-se a melhor predição por imagem e classe, sem aplicação de limiar de confiança inicial, mas filtrando por tamanho e localização da bounding box para excluir erros grossos de IoU (Intersection-Over-Union).</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.14518/figure2.webp" alt="Detalhes da arquitetura EM-DETR. Um embedding de feature de exemplo é gerado para cada classe e entrelaçado com o embedding de texto. O encoder/decoder de detecção realiza atenção cruzada para buscar as classes." loading="lazy">
+          <figcaption>
+            Detalhes da arquitetura EM-DETR. Um embedding de feature de exemplo é gerado para cada classe e entrelaçado com o embedding de texto. O encoder/decoder de detecção realiza atenção cruzada para buscar as classes.
+            <span class="source">Figura 2 do paper · Bhat et al., arXiv:2611.14518</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Treinamento do Modelo de Fundação Anatômica-Anormalidade (AAFM)</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Com o espaço de rótulos unificado, um modelo de fundação é treinado usando a combinação de todas as anotações, tanto as originais (gold-standard) quanto as geradas (weak).</span> <span class="s" data-s="b5-p0-s1">Este modelo é denominado Modelo de Fundação Anatômica-Anormalidade (AAFM).</span> <span class="s" data-s="b5-p0-s2">Este passo é crucial, pois prepara o modelo para lidar com a complexidade de detectar tanto estruturas normais quanto patologias, mitigando o esquecimento que ocorreria com um treinamento joint ingênuo.</span></p><p><span class="s" data-s="b5-p1-s0">Em seguida, os autores incorporam anotações de outros domínios, como mamografia, que podem compartilhar rótulos textuais similares, mas diferem visualmente.</span> <span class="s" data-s="b5-p1-s1">Eles utilizam o método baseado em exemplos EM-DETR para treinar um segundo modelo de fundação, o EM-FM.</span> <span class="s" data-s="b5-p1-s2">A integração de embeddings de exemplo permite que o modelo capture nuances visuais finas de cada classe, indo além da simples correspondência textual.</span></p><p><span class="s" data-s="b5-p2-s0">O treinamento final do EM-FM ocorre em duas fases.</span> <span class="s" data-s="b5-p2-s1">Na primeira, o AAFM é refinado.</span> <span class="s" data-s="b5-p2-s2">Na segunda, o EM-DETR é treinado sobre os dados unificados.</span> <span class="s" data-s="b5-p2-s3">A arquitetura Swin-L é usada como backbone, com tamanho de lote de 1 por GPU (em um node com quatro A100 de 40GB).</span> <span class="s" data-s="b5-p2-s4">O learning rate foi ajustado para 0.0008.</span> <span class="s" data-s="b5-p2-s5">Aumentos de dados padrão de CXR, como contraste automático e flip horizontal, foram aplicados, além de termos de texto específicos como &#39;right lung&#39; e &#39;left lung&#39; para distinguir categorias laterais.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b6-t">Atenção aos detalhes de pré-processamento</span></h3>
+          <p><span class="s" data-s="b6-c-s0">Para mamografias, as regiões escuras de fundo foram recortadas e as anotações foram recalculadas para as imagens redimensionadas.</span> <span class="s" data-s="b6-c-s1">Isso é crítico, pois o ruído de fundo pode interferir significativamente na detecção de massas.</span> <span class="s" data-s="b6-c-s2">Predições do professor com score abaixo de 0.8 ou desvios maiores que 50% do tamanho médio da ground truth foram excluídos para garantir a qualidade das pseudo-anotações.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b7-h">Resultados: Superação do SOTA em CXRs e Mamografia</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Os experimentos avaliaram o desempenho em quatro achados principais de CXRs e massas em mamografia.</span> <span class="s" data-s="b7-p0-s1">A Tabela 3 mostra que o EM-FM alcançou ganhos substanciais e estatisticamente significativos em relação ao baseline GDINO.</span> <span class="s" data-s="b7-p0-s2">Para CXRs, houve aumentos de 14,6 pontos percentuais em consolidação, 51,2 pontos em derrame pleural (pleural effusion) e 13,7 pontos em pneumotórax, resultando em um aumento médio de 19,9 pontos percentuais no mAP50 (0,567 vs 0,369).</span></p><p><span class="s" data-s="b7-p1-s0">Comparado ao EM-DETR treinado em um único dataset, o EM-FM melhorou o mAP50 em 2 a 6 pontos percentuais através desses achados.</span> <span class="s" data-s="b7-p1-s1">Na mamografia, o EM-FM superou o EM-DETR em 2,2 pontos percentuais.</span> <span class="s" data-s="b7-p1-s2">Além disso, o EM-FM superou o baseline em termos de AUC em nível de imagem, com ganhos estatisticamente significativos de 1 ponto percentual na média para os quatro achados principais de CXRs.</span></p><p><span class="s" data-s="b7-p2-s0">É importante notar que o produto comercial de referência (RPS), baseado em ResNet-101 FCOS, beneficia-se de pré-treinamento em 100 milhões de imagens e uso de Non-Maximum Suppression (NMS).</span> <span class="s" data-s="b7-p2-s1">O EM-FM, embora não use NMS pós-processamento da mesma forma, compete de maneira competitiva, demonstrando a eficácia da abordagem de foundation model sem necessidade de pré-treinamento massivo em imagens naturais.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.14518/figure4.webp" alt="Exemplos qualitativos de previsões de bounding box para derrame pleural e pneumotórax em CXRs, seguidos por previsões de massa em mamografias. Groundtruth em amarelo e previsões em verde com seus escores." loading="lazy">
+          <figcaption>
+            Exemplos qualitativos de previsões de bounding box para derrame pleural e pneumotórax em CXRs, seguidos por previsões de massa em mamografias. Groundtruth em amarelo e previsões em verde com seus escores.
+            <span class="source">Figura 4 do paper · Bhat et al., arXiv:2611.14518</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Limitações e Ambiguidade Clínica</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Apesar dos ganhos gerais, o modelo apresentou limitações em certas classes.</span> <span class="s" data-s="b9-p0-s1">As melhorias limitadas na detecção de atelectasia são atribuídas à ambiguidade inerente do rótulo, decorrente da sobreposição clínica com condições como consolidação e distelectasia.</span> <span class="s" data-s="b9-p0-s2">Essas condições frequentemente compartilham características radiológicas similares e podem representar estágios diferentes de um mesmo espectro patológico, levando a anotações groundtruth ruidosas ou inconsistentes entre datasets.</span></p><p><span class="s" data-s="b9-p1-s0">Embora o AAFM tenha tido desempenho inferior na atelectasia e no derrame pleural em comparação com o baseline, essas diferenças não foram estatisticamente significativas.</span> <span class="s" data-s="b9-p1-s1">Essa lacuna pode ser atribuída aos limiares de confiança otimizados para classificação no treinamento aluno-professor e à variabilidade no aprendizado contrastivo do GDINO, que depende das classes escolhidas para avaliação.</span></p><p><span class="s" data-s="b9-p2-s0">Além disso, a estratégia de geração de pseudo-anotações, embora eficaz, introduz ruído potencial.</span> <span class="s" data-s="b9-p2-s1">O filtro de 95% de sensibilidade no ROC ajuda a controlar isso, mas predições incorretas de baixa confiança ainda podem ser incluídas se não forem filtradas adequadamente por tamanho ou localização, como discutido no método.</span> <span class="s" data-s="b9-p2-s2">A generalização para outras modalidades além de CXR e mamografia ainda precisa ser validada.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.14518/table3.webp" alt="Tabela comparativa mostrando que o EM-FM alcança os melhores resultados de precisão (mAP50) em diversas lesões, superando baseline, AAFM e EM-DETR original com significância estatística." loading="lazy">
+          <figcaption>
+            Tabela comparativa mostrando que o EM-FM alcança os melhores resultados de precisão (mAP50) em diversas lesões, superando baseline, AAFM e EM-DETR original com significância estatística.
+            <span class="source">Tabela 3 do paper · Bhat et al., arXiv:2611.14518</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b11-h">Conclusão e Perspectivas</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Este estudo demonstra que a criação de um modelo de detecção de fundação para todas as imagens de radiografia é viável.</span> <span class="s" data-s="b11-p0-s1">A combinação de datasets disjuntos e sobrepostos de anatomia e anormalidades, protegida pela estratégia aluno-professor, alcançou desempenho SOTA em classificação e melhorou significativamente a detecção.</span> <span class="s" data-s="b11-p0-s2">O EM-FM prova que é possível integrar dados heterogêneos mantendo a robustez.</span></p><p><span class="s" data-s="b11-p1-s0">A abordagem também facilitou uma convergência de treinamento mais rápida e estável, um benefício comum em modelos fundamentais.</span> <span class="s" data-s="b11-p1-s1">Trabalhos futuros estenderão essa abordagem para outros achados e datasets para validar ainda mais a generalização e robustez do EM-FM.</span> <span class="s" data-s="b11-p1-s2">Para desenvolvedores e pesquisadores, o principal takeaway é a viabilidade de unificar espaços de rótulos médicos fragmentados sem sacrificar o desempenho de detecção, desde que se gerencie cuidadosamente o esquecimento catastrófico.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">O EM-FM integra datasets de anatomia e anormalidades usando uma estratégia aluno-professor para gerar anotações fracas, evitando o esquecimento catastrófico.</span></li><li><span class="s" data-s="k1">A abordagem supera o baseline GDINO e o EM-DETR original, alcançando SOTA em mAP50 para raio-X e mamografia.</span></li><li><span class="s" data-s="k2">O modelo demonstra que a unificação de espaços de rótulos distintos é viável e benéfica para a detecção de lesões em imagens médicas.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.14518" rel="noopener">Toward Foundation Detection Models via Example-Based Grounding in EM-DETR</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.14518" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>
