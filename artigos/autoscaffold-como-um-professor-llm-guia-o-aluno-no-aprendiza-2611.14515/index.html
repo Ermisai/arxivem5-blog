@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AutoScaffold: Como um Professor LLM Guia o Aluno no Aprendizado por Reforço — arXiv em 5</title>
+<meta name="description" content="O AutoScaffold usa um modelo professor congelado para analisar falhas do aluno e gerar dicas adaptativas durante o RL, melhorando o raciocínio sem intervenção humana.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AutoScaffold: Como um Professor LLM Guia o Aluno no Aprendizado por Reforço">
+<meta property="og:description" content="O AutoScaffold usa um modelo professor congelado para analisar falhas do aluno e gerar dicas adaptativas durante o RL, melhorando o raciocínio sem intervenção humana.">
+<meta property="og:image" content="../../assets/papers/2611.14515/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>LLMs</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.14515" rel="noopener">arXiv:2611.14515</a>
+    </div>
+    <h1><span class="s" data-s="t">AutoScaffold: Como um Professor LLM Guia o Aluno no Aprendizado por Reforço</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">O AutoScaffold usa um modelo professor congelado para analisar falhas do aluno e gerar dicas adaptativas durante o RL, melhorando o raciocínio sem intervenção humana.</span></p>
+    <p class="byline">
+      <span>Zhang et al.</span>
+      <span>7 min de leitura</span>
+<span>10/11/2026</span>    </p>
+    <div class="listen" data-article="2611.14515" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=lxmGNGBlxY8" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Cegueira do RLVR</span></h2>
+<p><span class="s" data-s="b0-p0-s0">O Aprendizado por Reforço com Recompensas Verificáveis (RLVR) tornou-se o padrão para pós-treinamento de modelos de linguagem em tarefas de raciocínio e agentes.</span> <span class="s" data-s="b0-p0-s1">A premissa é simples: o modelo gera rollouts (tentativas), recebe uma recompensa binária (sucesso ou falha) e ajusta seus pesos.</span> <span class="s" data-s="b0-p0-s2">No entanto, essa abordagem tem uma limitação fundamental: a recompensa é um resumo agregado.</span> <span class="s" data-s="b0-p0-s3">Ela reduz cada tentativa a um único número, descartando a riqueza do que realmente aconteceu durante a execução.</span></p><p><span class="s" data-s="b0-p1-s0">Quando um rollout falha, o algoritmo de RL sabe que algo deu errado, mas não sabe por quê.</span> <span class="s" data-s="b0-p1-s1">A tentativa pode conter raciocínios parciais úteis, ações corretas seguidas de um erro de formatação, ou uma estratégia totalmente ineficiente.</span> <span class="s" data-s="b0-p1-s2">Em tarefas difíceis, onde o modelo falha consistentemente, a recompensa é sempre zero, gerando zero sinal de gradiente.</span> <span class="s" data-s="b0-p1-s3">O modelo fica estagnado porque o sinal de feedback é insuficiente para guiar a exploração inteligente.</span></p><p><span class="s" data-s="b0-p2-s0">Uma solução tradicional é o uso de scaffolds durante o treinamento: textos auxiliares, como dicas, estratégias ou soluções parciais, são inseridos no prompt do modelo (o aluno) para ajudá-lo a completar a tarefa.</span> <span class="s" data-s="b0-p2-s1">Isso permite que o modelo receba recompensa positiva mesmo quando não consegue resolver o problema sozinho, criando um sinal de aprendizado.</span> <span class="s" data-s="b0-p2-s2">O problema é que, na maioria dos métodos existentes, esses scaffolds são projetados manualmente por humanos ou gerados por pipelines fixos, não se adaptando à evolução do aluno.</span></p>        <h2><span class="s" data-s="b1-h">AutoScaffold: Uma Abordagem AI-for-AI</span></h2>
+<p><span class="s" data-s="b1-p0-s0">O paper AutoScaffold propõe um framework unificado que automatiza e adapta a criação de scaffolds.</span> <span class="s" data-s="b1-p0-s1">A ideia central é introduzir um modelo professor (Teacher LLM) congelado que observa o treinamento do modelo aluno (Student LLM) em tempo real.</span> <span class="s" data-s="b1-p0-s2">Diferente dos métodos anteriores, o professor não apenas gera dicas uma vez; ele periodicamente examina a experiência de treinamento do aluno, diagnostica os gargalos específicos de falha e projeta scaffolds personalizados.</span></p><p><span class="s" data-s="b1-p1-s0">Esses scaffolds assumem duas formas principais: estratégias compartilhadas por uma classe de tarefas (nível de classe) e dicas direcionadas para tarefas individuais difíceis (nível de instância).</span> <span class="s" data-s="b1-p1-s1">O professor ajusta o conteúdo e a quantidade de suporte conforme o aluno aprende.</span> <span class="s" data-s="b1-p1-s2">Inicialmente, o suporte pode ser mais explícito; à medida que o aluno melhora, o professor retira o suporte ou o torna mais sutil, garantindo que o aluno não dependa permanentemente das dicas.</span></p><p><span class="s" data-s="b1-p2-s0">Um ponto crucial é que os scaffolds são removidos durante a avaliação.</span> <span class="s" data-s="b1-p2-s1">Isso garante que o ganho de performance não seja apenas um artefato de ter instruções extras no prompt, mas sim uma melhoria real na capacidade de raciocínio e ação do modelo aluno.</span> <span class="s" data-s="b1-p2-s2">O framework foi projetado para ser agnóstico ao domínio, exigindo apenas informações mínimas específicas do domínio, e pode ser aplicado a diferentes tipos de tarefas sem redesign significativo.</span></p>        <h2><span class="s" data-s="b2-h">Por que Scaffolds Precisam ser Adaptativos</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Para entender a necessidade da adaptação, é preciso olhar para métodos de RL relativos ao grupo, como o GRPO.</span> <span class="s" data-s="b2-p0-s1">Esses métodos amostram G rollouts para uma tarefa e calculam a vantagem relativa baseada na média e desvio padrão do grupo.</span> <span class="s" data-s="b2-p0-s2">Se todas as tentativas falham ou todas têm sucesso, a vantagem é zero e não há aprendizado.</span> <span class="s" data-s="b2-p0-s3">Para tarefas que o aluno raramente resolve, a probabilidade de gerar um sinal de gradiente é baixa.</span></p><p><span class="s" data-s="b2-p1-s0">Um scaffold fixo pode ajudar inicialmente ao aumentar a probabilidade de sucesso, criando um grupo misto (sucessos e falhas) que permite o aprendizado.</span> <span class="s" data-s="b2-p1-s1">No entanto, à medida que o aluno evolui, os gargalos mudam.</span> <span class="s" data-s="b2-p1-s2">O que era uma falha crítica no início pode ser resolvido, enquanto novas falhas surgem.</span> <span class="s" data-s="b2-p1-s3">Um scaffold fixo, como uma lista de habilidades pré-definida, pode se tornar irrelevante ou até prejudicial se continuar a fornecer suporte onde não é mais necessário, impedindo o aluno de desenvolver autonomia.</span></p><p><span class="s" data-s="b2-p2-s0">O AutoScaffold aborda isso tornando o processo adaptativo.</span> <span class="s" data-s="b2-p2-s1">O professor monitora o progresso e revisa os scaffolds periodicamente.</span> <span class="s" data-s="b2-p2-s2">Se o aluno começa a resolver uma classe de tarefas, o professor pode reduzir a injeção de scaffolds dessa classe ou modificá-los para focar em nuances mais difíceis.</span> <span class="s" data-s="b2-p2-s3">Essa dinâmica garante que o suporte esteja sempre alinhado com o estado atual de aprendizado do aluno, maximizando a eficiência do treinamento.</span></p>        <h2><span class="s" data-s="b3-h">Mecanismo: Diagnóstico e Geração de Scaffolds</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O núcleo do AutoScaffold é o processo pelo qual o professor gera os scaffolds.</span> <span class="s" data-s="b3-p0-s1">O professor é um LLM congelado, o que significa que seus pesos não são atualizados durante o treinamento do aluno.</span> <span class="s" data-s="b3-p0-s2">Ele opera em estágios.</span> <span class="s" data-s="b3-p0-s3">Primeiro, ele coleta evidências sobre o desempenho do aluno.</span> <span class="s" data-s="b3-p0-s4">Em vez de apenas olhar para a recompensa final, ele analisa as trajetórias completas, identificando onde e por que o aluno falhou.</span></p><p><span class="s" data-s="b3-p1-s0">O professor utiliza ferramentas de consulta e memória para estruturar essa análise.</span> <span class="s" data-s="b3-p1-s1">Ele diagnostica se a falha é devido a uma falta de conhecimento factual, um erro de planejamento, ou uma execução incorreta de ações.</span> <span class="s" data-s="b3-p1-s2">Com base nesse diagnóstico, ele projeta o scaffold.</span> <span class="s" data-s="b3-p1-s3">Para tarefas agênticas, como o ALFWorld, o scaffold pode ser uma sequência de passos de alto nível (ex: &#39;pegue o objeto, leve à lâmpada, use a lâmpada&#39;).</span> <span class="s" data-s="b3-p1-s4">Para QA, pode ser uma dica sobre a fonte de informação necessária.</span></p><p><span class="s" data-s="b3-p2-s0">O professor também valida suas próprias propostas antes de aplicá-las.</span> <span class="s" data-s="b3-p2-s1">Ele verifica se o scaffold é relevante e se não viola as restrições da tarefa.</span> <span class="s" data-s="b3-p2-s2">Essa validação é crucial para garantir que o scaffold ajude no aprendizado e não introduza viés ou informações incorretas.</span> <span class="s" data-s="b3-p2-s3">O scaffold é então injetado no prompt do aluno durante os próximos passos de treinamento.</span></p>        <h2><span class="s" data-s="b4-h">Avaliação Experimental e Resultados</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Os autores avaliaram o AutoScaffold em quatro domínios distintos: ALFWorld (tarefas domésticas agênticas), QA baseado em busca (single-hop e multi-hop), KernelBench (geração de kernels de GPU) e raciocínio matemático.</span> <span class="s" data-s="b4-p0-s1">Em todos os casos, o modelo aluno treinado com AutoScaffold foi avaliado sem scaffolds, comparando-se com baselines de RL puro (como PPO, GRPO) e métodos com scaffolds humanos (como SkillRL, Skill0).</span></p><p><span class="s" data-s="b4-p1-s0">Os resultados mostram que o AutoScaffold supera consistentemente os baselines.</span> <span class="s" data-s="b4-p1-s1">No ALFWorld, o ganho foi de 7.2 pontos na taxa de sucesso.</span> <span class="s" data-s="b4-p1-s2">No QA baseado em busca, houve um ganho de 4.0 pontos na métrica de exatidão.</span> <span class="s" data-s="b4-p1-s3">No KernelBench, o método aumentou a fração de kernels corretos e mais rápidos que a referência PyTorch em até 5.0 pontos.</span> <span class="s" data-s="b4-p1-s4">No raciocínio matemático, o aluno do AutoScaffold superou a precisão relatada pelo QuestA usando aproximadamente um terço dos passos de treinamento.</span></p><p><span class="s" data-s="b4-p2-s0">Esses ganhos não são triviais.</span> <span class="s" data-s="b4-p2-s1">Eles demonstram que a orientação adaptativa do professor é mais eficaz do que estratégias fixas ou a ausência de orientação.</span> <span class="s" data-s="b4-p2-s2">O fato de o modelo superar métodos com scaffolds humanos sugere que a adaptação automática permite capturar nuances que os humanos podem não prever ou ajustar em tempo real.</span></p>        <h2><span class="s" data-s="b5-h">Análise da Adaptação do Professor</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Uma parte importante do paper é a análise de como o professor se adapta ao longo do treinamento.</span> <span class="s" data-s="b5-p0-s1">Os autores observaram que o professor identifica diferentes gargalos em cada classe de tarefas.</span> <span class="s" data-s="b5-p0-s2">Inicialmente, ele tende a fornecer scaffolds mais explícitos, como workflows passo a passo.</span> <span class="s" data-s="b5-p0-s3">À medida que o aluno melhora, o professor muda para correções mais direcionadas e reduz a quantidade de suporte.</span></p><p><span class="s" data-s="b5-p1-s0">Essa transição é visível nos dados de treinamento.</span> <span class="s" data-s="b5-p1-s1">O professor adiciona novos scaffolds para tarefas que o aluno ainda não domina, revisa os existentes para torná-los mais sutis, e remove aqueles que se tornaram irrelevantes.</span> <span class="s" data-s="b5-p1-s2">Essa dinâmica de ajuste fino garante que o aluno esteja sempre sendo desafiado na fronteira de sua capacidade atual, maximizando o aprendizado.</span></p><p><span class="s" data-s="b5-p2-s0">O estudo de ablação confirma que essa adaptação é crucial.</span> <span class="s" data-s="b5-p2-s1">Usar um banco de habilidades fixo (como no Skill0) resultou em uma taxa de sucesso no ALFWorld 15.3 pontos inferior à do AutoScaffold e 8.1 pontos inferior ao baseline de RL puro.</span> <span class="s" data-s="b5-p2-s2">Isso destaca que a rigidez dos scaffolds humanos é um limitador significativo de performance.</span></p>        <h2><span class="s" data-s="b6-h">Limitações e Considerações Finais</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Apesar dos resultados promissores, o AutoScaffold tem limitações.</span> <span class="s" data-s="b6-p0-s1">O uso de um professor LLM adiciona custo computacional ao treinamento, pois o professor precisa processar o histórico de treinamento periodicamente.</span> <span class="s" data-s="b6-p0-s2">Os autores mencionam que reduzir esse custo é uma área de trabalho futuro.</span> <span class="s" data-s="b6-p0-s3">Além disso, o framework depende da capacidade do professor de diagnosticar corretamente as falhas do aluno.</span> <span class="s" data-s="b6-p0-s4">Se o professor falhar no diagnóstico, o scaffold gerado pode ser ineficaz ou prejudicial.</span></p><p><span class="s" data-s="b6-p1-s0">Outra consideração é o escopo dos experimentos.</span> <span class="s" data-s="b6-p1-s1">O paper foca em domínios onde a estrutura da tarefa é bem definida e a recompensa é verificável.</span> <span class="s" data-s="b6-p1-s2">A generalização para domínios mais abertos ou subjetivos pode exigir ajustes.</span> <span class="s" data-s="b6-p1-s3">Os autores também destacam a necessidade de caracterizar melhor quando o aprendizado com scaffolds melhora realmente as capacidades independentes do aluno, em vez de apenas melhorar a performance durante o treinamento.</span></p><p><span class="s" data-s="b6-p2-s0">Em resumo, o AutoScaffold representa um avanço significativo na aplicação de RL para LLMs.</span> <span class="s" data-s="b6-p2-s1">Ao automatizar e adaptar a criação de scaffolds, ele supera as limitações dos métodos manuais e fixos, oferecendo um caminho mais eficiente e escalável para o pós-treinamento de modelos de linguagem.</span> <span class="s" data-s="b6-p2-s2">A abordagem AI-for-AI abre novas possibilidades para a educação de modelos, onde o próprio modelo pode se tornar seu próprio tutor.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Um modelo &#39;professor&#39; congelado analisa o histórico de erros do &#39;aluno&#39; e gera scaffolds (dicas/estratégias) dinamicamente.</span></li><li><span class="s" data-s="k1">Os scaffolds são removidos na avaliação, forçando o aluno a aprender a capacidade real, não apenas a seguir instruções.</span></li><li><span class="s" data-s="k2">O método é unificado: funciona em tarefas agênticas, QA, kernels de GPU e matemática sem redesign manual.</span></li><li><span class="s" data-s="k3">Resultados mostram ganhos consistentes sobre baselines de RL puro e métodos com scaffolds humanos fixos.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.14515" rel="noopener">AutoScaffold: AI-Guided Scaffolding for Reinforcement Learning of Language Models</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.14515" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SceneBloom: Geração de Ambientes 3D Realistas para Agentes Embodied via Amostragem Visual e Compilação Guiada — arXiv em 5</title>
+<meta name="description" content="O paper apresenta um framework agêntico que separa o planejamento semântico da correção geométrica, gerando layouts de interiores fisicamente válidos e visualmente coerentes para treinar agentes de navegação.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SceneBloom: Geração de Ambientes 3D Realistas para Agentes Embodied via Amostragem Visual e Compilação Guiada">
+<meta property="og:description" content="O paper apresenta um framework agêntico que separa o planejamento semântico da correção geométrica, gerando layouts de interiores fisicamente válidos e visualmente coerentes para treinar agentes de navegação.">
+<meta property="og:image" content="../../assets/papers/2610.32978/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Agentes</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.32978" rel="noopener">arXiv:2610.32978</a>
+    </div>
+    <h1><span class="s" data-s="t">SceneBloom: Geração de Ambientes 3D Realistas para Agentes Embodied via Amostragem Visual e Compilação Guiada</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">O paper apresenta um framework agêntico que separa o planejamento semântico da correção geométrica, gerando layouts de interiores fisicamente válidos e visualmente coerentes para treinar agentes de navegação.</span></p>
+    <p class="byline">
+      <span>Liu et al.</span>
+      <span>7 min de leitura</span>
+<span>23/10/2026</span>    </p>
+    <div class="listen" data-article="2610.32978" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=LzH6570dWrk" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Desafio da Generalização em Ambientes Sintéticos</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Aprender agentes embodied (robôs ou avatares que interagem com o ambiente) requer exposição a uma diversidade massiva de cenários.</span> <span class="s" data-s="b0-p0-s1">O treinamento apenas em ambientes reais é inviável devido ao custo e à dificuldade de coleta.</span> <span class="s" data-s="b0-p0-s2">Por isso, geradores procedurais de ambientes sintéticos são essenciais.</span> <span class="s" data-s="b0-p0-s3">No entanto, gerar layouts que sejam ao mesmo tempo semanticamente plausíveis (fazem sentido funcionalmente) e geometricamente válidos (não há colisão de objetos, móveis não flutuam) é um problema aberto complexo.</span></p><p><span class="s" data-s="b0-p1-s0">Métodos anteriores tentam resolver isso usando regras manuais ou distribuições aprendidas de configurações 3D.</span> <span class="s" data-s="b0-p1-s1">Outros, mais recentes, usam modelos de linguagem (LLMs) para definir restrições espaciais ou agentes autônomos para iterar sobre a cena.</span> <span class="s" data-s="b0-p1-s2">Embora flexíveis, essas abordagens frequentemente acumulam conflitos: ao adicionar objetos um por um, as colisões se acumulam e a correção posterior pode quebrar relações funcionais importantes, como colocar uma cadeira virada para a parede em vez da mesa.</span></p><p><span class="s" data-s="b0-p2-s0">O paper SceneBloom, de pesquisadores da New York University e da University of California, San Diego, propõe uma divisão de responsabilidades clara.</span> <span class="s" data-s="b0-p2-s1">A ideia central é separar o que deve ser preservado (relações semânticas e funcionais) do que deve ser corrigido (poses numéricas exatas).</span> <span class="s" data-s="b0-p2-s2">Isso é feito através de dois estágios distintos: amostragem visual hierárquica e compilação 3D guiada por contratos.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.32978/figure1.webp" alt="Visão geral do pipeline SceneBloom. O processo inicia com um prompt de texto, passa pela divisão em zonas funcionais e geração de propostas visuais, culminando na compilação 3D física. A mesma entrada pode gerar layouts diferentes via resampling." loading="lazy">
+          <figcaption>
+            Visão geral do pipeline SceneBloom. O processo inicia com um prompt de texto, passa pela divisão em zonas funcionais e geração de propostas visuais, culminando na compilação 3D física. A mesma entrada pode gerar layouts diferentes via resampling.
+            <span class="source">Figura 1 do paper · Liu et al., arXiv:2610.32978</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">Amostragem Visual Hierárquica: Planejar a Zona, Desenhar o Mobiliário</span></h2>
+<p><span class="s" data-s="b2-p0-s0">O primeiro estágio do SceneBloom foca na estrutura lógica da sala.</span> <span class="s" data-s="b2-p0-s1">Em vez de tentar gerar a sala inteira de uma vez, o sistema divide o espaço em zonas funcionais (ex: área de dormir, área de trabalho, armazenamento).</span> <span class="s" data-s="b2-p0-s2">Um Vision-Language Model (VLM) analisa a descrição da sala e, usando exemplos reais recuperados como referência, define essas zonas, especificando quais móveis devem estar em cada uma.</span></p><p><span class="s" data-s="b2-p1-s0">A inovação aqui está na geração das propostas visuais.</span> <span class="s" data-s="b2-p1-s1">Para cada zona, um modelo de difusão de imagens gera uma imagem 2D que representa o arranjo dos móveis daquela área específica.</span> <span class="s" data-s="b2-p1-s2">Diferente de métodos que geram texto ou restrições lógicas, o modelo de difusão usa um prior visual aprendido de grandes datasets de imagens.</span> <span class="s" data-s="b2-p1-s3">Isso permite capturar nuances de arranjo que são difíceis de codificar em regras manuais.</span></p><p><span class="s" data-s="b2-p2-s0">Para garantir que os objetos gerados na imagem correspondam a assets 3D reais disponíveis para a simulação, o sistema utiliza LoRA adapters (Low-Rank Adaptation) específicos para cada ativo do catálogo.</span> <span class="s" data-s="b2-p2-s1">Isso significa que a imagem gerada não é apenas uma ilustração artística, mas um blueprint fiel dos objetos que serão instanciados no ambiente 3D.</span> <span class="s" data-s="b2-p2-s2">A fusão de adaptadores permite que múltiplos objetos apareçam na mesma imagem sem interferência visual.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.32978/figure2.webp" alt="Arquitetura detalhada. O VLM planeja as zonas e prompts. O Diffusion Model gera as propostas visuais Ij. Modelos de percepção 3D levantam (lift) essas imagens para layouts 3D preliminares Lj. Um VLM extrai contratos de relação Cj, que guiam a compilação geométrica final." loading="lazy">
+          <figcaption>
+            Arquitetura detalhada. O VLM planeja as zonas e prompts. O Diffusion Model gera as propostas visuais Ij. Modelos de percepção 3D levantam (lift) essas imagens para layouts 3D preliminares Lj. Um VLM extrai contratos de relação Cj, que guiam a compilação geométrica final.
+            <span class="source">Figura 2 do paper · Liu et al., arXiv:2610.32978</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b4-h">Compilação Guiada por Contratos: Da Imagem ao 3D Físico</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Gerar uma imagem não garante validade física.</span> <span class="s" data-s="b4-p0-s1">Quando as imagens são convertidas para 3D (um processo chamado lifting), erros de profundidade e escala são comuns.</span> <span class="s" data-s="b4-p0-s2">Móveis podem ficar sobrepostos, inclinados de forma instável ou fora dos limites da sala.</span> <span class="s" data-s="b4-p0-s3">O StageBloom resolve isso no segundo estágio: compilação 3D guiada por contratos.</span></p><p><span class="s" data-s="b4-p1-s0">Antes de mover qualquer objeto, o sistema analisa as imagens de proposta geradas no estágio anterior.</span> <span class="s" data-s="b4-p1-s1">Um VLM extrai &#39;contratos de relação&#39; (relation contracts) dessas imagens.</span> <span class="s" data-s="b4-p1-s2">Esses contratos são declarações semânticas como &#39;a cadeira deve enfrentar a mesa&#39;, &#39;a mesa lateral deve estar alinhada com a mesa principal&#39; ou &#39;a luminária deve estar próxima ao sofá&#39;.</span> <span class="s" data-s="b4-p1-s3">Esses contratos definem as relações qualitativas que devem ser preservadas.</span></p><p><span class="s" data-s="b4-p2-s0">Um compilador geométrico então ajusta as poses dos objetos 3D para que eles se encaixem na sala e respeitem esses contratos.</span> <span class="s" data-s="b4-p2-s1">A chave é que o compilador não tenta adivinhar a melhor posição; ele otimiza a posição numérica dos objetos (x, y, z, rotação) para satisfazer as restrições lógicas extraídas.</span> <span class="s" data-s="b4-p2-s2">Isso permite corrigir erros de lifting (como uma cadeira que ficou torta) sem perder a intenção do arranjo visual original (a cadeira ainda está voltada para a mesa).</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b5-t">Por que separar relações de poses?</span></h3>
+          <p><span class="s" data-s="b5-c-s0">Métodos iterativos que adicionam objetos um por um tendem a acumular erros.</span> <span class="s" data-s="b5-c-s1">O SceneBloom resolve o layout da sala como um todo, verificando colisões e estabilidade globalmente.</span> <span class="s" data-s="b5-c-s2">Isso resulta em cenas fisicamente estáveis, onde 100% dos objetos estão dentro dos limites e sem colisões de malha, algo que os baselines não alcançam.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b6-h">Resultados: Qualidade Visual e Plausibilidade Física</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Os autores avaliaram o SceneBloom em cinco tipos de cômodos: quartos, salas de estar, salas de jantar, banheiros e escritórios.</span> <span class="s" data-s="b6-p0-s1">A comparação foi feita contra três métodos base: Holodeck (que usa LLMs para restrições), SceneWeaver (agente autônomos com auto-reflexão) e SAGE (que usa críticos visuais e físicos).</span></p><p><span class="s" data-s="b6-p1-s0">Em termos de plausibilidade física, o SceneBloom foi o único método a produzir cenas sem colisões de malha detectadas e sem objetos fora dos limites (out-of-bounds).</span> <span class="s" data-s="b6-p1-s1">Além disso, as cenas apresentaram a maior taxa de estabilidade.</span> <span class="s" data-s="b6-p1-s2">Nos baselines, até 31% dos objetos grandes se moviam além do limiar de estabilidade, enquanto no SceneBloom esse número foi de apenas 3%.</span> <span class="s" data-s="b6-p1-s3">Isso ocorre porque o compilador resolve conflitos globalmente, ao contrário dos métodos que adicionam objetos sequencialmente.</span></p><p><span class="s" data-s="b6-p2-s0">Na qualidade visual, avaliada por métricas de realismo, funcionalidade, coerência de layout e completude, o SceneBloom também liderou.</span> <span class="s" data-s="b6-p2-s1">O SAGE, por exemplo, tendia a superlotar os cômodos, adicionando objetos até que superfícies ficarem cheias.</span> <span class="s" data-s="b6-p2-s2">O SceneBloom, ao gerar arranjos baseados em zonas funcionais, manteve um número razoável de objetos e relações funcionais claras (ex: cadeiras voltadas para a mesa de jantar).</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.32978/figure3.webp" alt="Efeito da compilação guiada por contratos. Mostra como o layout 3D bruto (lifted) perde relações (cadeiras viradas para a parede) e como a correção baseada em contratos restaura a funcionalidade (cadeiras voltadas para a mesa)." loading="lazy">
+          <figcaption>
+            Efeito da compilação guiada por contratos. Mostra como o layout 3D bruto (lifted) perde relações (cadeiras viradas para a parede) e como a correção baseada em contratos restaura a funcionalidade (cadeiras voltadas para a mesa).
+            <span class="source">Figura 3 do paper · Liu et al., arXiv:2610.32978</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Aproximação da Distribuição Real</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Um ponto crucial para agentes embodied é que os dados de treinamento se assemelhem à distribuição de dados reais.</span> <span class="s" data-s="b8-p0-s1">Os autores mediram a Discrepância de Distribuição de Layout (LDD) usando uma métrica de MMD (Maximum Mean Discrepancy) contra dois datasets reais: Matterport3D e Scan2CAD.</span></p><p><span class="s" data-s="b8-p1-s0">Os layouts gerados pelo SceneBloom estiveram mais próximos da distribuição de quartos reais do que todos os baselines comparados.</span> <span class="s" data-s="b8-p1-s1">Isso sugere que a combinação de planejamento semântico (zonas) e prior visual (difusão) captura melhor a variabilidade e a estrutura dos ambientes habitados do que métodos baseados puramente em regras ou otimização de restrições textuais.</span></p>        <h2><span class="s" data-s="b9-h">Transferência para Navegação de Objetos</span></h2>
+<p><span class="s" data-s="b9-p0-s0">O teste final foi o mais importante para validar a utilidade prática: treinar uma política de navegação de objetos (object navigation) usando os ambientes gerados.</span> <span class="s" data-s="b9-p0-s1">Um agente foi treinado do zero em cenas geradas pelo SceneBloom e testado em varreduras reais mantidas fora do conjunto de treinamento (held-out real scans).</span></p><p><span class="s" data-s="b9-p1-s0">O agente treinado nos ambientes sintéticos do SceneBloom alcançou uma taxa de sucesso maior do que um agente treinado em um número igual de varreduras reais do mesmo dataset.</span> <span class="s" data-s="b9-p1-s1">Isso é contraintuitivo e significativo: ambientes sintéticos bem gerados podem generalizar melhor do que dados reais brutos, possivelmente porque o SceneBloom oferece uma organização de layout mais coerente e livre de ruídos de aquisição real.</span></p><p><span class="s" data-s="b9-p2-s0">Abalações mostraram que essa vantagem vem da organização do layout.</span> <span class="s" data-s="b9-p2-s1">Se os objetos fossem colocados aleatoriamente dentro das mesmas salas, a vantagem desaparecia.</span> <span class="s" data-s="b9-p2-s2">Além disso, o fine-tuning (ajuste fino) do agente nos ambientes do SceneBloom melhorou ainda mais a generalização para objetivos não vistos.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.32978/table2.webp" alt="Resultados de fine-tuning e generalização. O SceneBloom (SB) supera métodos base em taxas de sucesso (SR) e caminho percorrido (SPL) em objetivos vistos e não vistos, tanto em cenas geridas quanto em varreduras reais." loading="lazy">
+          <figcaption>
+            Resultados de fine-tuning e generalização. O SceneBloom (SB) supera métodos base em taxas de sucesso (SR) e caminho percorrido (SPL) em objetivos vistos e não vistos, tanto em cenas geridas quanto em varreduras reais.
+            <span class="source">Tabela 2 do paper · Liu et al., arXiv:2610.32978</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b11-h">Limitações e Considerações Finais</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Apesar dos resultados promissores, o paper não discute extensivamente as limitações computacionais ou a escalabilidade para cenas extremamente complexas.</span> <span class="s" data-s="b11-p0-s1">O uso de modelos de difusão e VLMs é computacionalmente custoso, embora o processo seja descrito como mais rápido que métodos agênticos iterativos devido à geração não iterativa por zona.</span></p><p><span class="s" data-s="b11-p1-s0">Outro ponto é a dependência de um catálogo de assets 3D pré-definido.</span> <span class="s" data-s="b11-p1-s1">O sistema não gera geometria nova do zero; ele instancia objetos conhecidos.</span> <span class="s" data-s="b11-p1-s2">Isso é uma vantagem para simulação (assets otimizados), mas limita a diversidade absoluta de formas de mobiliário.</span></p><p><span class="s" data-s="b11-p2-s0">Em resumo, o SceneBloom apresenta uma arquitetura elegante que resolve o conflito entre plausibilidade visual e validade física ao desacoplar o planejamento semântico da correção geométrica.</span> <span class="s" data-s="b11-p2-s1">Ao usar contratos de relação para guiar a compilação 3D, ele produz ambientes que não apenas parecem reais, mas funcionam como tal para o treinamento de agentes embodied.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b12-t">Principais Takeaways</span></h3>
+          <p><span class="s" data-s="b12-c-s0">1.</span> <span class="s" data-s="b12-c-s1">SceneBloom separa planejamento semântico (zonas) de compilação geométrica, usando contratos de relação para preservar funcionalidade durante a correção 3D.</span> <span class="s" data-s="b12-c-s2">2.</span> <span class="s" data-s="b12-c-s3">É o único método comparado a gerar cenas sem colisões de malha ou objetos fora dos limites, com alta estabilidade física.</span> <span class="s" data-s="b12-c-s4">3.</span> <span class="s" data-s="b12-c-s5">Agentes de navegação treinados em seus ambientes sintéticos superam aqueles treinados em um volume equivalente de dados reais em testes de generalização.</span> <span class="s" data-s="b12-c-s6">4.</span> <span class="s" data-s="b12-c-s7">A abordagem usa difusão visual com LoRA adapters para garantir que as propostas 2D correspondam a assets 3D utilizáveis na simulação.</span></p>
+        </aside>
+
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">SceneBloom separa planejamento semântico (zonas) de compilação geométrica, usando contratos de relação para preservar funcionalidade durante a correção 3D.</span></li><li><span class="s" data-s="k1">É o único método comparado a gerar cenas sem colisões de malha ou objetos fora dos limites, com alta estabilidade física.</span></li><li><span class="s" data-s="k2">Agentes de navegação treinados em seus ambientes sintéticos superam aqueles treinados em um volume equivalente de dados reais em testes de generalização.</span></li><li><span class="s" data-s="k3">A abordagem usa difusão visual com LoRA adapters para garantir que as propostas 2D correspondam a assets 3D utilizáveis na simulação.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.32978" rel="noopener">SceneBloom: Agentic Indoor Environment Generation with Realistic and Diverse Layouts for Embodied Learning</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.32978" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

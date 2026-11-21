@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PrismRestore: Agentes de Restauração de Imagem com Um Único Modelo Congelado — arXiv em 5</title>
+<meta name="description" content="Como construir uma caixa de ferramentas de restauração de imagem compacta e eficiente, usando modulação de canais em um modelo pré-treinado, sem necessidade de múltiplos backbones ou adaptadores pesados.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PrismRestore: Agentes de Restauração de Imagem com Um Único Modelo Congelado">
+<meta property="og:description" content="Como construir uma caixa de ferramentas de restauração de imagem compacta e eficiente, usando modulação de canais em um modelo pré-treinado, sem necessidade de múltiplos backbones ou adaptadores pesados.">
+<meta property="og:image" content="../../assets/papers/2611.24915/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Agentes</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.24915" rel="noopener">arXiv:2611.24915</a>
+    </div>
+    <h1><span class="s" data-s="t">PrismRestore: Agentes de Restauração de Imagem com Um Único Modelo Congelado</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Como construir uma caixa de ferramentas de restauração de imagem compacta e eficiente, usando modulação de canais em um modelo pré-treinado, sem necessidade de múltiplos backbones ou adaptadores pesados.</span></p>
+    <p class="byline">
+      <span>Yu et al.</span>
+      <span>8 min de leitura</span>
+<span>18/11/2026</span>    </p>
+    <div class="listen" data-article="2611.24915" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=VsxbBOY3RoY" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Custo Oculto da Restauração Agêntica</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A restauração de imagens capturadas em ambientes não controlados é um problema complexo.</span> <span class="s" data-s="b0-p0-s1">Raramente uma imagem sofre apenas um tipo de degradação; é comum encontrar misturas de ruído, desfoque, neblina e artefatos de baixa luminosidade.</span> <span class="s" data-s="b0-p0-s2">Abordagens tradicionais, como modelos específicos para tarefas (task-specific models), exigem treinar e armazenar uma rede diferente para cada problema.</span> <span class="s" data-s="b0-p0-s3">Para lidar com combinações imprevisíveis, surgiram os sistemas agênticos (agentic systems).</span> <span class="s" data-s="b0-p0-s4">Esses sistemas não aplicam uma única correção; eles avaliam o estado da imagem, planejam uma sequência de operações e invocam ferramentas de restauração de forma adaptativa.</span></p><p><span class="s" data-s="b0-p1-s0">No entanto, essa flexibilidade tem um preço alto em termos de infraestrutura.</span> <span class="s" data-s="b0-p1-s1">A maioria dos agentes de restauração de imagem (AgenticIR) constrói sua &#39;caixa de ferramentas&#39; (toolbox) instanciando múltiplas redes de restauração independentes ou usando adaptadores pesados, como LoRA, para cada tarefa.</span> <span class="s" data-s="b0-p1-s2">Isso significa que, para cobrir um conjunto de degradações, o sistema precisa carregar na memória vários backbones completos ou grandes conjuntos de parâmetros de adaptação.</span> <span class="s" data-s="b0-p1-s3">Esse overhead de armazenamento e inferência limita a escalabilidade desses métodos em dispositivos com recursos restritos ou em aplicações que exigem baixa latência.</span></p><p><span class="s" data-s="b0-p2-s0">Os autores deste paper questionam se é possível manter a flexibilidade de um sistema agêntico sem duplicar o backbone de restauração.</span> <span class="s" data-s="b0-p2-s1">A premissa central é que um único modelo &#39;all-in-one&#39; (tudo-em-um), já capaz de lidar com várias degradações, pode servir como base para uma caixa de ferramentas compacta.</span> <span class="s" data-s="b0-p2-s2">A chave está em como parametrizeamos essas ações dentro do modelo compartilhado.</span> <span class="s" data-s="b0-p2-s3">Em vez de adicionar novos pesos, podemos modificar o comportamento do modelo existente através de modulação de canais, mantendo os pesos originais congelados.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.24915/figure1.webp" alt="Comparação de parameterização: (a) Ferramentas independentes duplicam backbones; (b) Adaptadores compartilham backbone mas adicionam parâmetros por tarefa; (c) PrismRestore usa prioris compactos em um backbone congelado, minimizando o espaço de armazenamento." loading="lazy">
+          <figcaption>
+            Comparação de parameterização: (a) Ferramentas independentes duplicam backbones; (b) Adaptadores compartilham backbone mas adicionam parâmetros por tarefa; (c) PrismRestore usa prioris compactos em um backbone congelado, minimizando o espaço de armazenamento.
+            <span class="source">Figura 1 do paper · Yu et al., arXiv:2611.24915</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">A Ideia: Modulação de Canais como Ação</span></h2>
+<p><span class="s" data-s="b2-p0-s0">O PrismRestore propõe uma arquitetura onde a caixa de ferramentas é construída a partir de um único modelo all-in-one congelado.</span> <span class="s" data-s="b2-p0-s1">A inovação reside na criação de &#39;prioris de restauração&#39; (restoration priors).</span> <span class="s" data-s="b2-p0-s2">Cada prior é um conjunto de coeficientes de modulação que, quando aplicado ao backbone, transforma o comportamento geral do modelo em uma ação específica de restauração (por exemplo, &#39;remover ruído&#39; ou &#39;desembaçar&#39;).</span> <span class="s" data-s="b2-p0-s3">Esses priors são pré-computados offline e armazenados em um banco de dados compacto.</span> <span class="s" data-s="b2-p0-s4">Durante a inferência, um agente seleciona um prior do banco e o aplica ao modelo congelado para produzir o próximo passo da restauração.</span></p><p><span class="s" data-s="b2-p1-s0">Mas como definir esses coeficientes sem treinar o modelo do zero?</span> <span class="s" data-s="b2-p1-s1">Os autores analisaram as estatísticas de ativação e gradiente dos canais em uma rede all-in-one (AdaIR).</span> <span class="s" data-s="b2-p1-s2">Descobriram que, embora tarefas diferentes ativem canais distintos, existe uma sobreposição significativa.</span> <span class="s" data-s="b2-p1-s3">Canais &#39;representativos&#39; capturam características comuns a várias tarefas, enquanto canais &#39;não-representativos&#39; são mais especializados.</span> <span class="s" data-s="b2-p1-s4">A estratégia do PrismRestore é agrupar canais por perfis de resposta semelhantes e aplicar modulação apenas nos não-representativos, deixando os representativos inalterados.</span> <span class="s" data-s="b2-p1-s5">Isso permite que a ação de restauração seja diferenciada sem destruir a informação compartilhada essencial para a qualidade geral da imagem.</span></p><p><span class="s" data-s="b2-p2-s0">Essa abordagem elimina a necessidade de módulos adaptadores específicos por tarefa (como LoRA ou Prompt Tuning) que são comuns em métodos híbridos.</span> <span class="s" data-s="b2-p2-s1">O armazenamento necessário se reduz drasticamente: apenas o backbone pré-treinado e os pequenos vetores de prior.</span> <span class="s" data-s="b2-p2-s2">Isso resolve o gargalo de memória, permitindo que agentes complexos operem com uma pegada de modelo mínima.</span></p>        <h2><span class="s" data-s="b3-h">Construção da Caixa de Ferramentas: Do Offline ao Online</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O processo de construção da caixa de ferramentas ocorre offline e consiste em três etapas principais.</span> <span class="s" data-s="b3-p0-s1">Primeiro, caracterização de resposta condicional à tarefa.</span> <span class="s" data-s="b3-p0-s2">Para cada tarefa de restauração (ex: remoção de chuva, aumento de luminosidade), os autores coletam estatísticas de ativação e gradiente ponderado por gradiente em uma rede frozen.</span> <span class="s" data-s="b3-p0-s3">Eles calculam descritores que capturam a magnitude da ativação e a sensibilidade ao erro de reconstrução para cada canal.</span> <span class="s" data-s="b3-p0-s4">Esses descritores são normalizados e usados para agrupar canais com comportamentos similares.</span></p><p><span class="s" data-s="b3-p1-s0">A segunda etapa é o agrupamento de canais e a partição representativa.</span> <span class="s" data-s="b3-p1-s1">Utilizando K-means, os canais são agrupados em clusters.</span> <span class="s" data-s="b3-p1-s2">Dentro de cada cluster, os canais são ordenados pela sua distância ao centróide.</span> <span class="s" data-s="b3-p1-s3">Um ratio de representatividade (ρ) é usado para separar os canais: os mais próximos ao centróide (representativos) são mantidos fixos, enquanto os mais distantes (não-representativos) são candidatos à modulação.</span> <span class="s" data-s="b3-p1-s4">Isso garante que a estrutura fundamental da rede, responsável por features gerais, não seja perturbada.</span></p><p><span class="s" data-s="b3-p2-s0">Na terceira etapa, busca offline de modulação.</span> <span class="s" data-s="b3-p2-s1">Para cada cluster de canais não-representativos, os autores buscam coeficientes de modulação ótimos.</span> <span class="s" data-s="b3-p2-s2">Esses coeficientes multiplicam as ativações dos canais, amplificando ou atenuando sua resposta para a tarefa específica.</span> <span class="s" data-s="b3-p2-s3">A busca é feita avaliando a qualidade da imagem em um conjunto de dados de validação para a tarefa.</span> <span class="s" data-s="b3-p2-s4">O resultado é um banco de prioris, onde cada prior define um &#39;modo&#39; de restauração.</span> <span class="s" data-s="b3-p2-s5">Esses modos são então expostos ao agente online como ações discretas disponíveis.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.24915/figure2.webp" alt="Pipeline completo: (a) O agente seleciona ações baseadas no estado da imagem; (b) A caixa de ferramentas usa prioris compactos no backbone congelado; (c) A composição sequencial melhora a imagem passo a passo." loading="lazy">
+          <figcaption>
+            Pipeline completo: (a) O agente seleciona ações baseadas no estado da imagem; (b) A caixa de ferramentas usa prioris compactos no backbone congelado; (c) A composição sequencial melhora a imagem passo a passo.
+            <span class="source">Figura 2 do paper · Yu et al., arXiv:2611.24915</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">O Agente: Composição de Ações com GRPO</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Ter uma caixa de ferramentas não é suficiente; é preciso saber quando e como usá-la.</span> <span class="s" data-s="b5-p0-s1">O PrismRestore treina um agente (policy network) que observa o estado atual da imagem degradada e seleciona a ação (prior) mais adequada.</span> <span class="s" data-s="b5-p0-s2">Diferente de métodos que treinam o agente e o modelo simultaneamente, aqui o backbone é congelado.</span> <span class="s" data-s="b5-p0-s3">O agente é treinado usando Group Relative Policy Optimization (GRPO).</span> <span class="s" data-s="b5-p0-s4">O GRPO é uma variação do PPO (Proximal Policy Optimization) que é mais eficiente em termos de memória e estável para tarefas de raciocínio sequencial.</span></p><p><span class="s" data-s="b5-p1-s0">O treinamento do agente é desafiador porque a qualidade da imagem deve ser avaliada em duas dimensões: fidelidade (quão perto está do original, em dados sintéticos) e percepção (quão natural parece, em dados reais).</span> <span class="s" data-s="b5-p1-s1">Combinar essas métricas diretamente é problemático, pois elas têm escalas diferentes e podem ser conflitantes.</span> <span class="s" data-s="b5-p1-s2">Para resolver isso, os autores normalizam separadamente os feedbacks de fidelidade e percepção dentro de grupos de trajetórias amostradas para a mesma imagem.</span> <span class="s" data-s="b5-p1-s3">Isso permite que o agente aprenda a equilibrar as duas métricas sem que uma domine a outra devido à sua magnitude numérica.</span></p><p><span class="s" data-s="b5-p2-s0">Além disso, o objetivo do agente considera a mudança de qualidade passo a passo (return-to-go).</span> <span class="s" data-s="b5-p2-s1">Em vez de apenas olhar para o resultado final, o agente é recompensado por melhorias incrementais a cada ação.</span> <span class="s" data-s="b5-p2-s2">Isso incentiva a composição inteligente de operações: uma ação pode não resolver tudo, mas prepara o terreno para a próxima.</span> <span class="s" data-s="b5-p2-s3">O pipeline inclui um critério de parada guiado pela qualidade: se uma ação piora a percepção da imagem, ela é descartada e o estado anterior é mantido, evitando degradações irreversíveis.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b6-t">Detalhe Técnico: Normalização de Vantagens</span></h3>
+          <p><span class="s" data-s="b6-c-s0">O uso de Group Relative Policy Optimization (GRPO) com normalização decouplada de métricas é crucial.</span> <span class="s" data-s="b6-c-s1">Ao normalizar fidelidade e percepção separadamente dentro de grupos de trajetórias, o agente evita que métricas com variância alta dominem o sinal de gradiente.</span> <span class="s" data-s="b6-c-s2">Isso resulta em um treinamento mais estável e em políticas que generalizam melhor para combinações de degradações não vistas.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b7-h">Resultados: Qualidade e Eficiência</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Os experimentos foram realizados em benchmarks sintéticos (MiO100) e reais.</span> <span class="s" data-s="b7-p0-s1">No MiO100, que testa combinações de até três degradações, o PrismRestore superou todos os métodos all-in-one base (como AirNet e AdaIR) em todas as métricas (PSNR, SSIM, LPIPS, MANIQA, CLIP-IQA, MUSIQ).</span> <span class="s" data-s="b7-p0-s2">Em comparação com agentes multi-modelo, o PrismRestore alcançou qualidade competitiva, muitas vezes ficando em segundo lugar em métricas-chave como PSNR e SSIM, mas com uma fração do custo de armazenamento.</span></p><p><span class="s" data-s="b7-p1-s0">Um ponto crucial é a eficiência de inferência.</span> <span class="s" data-s="b7-p1-s1">Como o PrismRestore usa um único backbone e aplica modulações leves, ele é significativamente mais rápido que agentes que precisam carregar e executar múltiplos modelos sequencialmente ou em paralelo.</span> <span class="s" data-s="b7-p1-s2">A tabela de resultados mostra que, enquanto métodos baseados em múltiplos backbones podem levar centenas de milissegundos por passo, o PrismRestore mantém latências baixas, tornando-o viável para aplicações em tempo real ou com restrições de energia.</span></p><p><span class="s" data-s="b7-p2-s0">Nos benchmarks reais (LHP-Rain, RTTS), o método também se saiu bem, superando a maioria dos all-in-one em métricas de referência nula (no-reference).</span> <span class="s" data-s="b7-p2-s1">Visualmente, o PrismRestore mostrou capacidade de remover neblina e ruído de forma mais natural, sem introduzir artefatos ou cores artificiais, comuns em outros agentes que tendem a superprocessar a imagem.</span> <span class="s" data-s="b7-p2-s2">Isso demonstra que a modulação de canais preserva a estética da imagem melhor do que abordagens puramente baseadas em fidelidade.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.24915/table1.webp" alt="Resultados quantitativos no MiO100: PrismRestore supera todos os baselines all-in-one e compete com agentes multi-modelo em métricas de qualidade." loading="lazy">
+          <figcaption>
+            Resultados quantitativos no MiO100: PrismRestore supera todos os baselines all-in-one e compete com agentes multi-modelo em métricas de qualidade.
+            <span class="source">Tabela 1 do paper · Yu et al., arXiv:2611.24915</span>
+          </figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="../../assets/papers/2611.24915/table4.webp" alt="Eficiência de inferência: PrismRestore é significativamente mais rápido que agentes baseados em múltiplos modelos, mantendo alta qualidade de restauração." loading="lazy">
+          <figcaption>
+            Eficiência de inferência: PrismRestore é significativamente mais rápido que agentes baseados em múltiplos modelos, mantendo alta qualidade de restauração.
+            <span class="source">Tabela 4 do paper · Yu et al., arXiv:2611.24915</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">Limitações e Direções Futuras</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Apesar dos avanços, o paper reconhece limitações importantes.</span> <span class="s" data-s="b10-p0-s1">A caixa de ferramentas é construída para um conjunto predefinido de degradações.</span> <span class="s" data-s="b10-p0-s2">Se uma nova degradação surgir (ex: um tipo específico de distorção óptica não considerada), o sistema não será capaz de restaurá-la sem reconstruir offline os prioris e adaptar o agente.</span> <span class="s" data-s="b10-p0-s3">Isso limita a generalização para cenários totalmente abertos, onde as degradações podem ser arbitrárias e desconhecidas.</span></p><p><span class="s" data-s="b10-p1-s0">Além disso, a melhoria na qualidade perceptual ainda tem teto.</span> <span class="s" data-s="b10-p1-s1">Embora o método seja eficiente, a modulação de canais em um modelo congelado pode não ser suficiente para capturar nuances complexas que exigiriam ajustes finos (fine-tuning) em mais canais ou camadas.</span> <span class="s" data-s="b10-p1-s2">O paper sugere que explorar formas mais sofisticadas de modulação, sem aumentar o overhead de armazenamento, é uma direção promissora.</span></p><p><span class="s" data-s="b10-p2-s0">Outro ponto é a dependência de dados sintéticos para o treinamento do agente.</span> <span class="s" data-s="b10-p2-s1">A qualidade do agente depende da distribuição das degradações nos dados de treinamento.</span> <span class="s" data-s="b10-p2-s2">Se a distribuição real for muito diferente, a política pode falhar.</span> <span class="s" data-s="b10-p2-s3">A extensão para domínios reais mais amplos requer mais dados de avaliação e possivelmente mecanismos de adaptação online, que ainda não são implementados no PrismRestore atual.</span></p>        <h2><span class="s" data-s="b11-h">Conclusão</span></h2>
+<p><span class="s" data-s="b11-p0-s0">O PrismRestore apresenta uma alternativa eficiente e compacta para a restauração de imagem agêntica.</span> <span class="s" data-s="b11-p0-s1">Ao substituir múltiplos backbones por um único modelo congelado com prioris de modulação de canais, os autores reduzem drasticamente o custo de armazenamento e inferência.</span> <span class="s" data-s="b11-p0-s2">O uso de GRPO para treinar o agente permite uma composição inteligente de ações, resultando em qualidade de imagem competitiva com métodos mais pesados.</span></p><p><span class="s" data-s="b11-p1-s0">Este trabalho destaca a importância de como parametrizeamos as ferramentas de um agente.</span> <span class="s" data-s="b11-p1-s1">Muitas vezes, a complexidade não está na decisão do agente, mas na redundância das ferramentas que ele usa.</span> <span class="s" data-s="b11-p1-s2">Ao compartilhar a computação através de modulação leve, é possível alcançar escalabilidade sem sacrificar a qualidade.</span> <span class="s" data-s="b11-p1-s3">Para desenvolvedores e cientistas de dados que buscam implementar sistemas de restauração robustos, o PrismRestore oferece um blueprint para construir agentes eficientes, focando na reutilização de modelos existentes e na otimização de políticas de alto nível.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">PrismRestore substitui múltiplos modelos por um único backbone congelado, usando prioris de modulação de canais para definir ações de restauração.</span></li><li><span class="s" data-s="k1">O método agrupa canais por similaridade de resposta e modula apenas os não-representativos, preservando informações compartilhadas entre tarefas.</span></li><li><span class="s" data-s="k2">Um agente treinado com GRPO seleciona e compõe ações sequenciais, melhorando a qualidade em degradações compostas sem aumentar o custo de armazenamento.</span></li><li><span class="s" data-s="k3">A abordagem reduz significativamente o overhead de inferência comparado a agentes baseados em múltiplos modelos, mantendo performance competitiva.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.24915" rel="noopener">PrismRestore: A Compact Restoration Toolbox for Agentic Image Restoration</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.24915" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

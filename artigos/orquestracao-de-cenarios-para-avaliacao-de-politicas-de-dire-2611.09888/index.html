@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Orquestração de Cenários para Avaliação de Políticas de Direção Autônoma em Loop Fechado — arXiv em 5</title>
+<meta name="description" content="Como garantir que um cenário de teste crítico realmente aconteça quando a política do veículo autônomo reage de forma imprevisível, usando otimização restrita em tempo real.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Orquestração de Cenários para Avaliação de Políticas de Direção Autônoma em Loop Fechado">
+<meta property="og:description" content="Como garantir que um cenário de teste crítico realmente aconteça quando a política do veículo autônomo reage de forma imprevisível, usando otimização restrita em tempo real.">
+<meta property="og:image" content="../../assets/papers/2611.09888/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Robótica</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.09888" rel="noopener">arXiv:2611.09888</a>
+    </div>
+    <h1><span class="s" data-s="t">Orquestração de Cenários para Avaliação de Políticas de Direção Autônoma em Loop Fechado</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Como garantir que um cenário de teste crítico realmente aconteça quando a política do veículo autônomo reage de forma imprevisível, usando otimização restrita em tempo real.</span></p>
+    <p class="byline">
+      <span>Rong et al.</span>
+      <span>8 min de leitura</span>
+<span>06/11/2026</span>    </p>
+    <div class="listen" data-article="2611.09888" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=H1V2sOFFopU" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Deriva em Loop Fechado</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A indústria de veículos autônomos depende massivamente de testes baseados em cenários dentro de simuladores.</span> <span class="s" data-s="b0-p0-s1">A premissa é clara: é impossível, perigoso e caro reproduzir todos os eventos de cauda longa do mundo real na estrada.</span> <span class="s" data-s="b0-p0-s2">Portanto, a simulação se torna o campo de treinamento e validação principal para expor a política de direção do veículo (conhecida como &#39;ego policy&#39;) a situações críticas de segurança.</span></p><p><span class="s" data-s="b0-p1-s0">No entanto, existe uma falha estrutural nos métodos tradicionais de teste.</span> <span class="s" data-s="b0-p1-s1">A maioria dos cenários é roteirizada (scripted) antes da execução.</span> <span class="s" data-s="b0-p1-s2">Isso significa que as rotas, velocidades e comportamentos dos outros veículos (atores) são fixos e predeterminados.</span> <span class="s" data-s="b0-p1-s3">O problema surge quando a política do ego, ao interagir em loop fechado, responde de maneira diferente da esperada.</span> <span class="s" data-s="b0-p1-s4">Se o ego chegar à interseção mais cedo ou mais devagar, o ator fixo pode já ter passado ou estar longe demais, e o conflito crítico planejado nunca ocorre.</span></p><p><span class="s" data-s="b0-p2-s0">Os autores chamam isso de &#39;closed-loop drift&#39; (deriva em loop fechado).</span> <span class="s" data-s="b0-p2-s1">A intenção do teste (test intent) — por exemplo, forçar o ego a frear bruscamente ou hesitar em uma virada à esquerda — se perde porque o cenário não se adapta à dinâmica real da política sendo testada.</span> <span class="s" data-s="b0-p2-s2">Cenários fixos são, por definição, abertos (open-loop) em relação ao comportamento do ego, o que os torna ferramentas imprecisas para avaliação rigorosa.</span></p><p><span class="s" data-s="b0-p3-s0">Abordagens baseadas em dados tentam criar tráfego realista, mas tendem a gerar comportamentos nominais e dentro da distribuição esperada, o que contradiz a necessidade de gerar eventos raros e críticos.</span> <span class="s" data-s="b0-p3-s1">Outras tentativas de otimização multobjetivo ainda mantêm os atores presos às especificações iniciais, sem capacidade de adaptação online.</span> <span class="s" data-s="b0-p3-s2">A conclusão dos autores é direta: se a política do ego se comporta dinamicamente, o cenário também precisa se comportar dinamicamente para preservar a intenção do teste.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.09888/figure1.webp" alt="A taxonomia mostra a evolução de métodos de simulação. O método proposto preenche a lacuna ao ser tanto orientado à intenção do teste quanto adaptativo em loop fechado, ao contrário de cenários fixos ou atores apenas reativos." loading="lazy">
+          <figcaption>
+            A taxonomia mostra a evolução de métodos de simulação. O método proposto preenche a lacuna ao ser tanto orientado à intenção do teste quanto adaptativo em loop fechado, ao contrário de cenários fixos ou atores apenas reativos.
+            <span class="source">Figura 1 do paper · Rong et al., arXiv:2611.09888</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">A Ideia: Orquestração de Cenários</span></h2>
+<p><span class="s" data-s="b2-p0-s0">O paper introduz um &#39;orquestrador de cenários&#39; (scenario orchestrator).</span> <span class="s" data-s="b2-p0-s1">Diferente de scripts estáticos ou agentes aprendidos que apenas reagem localmente, este orquestrador monitora continuamente o estado conjunto do tráfego.</span> <span class="s" data-s="b2-p0-s2">Seu objetivo é garantir que a intenção do cenário seja realizada, ajustando os atores não-ego (chamados de &#39;ado actors&#39;) em tempo real.</span></p><p><span class="s" data-s="b2-p1-s0">As intervenções possíveis são três: retemporização (ajustar quando o ator chega ao ponto de conflito), reroteirização (mudar a rota do ator) e reatribuição de papel (trocar qual ator é o &#39;herói&#39; responsável por criar o conflito).</span> <span class="s" data-s="b2-p1-s1">O orquestrador não controla o ego; ele controla o ambiente ao redor do ego para forçar a interação desejada.</span></p><p><span class="s" data-s="b2-p2-s0">Em cada passo temporal, o orquestrador resolve um problema de otimização restrita.</span> <span class="s" data-s="b2-p2-s1">A função de custo minimiza a intervenção necessária (para não tornar o cenário artificial demais), enquanto as restrições garantem que a intenção do cenário seja mantida e que o tráfego permaneça fisicamente viável.</span> <span class="s" data-s="b2-p2-s2">Isso permite que o teste seja julgado em duas etapas distintas: primeiro, se a interação crítica realmente ocorreu (realização do cenário), e segundo, como a política do ego respondeu a essa interação (falha ou sucesso da política).</span></p>        <h2><span class="s" data-s="b3-h">Mecanismo: Otimização Restrita e Diretivas</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O cerne técnico do método é a formulação do problema como uma otimização com horizonte recedente.</span> <span class="s" data-s="b3-p0-s1">O objetivo é encontrar parâmetros de decisão (θ) que minimizem um custo de intervenção J(θ), sujeito a uma indicação de intenção I(θ) que deve ser verdadeira (igual a 1).</span> <span class="s" data-s="b3-p0-s2">Isso garante que, a cada passo, o sistema busque a menor mudança possível nos atores para manter o cenário válido.</span></p><p><span class="s" data-s="b3-p1-s0">Para definir o que é um &#39;cenário válido&#39;, os autores estabelecem quatro diretivas (restrições) principais.</span> <span class="s" data-s="b3-p1-s1">A Diretiva D1 verifica se algum ator colide com o ego dentro de um horizonte temporal H. A Diretiva D2 assegura que o &#39;ator herói&#39; (aquele designado para criar o conflito) possa fisicamente alcançar o ponto de conflito dado a trajetória prevista do ego.</span> <span class="s" data-s="b3-p1-s2">A Diretiva D3 verifica se atores de fundo (background) colidem entre si ou bloqueiam o caminho do herói ou do ego antes do conflito principal.</span> <span class="s" data-s="b3-p1-s3">A Diretiva D4 garante que atores de fundo não colidam uns com os outros, preservando a realismo geral do tráfego.</span></p><p><span class="s" data-s="b3-p2-s0">A representação do cenário é baseada em sequências de manobras discretas (virar à esquerda, direita, mudar de faixa) com parâmetros contínuos como velocidade.</span> <span class="s" data-s="b3-p2-s1">O orquestrador designa um &#39;herói&#39; entre os atores não-ego — geralmente aquele mais próximo do ponto de conflito ou em posição favorável.</span> <span class="s" data-s="b3-p2-s2">Se o herói original se tornar incapaz de realizar a interação devido ao comportamento do ego, o orquestrador pode reatribuir esse papel a outro ator mais adequado, resolvendo o problema de deriva em tempo real.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.09888/figure2.webp" alt="O orquestrador monitora a chegada do ego à região de conflito. Se o ego atrasar, ele muda o ator herói para um NPC que está mais bem posicionado, garantindo que o conflito crítico ainda aconteça." loading="lazy">
+          <figcaption>
+            O orquestrador monitora a chegada do ego à região de conflito. Se o ego atrasar, ele muda o ator herói para um NPC que está mais bem posicionado, garantindo que o conflito crítico ainda aconteça.
+            <span class="source">Figura 2 do paper · Rong et al., arXiv:2611.09888</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Avaliação Experimental no CARLA</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os autores avaliaram o método no simulador CARLA, utilizando seis famílias de cenários derivados de fontes autoritativas: semáforo vermelho, virada à esquerda, virada à direita, corte de faixa (cut-in), frenagem brusca e ultrapassagem.</span> <span class="s" data-s="b5-p0-s1">Esses cenários cobrem tanto interseções quanto rodovias multilane.</span></p><p><span class="s" data-s="b5-p1-s0">Seis políticas de direção diferentes foram testadas: três modelos clássicos baseados em física (IDM-Assertive, IDM-Basic, IDM-Conservative) e três métodos de estado da arte aprendidos (PlanT 2.0, TFv6, SimLingo).</span> <span class="s" data-s="b5-p1-s1">Isso permitiu avaliar a robustez do orquestrador contra tanto comportamentos determinísticos quanto políticas neurais complexas.</span></p><p><span class="s" data-s="b5-p2-s0">O método foi comparado contra três bases (baselines): ProSim (atores aprendidos reativos, mas em loop aberto), LASER (orquestração baseada em LLM de scripts) e OSC2Runner (execução baseada em gatilhos de script).</span> <span class="s" data-s="b5-p2-s1">A matriz de avaliação resultou em 144 combinações de cenários, políticas e métodos, fornecendo uma visão abrangente de desempenho.</span></p><p><span class="s" data-s="b5-p3-s0">As métricas principais foram a taxa de realização do cenário (se a interação crítica ocorreu) e a taxa de falha da política (se o ego falhou ao lidar com a interação).</span> <span class="s" data-s="b5-p3-s1">É crucial notar que a realização do cenário é medida independentemente da resposta do ego.</span> <span class="s" data-s="b5-p3-s2">Isso permite distinguir se um teste falhou porque o cenário não se realizou (problema do orquestrador) ou porque o ego simplesmente não conseguiu lidar com o cenário (problema da política).</span></p>        <h2><span class="s" data-s="b6-h">Resultados: Superioridade em Realização de Cenários</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Os resultados mostram que o método proposto realiza os cenários alvo com muito mais consistência do que as abordagens tradicionais.</span> <span class="s" data-s="b6-p0-s1">Em todas as famílias de cenários testadas, o orquestrador alcançou a taxa máxima de sucesso na realização da interação, enquanto os métodos baseados em scripts (OSC2Runner) e atores aprendidos (ProSim) tiveram taxas significativamente menores.</span></p><p><span class="s" data-s="b6-p1-s0">Isso ocorre porque scripts fixos não conseguem compensar variações nas condições iniciais ou no comportamento do ego.</span> <span class="s" data-s="b6-p1-s1">Se o ego chega atrasado, o script não ajusta o tempo do outro veículo.</span> <span class="s" data-s="b6-p1-s2">Já o orquestrador, ao resolver a otimização em cada passo, recalcula as trajetórias para garantir que o conflito aconteça no momento certo.</span></p><p><span class="s" data-s="b6-p2-s0">Quanto à capacidade de estressar as políticas, o método também se saiu bem.</span> <span class="s" data-s="b6-p2-s1">Ao garantir que o cenário crítico realmente ocorra, ele expõe as políticas a situações de falha que seriam perdidas em testes com cenários fixos.</span> <span class="s" data-s="b6-p2-s2">Políticas aprendidas como TFv6 e SimLingo, que podem ser mais robustas a ruídos, ainda assim foram testadas sob condições controladas de interação crítica, permitindo uma avaliação mais justa de suas capacidades de segurança.</span></p><p><span class="s" data-s="b6-p3-s0">O gráfico de barras demonstrou que, mesmo quando variadas as condições iniciais (offsets de spawn), o método proposto manteve a taxa de sucesso alta, enquanto as outras metodologias apresentaram quedas drásticas.</span> <span class="s" data-s="b6-p3-s1">Isso confirma a robustez da abordagem de orquestração contínua frente a perturbações.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.09888/figure5.webp" alt="Gráfico de barras comparando a taxa de realização de cenários. O método proposto (Ours) mantém desempenho superior e estável mesmo com variações nas condições iniciais, ao contrário das bases." loading="lazy">
+          <figcaption>
+            Gráfico de barras comparando a taxa de realização de cenários. O método proposto (Ours) mantém desempenho superior e estável mesmo com variações nas condições iniciais, ao contrário das bases.
+            <span class="source">Figura 5 do paper · Rong et al., arXiv:2611.09888</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Limitações e Trabalho Futuro</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Apesar dos resultados promissores, os autores destacam limitações importantes.</span> <span class="s" data-s="b8-p0-s1">O design atual depende de comportamentos de tráfego especificados manualmente.</span> <span class="s" data-s="b8-p0-s2">Por exemplo, a seleção do &#39;ator herói&#39; e as regras de prioridade são definidas por heurísticas manuais.</span> <span class="s" data-s="b8-p0-s3">Isso pode não escalar bem para cenários muito complexos e abertos, onde a lógica manual se torna intratável.</span></p><p><span class="s" data-s="b8-p1-s0">Além disso, a integração de modelos de atores baseados em dados (aprendidos) dentro das restrições de otimização do orquestrador é deixada como trabalho futuro.</span> <span class="s" data-s="b8-p1-s1">Atualmente, o orquestrador ajusta parâmetros contínuos (velocidade, tempo) de manobras discretas pré-definidas, mas não gera novas manobras complexas a partir de zero usando redes neurais.</span></p><p><span class="s" data-s="b8-p2-s0">Outra limitação é a computação.</span> <span class="s" data-s="b8-p2-s1">Resolver um problema de otimização restrita em cada passo temporal exige recursos.</span> <span class="s" data-s="b8-p2-s2">Embora o horizonte recedente ajude a limitar a complexidade, a escalabilidade para simulações com centenas de veículos e interações simultâneas não foi totalmente explorada neste estudo.</span></p><p><span class="s" data-s="b8-p3-s0">Os autores também mencionam que o foco principal foi a avaliação de políticas, não a geração de dados para treinamento.</span> <span class="s" data-s="b8-p3-s1">Embora o método possa gerar dados de alta qualidade para treinar políticas mais seguras, seu uso principal neste paper é como ferramenta de teste e validação.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b9-t">Por que separar realização de falha?</span></h3>
+          <p><span class="s" data-s="b9-c-s0">Avaliar se o cenário ocorreu e se a política falhou separadamente é crucial.</span> <span class="s" data-s="b9-c-s1">Um teste pode falhar porque o cenário não se realizou (o orquestrador falhou), não porque o carro autônomo é ruim.</span> <span class="s" data-s="b9-c-s2">Isso evita falsos negativos na avaliação de segurança.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b10-h">Conclusão</span></h2>
+<p><span class="s" data-s="b10-p0-s0">O paper apresenta uma solução elegante para um problema prático e persistente na avaliação de veículos autônomos: a deriva de cenários em loop fechado.</span> <span class="s" data-s="b10-p0-s1">Ao introduzir um orquestrador que ajusta atores não-ego em tempo real através de otimização restrita, os autores garantem que a intenção do teste seja preservada, independentemente de como a política do ego reage.</span></p><p><span class="s" data-s="b10-p1-s0">Os resultados no CARLA demonstram que essa abordagem supera métodos baseados em scripts e atores reativos aprendidos, oferecendo uma ferramenta mais confiável para estressar e avaliar políticas de direção.</span> <span class="s" data-s="b10-p1-s1">A distinção clara entre realização de cenário e resposta da política oferece uma métrica de avaliação mais justa e informativa.</span></p><p><span class="s" data-s="b10-p2-s0">Embora dependa de especificações manuais que podem não escalar infinitamente, a metodologia estabelece um novo padrão para testes de segurança em simulação.</span> <span class="s" data-s="b10-p2-s1">Para pesquisadores e engenheiros de direção autônoma, a ideia de orquestrar o ambiente dinamicamente para forçar interações críticas é um passo significativo em direção a avaliações de segurança mais rigorosas e reproduzíveis.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Cenários pré-roteirizados falham em loop fechado porque a política do ego pode chegar tarde ou rápido demais, perdendo o conflito planejado.</span></li><li><span class="s" data-s="k1">O orquestrador monitora o estado do tráfego e ajusta atores não-ego (retemporização, reroteirização) via otimização restrita.</span></li><li><span class="s" data-s="k2">Avaliação separa &#39;realização do cenário&#39; de &#39;falha da política&#39;, permitindo testar se a interação ocorreu antes de julgar a resposta.</span></li><li><span class="s" data-s="k3">Método supera bases de cenários fixos e atores reativos aprendidos no CARLA, mas depende de comportamentos de tráfego manuais.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.09888" rel="noopener">Scenario Orchestration for Closed-loop Policy Evaluation of Autonomous Driving</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.09888" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

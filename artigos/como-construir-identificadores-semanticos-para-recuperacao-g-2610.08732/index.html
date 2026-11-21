@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Como construir identificadores semânticos para recuperação generativa de documentos — arXiv em 5</title>
+<meta name="description" content="Pesquisadores da Artefact e da Universidade de Angers mapeiam sistematicamente o espaço de design de DocIDs numéricos e propõem métricas que avaliam a qualidade de um esquema de identificação antes de treinar qualquer modelo.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Como construir identificadores semânticos para recuperação generativa de documentos">
+<meta property="og:description" content="Pesquisadores da Artefact e da Universidade de Angers mapeiam sistematicamente o espaço de design de DocIDs numéricos e propõem métricas que avaliam a qualidade de um esquema de identificação antes de treinar qualquer modelo.">
+<meta property="og:image" content="../../assets/papers/2610.08732/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>LLMs</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.08732" rel="noopener">arXiv:2610.08732</a>
+    </div>
+    <h1><span class="s" data-s="t">Como construir identificadores semânticos para recuperação generativa de documentos</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Pesquisadores da Artefact e da Universidade de Angers mapeiam sistematicamente o espaço de design de DocIDs numéricos e propõem métricas que avaliam a qualidade de um esquema de identificação antes de treinar qualquer modelo.</span></p>
+    <p class="byline">
+      <span>Allal et al.</span>
+      <span>10 min de leitura</span>
+<span>06/10/2026</span>    </p>
+    <div class="listen" data-article="2610.08732" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=NXfpRlqQQ1U" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema da identidade dos documentos</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Recuperação generativa de informação (Generative Information Retrieval, GIR) reformula a busca de documentos como um problema de geração de sequências: em vez de ranquear candidatos recuperados por um índice, um modelo seq2seq recebe uma query e gera diretamente o identificador do documento relevante.</span> <span class="s" data-s="b0-p0-s1">A ideia é que, se os identificadores forem bem desenhados, o modelo aprende a navegar o espaço semântico durante a decodificação, tomando decisões de vizinhança em níveis progressivamente mais finos.</span></p><p><span class="s" data-s="b0-p1-s0">O desempenho de GIR depende crucialmente de como você codifica cada documento em um DocID discreto.</span> <span class="s" data-s="b0-p1-s1">Identificadores arbitrários — números sequenciais, hashes aleatórios — não carregam estrutura semântica.</span> <span class="s" data-s="b0-p1-s2">A abordagem dominante usa quantização vetorial: embeddings densos de documentos são mapeados para sequências de tokens inteiros, cada token escolhido de um codebook finito.</span> <span class="s" data-s="b0-p1-s3">Dois paradigmas coexistem: Product Quantization (PQ), que particiona o vetor em subespaços independentes e quantiza cada um em paralelo, e Residual Quantization (RQ), que quantiza iterativamente o erro residual da etapa anterior, construindo uma hierarquia.</span></p><p><span class="s" data-s="b0-p2-s0">Apesar da popularidade, o espaço de design permanece inexplorado.</span> <span class="s" data-s="b0-p2-s1">A maioria dos papers fixa um único método, um tamanho de codebook V e um comprimento de DocID M, sem variar sistematicamente os hiperparâmetros.</span> <span class="s" data-s="b0-p2-s2">PQ e RQ são tratados como escolhas disjuntas, ignorando configurações híbridas.</span> <span class="s" data-s="b0-p2-s3">E avaliar a qualidade de um esquema de DocID exige treinar um modelo completo de ponta a ponta, tornando a iteração cara e opaca.</span></p>        <h2><span class="s" data-s="b1-h">Três perguntas de pesquisa</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Os autores estruturam a investigação em torno de três questões.</span> <span class="s" data-s="b1-p0-s1">Primeira: como o tamanho do codebook V, o comprimento do DocID M e o método de treinamento dos codebooks afetam a recuperação downstream, e como as variantes residuais (R-KMeans, que ajusta cada camada por k-means no resíduo; R-VQ, que aprende todas as camadas end-to-end) se comparam com PQ ao longo do espaço de design?</span></p><p><span class="s" data-s="b1-p1-s0">Segunda: um esquema híbrido Product–Residual Quantization (PQ×RQ) — que combina fatoração paralela com profundidade residual local — pode melhorar os trade-offs de recuperação?</span> <span class="s" data-s="b1-p1-s1">Terceira: métricas intrínsecas, calculáveis sem treinar modelo algum, conseguem diagnosticar a viabilidade estrutural de um espaço de DocIDs antes do treinamento completo?</span></p><p><span class="s" data-s="b1-p2-s0">Para responder, o trabalho propõe um framework parametrizado que unifica PQ, R-KMeans e R-VQ em uma única família e expõe o regime híbrido PQ×RQ.</span> <span class="s" data-s="b1-p2-s1">Dentro dessa família, os autores treinam e avaliam modelos de recuperação generativa em 60 configurações no MS MARCO 300K e 48 no Natural Questions, isolando o efeito do método de codificação, tamanho de codebook, comprimento de DocID e treinamento de codebook.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.08732/figure1.webp" alt="O framework unificado em três estágios: embedding denso do documento, particionamento em C subespaços paralelos (PQ) e quantização residual de L camadas por subespaço (RQ). Cada camada emite um token, totalizando M = C × L tokens por DocID." loading="lazy">
+          <figcaption>
+            O framework unificado em três estágios: embedding denso do documento, particionamento em C subespaços paralelos (PQ) e quantização residual de L camadas por subespaço (RQ). Cada camada emite um token, totalizando M = C × L tokens por DocID.
+            <span class="source">Figura 1 do paper · Allal et al., arXiv:2610.08732</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Um framework unificado para DocIDs semânticos</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O framework tem três estágios.</span> <span class="s" data-s="b3-p0-s1">Primeiro, um encoder de documentos φ_z mapeia cada documento d para um vetor denso z de dimensão h (no caso, 768, usando gtr-t5-base congelado).</span> <span class="s" data-s="b3-p0-s2">Segundo, o vetor z é dividido em C sub-vetores z_c de dimensão h/C; quando C = 1, não há particionamento (RQ puro); quando C &gt; 1, temos fatoração paralela (PQ).</span> <span class="s" data-s="b3-p0-s3">Terceiro, cada sub-vetor z_c é quantizado por L camadas residuais sucessivas, cada uma com um codebook C_{c,l} de V codewords.</span></p><p><span class="s" data-s="b3-p1-s0">A quantização residual funciona assim: na primeira camada (l=1), você encontra o codeword mais próximo de z_c no codebook C_{c,1} e emite seu índice y_{c,1}.</span> <span class="s" data-s="b3-p1-s1">Esse codeword é subtraído de z_c, gerando um resíduo r_{c,1}.</span> <span class="s" data-s="b3-p1-s2">Na segunda camada, você quantiza r_{c,1} com o codebook C_{c,2}, emite y_{c,2}, subtrai novamente, e assim por diante até L camadas.</span> <span class="s" data-s="b3-p1-s3">O DocID final é a concatenação de todos os tokens y_{c,l}, totalizando M = C × L tokens.</span></p><p><span class="s" data-s="b3-p2-s0">Essa parametrização expõe um contínuo: PQ puro corresponde a L=1 e C grande; RQ puro a C=1 e L grande; híbridos PQ×RQ têm C &gt; 1 e L &gt; 1.</span> <span class="s" data-s="b3-p2-s1">O treinamento dos codebooks também varia: R-KMeans ajusta cada camada por k-means sobre os resíduos da camada anterior; R-VQ inicializa por k-means mas depois otimiza todos os codebooks conjuntamente, minimizando a perda de reconstrução residual por 100 épocas com AdamW.</span></p>        <h2><span class="s" data-s="b4-h">Métricas intrínsecas: diagnosticando DocIDs sem treinar</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Para avaliar um espaço de DocIDs antes de qualquer treinamento de modelo, os autores definem quatro métricas intrínsecas.</span> <span class="s" data-s="b4-p0-s1">A primeira é a Uniqueness Ratio U: a fração de documentos que recebem DocIDs únicos.</span> <span class="s" data-s="b4-p0-s2">Se dois documentos compartilham o mesmo DocID (colisão), o modelo não consegue distingui-los.</span> <span class="s" data-s="b4-p0-s3">U &lt; 1 indica colisões; U &lt; 0,9 sinaliza colapso estrutural.</span> <span class="s" data-s="b4-p0-s4">O limite superior teórico é V^M DocIDs distintos; se V^M &lt; N (número de documentos), colisões são inevitáveis.</span></p><p><span class="s" data-s="b4-p1-s0">A segunda métrica é a Normalized Entropy H, que mede a distribuição de uso dos tokens em cada posição do DocID.</span> <span class="s" data-s="b4-p1-s1">Entropia baixa indica que poucos codewords dominam, desperdiçando capacidade; entropia alta sugere uso equilibrado.</span> <span class="s" data-s="b4-p1-s2">A terceira é a Shared Semantic Similarity S: para cada documento, você calcula a similaridade cosseno média entre seu embedding e os embeddings dos documentos que compartilham o mesmo prefixo de DocID.</span> <span class="s" data-s="b4-p1-s3">S alto indica que documentos com prefixos comuns são semanticamente próximos, o que facilita a navegação coarse-to-fine.</span></p><p><span class="s" data-s="b4-p2-s0">A quarta métrica é a Contrastive Alignment Preservation A: para cada documento, você identifica seus k vizinhos mais próximos no espaço de embeddings densos e verifica quantos deles compartilham pelo menos um token no DocID.</span> <span class="s" data-s="b4-p2-s1">A alto significa que a estrutura de vizinhança densa é preservada no espaço discreto.</span> <span class="s" data-s="b4-p2-s2">Tanto S quanto A têm três variantes de cálculo (Adapted, Hier, Parallel), dependendo de como você define &#39;compartilhar prefixo&#39; em um DocID híbrido.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b5-t">O pipeline experimental</span></h3>
+          <p><span class="s" data-s="b5-c-s0">Os autores seguem um setup desacoplado em dois estágios, baseado no código DDRO.</span> <span class="s" data-s="b5-c-s1">Primeiro, embeddings estáticos de documentos são gerados com gtr-t5-base congelado e quantizados em DocIDs.</span> <span class="s" data-s="b5-c-s2">Segundo, um modelo t5-small é fine-tunado por aprendizado supervisionado em três etapas (documento, pseudo-query, query para DocID), sem a otimização de relevância pareada do DDRO original.</span> <span class="s" data-s="b5-c-s3">Decodificação usa busca em feixe com restrição de prefixo (100 feixes).</span> <span class="s" data-s="b5-c-s4">Datasets: MS MARCO 300K (319.927 documentos) e NQ320K (109.739 documentos após deduplicação por título).</span></p>
+        </aside>
+        <h2><span class="s" data-s="b6-h">Resultados: o contínuo entre paralelismo e hierarquia</span></h2>
+<p><span class="s" data-s="b6-p0-s0">As melhores configurações das cinco famílias (PQ, R-KMeans, R-VQ, PQ×R-KMeans, PQ×R-VQ) ficam dentro de 2,2 pontos percentuais de MRR@10 em ambos os datasets.</span> <span class="s" data-s="b6-p0-s1">PQ favorece grande fatoração paralela (C=16), mas os esquemas residuais puros (R-KMeans, R-VQ) superam PQ em Recall@10 e MRR@10 tanto no MS MARCO quanto no NQ.</span> <span class="s" data-s="b6-p0-s2">R-VQ atinge o melhor resultado no NQ (56,64% MRR@10).</span></p><p><span class="s" data-s="b6-p1-s0">Com codebooks treinados por k-means, o híbrido PQ×R-KMeans alcança 46,30% MRR@10 no MS MARCO — o melhor resultado do estudo — e 55,04% no NQ, combinando subespaços paralelos grosseiros com profundidade residual local.</span> <span class="s" data-s="b6-p1-s1">Isso supera o R-KMeans puro (45,47% e 54,70%).</span> <span class="s" data-s="b6-p1-s2">O desempenho downstream é estável ao variar o tamanho do codebook: fixando família e M, mudar V entre 128 e 512 move MRR@10 em apenas 1,06 pontos (MS MARCO) e 1,53 (NQ).</span></p><p><span class="s" data-s="b6-p2-s0">A recuperação também é estável entre encoders de documentos: com R-KMeans (1×16×512) no MS MARCO, cinco encoders diferentes (gtr-t5-base, -large, -xl, bge-base-en-v1.5, ModernBERT-base) mantêm MRR@10 entre 42,31% e 45,39%.</span> <span class="s" data-s="b6-p2-s1">Isso sugere que a estrutura do espaço de DocIDs importa mais do que a qualidade absoluta do embedding de entrada, dentro de uma faixa razoável de encoders.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.08732/figure2.webp" alt="MRR@10 (%) em grade de C subespaços paralelos e L camadas residuais, com V=256. Painéis (a,b): MS MARCO com codebooks k-means e aprendidos; (c,d): NQ. Contorno vermelho marca a melhor célula; células pálidas ficam abaixo da escala de cor. PQ ocupa a linha L=1." loading="lazy">
+          <figcaption>
+            MRR@10 (%) em grade de C subespaços paralelos e L camadas residuais, com V=256. Painéis (a,b): MS MARCO com codebooks k-means e aprendidos; (c,d): NQ. Contorno vermelho marca a melhor célula; células pálidas ficam abaixo da escala de cor. PQ ocupa a linha L=1.
+            <span class="source">Figura 2 do paper · Allal et al., arXiv:2610.08732</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">A métrica que importa: Uniqueness Ratio</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Entre as métricas intrínsecas, a Uniqueness Ratio U é a única que decide se um espaço de DocIDs é utilizável.</span> <span class="s" data-s="b8-p0-s1">As 60 configurações no MS MARCO e 48 no NQ com U ≥ 0,9 ficam dentro de 4,0 e 4,3 pontos de MRR@10 entre si.</span> <span class="s" data-s="b8-p0-s2">Configurações com U &lt; 0,9 colapsam: o modelo não consegue distinguir documentos que compartilham o mesmo DocID, e o desempenho despenca.</span></p><p><span class="s" data-s="b8-p1-s0">A correlação entre U e MRR@10 é forte: R² de 0,94 no MS MARCO e 0,97 no NQ.</span> <span class="s" data-s="b8-p1-s1">Isso significa que, antes de treinar qualquer modelo, você pode calcular U — uma métrica simples, baseada apenas na contagem de DocIDs únicos — e saber se vale a pena prosseguir.</span> <span class="s" data-s="b8-p1-s2">Se V^M &lt; 0,9N, colisões são inevitáveis e o espaço não é viável.</span> <span class="s" data-s="b8-p1-s3">Por exemplo, com V=256 e M=4, você tem no máximo 256^4 ≈ 4,3 bilhões de DocIDs distintos, suficiente para 300K documentos, mas com M=2 você tem apenas 65.536, insuficiente.</span></p><p><span class="s" data-s="b8-p2-s0">As outras métricas — Normalized Entropy H, Shared Semantic Similarity S e Contrastive Alignment Preservation A — não explicam a variação de MRR@10 entre espaços utilizáveis (R² ≤ 0,30).</span> <span class="s" data-s="b8-p2-s1">Elas capturam propriedades estruturais interessantes (distribuição de tokens, preservação de vizinhança), mas não predizem desempenho downstream dentro da faixa de configurações viáveis.</span> <span class="s" data-s="b8-p2-s2">U é o filtro necessário; além dele, a escolha entre PQ, RQ e híbridos depende de outros trade-offs.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.08732/figure3.webp" alt="Painéis (a,b): Uniqueness U vs. MRR@10 no MS MARCO e NQ; cada marcador é uma configuração, marcadores vazios têm U&lt;0,9. Eixo U em escala log da taxa de colisão, esticado em direção a 1. Painéis (c-i): impacto do comprimento M nas métricas U, S e A em suas variantes Adapted, Hier e Parallel." loading="lazy">
+          <figcaption>
+            Painéis (a,b): Uniqueness U vs. MRR@10 no MS MARCO e NQ; cada marcador é uma configuração, marcadores vazios têm U&lt;0,9. Eixo U em escala log da taxa de colisão, esticado em direção a 1. Painéis (c-i): impacto do comprimento M nas métricas U, S e A em suas variantes Adapted, Hier e Parallel.
+            <span class="source">Figura 3 do paper · Allal et al., arXiv:2610.08732</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">Quando usar cada método</span></h2>
+<p><span class="s" data-s="b10-p0-s0">R-VQ, que aprende os codebooks end-to-end, é o método mais robusto sob orçamentos apertados de sequência (M ≤ 8).</span> <span class="s" data-s="b10-p0-s1">Quando o DocID precisa ser curto — por limitações de latência de decodificação ou custo computacional — R-VQ preserva melhor a estrutura semântica do que R-KMeans ou PQ.</span> <span class="s" data-s="b10-p0-s2">Isso se reflete no desempenho: R-VQ lidera no NQ (56,64% MRR@10) e mantém qualidade mesmo com M pequeno.</span></p><p><span class="s" data-s="b10-p1-s0">Os híbridos PQ×RQ oferecem o melhor resultado no MS MARCO (46,30% com PQ×R-KMeans), combinando a capacidade de PQ de capturar variações ortogonais em paralelo com a hierarquia fina de RQ.</span> <span class="s" data-s="b10-p1-s1">Isso sugere que, quando você tem orçamento de sequência moderado (M entre 8 e 24), vale a pena explorar configurações híbridas, ajustando C e L para equilibrar paralelismo e profundidade.</span></p><p><span class="s" data-s="b10-p2-s0">PQ puro, apesar de amplamente usado, não é a melhor escolha em nenhum dos cenários testados.</span> <span class="s" data-s="b10-p2-s1">Ele favorece C grande (16 ou 24 subespaços), mas é superado por esquemas residuais ou híbridos em ambos os datasets.</span> <span class="s" data-s="b10-p2-s2">A vantagem de PQ — paralelismo total, sem dependências sequenciais entre tokens — não compensa a perda de estrutura hierárquica coarse-to-fine que RQ oferece.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b11-t">Estabilidade entre encoders</span></h3>
+          <p><span class="s" data-s="b11-c-s0">Com R-KMeans (1×16×512) no MS MARCO, cinco encoders de documentos diferentes mantêm MRR@10 entre 42,31% e 45,39%, uma variação de apenas 3 pontos.</span> <span class="s" data-s="b11-c-s1">Isso indica que, dentro de uma faixa razoável de encoders modernos (gtr-t5, bge, ModernBERT), a escolha do encoder importa menos do que a estrutura do espaço de DocIDs.</span> <span class="s" data-s="b11-c-s2">A implicação prática: você pode iterar no design de DocID sem retreinar embeddings caros.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b12-h">O que o paper não mostra</span></h2>
+<p><span class="s" data-s="b12-p0-s0">O estudo fixa deliberadamente o resto do pipeline para isolar o efeito do espaço de DocIDs.</span> <span class="s" data-s="b12-p0-s1">O modelo é um t5-small treinado sem a otimização de relevância pareada do DDRO original; decodificação usa busca em feixe com restrição de prefixo, não look-ahead; DocIDs são quantizados post hoc a partir de um encoder congelado, não aprendidos conjuntamente com o decoder; colisões são deixadas sem resolução, sem tokens de sufixo ou reatribuição.</span></p><p><span class="s" data-s="b12-p1-s0">Os corpora são estáticos e relativamente pequenos: no máximo 300K documentos.</span> <span class="s" data-s="b12-p1-s1">Recuperação generativa degrada em milhões de passagens, e documentos novos exigem re-quantização — problemas que o paper não aborda.</span> <span class="s" data-s="b12-p1-s2">U sinaliza colapso (U &lt; 0,9), mas nenhuma métrica intrínseca explica MRR@10 entre espaços utilizáveis (R² ≤ 0,30).</span> <span class="s" data-s="b12-p1-s3">Isso significa que, depois de garantir U alto, você ainda precisa treinar para saber qual configuração é melhor.</span></p><p><span class="s" data-s="b12-p2-s0">O trabalho também não explora aprendizado conjunto de DocIDs e decoder, nem estratégias de resolução de colisões, nem escalonamento para corpora dinâmicos de milhões de documentos.</span> <span class="s" data-s="b12-p2-s1">Essas limitações são reconhecidas explicitamente pelos autores e apontam direções de pesquisa futura.</span> <span class="s" data-s="b12-p2-s2">O valor do paper está em mapear sistematicamente o espaço de design e fornecer U como filtro rápido antes do treinamento caro.</span></p>        <h2><span class="s" data-s="b13-h">Implicações práticas</span></h2>
+<p><span class="s" data-s="b13-p0-s0">Se você está implementando recuperação generativa, o conselho prático é: calcule U antes de treinar.</span> <span class="s" data-s="b13-p0-s1">Se V^M &lt; 0,9N, aumente V ou M até que U ≥ 0,9.</span> <span class="s" data-s="b13-p0-s2">Entre as configurações viáveis, prefira R-VQ se o orçamento de sequência for apertado (M ≤ 8), ou explore híbridos PQ×RQ se você tiver M entre 8 e 24.</span> <span class="s" data-s="b13-p0-s3">PQ puro não é a melhor escolha em nenhum cenário testado.</span></p><p><span class="s" data-s="b13-p1-s0">A estabilidade entre encoders sugere que você pode iterar no design de DocID sem retreinar embeddings caros.</span> <span class="s" data-s="b13-p1-s1">A estabilidade entre tamanhos de codebook (V entre 128 e 512 move MRR@10 em ~1 ponto) significa que V = 256 é uma escolha razoável por padrão, e você pode focar em ajustar C e L. O código, DocIDs e datasets foram liberados pelos autores, facilitando reprodução e extensão.</span></p><p><span class="s" data-s="b13-p2-s0">O trabalho não resolve todos os problemas de GIR — escalonamento, corpora dinâmicos, aprendizado conjunto — mas fornece um mapa do espaço de design e uma métrica de viabilidade que economiza tempo e recursos.</span> <span class="s" data-s="b13-p2-s1">Isso é especialmente valioso em um campo onde cada experimento exige treinar um modelo seq2seq completo, e iteração rápida é difícil.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">A Uniqueness Ratio U, calculável antes de treinar, decide se um espaço de DocIDs é viável; U &lt; 0,9 sinaliza colapso por colisões.</span></li><li><span class="s" data-s="k1">Híbridos PQ×RQ alcançam 46,3% MRR@10 no MS MARCO, combinando paralelismo e hierarquia; R-VQ lidera no NQ (56,6%) e é robusto com DocIDs curtos.</span></li><li><span class="s" data-s="k2">Desempenho é estável entre encoders e tamanhos de codebook (V=128–512), permitindo iterar no design de DocID sem retreinar embeddings caros.</span></li><li><span class="s" data-s="k3">O framework unifica PQ, R-KMeans e R-VQ em uma família parametrizada por C subespaços paralelos e L camadas residuais, expondo o contínuo entre paralelismo e hierarquia.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.08732" rel="noopener">A Systematic Study of Semantic ID Spaces for Generative Information Retrieval</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.08732" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

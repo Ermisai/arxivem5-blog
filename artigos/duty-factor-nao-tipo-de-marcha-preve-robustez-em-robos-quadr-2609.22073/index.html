@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Duty factor, não tipo de marcha, prevê robustez em robôs quadrúpedes — arXiv em 5</title>
+<meta name="description" content="Pesquisadores da Carnegie Mellon e University of Miami mostram que o duty factor — a fração do ciclo em que cada pata fica no chão — explica melhor a robustez de um robô quadrúpede do que classificações tradicionais como caminhada ou trote.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Duty factor, não tipo de marcha, prevê robustez em robôs quadrúpedes">
+<meta property="og:description" content="Pesquisadores da Carnegie Mellon e University of Miami mostram que o duty factor — a fração do ciclo em que cada pata fica no chão — explica melhor a robustez de um robô quadrúpede do que classificações tradicionais como caminhada ou trote.">
+<meta property="og:image" content="../../assets/papers/2609.22073/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Robótica</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2609.22073" rel="noopener">arXiv:2609.22073</a>
+    </div>
+    <h1><span class="s" data-s="t">Duty factor, não tipo de marcha, prevê robustez em robôs quadrúpedes</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Pesquisadores da Carnegie Mellon e University of Miami mostram que o duty factor — a fração do ciclo em que cada pata fica no chão — explica melhor a robustez de um robô quadrúpede do que classificações tradicionais como caminhada ou trote.</span></p>
+    <p class="byline">
+      <span>Zhu et al.</span>
+      <span>10 min de leitura</span>
+<span>18/09/2026</span>    </p>
+    <div class="listen" data-article="2609.22073" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=mA0kSIaecVg" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema: tipo de marcha não conta a história toda</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Quando você pensa em como um cachorro ou um robô quadrúpede se move, provavelmente imagina marchas distintas: caminhada, trote, galope.</span> <span class="s" data-s="b0-p0-s1">Essas classificações são úteis e intuitivas, mas escondem um problema.</span> <span class="s" data-s="b0-p0-s2">Dentro de uma mesma marcha — digamos, trote — você pode variar velocidade, largura da base de apoio e quanto tempo cada pata fica no chão.</span> <span class="s" data-s="b0-p0-s3">Esses parâmetros contínuos afetam drasticamente o desempenho, mas costumam ser tratados como detalhes secundários.</span></p><p><span class="s" data-s="b0-p1-s0">O paper investiga se o tipo de marcha é realmente o melhor preditor de robustez em robôs quadrúpedes, ou se algum parâmetro contínuo explica melhor o comportamento.</span> <span class="s" data-s="b0-p1-s1">A resposta é surpreendente: o duty factor — a fração do ciclo de marcha em que cada pata permanece em contato com o solo — prevê robustez de forma mais consistente do que a classificação nominal em caminhada ou trote.</span></p><p><span class="s" data-s="b0-p2-s0">Os autores testam essa hipótese em três cenários diferentes: otimização de trajetória com controle LQR, aprendizado por reforço para navegação em terreno estreito, e controle preditivo centroidal validado em hardware.</span> <span class="s" data-s="b0-p2-s1">A consistência dos resultados através de arquiteturas de controle tão diferentes é o ponto forte do trabalho.</span></p>        <h2><span class="s" data-s="b1-h">O que é duty factor e por que importa</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Duty factor é a fração de um ciclo completo de marcha durante a qual uma pata específica está em contato com o chão.</span> <span class="s" data-s="b1-p0-s1">Se o duty factor é 0.5, a pata passa metade do tempo no solo e metade no ar.</span> <span class="s" data-s="b1-p0-s2">Se é 0.75, ela fica 75% do tempo apoiada.</span> <span class="s" data-s="b1-p0-s3">Marchas tradicionais são frequentemente associadas a faixas de duty factor: caminhada geralmente tem duty factor acima de 0.5, enquanto trote costuma ficar em torno de 0.5.</span></p><p><span class="s" data-s="b1-p1-s0">Mas essa associação não é rígida.</span> <span class="s" data-s="b1-p1-s1">Você pode executar um trote com duty factor de 0.6 ou 0.7, e pode fazer uma caminhada com duty factor de 0.55.</span> <span class="s" data-s="b1-p1-s2">O que o paper mostra é que, quando você controla para duty factor, as diferenças entre caminhada e trote praticamente desaparecem em termos de robustez.</span> <span class="s" data-s="b1-p1-s3">A marcha nominal vira uma etiqueta, e o duty factor vira o parâmetro que realmente governa o comportamento.</span></p><p><span class="s" data-s="b1-p2-s0">A intuição física é direta: quanto mais tempo as patas ficam no chão, mais oportunidades o robô tem de aplicar forças corretivas quando algo dá errado.</span> <span class="s" data-s="b1-p2-s1">Com duty factor alto, há sempre mais patas em contato, distribuindo melhor as forças de reação do solo e permitindo que o controlador responda a perturbações de forma mais eficaz.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.22073/figure1.webp" alt="Robô quadrúpede atravessando uma viga estreita usando duty factor alto. Esta é a primeira demonstração documentada de um quadrúpede atravessando uma viga sem mecanismos auxiliares como rodas de reação." loading="lazy">
+          <figcaption>
+            Robô quadrúpede atravessando uma viga estreita usando duty factor alto. Esta é a primeira demonstração documentada de um quadrúpede atravessando uma viga sem mecanismos auxiliares como rodas de reação.
+            <span class="source">Figura 1 do paper · Zhu et al., arXiv:2609.22073</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Investigação 1: otimização de trajetória e análise de convergência</span></h2>
+<p><span class="s" data-s="b3-p0-s0">A primeira investigação usa otimização de trajetória de corpo completo com feedback LQR.</span> <span class="s" data-s="b3-p0-s1">Os autores implementaram um framework customizado de direct collocation usando a biblioteca Pinocchio para computar dinâmica contínua e híbrida.</span> <span class="s" data-s="b3-p0-s2">O objetivo da otimização inclui custos quadráticos nas entradas de controle, além de termos de regularização para altura do corpo e velocidades das juntas.</span></p><p><span class="s" data-s="b3-p1-s0">O truque aqui é que o tempo de swing das pernas é fixado, e combinado com o duty factor especificado, isso determina o período da marcha.</span> <span class="s" data-s="b3-p1-s1">Esse período varia entre tipos de marcha e duty factors, mas facilita a convergência do algoritmo.</span> <span class="s" data-s="b3-p1-s2">O modelo usado foi o Ghost Robotics Spirit 40.</span></p><p><span class="s" data-s="b3-p2-s0">Para cada trajetória otimizada, os autores geram um controlador LQR com matrizes de peso fixas.</span> <span class="s" data-s="b3-p2-s1">Esse controlador estabiliza a trajetória nominal e permite avaliar convergência local de erro sob dinâmica de malha fechada.</span> <span class="s" data-s="b3-p2-s2">A métrica de convergência χ é computada usando análise de sensibilidade baseada em saltation, uma técnica que lida com as descontinuidades inerentes a sistemas híbridos com contatos intermitentes.</span></p><p><span class="s" data-s="b3-p3-s0">A matriz de escala de estado S é definida com magnitudes características fisicamente significativas: 0.05 m para posição do corpo, 0.1 rad para orientação do corpo, 0.2 rad para posição das juntas, e assim por diante.</span> <span class="s" data-s="b3-p3-s1">Embora a escolha de S afete o valor absoluto de χ, os autores verificaram que as tendências observadas se mantêm para escolhas razoáveis dessa matriz.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.22073/figure2.webp" alt="Convergência de erro em função de velocidade e duty factor para caminhada e trote. Note como as duas marchas se fundem em uma transição contínua quando o duty factor é 0.75, e como a convergência se correlaciona fortemente com duty factor, não com tipo de marcha." loading="lazy">
+          <figcaption>
+            Convergência de erro em função de velocidade e duty factor para caminhada e trote. Note como as duas marchas se fundem em uma transição contínua quando o duty factor é 0.75, e como a convergência se correlaciona fortemente com duty factor, não com tipo de marcha.
+            <span class="source">Figura 2 do paper · Zhu et al., arXiv:2609.22073</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">O que a otimização revela</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os autores variaram sistematicamente tipo de marcha (caminhada vs. trote), duty factor, velocidade e largura da base de apoio, e avaliaram os efeitos na métrica de convergência local.</span> <span class="s" data-s="b5-p0-s1">Usando um modelo de regressão linear, descobriram que duty factor é o preditor dominante de convergência de erro, explicando a maior parte da variância nos dados.</span></p><p><span class="s" data-s="b5-p1-s0">Velocidade e largura da base também têm efeitos, mas menores.</span> <span class="s" data-s="b5-p1-s1">O tipo nominal de marcha, por si só, não adiciona poder explicativo significativo uma vez que duty factor é contabilizado.</span> <span class="s" data-s="b5-p1-s2">Isso significa que uma caminhada com duty factor 0.6 e um trote com duty factor 0.6 têm robustez local semelhante, mesmo que suas sequências de contato sejam diferentes.</span></p><p><span class="s" data-s="b5-p2-s0">Esse resultado desafia a visão tradicional de que marchas são categorias fundamentalmente distintas.</span> <span class="s" data-s="b5-p2-s1">Em vez disso, sugere que marchas são regiões de um espaço contínuo de parâmetros, e que duty factor é a coordenada mais importante nesse espaço quando o objetivo é robustez.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b6-t">Saltation e sistemas híbridos</span></h3>
+          <p><span class="s" data-s="b6-c-s0">A análise de sensibilidade baseada em saltation é uma técnica matemática para lidar com descontinuidades em sistemas híbridos, como robôs com contatos intermitentes.</span> <span class="s" data-s="b6-c-s1">Quando uma pata toca ou sai do chão, as equações de dinâmica mudam abruptamente.</span> <span class="s" data-s="b6-c-s2">Saltation mapeia como pequenas perturbações no estado se propagam através dessas transições, permitindo calcular a estabilidade local de uma trajetória periódica mesmo com contatos.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b7-h">Investigação 2: aprendizado por reforço e seleção de duty factor</span></h2>
+<p><span class="s" data-s="b7-p0-s0">A segunda investigação explora se as relações entre parâmetros de marcha e desempenho se estendem a um controlador aprendido, e se duty factor pode servir como parâmetro de baixa dimensão para adaptar locomoção em terreno estreito.</span> <span class="s" data-s="b7-p0-s1">O framework consiste em um controlador de locomoção condicionado por marcha e um seletor de duty factor.</span></p><p><span class="s" data-s="b7-p1-s0">O controlador foi treinado para o robô Unitree Go2 usando Proximal Policy Optimization (PPO) no simulador Isaac Lab.</span> <span class="s" data-s="b7-p1-s1">Na verdade, são duas redes separadas — uma para trote, outra para caminhada — com arquitetura comum, mesma interface de observação e ação, e mesma formulação de recompensa.</span> <span class="s" data-s="b7-p1-s2">A identidade da marcha determina qual política é usada, enquanto os demais parâmetros (velocidade, duty factor, largura da base, período da marcha) condicionam seu comportamento.</span></p><p><span class="s" data-s="b7-p2-s0">A ação da rede é um vetor de posições de junta, e as observações incluem estado do robô e fases de marcha por pata.</span> <span class="s" data-s="b7-p2-s1">O comando especifica velocidade para frente, duty factor, largura da base, período da marcha e identidade da marcha.</span> <span class="s" data-s="b7-p2-s2">Essa estrutura permite que a rede aprenda a executar uma marcha específica com parâmetros variáveis.</span></p><p><span class="s" data-s="b7-p3-s0">O seletor de duty factor é uma rede separada, também treinada com PPO, que aprende a escolher duty factor com base no sucesso medido sob perturbações externas.</span> <span class="s" data-s="b7-p3-s1">A ideia é testar se uma rede consegue descobrir sozinha que duty factors mais altos são melhores em terreno estreito.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.22073/figure3.webp" alt="Taxa de sucesso em simulação aumenta com duty factor mais alto, tanto para trote quanto para caminhada. O efeito é especialmente pronunciado em terreno estreito, onde duty factors baixos levam a quedas frequentes." loading="lazy">
+          <figcaption>
+            Taxa de sucesso em simulação aumenta com duty factor mais alto, tanto para trote quanto para caminhada. O efeito é especialmente pronunciado em terreno estreito, onde duty factors baixos levam a quedas frequentes.
+            <span class="source">Figura 3 do paper · Zhu et al., arXiv:2609.22073</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Resultados do aprendizado: duty factor alto vence</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Os autores testaram o controlador aprendido em terreno estreito, variando duty factor e medindo taxa de sucesso.</span> <span class="s" data-s="b9-p0-s1">Tanto para trote quanto para caminhada, a taxa de sucesso aumenta com duty factor mais alto.</span> <span class="s" data-s="b9-p0-s2">Em terrenos muito estreitos, duty factors baixos levam a quedas frequentes, enquanto duty factors altos permitem travessia consistente.</span></p><p><span class="s" data-s="b9-p1-s0">O seletor de duty factor aprendeu a tendência correta: conforme a largura da base diminui (terreno mais estreito), a rede escolhe duty factors progressivamente mais altos.</span> <span class="s" data-s="b9-p1-s1">Isso sugere que duty factor pode de fato servir como parâmetro de baixa dimensão para adaptação online de locomoção, sem precisar retreinar toda a política.</span></p><p><span class="s" data-s="b9-p2-s0">Essa abordagem modular — separar a execução da marcha da seleção de parâmetros — é interessante do ponto de vista de engenharia.</span> <span class="s" data-s="b9-p2-s1">Em vez de treinar uma política monolítica que precisa aprender tudo do zero, você treina um controlador base robusto e uma camada de seleção de parâmetros que pode ser ajustada para diferentes ambientes.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.22073/figure4.webp" alt="A rede seletora aprende automaticamente a escolher duty factors mais altos conforme a largura da base diminui. Linha mostra valores médios, região sombreada mostra mínimo e máximo escolhidos em cada largura." loading="lazy">
+          <figcaption>
+            A rede seletora aprende automaticamente a escolher duty factors mais altos conforme a largura da base diminui. Linha mostra valores médios, região sombreada mostra mínimo e máximo escolhidos em cada largura.
+            <span class="source">Figura 4 do paper · Zhu et al., arXiv:2609.22073</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b11-h">Investigação 3: validação em hardware com MPC centroidal</span></h2>
+<p><span class="s" data-s="b11-p0-s0">A terceira investigação usa controle preditivo de modelo (MPC) centroidal e valida os resultados em hardware.</span> <span class="s" data-s="b11-p0-s1">MPC centroidal é uma técnica popular em robótica de pernas que simplifica a dinâmica do robô para um modelo de corpo único com forças de contato concentradas nos pés.</span> <span class="s" data-s="b11-p0-s2">Isso torna o problema de otimização tratável em tempo real.</span></p><p><span class="s" data-s="b11-p1-s0">Os autores implementaram um MPC centroidal e testaram diferentes duty factors em uma viga estreita com o robô físico.</span> <span class="s" data-s="b11-p1-s1">As tendências observadas nas investigações anteriores persistem: duty factors mais altos levam a travessia mais robusta.</span> <span class="s" data-s="b11-p1-s2">A figura 1 mostra o robô atravessando a viga com sucesso — a primeira demonstração documentada de um quadrúpede atravessando uma viga sem mecanismos auxiliares como rodas de reação.</span></p><p><span class="s" data-s="b11-p2-s0">Essa validação em hardware é crucial porque fecha o ciclo entre teoria, simulação e realidade.</span> <span class="s" data-s="b11-p2-s1">É fácil encontrar padrões em simulação que não se sustentam no mundo real, mas aqui a história é consistente através de três arquiteturas de controle muito diferentes: otimização offline com LQR, aprendizado por reforço, e MPC em tempo real.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b12-t">Por que três investigações?</span></h3>
+          <p><span class="s" data-s="b12-c-s0">Cada método de controle tem vieses próprios.</span> <span class="s" data-s="b12-c-s1">Otimização de trajetória pode encontrar soluções que funcionam em teoria mas não em prática.</span> <span class="s" data-s="b12-c-s2">Aprendizado por reforço pode explorar regiões estranhas do espaço de estados.</span> <span class="s" data-s="b12-c-s3">MPC tem horizonte limitado e aproximações.</span> <span class="s" data-s="b12-c-s4">Ao mostrar que duty factor importa nos três casos, os autores fortalecem a evidência de que não é um artefato de um método específico, mas uma propriedade fundamental da locomoção quadrúpede.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b13-h">O que o paper não mostra</span></h2>
+<p><span class="s" data-s="b13-p0-s0">O trabalho tem limitações claras.</span> <span class="s" data-s="b13-p0-s1">Primeiro, os autores focam principalmente em caminhada e trote.</span> <span class="s" data-s="b13-p0-s2">Marchas como galope, bound e pace não são investigadas sistematicamente.</span> <span class="s" data-s="b13-p0-s3">Não está claro se as conclusões se estendem a essas marchas mais dinâmicas, onde o duty factor pode cair abaixo de 0.5 e fases aéreas se tornam significativas.</span></p><p><span class="s" data-s="b13-p1-s0">Segundo, o foco é robustez local e convergência de erro, não eficiência energética.</span> <span class="s" data-s="b13-p1-s1">É bem estabelecido na literatura que diferentes marchas são mais eficientes em diferentes velocidades, e o paper não contradiz isso.</span> <span class="s" data-s="b13-p1-s2">Duty factors altos podem ser mais robustos, mas provavelmente custam mais energia.</span> <span class="s" data-s="b13-p1-s3">O trade-off entre robustez e eficiência não é explorado.</span></p><p><span class="s" data-s="b13-p2-s0">Terceiro, os experimentos em hardware são limitados a terreno estreito.</span> <span class="s" data-s="b13-p2-s1">Não há testes em terreno irregular, escadas, ou outros ambientes desafiadores.</span> <span class="s" data-s="b13-p2-s2">A generalização para outros tipos de perturbação e incerteza fica em aberto.</span></p><p><span class="s" data-s="b13-p3-s0">Quarto, a análise de sensibilidade baseada em saltation captura convergência local, não estabilidade global.</span> <span class="s" data-s="b13-p3-s1">Um sistema pode ser localmente estável mas ter bacia de atração pequena, ou vice-versa.</span> <span class="s" data-s="b13-p3-s2">O paper não aborda estabilidade global ou robustez a perturbações grandes.</span></p>        <h2><span class="s" data-s="b14-h">Por que isso importa</span></h2>
+<p><span class="s" data-s="b14-p0-s0">A contribuição principal não é uma nova técnica de controle, mas uma mudança de perspectiva.</span> <span class="s" data-s="b14-p0-s1">Em vez de tratar tipo de marcha como escolha discreta fundamental, o paper sugere que parâmetros contínuos como duty factor são mais informativos.</span> <span class="s" data-s="b14-p0-s2">Isso tem implicações práticas para design de controladores.</span></p><p><span class="s" data-s="b14-p1-s0">Se você está projetando um sistema de locomoção, em vez de implementar caminhada, trote e galope como modos separados, você pode pensar em um espaço contínuo parametrizado por duty factor, velocidade e largura da base.</span> <span class="s" data-s="b14-p1-s1">A marcha nominal vira uma consequência desses parâmetros, não um input primário.</span></p><p><span class="s" data-s="b14-p2-s0">Isso também abre caminho para adaptação online.</span> <span class="s" data-s="b14-p2-s1">Se duty factor é um bom preditor de robustez e é um parâmetro de baixa dimensão, você pode ajustá-lo em tempo real com base em estimativas de incerteza ou dificuldade do terreno.</span> <span class="s" data-s="b14-p2-s2">A investigação 2 mostra que isso é viável com aprendizado por reforço, mas outras abordagens também são possíveis.</span></p><p><span class="s" data-s="b14-p3-s0">Finalmente, o trabalho contribui para a compreensão fundamental de locomoção.</span> <span class="s" data-s="b14-p3-s1">A classificação de marchas vem da biologia, onde animais exibem transições discretas entre padrões de movimento.</span> <span class="s" data-s="b14-p3-s2">Mas em robôs, onde você tem controle fino sobre todos os parâmetros, pode ser mais útil pensar em locomoção como um continuum.</span> <span class="s" data-s="b14-p3-s3">O paper fornece evidência quantitativa para essa visão.</span></p>        <h2><span class="s" data-s="b15-h">O que vem a seguir</span></h2>
+<p><span class="s" data-s="b15-p0-s0">Os autores sugerem várias direções futuras.</span> <span class="s" data-s="b15-p0-s1">Primeiro, investigar se a relação se estende a outros parâmetros de marcha e regimes de locomoção, incluindo marchas mais dinâmicas e terrenos mais variados.</span> <span class="s" data-s="b15-p0-s2">Segundo, explorar se duty factor pode ser adaptado automaticamente online para balancear objetivos concorrentes como robustez e eficiência energética.</span></p><p><span class="s" data-s="b15-p1-s0">Outra direção é entender melhor os mecanismos causais.</span> <span class="s" data-s="b15-p1-s1">Por que exatamente duty factor alto melhora robustez?</span> <span class="s" data-s="b15-p1-s2">É porque há sempre mais patas no chão?</span> <span class="s" data-s="b15-p1-s3">É porque as forças de reação são melhor distribuídas?</span> <span class="s" data-s="b15-p1-s4">É porque o controlador tem mais tempo para reagir?</span> <span class="s" data-s="b15-p1-s5">Análises mais detalhadas da dinâmica de malha fechada podem responder essas questões.</span></p><p><span class="s" data-s="b15-p2-s0">Do ponto de vista de aprendizado de máquina, seria interessante ver se redes podem aprender a modular duty factor de forma mais sofisticada, talvez variando-o ao longo do ciclo de marcha ou entre patas diferentes.</span> <span class="s" data-s="b15-p2-s1">A investigação 2 usa duty factor uniforme para todas as patas, mas há espaço para exploração.</span></p><p><span class="s" data-s="b15-p3-s0">Finalmente, validação em ambientes reais mais diversos é essencial.</span> <span class="s" data-s="b15-p3-s1">Terreno estreito é um caso de uso importante, mas robôs quadrúpedes enfrentam muitos outros desafios: escadas, terreno irregular, superfícies escorregadias, cargas dinâmicas.</span> <span class="s" data-s="b15-p3-s2">Testar se duty factor continua sendo um bom preditor nesses contextos fortaleceria as conclusões.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Duty factor — a fração do ciclo em que cada pata fica no chão — prevê robustez de locomoção melhor do que tipo de marcha (caminhada vs. trote).</span></li><li><span class="s" data-s="k1">Resultado se mantém em três arquiteturas de controle: otimização de trajetória com LQR, aprendizado por reforço e MPC centroidal validado em hardware.</span></li><li><span class="s" data-s="k2">Duty factors mais altos aumentam robustez em terreno estreito, permitindo primeira travessia documentada de viga por quadrúpede sem mecanismos auxiliares.</span></li><li><span class="s" data-s="k3">Limitações: foco em caminhada e trote, robustez local (não global), trade-off com eficiência energética não explorado, validação limitada a terreno estreito.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2609.22073" rel="noopener">Duty Factor Predicts Robust Constrained Quadrupedal Locomotion Across Gait Types</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2609.22073" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RynnUnify: Unificando compreensão corporal, previsão visual e controle robótico em um único modelo — arXiv em 5</title>
+<meta name="description" content="O paper apresenta RynnUnify, um modelo de 16B parâmetros que integra raciocínio linguístico-autoregressivo com geração de vídeo por fluxo retificado, permitindo planejamento de longo prazo e controle de robôs através de previsões visuais intercaladas.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RynnUnify: Unificando compreensão corporal, previsão visual e controle robótico em um único modelo">
+<meta property="og:description" content="O paper apresenta RynnUnify, um modelo de 16B parâmetros que integra raciocínio linguístico-autoregressivo com geração de vídeo por fluxo retificado, permitindo planejamento de longo prazo e controle de robôs através de previsões visuais intercaladas.">
+<meta property="og:image" content="../../assets/papers/2610.32965/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Robótica</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.32965" rel="noopener">arXiv:2610.32965</a>
+    </div>
+    <h1><span class="s" data-s="t">RynnUnify: Unificando compreensão corporal, previsão visual e controle robótico em um único modelo</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">O paper apresenta RynnUnify, um modelo de 16B parâmetros que integra raciocínio linguístico-autoregressivo com geração de vídeo por fluxo retificado, permitindo planejamento de longo prazo e controle de robôs através de previsões visuais intercaladas.</span></p>
+    <p class="byline">
+      <span>Zhu et al.</span>
+      <span>7 min de leitura</span>
+<span>23/10/2026</span>    </p>
+    <div class="listen" data-article="2610.32965" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=ygfKlq5RCCo" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Desafio do Cérebro Corporificado Unificado</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Desenvolver cérebros robóticos gerais exige mais do que simples reconhecimento de objetos; requer que o modelo entenda o mundo físico, antecipe os resultados de interações e traduza intenções de tarefas em ações executáveis.</span> <span class="s" data-s="b0-p0-s1">Em operações interdependentes, um robô deve identificar subobjetivos, prever mudanças na cena e determinar como essas mudanças afetam decisões subsequentes.</span> <span class="s" data-s="b0-p0-s2">Os Modelos Multimodais Unificados (UMMs) existentes fizeram progressos promissores em modelar conjuntamente compreensão e geração, mas manter essa coordenação em horizontes temporais longos permanece um desafio.</span> <span class="s" data-s="b0-p0-s3">Mudanças de cena e erros de previsão se acumulam, e previsões visuais estáticas frequentemente ignoram dinâmicas intermediárias cruciais para o planejamento contínuo.</span></p>        <h2><span class="s" data-s="b1-h">Arquitetura RynnUnify: MoT e Raciocínio Entrelaçado</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Para abordar essas limitações, os autores introduzem o RynnUnify, um modelo de 16 bilhões de parâmetros construído sobre a arquitetura Mixture-of-Transformers (MoT) do Cosmos3.</span> <span class="s" data-s="b1-p0-s1">O núcleo do sistema é o raciocínio entrelaçado de vídeo e linguagem, que conecta a compreensão corporificada com a previsão visual para suportar o planejamento de longo prazo guiado pela compreensão.</span> <span class="s" data-s="b1-p0-s2">O modelo consiste em dois componentes principais: um raciocinador autoregressivo de 8B, responsável pela compreensão multimodal e geração de linguagem, e um gerador de vídeo de 8B baseado em fluxo retificado, que prevê latentes visuais contínuos.</span> <span class="s" data-s="b1-p0-s3">Essas duas ramificações utilizam parâmetros de Transformer separados, mas interagem através de atenção conjunta, permitindo que o gerador atenda às representações produzidas pelo raciocinador.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.32965/figure2.webp" alt="Arquitetura do RynnUnify mostrando a interação entre o raciocinador autoregressivo e o gerador de vídeo via atenção conjunta, com suporte à memória de cena para geração condicional." loading="lazy">
+          <figcaption>
+            Arquitetura do RynnUnify mostrando a interação entre o raciocinador autoregressivo e o gerador de vídeo via atenção conjunta, com suporte à memória de cena para geração condicional.
+            <span class="source">Figura 2 do paper · Zhu et al., arXiv:2610.32965</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">O Racinocinador e o Gerador de Vídeo</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O raciocinador processa observações multimodais e contexto linguístico para suportar compreensão corporificada, ancoragem espacial e planejamento de tarefas.</span> <span class="s" data-s="b3-p0-s1">Para o planejamento visual, ele recebe como entrada o objetivo da tarefa, as observações iniciais e atuais, e o histórico de subtarefas anteriores.</span> <span class="s" data-s="b3-p0-s2">Com base nisso, ele prevê a próxima subtarefa executável, juntamente com uma descrição detalhada da evolução visual antecipada e uma duração estimada.</span> <span class="s" data-s="b3-p0-s3">Essas saídas fornecem ao gerador condições textuais estruturadas que especificam a interação pretendida e sua extensão temporal.</span> <span class="s" data-s="b3-p0-s4">Durante o rollout de múltiplos passos, o último frame de cada clip gerado se torna a observação atualizada para o raciocínio subsequente, conectando o planejamento de subtarefas às consequências visuais das previsões anteriores.</span></p>        <h2><span class="s" data-s="b4-h">Tokenização Visual e Memória de Cena Cruzada</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Para a geração de vídeo, os autores utilizam um VAE de vídeo causal com fatores de compressão espacial e temporal de 16 e 4, respectivamente.</span> <span class="s" data-s="b4-p0-s1">Os latentes resultantes são patchificados espacialmente em tokens visuais.</span> <span class="s" data-s="b4-p0-s2">Uma inovação chave é a memória de cena cruzada, projetada para lidar com planejamentos de longo prazo onde objetos ou regiões da cena saem do campo de visão.</span> <span class="s" data-s="b4-p0-s3">O sistema mantém quatro frames de referência: uma observação inicial persistente, dois keyframes selecionados ao longo do histórico anterior e um frame de referência associado ao passo mais recente.</span> <span class="s" data-s="b4-p0-s4">Essa seleção preserva tanto a cobertura ampla da cena quanto o contexto recente da tarefa.</span></p>        <h2><span class="s" data-s="b5-h">Integração da Memória na Geração</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Quando a memória de cena é ativada, os tokens visuais dos frames de referência são concatenados antes dos tokens do vídeo principal na sequência de entrada do gerador.</span> <span class="s" data-s="b5-p0-s1">Especificamente, a estrutura é composta pelos tokens de contexto textual do raciocinador, seguidos pelos grupos de tokens de memória e, finalmente, pelos tokens do vídeo principal.</span> <span class="s" data-s="b5-p0-s2">Durante cada passo de denoising, o gerador processa a memória e os tokens do vídeo principal através de suas camadas de atenção existentes, atendendo às representações textuais do raciocinador.</span> <span class="s" data-s="b5-p0-s3">Isso permite que o vídeo principal acesse as referências da cena diretamente, sem a necessidade de introduzir um codificador de memória separado ou módulos adicionais de atenção cruzada, mantendo a eficiência arquitetural.</span></p>        <h2><span class="s" data-s="b6-h">Extensão Agêntica via Aprendizado por Reforço</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Além da arquitetura base, os autores desenvolvem uma extensão agêntica para melhorar a compreensão corporificada através da geração.</span> <span class="s" data-s="b6-p0-s1">Eles realizam pós-treinamento de um agente de 8B adicional, derivado do raciocinador do RynnUnify, utilizando aprendizado por reforço com feedback da resposta final.</span> <span class="s" data-s="b6-p0-s2">Este agente aprende a escolher dinamicamente entre responder diretamente à pergunta ou invocar o modelo RynnUnify congelado para gerar evidências visuais.</span> <span class="s" data-s="b6-p0-s3">Ao gerar vídeos, o agente pode interpretar estados futuros não observáveis e resultados de interações, utilizando essas previsões para refinar seu raciocínio.</span> <span class="s" data-s="b6-p0-s4">O treinamento é guiado por recompensas que combinam validade de formato e qualidade da resposta.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.32965/figure4.webp" alt="Agentica reinforcement learning para compreensão aprimorada por geração: o agente escolhe dinamicamente entre responder diretamente ou invocar o modelo congelado para gerar evidências visuais." loading="lazy">
+          <figcaption>
+            Agentica reinforcement learning para compreensão aprimorada por geração: o agente escolhe dinamicamente entre responder diretamente ou invocar o modelo congelado para gerar evidências visuais.
+            <span class="source">Figura 4 do paper · Zhu et al., arXiv:2610.32965</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Extensão World-Action Model (WAM)</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Para trazer as capacidades de compreensão e previsão do mundo para o controle de robôs, o modelo é estendido para um World-Action Model (WAM).</span> <span class="s" data-s="b8-p0-s1">Essa extensão traduz a compreensão e as capacidades de previsão em controle de robôs através de planejamento latente e treinamento conjunto de vídeo e ação.</span> <span class="s" data-s="b8-p0-s2">O WAM utiliza representações internas do modelo para prever não apenas a aparência da cena, mas também as ações necessárias para alcançar o estado previsto.</span> <span class="s" data-s="b8-p0-s3">Isso permite que o modelo traduza intenções de tarefas em comandos de controle diretos, fechando o loop entre percepção, previsão e ação.</span></p>        <h2><span class="s" data-s="b9-h">Novos Benchmarks: Rynn-VP e Rynn-GEU</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Os autores identificam a falta de benchmarks dedicados para avaliar planejamento visual sustentado e a contribuição da previsão de vídeo para o raciocínio de estados futuros.</span> <span class="s" data-s="b9-p0-s1">Para preencher essa lacuna, eles introduzem o Rynn-VP e o Rynn-GEU.</span> <span class="s" data-s="b9-p0-s2">O Rynn-VP avalia se os planos visuais permanecem consistentes com a tarefa e as operações anteriores ao longo de horizontes longos.</span> <span class="s" data-s="b9-p0-s3">O Rynn-GEU foca nas consequências das ações, mudanças físicas e relações espaciais após movimentos ou mudanças de ponto de vista, cujas respostas concernem a estados não diretamente observáveis na entrada.</span> <span class="s" data-s="b9-p0-s4">O Rynn-GEU possui configurações diretas, que testam a inferência sem geração explícita, e assistidas por geração, que testam se os vídeos previstos melhoram as respostas.</span></p>        <h2><span class="s" data-s="b10-h">Resultados em Compreensão Corporificada</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Na avaliação de compreensão corporificada fundamental, o RynnUnify alcançou a maior pontuação média entre os UMMs avaliados, atingindo 57,9 em benchmarks normalizados, comparado a 53,2 do Cosmos 3 Nano.</span> <span class="s" data-s="b10-p0-s1">Ele liderou em seis dos dez métricas avaliadas, incluindo VSI-Bench e RoboSpatial, onde superou o Cosmos 3 Nano em 12,2 e 10,7 pontos, respectivamente.</span> <span class="s" data-s="b10-p0-s2">Para ancoragem de localização, o ShareRobot Affordance melhorou de 28,0 para 41,8, indicando um posicionamento mais preciso de pontos de interação relevantes para a tarefa.</span> <span class="s" data-s="b10-p0-s3">O modelo também obteve os melhores resultados em EmbSpatial, RefSpatial-Bench e ShareRobot Trajectory.</span></p>        <h2><span class="s" data-s="b11-h">Raciocínio Agêntico e Previsão Visual</span></h2>
+<p><span class="s" data-s="b11-p0-s0">O desempenho do raciocínio corporificado com geração visual agêntica foi avaliado no Rynn-GEU.</span> <span class="s" data-s="b11-p0-s1">O RynnUnify base alcançou a melhor performance de resposta direta entre os UMMs comparados, com uma pontuação média de 44,0.</span> <span class="s" data-s="b11-p0-s2">A extensão agêntica, que utiliza aprendizado por reforço, melhorou a média do Rynn-GEU em 6,0 pontos, elevando-a para 50,0, em comparação com o raciocínio direto.</span> <span class="s" data-s="b11-p0-s3">Isso demonstra que a capacidade intrínseca de antecipação do modelo é significativamente amplificada quando ele pode gerar e interpretar evidências visuais para estados não observáveis, validando a utilidade do raciocínio entrelaçado.</span></p>        <h2><span class="s" data-s="b12-h">Planejamento Visual de Longo Prazo</span></h2>
+<p><span class="s" data-s="b12-p0-s0">No benchmark Rynn-VP, projetado especificamente para avaliar a consistência do planejamento visual ao longo do tempo, o RynnUnify melhorou a pontuação geral em 9,75 pontos em relação ao Cosmos 3 Nano, passando de 45,05 para 54,80.</span> <span class="s" data-s="b12-p0-s1">Esse resultado indica que a arquitetura de memória de cena cruzada e o treinamento de auto-forçamento contribuem efetivamente para manter a coerência visual durante operações sequenciais longas.</span> <span class="s" data-s="b12-p0-s2">A capacidade de prever a evolução visual de forma consistente com as subtarefas anteriores é um componente crítico para a navegação e manipulação robótica autônoma complexa.</span></p>        <h2><span class="s" data-s="b13-h">Controle Robótico e Simulação</span></h2>
+<p><span class="s" data-s="b13-p0-s0">A extensão World-Action Model (WAM) foi avaliada em tarefas de manipulação robótica.</span> <span class="s" data-s="b13-p0-s1">Em simulação, o modelo alcançou uma taxa de sucesso de 51,5% em 20 tarefas compostas selecionadas do RoboCasa365.</span> <span class="s" data-s="b13-p0-s2">Em robôs reais, o modelo obteve uma taxa de sucesso média de 46,7% em três tarefas de manipulação física.</span> <span class="s" data-s="b13-p0-s3">Esses resultados estabelecem o RynnUnify como uma base compartilhada para compreensão corporificada, planejamento visual e controle de robôs, demonstrando que a unificação de raciocínio e geração visual pode ser efetivamente traduzida em ações físicas concretas, mesmo em ambientes não estruturados.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b14-t">Limitações Geométricas e Físicas</span></h3>
+          <p><span class="s" data-s="b14-c-s0">Apesar dos avanços, o paper reconhece que os vídeos gerados podem distorcer a geometria fina, refletido em quedas de desempenho em algumas tarefas espaciais após o rollout agêntico.</span> <span class="s" data-s="b14-c-s1">Além disso, o forte desempenho no planejamento visual livre de simulador precisa ser complementado por uma validação mais ampla da execução física em diversas tarefas e ambientes.</span> <span class="s" data-s="b14-c-s2">O custo computacional da geração entrelaçada também permanece um obstáculo para o controle em loop fechado em tempo real.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b15-h">Conclusão e Direções Futuras</span></h2>
+<p><span class="s" data-s="b15-p0-s0">O RynnUnify representa um passo significativo em direção a um cérebro corporificado unificado, conectando compreensão de cena, previsão de vídeo e ação robótica através de raciocínio entrelaçado.</span> <span class="s" data-s="b15-p0-s1">Ao combinar supervisão corporificada com memória de cena cruzada e treinamento de auto-forçamento, o modelo suporta planejamento visual através de operações sucessivas.</span> <span class="s" data-s="b15-p0-s2">As extensões agêntica e WAM demonstram a versatilidade da arquitetura para raciocínio sobre estados não observáveis e controle de robôs.</span> <span class="s" data-s="b15-p0-s3">Trabalhos futuros focarão em melhorar a fidelidade geométrica, selecionar evidências geradas confiáveis e reduzir o custo computacional para habilitar aplicações robóticas mais eficientes e robustas.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.32965/figure1.webp" alt="RynnUnify unifica compreensão corporificada, planejamento visual, raciocínio agêntico e ação robótica, demonstrando superioridade em benchmarks de planejamento e manipulação." loading="lazy">
+          <figcaption>
+            RynnUnify unifica compreensão corporificada, planejamento visual, raciocínio agêntico e ação robótica, demonstrando superioridade em benchmarks de planejamento e manipulação.
+            <span class="source">Figura 1 do paper · Zhu et al., arXiv:2610.32965</span>
+          </figcaption>
+        </figure>
+
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">RynnUnify combina um raciocinador autoregressivo de 8B com um gerador de vídeo difusivo de 8B, usando memória de cena cruzada para manter consistência visual em planejamentos de longo prazo.</span></li><li><span class="s" data-s="k1">O modelo introduz extensões agênticas via RL para decidir dinamicamente quando gerar vídeos para raciocinar sobre estados não observáveis, melhorando a precisão em benchmarks de previsão física.</span></li><li><span class="s" data-s="k2">A extensão World-Action Model (WAM) traduz a compreensão e previsão em ações robóticas, alcançando 51,5% de sucesso em tarefas compostas do RoboCasa365.</span></li><li><span class="s" data-s="k3">Limitações incluem distorções geométricas finas nos vídeos gerados e a necessidade de validação mais ampla da execução física em ambientes reais.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.32965" rel="noopener">RynnUnify: Towards Unified Embodied Brain</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.32965" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

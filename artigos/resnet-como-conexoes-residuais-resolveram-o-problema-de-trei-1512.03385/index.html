@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ResNet: como conexões residuais resolveram o problema de treinar redes muito profundas — arXiv em 5</title>
+<meta name="description" content="Em 2015, a Microsoft Research mostrou que redes neurais profundas não aprendem melhor apenas empilhando camadas — e propôs um mecanismo simples de atalhos que permitiu treinar redes com 152 camadas, vencendo o ImageNet.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ResNet: como conexões residuais resolveram o problema de treinar redes muito profundas">
+<meta property="og:description" content="Em 2015, a Microsoft Research mostrou que redes neurais profundas não aprendem melhor apenas empilhando camadas — e propôs um mecanismo simples de atalhos que permitiu treinar redes com 152 camadas, vencendo o ImageNet.">
+<meta property="og:image" content="../../assets/papers/1512.03385/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Imagem</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/1512.03385" rel="noopener">arXiv:1512.03385</a>
+    </div>
+    <h1><span class="s" data-s="t">ResNet: como conexões residuais resolveram o problema de treinar redes muito profundas</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Em 2015, a Microsoft Research mostrou que redes neurais profundas não aprendem melhor apenas empilhando camadas — e propôs um mecanismo simples de atalhos que permitiu treinar redes com 152 camadas, vencendo o ImageNet.</span></p>
+    <p class="byline">
+      <span>He et al.</span>
+      <span>6 min de leitura</span>
+<span>10/12/2015</span>    </p>
+    <div class="listen" data-article="1512.03385" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=rAcqx-A5w1g" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema da degradação</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Redes neurais convolucionais profundas vinham dominando os resultados em classificação de imagens desde 2012.</span> <span class="s" data-s="b0-p0-s1">A intuição era clara: quanto mais camadas, mais níveis de abstração a rede pode aprender — de bordas simples até conceitos complexos como &#39;rosto&#39; ou &#39;carro&#39;.</span> <span class="s" data-s="b0-p0-s2">Os melhores modelos da época tinham entre 16 e 30 camadas, e a tendência era empilhar mais.</span></p><p><span class="s" data-s="b0-p1-s0">Mas havia um obstáculo surpreendente.</span> <span class="s" data-s="b0-p1-s1">Quando os pesquisadores da Microsoft Research tentaram treinar redes ainda mais profundas, algo inesperado aconteceu: o erro de treinamento aumentou.</span> <span class="s" data-s="b0-p1-s2">Não era overfitting — o modelo não estava decorando os dados.</span> <span class="s" data-s="b0-p1-s3">Era pior: a rede simplesmente não conseguia aprender, mesmo no conjunto de treino.</span></p><p><span class="s" data-s="b0-p2-s0">A Figura 1 mostra o fenômeno em CIFAR-10: uma rede de 56 camadas tem erro de treino e teste maior que uma de 20 camadas.</span> <span class="s" data-s="b0-p2-s1">Isso é contra-intuitivo.</span> <span class="s" data-s="b0-p2-s2">Em teoria, a rede mais profunda poderia simplesmente copiar a arquitetura da rede rasa nas primeiras 20 camadas e usar as 36 camadas extras como mapeamentos de identidade (que não fazem nada).</span> <span class="s" data-s="b0-p2-s3">Ela deveria ter, no mínimo, o mesmo desempenho.</span> <span class="s" data-s="b0-p2-s4">Mas não tem.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/1512.03385/figure1.webp" alt="Redes &#39;plain&#39; (sem atalhos) mais profundas treinam pior: a de 56 camadas tem mais erro que a de 20, tanto em treino quanto em teste. O problema não é overfitting — é otimização." loading="lazy">
+          <figcaption>
+            Redes &#39;plain&#39; (sem atalhos) mais profundas treinam pior: a de 56 camadas tem mais erro que a de 20, tanto em treino quanto em teste. O problema não é overfitting — é otimização.
+            <span class="source">Figura 1 do paper · He et al., arXiv:1512.03385</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">Por que redes profundas não treinam?</span></h2>
+<p><span class="s" data-s="b2-p0-s0">O problema clássico de vanishing gradients — quando o gradiente desaparece ao propagar para trás em redes muito profundas — já tinha sido em grande parte resolvido por técnicas como inicialização normalizada e batch normalization.</span> <span class="s" data-s="b2-p0-s1">As redes começavam a convergir, mas depois degradavam.</span></p><p><span class="s" data-s="b2-p1-s0">Os autores argumentam que o problema é de otimização, não de capacidade.</span> <span class="s" data-s="b2-p1-s1">Os algoritmos de otimização atuais (SGD com backpropagation) simplesmente não conseguem encontrar boas soluções para redes muito profundas, mesmo que essas soluções existam.</span> <span class="s" data-s="b2-p1-s2">A rede de 34 camadas tem dificuldade de aprender algo que a de 18 camadas aprende facilmente, mesmo que o espaço de soluções da rede mais profunda contenha todas as soluções da rede mais rasa.</span></p><p><span class="s" data-s="b2-p2-s0">A hipótese dos autores: é muito difícil para camadas empilhadas aprenderem diretamente o mapeamento desejado H(x).</span> <span class="s" data-s="b2-p2-s1">Mas pode ser mais fácil aprender o resíduo — a diferença entre o que você quer e o que você já tem.</span></p>        <h2><span class="s" data-s="b3-h">A ideia das conexões residuais</span></h2>
+<p><span class="s" data-s="b3-p0-s0">A solução proposta é elegante.</span> <span class="s" data-s="b3-p0-s1">Em vez de fazer cada conjunto de camadas aprender diretamente o mapeamento desejado H(x), os autores reformulam o problema: as camadas aprendem F(x) = H(x) - x, o resíduo.</span> <span class="s" data-s="b3-p0-s2">A saída final é F(x) + x, onde o &#39;+x&#39; vem de uma conexão de atalho (shortcut connection) que pula as camadas.</span></p><p><span class="s" data-s="b3-p1-s0">Matematicamente, se o mapeamento ideal for próximo da identidade (ou seja, a entrada deve passar quase inalterada), é muito mais fácil empurrar F(x) para zero do que fazer um conjunto de camadas não-lineares aprender uma função identidade.</span> <span class="s" data-s="b3-p1-s1">No caso extremo, se a identidade for ótima, a rede simplesmente zera os pesos de F(x) e deixa o atalho fazer o trabalho.</span></p><p><span class="s" data-s="b3-p2-s0">Na prática, isso significa adicionar uma conexão direta que pula uma ou mais camadas.</span> <span class="s" data-s="b3-p2-s1">A saída do bloco residual é a soma da transformação aprendida F(x) com a entrada original x. Essas conexões de atalho não adicionam parâmetros nem complexidade computacional — são apenas somas elemento a elemento.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/1512.03385/figure5.webp" alt="Blocos residuais básicos (esquerda) e com bottleneck (direita). A conexão de atalho permite que a informação flua diretamente, enquanto as camadas convolucionais aprendem apenas o resíduo." loading="lazy">
+          <figcaption>
+            Blocos residuais básicos (esquerda) e com bottleneck (direita). A conexão de atalho permite que a informação flua diretamente, enquanto as camadas convolucionais aprendem apenas o resíduo.
+            <span class="source">Figura 5 do paper · He et al., arXiv:1512.03385</span>
+          </figcaption>
+        </figure>
+        <aside class="callout">
+          <h3><span class="s" data-s="b5-t">Conexões de atalho não são novidade</span></h3>
+          <p><span class="s" data-s="b5-c-s0">Shortcut connections já existiam na literatura (Highway Networks, por exemplo), mas a contribuição chave do ResNet é a formulação específica: atalhos de identidade pura, sem parâmetros extras, e a interpretação como aprendizado residual.</span> <span class="s" data-s="b5-c-s1">Essa simplicidade foi crucial para o sucesso em escala.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b6-h">Arquitetura e implementação</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Os autores testaram várias profundidades: 18, 34, 50, 101 e 152 camadas.</span> <span class="s" data-s="b6-p0-s1">Para as redes mais profundas (50+), usaram blocos &#39;bottleneck&#39;: três camadas (1×1, 3×3, 1×1) em vez de duas (3×3, 3×3).</span> <span class="s" data-s="b6-p0-s2">As convoluções 1×1 reduzem e depois restauram dimensões, mantendo a complexidade controlada.</span></p><p><span class="s" data-s="b6-p1-s0">Quando as dimensões mudam (por exemplo, ao fazer downsampling), os autores testaram duas estratégias para os atalhos: (A) zero-padding para igualar dimensões, sem parâmetros extras; (B) projeção linear 1×1 para ajustar dimensões.</span> <span class="s" data-s="b6-p1-s1">A opção A já funcionou muito bem, mostrando que o mecanismo não depende de parâmetros nos atalhos.</span></p><p><span class="s" data-s="b6-p2-s0">Todos os modelos foram treinados no ImageNet (1,28 milhão de imagens, 1000 classes) com SGD, batch normalization, e as práticas padrão de data augmentation.</span> <span class="s" data-s="b6-p2-s1">A comparação foi feita contra redes &#39;plain&#39; idênticas, mas sem as conexões residuais.</span></p>        <h2><span class="s" data-s="b7-h">Resultados no ImageNet</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Os resultados confirmaram a hipótese.</span> <span class="s" data-s="b7-p0-s1">Nas redes plain, a de 34 camadas teve erro de validação maior (28,54%) que a de 18 camadas (27,94%).</span> <span class="s" data-s="b7-p0-s2">Nas ResNets, a tendência se inverteu: a de 34 camadas alcançou 25,03% de erro, superando a de 18 camadas (27,88%).</span></p><p><span class="s" data-s="b7-p1-s0">A ResNet-152, com 152 camadas — 8× mais profunda que a VGG-16 — alcançou 4,49% de erro top-5 no conjunto de validação do ImageNet.</span> <span class="s" data-s="b7-p1-s1">Um ensemble de ResNets chegou a 3,57% de erro no conjunto de teste, vencendo a competição ILSVRC 2015.</span></p><p><span class="s" data-s="b7-p2-s0">Importante: a ResNet-152 tem menos parâmetros e menos FLOPs (operações de ponto flutuante) que a VGG-16, apesar de ser muito mais profunda.</span> <span class="s" data-s="b7-p2-s1">A eficiência vem dos blocos bottleneck e da ausência de camadas totalmente conectadas gigantes.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/1512.03385/figure4.webp" alt="Comparação de curvas de treino no ImageNet. À esquerda, redes plain: 34 camadas treina pior que 18. À direita, ResNets: 34 camadas supera 18, mostrando que as conexões residuais resolvem o problema de degradação." loading="lazy">
+          <figcaption>
+            Comparação de curvas de treino no ImageNet. À esquerda, redes plain: 34 camadas treina pior que 18. À direita, ResNets: 34 camadas supera 18, mostrando que as conexões residuais resolvem o problema de degradação.
+            <span class="source">Figura 4 do paper · He et al., arXiv:1512.03385</span>
+          </figcaption>
+        </figure>
+        <aside class="callout">
+          <h3><span class="s" data-s="b9-t">Profundidade extrema: 1000 camadas</span></h3>
+          <p><span class="s" data-s="b9-c-s0">Os autores também treinaram ResNets com 100 e 1000 camadas no CIFAR-10.</span> <span class="s" data-s="b9-c-s1">A rede de 1000 camadas convergiu sem problemas, algo impensável com arquiteturas plain.</span> <span class="s" data-s="b9-c-s2">Isso demonstra que o mecanismo residual escala para profundidades extremas.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b10-h">Além da classificação</span></h2>
+<p><span class="s" data-s="b10-p0-s0">O impacto das ResNets foi além do ImageNet.</span> <span class="s" data-s="b10-p0-s1">No COCO object detection, o uso de ResNets como backbone trouxe 28% de melhoria relativa.</span> <span class="s" data-s="b10-p0-s2">A equipe venceu também as tarefas de detecção, localização e segmentação no ILSVRC e COCO 2015.</span></p><p><span class="s" data-s="b10-p1-s0">O paper argumenta que a profundidade das representações é central para tarefas de reconhecimento visual.</span> <span class="s" data-s="b10-p1-s1">Modelos mais profundos capturam hierarquias mais ricas de features, e as ResNets finalmente permitiram explorar essa profundidade sem barreiras de otimização.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/1512.03385/table4.webp" alt="Resultados de modelos individuais no ImageNet. ResNet-152 alcançou 4,49% de erro top-5, superando todos os modelos anteriores e mostrando que profundidade, quando bem implementada, traz ganhos reais." loading="lazy">
+          <figcaption>
+            Resultados de modelos individuais no ImageNet. ResNet-152 alcançou 4,49% de erro top-5, superando todos os modelos anteriores e mostrando que profundidade, quando bem implementada, traz ganhos reais.
+            <span class="source">Tabela 4 do paper · He et al., arXiv:1512.03385</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b12-h">O que o paper não resolve</span></h2>
+<p><span class="s" data-s="b12-p0-s0">O paper é honesto sobre o que não explica completamente.</span> <span class="s" data-s="b12-p0-s1">Por que exatamente a formulação residual facilita a otimização?</span> <span class="s" data-s="b12-p0-s2">A hipótese é plausível, mas os autores admitem que a razão fundamental para as dificuldades de otimização em redes plain profundas ainda precisa ser estudada.</span></p><p><span class="s" data-s="b12-p1-s0">Também não há análise teórica rigorosa.</span> <span class="s" data-s="b12-p1-s1">Os resultados são empíricos: funcionam consistentemente em múltiplos datasets e tarefas, mas a compreensão matemática de por que o aprendizado residual é mais fácil ainda estava em aberto na época da publicação.</span></p><p><span class="s" data-s="b12-p2-s0">Outra limitação: os experimentos focam em visão computacional.</span> <span class="s" data-s="b12-p2-s1">O mecanismo é geral e foi depois aplicado a outras áreas (NLP, áudio), mas o paper em si não explora esses domínios.</span></p>        <h2><span class="s" data-s="b13-h">Por que este paper importa</span></h2>
+<p><span class="s" data-s="b13-p0-s0">ResNet não foi apenas um modelo melhor — foi uma mudança de paradigma.</span> <span class="s" data-s="b13-p0-s1">Mostrou que o problema de treinar redes profundas não era fundamental, mas de formulação.</span> <span class="s" data-s="b13-p0-s2">A ideia das conexões residuais é simples o suficiente para ser implementada em poucas linhas de código, mas poderosa o suficiente para desbloquear arquiteturas de centenas de camadas.</span></p><p><span class="s" data-s="b13-p1-s0">Desde 2015, variações de ResNet se tornaram o backbone padrão em visão computacional.</span> <span class="s" data-s="b13-p1-s1">A arquitetura influenciou praticamente todos os modelos posteriores: DenseNet, EfficientNet, e até Transformers de visão usam conceitos de conexões residuais.</span> <span class="s" data-s="b13-p1-s2">É um dos papers mais citados em deep learning.</span></p><p><span class="s" data-s="b13-p2-s0">O legado é duplo: técnico (uma ferramenta que funciona) e conceitual (uma nova forma de pensar sobre o que redes profundas devem aprender).</span> <span class="s" data-s="b13-p2-s1">Em vez de forçar cada camada a aprender tudo do zero, deixe-as refinar incrementalmente.</span> <span class="s" data-s="b13-p2-s2">Às vezes, a melhor coisa que uma camada pode aprender é não fazer quase nada — e as ResNets tornam isso fácil.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Redes neurais muito profundas sofrem de degradação: o erro de treino aumenta com mais camadas, não por overfitting, mas por dificuldade de otimização.</span></li><li><span class="s" data-s="k1">Conexões residuais (atalhos que pulam camadas) reformulam o problema: em vez de aprender H(x), as camadas aprendem F(x) = H(x) - x, o resíduo, que é mais fácil de otimizar.</span></li><li><span class="s" data-s="k2">ResNet-152 venceu o ImageNet 2015 com 3,57% de erro (ensemble), usando 8× mais camadas que VGG mas menos parâmetros, provando que profundidade bem implementada traz ganhos reais.</span></li><li><span class="s" data-s="k3">O mecanismo é simples (soma de atalhos, sem parâmetros extras) mas poderoso: permitiu treinar redes de até 1000 camadas e virou o backbone padrão em visão computacional.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/1512.03385" rel="noopener">Deep Residual Learning for Image Recognition</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="1512.03385" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

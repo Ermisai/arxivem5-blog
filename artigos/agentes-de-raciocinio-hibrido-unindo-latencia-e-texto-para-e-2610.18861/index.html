@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agentes de Raciocínio Híbrido: Unindo Latência e Texto para Eficiência — arXiv em 5</title>
+<meta name="description" content="O paper &#39;Hybrid Reasoning Agents&#39; apresenta uma arquitetura que permite aos LLMs alternar dinamicamente entre raciocínio em espaço latente (rápido e eficiente) e interação textual (explorável e com ferramentas), reduzindo custos e latência sem perder precisão.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Agentes de Raciocínio Híbrido: Unindo Latência e Texto para Eficiência">
+<meta property="og:description" content="O paper &#39;Hybrid Reasoning Agents&#39; apresenta uma arquitetura que permite aos LLMs alternar dinamicamente entre raciocínio em espaço latente (rápido e eficiente) e interação textual (explorável e com ferramentas), reduzindo custos e latência sem perder precisão.">
+<meta property="og:image" content="../../assets/papers/2610.18861/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Agentes</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.18861" rel="noopener">arXiv:2610.18861</a>
+    </div>
+    <h1><span class="s" data-s="t">Agentes de Raciocínio Híbrido: Unindo Latência e Texto para Eficiência</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">O paper &#39;Hybrid Reasoning Agents&#39; apresenta uma arquitetura que permite aos LLMs alternar dinamicamente entre raciocínio em espaço latente (rápido e eficiente) e interação textual (explorável e com ferramentas), reduzindo custos e latência sem perder precisão.</span></p>
+    <p class="byline">
+      <span>Zou et al.</span>
+      <span>6 min de leitura</span>
+<span>13/10/2026</span>    </p>
+    <div class="listen" data-article="2610.18861" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=eas7NcQHEMM" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Dilema da Linguagem Única em Agentes LLM</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A inteligência artificial de ponta deixou de depender exclusivamente da capacidade de raciocínio interno do modelo.</span> <span class="s" data-s="b0-p0-s1">Hoje, a performance de agentes baseados em LLMs (Large Language Models) depende crucialmente da sua habilidade de interagir com o mundo externo: invocar ferramentas especializadas, observar feedbacks do ambiente e adaptar suas próximas ações.</span> <span class="s" data-s="b0-p0-s2">No entanto, existe uma limitação estrutural fundamental: a língua franca para tanto o raciocínio interno quanto a interação externa é o texto.</span></p><p><span class="s" data-s="b0-p1-s0">Em arquiteturas padrão, todas as trajetórias de raciocínio intermediário são geradas token por token como texto antes que o agente possa agir no ambiente.</span> <span class="s" data-s="b0-p1-s1">Isso cria um gargalo de eficiência.</span> <span class="s" data-s="b0-p1-s2">Uma linha de pesquisa alternativa, o raciocínio latente, propõe desdobrar o cálculo diretamente no espaço contínuo de vetores ocultos (hidden space) do modelo.</span> <span class="s" data-s="b0-p1-s3">Isso elimina a necessidade de decodificar e verbalizar cada passo intermediário, permitindo um raciocínio interno mais rápido e eficiente dentro da &#34;língua própria&#34; do modelo.</span></p><p><span class="s" data-s="b0-p2-s0">O problema é que os atuais reasoners latentes permanecem selados atrás da fronteira do modelo.</span> <span class="s" data-s="b0-p2-s1">Ao contrário do texto decodificado, os vetores latentes contínuos (i) não possuem vias nativas para invocação de ferramentas em raciocínios agênticos de múltiplas rodadas, e (ii) não expõem facilmente semânticas interpretáveis por humanos.</span> <span class="s" data-s="b0-p2-s2">Isso os torna difíceis de supervisionar durante o treinamento e de auditar ou depurar na inferência.</span> <span class="s" data-s="b0-p2-s3">Essa divisão mantém as duas linhas de trabalho separadas no desenvolvimento de agentes de próxima geração.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.18861/figure1.webp" alt="Arquitetura do HybridAgent: o HybridLink conecta estados ocultos ao espaço de texto, permitindo alternar entre raciocínio interno e ações externas." loading="lazy">
+          <figcaption>
+            Arquitetura do HybridAgent: o HybridLink conecta estados ocultos ao espaço de texto, permitindo alternar entre raciocínio interno e ações externas.
+            <span class="source">Figura 1 do paper · Zou et al., arXiv:2610.18861</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">A Proposta: Hybrid Reasoning Agents</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Os autores propõem fechar essa lacuna com os Hybrid Reasoning Agents (HybridAgents).</span> <span class="s" data-s="b2-p0-s1">Esta é uma arquitetura unificada que navega dinamicamente entre o raciocínio latente e a interação baseada em texto dentro de um único processo de geração.</span> <span class="s" data-s="b2-p0-s2">A ideia central é permitir que o agente pense além da linguagem humana (usando latência) enquanto ainda age através dela (usando texto para ferramentas e monitoramento).</span></p>        <h2><span class="s" data-s="b3-h">Mecanismo: O HybridLink e a Memória de Trabalho</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Construir tal agente é desafiador porque ele precisa lidar com entradas híbridas: vetores contínuos densos e tokens discretos esparsos, além de determinar quando transitar entre os modos para equilibrar ações agênticas e eficiência de raciocínio.</span> <span class="s" data-s="b3-p0-s1">Para resolver isso, os autores revisitam a arquitetura do modelo e estendem sua interface de geração autoregressiva para suportar entradas híbridas.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b4-t">O Coração do HybridLink</span></h3>
+          <p><span class="s" data-s="b4-c-s0">O componente central é o HybridLink, um adaptador residual leve.</span> <span class="s" data-s="b4-c-s1">Ele mapeia os estados ocultos da última camada (last-layer hidden states) de volta para o espaço de embedding de entrada.</span> <span class="s" data-s="b4-c-s2">Isso permite que o agente entre no modo latente para um pensamento interno recorrente e rápido, e retorne ao modo texto para chamadas de ferramentas e monitoramento externo.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b5-h">Implementação Técnica</span></h2>
+<p><span class="s" data-s="b5-p0-s0">O HybridLink atua como uma ponte.</span> <span class="s" data-s="b5-p0-s1">Ao mapear os estados ocultos de volta ao espaço de embedding, ele permite a recorrência sequencial dentro do modo latente.</span> <span class="s" data-s="b5-p0-s2">Isso significa que o modelo pode processar múltiplos passos de raciocínio interno sem precisar gerar texto explícito para cada um, mantendo o contexto denso e contínuo.</span> <span class="s" data-s="b5-p0-s3">A geração híbrida de múltiplas rodadas (multi-turn) é realizada através da memória de trabalho do próprio agente, que preserva trajetórias híbridas completas de texto, pensamentos latentes e observações de ferramentas entre as rodadas.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.18861/figure2.webp" alt="O modo latente gera pensamentos legíveis e informativos, permitindo que humanos inspecionem o raciocínio do modelo." loading="lazy">
+          <figcaption>
+            O modo latente gera pensamentos legíveis e informativos, permitindo que humanos inspecionem o raciocínio do modelo.
+            <span class="source">Figura 2 do paper · Zou et al., arXiv:2610.18861</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Transparência Inesperada: Pseudo-texto Latente</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Um achado surpreendente deste trabalho é a capacidade do HybridAgent de renderizar seus pensamentos no modo latente como pseudo-texto legível por humanos.</span> <span class="s" data-s="b7-p0-s1">Isso torna o raciocínio latente transparente e diretamente inspecionável, em vez de opaco.</span> <span class="s" data-s="b7-p0-s2">Os autores demonstram quantitativa e qualitativamente que os pensamentos latentes são altamente legíveis e específicos ao contexto, carregando semântica suficiente para serem interpretados como texto.</span></p>        <h2><span class="s" data-s="b8-h">Pós-Treinamento: HybridSFT e HybridRL</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Para desbloquear totalmente o potencial do raciocínio híbrido, os autores desenvolvem algoritmos dedicados de pós-treinamento.</span> <span class="s" data-s="b8-p0-s1">O primeiro passo é o HybridSFT (Supervised Fine-Tuning).</span> <span class="s" data-s="b8-p0-s2">Este estágio estabiliza a geração híbrida integrada a ferramentas, ensinando o modelo base (backbone) a coordenar-se com o HybridLink.</span> <span class="s" data-s="b8-p0-s3">O treinamento é feito por ativação e auto-condicionamento, adaptando o backbone a raciocinar sobre pensamentos latentes produzidos pelo seu próprio HybridLink.</span> <span class="s" data-s="b8-p0-s4">Isso fecha o gap entre treinamento e inferência (train-inference mismatch).</span></p>        <h2><span class="s" data-s="b9-h">Otimização de Política com HybridRL</span></h2>
+<p><span class="s" data-s="b9-p0-s0">O segundo passo é o HybridRL (Reinforcement Learning).</span> <span class="s" data-s="b9-p0-s1">Este algoritmo escala as capacidades de raciocínio agêntico treinando o HybridAgent a equilibrar adaptativamente o raciocínio latente e a interação baseada em texto.</span> <span class="s" data-s="b9-p0-s2">Para realizar isso, os autores habilitam a otimização de política sobre trajetórias híbridas através de fatoração de política híbrida e replay exato de rollout (exact rollout replay).</span> <span class="s" data-s="b9-p0-s3">Isso permite que o modelo aprenda quando é mais eficiente pensar no espaço latente e quando é necessário agir através do texto.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.18861/figure6.webp" alt="O HybridAgent reduz drasticamente o uso de tokens e aumenta a velocidade de inferência em comparação com agentes baseados apenas em texto." loading="lazy">
+          <figcaption>
+            O HybridAgent reduz drasticamente o uso de tokens e aumenta a velocidade de inferência em comparação com agentes baseados apenas em texto.
+            <span class="source">Figura 6 do paper · Zou et al., arXiv:2610.18861</span>
+          </figcaption>
+        </figure>
+        <aside class="callout">
+          <h3><span class="s" data-s="b11-t">Eficiência Comprovada</span></h3>
+          <p><span class="s" data-s="b11-c-s0">Em comparação com agentes LLM de ponta e frameworks agênticos que abrangem métodos baseados em texto e latentes, o HybridAgent melhora consistentemente o desempenho em 10,4%.</span> <span class="s" data-s="b11-c-s1">Além disso, entrega redução de 35,5% a 54,7% no uso de tokens, inferência 1,8x a 2,6x mais rápida e economia de custos de 2,7x a 3,7x.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b12-h">Avaliação e Resultados</span></h2>
+<p><span class="s" data-s="b12-p0-s0">Os autores avaliam o HybridAgent em três escalas de modelo (8B, 14B e superiores) em 11 benchmarks que cobrem matemática, ciência, medicina, busca e raciocínio agêntico.</span> <span class="s" data-s="b12-p0-s1">Os resultados mostram que o HybridAgent entrega performance competitiva sobre agentes LLM de fronteira maiores e frameworks especializados de uso de ferramentas.</span> <span class="s" data-s="b12-p0-s2">Por exemplo, o HybridAgent (14B) melhora a média dos benchmarks em 17,4% em comparação com a baseline agêntica mais forte.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.18861/table2.webp" alt="O HybridAgent supera métodos existentes em benchmarks de matemática e busca, entregando maior precisão e eficiência." loading="lazy">
+          <figcaption>
+            O HybridAgent supera métodos existentes em benchmarks de matemática e busca, entregando maior precisão e eficiência.
+            <span class="source">Tabela 2 do paper · Zou et al., arXiv:2610.18861</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b14-h">Análise de Escalabilidade e Precisão</span></h2>
+<p><span class="s" data-s="b14-p0-s0">A Tabela 2 destaca os resultados em benchmarks de matemática e busca intensiva em conhecimento.</span> <span class="s" data-s="b14-p0-s1">O HybridAgent, após o estágio de RL, atinge pontuações superiores em métricas como AIME25, AIME26, MATH500, GPQA-D, MedQA e MuSiQue.</span> <span class="s" data-s="b14-p0-s2">Por exemplo, no benchmark AIME25, o HybridAgent (14B) com RL atinge 43,3%, superando o ARPO (42,1%) e o GRPO (40,8%).</span> <span class="s" data-s="b14-p0-s3">No MATH500, atinge 84,6%, contra 82,8% do ARPO.</span></p>        <h2><span class="s" data-s="b15-h">Redução de Tokens e Passos de Geração</span></h2>
+<p><span class="s" data-s="b15-p0-s0">Além da precisão, a eficiência é um ponto forte.</span> <span class="s" data-s="b15-p0-s1">O HybridAgent reduz significativamente o uso de tokens de texto e o número total de passos de geração em comparação com agentes LLM baseados apenas em texto de tamanho correspondente.</span> <span class="s" data-s="b15-p0-s2">A Figura 6 ilustra essa eficiência através das escalas de modelo, mostrando que a abordagem híbrida mantém a qualidade do raciocínio enquanto corta drasticamente o custo computacional.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b16-t">Limitações e Escopo</span></h3>
+          <p><span class="s" data-s="b16-c-s0">O paper avalia a performance em benchmarks específicos e escalas de modelo limitadas.</span> <span class="s" data-s="b16-c-s1">A generalização para domínios não testados ou para modelos de escala muito maior (acima de 14B neste estudo principal) não é detalhada.</span> <span class="s" data-s="b16-c-s2">Além disso, a dependência da qualidade do HybridLink para a estabilidade do modo latente é um fator crítico que pode variar com diferentes arquiteturas de backbone.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b17-h">Conclusão e Implicações</span></h2>
+<p><span class="s" data-s="b17-p0-s0">O HybridAgent representa um framework escalável e eficiente para a próxima geração de agentes.</span> <span class="s" data-s="b17-p0-s1">Ele permite que os modelos raciocinem além da linguagem humana, mantendo a interação agêntica em ambientes externos e a inspecionabilidade externa.</span> <span class="s" data-s="b17-p0-s2">Ao combinar raciocínio latente eficiente com inspeção textual, o HybridAgent oferece um caminho viável para superar os gargalos de eficiência e transparência dos agentes atuais.</span></p>        <h2><span class="s" data-s="b18-h">O Que Fica em Aberto</span></h2>
+<p><span class="s" data-s="b18-p0-s0">Apesar dos avanços, questões sobre a robustez do HybridLink sob distribuições de dados muito diferentes das de treinamento permanecem.</span> <span class="s" data-s="b18-p0-s1">A capacidade de renderizar pseudo-texto latível é promissora, mas a fidelidade semântica completa em cenários de alta complexidade ou ambiguidade precisa de mais investigação.</span> <span class="s" data-s="b18-p0-s2">O código e os dados estão disponíveis no GitHub da Together AI, convidando a comunidade a explorar e estender esta arquitetura.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">HybridAgents alternam entre raciocínio latente e textual via HybridLink, unindo eficiência computacional e transparência.</span></li><li><span class="s" data-s="k1">O método reduz o uso de tokens em até 54,7% e acelera a inferência em 2,6x comparado a agentes baseados apenas em texto.</span></li><li><span class="s" data-s="k2">Algoritmos de pós-treinamento (HybridSFT e HybridRL) estabilizam a coordenação entre os dois modos de geração.</span></li><li><span class="s" data-s="k3">O raciocínio latente é renderizado como pseudo-texto, permitindo inspeção humana e depuração direta.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.18861" rel="noopener">Hybrid Reasoning Agents</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.18861" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

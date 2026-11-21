@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MOSS: Robô anfíbio com rodas origami que mudam de forma para vencer lama e água — arXiv em 5</title>
+<meta name="description" content="O paper apresenta MOSS, um robô compacto com rodas 3D impressas que alteram sua geometria axialmente para otimizar o consumo de energia em terrenos deformáveis e aquáticos.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MOSS: Robô anfíbio com rodas origami que mudam de forma para vencer lama e água">
+<meta property="og:description" content="O paper apresenta MOSS, um robô compacto com rodas 3D impressas que alteram sua geometria axialmente para otimizar o consumo de energia em terrenos deformáveis e aquáticos.">
+<meta property="og:image" content="../../assets/papers/2610.23813/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Robótica</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.23813" rel="noopener">arXiv:2610.23813</a>
+    </div>
+    <h1><span class="s" data-s="t">MOSS: Robô anfíbio com rodas origami que mudam de forma para vencer lama e água</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">O paper apresenta MOSS, um robô compacto com rodas 3D impressas que alteram sua geometria axialmente para otimizar o consumo de energia em terrenos deformáveis e aquáticos.</span></p>
+    <p class="byline">
+      <span>Lan et al.</span>
+      <span>9 min de leitura</span>
+<span>16/10/2026</span>    </p>
+    <div class="listen" data-article="2610.23813" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=tcc7-R4wSpU" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Desafio da Locomoção em Pântanos</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Monitorar ecossistemas úmidos, como pântanos e manguezais, é crucial para a conservação da biodiversidade e o entendimento das mudanças climáticas.</span> <span class="s" data-s="b0-p0-s1">Esses ambientes armazenam carbono e regulam o ciclo da água, mas a observação humana é frequentemente interrompida por variações sazonais no nível da água e na consistência do solo.</span> <span class="s" data-s="b0-p0-s2">Robôs oferecem uma alternativa para reduzir o distúrbio humano e coletar dados contínuos, mas enfrentar esses terrenos é um problema clássico de engenharia robótica.</span></p><p><span class="s" data-s="b0-p1-s0">A dificuldade central reside na heterogeneidade do terreno.</span> <span class="s" data-s="b0-p1-s1">Um pântano não é uma superfície uniforme; ele combina solo firme, areia solta, lama viscosa e água aberta.</span> <span class="s" data-s="b0-p1-s2">Superfícies firmes favorecem o rolamento com baixa resistência, enquanto terrenos deformáveis exigem uma área de contato maior e maior engajamento de cisalhamento para evitar que as rodas afundem ou deslizem.</span> <span class="s" data-s="b0-p1-s3">Rodas de geometria fixa, padrão na maioria dos robôs móveis, não conseguem adaptar sua forma a essas mudanças abruptas.</span></p><p><span class="s" data-s="b0-p2-s0">Estudos anteriores demonstraram que rodas transformáveis ou inspiradas em origami podem reconfigurar seu contato com o solo.</span> <span class="s" data-s="b0-p2-s1">No entanto, integrar essa reconfiguração axial com a transmissão de torque e a presença de aletas para interação com o terreno em um mecanismo compacto permanece um desafio.</span> <span class="s" data-s="b0-p2-s2">Além disso, a performance locomotora desses sistemas multimodais não foi suficientemente caracterizada em condições reais de pântano, que incluem transições suaves e abruptas entre terra e água.</span></p><p><span class="s" data-s="b0-p3-s0">Para preencher essas lacunas, os autores do paper MOSS (Multimodal Origami Swamp Robot System) desenvolveram uma plataforma robótica anfíbia compacta equipada com rodas origami impressas em 3D.</span> <span class="s" data-s="b0-p3-s1">O sistema foi projetado para mudar sua geometria de contato dinamicamente, permitindo que um único robô traverse ambientes terrestres e aquáticos significativamente diferentes.</span> <span class="s" data-s="b0-p3-s2">O trabalho não apenas apresenta o design, mas também fornece uma avaliação experimental sistemática do desempenho locomotor em condições representativas.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.23813/figure1.webp" alt="O robô MOSS operando em terreno representativo de pântano, mostrando sua capacidade anfíbia e as rodas origami vermelhas em diferentes estados de deformação." loading="lazy">
+          <figcaption>
+            O robô MOSS operando em terreno representativo de pântano, mostrando sua capacidade anfíbia e as rodas origami vermelhas em diferentes estados de deformação.
+            <span class="source">Figura 1 do paper · Lan et al., arXiv:2610.23813</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">Mecanismo de Transformação e Design das Rodas</span></h2>
+<p><span class="s" data-s="b2-p0-s0">O coração do sistema MOSS são suas rodas origami.</span> <span class="s" data-s="b2-p0-s1">Diferente de rodas convencionais, estas são impressas em 3D usando um padrão de origami modificado.</span> <span class="s" data-s="b2-p0-s2">Cada roda é formada pela colagem de duas peças idênticas impressas em anel e subsequentemente dobradas.</span> <span class="s" data-s="b2-p0-s3">O design incorpora aletas integradas e recortes de conformidade (compliance cutouts) que permitem a deformação controlada.</span> <span class="s" data-s="b2-p0-s4">A geometria da roda não é estática; ela pode alternar entre uma configuração contraída e uma expandida.</span></p><p><span class="s" data-s="b2-p1-s0">Na configuração contraída, a roda possui uma largura menor e um diâmetro de corpo reduzido.</span> <span class="s" data-s="b2-p1-s1">Essa forma é projetada para minimizar a resistência ao rolamento em superfícies mais firmes, como solo compacto ou lama menos saturada.</span> <span class="s" data-s="b2-p1-s2">A configuração expandida, por outro lado, aumenta significativamente a largura e o diâmetro da roda, além de alterar a orientação das aletas.</span> <span class="s" data-s="b2-p1-s3">Essa expansão aumenta a área de contato com o solo e o engajamento do terreno, o que é crítico para reduzir o deslizamento (slip) e o afundamento do cubo em superfícies moles, como areia ou lama profunda.</span></p><p><span class="s" data-s="b2-p2-s0">A transição entre essas configurações é acionada por um mecanismo de manivela central.</span> <span class="s" data-s="b2-p2-s1">Um atuador servo controla uma articulação de manivela que puxa ou empurra os lados das rodas.</span> <span class="s" data-s="b2-p2-s2">Este movimento axial único altera simultaneamente a largura, o diâmetro do corpo e a orientação das aletas.</span> <span class="s" data-s="b2-p2-s3">A simplicidade deste mecanismo é intencional: ele evita a complexidade de sistemas de troca de rodas ou múltiplos atuadores independentes, mantendo o robô compacto e leve.</span></p><p><span class="s" data-s="b2-p3-s0">Um dos desafios de engenharia mais interessantes aqui é como transmitir o torque de tração enquanto a roda muda de forma axialmente.</span> <span class="s" data-s="b2-p3-s1">Se o eixo de transmissão fosse rígido, a deformação da roda quebraria o acoplamento.</span> <span class="s" data-s="b2-p3-s2">Para resolver isso, os autores utilizaram um design de eixo telescópico.</span> <span class="s" data-s="b2-p3-s3">Este eixo separa o movimento de morfing axial da transmissão de torque, fornecendo um caminho de carga guiado que mantém a integridade estrutural durante a transformação.</span> <span class="s" data-s="b2-p3-s4">Isso permite que o motor continue girando a roda enquanto ela se expande ou contrai.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.23813/figure3.webp" alt="Desenho técnico do robô MOSS, destacando o mecanismo de transformação central e as dimensões compactas do chassi anfíbio." loading="lazy">
+          <figcaption>
+            Desenho técnico do robô MOSS, destacando o mecanismo de transformação central e as dimensões compactas do chassi anfíbio.
+            <span class="source">Figura 3 do paper · Lan et al., arXiv:2610.23813</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b4-h">Protocolo Experimental e Métricas de Desempenho</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Para validar a hipótese de que a geometria adaptativa oferece benefícios locomotores dependentes do terreno, os autores realizaram uma bateria rigorosa de testes.</span> <span class="s" data-s="b4-p0-s1">A avaliação ocorreu em quatro tipos principais de superfície: solo firme, areia, lama com varying conteúdo de água (Mud0.5, Mud1.0, Mud2.0) e água aberta.</span> <span class="s" data-s="b4-p0-s2">A métrica principal de eficiência foi o Custo de Transporte (Cost of Transport - CoT), que mede a energia consumida por unidade de peso por metro percorrido.</span> <span class="s" data-s="b4-p0-s3">Um CoT menor indica maior eficiência energética.</span></p><p><span class="s" data-s="b4-p1-s0">Além do CoT, os pesquisadores mediram o deslizamento (slip) e o afundamento do cubo (hub sinkage).</span> <span class="s" data-s="b4-p1-s1">O deslizamento refere-se à diferença entre a velocidade teórica da roda e a velocidade real de deslocamento do robô, indicando quanta tração está sendo perdida.</span> <span class="s" data-s="b4-p1-s2">O afundamento do cubo é crítico em terrenos moles, pois um afundamento excessivo pode travar o robô.</span> <span class="s" data-s="b4-p1-s3">Os testes incluíram não apenas a locomoção em configurações fixas, mas também testes de morfing em movimento e transições terrestres-aquáticas.</span></p><p><span class="s" data-s="b4-p2-s0">Os testes de morfing em movimento avaliaram a capacidade do robô de mudar de configuração enquanto se locomove, uma operação que impõe cargas dinâmicas ao mecanismo.</span> <span class="s" data-s="b4-p2-s1">Os testes de transição simularam a mudança natural de um pântano, onde o robô passa de solo firme para lama e finalmente para água.</span> <span class="s" data-s="b4-p2-s2">Além dos testes de laboratório controlados, foram realizados testes ao ar livre em terreno deformável natural, com payloads modulares de sensoriamento, para demonstrar a viabilidade operacional em condições reais.</span></p><p><span class="s" data-s="b4-p3-s0">A escolha das superfícies de teste foi deliberada para cobrir o espectro de desafios encontrados em pântanos.</span> <span class="s" data-s="b4-p3-s1">A lama com diferentes conteúdos de água permite isolar o efeito da viscosidade e da capacidade de suporte do solo.</span> <span class="s" data-s="b4-p3-s2">A areia testa a resistência ao cisalhamento e a tendência de afundamento.</span> <span class="s" data-s="b4-p3-s3">A água testa a propulsão hidrodinâmica e a flutuabilidade.</span> <span class="s" data-s="b4-p3-s4">Essa abordagem sistemática permite uma comparação direta de como a configuração da roda (contraída vs. expandida) impacta o desempenho em cada cenário.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.23813/figure5.webp" alt="Gráficos comparando o consumo de energia e o deslizamento nas diferentes configurações das rodas, mostrando a eficácia da morfologia adaptativa." loading="lazy">
+          <figcaption>
+            Gráficos comparando o consumo de energia e o deslizamento nas diferentes configurações das rodas, mostrando a eficácia da morfologia adaptativa.
+            <span class="source">Figura 5 do paper · Lan et al., arXiv:2610.23813</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b6-h">Resultados: Eficiência Dependente do Terreno</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Os resultados confirmam que não existe uma configuração de roda universalmente superior.</span> <span class="s" data-s="b6-p0-s1">A eficiência energética depende criticamente das propriedades do terreno.</span> <span class="s" data-s="b6-p0-s2">A configuração contraída demonstrou ser mais eficiente em solo firme e em lamas menos saturadas (Mud0.5 e Mud1.0).</span> <span class="s" data-s="b6-p0-s3">Nessas superfícies, a menor área de contato e o diâmetro reduzido minimizam a resistência ao rolamento e o trabalho necessário para deformar o solo, resultando em um CoT mais baixo.</span></p><p><span class="s" data-s="b6-p1-s0">Por outro lado, a configuração expandida superou a contraída em superfícies mais moles e aquáticas.</span> <span class="s" data-s="b6-p1-s1">Em lama saturada (Mud2.0), areia e água, a configuração expandida reduziu o CoT em até 29% em comparação com a contraída.</span> <span class="s" data-s="b6-p1-s2">Isso ocorre porque, nesses terrenos, a limitação não é a resistência ao rolamento, mas sim a capacidade de suporte e a tração.</span> <span class="s" data-s="b6-p1-s3">A maior área de contato da roda expandida distribui o peso do robô, reduzindo o afundamento, e as aletas expandidas fornecem maior engajamento de cisalhamento, reduzindo o deslizamento.</span></p><p><span class="s" data-s="b6-p2-s0">Em areia, a configuração expandida foi particularmente eficaz em reduzir tanto o deslizamento quanto o afundamento do cubo.</span> <span class="s" data-s="b6-p2-s1">Em lama molhada, a redução do deslizamento foi significativa, permitindo que o robô mantivesse a tração onde a roda contraída simplesmente patinava.</span> <span class="s" data-s="b6-p2-s2">Na água, as aletas expandidas atuaram como remos ou hélices, aumentando a velocidade de propulsão e a eficiência da locomoção aquática.</span> <span class="s" data-s="b6-p2-s3">Esses dados mostram claramente que a morfologia da roda deve ser adaptada ao tipo de interação solo-robô predominante.</span></p><p><span class="s" data-s="b6-p3-s0">Os testes de morfing em movimento não apresentaram falhas observadas, indicando que o mecanismo de manivela e o eixo telescópico são robustos o suficiente para suportar as cargas dinâmicas da transição.</span> <span class="s" data-s="b6-p3-s1">O robô conseguiu mudar de configuração sem perder estabilidade ou travar.</span> <span class="s" data-s="b6-p3-s2">Isso é um resultado importante para aplicações práticas, onde o robô pode precisar ajustar sua locomoção rapidamente ao encontrar uma mudança de terreno inesperada.</span></p>        <h2><span class="s" data-s="b7-h">Transições e Limitações Operacionais</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Um dos testes mais desafiadores foi a traversia contínua de transições solo-lama-água.</span> <span class="s" data-s="b7-p0-s1">Em 10 tentativas, o MOSS conseguiu completar a transição com sucesso em 8 delas.</span> <span class="s" data-s="b7-p0-s2">As duas falhas não foram causadas por problemas no mecanismo de rodas, mas sim por limitações de clearance do chassi.</span> <span class="s" data-s="b7-p0-s3">Especificamente, na fronteira rígida entre a lama e a água, o chassi do robô raspou no fundo ou na interface, impedindo a progressão.</span></p><p><span class="s" data-s="b7-p1-s0">Essa falha destaca uma limitação de design importante: a altura do chassi e a folga mínima são críticas em terrenos irregulares e transições abruptas.</span> <span class="s" data-s="b7-p1-s1">Embora as rodas se adaptem perfeitamente, o corpo do robô permanece rígido.</span> <span class="s" data-s="b7-p1-s2">Em um cenário real de pântano, onde a profundidade da água e a consistência da lama podem variar rapidamente, um chassi muito baixo pode entrar em contato com obstáculos ou superfícies duras, causando atolamento ou danos.</span></p><p><span class="s" data-s="b7-p2-s0">Os testes ao ar livre validaram a operação em terreno deformável natural e em água, com payloads modulares.</span> <span class="s" data-s="b7-p2-s1">Isso demonstra que o sistema não é apenas um protótipo de laboratório, mas uma plataforma funcional para coleta de dados.</span> <span class="s" data-s="b7-p2-s2">No entanto, a necessidade de intervenção manual para ajustar o clearance ou evitar obstáculos pontiagudos sugere que a autonomia completa ainda requer melhorias no planejamento de trajetória e na percepção do terreno.</span></p><p><span class="s" data-s="b7-p3-s0">Os autores também notaram que a força necessária para manter a configuração expandida (shape-holding power) é um fator a ser considerado.</span> <span class="s" data-s="b7-p3-s1">O mecanismo atual depende da fricção e do design geométrico para manter a forma sob carga.</span> <span class="s" data-s="b7-p3-s2">Em cenários de alta resistência, isso pode consumir energia adicional ou exigir um torque maior do atuador.</span> <span class="s" data-s="b7-p3-s3">Futuras iterações visam reduzir essa força de retenção, possivelmente através de mecanismos de auto-travação.</span></p>        <h2><span class="s" data-s="b8-h">Conclusões e Direções Futuras</span></h2>
+<p><span class="s" data-s="b8-p0-s0">O paper MOSS demonstra que a morfologia adaptativa das rodas pode fornecer benefícios locomotores dependentes do terreno, permitindo que um único robô compacto traverse ambientes terrestres e aquáticos.</span> <span class="s" data-s="b8-p0-s1">A integração de rodas origami 3D impressas com um mecanismo de transformação axial e um eixo telescópico é uma solução elegante para o problema de geometria fixa.</span> <span class="s" data-s="b8-p0-s2">Os resultados experimentais mostram claramente que a configuração contraída é preferível para solo firme, enquanto a expandida é superior para areia, lama molhada e água.</span></p><p><span class="s" data-s="b8-p1-s0">Apesar dos avanços, o trabalho deixa várias questões em aberto.</span> <span class="s" data-s="b8-p1-s1">A eficiência energética global ainda é limitada pela ineficiência do mecanismo de transformação em si, que consome energia para mudar de configuração.</span> <span class="s" data-s="b8-p1-s2">Além disso, a falta de um sistema de auto-travação significa que o atuador deve manter tensão constante para manter a forma expandida, o que pode drenar a bateria em operações de longa duração.</span></p><p><span class="s" data-s="b8-p2-s0">Trabalhos futuros propõem melhorar a tração com materiais de contato de maior atrito e desenvolver mecanismos de morfing com auto-travação para reduzir o consumo de energia de manutenção.</span> <span class="s" data-s="b8-p2-s1">A interface modular do robô permite a integração de sensores como microfones, ferramentas de amostragem ambiental e câmeras infravermelhas para monitoramento de biodiversidade e inspeção pós-enchentes.</span></p><p><span class="s" data-s="b8-p3-s0">A próxima grande etapa é a combinação de sensoriamento de terreno a bordo com navegação autônoma.</span> <span class="s" data-s="b8-p3-s1">O objetivo é que o robô possa analisar o terreno à frente e selecionar automaticamente a configuração de roda mais adequada antes de entrar na área problemática.</span> <span class="s" data-s="b8-p3-s2">Ensaios de campo mais amplos serão necessários para validar essa estratégia de controle consciente do terreno em ambientes não estruturados e imprevisíveis.</span> <span class="s" data-s="b8-p3-s3">O MOSS é um passo sólido em direção a robôs ecológicos verdadeiramente versáteis.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Rodas origami mudam de largura e diâmetro com um único mecanismo de manivela, sem necessidade de troca de rodas.</span></li><li><span class="s" data-s="k1">Configuração compacta é mais eficiente em solo firme; a expandida reduz deslizamento em areia e lama molhada.</span></li><li><span class="s" data-s="k2">Eixo telescópico transmite torque enquanto permite a deformação axial, mantendo a integridade estrutural.</span></li><li><span class="s" data-s="k3">Testes mostram sucesso em transições terra-água, mas falhas ocorreram devido a limitações de clearance do chassi.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.23813" rel="noopener">MOSS: Multimodal Origami Swamp Robot System</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.23813" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

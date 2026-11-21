@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ScenarioForge: Validação Executável de Exercícios de Cibersegurança com LLMs — arXiv em 5</title>
+<meta name="description" content="Como transformar propostas de LLMs em cenários de cyber-range validados, resolvendo a lacuna entre descrição plausível e infraestrutura funcional.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ScenarioForge: Validação Executável de Exercícios de Cibersegurança com LLMs">
+<meta property="og:description" content="Como transformar propostas de LLMs em cenários de cyber-range validados, resolvendo a lacuna entre descrição plausível e infraestrutura funcional.">
+<meta property="og:image" content="../../assets/papers/2611.21579/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Segurança</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.21579" rel="noopener">arXiv:2611.21579</a>
+    </div>
+    <h1><span class="s" data-s="t">ScenarioForge: Validação Executável de Exercícios de Cibersegurança com LLMs</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Como transformar propostas de LLMs em cenários de cyber-range validados, resolvendo a lacuna entre descrição plausível e infraestrutura funcional.</span></p>
+    <p class="byline">
+      <span>Acosta et al.</span>
+      <span>5 min de leitura</span>
+<span>16/11/2026</span>    </p>
+    <div class="listen" data-article="2611.21579" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=t7uI46198rY" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Lacuna entre Descrição e Execução</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Construir cenários para cyber-ranges e competições Capture-The-Flag (CTF) é uma tarefa intensiva em mão de obra.</span> <span class="s" data-s="b0-p0-s1">Os autores precisam coordenar infraestrutura, serviços vulneráveis, caminhos de ataque, artefatos e condições de sucesso.</span> <span class="s" data-s="b0-p0-s2">Embora Grandes Modelos de Linguagem (LLMs) possam propor exercícios detalhados, descrições plausíveis não garantem software implantável ou objetivos verificáveis.</span> <span class="s" data-s="b0-p0-s3">A literatura atual frequentemente avalia a solidez, o realismo ou a criatividade das narrativas geradas, mas isso não estabelece se o cenário pode ser instanciado e operado na prática.</span></p>        <h2><span class="s" data-s="b1-h">A Proposta: ScenarioForge</span></h2>
+<p><span class="s" data-s="b1-p0-s0">O paper apresenta o ScenarioForge, um framework que transforma requisitos de alto nível em topologias fundamentadas em recursos, serviços, tráfego, segmentação e cadeias de desafios.</span> <span class="s" data-s="b1-p0-s1">Diferente de abordagens anteriores que tratam a saída do LLM como o ambiente final, o ScenarioForge trata a saída como uma proposta.</span> <span class="s" data-s="b1-p0-s2">Um componente backend decide quais ativos instalados podem realizar essa proposta e registra os vínculos resultantes.</span> <span class="s" data-s="b1-p0-s3">Essa divisão estabelece uma fronteira de confiança explícita: conteúdo gerado plausível nunca é aceito como evidência de um recurso disponível ou um objetivo suportado.</span></p>        <h2><span class="s" data-s="b2-h">Arquitetura e Representação Intermediária</span></h2>
+<p><span class="s" data-s="b2-p0-s0">O coração do sistema é um documento XML canônico que persiste durante todo o fluxo de trabalho, desde a autoria até a execução.</span> <span class="s" data-s="b2-p0-s1">O LLM refina este XML, mas nunca invoca diretamente o CORE (Common Open Research Emulator), Docker ou shells remotos.</span> <span class="s" data-s="b2-p0-s2">A representação registra infraestrutura, configuração de nós, estado dos desafios e dependências.</span> <span class="s" data-s="b2-p0-s3">Cenários parcialmente especificados preservam as restrições do usuário enquanto o modelo preenche campos ausentes.</span> <span class="s" data-s="b2-p0-s4">Todo valor gerado deve resolver para uma entrada de catálogo ou capacidade do backend.</span></p>        <h2><span class="s" data-s="b3-h">Síntese Guiada por LLM e Construção de Recursos</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O LLM extrai restrições, decompondo o pedido em componentes de infraestrutura e exercício.</span> <span class="s" data-s="b3-p0-s1">Ele preenche papéis e relacionamentos não especificados, serializando o resultado em XML restrito.</span> <span class="s" data-s="b3-p0-s2">Restrições explícitas permanecem autoritárias; se um usuário solicita uma vulnerabilidade específica, ela é preservada, enquanto a topologia ao redor pode ser gerada.</span> <span class="s" data-s="b3-p0-s3">O sistema inclui um Generator Builder assistido por IA que usa LLMs locais ou em nuvem para criar ou refinar geradores de recursos personalizados.</span> <span class="s" data-s="b3-p0-s4">Isso permitiu desenvolver 85 geradores de desafios customizados, que são testados e reparados antes da instalação.</span></p>        <h2><span class="s" data-s="b4-h">Ancoragem em Recursos Executáveis</span></h2>
+<p><span class="s" data-s="b4-p0-s0">A etapa de grounding (ancoragem) é crítica.</span> <span class="s" data-s="b4-p0-s1">Um elemento é retido apenas se mapear para um ativo executável ou configuração determinística suportada.</span> <span class="s" data-s="b4-p0-s2">Serviços vulneráveis resolvem-se para ambientes Docker Compose catalogados, incluindo portas e procedimentos de inicialização.</span> <span class="s" data-s="b4-p0-s3">Geradores de recursos de desafio produzem artefatos, flags e instruções de implantação.</span> <span class="s" data-s="b4-p0-s4">Se um serviço ou versão não estiver disponível ou for incompatível, a saída inicial permanece como proposta.</span> <span class="s" data-s="b4-p0-s5">A resolução determinística adiciona hosts necessários, reconcilia identificadores e rejeita escolhas de catálogo que não correspondem aos pré-requisitos de tempo de execução.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.21579/figure2.webp" alt="Topologia de rede gerada mostrando roteadores, firewalls e containers Docker conectados. Caixas laranja identificam containers de desafio; roxo identifica a conexão HITL do participante; vermelho e verde identificam aplicação de firewall e NAT." loading="lazy">
+          <figcaption>
+            Topologia de rede gerada mostrando roteadores, firewalls e containers Docker conectados. Caixas laranja identificam containers de desafio; roxo identifica a conexão HITL do participante; vermelho e verde identificam aplicação de firewall e NAT.
+            <span class="source">Figura 2 do paper · Acosta et al., arXiv:2611.21579</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b6-h">Validação Baseada em Execução</span></h2>
+<p><span class="s" data-s="b6-p0-s0">O ScenarioForge não confia em descrições.</span> <span class="s" data-s="b6-p0-s1">O cenário resolvido é instanciado no CORE 9.2 e julgado usando observações do ambiente implantado.</span> <span class="s" data-s="b6-p0-s2">As verificações de runtime cobrem nós, contêineres, serviços, portas, injetores, segmentação de rede e artefatos.</span> <span class="s" data-s="b6-p0-s3">Um script de solução percorre a sequência de desafios e registra se cada passo passou, falhou, foi inconclusivo ou foi ignorado.</span> <span class="s" data-s="b6-p0-s4">XML, logs, resumos e relatórios preservam as evidências.</span> <span class="s" data-s="b6-p0-s5">Isso garante que cada etapa do exercício seja verificável individualmente, criando um registro auditável da execução.</span></p>        <h2><span class="s" data-s="b7-h">O Conjunto de Dados ScenarioForge</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Os autores lançam o ScenarioForge Execution Dataset, contendo 226 cenários materializados.</span> <span class="s" data-s="b7-p0-s1">Esses cenários cobrem 294 imagens do Vulhub (um repositório de vulnerabilidades Docker) e todos os 85 geradores de recursos de desafio customizados desenvolvidos com a scaffolding assistida por IA.</span> <span class="s" data-s="b7-p0-s2">Todos os 226 cenários passaram pela construção, pré-visualização, sequenciamento, implantação, validação rigorosa de runtime e verificações de artefato ao vivo.</span> <span class="s" data-s="b7-p0-s3">Seus 867 passos, cada um um objetivo de desafio verificável individualmente, compreendem 457 instâncias baseadas em vulnerabilidade e 410 baseadas em recursos gerados.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.21579/figure3.webp" alt="Fluxograma de dependências entre artefatos e acesso a containers para resolver o desafio. Bordas tracejadas mostram pré-requisitos de acesso validados; verdes mostram dependências tipadas de artefatos. Nós laranja são baseados em vulnerabilidade; azuis usam recursos gerados." loading="lazy">
+          <figcaption>
+            Fluxograma de dependências entre artefatos e acesso a containers para resolver o desafio. Bordas tracejadas mostram pré-requisitos de acesso validados; verdes mostram dependências tipadas de artefatos. Nós laranja são baseados em vulnerabilidade; azuis usam recursos gerados.
+            <span class="source">Figura 3 do paper · Acosta et al., arXiv:2611.21579</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Benchmark de Autoria com IA</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Em um benchmark separado com 50 prompts correspondentes, o ScenarioForge combinado com Qwen3.8 e com GPT5.6 alcançou 50/50 (100%) de sucesso na topologia/construção e 160/160 campos de intenção.</span> <span class="s" data-s="b9-p0-s1">Isso demonstra que o modelo open-weight menor, Qwen3.8, igualou o modelo frontier dentro do ScenarioForge.</span> <span class="s" data-s="b9-p0-s2">A geração direta de frontier, mesmo com scaffolding cumulativo (estrutura, vocabulário, política e guia de imagem de container), atingiu apenas 41/50 builds e 147/160 campos.</span> <span class="s" data-s="b9-p0-s3">O framework estruturado é essencial para a confiabilidade.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b10-t">A Importância do Scaffolding Cumulativo</span></h3>
+          <p><span class="s" data-s="b10-c-s0">A geração direta de modelos frontier falhou em 9 dos 50 casos e em 13 dos 160 campos de intenção.</span> <span class="s" data-s="b10-c-s1">O ScenarioForge fornece estrutura, vocabulário, política e guia de imagem de container.</span> <span class="s" data-s="b10-c-s2">Isso reduz a ambiguidade e garante que a saída do LLM seja interpretável pelo sistema de execução, eliminando a necessidade de correções manuais extensas.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b11-h">Limitações e Escopo do Experimento</span></h2>
+<p><span class="s" data-s="b11-p0-s0">É importante notar que o benchmark testado omitiu a geração downstream de recursos de desafio, o sequenciamento de dependências/flags, a implantação e a validação ao vivo.</span> <span class="s" data-s="b11-p0-s1">O foco foi na autoria de topologia e na satisfação dos campos de intenção.</span> <span class="s" data-s="b11-p0-s2">Além disso, o sistema depende da disponibilidade de ativos no catálogo e na capacidade do backend de resolver as restrições.</span> <span class="s" data-s="b11-p0-s3">Cenários que exigem configurações de rede ou serviços não catalogados podem falhar na etapa de grounding.</span> <span class="s" data-s="b11-p0-s4">O framework não cria recursos do nada; ele os instancia a partir do que está disponível.</span></p>        <h2><span class="s" data-s="b12-h">Conclusão e Reprodutibilidade</span></h2>
+<p><span class="s" data-s="b12-p0-s0">ScenarioForge separa propostas de exercícios fundamentados, implantados e validados.</span> <span class="s" data-s="b12-p0-s1">Os 226 cenários do dataset completaram o pipeline completo.</span> <span class="s" data-s="b12-p0-s2">O framework permite a criação de exercícios operacionais ricos e reprodutíveis para treinamento e avaliação.</span> <span class="s" data-s="b12-p0-s3">Os artefatos lançados, incluindo prompts congelados, expectativas, saídas retidas e scripts de pontuação, suportam reprodução e futuros estudos cross-modelo.</span> <span class="s" data-s="b12-p0-s4">Isso estabelece um padrão para a avaliação de cenários de cibersegurança, onde a execução real é a única prova de validade.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">ScenarioForge separa a intenção generativa da execução determinística, garantindo que cenários sejam implantáveis antes de serem validados.</span></li><li><span class="s" data-s="k1">O framework alcançou 100% de sucesso na construção de topologias em benchmarks, superando gerações diretas de modelos frontier.</span></li><li><span class="s" data-s="k2">226 cenários materializados foram validados em runtime, cobrindo vulnerabilidades reais e recursos gerados automaticamente.</span></li><li><span class="s" data-s="k3">O sistema usa um XML canônico persistente para manter o controle de estado e dependências entre desafios e infraestrutura.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.21579" rel="noopener">ScenarioForge: Resource-Grounded Generation and Execution Validation of Cyber Exercises</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.21579" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

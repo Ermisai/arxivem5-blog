@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scientist World: Transformando artigos de pesquisa em ambientes executáveis para IAs — arXiv em 5</title>
+<meta name="description" content="O paper apresenta o Scientist World, um pipeline autônomo que converte 1.000 artigos científicos em ambientes de teste reprodutíveis, permitindo avaliar se IAs podem superar o estado da arte humano em pesquisa real.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Scientist World: Transformando artigos de pesquisa em ambientes executáveis para IAs">
+<meta property="og:description" content="O paper apresenta o Scientist World, um pipeline autônomo que converte 1.000 artigos científicos em ambientes de teste reprodutíveis, permitindo avaliar se IAs podem superar o estado da arte humano em pesquisa real.">
+<meta property="og:image" content="../../assets/papers/2611.08478/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Agentes</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.08478" rel="noopener">arXiv:2611.08478</a>
+    </div>
+    <h1><span class="s" data-s="t">Scientist World: Transformando artigos de pesquisa em ambientes executáveis para IAs</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">O paper apresenta o Scientist World, um pipeline autônomo que converte 1.000 artigos científicos em ambientes de teste reprodutíveis, permitindo avaliar se IAs podem superar o estado da arte humano em pesquisa real.</span></p>
+    <p class="byline">
+      <span>Lu et al.</span>
+      <span>8 min de leitura</span>
+<span>05/11/2026</span>    </p>
+    <div class="listen" data-article="2611.08478" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=ZXQxZpy_tz4" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema: A Literatura é Legível, Mas Não Executável</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A ciência humana opera sobre uma base acumulativa: cada novo trabalho repousa sobre métodos, falhas e descobertas anteriores.</span> <span class="s" data-s="b0-p0-s1">Para pesquisadores humanos, essa literatura é um mundo vivo, acessível e utilizável.</span> <span class="s" data-s="b0-p0-s2">Para sistemas de Inteligência Artificial, no entanto, a literatura científica é estática.</span> <span class="s" data-s="b0-p0-s3">Ela é legível, mas não executável.</span> <span class="s" data-s="b0-p0-s4">Os modelos podem ler os textos, mas não podem rodar os experimentos, reproduzir os resultados ou testar hipóteses diretamente sobre o código original publicado.</span></p><p><span class="s" data-s="b0-p1-s0">Essa desconexão cria um gargalo.</span> <span class="s" data-s="b0-p1-s1">IAs que tentam atuar como &#34;cientistas&#34; frequentemente operam em ambientes simulados ou tarefas isoladas que não refletem a complexidade da pesquisa real.</span> <span class="s" data-s="b0-p1-s2">Elas não têm um &#34;mundo&#34; onde possam crescer, falhar e iterar sobre problemas genuínos da literatura acadêmica.</span> <span class="s" data-s="b0-p1-s3">O paper &#34;Scientist World: Grow a Research World for AI-Scientists&#34;, de Taiming Lu, Sachin Konan e Zhuang Liu da Princeton University, propõe preencher essa lacuna.</span></p><p><span class="s" data-s="b0-p2-s0">A proposta central é simples em teoria, mas complexa em execução: transformar cada artigo de pesquisa em um ambiente executável.</span> <span class="s" data-s="b0-p2-s1">Ao fazer isso, a literatura científica deixa de ser apenas um arquivo de PDFs e se torna um conjunto de desafios computacionais reprodutíveis.</span> <span class="s" data-s="b0-p2-s2">Um &#34;AI-Scientist&#34; entra nesse ambiente, tenta melhorar o método original ou inventar um novo, e é avaliado com base no seu desempenho real, não em métricas de linguagem.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.08478/figure1.webp" alt="Visão geral do Scientist World: converte artigos em ambientes onde IAs competem para melhorar resultados humanos, medido pela melhoria normalizada na fronteira (FNI)." loading="lazy">
+          <figcaption>
+            Visão geral do Scientist World: converte artigos em ambientes onde IAs competem para melhorar resultados humanos, medido pela melhoria normalizada na fronteira (FNI).
+            <span class="source">Figura 1 do paper · Lu et al., arXiv:2611.08478</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">A Solução: Um Pipeline Autônomo de Quatro Etapas</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Para construir o Scientist World, os autores desenvolveram um pipeline totalmente autônomo, sem intervenção humana (no human-in-the-loop).</span> <span class="s" data-s="b2-p0-s1">Isso é crucial para a escalabilidade.</span> <span class="s" data-s="b2-p0-s2">Se dependesse de humanos para validar cada ambiente, o projeto não poderia crescer junto com a literatura.</span> <span class="s" data-s="b2-p0-s3">O pipeline opera em quatro etapas principais para cada artigo selecionado.</span></p><p><span class="s" data-s="b2-p1-s0">Primeiro, a reprodução do método.</span> <span class="s" data-s="b2-p1-s1">O sistema extrai o código e a metodologia do artigo original e tenta reproduzir os resultados reportados.</span> <span class="s" data-s="b2-p1-s2">Não basta gerar código que roda; ele precisa gerar números que estejam dentro de uma margem estatística aceitável em relação aos do paper original.</span> <span class="s" data-s="b2-p1-s3">Se a reprodução falha, o ambiente é descartado ou ajustado.</span></p><p><span class="s" data-s="b2-p2-s0">Segundo, o design da tarefa de pesquisa.</span> <span class="s" data-s="b2-p2-s1">O sistema identifica a pergunta de pesquisa aberta do artigo e define o que conta como progresso científico.</span> <span class="s" data-s="b2-p2-s2">Isso evita que o modelo apenas &#34;jogue&#34; o sistema, otimizando métricas artificiais.</span> <span class="s" data-s="b2-p2-s3">O objetivo é melhorar a precisão, eficiência ou robustez do método original, mantendo as restrições do problema (como tamanho do modelo ou dados) fixas.</span></p><p><span class="s" data-s="b2-p3-s0">Terceiro, o empacotamento.</span> <span class="s" data-s="b2-p3-s1">O ambiente é estruturado para rodar em qualquer máquina.</span> <span class="s" data-s="b2-p3-s2">Ele inclui scripts de preparação, dados, implementações de referência (baselines) e uma matriz de pontuação.</span> <span class="s" data-s="b2-p3-s3">Por fim, a verificação independente.</span> <span class="s" data-s="b2-p3-s4">Um agente diferente daquele que construiu o ambiente verifica se tudo funciona e se a reprodução é fiel.</span> <span class="s" data-s="b2-p3-s5">Apenas ambientes que passam por todas essas etapas são liberados.</span></p>        <h2><span class="s" data-s="b3-h">Anatomia de um Ambiente: O Que Torna a Pesquisa &#34;Executável&#34;?</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Um ambiente no Scientist World não é apenas um script Python.</span> <span class="s" data-s="b3-p0-s1">Ele é um espaço de trabalho autocontido, projetado para separar o problema da solução.</span> <span class="s" data-s="b3-p0-s2">A Figura 6 do paper detalha essa estrutura.</span> <span class="s" data-s="b3-p0-s3">O briefing define a pergunta de pesquisa, os dados são fornecidos e a pontuação é fixada.</span> <span class="s" data-s="b3-p0-s4">O que é crucial é que a solução não é revelada; ela deve ser descoberta pelo modelo.</span></p><p><span class="s" data-s="b3-p1-s0">Cada ambiente mantém as restrições do artigo original.</span> <span class="s" data-s="b3-p1-s1">Por exemplo, se um paper original treina um Transformer sem normalização usando um conjunto de dados específico, o ambiente não permite que o modelo de IA simplesmente aumente o tamanho do modelo ou use mais dados para melhorar a precisão.</span> <span class="s" data-s="b3-p1-s2">Isso forçaria o modelo a inovar na arquitetura ou no método de treinamento, não apenas na escala.</span></p><p><span class="s" data-s="b3-p2-s0">A avaliação é dividida em duas partes: visível e oculta.</span> <span class="s" data-s="b3-p2-s1">Metade das métricas é usada para o modelo ajustar sua abordagem durante a execução, mas a outra metade é mantida em segredo até o final.</span> <span class="s" data-s="b3-p2-s2">Isso impede o overfitting (sobreajuste) às métricas de teste.</span> <span class="s" data-s="b3-p2-s3">O modelo precisa aprender o problema, não apenas memorizar como pontuar bem.</span></p><p><span class="s" data-s="b3-p3-s0">Além disso, o sistema rastreia não apenas o sucesso, mas também o fracasso.</span> <span class="s" data-s="b3-p3-s1">O Scientist World armazena 6.400 horas de rastros de pesquisa, incluindo ideias, experimentos, falhas e sucessos.</span> <span class="s" data-s="b3-p3-s2">Isso cria um registro rico de como as IAs fazem ciência, servindo tanto para avaliação quanto para treinamento futuro.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.08478/figure6.webp" alt="Estrutura de um ambiente: separa o problema, os dados e a pontuação da solução, mantendo a tarefa aberta para inovação sem revelar a resposta." loading="lazy">
+          <figcaption>
+            Estrutura de um ambiente: separa o problema, os dados e a pontuação da solução, mantendo a tarefa aberta para inovação sem revelar a resposta.
+            <span class="source">Figura 6 do paper · Lu et al., arXiv:2611.08478</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Resultados: IAs Já Superam Humanos em Pesquisa?</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Com 1.000 ambientes verificados lançados, os autores testaram diversos modelos de ponta (frontier models) para ver como eles se saem.</span> <span class="s" data-s="b5-p0-s1">A métrica principal é a Frontier-Normalized Improvement (FNI).</span> <span class="s" data-s="b5-p0-s2">Se um modelo melhora o método reproduzido, seu FNI é positivo.</span> <span class="s" data-s="b5-p0-s3">Se não, é zero ou negativo.</span></p><p><span class="s" data-s="b5-p1-s0">Os resultados são surpreendentes.</span> <span class="s" data-s="b5-p1-s1">Em 74% dos casos, os AI-Scientists de ponta conseguiram superar os resultados dos pesquisadores humanos que escreveram os artigos originais.</span> <span class="s" data-s="b5-p1-s2">Isso não significa que as IAs são &#34;mais inteligentes&#34; que humanos em geral, mas que, em tarefas de otimização de métodos específicos, elas são altamente eficazes.</span></p><p><span class="s" data-s="b5-p2-s0">O paper avalia os modelos em dois modos: &#34;improve&#34; e &#34;innovate&#34;.</span> <span class="s" data-s="b5-p2-s1">No modo &#34;improve&#34;, o modelo recebe o método original e tenta melhorá-lo.</span> <span class="s" data-s="b5-p2-s2">No modo &#34;innovate&#34;, ele deve inventar um método do zero, sem ver a solução original.</span> <span class="s" data-s="b5-p2-s3">Isso testa a capacidade de criatividade e raciocínio autônomo.</span></p><p><span class="s" data-s="b5-p3-s0">No modo &#34;improve&#34;, modelos como Fable 5 e Opus 4.7 lideram, com FNI acima de 100, indicando melhorias significativas.</span> <span class="s" data-s="b5-p3-s1">No modo &#34;innovate&#34;, o desafio é maior.</span> <span class="s" data-s="b5-p3-s2">Fable 5.1 se destaca com FNI de 76.3, enquanto outros modelos, como DeepSeek V4 e MiMo V2.5, tiveram desempenho muito baixo, alguns quase zero.</span> <span class="s" data-s="b5-p3-s3">Isso sugere que, embora as IAs sejam boas em otimizar o existente, a inovação do zero ainda é um desafio significativo para a maioria dos modelos.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.08478/figure12.webp" alt="Leaderboards: Fable 5 e Opus 4.7 lideram na melhoria de métodos existentes, enquanto Fable 5.1 se destaca na inovação do zero." loading="lazy">
+          <figcaption>
+            Leaderboards: Fable 5 e Opus 4.7 lideram na melhoria de métodos existentes, enquanto Fable 5.1 se destaca na inovação do zero.
+            <span class="source">Figura 12 do paper · Lu et al., arXiv:2611.08478</span>
+          </figcaption>
+        </figure>
+        <aside class="callout">
+          <h3><span class="s" data-s="b7-t">Qualidade do Pipeline Autônomo</span></h3>
+          <p><span class="s" data-s="b7-c-s0">O pipeline de construção é rigoroso.</span> <span class="s" data-s="b7-c-s1">99% dos métodos reproduzidos estão dentro da margem esperada.</span> <span class="s" data-s="b7-c-s2">82% dos ambientes superam as baselines originais dos artigos.</span> <span class="s" data-s="b7-c-s3">Apenas 37% foram aprovados na primeira tentativa de verificação independente, mas 100% passaram após iterações de correção automática.</span> <span class="s" data-s="b7-c-s4">Isso garante que os ambientes são robustos e reprodutíveis.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b8-h">O Scientist World como Ferramenta de Treinamento</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Além de avaliar modelos existentes, o Scientist World serve como um terreno de treinamento.</span> <span class="s" data-s="b8-p0-s1">Os autores demonstraram que é possível &#34;criar&#34; um pequeno modelo para que ele alcance o desempenho de modelos de ponta em ideação de pesquisa.</span> <span class="s" data-s="b8-p0-s2">Usando os rastros de pesquisa do Scientist World, eles treinaram um modelo pequeno e conseguiram um aumento de 158% em sua capacidade de gerar ideias de pesquisa comparado a um modelo base sem esse treinamento.</span></p><p><span class="s" data-s="b8-p1-s0">Isso é um passo importante para democratizar a pesquisa com IA.</span> <span class="s" data-s="b8-p1-s1">Se ambientes de alta qualidade podem ser gerados automaticamente a partir da literatura, eles podem ser usados para treinar modelos menores e mais eficientes, reduzindo a dependência de modelos gigantes e caros para tarefas de pesquisa.</span></p><p><span class="s" data-s="b8-p2-s0">O Scientist World não é um conjunto estático de dados.</span> <span class="s" data-s="b8-p2-s1">Ele é projetado para crescer.</span> <span class="s" data-s="b8-p2-s2">À medida que novos artigos são publicados, novos ambientes são adicionados.</span> <span class="s" data-s="b8-p2-s3">Isso mantém o benchmark atualizado com o estado da arte, ao contrário de benchmarks tradicionais que ficam desatualizados rapidamente à medida que os modelos melhoram e passam a &#34;decorar&#34; os testes.</span></p>        <h2><span class="s" data-s="b9-h">Limitações e Crítica Honesta</span></h2>
+<p><span class="s" data-s="b9-p0-s0">É importante não vender o Scientist World como uma revolução completa.</span> <span class="s" data-s="b9-p0-s1">Há limitações claras.</span> <span class="s" data-s="b9-p0-s2">Primeiro, o pipeline só funciona para artigos que possuem código aberto e implementações reprodutíveis.</span> <span class="s" data-s="b9-p0-s3">Isso exclui uma grande parte da literatura científica, especialmente em áreas onde a reprodução é difícil ou o código não é compartilhado.</span></p><p><span class="s" data-s="b9-p1-s0">Segundo, a automação total tem riscos.</span> <span class="s" data-s="b9-p1-s1">Embora o sistema de verificação independente seja robusto, erros podem passar.</span> <span class="s" data-s="b9-p1-s2">A reprodução de métodos complexos pode falhar silenciosamente, levando a ambientes que parecem válidos, mas têm falhas fundamentais.</span> <span class="s" data-s="b9-p1-s3">A taxa de aprovação inicial de apenas 37% para a verificação independente mostra que o processo de filtragem é necessário e que nem tudo é perfeito.</span></p><p><span class="s" data-s="b9-p2-s0">Terceiro, a métrica FNI, embora útil, é limitada.</span> <span class="s" data-s="b9-p2-s1">Ela mede o progresso em relação a um método específico, mas não captura a qualidade geral da contribuição científica.</span> <span class="s" data-s="b9-p2-s2">Um modelo pode melhorar ligeiramente a precisão, mas introduzir complexidades que tornam o método inútil na prática.</span> <span class="s" data-s="b9-p2-s3">O Scientist World foca em melhorias quantificáveis, o que pode ignorar aspectos qualitativos da pesquisa.</span></p><p><span class="s" data-s="b9-p3-s0">Por fim, o foco em &#34;melhorar&#34; ou &#34;inovar&#34; dentro de tarefas definidas por artigos humanos pode limitar a criatividade das IAs.</span> <span class="s" data-s="b9-p3-s1">Elas estão operando dentro de um quadro definido por humanos.</span> <span class="s" data-s="b9-p3-s2">A verdadeira inovação científica muitas vezes vem de questionar as premissas do problema, não apenas de otimizá-lo.</span> <span class="s" data-s="b9-p3-s3">O Scientist World é um excelente campo de treinamento, mas ainda é um campo delimitado.</span></p>        <h2><span class="s" data-s="b10-h">Conclusão: Um Novo Capítulo para a Pesquisa com IA</span></h2>
+<p><span class="s" data-s="b10-p0-s0">O Scientist World representa um avanço significativo na forma como avaliamos e treinamos IAs para pesquisa.</span> <span class="s" data-s="b10-p0-s1">Ao transformar a literatura científica em ambientes executáveis, os autores da Princeton University criaram um recurso valioso para a comunidade de IA.</span> <span class="s" data-s="b10-p0-s2">Ele permite que IAs pratiquem a pesquisa de forma realista, com feedback imediato e métricas objetivas.</span></p><p><span class="s" data-s="b10-p1-s0">Os resultados mostram que IAs de ponta já são capazes de superar humanos em muitas tarefas de otimização de métodos, mas a inovação do zero ainda é um desafio.</span> <span class="s" data-s="b10-p1-s1">O Scientist World oferece o caminho para fechar essa lacuna, fornecendo dados de treinamento ricos e um benchmark dinâmico.</span></p><p><span class="s" data-s="b10-p2-s0">Para desenvolvedores, cientistas de dados e estudantes de tecnologia, o Scientist World é um lembrete de que o futuro da pesquisa não é apenas sobre modelos maiores, mas sobre melhores ambientes de teste e treinamento.</span> <span class="s" data-s="b10-p2-s1">Ele convida a comunidade a construir sobre essa base, explorando como IAs podem não apenas usar, mas também avançar o conhecimento científico.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">O Scientist World converte 1.000 artigos científicos em ambientes executáveis autônomos, permitindo que IAs pratiquem pesquisa real com reprodução fiel dos métodos originais.</span></li><li><span class="s" data-s="k1">IAs de ponta superam pesquisadores humanos em 74% dos casos ao melhorar métodos existentes, mas a inovação do zero ainda é um desafio difícil para a maioria dos modelos.</span></li><li><span class="s" data-s="k2">O pipeline é totalmente automatizado, com verificações rigorosas de qualidade, e serve tanto como benchmark dinâmico quanto como terreno de treinamento para melhorar modelos menores.</span></li><li><span class="s" data-s="k3">A abordagem foca em melhorias quantificáveis dentro de restrições definidas, limitando-se a artigos com código aberto e não capturando necessariamente a inovação qualitativa ou a quebra de paradigmas.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.08478" rel="noopener">Scientist World: Grow a Research World for AI-Scientists</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.08478" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

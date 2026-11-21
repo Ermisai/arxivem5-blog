@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quando o Nome Não é a Identidade: Medindo a Falha de Ligação de Provedores em Agentes MCP — arXiv em 5</title>
+<meta name="description" content="Este paper investiga uma falha de segurança no Model Context Protocol (MCP) onde agentes de IA selecionam ferramentas de servidores não verificados, explorando a ambiguidade entre metadados visíveis e a identidade real do provedor.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Quando o Nome Não é a Identidade: Medindo a Falha de Ligação de Provedores em Agentes MCP">
+<meta property="og:description" content="Este paper investiga uma falha de segurança no Model Context Protocol (MCP) onde agentes de IA selecionam ferramentas de servidores não verificados, explorando a ambiguidade entre metadados visíveis e a identidade real do provedor.">
+<meta property="og:image" content="../../assets/papers/2611.21577/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Segurança</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.21577" rel="noopener">arXiv:2611.21577</a>
+    </div>
+    <h1><span class="s" data-s="t">Quando o Nome Não é a Identidade: Medindo a Falha de Ligação de Provedores em Agentes MCP</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Este paper investiga uma falha de segurança no Model Context Protocol (MCP) onde agentes de IA selecionam ferramentas de servidores não verificados, explorando a ambiguidade entre metadados visíveis e a identidade real do provedor.</span></p>
+    <p class="byline">
+      <span>Anbiaee et al.</span>
+      <span>8 min de leitura</span>
+<span>16/11/2026</span>    </p>
+    <div class="listen" data-article="2611.21577" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=Gr8yxsPAjb4" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Contexto: Agentes, Ferramentas e a Fronteira de Segurança</span></h2>
+<p><span class="s" data-s="b0-p0-s0">As aplicações de Grandes Modelos de Linguagem (LLMs) estão evoluindo rapidamente de geradores de texto para agentes executivos.</span> <span class="s" data-s="b0-p0-s1">Esses agentes modernos não apenas processam linguagem natural, mas também recuperam arquivos, chamam APIs, consultam bancos de dados, operam navegadores e invocam ferramentas externas.</span> <span class="s" data-s="b0-p0-s2">Essa mudança de paradigma transforma a resolução de ferramentas em uma fronteira crítica de segurança.</span> <span class="s" data-s="b0-p0-s3">A segurança de um sistema agentic não depende apenas de o modelo entender a intenção do usuário, mas também de o sistema invocar a capacidade correta, do provedor correto.</span></p><p><span class="s" data-s="b0-p1-s0">O Model Context Protocol (MCP) surge como uma tentativa proeminente de padronizar essa camada de interação.</span> <span class="s" data-s="b0-p1-s1">O MCP permite que um cliente (a aplicação que usa o LLM) se conecte a servidores externos que expõem ferramentas, recursos e prompts.</span> <span class="s" data-s="b0-p1-s2">Essas ferramentas são anunciadas através de metadados, incluindo nome, descrição em linguagem natural, esquema de entrada e anotações opcionais.</span> <span class="s" data-s="b0-p1-s3">Esses campos definem a interface invocável e guiam a seleção de ferramentas pelos LLMs.</span></p><p><span class="s" data-s="b0-p2-s0">No entanto, o papel do paper é destacar que esses metadados não são apenas documentação passiva.</span> <span class="s" data-s="b0-p2-s1">Eles se tornam parte do plano de controle do agente.</span> <span class="s" data-s="b0-p2-s2">Quando um cliente compõe ferramentas de servidores operados independentemente, ele enfrenta um problema de resolução não vinculado ao provedor.</span> <span class="s" data-s="b0-p2-s3">Se os metadados não forem ligados a uma identidade verificada do provedor, um nome familiar pode ajudar o modelo a identificar uma capacidade, mas não prova sua origem.</span> <span class="s" data-s="b0-p2-s4">Uma descrição plausível e um esquema compatível podem fazer uma ferramenta parecer adequada, mas não estabelecem que o componente executável selecionado pertence ao provedor pretendido.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.21577/figure1.webp" alt="Diagrama que ilustra o cenário controlado de ambiguidade de ferramentas MCP, onde um cliente é enganado por um servidor malicioso que anuncia metadados similares aos legítimos." loading="lazy">
+          <figcaption>
+            Diagrama que ilustra o cenário controlado de ambiguidade de ferramentas MCP, onde um cliente é enganado por um servidor malicioso que anuncia metadados similares aos legítimos.
+            <span class="source">Figura 1 do paper · Anbiaee et al., arXiv:2611.21577</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">O Problema: Misbinding de Provedor de Ferramenta</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Os autores, Zeynab Anbiaee, Sajjad Dadkhah e Ali A. Ghorbani, do Canadian Institute for Cybersecurity (CIC) da Universidade de New Brunswick, definem o problema central como &#39;tool-provider misbinding&#39; (falha de ligação de provedor de ferramenta).</span> <span class="s" data-s="b2-p0-s1">Uma violação ocorre quando uma solicitação de usuário destinada a um provedor legítimo é resolvida para uma ferramenta controlada por um atacante.</span></p><p><span class="s" data-s="b2-p1-s0">É crucial entender o modelo de ameaça.</span> <span class="s" data-s="b2-p1-s1">O atacante não compromete o host, o cliente, o LLM, o servidor legítimo ou o canal de rede.</span> <span class="s" data-s="b2-p1-s2">Ele apenas opera outro servidor MCP que é visível para o mesmo cliente e anuncia ferramentas com metadados escolhidos estrategicamente.</span> <span class="s" data-s="b2-p1-s3">A falha de segurança não é uma invasão convencional de servidor ou interceptação man-in-the-middle.</span> <span class="s" data-s="b2-p1-s4">É uma falha em vincular a identidade de uma ferramenta executável ao provedor autorizado a oferecer essa capacidade.</span></p><p><span class="s" data-s="b2-p2-s0">Estudos comparativos de modelagem de ameaças em protocolos emergentes de agentes de IA já identificaram a falta de validação de proveniência e vinculação de identidade como uma preocupação de segurança no MCP.</span> <span class="s" data-s="b2-p2-s1">Este paper move essa preocupação plausível para uma afirmação de segurança científica, formulando o problema como um problema de medição e avaliação controlada.</span></p>        <h2><span class="s" data-s="b3-h">Metodologia: O Experimento de Fatoração Controlada</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Para isolar as variáveis que causam a falha, os autores construíram um ambiente MCP controlado com um servidor legítimo e um servidor controlado pelo atacante.</span> <span class="s" data-s="b3-p0-s1">O servidor legítimo expõe uma ferramenta chamada &#39;data_fetch_and_store&#39;, descrita como &#39;Fetch a dataset and store it in the destination&#39;, com um esquema que aceita argumentos relevantes para a tarefa, como dataset_id e destination.</span></p><p><span class="s" data-s="b3-p1-s0">O atacante anuncia ferramentas construídas variando sistematicamente três atributos: nome, descrição e esquema.</span> <span class="s" data-s="b3-p1-s1">O experimento principal utiliza um design fatorial completo de 12 condições, resultando de uma matriz 2x3x2.</span> <span class="s" data-s="b3-p1-s2">Os fatores são: Nome (Não Relacionado vs. Exato), Descrição (Não Relacionada, Copiada, Autoridade-Enhanced) e Esquema (Incompatível vs. Compatível).</span></p><p><span class="s" data-s="b3-p2-s0">A condição C01, por exemplo, usa um nome não relacionado, descrição não relacionada e esquema incompatível.</span> <span class="s" data-s="b3-p2-s1">Já a condição C12 usa nome exato, descrição com reforço de autoridade e esquema compatível.</span> <span class="s" data-s="b3-p2-s2">O orçamento do atacante é definido como r=1, expondo uma ferramenta legítima e uma controlada pelo atacante em cada teste.</span> <span class="s" data-s="b3-p2-s3">Para evitar viés de wording, foram usadas 10 solicitações de tarefa equivalentes, com cinco usando linguagem comum e cinco com linguagem mais consciente de segurança.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b4-t">O Poder da Intersecção de Metadados</span></h3>
+          <p><span class="s" data-s="b4-c-s0">O resultado mais crítico não é um único atributo defeituoso, mas a sinergia entre eles.</span> <span class="s" data-s="b4-c-s1">Quando o nome é uma colisão exata, a descrição está alinhada com a tarefa e o esquema é compatível, a probabilidade de seleção incorreta dispara.</span> <span class="s" data-s="b4-c-s2">Nenhum desses fatores isoladamente é suficiente para enganar a maioria dos modelos de forma consistente.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b5-h">Avaliação: Cinco Modelos, Quatro Resultados Possíveis</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Cada condição foi testada com 5 repetições independentes para cada um dos 10 prompts, totalizando 50 ensaios por condição e modelo.</span> <span class="s" data-s="b5-p0-s1">Cinco clientes baseados em LLM foram avaliados: GPT-5.4, Claude Sonnet 5, Gemini 2.5 Pro, Qwen3.7 Max e DeepSeek V3.</span> <span class="s" data-s="b5-p0-s2">O objetivo era observar se a mesma ambiguidade de metadados produz modos de falha semelhantes ou diferentes.</span></p><p><span class="s" data-s="b5-p1-s0">Cada tentativa foi classificada em quatro categorias de resultado: seleção do atacante (A), seleção legítima (L), solicitação de esclarecimento (C) e falha de resolução ou instabilidade de ligação.</span> <span class="s" data-s="b5-p1-s1">A estabilidade é um fator chave: mesmo que o modelo escolha corretamente uma vez, ele pode falhar consistentemente em replicar essa escolha em execuções subsequentes sob as mesmas condições, indicando uma resolução instável.</span></p><p><span class="s" data-s="b5-p2-s0">Os autores investigaram quatro perguntas de pesquisa principais: quais atributos aumentam a probabilidade de misbinding?</span> <span class="s" data-s="b5-p2-s1">A colisão exata de nomes sozinha causa falhas?</span> <span class="s" data-s="b5-p2-s2">Os resultados diferem entre clientes?</span> <span class="s" data-s="b5-p2-s3">E os resultados são robustos a variações no orçamento do atacante e escolhas de nomes não relacionados?</span></p>        <h2><span class="s" data-s="b6-h">Resultados: A Sinergia da Enganação</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Os resultados mostram que o misbinding é impulsionado pela interação entre os metadados.</span> <span class="s" data-s="b6-p0-s1">As condições de controle de baixo alinhamento (como C01) são majoritariamente seguras.</span> <span class="s" data-s="b6-p0-s2">No entanto, as falhas mais graves ocorrem quando a colisão exata de nome, a descrição alinhada com a tarefa e o esquema compatível se reforçam mutuamente.</span> <span class="s" data-s="b6-p0-s3">Isso confirma que a familiaridade do nome, somada à plausibilidade semântica e à validade estrutural, cria uma armadilha eficaz para o agente.</span></p><p><span class="s" data-s="b6-p1-s0">Análises de robustez mostraram que uma única string de metadados ou um único candidato controlado pelo atacante não explicam o efeito.</span> <span class="s" data-s="b6-p1-s1">O problema é sistêmico à arquitetura de seleção baseada em metadados desvinculados.</span> <span class="s" data-s="b6-p1-s2">Mesmo com nomes não relacionados, descrições com &#39;autoridade-enhanced&#39; (que imitam tom oficial) e esquemas compatíveis podem causar execução de provedor errado ou ambiguidade de resolução não resolvida.</span></p><p><span class="s" data-s="b6-p2-s0">Os mapas de calor dos resultados revelam padrões distintos.</span> <span class="s" data-s="b6-p2-s1">As taxas de violação (seleção do atacante) são mais altas nas condições C10-C12.</span> <span class="s" data-s="b6-p2-s2">Isso valida a hipótese de que a colisão de nome é um catalisador poderoso, mas não suficiente sem o suporte descritivo e estrutural.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.21577/figure2.webp" alt="Mapas de calor mostrando as taxas de violação, esclarecimento e instabilidade de resolução para os diferentes modelos avaliados, destacando as condições de maior risco." loading="lazy">
+          <figcaption>
+            Mapas de calor mostrando as taxas de violação, esclarecimento e instabilidade de resolução para os diferentes modelos avaliados, destacando as condições de maior risco.
+            <span class="source">Figura 2 do paper · Anbiaee et al., arXiv:2611.21577</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Fragmentação de Falhas entre Modelos</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Um achado crucial é que diferentes modelos expõem a mesma fraqueza de ligação de provedor de maneiras diferentes.</span> <span class="s" data-s="b8-p0-s1">Não existe um comportamento uniforme de falha.</span> <span class="s" data-s="b8-p0-s2">GPT-5.4, Qwen3.7 Max e DeepSeek V3 frequentemente resolvem a ambiguidade de alto alinhamento através da seleção direta da ferramenta do atacante.</span> <span class="s" data-s="b8-p0-s3">Esses modelos priorizam a adequação funcional imediata sobre a verificação de proveniência.</span></p><p><span class="s" data-s="b8-p1-s0">Em contraste, Claude Sonnet 5 tende a solicitar esclarecimento em situações ambíguas.</span> <span class="s" data-s="b8-p1-s1">Embora isso pareça uma defesa mais robusta, os autores notam que a ambiguidade pode persistir, e a interação humana ou de sistema adicional pode não ser suficiente para resolver a falha de ligação subjacente se o contexto não for explicitamente fornecido.</span></p><p><span class="s" data-s="b8-p2-s0">Gemini 2.5 Pro exibiu uma resolução de provedor instável ou inconsistente em várias condições.</span> <span class="s" data-s="b8-p2-s1">Isso significa que o modelo pode alternar entre o provedor legítimo e o atacante em execuções repetidas do mesmo prompt, criando um estado de segurança imprevisível e difícil de auditar.</span> <span class="s" data-s="b8-p2-s2">Essa instabilidade é tão perigosa quanto a seleção direta, pois impede a criação de políticas de segurança determinísticas.</span></p>        <h2><span class="s" data-s="b9-h">Limitações e Escopo do Experimento</span></h2>
+<p><span class="s" data-s="b9-p0-s0">É importante notar as limitações deste estudo.</span> <span class="s" data-s="b9-p0-s1">A avaliação foi realizada em um ambiente local mockado, com um único servidor legítimo e um único servidor atacante.</span> <span class="s" data-s="b9-p0-s2">Cenários reais de produção podem envolver dezenas de servidores, tornando a superfície de ataque mais complexa e a ruído semântico maior.</span> <span class="s" data-s="b9-p0-s3">O orçamento do atacante foi limitado a uma ferramenta concorrente por teste, mas um atacante sofisticado poderia tentar múltiplas ferramentas com variações sutis.</span></p><p><span class="s" data-s="b9-p1-s0">Além disso, o estudo focou em tarefas de busca e armazenamento de dados.</span> <span class="s" data-s="b9-p1-s1">A dinâmica de seleção pode variar para ferramentas que modificam estado crítico ou executam código.</span> <span class="s" data-s="b9-p1-s2">A segurança &#39;consciente&#39; incorporada nos prompts de teste também pode não refletir o comportamento de usuários finais que não recebem treinamento de segurança específico.</span></p><p><span class="s" data-s="b9-p2-s0">Os autores não investigaram a eficácia de soluções potenciais, como a assinatura digital de metadados ou a verificação de certificados de provedor, focando apenas na medição da falha na ausência desses mecanismos.</span> <span class="s" data-s="b9-p2-s1">O estudo é um diagnóstico, não uma prescrição completa.</span></p>        <h2><span class="s" data-s="b10-h">Conclusão: A Necessidade de Identidade Vinculada</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Este paper demonstra que os metadados do MCP, incluindo nome, descrição e esquema, não são apenas documentação, mas parte da superfície de seleção usada pelos clientes baseados em LLM.</span> <span class="s" data-s="b10-p0-s1">Quando esses metadados não estão vinculados a uma identidade verificada do provedor, uma ferramenta semanticamente plausível pode ser selecionada do provedor errado.</span></p><p><span class="s" data-s="b10-p1-s0">A formulação do problema como uma tarefa de seleção controlada pelo atacante permitiu quantificar o risco.</span> <span class="s" data-s="b10-p1-s1">A conclusão é que nomes familiares, descrições plausíveis e esquemas compatíveis não são limites de segurança suficientes.</span> <span class="s" data-s="b10-p1-s2">Para abordar essa classe de falhas, os clientes MCP precisam de identidade de ferramenta vinculada ao provedor: a capacidade executável selecionada deve ser ligada ao provedor autorizado a anunciá-la.</span></p><p><span class="s" data-s="b10-p2-s0">Para desenvolvedores e arquitetos de sistemas agentic, a lição é clara: a confiança não pode ser inferida apenas da semântica da ferramenta.</span> <span class="s" data-s="b10-p2-s1">A verificação de identidade do provedor deve ser uma camada explícita e verificável na pilha de protocolos, independentemente da qualidade dos metadados anunciados.</span> <span class="s" data-s="b10-p2-s2">Ignorar essa vinculação expõe os agentes a riscos de execução não autorizada e violação de dados.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">O protocolo MCP não vincula metadados de ferramentas a identidades verificadas de provedores, permitindo que servidores maliciosos se passem por legítimos.</span></li><li><span class="s" data-s="k1">A falha ocorre quando nomes exatos, descrições alinhadas e esquemas compatíveis reforçam mutuamente a escolha errada pelo modelo de linguagem.</span></li><li><span class="s" data-s="k2">Diferentes LLMs falham de maneiras distintas: alguns selecionam diretamente o atacante, outros pedem esclarecimento ou exibem resolução instável.</span></li><li><span class="s" data-s="k3">A segurança não depende apenas da compreensão do modelo, mas da vinculação criptográfica ou lógica entre a ferramenta executada e o provedor autorizado.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.21577" rel="noopener">When Tool Names Are Not Identities: Measuring Provider Misbinding in MCP-Based AI Agents</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.21577" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

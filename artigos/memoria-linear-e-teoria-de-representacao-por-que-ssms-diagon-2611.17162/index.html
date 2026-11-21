@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Memória Linear e Teoria de Representação: Por que SSMs Diagonais Falham em Rastrear Ordem — arXiv em 5</title>
+<meta name="description" content="Um novo paper usa teoria de representação para provar que SSMs diagonais não comutam e, portanto, não rastreiam ordem. Apresenta o HyperSSM com quaterniões, alcançando precisão exata em tarefas de grupo.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Memória Linear e Teoria de Representação: Por que SSMs Diagonais Falham em Rastrear Ordem">
+<meta property="og:description" content="Um novo paper usa teoria de representação para provar que SSMs diagonais não comutam e, portanto, não rastreiam ordem. Apresenta o HyperSSM com quaterniões, alcançando precisão exata em tarefas de grupo.">
+<meta property="og:image" content="../../assets/papers/2611.17162/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Redes neurais</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.17162" rel="noopener">arXiv:2611.17162</a>
+    </div>
+    <h1><span class="s" data-s="t">Memória Linear e Teoria de Representação: Por que SSMs Diagonais Falham em Rastrear Ordem</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um novo paper usa teoria de representação para provar que SSMs diagonais não comutam e, portanto, não rastreiam ordem.</span> <span class="s" data-s="d-s1">Apresenta o HyperSSM com quaterniões, alcançando precisão exata em tarefas de grupo.</span></p>
+    <p class="byline">
+      <span>Shikder et al.</span>
+      <span>6 min de leitura</span>
+<span>12/11/2026</span>    </p>
+    <div class="listen" data-article="2611.17162" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=6Y0UGeamfXA" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Ordem em SSMs</span></h2>
+<p><span class="s" data-s="b0-p0-s0">State Space Models (SSMs) surgiram como uma alternativa viável aos Transformers para processamento de sequências, oferecendo inferência em tempo linear e treinamento paralelo.</span> <span class="s" data-s="b0-p0-s1">No entanto, à medida que esses modelos são aplicados a tarefas que exigem o rastreamento de eventos em ordem específica — como seguir programas ou trajetórias de agentes —, uma limitação fundamental foi revelada: a maioria das implementações falha em preservar a ordem dos inputs.</span> <span class="s" data-s="b0-p0-s2">O paper &#34;Symmetry in Time: A Representation Theory of Linear Recurrent Memory&#34;, de Anif N. Shikder, Ramit Dey, Ján Mináč e Lyle E. Muller, formaliza essa falha usando teoria de representação e propõe uma arquitetura corrigida.</span></p>        <h2><span class="s" data-s="b1-h">A Explicação via Teoria de Representação</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Os SSMs modernos, como Mamba e S4, utilizam um &#34;seletivo&#34; onde a matriz de transição depende do input.</span> <span class="s" data-s="b1-p0-s1">Embora isso permita que o modelo &#34;escolha&#34; quanto memória reter, a estrutura interna ainda é frequentemente diagonalizada.</span> <span class="s" data-s="b1-p0-s2">Cada canal do estado oculto é multiplicado por um número real ou complexo escolhido pelo input.</span> <span class="s" data-s="b1-p0-s3">Como a multiplicação de números reais e complexos é comutativa (a * b = b * a), a ordem em que as operações são aplicadas não altera o resultado final.</span> <span class="s" data-s="b1-p0-s4">O estado registra quais inputs ocorreram, mas não a sequência em que aconteceram.</span></p><p><span class="s" data-s="b1-p1-s0">Os autores formalizam a atualização do estado como uma representação linear do monóide de sequências de inputs.</span> <span class="s" data-s="b1-p1-s1">Eles demonstram que um SSM rastreia um grupo exatamente quando esse grupo é um quociente do grupo gerado por suas matrizes de transição.</span> <span class="s" data-s="b1-p1-s2">Isso implica uma restrição algebraica rígida: SSMs diagonais reais e complexos só podem rastrear grupos comutativos (abelianos).</span> <span class="s" data-s="b1-p1-s3">Para rastrear grupos não-comutativos, como permutações de objetos ou rotações no espaço 3D, as matrizes de transição devem se decompor em blocos independentes sobre os números reais, complexos e quatérnions.</span></p><p><span class="s" data-s="b1-p2-s0">A intuição física é clara.</span> <span class="s" data-s="b1-p2-s1">Números complexos armazenam fase, permitindo contar ou navegar ciclos, mas rotações em 3D não comutam: girar um dado para frente e depois para a esquerda resulta em uma orientação diferente de girá-lo para a esquerda e depois para a frente.</span> <span class="s" data-s="b1-p2-s2">Números quatérnions, por outro lado, são a estrutura natural para representar rotações em 3D sem a perda de ordem associada aos escalares.</span> <span class="s" data-s="b1-p2-s3">O paper mostra que a limitação não está na recorrencia ou no treinamento, mas no sistema numérico subjacente.</span></p>        <h2><span class="s" data-s="b2-h">HyperSSM: Adicionando Quaterniões</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Baseado nessa teoria, os autores introduzem o HyperSSM.</span> <span class="s" data-s="b2-p0-s1">A arquitetura mantém a eficiência computacional dos SSMs diagonais, mas permite que cada canal evolua em seu próprio álgebra: real, complexo ou quatérnion.</span> <span class="s" data-s="b2-p0-s2">Em vez de multiplicar por um escalar, os canais quatérnion multiplicam por um quatérnion dependente do input.</span> <span class="s" data-s="b2-p0-s3">Isso preserva a ordem das operações, pois a multiplicação de quatérnions é não-comutativa.</span> <span class="s" data-s="b2-p0-s4">O modelo ainda utiliza o &#34;parallel scan&#34; para treinamento eficiente e inferência linear, garantindo que a complexidade não exploda.</span></p><p><span class="s" data-s="b2-p1-s0">O HyperSSM é treinado apenas com as respostas finais, sem supervisão densa.</span> <span class="s" data-s="b2-p1-s1">A teoria guia a escolha da representação mínima necessária: um canal real para paridade, um complexo para navegação de ciclos e um quatérnion para grupos como A5 (rotações do icosaedro).</span> <span class="s" data-s="b2-p1-s2">Para o grupo S5 (permutações de cinco elementos), é necessário um canal de sinal combinado com um quatérnion.</span> <span class="s" data-s="b2-p1-s3">Nenhuma informação sobre a estrutura do grupo é fornecida ao modelo durante o treinamento; ele descobre a representação necessária através da otimização.</span></p>        <h2><span class="s" data-s="b3-h">Resultados em Benchmarks de Grupo</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Nos benchmarks de rastreamento de estado, o HyperSSM demonstra precisão exata em tarefas de paridade, pares pares e navegação de ciclos, usando apenas um ou dois números de estado.</span> <span class="s" data-s="b3-p0-s1">Para o grupo A5, um único canal quatérnion é suficiente para 100% de acurácia.</span> <span class="s" data-s="b3-p0-s2">Para o grupo S5, a combinação de um canal de sinal e um quatérnion (cinco números de estado no total) também atinge 100% de acurácia.</span> <span class="s" data-s="b3-p0-s3">Isso contrasta fortemente com modelos anteriores: PD-SSM e Gated DeltaProduct, que usam dezenas de canais complexos, alcançam apenas ~1% de acurácia na tarefa S5 com 32 geradores, nível próximo ao acaso.</span></p><p><span class="s" data-s="b3-p1-s0">Um aspecto crucial é a generalização.</span> <span class="s" data-s="b3-p1-s1">O HyperSSM mantém a performance exata em sequências até 25 vezes mais longas do que as vistas durante o treinamento.</span> <span class="s" data-s="b3-p1-s2">Enquanto modelos em álgebras inadequadas falham além do intervalo de treino devido ao acúmulo de erros ou à falta de capacidade representacional, a memória exata do HyperSSM não sofre de propagação de erro.</span> <span class="s" data-s="b3-p1-s3">A precisão é mantida mesmo quando a complexidade da sequência aumenta drasticamente.</span></p>        <h2><span class="s" data-s="b4-h">Aplicações em Ciência e Interpretabilidade</span></h2>
+<p><span class="s" data-s="b4-p0-s0">A estrutura do HyperSSM permite interpretar diretamente os pesos aprendidos, pois a teoria dita o que as transições devem codificar.</span> <span class="s" data-s="b4-p0-s1">Os autores testam o modelo em três sistemas físicos onde a composição de rotações é fundamental: giroscópios rígidos, portas de qubits imperfeitas e backbones de proteínas.</span> <span class="s" data-s="b4-p0-s2">Em cada caso, o HyperSSM aprende a calibração ou a geometria subjacente sem ser explicitamente instruído sobre a física do sistema.</span></p><p><span class="s" data-s="b4-p1-s0">No experimento com giroscópios, o modelo processa janelas de velocidade angular para prever a orientação.</span> <span class="s" data-s="b4-p1-s1">Reverter a ordem das rotações leva a erros significativos em modelos não-comutativos, mas o HyperSSM mantém a precisão.</span> <span class="s" data-s="b4-p1-s2">No contexto de computação quântica, o modelo caracteriza portas de qubits aprendidas a partir de medições, funcionando de forma análoga à tomografia de conjuntos de portas.</span> <span class="s" data-s="b4-p1-s3">Ele também prevê o comportamento de circuitos mais longos do que os usados no treino, incluindo efeitos de decoerência quando há decaimento.</span></p><p><span class="s" data-s="b4-p2-s0">Para proteínas, o backbone é modelado como uma sequência de frames rígidos.</span> <span class="s" data-s="b4-p2-s1">O HyperSSM compõe essas rotações linearmente, recuperando a geometria dos ângulos de torção.</span> <span class="s" data-s="b4-p2-s2">Isso sugere que a estrutura algébrica da memória é uma propriedade física de sistemas que evoluem via composição de operações não-comutativas, e não apenas uma suposição de modelagem.</span> <span class="s" data-s="b4-p2-s3">A descoberta de simetrias ocorre naturalmente: canais complexos identificam grupos Z2 e Z5, enquanto canais quatérnion capturam rotações reais.</span></p>        <h2><span class="s" data-s="b5-h">Limitações e Considerações Finais</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Apesar dos resultados promissores, o paper reconhece limitações.</span> <span class="s" data-s="b5-p0-s1">A abordagem de quaterniões adiciona um fator constante ao scan, o que pode impactar a velocidade em implementações muito otimizadas para escalares.</span> <span class="s" data-s="b5-p0-s2">Além disso, enquanto quaterniões lidam com rotações (grupos compactos), a estrutura de proteínas envolve também translações, descritas por quatérnions duais.</span> <span class="s" data-s="b5-p0-s3">O grupo de movimentos rígidos associado a quatérnions duais não é compacto, ficando fora do escopo dos teoremas atuais, embora o framework de recorrencia linear ainda se aplique.</span></p><p><span class="s" data-s="b5-p1-s0">Outra limitação é a necessidade de discretização ou restrição para certas tarefas.</span> <span class="s" data-s="b5-p1-s1">Para grupos finitos, os canais complexos são treinados continuamente e depois discretizados para raízes da unidade, o que pode introduzir instabilidades se a discretização não for feita corretamente.</span> <span class="s" data-s="b5-p1-s2">O HyperSSM evita isso para quatérnions, mas a escolha da representação mínima exige conhecimento prévio da estrutura do grupo alvo ou uma busca eficiente durante o treino.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b6-t">A Lição da Álgebra</span></h3>
+          <p><span class="s" data-s="b6-c-s0">A principal contribuição do paper não é apenas a arquitetura HyperSSM, mas a prova de que a escolha do sistema numérico na memória é uma variável de design crítica.</span> <span class="s" data-s="b6-c-s1">Para tarefas de linguagem que envolvem lógica complexa, programação ou raciocínio espacial, modelos baseados apenas em números reais e complexos podem estar fundamentalmente limitados.</span> <span class="s" data-s="b6-c-s2">A integração de blocos não-comutativos pode ser necessária para escalar a capacidade de rastreamento de longo prazo.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b7-h">Conclusão</span></h2>
+<p><span class="s" data-s="b7-p0-s0">O paper estabelece uma ponte robusta entre teoria de representação e aprendizado de máquina sequencial.</span> <span class="s" data-s="b7-p0-s1">Ao demonstrar que SSMs diagonais falham em rastrear ordem devido à comutatividade, e ao fornecer uma solução exata via quaterniões, os autores abrem um novo caminho para a interpretação e o design de memórias lineares.</span> <span class="s" data-s="b7-p0-s2">O HyperSSM mostra que, para problemas de composição de operações, a estrutura algébrica correta não é um luxo, mas uma necessidade para a generalização em longas sequências.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">SSMs diagonais reais ou complexos só rastreiam grupos comutativos; a ordem dos inputs se perde porque a multiplicação escalar comuta.</span></li><li><span class="s" data-s="k1">A teoria prova que matrizes de transição devem se decompor em blocos sobre R, C e H (quaterniões) para rastrear grupos não-comutativos.</span></li><li><span class="s" data-s="k2">HyperSSM usa canais de quaterniões, mantendo inferência linear e treinamento paralelo, resolvendo tarefas de grupo S5 com 100% de acurácia.</span></li><li><span class="s" data-s="k3">O modelo generaliza para sequências 25x mais longas que o treino e permite interpretação direta dos pesos aprendidos em sistemas físicos.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.17162" rel="noopener">Symmetry in Time: A Representation Theory of Linear Recurrent Memory</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.17162" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

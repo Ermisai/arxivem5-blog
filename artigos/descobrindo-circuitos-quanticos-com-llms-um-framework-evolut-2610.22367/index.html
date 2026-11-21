@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Descobrindo circuitos quânticos com LLMs: um framework evolutivo para otimização reversível — arXiv em 5</title>
+<meta name="description" content="Pesquisadores usam modelos de linguagem para propor e otimizar circuitos quânticos reversíveis, reduzindo contagem de qubits e portas Toffoli em tarefas de química e otimização.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Descobrindo circuitos quânticos com LLMs: um framework evolutivo para otimização reversível">
+<meta property="og:description" content="Pesquisadores usam modelos de linguagem para propor e otimizar circuitos quânticos reversíveis, reduzindo contagem de qubits e portas Toffoli em tarefas de química e otimização.">
+<meta property="og:image" content="../../assets/papers/2610.22367/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>LLMs</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.22367" rel="noopener">arXiv:2610.22367</a>
+    </div>
+    <h1><span class="s" data-s="t">Descobrindo circuitos quânticos com LLMs: um framework evolutivo para otimização reversível</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Pesquisadores usam modelos de linguagem para propor e otimizar circuitos quânticos reversíveis, reduzindo contagem de qubits e portas Toffoli em tarefas de química e otimização.</span></p>
+    <p class="byline">
+      <span>Gu et al.</span>
+      <span>6 min de leitura</span>
+<span>15/10/2026</span>    </p>
+    <div class="listen" data-article="2610.22367" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=GzeffgK6eEI" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Desafio da Reversibilidade e a Busca por Algoritmos Eficientes</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A computação quântica promete vantagens significativas sobre a clássica, mas realizar essa promessa requer algoritmos eficientes.</span> <span class="s" data-s="b0-p0-s1">Diferente da computação clássica, onde funções podem ser aplicadas diretamente, a evolução quântica deve ser reversível.</span> <span class="s" data-s="b0-p0-s2">Isso impõe uma restrição fundamental: para implementar uma função clássica f em um circuito quântico, ela deve ser embutida em um mapa reversível da forma |x⟩|y⟩ → |x⟩|y ⊕ f(x)⟩.</span> <span class="s" data-s="b0-p0-s3">Essa necessidade de reversibilidade, combinada com a gestão de qubits auxiliares (ancillas) que devem ser retornados ao estado zero, cria um espaço de busca complexo e restrito para o design de circuitos.</span></p><p><span class="s" data-s="b0-p1-s0">Os custos de recursos para muitos problemas práticos residem em um pequeno conjunto de primitivas computacionais.</span> <span class="s" data-s="b0-p1-s1">Otimizá-las no contexto quântico é desafiador porque operações não-Clifford, como a porta Toffoli, são caras e muitas vezes determinam a complexidade lógica e o tempo de execução.</span> <span class="s" data-s="b0-p1-s2">Além disso, existe um trade-off clássico entre tempo e espaço: usar mais qubits auxiliares pode evitar recomputação, enquanto reciclar esses qubits reduz o espaço necessário, mas aumenta o número de portas.</span> <span class="s" data-s="b0-p1-s3">Encontrar o equilíbrio ótimo é um problema de otimização restrita difícil de resolver manualmente.</span></p><p><span class="s" data-s="b0-p2-s0">Neste contexto, os autores propõem um framework evolutivo que utiliza Grandes Modelos de Linguagem (LLMs) para propor designs de circuitos.</span> <span class="s" data-s="b0-p2-s1">A ideia central não é substituir a simulação quântica, mas usar a capacidade dos LLMs de gerar código e lógica estruturada para explorar o espaço de circuitos possíveis.</span> <span class="s" data-s="b0-p2-s2">Um avaliador independente verifica a correção e pontua cada proposta, permitindo que o sistema aprenda e refine as estratégias de design ao longo de gerações sucessivas.</span></p>        <h2><span class="s" data-s="b1-h">O Modelo Kickmix e a Simulação Clássica Eficiente</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Para viabilizar a busca evolutiva, os autores utilizam o modelo de circuito &#39;kickmix&#39;, introduzido anteriormente por Babbush et al.</span> <span class="s" data-s="b1-p0-s1">Este modelo estende a computação clássica reversível com duas operações chave: &#39;uncomputation&#39; baseada em medição (MBU) e portas de sinal diagonal.</span> <span class="s" data-s="b1-p0-s2">A grande vantagem do kickmix é que ele permanece eficientemente simulável classicamente.</span> <span class="s" data-s="b1-p0-s3">Isso permite que candidatos a circuitos sejam testados quanto à sua ação em superposições quânticas coerentes, fornecendo o sinal de correção confiável necessário para a busca evolutiva.</span></p><p><span class="s" data-s="b1-p1-s0">O modelo kickmix permite três classes de operações: portas reversíveis clássicas (X, CNOT, Toffoli, swap), portas de sinal diagonal (Z, CZ, CCZ, e flip de sinal global) e medições destrutivas na base X. Antes de qualquer medição, a evolução de um estado da base computacional é simples.</span> <span class="s" data-s="b1-p1-s1">Portas reversíveis atualizam a string de bits armazenada, enquanto portas diagonais atualizam apenas seu sinal (fase), mantendo o estado na forma (-1)^φ |x⟩.</span> <span class="s" data-s="b1-p1-s2">Um simulador clássico precisa apenas rastrear os bits atuais x e a fase φ, em vez de um vetor de estado completo, o que torna a verificação extremamente rápida.</span></p><p><span class="s" data-s="b1-p2-s0">A eficiência do kickmix reside na forma como ele lida com a reversibilidade e o &#39;limpeza&#39; de qubits auxiliares.</span> <span class="s" data-s="b1-p2-s1">Em computação quântica, é comum calcular uma operação temporária em um qubit auxiliar e depois &#39;desfazê-la&#39; para retornar o qubit ao estado zero, liberando-o para reuso.</span> <span class="s" data-s="b1-p2-s2">Tradicionalmente, isso requer aplicar a mesma porta duas vezes, dobrando o custo.</span> <span class="s" data-s="b1-p2-s3">O kickmix oferece uma alternativa mais barata através do MBU.</span></p>        <h2><span class="s" data-s="b2-h">Uncomputation Baseado em Medição (MBU)</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Para ilustrar o custo do uncomputation tradicional, considere um AND temporário.</span> <span class="s" data-s="b2-p0-s1">Uma porta Toffoli calcula t = uv em um qubit auxiliar.</span> <span class="s" data-s="b2-p0-s2">Após o uso de t, aplicar a mesma Toffoli novamente retorna esse qubit ao zero.</span> <span class="s" data-s="b2-p0-s3">Isso significa que computar e descomputationar um AND temporário custa duas portas Toffoli.</span> <span class="s" data-s="b2-p0-s4">Em um cenário de muitos cálculos intermediários, esse custo se acumula rapidamente, tornando o circuito ineficiente.</span></p><p><span class="s" data-s="b2-p1-s0">O MBU, introduzido por Gidney, substitui a segunda aplicação da porta Toffoli por uma medição na base X destrutiva e uma correção de fase barata.</span> <span class="s" data-s="b2-p1-s1">Ao medir o qubit auxiliar t, obtém-se um resultado aleatório r. Isso libera o qubit, que pode ser restaurado ao estado |0⟩.</span> <span class="s" data-s="b2-p1-s2">Se o resultado da medição for 1, aplica-se uma porta CZ (que é uma porta Clifford, portanto barata) para corrigir o sinal.</span> <span class="s" data-s="b2-p1-s3">Assim, o AND temporário é computado e limpo usando apenas uma porta Toffoli.</span></p><p><span class="s" data-s="b2-p2-s0">Essa técnica é crucial para a otimização de circuitos quânticos.</span> <span class="s" data-s="b2-p2-s1">Ao reduzir o custo de limpeza de qubits auxiliares, o MBU permite que os algoritmos usem mais recursos espaciais (qubits) sem penalidade excessiva em tempo (portas Toffoli).</span> <span class="s" data-s="b2-p2-s2">Os autores utilizam essa propriedade para definir uma métrica de custo composta, o TQ-cost, que multiplica a contagem de Toffoli pela contagem de pico de qubits, oferecendo um único objetivo para comparar diferentes designs de circuitos.</span></p>        <h2><span class="s" data-s="b3-h">O Framework Evolutivo com LLMs</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O cerne da contribuição deste paper é a integração de LLMs em um processo de busca evolutiva.</span> <span class="s" data-s="b3-p0-s1">Os autores motivam essa abordagem pelas recentes avanços em agentes de codificação e raciocínio, onde LLMs são usados para gerar código estruturado.</span> <span class="s" data-s="b3-p0-s2">No contexto quântico, o LLM é encarregado de propor redesigns coordenados e específicos para a tarefa, gerando programas que descrevem circuitos dentro do modelo kickmix.</span></p><p><span class="s" data-s="b3-p1-s0">O processo funciona como um ciclo de feedback.</span> <span class="s" data-s="b3-p1-s1">O LLM propõe um circuito.</span> <span class="s" data-s="b3-p1-s2">Um avaliador independente, baseado na simulação clássica eficiente do kickmix, verifica se o circuito implementa a função reversível desejada.</span> <span class="s" data-s="b3-p1-s3">A verificação inclui garantir que a permutação π e a fase booleana g sejam corretas, e que todos os qubits auxiliares retornem ao estado zero (ou dentro de uma margem de erro definida para aproximações numéricas).</span> <span class="s" data-s="b3-p1-s4">O avaliador também calcula o TQ-cost do circuito.</span></p><p><span class="s" data-s="b3-p2-s0">Se o circuito for válido, ele é pontuado com base no TQ-cost.</span> <span class="s" data-s="b3-p2-s1">Circuitos com menor custo têm maior probabilidade de serem selecionados para a próxima geração ou para inspirar novas variações.</span> <span class="s" data-s="b3-p2-s2">O LLM aprende, implicitamente, quais estruturas de circuito são mais eficientes para a tarefa em questão.</span> <span class="s" data-s="b3-p2-s3">Isso permite a descoberta de arquiteturas que podem não ser óbvias para humanos, especialmente aquelas que exploram de forma não trivial o trade-off entre portas Toffoli e qubits.</span></p>        <h2><span class="s" data-s="b4-h">Resultados em Tarefas Diversas</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Os autores aplicaram este framework a oito tarefas distintas, abrangendo computação numérica, química, otimização, simulação quântica e teoria dos números.</span> <span class="s" data-s="b4-p0-s1">Os resultados foram impressionantes: em sete das oito tarefas, os circuitos descobertos reduziram significativamente tanto a contagem de portas Toffoli quanto a contagem de qubits em relação ao estado da arte.</span></p><p><span class="s" data-s="b4-p1-s0">Essa redução é significativa porque as portas Toffoli são um gargalo crítico em computadores quânticos atuais, exigindo correção de erros complexa e recursos consideráveis.</span> <span class="s" data-s="b4-p1-s1">A redução na contagem de qubits também é vital, pois limita o tamanho dos processadores quânticos necessários para executar os algoritmos.</span> <span class="s" data-s="b4-p1-s2">A capacidade do LLM de navegar no espaço de designs e encontrar configurações que minimizam o TQ-cost demonstra o potencial dessa abordagem híbrida.</span></p><p><span class="s" data-s="b4-p2-s0">Em uma das tarefas, a otimização de inversão modular em corpo primo, o framework descobriu uma nova arquitetura reversível.</span> <span class="s" data-s="b4-p2-s1">Esta descoberta é particularmente interessante porque permite que o algoritmo &#39;divsteps&#39;, anteriormente impraticável para aritmética inteira reversível, se torne viável.</span> <span class="s" data-s="b4-p2-s2">A nova arquitetura melhora substancialmente o trade-off Toffoli-qubit para a inversão modular, um problema fundamental em criptografia e computação numérica.</span></p>        <h2><span class="s" data-s="b5-h">Limitações e Perspectivas</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Apesar dos resultados promissores, é importante notar as limitações do estudo.</span> <span class="s" data-s="b5-p0-s1">O framework depende da capacidade do LLM de gerar circuitos válidos dentro do modelo kickmix.</span> <span class="s" data-s="b5-p0-s2">Se o LLM falhar em gerar propostas diversificadas ou corretas, a busca pode estagnar.</span> <span class="s" data-s="b5-p0-s3">Além disso, a simulação clássica eficiente do kickmix, embora poderosa, tem seus próprios limites de escalabilidade para circuitos extremamente grandes ou complexos.</span></p><p><span class="s" data-s="b5-p1-s0">Os autores também mencionam que permitem que alguns circuitos falhem em uma fração limitada de entradas, o que introduz uma margem de erro controlada.</span> <span class="s" data-s="b5-p1-s1">Isso é útil para aproximações numéricas, mas pode não ser aceitável para todas as aplicações.</span> <span class="s" data-s="b5-p1-s2">A gestão dessa &#39;falha orçamentária&#39; é um detalhe importante que requer ajuste fino.</span></p><p><span class="s" data-s="b5-p2-s0">Outra consideração é a generalização do método.</span> <span class="s" data-s="b5-p2-s1">O framework foi aplicado a tarefas específicas, e não está claro se ele se generaliza facilmente para novos domínios sem reconfiguração ou fine-tuning do LLM.</span> <span class="s" data-s="b5-p2-s2">A descoberta de novas arquiteturas, como a da inversão modular, sugere que o LLM pode encontrar soluções não intuitivas, mas a interpretabilidade dessas soluções ainda pode ser um desafio para pesquisadores humanos.</span></p><p><span class="s" data-s="b5-p3-s0">Em resumo, este paper apresenta uma ferramenta poderosa para a descoberta de algoritmos quânticos, combinando a criatividade generativa dos LLMs com a precisão verificável da simulação clássica.</span> <span class="s" data-s="b5-p3-s1">Ao lidar com a reversibilidade de forma inteligente através do modelo kickmix e do MBU, os autores abrem caminho para a co-design de estruturas algorítmicas quânticas mais eficientes, um passo crucial para a realização da vantagem quântica prática.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">LLMs propõem designs de circuitos que são verificados por um avaliador independente, criando um ciclo de feedback evolutivo.</span></li><li><span class="s" data-s="k1">O framework supera o estado da arte em 7 de 8 tarefas, reduzindo drasticamente o custo de portas Toffoli e qubits.</span></li><li><span class="s" data-s="k2">A técnica de &#39;uncomputation&#39; baseada em medição (MBU) permite limpar qubits auxiliares com custo mínimo de portas não-Clifford.</span></li><li><span class="s" data-s="k3">O modelo &#39;kickmix&#39; permite simulação clássica eficiente, validando circuitos quânticos antes da execução em hardware.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.22367" rel="noopener">Discovering state-of-the-art quantum circuits with large language models</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.22367" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

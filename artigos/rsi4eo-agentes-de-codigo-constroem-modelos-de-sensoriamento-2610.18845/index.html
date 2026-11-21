@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RSI4EO: Agentes de Código Constróem Modelos de Sensoriamento Remoto em Loop Recursivo — arXiv em 5</title>
+<meta name="description" content="O RSI4EO usa agentes de código para criar e melhorar modelos de observação da Terra recursivamente, superando o estado da arte em seis benchmarks com apenas 11% dos rótulos.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RSI4EO: Agentes de Código Constróem Modelos de Sensoriamento Remoto em Loop Recursivo">
+<meta property="og:description" content="O RSI4EO usa agentes de código para criar e melhorar modelos de observação da Terra recursivamente, superando o estado da arte em seis benchmarks com apenas 11% dos rótulos.">
+<meta property="og:image" content="../../assets/papers/2610.18845/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Agentes</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.18845" rel="noopener">arXiv:2610.18845</a>
+    </div>
+    <h1><span class="s" data-s="t">RSI4EO: Agentes de Código Constróem Modelos de Sensoriamento Remoto em Loop Recursivo</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">O RSI4EO usa agentes de código para criar e melhorar modelos de observação da Terra recursivamente, superando o estado da arte em seis benchmarks com apenas 11% dos rótulos.</span></p>
+    <p class="byline">
+      <span>Zhao et al.</span>
+      <span>11 min de leitura</span>
+<span>13/10/2026</span>    </p>
+    <div class="listen" data-article="2610.18845" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=-TkxsX7ZT1Y" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Gargalo da Engenharia Manual em Sensoriamento Remoto</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A construção de modelos de aprendizado de máquina para observação da Terra (Earth Observation - EO) ainda é, em grande parte, um processo manual e intensivo em engenharia.</span> <span class="s" data-s="b0-p0-s1">Para cada novo sensor, região geográfica ou tarefa específica, especialistas precisam projetar receitas de treinamento, escolher arquiteturas e ajustar hiperparâmetros contra benchmarks.</span> <span class="s" data-s="b0-p0-s2">Embora os modelos fundacionais tenham elevado o ponto de partida, eles não eliminaram a necessidade de adaptação especializada.</span> <span class="s" data-s="b0-p0-s3">Em muitos casos, um modelo supervisionado simples, como uma U-Net, ainda supera modelos fundacionais complexos quando aplicados a dados específicos de EO.</span></p><p><span class="s" data-s="b0-p1-s0">Este processo artesanal cria um gargalo crítico.</span> <span class="s" data-s="b0-p1-s1">Quando um desastre natural ocorre, um novo satélite é lançado ou é necessário mapear uma nova região afetada por incêndios ou inundações, a necessidade de um modelo robusto é imediata.</span> <span class="s" data-s="b0-p1-s2">No entanto, a engenharia especializada pode levar semanas ou meses.</span> <span class="s" data-s="b0-p1-s3">Muitas agências e países não possuem equipes de machine learning dedicadas, deixando-as desprovidas de ferramentas analíticas avançadas exatamente quando mais precisam delas.</span></p><p><span class="s" data-s="b0-p2-s0">Um novo paper introduz o RSI4EO, um framework que transfere a construção do modelo para agentes de código generalistas.</span> <span class="s" data-s="b0-p2-s1">A premissa é simples, mas radical: qualquer tarefa verificável pode ser decomposta em dois componentes definidos por humanos — um &#39;harness&#39; (aquecedor) que define os recursos disponíveis e um &#39;verifier&#39; (verificador) que define o sucesso.</span> <span class="s" data-s="b0-p2-s2">O agente, então, escreve código, treina modelos e os melhora recursivamente sobre suas próprias saídas, sem intervenção humana direta no ciclo de otimização.</span></p><p><span class="s" data-s="b0-p3-s0">Os resultados são impressionantes.</span> <span class="s" data-s="b0-p3-s1">Modelos construídos por agentes superam o estado da arte em seis benchmarks que abrangem imagens ópticas, radar de abertura sintética (SAR) e séries temporais multiespectrais.</span> <span class="s" data-s="b0-p3-s2">Em tarefas de mapeamento de cobertura do solo, os modelos alcançam desempenho de estado da arte utilizando apenas 11% dos rótulos de treinamento disponíveis.</span> <span class="s" data-s="b0-p3-s3">Este artigo explora como esse mecanismo funciona, os detalhes técnicos do loop de autoaperfeiçoamento e as implicações para o futuro do sensoriamento remoto.</span></p>        <h2><span class="s" data-s="b1-h">Tarefas como Harness e Verifier</span></h2>
+<p><span class="s" data-s="b1-p0-s0">O cerne do RSI4EO é a reformulação de tarefas de EO como problemas de otimização contra um verificador selado.</span> <span class="s" data-s="b1-p0-s1">Em vez de um pesquisador definir manualmente cada etapa do pipeline de treinamento, o sistema define um ambiente restrito e uma métrica de sucesso.</span> <span class="s" data-s="b1-p0-s2">O agente de código opera dentro desse ambiente, recebendo apenas a pontuação gerada pelo verificador, sem acesso direto aos dados de validação ou aos rótulos de teste.</span></p><p><span class="s" data-s="b1-p1-s0">Essa abordagem não é nova em outros domínios.</span> <span class="s" data-s="b1-p1-s1">Em raciocínio matemático e descoberta de programas, verificadores já impulsionam avanços significativos, permitindo que agentes refinem suas estratégias através de tentativa e erro.</span> <span class="s" data-s="b1-p1-s2">No entanto, o sensoriamento remoto apresenta particularidades únicas.</span> <span class="s" data-s="b1-p1-s3">A verificabilidade pode ser alcançada através de benchmarks com dados rotulados, sensores independentes, modelos físicos ou observações repetidas do mesmo local ao longo do tempo.</span> <span class="s" data-s="b1-p1-s4">O RSI4EO unifica essas diversas fontes de verificação sob uma única interface: uma função que retorna uma pontuação escalar.</span></p><p><span class="s" data-s="b1-p2-s0">Ao definir a tarefa apenas pelo harness e pelo verifier, configurações que eram tratadas como problemas de pesquisa separados tornam-se escolhas de configuração.</span> <span class="s" data-s="b1-p2-s1">Por exemplo, aprender com poucos rótulos (few-shot learning) é simplesmente restringir a quantidade de dados rotulados no harness.</span> <span class="s" data-s="b1-p2-s2">A adaptação de domínio (domain adaptation) é alcançada posicionando o verifier em um domínio diferente do treinamento.</span> <span class="s" data-s="b1-p2-s3">A busca por orçamentos de rótulos (label-budget search) pede ao agente o menor conjunto de treinamento que atinja uma pontuação alvo.</span> <span class="s" data-s="b1-p2-s4">Essa generalidade permite que um único agente resolva uma vasta gama de tarefas de EO.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.18845/figure1.webp" alt="Visão geral do RSI4EO: O harness define os recursos (dados, código, GPUs) e o verifier selado fornece apenas uma pontuação. O agente escreve código e treina modelos, melhorando-se recursivamente sobre suas próprias gerações anteriores." loading="lazy">
+          <figcaption>
+            Visão geral do RSI4EO: O harness define os recursos (dados, código, GPUs) e o verifier selado fornece apenas uma pontuação. O agente escreve código e treina modelos, melhorando-se recursivamente sobre suas próprias gerações anteriores.
+            <span class="source">Figura 1 do paper · Zhao et al., arXiv:2610.18845</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">O Harness e o Verifier Selado</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O sistema RSI4EO opera através de dois componentes principais que são especificados antes da execução do agente.</span> <span class="s" data-s="b3-p0-s1">O primeiro é o Harness (H), que define o conjunto de recursos que o agente tem permissão para usar.</span> <span class="s" data-s="b3-p0-s2">Isso inclui os dados de treinamento rotulados (DL), um pool de dados não rotulados (DU), checkpoints de modelos pré-treinados, bibliotecas de software e um orçamento de computação.</span> <span class="s" data-s="b3-p0-s3">No experimento descrito, o agente tem acesso a quatro GPUs GB200 e um orçamento de 12 horas, com a restrição de que nenhuma execução de treinamento individual pode exceder 4 horas.</span></p><p><span class="s" data-s="b3-p1-s0">O Harness também fornece um pipeline inicial simples, servindo como ponto de partida.</span> <span class="s" data-s="b3-p1-s1">Para tarefas de segmentação, isso pode ser um codificador EfficientNet-B0 com um decodificador FPN.</span> <span class="s" data-s="b3-p1-s2">O agente pode utilizar bibliotecas padrão da área, como QGIS, SAGA, GDAL, e backbones específicos para tarefas de detecção.</span> <span class="s" data-s="b3-p1-s3">Importantes, os modelos pré-treinados fornecidos são geralmente codificadores (sem cabeças de tarefa ou decodificadores), como o DINOv3 ViT-L/16 ou o DINOv2, permitindo que o agente construa a arquitetura completa do modelo do zero.</span></p><p><span class="s" data-s="b3-p2-s0">O segundo componente é o Verifier (V), que define o que conta como sucesso.</span> <span class="s" data-s="b3-p2-s1">O verifier é selado, rodando em um contêiner isolado que contém os dados de validação (Xv, Yv) que o agente nunca vê.</span> <span class="s" data-s="b3-p2-s2">Ele executa o pipeline submetido pelo agente exatamente como o classificador final faria, retornando uma pontuação s(π) = m(π(Xv), Yv), onde m é a métrica da tarefa (como mIoU ou mask AP).</span> <span class="s" data-s="b3-p2-s3">O agente pode consultar o verifier quantas vezes quiser, mas recebe apenas o score numérico.</span> <span class="s" data-s="b3-p2-s4">Isso impede vazamento de dados e garante que o agente otimize para a métrica real de avaliação.</span></p>        <h2><span class="s" data-s="b4-h">Autoaperfeiçoamento Recursivo</span></h2>
+<p><span class="s" data-s="b4-p0-s0">A inovação central do RSI4EO é o mecanismo de autoaperfeiçoamento recursivo.</span> <span class="s" data-s="b4-p0-s1">O agente não apenas tenta treinar um modelo uma vez; ele constrói o modelo sobre as saídas de gerações anteriores.</span> <span class="s" data-s="b4-p0-s2">O processo funciona em &#39;gerações&#39;.</span> <span class="s" data-s="b4-p0-s3">Na primeira geração, o agente recebe o harness padrão e o verifier, escreve um pipeline de treinamento e o avalia.</span> <span class="s" data-s="b4-p0-s4">O verifier retorna uma pontuação.</span></p><p><span class="s" data-s="b4-p1-s0">Nas gerações subsequentes, o agente utiliza as saídas do melhor pipeline encontrado até aquele momento.</span> <span class="s" data-s="b4-p1-s1">Especificamente, o melhor pipeline é usado para gerar pseudo-rótulos para o pool de dados não rotulados.</span> <span class="s" data-s="b4-p1-s2">O agente então treina um novo modelo (o &#39;estudante&#39;) a partir do checkpoint do melhor modelo (o &#39;professor&#39;), combinando os dados rotulados originais com os pseudo-rótulos gerados.</span> <span class="s" data-s="b4-p1-s3">Além disso, o sistema utiliza &#39;soft targets&#39; e previsões OOF (Out-Of-Fold) para fornecer sinais de treinamento mais suaves e robustos.</span></p><p><span class="s" data-s="b4-p2-s0">O verifier atua como um juiz seletivo.</span> <span class="s" data-s="b4-p2-s1">Ele avalia o novo pipeline gerado na geração atual.</span> <span class="s" data-s="b4-p2-s2">Se o novo pipeline obtiver uma pontuação melhor, ele se torna o novo &#39;melhor pipeline&#39; e será usado para gerar pseudo-rótulos na próxima geração.</span> <span class="s" data-s="b4-p2-s3">Se não, o pipeline anterior é mantido.</span> <span class="s" data-s="b4-p2-s4">O agente também decide, através de seus próprios scripts, quando automatizar o loop ou quando encerrar a busca.</span> <span class="s" data-s="b4-p2-s5">Essa recursão permite que o modelo refine gradualmente suas previsões, aprendendo padrões que não estavam presentes nos dados rotulados iniciais.</span></p><p><span class="s" data-s="b4-p3-s0">Esse ciclo de &#39;escrever código, treinar, verificar e iterar&#39; é executado offline, sem interação humana.</span> <span class="s" data-s="b4-p3-s1">O agente pode explorar arquiteturas, funções de perda, estratégias de augmentação de dados e métodos de ensemble que um humano poderia levar dias para propor e testar sistematicamente.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.18845/figure3.webp" alt="Ciclo de autoaperfeiçoamento: Na geração N, o melhor pipeline anterior rotula dados não rotulados. O novo modelo é treinado combinando rótulos originais e pseudo-rótulos, e o verifier seleciona a geração vencedora para a próxima iteração." loading="lazy">
+          <figcaption>
+            Ciclo de autoaperfeiçoamento: Na geração N, o melhor pipeline anterior rotula dados não rotulados. O novo modelo é treinado combinando rótulos originais e pseudo-rótulos, e o verifier seleciona a geração vencedora para a próxima iteração.
+            <span class="source">Figura 3 do paper · Zhao et al., arXiv:2610.18845</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b6-h">Resultados em Benchmarks Diversos</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Os autores avaliaram o RSI4EO em seis benchmarks diversos, cobrindo diferentes modalidades de imagem e tarefas.</span> <span class="s" data-s="b6-p0-s1">Os benchmarks incluem BRIGHT e PASTIS para segmentação semântica de cobertura do solo, HRSID para detecção de navios, OpenEarthMap para segmentação de alta resolução, Open-Canopy para estimativa de altura de dossel florestal e uma tarefa de resposta a perguntas (QA) usando imagens de satélite.</span> <span class="s" data-s="b6-p0-s2">Essa diversidade testa a capacidade do agente de generalizar entre tarefas de detecção, segmentação e regressão.</span></p><p><span class="s" data-s="b6-p1-s0">Os resultados mostram que os modelos construídos pelo agente superam o estado da arte (SOTA) em todos os seis benchmarks.</span> <span class="s" data-s="b6-p1-s1">No benchmark BRIGHT, o agente alcançou um mIoU de 71.56, superando o SOTA de 68.86 em 2.70 pontos.</span> <span class="s" data-s="b6-p1-s2">No PASTIS, o ganho foi de 2.63 pontos (69.72 vs 67.09).</span> <span class="s" data-s="b6-p1-s3">No HRSID, a melhoria foi de 4.8 pontos em mask AP (68.7 vs 63.9).</span> <span class="s" data-s="b6-p1-s4">Para o OpenEarthMap, o modelo do agente atingiu 71.6 de mIoU, superando o SOTA de 67.5 em 4.1 pontos.</span></p><p><span class="s" data-s="b6-p2-s0">Um aspecto particularmente notável é a eficiência na utilização de rótulos.</span> <span class="s" data-s="b6-p2-s1">Em tarefas de mapeamento de cobertura do solo, o modelo alcançou desempenho de estado da arte utilizando apenas 11% dos rótulos de treinamento disponíveis.</span> <span class="s" data-s="b6-p2-s2">Em alguns casos, com apenas 4,3% dos rótulos, o modelo atingiu até 99% da precisão máxima possível com todos os dados.</span> <span class="s" data-s="b6-p2-s3">Isso demonstra que o mecanismo de auto-aprendizado e o uso de dados não rotulados são eficazes para reduzir a dependência de anotações manuais caras.</span></p><p><span class="s" data-s="b6-p3-s0">Para a tarefa de resposta a perguntas, que utiliza um modelo de visão e linguagem (Qwen3-VL-8B), o agente foi capaz de otimizar prompts e estratégias de inferência para melhorar a precisão das respostas, demonstrando a flexibilidade do framework para tarefas além da segmentação tradicional.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.18845/figure2.webp" alt="Eficiência de rótulos: O modelo atinge até 99% da precisão máxima do benchmark utilizando apenas uma pequena fração (até 4,3%) dos rótulos de treinamento disponíveis, demonstrando a eficácia do aprendizado semi-supervisionado recursivo." loading="lazy">
+          <figcaption>
+            Eficiência de rótulos: O modelo atinge até 99% da precisão máxima do benchmark utilizando apenas uma pequena fração (até 4,3%) dos rótulos de treinamento disponíveis, demonstrando a eficácia do aprendizado semi-supervisionado recursivo.
+            <span class="source">Figura 2 do paper · Zhao et al., arXiv:2610.18845</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Análise dos Resultados e Limitações</span></h2>
+<p><span class="s" data-s="b8-p0-s0">A tabela comparativa dos resultados no teste oculto (hidden-test) confirma a superioridade dos modelos construídos pelo agente.</span> <span class="s" data-s="b8-p0-s1">O pipeline inicial (&#39;starter&#39;), que é uma configuração básica fornecida pelo harness, serve como linha de base.</span> <span class="s" data-s="b8-p0-s2">O ganho do agente sobre o starter é significativo em todos os casos, mas o ponto crucial é que o agente supera modelos que foram projetados e ajustados por especialistas humanos ao longo de anos de pesquisa.</span></p><p><span class="s" data-s="b8-p1-s0">É importante notar que o agente operou com um orçamento de tempo e computação limitado.</span> <span class="s" data-s="b8-p1-s1">12 horas em 4 GPUs GB200 é um recurso considerável, mas não infinito.</span> <span class="s" data-s="b8-p1-s2">O fato de o agente conseguir explorar o espaço de soluções de forma tão eficiente sugere que os modelos de linguagem e código atuais são capazes de navegar complexidades de engenharia de ML que antes exigiam intuição humana especializada.</span> <span class="s" data-s="b8-p1-s3">O agente não apenas replica o SOTA; ele o supera, indicando que a busca automatizada pode encontrar configurações que escaparam à exploração humana.</span></p><p><span class="s" data-s="b8-p2-s0">Além disso, o sistema demonstrou robustez em tarefas de adaptação de domínio.</span> <span class="s" data-s="b8-p2-s1">Em configurações onde o agente não podia treinar parâmetros (training-free adaptation), ele ainda conseguiu obter bons resultados ajustando apenas o código de inferência e pré-processamento, mostrando que o harness e o verifier podem ser configurados para restringir a capacidade de aprendizado do agente conforme a necessidade da tarefa.</span></p><p><span class="s" data-s="b8-p3-s0">Apesar dos resultados promissores, é crucial reconhecer as limitações e o escopo deste trabalho.</span> <span class="s" data-s="b8-p3-s1">O RSI4EO foi testado em um conjunto específico de benchmarks e agentes.</span> <span class="s" data-s="b8-p3-s2">Os autores mencionam que este é um projeto em andamento e que estão escalando os experimentos para um maior número de tarefas e agentes.</span> <span class="s" data-s="b8-p3-s3">A generalização para tarefas de EO não cobertas pelos benchmarks atuais, ou para regiões geográficas com características extremas não representadas nos dados de treinamento, permanece a ser verificada.</span></p><p><span class="s" data-s="b8-p4-s0">Outra limitação é a dependência da qualidade do agente de código.</span> <span class="s" data-s="b8-p4-s1">O desempenho do sistema está diretamente ligado à capacidade do modelo de linguagem subjacente de escrever código Python funcional e de entender as nuances do framework de deep learning.</span> <span class="s" data-s="b8-p4-s2">Se o agente falhar em gerar código executável ou introduzir bugs sutis, o ciclo de iteração pode ser interrompido ou levar a convergências prematuras.</span> <span class="s" data-s="b8-p4-s3">A segurança e a robustez do código gerado por agentes também são preocupações válidas em ambientes de produção.</span></p><p><span class="s" data-s="b8-p5-s0">Além disso, o custo computacional, embora otimizado, ainda é alto para algumas organizações.</span> <span class="s" data-s="b8-p5-s1">12 horas em GPUs de última geração não são acessíveis para todos.</span> <span class="s" data-s="b8-p5-s2">No entanto, a proposta é que, à medida que a capacidade dos agentes melhorar, o esforço humano necessário para definir o harness e o verifier se tornará o único custo significativo, enquanto a construção do modelo se torna automática e escalável.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b9-t">O Fim da Engenharia Manual?</span></h3>
+          <p><span class="s" data-s="b9-c-s0">O RSI4EO não elimina a necessidade de humanos, mas muda seu papel.</span> <span class="s" data-s="b9-c-s1">Em vez de escrever código de treinamento, os especialistas devem focar em definir tarefas bem formuladas, escolher bons verificadores e garantir a qualidade dos dados no harness.</span> <span class="s" data-s="b9-c-s2">A engenharia de prompts e a curadoria de recursos tornam-se as novas habilidades críticas.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b10-h">Um Novo Paradigma para EO</span></h2>
+<p><span class="s" data-s="b10-p0-s0">O RSI4EO propõe um novo paradigma para a construção de modelos de sensoriamento remoto.</span> <span class="s" data-s="b10-p0-s1">Ao separar a definição da tarefa (humana) da construção do modelo (agente), o framework permite que os avanços na capacidade dos agentes de IA se traduzam diretamente em modelos de EO melhores, sem a necessidade de nova engenharia humana.</span> <span class="s" data-s="b10-p0-s2">Isso reduz drasticamente o tempo entre a identificação de uma nova necessidade (como um desastre ou um novo satélite) e a disponibilidade de um modelo funcional.</span></p><p><span class="s" data-s="b10-p1-s0">Para agências governamentais, ONGs e empresas que dependem de dados de satélite, essa abordagem oferece a promessa de democratizar o acesso a modelos de alta precisão.</span> <span class="s" data-s="b10-p1-s1">Qualquer entidade capaz de definir uma tarefa verificável pode obter um modelo de estado da arte, independentemente de ter uma equipe de ML dedicada.</span> <span class="s" data-s="b10-p1-s2">Isso é particularmente relevante para países em desenvolvimento ou regiões afetadas por crises, onde a infraestrutura de pesquisa pode ser limitada.</span></p><p><span class="s" data-s="b10-p2-s0">O sucesso do RSI4EO em superar o SOTA em múltiplos benchmarks sugere que a busca automatizada por arquiteturas e pipelines de treinamento é um caminho viável e promissor.</span> <span class="s" data-s="b10-p2-s1">À medida que os agentes de código se tornam mais capazes, é provável que vejamos uma convergência entre a pesquisa em IA geral e a aplicação em domínios específicos como o sensoriamento remoto, onde a verificabilidade é alta e os dados são abundantes.</span></p><p><span class="s" data-s="b10-p3-s0">Em resumo, o paper &#39;The Last Remote Sensing Model Built by Humans?&#39; apresenta o RSI4EO, um framework que utiliza agentes de código para construir e melhorar recursivamente modelos de observação da Terra.</span> <span class="s" data-s="b10-p3-s1">Ao formalizar tarefas como pares de harness e verifier, o sistema permite que agentes gerem pipelines de treinamento que superam o estado da arte em seis benchmarks, usando apenas uma fração dos rótulos de treinamento.</span> <span class="s" data-s="b10-p3-s2">Este trabalho marca uma mudança significativa na forma como os modelos de EO são desenvolvidos, deslocando o esforço humano da implementação técnica para a definição de tarefas e recursos.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">RSI4EO usa um &#39;harness&#39; (recursos) e um &#39;verifier&#39; (métrica selada) para permitir que agentes de código construam modelos de EO sem intervenção humana.</span></li><li><span class="s" data-s="k1">Modelos gerados superam o SOTA em seis benchmarks (óptico, SAR, séries temporais) em 12 horas de computação em 4 GPUs GB200.</span></li><li><span class="s" data-s="k2">A melhoria recursiva usa pseudo-rótulos das gerações anteriores, alcançando alta precisão com poucos dados rotulados.</span></li><li><span class="s" data-s="k3">O paradigma separa a definição da tarefa (humana) da construção do modelo (agente), escalando a qualidade conforme os agentes melhoram.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.18845" rel="noopener">The Last Remote Sensing Model Built by Humans? Casting Any Earth Observation Task as Recursive Self-Improvement</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.18845" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PixelSpline: Super-resolução de vídeo contínua com trajetórias de pixels ancoradas — arXiv em 5</title>
+<meta name="description" content="Um novo framework C-STVSR que usa contexto temporal longo e trajetórias de pixel únicas para equilibrar qualidade e latência em super-resolução espaço-temporal.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PixelSpline: Super-resolução de vídeo contínua com trajetórias de pixels ancoradas">
+<meta property="og:description" content="Um novo framework C-STVSR que usa contexto temporal longo e trajetórias de pixel únicas para equilibrar qualidade e latência em super-resolução espaço-temporal.">
+<meta property="og:image" content="../../assets/papers/2611.06870/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Vídeo</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.06870" rel="noopener">arXiv:2611.06870</a>
+    </div>
+    <h1><span class="s" data-s="t">PixelSpline: Super-resolução de vídeo contínua com trajetórias de pixels ancoradas</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um novo framework C-STVSR que usa contexto temporal longo e trajetórias de pixel únicas para equilibrar qualidade e latência em super-resolução espaço-temporal.</span></p>
+    <p class="byline">
+      <span>Yuan et al.</span>
+      <span>6 min de leitura</span>
+<span>04/11/2026</span>    </p>
+    <div class="listen" data-article="2611.06870" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=HJrrOoIhX3Q" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Desafio da Super-resolução Contínua</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A super-resolução de vídeo (VSR) tradicional visa recuperar vídeos de alta resolução (HR) a partir de observações de baixa resolução (LR).</span> <span class="s" data-s="b0-p0-s1">No entanto, melhorar apenas a resolução espacial não resolve a subamostragem temporal: um vídeo nítido ainda pode exibir movimento descontínuo se capturado em baixa taxa de quadros.</span> <span class="s" data-s="b0-p0-s2">A interpolação de quadros (VFI) aborda isso, mas não recupera detalhes espaciais perdidos.</span> <span class="s" data-s="b0-p0-s3">O Space-Time Video Super-Resolution (STVSR) combina ambas, mas os métodos contínuos (C-STVSR) vão além, permitindo consultas em escalas espaciais arbitrárias e coordenadas de tempo contínuas.</span></p><p><span class="s" data-s="b0-p1-s0">Apesar dos avanços, três desafios persistem.</span> <span class="s" data-s="b0-p1-s1">Primeiro, a correspondência inferida apenas de dois frames de extremidade é ambígua em regiões de oclusão ou com movimento grande.</span> <span class="s" data-s="b0-p1-s2">Segundo, métodos existentes modelam as direções de movimento dos dois endpoints independentemente, sem garantir que sigam a mesma curva física.</span> <span class="s" data-s="b0-p1-s3">Terceiro, a síntese temporal arbitrária exige features de aparência em grade HR, o que geralmente é feito tardiamente, perdendo detalhes finos durante o transporte temporal.</span></p>        <h2><span class="s" data-s="b1-h">A Proposta: PixelSpline e Contexto Longo</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Os autores propõem um framework contínuo composto por quatro estágios principais.</span> <span class="s" data-s="b1-p0-s1">O primeiro é um codificador de contexto longo que agrega informações de múltiplos frames LR para produzir representações de extremidade aprimoradas.</span> <span class="s" data-s="b1-p0-s2">Isso reduz a ambiguidade ao usar conteúdo visível em frames adjacentes ao par de consulta.</span></p><p><span class="s" data-s="b1-p1-s0">O segundo estágio é o lifting contínuo de features, que mapeia as features LR das extremidades para a grade HR solicitada.</span> <span class="s" data-s="b1-p1-s1">Isso permite que detalhes espaciais sejam construídos antes do transporte temporal.</span> <span class="s" data-s="b1-p1-s2">O terceiro componente é o PixelSpline, que modela explicitamente o movimento de cada pixel como uma única trajetória contínua compartilhada por ambas as extremidades.</span> <span class="s" data-s="b1-p1-s3">Por fim, um decodificador leve prevê um resíduo de imagem e o adiciona ao frame intermediário bruto.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.06870/figure2.webp" alt="Visão geral do framework: codificador de contexto bidirecional, lifting contínuo de features e transporte via PixelSpline para reconstrução residual." loading="lazy">
+          <figcaption>
+            Visão geral do framework: codificador de contexto bidirecional, lifting contínuo de features e transporte via PixelSpline para reconstrução residual.
+            <span class="source">Figura 2 do paper · Yuan et al., arXiv:2611.06870</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Detalhando o Codificador de Contexto Longo</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O núcleo da robustez do método está no &#39;Target-Pair-Aware Context Encoding&#39;.</span> <span class="s" data-s="b3-p0-s1">Os autores adaptam o codificador de múltiplos frames do Zooming Slow-Mo, mas adicionam um módulo de atenção dual-escopo focado no par de frames de interesse.</span> <span class="s" data-s="b3-p0-s2">Dado um conjunto de N frames LR, o encoder extrai uma pirâmide de features em três níveis e as alinha temporalmente.</span></p><p><span class="s" data-s="b3-p1-s0">As features alinhadas são fundidas e organizadas em uma sequência intercalada contendo N-1 elementos de intervalo e N elementos de frame.</span> <span class="s" data-s="b3-p1-s1">Uma ConvLSTM deformável bidirecional propaga informações através dessa sequência, garantindo que cada elemento contenha contexto de múltiplos frames.</span> <span class="s" data-s="b3-p1-s2">Isso permite que o modelo &#39;veja&#39; além do par imediato, usando frames anteriores ou posteriores para desambiguar movimentos.</span></p>        <h2><span class="s" data-s="b4-h">Atenção Dual-Escopo para Correspondência</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Para refinar as features do par de extremidade (esquerda, intervalo, direita), o modelo aplica atenção cruzada em duas escalas.</span> <span class="s" data-s="b4-p0-s1">A branch local usa janelas não sobrepostas e depois janelas deslocadas (shifted windows), permitindo troca de informação entre limites de janelas e recuperação de evidências espaciais correspondentes em todas as posições temporais.</span></p><p><span class="s" data-s="b4-p1-s0">A branch global faz pooling de cada mapa de features em uma grade compacta e aplica atenção cruzada sobre tokens de query e memória.</span> <span class="s" data-s="b4-p1-s1">Isso fornece contexto de nível de cena com baixo custo computacional.</span> <span class="s" data-s="b4-p1-s2">A saída global é upsampled e somada às features locais.</span> <span class="s" data-s="b4-p1-s3">Embeddings de offset temporal são adicionados para identificar a posição relativa de cada frame na sequência, ajudando o modelo a distinguir contexto imediato de contexto remoto.</span></p>        <h2><span class="s" data-s="b5-h">Lifting Contínuo de Features</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Um problema comum em métodos contínuos é a dependência de escalas fixas de upsampling.</span> <span class="s" data-s="b5-p0-s1">O PixelSpline aborda isso com um módulo de lifting contínuo.</span> <span class="s" data-s="b5-p0-s2">As features LR das extremidades são mapeadas diretamente para a grade HR solicitada no momento da consulta.</span> <span class="s" data-s="b5-p0-s3">Isso é crucial porque o transporte temporal de features de baixa resolução pode levar à perda de alta frequência.</span></p><p><span class="s" data-s="b5-p1-s0">Ao levantar as features para a resolução alvo antes de aplicar o warp temporal, o método preserva a estrutura fina das texturas.</span> <span class="s" data-s="b5-p1-s1">O lifting é feito de forma contínua, permitindo que o modelo seja consultado em qualquer fator de escala espacial, sem a necessidade de re-treinamento ou interpolação discreta prévia.</span> <span class="s" data-s="b5-p1-s2">As features levantadas são então usadas no transporte e na reconstrução residual.</span></p>        <h2><span class="s" data-s="b6-h">PixelSpline: Trajetórias Compartilhadas</span></h2>
+<p><span class="s" data-s="b6-p0-s0">A inovação central do paper é o PixelSpline.</span> <span class="s" data-s="b6-p0-s1">Em vez de calcular campos de fluxo independentes para cada extremidade em direção ao tempo alvo, o método constrói uma única trajetória explícita para cada par de pixels correspondentes.</span> <span class="s" data-s="b6-p0-s2">Essa trajetória é ancorada nas extremidades e modelada como uma curva contínua.</span></p><p><span class="s" data-s="b6-p1-s0">Usando essa trajetória, o método transporta tanto os valores de cor RGB quanto as features HR levantadas das extremidades para o tempo de consulta t. Isso garante consistência física: se um pixel está na posição A no tempo 0 e na posição B no tempo 1, seu caminho intermediário é único e não ambíguo.</span> <span class="s" data-s="b6-p1-s1">O transporte produz um frame intermediário bruto e uma feature HR alinhada, que são combinadas com um resíduo previsto por um decodificador leve.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b7-t">Consistência Física Garantida</span></h3>
+          <p><span class="s" data-s="b7-c-s0">Ao compartilhar a mesma trajetória de movimento entre as duas extremidades, o PixelSpline evita que pixels correspondentes sejam transportados para locais inconsistentes, reduzindo artefatos de ghosting e saltos temporais comuns em métodos que modelam direções separadamente.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b8-h">Configuração Experimental</span></h2>
+<p><span class="s" data-s="b8-p0-s0">O modelo foi treinado em PyTorch usando quatro GPUs NVIDIA H100, com batch size total de 8.</span> <span class="s" data-s="b8-p0-s1">Cada amostra contém oito frames LR de contexto.</span> <span class="s" data-s="b8-p0-s2">A supervisão vem de sequências de alta taxa de quadros, onde os frames extremos definem o par de âncora e três timestamps aleatórios são usados como alvos.</span> <span class="s" data-s="b8-p0-s3">O treinamento usa crops de 64x64 com augmentação aleatória.</span></p><p><span class="s" data-s="b8-p1-s0">Os dados de treinamento são do split de treino do Adobe240, que contém 133 vídeos capturados a 240 fps em 1280x720.</span> <span class="s" data-s="b8-p1-s1">As entradas LR são geradas por downsampleamento bicúbico espacial e subamostragem temporal por fator 8, produzindo sequências de 30 fps.</span> <span class="s" data-s="b8-p1-s2">A avaliação foi feita em Adobe240, GoPro e REDS, usando fatores de upsampling Sx4 e Tx8.</span></p>        <h2><span class="s" data-s="b9-h">Resultados de Qualidade e Eficiência</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Na tarefa C-STVSR, o método compete diretamente com V3, VideoINR, MoTIF e BF-STVSR.</span> <span class="s" data-s="b9-p0-s1">Em termos de PSNR e SSIM, o PixelSpline obtém o segundo melhor resultado em todos os seis conjuntos de dados e protocolos testados, ficando atrás apenas do V3.</span> <span class="s" data-s="b9-p0-s2">Por exemplo, no Adobe Average, o método alcança 31.39 dB de PSNR, contra 32.29 dB do V3.</span></p><p><span class="s" data-s="b9-p1-s0">No entanto, a diferença de qualidade vem com um custo de eficiência significativo.</span> <span class="s" data-s="b9-p1-s1">Como mostrado nos gráficos de trade-off, o PixelSpline é 2,24x mais rápido que o V3, com uma perda de apenas 0,90 dB em PSNR.</span> <span class="s" data-s="b9-p1-s2">A latência foi medida end-to-end em uma única GPU H100.</span> <span class="s" data-s="b9-p1-s3">Isso sugere que o método oferece um equilíbrio favorável entre qualidade e velocidade, sendo uma opção prática para aplicações que exigem baixa latência.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.06870/figure1.webp" alt="Trade-off qualidade-latença no Adobe240: o método é 2,24x mais rápido que o V3, com perda de 0,90 dB em PSNR." loading="lazy">
+          <figcaption>
+            Trade-off qualidade-latença no Adobe240: o método é 2,24x mais rápido que o V3, com perda de 0,90 dB em PSNR.
+            <span class="source">Figura 1 do paper · Yuan et al., arXiv:2611.06870</span>
+          </figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="../../assets/papers/2611.06870/figure3.webp" alt="Comparação visual: o método preserva detalhes finos, texturas e estruturas de roupas melhor que concorrentes como MoTIF e BF-STVSR." loading="lazy">
+          <figcaption>
+            Comparação visual: o método preserva detalhes finos, texturas e estruturas de roupas melhor que concorrentes como MoTIF e BF-STVSR.
+            <span class="source">Figura 3 do paper · Yuan et al., arXiv:2611.06870</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b12-h">Análise Qualitativa e Limitações</span></h2>
+<p><span class="s" data-s="b12-p0-s0">As comparações qualitativas mostram que o PixelSpline preserva detalhes finos, como caracteres, padrões de textura e estruturas de roupas, melhor que os métodos concorrentes.</span> <span class="s" data-s="b12-p0-s1">A consistência temporal também é melhorada, com menos ghosting e estruturas mais estáveis ao longo do tempo.</span> <span class="s" data-s="b12-p0-s2">Isso é atribuído à combinação de contexto longo e trajetórias compartilhadas.</span></p><p><span class="s" data-s="b12-p1-s0">Apesar dos resultados competitivos, os autores reconhecem limitações.</span> <span class="s" data-s="b12-p1-s1">A performance de reconstrução em PSNR e SSIM ainda pode ser melhorada, especialmente comparada ao líder de qualidade (V3) em alguns cenários.</span> <span class="s" data-s="b12-p1-s2">Além disso, o processo de treinamento é computacionalmente intensivo e demorado.</span> <span class="s" data-s="b12-p1-s3">Melhorar a precisão e desenvolver estratégias de treinamento mais eficientes são direções futuras prometedoras.</span></p>        <h2><span class="s" data-s="b13-h">Conclusão</span></h2>
+<p><span class="s" data-s="b13-p0-s0">O PixelSpline apresenta um framework contínuo para super-resolução espaço-temporal que combina codificação de contexto longo, lifting contínuo de features e trajetórias de pixel ancoradas.</span> <span class="s" data-s="b13-p0-s1">Ao construir uma única trajetória consistente para cada ponto correspondente, o método alinha o transporte de pixels e features, explorando observações além do par de frames consultado.</span></p><p><span class="s" data-s="b13-p1-s0">Os experimentos demonstram qualidade competitiva, melhor consistência temporal e um trade-off qualidade-eficiência favorável.</span> <span class="s" data-s="b13-p1-s1">O trabalho mostra que a modelagem explícita de trajetórias compartilhadas, combinada com contexto temporal estendido, é uma abordagem eficaz para resolver ambiguidades em super-resolução contínua, oferecendo uma alternativa prática aos métodos mais pesados.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">O método usa um codificador de contexto longo para reduzir ambiguidades de correspondência entre frames.</span></li><li><span class="s" data-s="k1">PixelSpline modela o movimento como uma única trajetória contínua compartilhada por dois frames de extremidade.</span></li><li><span class="s" data-s="k2">O upsampling de features é feito continuamente na grade HR antes do transporte temporal.</span></li><li><span class="s" data-s="k3">Oferece 2,24x mais velocidade que o V3, com perda de apenas 0,90 dB em PSNR.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.06870" rel="noopener">PixelSpline: Continuous Space-Time Video Super-Resolution via Endpoint-Anchored Shared Pixel Trajectories</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.06870" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

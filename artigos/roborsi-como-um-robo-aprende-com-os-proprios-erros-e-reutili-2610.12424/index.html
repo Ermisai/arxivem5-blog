@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RoboRSI: como um robô aprende com os próprios erros e reutiliza o que funciona — arXiv em 5</title>
+<meta name="description" content="Um sistema que organiza a experiência de execução em habilidades hierárquicas, atribui cada falha ao componente responsável e valida melhorias antes de reutilizá-las em novas tarefas.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RoboRSI: como um robô aprende com os próprios erros e reutiliza o que funciona">
+<meta property="og:description" content="Um sistema que organiza a experiência de execução em habilidades hierárquicas, atribui cada falha ao componente responsável e valida melhorias antes de reutilizá-las em novas tarefas.">
+<meta property="og:image" content="../../assets/papers/2610.12424/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Robótica</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.12424" rel="noopener">arXiv:2610.12424</a>
+    </div>
+    <h1><span class="s" data-s="t">RoboRSI: como um robô aprende com os próprios erros e reutiliza o que funciona</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um sistema que organiza a experiência de execução em habilidades hierárquicas, atribui cada falha ao componente responsável e valida melhorias antes de reutilizá-las em novas tarefas.</span></p>
+    <p class="byline">
+      <span>Wen et al.</span>
+      <span>9 min de leitura</span>
+<span>08/10/2026</span>    </p>
+    <div class="listen" data-article="2610.12424" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=JudvNXhCuiY" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema da memória em robótica generalista</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Robôs generalistas precisam fazer duas coisas ao mesmo tempo: executar tarefas diversas e melhorar com a experiência.</span> <span class="s" data-s="b0-p0-s1">Quando um robô falha ao pegar um objeto ou erra a localização de uma peça, essa informação só tem valor se ele conseguir identificar qual capacidade estava envolvida, refiná-la com base na evidência de execução e tornar o comportamento corrigido disponível para tarefas futuras.</span></p><p><span class="s" data-s="b0-p1-s0">Trabalhos recentes permitem que modelos de fundação ajam através de código.</span> <span class="s" data-s="b0-p1-s1">Code as Policies compõe primitivas de percepção e controle em programas executáveis.</span> <span class="s" data-s="b0-p1-s2">Sistemas como ETA e OpenETA intercalam planejamento e execução com observações frescas, ASPIRE adiciona programas reparados a uma biblioteca crescente de habilidades, e ENPIRE leva esse loop para experimentação física.</span></p><p><span class="s" data-s="b0-p2-s0">O desafio central permanece: como organizar a experiência de execução em torno da estrutura de tarefas que lhe dá significado?</span> <span class="s" data-s="b0-p2-s1">Um reparo precisa permanecer conectado ao objetivo que o motivou, pertencer à capacidade responsável pelo comportamento observado e ser validado antes de ser reutilizado.</span> <span class="s" data-s="b0-p2-s2">Sem essa estrutura, cada correção fica isolada, cada falha é tratada como nova e o sistema não acumula capacidades de forma estável.</span></p>        <h2><span class="s" data-s="b1-h">A proposta: refinamento hierárquico e validação em loop</span></h2>
+<p><span class="s" data-s="b1-p0-s0">RoboRSI é um sistema de auto-aperfeiçoamento robótico construído sobre Top-Down Skill Refinement (TSR), uma abordagem que decompõe tarefas em habilidades compostas, atômicas e de base, cada uma com responsabilidades delimitadas e contratos explícitos de entrada e saída.</span> <span class="s" data-s="b1-p0-s1">Quando algo dá errado, o sistema atribui o resultado ao ramo responsável e confina a revisão a esse ramo.</span></p><p><span class="s" data-s="b1-p1-s0">Sobre essa estrutura hierárquica, quatro agentes coordenam o processo: um Manager organiza a hierarquia de habilidades da tarefa, um Planner compõe o plano de execução, um Engineer executa as habilidades necessárias e um Reviewer valida e libera novas habilidades.</span> <span class="s" data-s="b1-p1-s1">Pessoas orientam o processo através de objetivos e correções.</span> <span class="s" data-s="b1-p1-s2">Sequências de habilidades que se tornam estáveis são consolidadas em habilidades compostas reutilizáveis.</span></p><p><span class="s" data-s="b1-p2-s0">A ideia é simples: em vez de tratar cada execução como episódio isolado, o sistema mantém uma biblioteca de habilidades que cresce e se refina.</span> <span class="s" data-s="b1-p2-s1">Cada falha gera diagnóstico localizado, cada reparo passa por revisão antes de entrar na biblioteca, e habilidades bem-sucedidas são promovidas a componentes de nível superior.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.12424/figure2.webp" alt="O framework RoboRSI: Manager organiza hierarquia de habilidades, Planner monta o plano, Engineer executa e Reviewer valida antes de liberar novas capacidades para reutilização." loading="lazy">
+          <figcaption>
+            O framework RoboRSI: Manager organiza hierarquia de habilidades, Planner monta o plano, Engineer executa e Reviewer valida antes de liberar novas capacidades para reutilização.
+            <span class="source">Figura 2 do paper · Wen et al., arXiv:2610.12424</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Como funciona o Top-Down Skill Refinement</span></h2>
+<p><span class="s" data-s="b3-p0-s0">TSR estrutura o conhecimento do robô em três camadas.</span> <span class="s" data-s="b3-p0-s1">Habilidades de base são primitivas fornecidas pelo ambiente — funções de percepção, controle de movimento, manipulação de objetos.</span> <span class="s" data-s="b3-p0-s2">Habilidades atômicas implementam comportamentos específicos usando apenas primitivas de base, como &#39;pegar objeto&#39; ou &#39;mover para posição&#39;.</span> <span class="s" data-s="b3-p0-s3">Habilidades compostas orquestram sequências de habilidades atômicas ou outras compostas para realizar objetivos de nível superior, como &#39;limpar mesa&#39; ou &#39;organizar cozinha&#39;.</span></p><p><span class="s" data-s="b3-p1-s0">Cada habilidade tem um contrato explícito: pré-condições que devem ser satisfeitas antes da execução, pós-condições que garantem após sucesso, e responsabilidades claras sobre o que a habilidade deve realizar.</span> <span class="s" data-s="b3-p1-s1">Quando uma execução falha, o sistema percorre a hierarquia de cima para baixo, identifica qual habilidade violou seu contrato e concentra o diagnóstico e a correção nesse ponto.</span></p><p><span class="s" data-s="b3-p2-s0">Essa decomposição resolve o problema de atribuição: se &#39;limpar cozinha&#39; falha porque &#39;pegar copo&#39; não funciona, o sistema não revisa a estratégia de limpeza inteira, mas apenas a lógica de preensão.</span> <span class="s" data-s="b3-p2-s1">A correção fica confinada ao escopo responsável, preservando o resto da hierarquia.</span> <span class="s" data-s="b3-p2-s2">Quando &#39;pegar copo&#39; é corrigido e validado, todas as tarefas que dependem dessa habilidade se beneficiam automaticamente.</span></p>        <h2><span class="s" data-s="b4-h">O sistema multi-agente em ação</span></h2>
+<p><span class="s" data-s="b4-p0-s0">O Manager recebe uma tarefa em linguagem natural e decide se ela pode ser resolvida com habilidades existentes ou se precisa criar uma nova habilidade composta.</span> <span class="s" data-s="b4-p0-s1">Se a tarefa é nova, ele a decompõe em sub-objetivos e constrói uma hierarquia de habilidades candidatas, consultando a biblioteca atual e propondo novas quando necessário.</span></p><p><span class="s" data-s="b4-p1-s0">O Planner pega a hierarquia e monta um plano de execução concreto: sequência de chamadas de habilidades com parâmetros específicos, verificações de pré-condições e estratégias de recuperação.</span> <span class="s" data-s="b4-p1-s1">O Engineer executa o plano, chamando habilidades uma a uma, coletando observações do ambiente e registrando resultados — sucessos, falhas, estados intermediários, mensagens de erro.</span></p><p><span class="s" data-s="b4-p2-s0">Quando algo falha, o Engineer diagnostica a causa: identifica qual habilidade violou seu contrato, coleta evidências de execução (logs, observações, traços de erro) e propõe uma correção.</span> <span class="s" data-s="b4-p2-s1">A correção pode ser ajuste de parâmetros, mudança de lógica, adição de verificações ou criação de sub-habilidade auxiliar.</span> <span class="s" data-s="b4-p2-s2">O Reviewer então examina a proposta: verifica se a correção está no escopo correto, se preserva contratos de outras habilidades, se a justificativa é coerente com a evidência.</span> <span class="s" data-s="b4-p2-s3">Só depois de aprovação a habilidade revisada entra na biblioteca.</span></p><p><span class="s" data-s="b4-p3-s0">Esse loop continua: o robô tenta tarefas, falha, diagnostica, corrige, valida e tenta de novo.</span> <span class="s" data-s="b4-p3-s1">Quando uma sequência de habilidades atômicas é executada com sucesso várias vezes, o sistema a consolida em uma nova habilidade composta, que passa pelo mesmo processo de revisão antes de ser publicada.</span> <span class="s" data-s="b4-p3-s2">Pessoas podem intervir a qualquer momento, corrigindo diagnósticos errados, sugerindo decomposições melhores ou fornecendo conhecimento que o sistema não tem.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.12424/figure3.webp" alt="Evolução da hierarquia de habilidades ao longo de 104 rodadas de limpeza doméstica: quatro estruturas representativas mostram como tarefas se decompõem e habilidades se refinam." loading="lazy">
+          <figcaption>
+            Evolução da hierarquia de habilidades ao longo de 104 rodadas de limpeza doméstica: quatro estruturas representativas mostram como tarefas se decompõem e habilidades se refinam.
+            <span class="source">Figura 3 do paper · Wen et al., arXiv:2610.12424</span>
+          </figcaption>
+        </figure>
+        <aside class="callout">
+          <h3><span class="s" data-s="b6-t">Validação antes de reutilização</span></h3>
+          <p><span class="s" data-s="b6-c-s0">O ponto crítico do RoboRSI é que nenhuma habilidade entra na biblioteca sem passar pelo Reviewer.</span> <span class="s" data-s="b6-c-s1">Isso evita que correções mal localizadas ou quebras de contrato se propaguem para outras tarefas.</span> <span class="s" data-s="b6-c-s2">A validação verifica escopo, preservação de contratos e coerência com evidências de execução antes de liberar a habilidade para reutilização.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b7-h">Experimentos no mundo real: limpeza doméstica</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Os autores testaram RoboRSI em um manipulador móvel real executando tarefas de limpeza doméstica com múltiplos objetos ao longo de 104 rodadas.</span> <span class="s" data-s="b7-p0-s1">O robô precisava identificar objetos espalhados, pegá-los, levá-los para locais apropriados e lidar com variações de layout, iluminação e tipos de objeto.</span></p><p><span class="s" data-s="b7-p1-s0">O sistema começou com habilidades de base fornecidas (percepção visual, controle de braço, navegação) e nenhuma habilidade de nível superior.</span> <span class="s" data-s="b7-p1-s1">Ao longo das rodadas, desenvolveu habilidades atômicas para pegar diferentes tipos de objeto, habilidades compostas para limpar áreas específicas e estratégias de recuperação para situações de falha.</span> <span class="s" data-s="b7-p1-s2">A hierarquia cresceu de forma orgânica: novas habilidades eram criadas quando necessário, refinadas quando falhavam e consolidadas quando se tornavam estáveis.</span></p><p><span class="s" data-s="b7-p2-s0">O experimento físico não reporta taxa de sucesso final, mas documenta a evolução qualitativa: o número de habilidades na biblioteca, a profundidade da hierarquia, exemplos de correções bem-sucedidas e casos onde intervenção humana foi necessária.</span> <span class="s" data-s="b7-p2-s1">O foco está em demonstrar que o sistema acumula capacidades de forma estável, não em bater benchmarks de desempenho.</span></p>        <h2><span class="s" data-s="b8-h">Resultados em simulação: LIBERO e variantes</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Para avaliação quantitativa, os autores usaram quatro benchmarks de simulação: LIBERO, LIBERO-PRO, LIBERO-Plus e RoboTwin.</span> <span class="s" data-s="b8-p0-s1">LIBERO contém tarefas de manipulação em ambientes domésticos com variações de objeto e layout.</span> <span class="s" data-s="b8-p0-s2">LIBERO-PRO adiciona restrições temporais e dependências entre sub-tarefas.</span> <span class="s" data-s="b8-p0-s3">LIBERO-Plus inclui tarefas que requerem raciocínio espacial complexo.</span> <span class="s" data-s="b8-p0-s4">RoboTwin simula cenários de colaboração entre dois braços robóticos.</span></p><p><span class="s" data-s="b8-p1-s0">RoboRSI alcançou a maior taxa de sucesso em todos os quatro benchmarks, superando o baseline mais forte por 2,7 a 11,0 pontos percentuais.</span> <span class="s" data-s="b8-p1-s1">Em LIBERO, a diferença foi menor (2,7 pontos), provavelmente porque as tarefas são mais simples e o ganho de reutilização é limitado.</span> <span class="s" data-s="b8-p1-s2">Em LIBERO-PRO e LIBERO-Plus, onde tarefas são mais complexas e a estrutura hierárquica ajuda, a vantagem cresceu para 8,3 e 11,0 pontos.</span></p><p><span class="s" data-s="b8-p2-s0">Os autores também reportam um experimento de &#39;auto-iteração de um dia&#39;: o sistema rodou continuamente por 24 horas, executando tarefas, corrigindo falhas e expandindo a biblioteca.</span> <span class="s" data-s="b8-p2-s1">Ao final, a taxa de sucesso havia aumentado em relação ao início, demonstrando que o loop de auto-aperfeiçoamento funciona sem supervisão constante.</span> <span class="s" data-s="b8-p2-s2">O paper não detalha a magnitude desse ganho, mas enfatiza a estabilidade: o sistema não degradou, não entrou em loops de correção infinitos e não precisou de intervenção manual frequente.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.12424/figure9.webp" alt="Casos de simulação com mesmo estado inicial: imagens mostram primeiro e último frame do episódio RoboRSI, texto resume chamadas decisivas de cada método." loading="lazy">
+          <figcaption>
+            Casos de simulação com mesmo estado inicial: imagens mostram primeiro e último frame do episódio RoboRSI, texto resume chamadas decisivas de cada método.
+            <span class="source">Figura 9 do paper · Wen et al., arXiv:2610.12424</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">Estudos de ablação: o que importa de verdade</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Os autores conduziram ablações sistemáticas para isolar o impacto de cada componente.</span> <span class="s" data-s="b10-p0-s1">Remover a separação de papéis (Manager, Planner, Engineer, Reviewer) e usar um único agente reduziu o desempenho, especialmente em tarefas complexas onde diagnóstico e validação precisam de raciocínio focado.</span></p><p><span class="s" data-s="b10-p1-s0">Substituir TSR por uma biblioteca plana de habilidades — sem hierarquia, sem contratos, sem atribuição de responsabilidade — causou queda significativa.</span> <span class="s" data-s="b10-p1-s1">Sem a estrutura hierárquica, o sistema não conseguia localizar falhas corretamente: corrigia a habilidade errada, introduzia regressões em habilidades que já funcionavam ou falhava em reutilizar correções em contextos similares.</span></p><p><span class="s" data-s="b10-p2-s0">Desabilitar a consolidação de código — o mecanismo que transforma sequências estáveis em habilidades compostas — também prejudicou o desempenho, mas menos do que remover TSR.</span> <span class="s" data-s="b10-p2-s1">A consolidação acelera execução e reduz redundância, mas não é essencial para o loop de auto-aperfeiçoamento.</span> <span class="s" data-s="b10-p2-s2">A ablação de modelo de fundação mostrou que RoboRSI funciona com diferentes backbones, mas modelos mais capazes (GPT-4 vs GPT-3.5) melhoram diagnóstico e geração de código.</span></p><p><span class="s" data-s="b10-p3-s0">Um experimento adicional testou usar dados de execução coletados pelo sistema para treinar políticas neurais via aprendizado por imitação.</span> <span class="s" data-s="b10-p3-s1">As políticas aprendidas superaram baselines treinados em demonstrações humanas, sugerindo que a experiência de auto-aperfeiçoamento gera dados de treinamento de alta qualidade.</span> <span class="s" data-s="b10-p3-s2">No entanto, o paper não explora essa direção em profundidade.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.12424/figure1.webp" alt="RoboRSI em resumo: loop multi-agente de auto-aperfeiçoamento (centro), experimentos no mundo real com manipulador móvel e ganhos medidos em simulação." loading="lazy">
+          <figcaption>
+            RoboRSI em resumo: loop multi-agente de auto-aperfeiçoamento (centro), experimentos no mundo real com manipulador móvel e ganhos medidos em simulação.
+            <span class="source">Figura 1 do paper · Wen et al., arXiv:2610.12424</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b12-h">Limitações e o que fica em aberto</span></h2>
+<p><span class="s" data-s="b12-p0-s0">RoboRSI depende de habilidades de base fornecidas.</span> <span class="s" data-s="b12-p0-s1">O sistema não aprende novas primitivas de percepção ou controle, apenas compõe e refina as que já existem.</span> <span class="s" data-s="b12-p0-s2">Se uma tarefa requer capacidade sensorial ou motora que não está na biblioteca de base, o sistema não consegue progredir.</span> <span class="s" data-s="b12-p0-s3">Estender o framework para aprender primitivas de baixo nível é trabalho futuro.</span></p><p><span class="s" data-s="b12-p1-s0">A validação feita pelo Reviewer é baseada em raciocínio simbólico sobre contratos e evidências de execução, mas não inclui verificação formal ou testes automatizados.</span> <span class="s" data-s="b12-p1-s1">Correções aprovadas podem ainda conter bugs sutis que só aparecem em situações raras.</span> <span class="s" data-s="b12-p1-s2">O paper não discute como garantir correção de habilidades críticas ou como lidar com falhas catastróficas.</span></p><p><span class="s" data-s="b12-p2-s0">Os experimentos físicos são qualitativos: mostram evolução da hierarquia e exemplos de correções, mas não reportam taxa de sucesso final, tempo de convergência ou número de intervenções humanas necessárias.</span> <span class="s" data-s="b12-p2-s1">A avaliação quantitativa fica restrita a simulação, onde o ambiente é mais controlado e as falhas menos imprevisíveis.</span></p><p><span class="s" data-s="b12-p3-s0">O sistema assume que falhas são diagnosticáveis a partir de logs e observações.</span> <span class="s" data-s="b12-p3-s1">Falhas causadas por degradação de hardware, ruído sensorial extremo ou eventos raros podem não deixar evidência suficiente para diagnóstico correto.</span> <span class="s" data-s="b12-p3-s2">O paper não aborda robustez a ambiguidade ou incerteza no processo de atribuição de responsabilidade.</span></p><p><span class="s" data-s="b12-p4-s0">Finalmente, o custo computacional não é discutido.</span> <span class="s" data-s="b12-p4-s1">Cada rodada envolve múltiplas chamadas a modelos de fundação (Manager, Planner, Engineer, Reviewer), cada uma processando contexto extenso (hierarquia de habilidades, histórico de execução, código de habilidades).</span> <span class="s" data-s="b12-p4-s2">Escalar para bibliotecas grandes ou tarefas longas pode exigir otimizações que o paper não explora.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b13-t">Intervenção humana ainda é necessária</span></h3>
+          <p><span class="s" data-s="b13-c-s0">O paper menciona casos onde correções exigiram conhecimento humano — situações onde o sistema não tinha informação suficiente para diagnosticar ou corrigir sozinho.</span> <span class="s" data-s="b13-c-s1">A frequência e natureza dessas intervenções não são quantificadas, mas deixam claro que RoboRSI não é totalmente autônomo.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b14-h">O que o paper entrega de fato</span></h2>
+<p><span class="s" data-s="b14-p0-s0">RoboRSI demonstra que é possível construir um sistema de auto-aperfeiçoamento robótico que acumula capacidades de forma estável, organiza experiência em estrutura hierárquica e valida melhorias antes de reutilizá-las.</span> <span class="s" data-s="b14-p0-s1">A combinação de TSR com sistema multi-agente resolve problemas reais: atribuição de responsabilidade, confinamento de revisões, prevenção de regressões.</span></p><p><span class="s" data-s="b14-p1-s0">Os ganhos em simulação são modestos mas consistentes, e os experimentos físicos mostram que o sistema funciona em ambientes reais com variabilidade genuína.</span> <span class="s" data-s="b14-p1-s1">A abordagem é geral: não depende de domínio específico, não requer demonstrações humanas massivas, não pressupõe estrutura de tarefa fixa.</span></p><p><span class="s" data-s="b14-p2-s0">O que o paper não entrega é um sistema pronto para produção.</span> <span class="s" data-s="b14-p2-s1">As limitações são significativas, a avaliação física é incompleta e muitas perguntas ficam em aberto.</span> <span class="s" data-s="b14-p2-s2">Mas a direção é clara: robôs generalistas precisam de memória estruturada, diagnóstico localizado e validação rigorosa.</span> <span class="s" data-s="b14-p2-s3">RoboRSI mostra um caminho possível.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">RoboRSI organiza experiência de execução em habilidades hierárquicas com contratos explícitos, atribui falhas ao componente responsável e confina correções a esse escopo.</span></li><li><span class="s" data-s="k1">Sistema multi-agente coordena planejamento, execução, diagnóstico e validação; habilidades só entram na biblioteca após aprovação do Reviewer.</span></li><li><span class="s" data-s="k2">Supera baselines em quatro benchmarks de simulação por 2,7 a 11,0 pontos percentuais; experimentos físicos mostram evolução estável ao longo de 104 rodadas.</span></li><li><span class="s" data-s="k3">Limitações: depende de primitivas fornecidas, validação não é formal, avaliação física é qualitativa e intervenção humana ainda é necessária em alguns casos.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.12424" rel="noopener">RoboRSI: Stable, efficient, and reusable robot self-evolution in complex real-world environments</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.12424" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SatNav: um benchmark de 118 mil episódios para navegação de drones em cidades usando apenas imagens de satélite — arXiv em 5</title>
+<meta name="description" content="Pesquisadores da HKUST e da IDEA criam um dataset escalável para treinar drones a seguir instruções em linguagem natural por trajetos urbanos de centenas de metros, usando imagens de satélite como proxy da visão aérea real.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SatNav: um benchmark de 118 mil episódios para navegação de drones em cidades usando apenas imagens de satélite">
+<meta property="og:description" content="Pesquisadores da HKUST e da IDEA criam um dataset escalável para treinar drones a seguir instruções em linguagem natural por trajetos urbanos de centenas de metros, usando imagens de satélite como proxy da visão aérea real.">
+<meta property="og:image" content="../../assets/papers/2609.31507/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Agentes</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2609.31507" rel="noopener">arXiv:2609.31507</a>
+    </div>
+    <h1><span class="s" data-s="t">SatNav: um benchmark de 118 mil episódios para navegação de drones em cidades usando apenas imagens de satélite</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Pesquisadores da HKUST e da IDEA criam um dataset escalável para treinar drones a seguir instruções em linguagem natural por trajetos urbanos de centenas de metros, usando imagens de satélite como proxy da visão aérea real.</span></p>
+    <p class="byline">
+      <span>Jiang et al.</span>
+      <span>9 min de leitura</span>
+<span>25/09/2026</span>    </p>
+    <div class="listen" data-article="2609.31507" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=LCH0Fj2IeCE" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema: benchmarks de navegação não escalam para a cidade inteira</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Navegação visão-linguagem (VLN) é a tarefa de fazer um agente seguir instruções em linguagem natural enquanto se move por um ambiente visual.</span> <span class="s" data-s="b0-p0-s1">A maioria dos benchmarks existentes foca em trajetos curtos—alguns metros dentro de uma casa, por exemplo—e depende de reconstruções 3D caras e trabalhosas.</span> <span class="s" data-s="b0-p0-s2">Isso limita a diversidade geográfica e o tamanho dos episódios: é inviável reconstruir uma cidade inteira em 3D para treinar um modelo.</span></p><p><span class="s" data-s="b0-p1-s0">Drones urbanos (UAVs) oferecem um cenário natural para navegação de longo prazo: voos de centenas de metros, múltiplas referências espaciais, necessidade de memória estendida para lembrar onde o agente já passou e o que ainda precisa fazer.</span> <span class="s" data-s="b0-p1-s1">Mas os datasets atuais não cobrem essa escala.</span> <span class="s" data-s="b0-p1-s2">O SatNav resolve esse gargalo usando imagens de satélite de alta resolução como aproximação da visão nadir (de cima para baixo) do drone, eliminando a necessidade de reconstrução 3D e permitindo gerar episódios automaticamente a partir de mapas abertos.</span></p><p><span class="s" data-s="b0-p2-s0">O benchmark contém 118 mil episódios distribuídos em 59 cenas de 18 cidades, com trajetos que têm em média 379 metros de comprimento.</span> <span class="s" data-s="b0-p2-s1">Três famílias de tarefas testam habilidades distintas: Boundary (seguir o perímetro de uma área), Landmark (navegar até marcos usando referências espaciais) e Route (seguir rotas com contagens, como &#39;vire na terceira interseção&#39;).</span> <span class="s" data-s="b0-p2-s2">Cada família força o agente a manter memória de longo prazo e raciocínio geoespacial consistente.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.31507/figure1.webp" alt="Visão geral do SatNav: 118 mil episódios em 59 cenas de 18 cidades. As três famílias de tarefas (Boundary, Landmark, Route) cobrem diferentes desafios de navegação urbana. Durante a navegação, o agente recebe uma instrução e crops de satélite como observação visual." loading="lazy">
+          <figcaption>
+            Visão geral do SatNav: 118 mil episódios em 59 cenas de 18 cidades. As três famílias de tarefas (Boundary, Landmark, Route) cobrem diferentes desafios de navegação urbana. Durante a navegação, o agente recebe uma instrução e crops de satélite como observação visual.
+            <span class="source">Figura 1 do paper · Jiang et al., arXiv:2609.31507</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">A ideia: gerar episódios automaticamente a partir de mapas abertos</span></h2>
+<p><span class="s" data-s="b2-p0-s0">O pipeline de geração do SatNav parte de imagens de satélite de alta resolução e anotações geoespaciais do OpenStreetMap (OSM).</span> <span class="s" data-s="b2-p0-s1">O OSM fornece polígonos de edifícios, ruas, rios e outros elementos urbanos.</span> <span class="s" data-s="b2-p0-s2">Os autores extraem &#39;cues&#39; estruturados—pontos de interesse, segmentos de rota, contornos de áreas—e os usam para gerar trajetos longos e instruções ancoradas nesses cues.</span></p><p><span class="s" data-s="b2-p1-s0">Para a família Boundary, o sistema identifica polígonos de edifícios ou parques e gera trajetos que seguem o perímetro, com variantes de arco parcial, loop completo ou loop estendido (múltiplas voltas).</span> <span class="s" data-s="b2-p1-s1">Para Landmark, o sistema seleciona um marco de destino e pontos de referência intermediários, gerando instruções como &#39;vire à esquerda após o prédio vermelho e siga até o estádio&#39;.</span> <span class="s" data-s="b2-p1-s2">Para Route, o sistema segue ruas ou rios e injeta cues de contagem (&#39;vire na segunda interseção&#39;).</span></p><p><span class="s" data-s="b2-p2-s0">As instruções são geradas por um modelo de linguagem (LLM) a partir dos cues estruturados, garantindo que cada instrução esteja ancorada em elementos verificáveis do mapa.</span> <span class="s" data-s="b2-p2-s1">O resultado é um dataset onde cada episódio tem uma trajetória de referência, uma instrução em linguagem natural e uma sequência de crops de satélite ao longo do caminho.</span> <span class="s" data-s="b2-p2-s2">Esse pipeline é escalável: adicionar uma nova cidade exige apenas baixar as imagens de satélite e rodar o gerador automático.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.31507/figure2.webp" alt="Pipeline de geração de episódios: cues estruturados (polígonos, ruas, marcos) são extraídos de imagens de satélite e anotações OSM, depois usados para gerar trajetos longos e instruções ancoradas espacialmente." loading="lazy">
+          <figcaption>
+            Pipeline de geração de episódios: cues estruturados (polígonos, ruas, marcos) são extraídos de imagens de satélite e anotações OSM, depois usados para gerar trajetos longos e instruções ancoradas espacialmente.
+            <span class="source">Figura 2 do paper · Jiang et al., arXiv:2609.31507</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b4-h">SwiftVLN: um framework modular para testar designs de memória</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Para avaliar diferentes estratégias de memória de longo prazo, os autores propõem o SwiftVLN, um framework modular onde os componentes de memória são intercambiáveis.</span> <span class="s" data-s="b4-p0-s1">A arquitetura base usa um encoder de visão (um LVLM, modelo de visão-linguagem grande) para processar crops de satélite e um decoder de linguagem para gerar ações (virar, seguir em frente, parar).</span></p><p><span class="s" data-s="b4-p1-s0">A memória é dividida em duas partes: memória de curto prazo (uma janela deslizante dos últimos N frames) e memória de longo prazo (frames selecionados de toda a história do trajeto).</span> <span class="s" data-s="b4-p1-s1">O SwiftVLN permite trocar a estratégia de seleção da memória de longo prazo sem mexer no resto do modelo.</span> <span class="s" data-s="b4-p1-s2">Os autores testam quatro variantes: amostragem uniforme (pega frames espaçados uniformemente), compressão temporal em segmentos (STC, agrupa frames em janelas e comprime cada janela), compressão temporal global (GTC, comprime toda a história de uma vez) e memória de mapa (mantém um mapa top-down das áreas já exploradas).</span></p><p><span class="s" data-s="b4-p2-s0">A configuração de referência usa uma janela de curto prazo de 8 frames sem sobreposição e 8 frames uniformemente amostrados da história como memória de longo prazo.</span> <span class="s" data-s="b4-p2-s1">Todas as ablações partem dessa configuração, mudando apenas o componente de memória e mantendo o resto fixo.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.31507/figure4.webp" alt="Arquitetura do SwiftVLN: framework modular onde componentes de memória de curto e longo prazo são intercambiáveis, permitindo ablações sistemáticas de design de memória para navegação de longo prazo." loading="lazy">
+          <figcaption>
+            Arquitetura do SwiftVLN: framework modular onde componentes de memória de curto e longo prazo são intercambiáveis, permitindo ablações sistemáticas de design de memória para navegação de longo prazo.
+            <span class="source">Figura 4 do paper · Jiang et al., arXiv:2609.31507</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b6-h">Resultados: modelos atuais ainda lutam em navegação urbana de longo prazo</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Os autores comparam métodos clássicos de VLN (Seq2Seq, CMA) e agentes baseados em LVLMs recentes (NaVILA, UniNaVid, StreamVLN, OpenFly-Agent).</span> <span class="s" data-s="b6-p0-s1">Todos os baselines são treinados ou fine-tunados no split de treino do SatNav e avaliados em dois splits de teste: Test Seen (cenas vistas durante o treino, mas episódios novos) e Test Unseen (cenas de cidades completamente novas).</span></p><p><span class="s" data-s="b6-p1-s0">A métrica principal é Success Rate (SR): o agente é considerado bem-sucedido se parar a menos de 10 metros do alvo (30 metros para tarefas Landmark, que são mais difíceis).</span> <span class="s" data-s="b6-p1-s1">Para episódios Boundary, onde o ponto de partida pode coincidir com o alvo, o sucesso só conta se o agente primeiro se afastar mais de 20 metros antes de voltar.</span> <span class="s" data-s="b6-p1-s2">Outras métricas incluem SPL (sucesso ponderado pelo comprimento do caminho), Oracle Success (se o agente passou perto do alvo em algum momento), Navigation Error (distância final até o alvo) e número de passos.</span></p><p><span class="s" data-s="b6-p2-s0">Os métodos clássicos ficam muito atrás: Seq2Seq atinge apenas 2,1% de SR em Test Seen e 1,6% em Test Unseen.</span> <span class="s" data-s="b6-p2-s1">CMA melhora para 9,5% e 7,3%, mas ainda é insuficiente.</span> <span class="s" data-s="b6-p2-s2">Entre os modelos baseados em LVLMs, StreamVLN lidera com 64,3% de SR em Test Seen e 52,2% em Test Unseen quando treinado do zero.</span> <span class="s" data-s="b6-p2-s3">Quando fine-tunado a partir de um checkpoint pré-treinado em outra tarefa de navegação, StreamVLN sobe para 67,3% e 58,4%, respectivamente.</span> <span class="s" data-s="b6-p2-s4">O SwiftVLN, com a configuração de referência, atinge 65,8% em Test Seen e 53,7% em Test Unseen.</span></p><p><span class="s" data-s="b6-p3-s0">A queda de desempenho entre Test Seen e Test Unseen é consistente em todos os modelos, mostrando que generalizar para novas regiões geográficas é um desafio real.</span> <span class="s" data-s="b6-p3-s1">Além disso, SR e SPL são muito próximos na maioria dos casos, indicando que agentes bem-sucedidos seguem caminhos diretos, enquanto desvios grandes são difíceis de corrigir em ambientes abertos de mapa.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.31507/table1.webp" alt="Comparação de desempenho no SatNav: modelos baseados em LVLMs superam métodos clássicos, mas a taxa de sucesso cai de ~67% em cenas conhecidas para ~58% em cidades novas. Asterisco indica fine-tuning a partir de checkpoints pré-treinados." loading="lazy">
+          <figcaption>
+            Comparação de desempenho no SatNav: modelos baseados em LVLMs superam métodos clássicos, mas a taxa de sucesso cai de ~67% em cenas conhecidas para ~58% em cidades novas. Asterisco indica fine-tuning a partir de checkpoints pré-treinados.
+            <span class="source">Tabela 1 do paper · Jiang et al., arXiv:2609.31507</span>
+          </figcaption>
+        </figure>
+        <aside class="callout">
+          <h3><span class="s" data-s="b8-t">O que significa &#39;sucesso&#39; no SatNav?</span></h3>
+          <p><span class="s" data-s="b8-c-s0">Um episódio é considerado bem-sucedido se o agente parar a menos de 10 metros do alvo (30 metros para tarefas Landmark).</span> <span class="s" data-s="b8-c-s1">Para episódios Boundary, onde início e fim podem coincidir, o agente precisa primeiro se afastar mais de 20 metros antes de retornar ao ponto de partida.</span> <span class="s" data-s="b8-c-s2">Essa definição captura tanto a precisão espacial quanto a capacidade de executar o trajeto completo.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b9-h">Ablações de memória: o que funciona para navegação de longo prazo</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Os autores conduzem ablações sistemáticas no SwiftVLN para isolar o efeito de cada componente de memória.</span> <span class="s" data-s="b9-p0-s1">Primeiro, testam o tamanho da janela de curto prazo: janelas maiores (16 ou 32 frames) degradam o desempenho, provavelmente porque diluem a atenção do modelo.</span> <span class="s" data-s="b9-p0-s2">Janelas menores (4 frames) também pioram, sugerindo que 8 frames é um bom equilíbrio entre contexto recente e eficiência.</span></p><p><span class="s" data-s="b9-p1-s0">Sobreposição entre janelas consecutivas (overlap) traz ganhos pequenos mas consistentes: com 50% de overlap, SR em Test Unseen sobe de 53,7% para 54,3%.</span> <span class="s" data-s="b9-p1-s1">Isso sugere que manter continuidade entre janelas ajuda o modelo a rastrear mudanças graduais na cena.</span></p><p><span class="s" data-s="b9-p2-s0">Para memória de longo prazo, amostragem uniforme (baseline) supera todas as outras estratégias testadas.</span> <span class="s" data-s="b9-p2-s1">Compressão temporal em segmentos (STC) fica próxima, mas compressão global (GTC) e memória de mapa caem significativamente.</span> <span class="s" data-s="b9-p2-s2">A memória de mapa, em particular, degrada o desempenho: os autores atribuem isso ao fato de que o encoder de visão é compartilhado entre mapas explorados e crops de satélite, forçando uma representação comprometida.</span> <span class="s" data-s="b9-p2-s3">Um encoder dedicado para mapas poderia resolver isso.</span></p><p><span class="s" data-s="b9-p3-s0">Adicionar a observação inicial como entrada extra melhora Oracle Success mas não SR, indicando que o agente passa perto do alvo mas falha em parar de forma confiável.</span> <span class="s" data-s="b9-p3-s1">Codificação de pose relativa (offset espacial entre frames) traz ganhos estáveis, mostrando que informação espacial explícita ajuda o modelo a interpretar a sequência de observações.</span></p>        <h2><span class="s" data-s="b10-h">Transferência satélite-drone: do mapa para o mundo real</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Os autores testam se um modelo treinado em imagens de satélite consegue operar em voos reais.</span> <span class="s" data-s="b10-p0-s1">Usam um drone DJI Matrice 4D com câmera nadir, transmitindo vídeo para uma estação de trabalho que roda o SwiftVLN em uma GPU RTX 4090.</span> <span class="s" data-s="b10-p0-s2">Constroem 18 episódios reais (6 de cada família de tarefa) em um campo de testes em Shenzhen, China.</span></p><p><span class="s" data-s="b10-p1-s0">As instruções são escritas por humanos e refinadas pelo mesmo pipeline de LLM usado no SatNav, garantindo consistência de estilo.</span> <span class="s" data-s="b10-p1-s1">O modelo de referência, treinado apenas em satélite, atinge 38,9% de SR geral nos 18 episódios.</span> <span class="s" data-s="b10-p1-s2">Adicionando um adaptador visual leve (uma camada treinável que ajusta as features de satélite para a distribuição de imagens reais), o SR sobe para 55,6%.</span></p><p><span class="s" data-s="b10-p2-s0">Esses resultados mostram que transferência satélite-drone é viável, mas ainda desafiadora.</span> <span class="s" data-s="b10-p2-s1">Ambiguidades locais na cena (prédios parecidos, falta de marcos distintos) e incerteza na execução (vento, latência de controle) são fontes comuns de falha.</span> <span class="s" data-s="b10-p2-s2">Os autores fornecem análises qualitativas detalhadas de casos representativos no apêndice, incluindo um episódio Boundary em que o drone circunda um prédio de teto cinza, completando o loop com sucesso.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b11-t">Latência e escala dos experimentos reais</span></h3>
+          <p><span class="s" data-s="b11-c-s0">A latência do sistema limita o número de voos de longa duração que os autores conseguem realizar.</span> <span class="s" data-s="b11-c-s1">A avaliação em 18 episódios reais fornece evidência preliminar de transferência satélite-drone, mas não é estatisticamente exaustiva.</span> <span class="s" data-s="b11-c-s2">O método de transferência atual usa um adaptador visual simples; designs mais sofisticados podem melhorar a robustez.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b12-h">Limitações: ações discretas, falta de RL e poucos voos reais</span></h2>
+<p><span class="s" data-s="b12-p0-s0">O SatNav tem três limitações principais.</span> <span class="s" data-s="b12-p0-s1">Primeira: a navegação usa quatro ações discretas (frente, esquerda, direita, parar) em altitude fixa.</span> <span class="s" data-s="b12-p0-s2">Os trajetos são gerados usando essas ações, e caminhos que exigem outros movimentos são removidos.</span> <span class="s" data-s="b12-p0-s3">Isso favorece rotas suaves e limita a cobertura de trajetos sinuosos.</span> <span class="s" data-s="b12-p0-s4">Expandir o espaço de ações para incluir mudanças de altitude, velocidade, decolagem e pouso permitiria missões mais diversas.</span></p><p><span class="s" data-s="b12-p1-s0">Segunda: o pipeline de treino atual não suporta fine-tuning por reforço (RL).</span> <span class="s" data-s="b12-p1-s1">Treinar apenas em trajetos de referência dá ao agente pouca experiência com estados alcançados após um erro.</span> <span class="s" data-s="b12-p1-s2">Adicionar treino por interação poderia ajudar o agente a aprender a se recuperar de desvios e melhorar as decisões de parada em rotas longas.</span></p><p><span class="s" data-s="b12-p2-s0">Terceira: a latência do sistema limita o número de voos de longa duração.</span> <span class="s" data-s="b12-p2-s1">A avaliação em 18 episódios reais fornece evidência preliminar de transferência satélite-drone, mas não é estatisticamente exaustiva.</span> <span class="s" data-s="b12-p2-s2">O método de transferência atual também usa um adaptador visual simples.</span> <span class="s" data-s="b12-p2-s3">Trabalhos futuros podem projetar e avaliar métodos mais eficazes para essa transferência.</span></p>        <h2><span class="s" data-s="b13-h">O que o SatNav abre</span></h2>
+<p><span class="s" data-s="b13-p0-s0">O SatNav oferece um caminho escalável para construir benchmarks de navegação urbana sem depender de reconstruções 3D caras.</span> <span class="s" data-s="b13-p0-s1">Ao usar imagens de satélite e anotações abertas do OSM, o dataset pode crescer para novas cidades e países com custo marginal baixo.</span> <span class="s" data-s="b13-p0-s2">As três famílias de tarefas transformam desafios de navegação de longo prazo—rastreamento de progresso, ancoragem geoespacial, raciocínio de rota—em alvos de avaliação explícitos.</span></p><p><span class="s" data-s="b13-p1-s0">Os experimentos mostram que agentes clássicos e baseados em LVLMs ainda enfrentam desafios claros em generalizar para ambientes geográficos novos e parar de forma confiável.</span> <span class="s" data-s="b13-p1-s1">O estudo de ablação de memória no SwiftVLN oferece uma visão comparativa de designs de memória de longo prazo e orientação para futuros modelos de VLN.</span> <span class="s" data-s="b13-p1-s2">As demonstrações reais mostram a viabilidade de implantar modelos treinados em satélite em drones, mas também destacam desafios remanescentes na transferência.</span></p><p><span class="s" data-s="b13-p2-s0">O SatNav não resolve navegação urbana de drones, mas fornece uma base prática para desenvolver e testar agentes de navegação de longo prazo em escala urbana.</span> <span class="s" data-s="b13-p2-s1">O benchmark está disponível publicamente, e os autores esperam que ele acelere pesquisa em memória de longo prazo, raciocínio geoespacial e transferência sim-to-real para navegação aérea.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">SatNav é um benchmark de 118 mil episódios de navegação urbana por drone, gerados automaticamente a partir de imagens de satélite e mapas abertos, com trajetos de ~380 metros em média.</span></li><li><span class="s" data-s="k1">Modelos baseados em LVLMs atingem até 67% de taxa de sucesso em cenas conhecidas, mas caem para ~58% em cidades novas, mostrando que generalização geográfica é um desafio real.</span></li><li><span class="s" data-s="k2">Ablações de memória mostram que amostragem uniforme de frames históricos supera compressão temporal e memória de mapa; janelas de 8 frames com overlap leve funcionam melhor.</span></li><li><span class="s" data-s="k3">Experimentos reais com um DJI Matrice 4D mostram que modelos treinados em satélite podem operar em voos reais com um adaptador visual leve, mas ambiguidades locais e latência limitam o desempenho.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2609.31507" rel="noopener">SatNav: A Scalable Benchmark for Long-Horizon UAV Vision-Language Navigation from Satellite Imagery</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2609.31507" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

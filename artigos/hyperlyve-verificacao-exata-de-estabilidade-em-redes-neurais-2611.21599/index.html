@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hyperlyve: Verificação exata de estabilidade em redes neurais profundas com ReLU — arXiv em 5</title>
+<meta name="description" content="Apresentamos o Hyperlyve, um framework que usa enumeração paralela de arranjos de hiperplanos para certificar funções de Lyapunov em sistemas dinâmicos controlados por redes neurais, superando ferramentas existentes em velocidade e escala.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hyperlyve: Verificação exata de estabilidade em redes neurais profundas com ReLU">
+<meta property="og:description" content="Apresentamos o Hyperlyve, um framework que usa enumeração paralela de arranjos de hiperplanos para certificar funções de Lyapunov em sistemas dinâmicos controlados por redes neurais, superando ferramentas existentes em velocidade e escala.">
+<meta property="og:image" content="../../assets/papers/2611.21599/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Redes neurais</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.21599" rel="noopener">arXiv:2611.21599</a>
+    </div>
+    <h1><span class="s" data-s="t">Hyperlyve: Verificação exata de estabilidade em redes neurais profundas com ReLU</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Apresentamos o Hyperlyve, um framework que usa enumeração paralela de arranjos de hiperplanos para certificar funções de Lyapunov em sistemas dinâmicos controlados por redes neurais, superando ferramentas existentes em velocidade e escala.</span></p>
+    <p class="byline">
+      <span>Yarbrough et al.</span>
+      <span>7 min de leitura</span>
+<span>16/11/2026</span>    </p>
+    <div class="listen" data-article="2611.21599" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=6qpvmu3a6ds" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema da estabilidade em sistemas controlados por redes neurais</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Sistemas ciber-físicos que utilizam redes neurais como controladores podem apresentar desempenho excepcional, mas também comportamentos inesperados e, em alguns casos, catastróficos.</span> <span class="s" data-s="b0-p0-s1">Para sistemas autônomos, incluindo aqueles que incorporam modelos de visão ou fundação no loop de controle, garantias clássicas de estabilidade permanecem como um componente essencial de uma abordagem em camadas para a segurança.</span> <span class="s" data-s="b0-p0-s2">Provar a estabilidade de um sistema em malha fechada com um controlador de rede neural é um problema bem estudado, particularmente através da análise de alcançabilidade.</span></p><p><span class="s" data-s="b0-p1-s0">No entanto, decidir a estabilidade assintótica de mesmo um sistema não linear simples é fortemente NP-difícil.</span> <span class="s" data-s="b0-p1-s1">A análise de estabilidade assintótica baseada em funções de Lyapunov é um pilar da teoria de controle.</span> <span class="s" data-s="b0-p1-s2">A existência de uma função de Lyapunov é suficiente para provar a estabilidade assintótica de um sistema dinâmico.</span> <span class="s" data-s="b0-p1-s3">Infelizmente, encontrar uma função de Lyapunov é uma tarefa não trivial, pois não existe um método universal aplicável a sistemas não lineares gerais.</span></p><p><span class="s" data-s="b0-p2-s0">Diante da dificuldade de derivar funções de Lyapunov à mão, um corpo crescente de trabalho aprende funções de Lyapunov neurais.</span> <span class="s" data-s="b0-p2-s1">Uma função de Lyapunov neural é geralmente construída implementando uma função de perda que penaliza violações das três condições de Lyapunov: zero no ponto de equilíbrio, definitividade positiva e diminuição ao longo de todas as trajetórias.</span> <span class="s" data-s="b0-p2-s2">Embora uma rede neural possa aprender a satisfazer as condições de Lyapunov para um conjunto de pontos amostrados dentro de um domínio de interesse, isso não garante que a rede satisfaça as condições em todo o espaço de estado contínuo.</span></p>        <h2><span class="s" data-s="b1-h">Limitações das abordagens atuais de verificação</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Portanto, aprender uma função de Lyapunov neural também requer um procedimento de verificação formal para certificar que as condições de estabilidade são válidas sobre todo o domínio de interesse.</span> <span class="s" data-s="b1-p0-s1">Trabalhos anteriores sobre a certificação da validade de uma função de Lyapunov neural incluem codificações SMT, SOS/SDP e MIP/MILP.</span> <span class="s" data-s="b1-p0-s2">Trabalhos recentes usam o verificador α, β-CROWN para acelerar a verificação de funções de Lyapunov neurais suaves por meio de propagação de limites e otimização branch-and-bound.</span></p><p><span class="s" data-s="b1-p1-s0">No entanto, a verificação completa branch-and-bound frequentemente se torna computacionalmente proibitiva para sistemas complexos e de alta dimensão.</span> <span class="s" data-s="b1-p1-s1">Decompor uma rede com ativações ReLU em um complexo poliédrico afim por partes (CPA) enumerando o arranjo de hiperplanos formado pelos padrões de ativação ReLU melhora a tratabilidade da verificação de funções de Lyapunov neurais não suaves.</span></p><p><span class="s" data-s="b1-p2-s0">Ferramentas como Reachable Polyhedral Marching (RPM) enumeram e computam conjuntos invariantes de controle a partir de regiões de ativação; no entanto, sua abordagem de programação linear depende de aproximações lineares por partes da dinâmica.</span> <span class="s" data-s="b1-p2-s1">Da mesma forma, trabalhos anteriores treinam e enumeram funções de Lyapunov neurais ReLU de camada única, mas também restringem sua análise a aproximações de dinâmica linear por partes.</span> <span class="s" data-s="b1-p2-s2">Além dessas limitações dinâmicas, os métodos existentes de enumeração de hiperplanos de redes ReLU lutam para paralelizar, permanecendo bloqueados por avaliações por neurônio ou achatamento da rede.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.21599/figure1.webp" alt="O framework CEGIS do Hyperlyve: o Learner treina a rede ReLU candidata V amostrando estados, e o Verifier checa a estabilidade em paralelo, retornando contraexemplos se a condição falhar." loading="lazy">
+          <figcaption>
+            O framework CEGIS do Hyperlyve: o Learner treina a rede ReLU candidata V amostrando estados, e o Verifier checa a estabilidade em paralelo, retornando contraexemplos se a condição falhar.
+            <span class="source">Figura 1 do paper · Yarbrough et al., arXiv:2611.21599</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">A abordagem Hyperlyve: Enumeração de Arranjos de Hiperplanos</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Apresentamos o Hyperlyve (Hyperplane Partitioned Lyapunov Verification and Enumeration), um framework para provar a estabilidade assintótica de sistemas dinâmicos não lineares, incluindo aqueles com controladores de rede neural.</span> <span class="s" data-s="b3-p0-s1">O Hyperlyve aprende e certifica formalmente funções de Lyapunov neurais contínuas afins por partes (CPA) dentro de um loop de síntese indutiva guiada por contraexemplos (CEGIS).</span> <span class="s" data-s="b3-p0-s2">A inovação chave do Hyperlyve é um algoritmo paralelo que enumera o arranjo de hiperplanos formado pelas ativações ReLU de redes profundas e certifica que as condições de Lyapunov são satisfeitas dentro de cada região poliédrica.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b4-t">Complexidade Computacional</span></h3>
+          <p><span class="s" data-s="b4-c-s0">Os autores caracterizam formalmente a complexidade computacional do problema de verificação de Lyapunov neural CPA como co-NP-completo.</span> <span class="s" data-s="b4-c-s1">Isso preenche uma lacuna chave na literatura, estabelecendo limites teóricos claros para o que pode ser verificado eficientemente.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b5-h">Detalhes do Método: Testes Regionais e Paralelismo</span></h2>
+<p><span class="s" data-s="b5-p0-s0">O Hyperlyve deriva testes regionais sonoros e completos para verificar a estabilidade assintótica da dinâmica suave exata (em vez de uma aproximação linear por partes) dentro de um domínio compacto de interesse.</span> <span class="s" data-s="b5-p0-s1">Isso é crucial, pois aproximações lineares podem mascarar instabilidades sutis que ocorrem nas fronteiras das regiões de ativação ou em dinâmicas altamente não lineares.</span></p><p><span class="s" data-s="b5-p1-s0">A chave para a eficiência do Hyperlyve é a paralelização da enumeração.</span> <span class="s" data-s="b5-p1-s1">Enquanto abordagens anteriores assumem que as redes são genéricas, com no máximo p hiperplanos se intersectando por vértice em R^p, o Hyperlyve explora a estrutura geométrica específica dos arranjos de hiperplanos induzidos pelas ativações ReLU.</span> <span class="s" data-s="b5-p1-s2">Isso permite que o algoritmo divida a carga de trabalho de forma granular, verificando múltiplas regiões poliédricas simultaneamente sem a necessidade de GPU, utilizando apenas processadores de núcleo único ou múltiplos em arquiteturas padrão.</span></p>        <h2><span class="s" data-s="b6-h">O Loop CEGIS no Hyperlyve</span></h2>
+<p><span class="s" data-s="b6-p0-s0">O processo opera em um ciclo iterativo.</span> <span class="s" data-s="b6-p0-s1">Inicialmente, um &#39;Learner&#39; treina uma rede neural candidata V para atuar como função de Lyapunov, minimizando uma função de perda baseada nas condições de Lyapunov em estados amostrados do domínio B. Em seguida, a função candidata é passada para o verificador Hyperlyve.</span></p><p><span class="s" data-s="b6-p1-s0">O verificador não confia apenas nas amostras.</span> <span class="s" data-s="b6-p1-s1">Ele enumera exaustivamente as regiões poliédricas definidas pelas fronteiras de decisão da rede (hiperplanos ReLU).</span> <span class="s" data-s="b6-p1-s2">Dentro de cada região, a dinâmica da rede é linear por partes.</span> <span class="s" data-s="b6-p1-s3">O Hyperlyve aplica testes analíticos para garantir que as condições de Lyapunov (positividade e decaimento) sejam satisfeitas para todos os pontos em cada região poliédrica, não apenas nos pontos de treinamento.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.21599/figure2.webp" alt="Visualização 3D onde a função candidata falha em garantir estabilidade. Áreas vermelhas indicam violações de definitividade positiva ou decaimento, guiando o treinamento para a próxima iteração." loading="lazy">
+          <figcaption>
+            Visualização 3D onde a função candidata falha em garantir estabilidade. Áreas vermelhas indicam violações de definitividade positiva ou decaimento, guiando o treinamento para a próxima iteração.
+            <span class="source">Figura 2 do paper · Yarbrough et al., arXiv:2611.21599</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Resultados Empíricos: Velocidade de Enumeração</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Substanciamos empiricamente nossas afirmações comparando o Hyperlyve com o estado da arte (SOTA).</span> <span class="s" data-s="b8-p0-s1">Os benchmarks de enumeração mostram que o Hyperlyve computa a representação H (meios-espaços/facetadas) completa do complexo poliédrico induzido por redes ReLU mais de 150 vezes mais rápido que as ferramentas concorrentes RPM e Relucent.</span></p><p><span class="s" data-s="b8-p1-s0">Em testes com redes maiores, como o Rejoin RL, o Hyperlyve paraleliza a enumeração de 6,3 milhões de regiões 8-dimensionais em menos de 16 minutos.</span> <span class="s" data-s="b8-p1-s1">Em contraste, o RPM e o Relucent atingiram o limite de timeout de 1 hora.</span> <span class="s" data-s="b8-p1-s2">Para a rede TaxiNet, o Hyperlyve completou a enumeração em 77,6 segundos, enquanto as ferramentas concorrentes não conseguiram finalizar dentro do tempo limite.</span> <span class="s" data-s="b8-p1-s3">Para a rede Stanford Bunny, o Hyperlyve levou apenas 5,2 segundos, comparado a 97,2 e 71,5 segundos para RPM e Relucent, respectivamente.</span></p>        <h2><span class="s" data-s="b9-h">Resultados Empíricos: Certificação de Estabilidade</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Além da enumeração, o Hyperlyve certifica a estabilidade assintótica de sistemas dinâmicos mais rapidamente, com dimensões de entrada maiores e uma tolerância de origem mais rigorosa.</span> <span class="s" data-s="b9-p0-s1">Testamos o framework em uma variedade de sistemas não lineares, incluindo a dinâmica AKP (Ahmadi-Krstic-Parrilo), o sistema de Lorenz, e modelos epidêmicos SIS em rede.</span></p><p><span class="s" data-s="b9-p1-s0">Para a dinâmica AKP-10, com domínio B = [-10, 10]^2, o Hyperlyve foi capaz de certificar a estabilidade em 4,8 segundos.</span> <span class="s" data-s="b9-p1-s1">O RPM falhou com um erro (ERR) ao retornar um resultado incorreto para redes não genéricas, devido à interseção de muitas hiperplanos na origem.</span> <span class="s" data-s="b9-p1-s2">Isso destaca a robustez do Hyperlyve em lidar com casos degenerados que quebram outras ferramentas.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.21599/figure3.webp" alt="Mapa das regiões de ativação da rede neural para um pêndulo invertido controlado por NN. Linhas pretas são hiperplanos de primeira camada; regiões sombreadas mostram onde contraexemplos foram identificados." loading="lazy">
+          <figcaption>
+            Mapa das regiões de ativação da rede neural para um pêndulo invertido controlado por NN. Linhas pretas são hiperplanos de primeira camada; regiões sombreadas mostram onde contraexemplos foram identificados.
+            <span class="source">Figura 3 do paper · Yarbrough et al., arXiv:2611.21599</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b11-h">Aplicações em Sistemas Controlados por NN</span></h2>
+<p><span class="s" data-s="b11-p0-s0">O Hyperlyve também foi testado em sistemas controlados por redes neurais, onde a entrada de controle u é fornecida por um controlador neural com ativações tanh.</span> <span class="s" data-s="b11-p0-s1">Os sistemas incluíram o Pêndulo Invertido (IPNN) e o Braço Robótico Planar de Dois Elos (TLPRA).</span></p><p><span class="s" data-s="b11-p1-s0">Para o Pêndulo Invertido, com um controlador de 2 camadas e 6 neurônios, o Hyperlyve identificou contraexemplos e refinou a função de Lyapunov de forma eficiente.</span> <span class="s" data-s="b11-p1-s1">A capacidade de lidar com controladores não lineares acoplados a dinâmicas físicas complexas demonstra a versatilidade do framework.</span> <span class="s" data-s="b11-p1-s2">A enumeração precisa das regiões de ativação permite que o verificador analise o comportamento do controlador em cada setor do espaço de estado, garantindo que a estabilidade seja mantida mesmo quando o controlador muda de política de atuação.</span></p>        <h2><span class="s" data-s="b12-h">Limitações e Trabalhos Futuros</span></h2>
+<p><span class="s" data-s="b12-p0-s0">Apesar dos avanços, o Hyperlyve não é uma bala de prata.</span> <span class="s" data-s="b12-p0-s1">A complexidade exponencial inerente à enumeração de arranjos de hiperplanos significa que, para redes extremamente profundas ou de alta dimensionalidade, o tempo de computação ainda pode crescer significativamente.</span> <span class="s" data-s="b12-p0-s2">Embora o paralelismo mitigue isso, o número de regiões poliédricas cresce exponencialmente com o número de neurônios ReLU.</span></p><p><span class="s" data-s="b12-p1-s0">Além disso, o método atual assume que o domínio de interesse é um hipercubo ou politopo simples.</span> <span class="s" data-s="b12-p1-s1">Trabalhos futuros explorarão o bounding de inputs do LiRPA e α,β-CROWN como politopos em vez dos hiperretângulos atuais, o que pode melhorar a precisão em domínios não retangulares.</span> <span class="s" data-s="b12-p1-s2">Outro caminho é o treinamento de controladores ótimos enquanto se usa o Hyperlyve para garantir estabilidade assintótica, integrando a verificação diretamente no processo de aprendizado.</span></p>        <h2><span class="s" data-s="b13-h">Conclusão</span></h2>
+<p><span class="s" data-s="b13-p0-s0">Desenvolvemos um método novel para verificar funções de Lyapunov neurais profundas com ativações ReLU, aproveitando propriedades geométricas de arranjos de hiperplanos.</span> <span class="s" data-s="b13-p0-s1">Introduzimos e provamos a validade de três testes que podem ser usados para verificar cada condição de Lyapunov separadamente.</span> <span class="s" data-s="b13-p0-s2">Provas formais sobre a complexidade computacional do problema de verificação de função de Lyapunov neural foram fornecidas.</span></p><p><span class="s" data-s="b13-p1-s0">Introduzimos formalmente o Hyperlyve e derivamos sua complexidade temporal.</span> <span class="s" data-s="b13-p1-s1">Através de experimentos, ilustramos o speedup que o Hyperlyve fornece contra outros verificadores de funções de Lyapunov neurais state-of-the-art em termos de provar a estabilidade assintótica de um sistema em malha fechada.</span> <span class="s" data-s="b13-p1-s2">O Hyperlyve marca um passo significativo em direção à verificação exata e escalável de sistemas ciber-físicos controlados por IA.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Hyperlyve resolve o problema de verificar estabilidade assintótica exata em redes ReLU profundas, evitando aproximações lineares por partes.</span></li><li><span class="s" data-s="k1">O método utiliza um loop CEGIS (Counterexample-Guided Inductive Synthesis) para aprender e verificar funções de Lyapunov continuamente.</span></li><li><span class="s" data-s="k2">A enumeração paralela de regiões poliédricas é mais de 150 vezes mais rápida que ferramentas state-of-the-art como RPM e Relucent.</span></li><li><span class="s" data-s="k3">O problema de verificação é formalmente caracterizado como co-NP-completo, preenchendo uma lacuna teórica na literatura.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.21599" rel="noopener">Hyperlyve: Parallelized Enumeration and Exact Lyapunov Stability Certification for Deep ReLU Networks</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.21599" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

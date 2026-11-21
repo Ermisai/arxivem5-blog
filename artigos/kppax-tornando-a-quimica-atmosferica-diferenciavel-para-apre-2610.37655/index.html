@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KPPax: Tornando a Química Atmosférica Diferenciável para Aprendizado de Máquina — arXiv em 5</title>
+<meta name="description" content="O KPPax traduz mecanismos químicos atmosféricos (KPP) para JAX, permitindo cálculo exato de gradientes e integração de modelos físicos com redes neurais sem derivadas manuais.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="KPPax: Tornando a Química Atmosférica Diferenciável para Aprendizado de Máquina">
+<meta property="og:description" content="O KPPax traduz mecanismos químicos atmosféricos (KPP) para JAX, permitindo cálculo exato de gradientes e integração de modelos físicos com redes neurais sem derivadas manuais.">
+<meta property="og:image" content="../../assets/papers/2610.37655/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Ciência</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.37655" rel="noopener">arXiv:2610.37655</a>
+    </div>
+    <h1><span class="s" data-s="t">KPPax: Tornando a Química Atmosférica Diferenciável para Aprendizado de Máquina</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">O KPPax traduz mecanismos químicos atmosféricos (KPP) para JAX, permitindo cálculo exato de gradientes e integração de modelos físicos com redes neurais sem derivadas manuais.</span></p>
+    <p class="byline">
+      <span>Peng et al.</span>
+      <span>8 min de leitura</span>
+<span>27/10/2026</span>    </p>
+    <div class="listen" data-article="2610.37655" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=7vGQ45CE8cA" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Barreira Computacional</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A modelagem da química atmosférica é essencial para entender saúde pública, clima e formação de aerossóis.</span> <span class="s" data-s="b0-p0-s1">Os mecanismos químicos completos, como o Master Chemical Mechanism (MCM), envolvem milhares de espécies e mais de dez mil reações.</span> <span class="s" data-s="b0-p0-s2">Codificar manualmente o sistema de equações diferenciais ordinárias (EDOs) rígidas e suas jacobianas para essas reações é tedioso e propenso a erros.</span> <span class="s" data-s="b0-p0-s3">Para automatizar isso, a comunidade utiliza o Kinetic PreProcessor (KPP), que gera código eficiente em Fortran ou C.</span></p><p><span class="s" data-s="b0-p1-s0">No entanto, o KPP gera código estático que não se integra aos frameworks modernos de programação diferenciável, como JAX, PyTorch ou TensorFlow.</span> <span class="s" data-s="b0-p1-s1">Esses frameworks são a base do aprendizado de máquina contemporâneo, onde o cálculo de gradientes é automático e vetorizado.</span> <span class="s" data-s="b0-p1-s2">A desconexão entre o KPP (hardware CPU, código estático) e o ML (hardware GPU/TPU, código dinâmico) impede a aplicação direta de técnicas avançadas de estimativa de parâmetros e aprendizado híbrido.</span></p><p><span class="s" data-s="b0-p2-s0">Ferramentas como pykpp e MUSICA tentam resolver parte desse problema, mas ainda dependem de solucionadores externos ou não oferecem diferenciação automática completa para adjuntos.</span> <span class="s" data-s="b0-p2-s1">O KPPax, desenvolvido por pesquisadores da Universidade de Helsinki, LUT University e do Atmospheric Modelling Centre Lahti, propõe preencher essa lacuna.</span> <span class="s" data-s="b0-p2-s2">Ele transforma mecanismos KPP em código JAX diferenciável, compilado sob demanda (JIT) e vetorizável, permitindo que a química atmosférica seja tratada como parte de um grafo computável de gradientes.</span></p>        <h2><span class="s" data-s="b1-h">A Arquitetura do KPPax</span></h2>
+<p><span class="s" data-s="b1-p0-s0">O KPPax não reescreve o solver numérico do zero.</span> <span class="s" data-s="b1-p0-s1">Em vez disso, ele atua como um pré-processador que traduz a sintaxe do KPP para operações JAX.</span> <span class="s" data-s="b1-p0-s2">O núcleo da solução reside na avaliação das leis de taxa reacional em espaço logarítmico e no uso de operações esparsas.</span> <span class="s" data-s="b1-p0-s3">Ao trabalhar no logaritmo das concentrações, o modelo mantém a diferenciabilidade mesmo quando as concentrações variam em várias ordens de grandeza, um problema comum em química estocástica.</span></p><p><span class="s" data-s="b1-p1-s0">A integração temporal do sistema rígido é feita através da biblioteca diffrax.</span> <span class="s" data-s="b1-p1-s1">O KPPax explora os adjuntos de modo direto e reverso dessa biblioteca para obter sensitividades exatas.</span> <span class="s" data-s="b1-p1-s2">Isso elimina a necessidade de derivar código adjunto manualmente, um processo complexo e sujeito a erros humanos.</span> <span class="s" data-s="b1-p1-s3">O gerador de código do KPPax preserva a esparsidade da jacobiana original, mas a resolve usando fatoração densa nos estágios implícitos.</span> <span class="s" data-s="b1-p1-s4">Para mecanismos pequenos, isso é eficiente; para grandes, a esparsidade simbólica do KPP original pode ser superior, mas a flexibilidade do JAX compensa em muitos cenários de ML.</span></p><p><span class="s" data-s="b1-p2-s0">Os parâmetros do modelo, especificamente os coeficientes de taxa (k), são parametrizados como k = k_ref ⊙ exp(θ), onde k_ref são valores de referência e θ são fatores de correção logarítmicos.</span> <span class="s" data-s="b1-p2-s1">Essa parametrização garante que os coeficientes permaneçam positivos e facilita a otimização, pois θ pode variar livremente no espaço real.</span> <span class="s" data-s="b1-p2-s2">A observação é empilhada como logaritmos das concentrações simuladas, alinhando a escala dos resíduos com a escala dos parâmetros.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.37655/figure1.webp" alt="Análise de identificabilidade via Matriz de Informação de Fisher. (a) Autovalores mostram quais direções no espaço de parâmetros são restritas pelos dados. (b) Cargas dos autovetores revelam clusters de reações rápidas cujas taxas absolutas não são identificáveis, apenas suas razões." loading="lazy">
+          <figcaption>
+            Análise de identificabilidade via Matriz de Informação de Fisher. (a) Autovalores mostram quais direções no espaço de parâmetros são restritas pelos dados. (b) Cargas dos autovetores revelam clusters de reações rápidas cujas taxas absolutas não são identificáveis, apenas suas razões.
+            <span class="source">Figura 1 do paper · Peng et al., arXiv:2610.37655</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Identificabilidade Antes do Treinamento</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Um dos maiores trunfos do KPPax é a capacidade de realizar análise de identificabilidade local antes de qualquer ajuste de modelo.</span> <span class="s" data-s="b3-p0-s1">Utilizando a Matriz de Informação de Fisher (FIM), calculada a partir da jacobiana automaticamente diferenciada, os autores podem prever quais coeficientes de taxa podem ser estimados com precisão a partir de um conjunto específico de observações.</span> <span class="s" data-s="b3-p0-s2">A FIM fornece o limite de Cramér-Rao, que define a menor variância possível para um estimador não viciado.</span></p><p><span class="s" data-s="b3-p1-s0">No experimento com o mecanismo POLLU (25 coeficientes de taxa, 20 espécies), a análise da FIM revelou que apenas nove coeficientes individuais eram identificáveis (desvio padrão &lt; 10%).</span> <span class="s" data-s="b3-p1-s1">As outras dez direções no espaço de parâmetros tinham autovalores próximos de zero, indicando que os dados não podiam distinguir combinações específicas de reações rápidas.</span> <span class="s" data-s="b3-p1-s2">Por exemplo, no ciclo NO-NO2-O3, as reações são tão rápidas em relação ao tempo experimental que apenas as razões entre suas taxas são constrangidas, não seus valores absolutos.</span></p><p><span class="s" data-s="b3-p2-s0">Essa análise é computacionalmente barata: calcular a jacobiana e a FIM leva menos de um segundo.</span> <span class="s" data-s="b3-p2-s1">Isso permite o desenho experimental: antes de rodar um experimento real ou simulado, os cientistas podem usar o KPPax para verificar se o desenho atual (espécies observadas, tempos) é capaz de identificar os parâmetros de interesse.</span> <span class="s" data-s="b3-p2-s2">Se não, o experimento pode ser redesenhado para maximizar a informação obtida.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b4-t">Limitação da Linearização Local</span></h3>
+          <p><span class="s" data-s="b4-c-s0">A análise da FIM é local e linearizada em torno de um ponto.</span> <span class="s" data-s="b4-c-s1">Ela prevê corretamente quais parâmetros são identificáveis, mas pode subestimar a magnitude do erro para parâmetros não identificáveis, que podem derivar longas distâncias ao longo de vales curvos da função de custo.</span> <span class="s" data-s="b4-c-s2">Métodos globais, como MCMC, ainda são necessários para quantificar essa incerteza completa.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b5-h">Validação Numérica e Estimativa de Parâmetros</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Para validar as previsões da FIM, os autores realizaram 20 ensaios de estimação com ruído sintético.</span> <span class="s" data-s="b5-p0-s1">Usando o algoritmo Levenberg-Marquardt, minimizaram o erro quadrático médio (χ²) para estimar os 25 coeficientes.</span> <span class="s" data-s="b5-p0-s2">Para os nove parâmetros identificáveis, o desvio raiz quadrático médio (RMS) das estimativas em relação à verdade concordou com o limite de Cramér-Rao dentro de 30%.</span> <span class="s" data-s="b5-p0-s3">Isso confirma que a jacobiana automática do KPPax fornece sensitividades precisas e que a análise prévia é confiável.</span></p><p><span class="s" data-s="b5-p1-s0">Para os parâmetros não identificáveis, as estimativas divergiram significativamente da verdade, às vezes por mais de seis ordens de grandeza.</span> <span class="s" data-s="b5-p1-s1">No entanto, o modelo ainda ajustou bem os dados observados, pois as reações dentro de um cluster rápido mantêm suas proporções constantes.</span> <span class="s" data-s="b5-p1-s2">Isso ilustra um ponto crucial: um modelo pode prever bem as observações sem conhecer os parâmetros individuais corretos, desde que as combinações relevantes estejam corretas.</span> <span class="s" data-s="b5-p1-s3">O KPPax torna essa distinção explícita e quantificável.</span></p>        <h2><span class="s" data-s="b6-h">Híbrido Física-ML: Correção de Inventários de Emissão</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Além da estimativa de parâmetros, o KPPax permite a integração de redes neurais diretamente no loop de simulação química.</span> <span class="s" data-s="b6-p0-s1">Os autores demonstraram isso corrigindo um inventário de emissões biogênicas.</span> <span class="s" data-s="b6-p0-s2">Uma rede neural foi treinada offline para prever correções logarítmicas nas emissões baseada em covariáveis ambientais.</span> <span class="s" data-s="b6-p0-s3">Em seguida, essa correção foi aplicada online durante a simulação química via KPPax, usando um ajuste Gauss-Newton para refinar as estimativas.</span></p><p><span class="s" data-s="b6-p1-s0">A abordagem híbrida combina o melhor dos dois mundos: a rede neural captura padrões complexos e não lineares nos dados, enquanto o modelo químico impõe as restrições físicas de conservação de massa e cinética reacional.</span> <span class="s" data-s="b6-p1-s1">O ajuste online permite que a rede neural seja refinada considerando o impacto direto das emissões corrigidas na química atmosférica, algo que o treinamento offline puro ignora.</span></p><p><span class="s" data-s="b6-p2-s0">Os resultados mostraram uma redução de erro de 2,4 a 5 vezes na correção das emissões biogênicas em comparação com o treinamento apenas offline.</span> <span class="s" data-s="b6-p2-s1">Além disso, o modelo híbrido recuperou informações sobre emissões em baixas temperaturas que eram perdidas nas retrievals individuais.</span> <span class="s" data-s="b6-p2-s2">Isso demonstra que a diferenciação automática através do solver químico permite o fine-tuning (ajuste fino) de componentes de ML acoplados a equações diferenciais rígidas.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.37655/table1.webp" alt="Tabela comparativa do RMSE da correção de emissões. O ajuste online via KPPax reduz significativamente o erro em relação ao treinamento offline, especialmente em extrapolação." loading="lazy">
+          <figcaption>
+            Tabela comparativa do RMSE da correção de emissões. O ajuste online via KPPax reduz significativamente o erro em relação ao treinamento offline, especialmente em extrapolação.
+            <span class="source">Tabela 1 do paper · Peng et al., arXiv:2610.37655</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Modos de Diferenciação e Eficiência</span></h2>
+<p><span class="s" data-s="b8-p0-s0">O KPPax herda a flexibilidade de modos de diferenciação da diffrax.</span> <span class="s" data-s="b8-p0-s1">Para problemas com poucos parâmetros em relação às observações (como a estimativa de 25 coeficientes), o modo direto (forward-mode) é mais eficiente, calculando a jacobiana completa com uma integração tangente por parâmetro.</span> <span class="s" data-s="b8-p0-s2">Para treinamento de redes neurais com muitos parâmetros e uma única perda escalar, o modo reverso (reverse-mode) com checkpointing recursivo é preferível.</span> <span class="s" data-s="b8-p0-s3">O KPPax permite alternar entre esses modos sem reescrever o código químico.</span></p><p><span class="s" data-s="b8-p1-s0">O custo computacional do KPPax inclui uma sobrecarga inicial de compilação JIT (just-in-time), que é amortecida ao longo de múltiplas execuções, como em otimizações iterativas ou simulações em lote (vmap).</span> <span class="s" data-s="b8-p1-s1">Para mecanismos pequenos como o POLLU, a fatoração densa da jacobiana é rápida.</span> <span class="s" data-s="b8-p1-s2">No entanto, para mecanismos grandes com milhares de espécies, a complexidade cúbica da fatoração densa pode se tornar um gargalo.</span> <span class="s" data-s="b8-p1-s3">A esparsidade simbólica do KPP original (LU esparsa) ainda é superior em escala absoluta para esses casos extremos.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b9-t">Atenção: Concentrações Positivas</span></h3>
+          <p><span class="s" data-s="b9-c-s0">A formulação em espaço logarítmico exige concentrações estritamente positivas.</span> <span class="s" data-s="b9-c-s1">O KPPax aplica um clipping (recorte) para um valor mínimo positivo antes da avaliação da lei de taxa.</span> <span class="s" data-s="b9-c-s2">Isso impede que o solver explore valores negativos ou zero, mas zera o gradiente para espécies consumidas totalmente.</span> <span class="s" data-s="b9-c-s3">Aplicações que dependem de gradientes nessas espécies devem considerar essa limitação.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b10-h">Limitações e Direções Futuras</span></h2>
+<p><span class="s" data-s="b10-p0-s0">O experimento de emissões é idealizado: usa o mesmo mecanismo químico para a verdade e o modelo, sem transporte atmosférico e com condições iniciais conhecidas perfeitamente.</span> <span class="s" data-s="b10-p0-s1">Na prática, erros de transporte e incertezas nas condições iniciais complicam a separação entre erros de emissão e erros de transporte.</span> <span class="s" data-s="b10-p0-s2">Além disso, a análise de identificabilidade é local; métodos globais como cadeias de Markov (MCMC) ou perfis de verossimilhança seriam necessários para quantificar a incerteza completa em vales curvos da função de custo.</span></p><p><span class="s" data-s="b10-p1-s0">Uma extensão crítica para o KPPax é a implementação de solucionadores lineares esparsos ou livres de matriz para os estágios implícitos.</span> <span class="s" data-s="b10-p1-s1">Isso reduziria o custo computacional para mecanismos atmosféricos de grande escala, como o MCM, tornando a ferramenta viável para aplicações industriais e de pesquisa em larga escala.</span> <span class="s" data-s="b10-p1-s2">A comparação sistemática de precisão e custo com o KPP em Fortran para mecanismos grandes está em andamento.</span></p>        <h2><span class="s" data-s="b11-h">Conclusão</span></h2>
+<p><span class="s" data-s="b11-p0-s0">O KPPax representa um passo significativo na convergência entre a química atmosférica tradicional e o aprendizado de máquina moderno.</span> <span class="s" data-s="b11-p0-s1">Ao tornar os mecanismos KPP diferenciáveis e vetorizáveis no JAX, ele habilita novas abordagens para estimativa de parâmetros, análise de incerteza e modelos híbridos física-ML.</span> <span class="s" data-s="b11-p0-s2">A capacidade de prever identificabilidade antes do ajuste e de refinar redes neurais online através do solver químico abre novas possibilidades para a interpretação de dados atmosféricos e a melhoria de modelos climáticos.</span></p><p><span class="s" data-s="b11-p1-s0">Embora não substitua o KPP em Fortran para simulações de alta performance em larga escala sem ML, o KPPax preenche uma lacuna crítica para pesquisadores que desejam integrar conhecimento físico com modelos de dados.</span> <span class="s" data-s="b11-p1-s1">Ele transforma a química atmosférica de uma caixa preta estática em um componente ativo e diferenciável do pipeline de aprendizado de máquina.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">O KPPax traduz mecanismos químicos KPP para JAX, permitindo cálculo exato de gradientes via diffrax sem derivadas manuais.</span></li><li><span class="s" data-s="k1">A análise de identificabilidade via Matriz de Informação de Fisher prevê quais parâmetros podem ser aprendidos antes do treinamento, validada com 30% de precisão no erro RMS.</span></li><li><span class="s" data-s="k2">Modelos híbridos que ajustam redes neurais online via solver químico reduzem o erro de correção de emissões em até 5x comparado ao treinamento offline.</span></li><li><span class="s" data-s="k3">A formulação logarítmica garante diferenciabilidade, mas exige clipping de concentrações, afetando gradientes em espécies consumidas totalmente.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.37655" rel="noopener">KPPax: preprocess differentiable kinetic ODE for machine learning in atmospheric chemistry</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.37655" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

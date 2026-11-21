@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Para além do WER: Uma taxonomia de falhas em ASR de ditado em streaming — arXiv em 5</title>
+<meta name="description" content="Este paper expõe que sistemas com WER similar falham de maneiras radicalmente diferentes no uso real de ditado, dependendo do ruído, do idioma e do pipeline de áudio antes do modelo.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Para além do WER: Uma taxonomia de falhas em ASR de ditado em streaming">
+<meta property="og:description" content="Este paper expõe que sistemas com WER similar falham de maneiras radicalmente diferentes no uso real de ditado, dependendo do ruído, do idioma e do pipeline de áudio antes do modelo.">
+<meta property="og:image" content="../../assets/papers/2611.16919/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Áudio</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.16919" rel="noopener">arXiv:2611.16919</a>
+    </div>
+    <h1><span class="s" data-s="t">Para além do WER: Uma taxonomia de falhas em ASR de ditado em streaming</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Este paper expõe que sistemas com WER similar falham de maneiras radicalmente diferentes no uso real de ditado, dependendo do ruído, do idioma e do pipeline de áudio antes do modelo.</span></p>
+    <p class="byline">
+      <span>Mansoor et al.</span>
+      <span>5 min de leitura</span>
+<span>12/11/2026</span>    </p>
+    <div class="listen" data-article="2611.16919" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=UOpO308Zj4w" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema do WER no uso real</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Os sistemas de Reconhecimento Automático de Fala (ASR) são tradicionalmente avaliados pela Taxa de Erro de Palavras (WER) em arquivos de áudio completos, após normalização do texto (remoção de pontuação, maiúsculas e formatação de números).</span> <span class="s" data-s="b0-p0-s1">No entanto, essa métrica não captura a experiência de quem usa o ASR para ditado: inserir mensagens, e-mails ou notas em aplicativos em tempo real.</span> <span class="s" data-s="b0-p0-s2">No ditado, o áudio é transmitido ao vivo, e o texto resultante é o produto final.</span> <span class="s" data-s="b0-p0-s3">Cada erro permanece na mensagem até que o usuário o detecte e corrija, o que representa um custo significativo de entrada de texto por voz.</span></p><p><span class="s" data-s="b0-p1-s0">O WER é uma média que pode esconder variações drásticas.</span> <span class="s" data-s="b0-p1-s1">Um WER de 9% pode significar uma palavra errada a cada onze, ou uma frase inteira ausente em um texto otherwise correto.</span> <span class="s" data-s="b0-p1-s2">Além disso, benchmarks públicos geralmente ignoram condições adversas, sotaques variados e o contexto de streaming.</span> <span class="s" data-s="b0-p1-s3">Este paper, &#34;Beyond Word Error Rate: A Failure Taxonomy of Streaming Dictation ASR&#34;, propõe uma análise mais granular, focada em como os sistemas falham em cenários de uso real, não apenas em quão errados eles são em média.</span></p>        <h2><span class="s" data-s="b1-h">Metodologia: Streaming e Taxonomia de Erros</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Os autores testaram onze sistemas de ASR, incluindo modelos auto-hospedados (como Whisper e Qwen3-ASR) e serviços comerciais (Zoom Scribe, OpenAI GPT-Live-Transcribe, AssemblyAI, etc.).</span> <span class="s" data-s="b1-p0-s1">O conjunto de dados inclui 106 ditados roteirizados em inglês de um único falante (em silêncio, com ventilador ligado e sussurrado), 20 clipes em cada um de onze conjuntos de idiomas/dialeto, e 400 gravações que misturam dois idiomas.</span></p><p><span class="s" data-s="b1-p1-s0">A inovação principal é a taxonomia de falhas.</span> <span class="s" data-s="b1-p1-s1">Em vez de apenas calcular o WER, cada erro foi classificado em quatro níveis, conforme definido na Tabela 1 do paper: Reconhecimento (palavras erradas, omitidas ou adicionadas), Formatação de Saída (números, pontuação, maiúsculas), Manejo de Idioma (o sistema ignora ou muda indevidamente idiomas diferentes) e Caminho de Áudio (falhas antes do modelo, como áudio cortado incorretamente).</span> <span class="s" data-s="b1-p1-s2">Essa abordagem permite identificar não apenas onde o sistema erra, mas qual componente do pipeline é o responsável.</span></p>        <h2><span class="s" data-s="b2-h">Resultados: WER Similar, Falhas Diferentes</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Um dos achados mais surpreendentes é que sistemas com WER semelhante em condições ideais falham de maneira drasticamente diferente em condições adversas.</span> <span class="s" data-s="b2-p0-s1">Zoom Scribe e OpenAI&#39;s GPT-Live-Transcribe têm WER quase idêntico em inglês silencioso (7.4% e 7.3%, respectivamente).</span> <span class="s" data-s="b2-p0-s2">No entanto, em inglês sussurrado, o Zoom Scribe tem um WER de 34.7%, enquanto o GPT-Live-Transcribe tem apenas 8.8%.</span> <span class="s" data-s="b2-p0-s3">A principal diferença é que o Zoom omite 26-28% das palavras sussurradas, enquanto o GPT-Live-Transcribe as reconhece quase inteiramente.</span></p><p><span class="s" data-s="b2-p1-s0">Essa disparidade não se deve apenas ao modelo de reconhecimento, mas também ao comportamento do sistema.</span> <span class="s" data-s="b2-p1-s1">Quando a detecção de fim de turno foi relaxada ou desativada, o Zoom ainda omitia 21-26% das palavras sussurradas.</span> <span class="s" data-s="b2-p1-s2">Outros sete sistemas omitiram no máximo 3%.</span> <span class="s" data-s="b2-p1-s3">Isso sugere que a robustez a baixo volume de voz é uma característica específica de alguns modelos, não uma generalidade.</span></p>        <h2><span class="s" data-s="b3-h">O Impacto do Pipeline de Áudio e VAD</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O paper também investiga o que acontece antes do modelo de ASR receber o áudio.</span> <span class="s" data-s="b3-p0-s1">Muitos sistemas usam um Detector de Atividade de Voz (VAD) para cortar trechos de silêncio, economizando recursos.</span> <span class="s" data-s="b3-p0-s2">Os autores testaram o Whisper auto-hospedado com um VAD Silero que descarta áudio classificado como silêncio.</span> <span class="s" data-s="b3-p0-s3">O resultado foi dramático: o WER em sussurros subiu de 10.1% (enviando todo o áudio) para 51.4% quando o VAD cortava trechos considerados silêncio.</span></p><p><span class="s" data-s="b3-p1-s0">Isso ocorre porque sussurros têm baixa amplitude e podem ser indistinguíveis do ruído de fundo para um VAD padrão.</span> <span class="s" data-s="b3-p1-s1">A Figura 2 ilustra como diferentes limiares de descarte do VAD afetam a proporção de janelas de áudio classificadas como fala e, consequentemente, o WER.</span> <span class="s" data-s="b3-p1-s2">Para o Qwen3-ASR, 32% dos erros vieram da detecção de fala na implementação própria (6% quando relaxada).</span> <span class="s" data-s="b3-p1-s3">Isso destaca que a engenharia do pipeline de áudio é tão crítica quanto a escolha do modelo.</span></p>        <h2><span class="s" data-s="b4-h">Desafios com Idiomas Múltiplos e Code-Switching</span></h2>
+<p><span class="s" data-s="b4-p0-s0">O manejo de múltiplos idiomas é outro ponto de falha.</span> <span class="s" data-s="b4-p0-s1">Em gravações que alternam entre dois idiomas, a configuração do sistema influencia drasticamente a recuperação.</span> <span class="s" data-s="b4-p0-s2">Com apenas o inglês selecionado, o Gemini, o Deepgram e o Whisper auto-hospedado perderam a parte não-inglesa em 86-99% das gravações.</span> <span class="s" data-s="b4-p0-s3">Em contraste, GPT-Live-Transcribe, o Whisper em tempo real da OpenAI e o modelo da Meta perderam a parte não-inglesa em no máximo 20% dos casos.</span></p><p><span class="s" data-s="b4-p1-s0">Isso revela que, para alguns sistemas, a configuração de idioma atua como um filtro rígido que descarta áudio em outros idiomas, enquanto para outros atua apenas como uma orientação para o modelo.</span> <span class="s" data-s="b4-p1-s1">Essa diferença é crucial para usuários que misturam idiomas (code-switching) em suas ditadas.</span> <span class="s" data-s="b4-p1-s2">O paper destaca que esses comportamentos, conhecidos em modelos open-source, não haviam sido medidos sistematicamente para sistemas comerciais de streaming.</span></p>        <h2><span class="s" data-s="b5-h">Formatação e Detalhes Finais</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Além do reconhecimento, a formatação da saída varia muito.</span> <span class="s" data-s="b5-p0-s1">Sistemas diferem em como escrevem números e em qual sistema de escrita utilizam.</span> <span class="s" data-s="b5-p0-s2">Configurações de &#39;limpeza&#39; podem escrever a mensagem pretendida em vez de cada palavra dita, o que pode ser desejável em alguns contextos, mas introduz erros se a intenção do falante não for clara.</span> <span class="s" data-s="b5-p0-s3">O paper também nota que nomes próprios são escritos corretamente com menos frequência do que outras palavras, um desafio persistente para ASR.</span></p><p><span class="s" data-s="b5-p1-s0">Os autores também lançam mão de duas referências para o mesmo discurso: o &#39;script reference&#39; (o que o falante pretendia dizer) e o &#39;spoken reference&#39; (o que foi dito, incluindo hesitações).</span> <span class="s" data-s="b5-p1-s1">Isso permite separar um sistema que ouve cada palavra de um que tenta inferir a mensagem.</span> <span class="s" data-s="b5-p1-s2">O código, os dados de áudio, as referências e as transcrições de todos os sistemas são públicos, permitindo reprodução e novas análises.</span></p>        <h2><span class="s" data-s="b6-h">Limitações e Considerações Finais</span></h2>
+<p><span class="s" data-s="b6-p0-s0">O estudo tem limitações claras.</span> <span class="s" data-s="b6-p0-s1">A maior parte dos resultados em inglês vem de um único falante, o que pode não representar a diversidade de vozes e sotaques.</span> <span class="s" data-s="b6-p0-s2">Embora tenham sido usados conjuntos externos (EARS e VOiCES) para validação parcial, a generalização para outros falantes e condições precisa de mais investigação.</span> <span class="s" data-s="b6-p0-s3">Além disso, os autores trabalham em uma empresa de software de ditado, o que pode introduzir vieses, embora afirmem não ter parcerias comerciais com os provedores testados.</span></p><p><span class="s" data-s="b6-p1-s0">Apesar das limitações, o paper oferece uma contribuição valiosa: uma taxonomia de falhas que deve ser reportada junto com o WER.</span> <span class="s" data-s="b6-p1-s1">Ele mostra que a escolha do sistema de ASR não deve ser baseada apenas na precisão média, mas na natureza dos erros que ele produz em condições reais de uso.</span> <span class="s" data-s="b6-p1-s2">Para desenvolvedores e cientistas de dados, isso significa que testar o pipeline completo, incluindo VAD e configurações de idioma, é tão importante quanto testar o modelo de reconhecimento em si.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">WER médio esconde disparidades: Zoom e GPT-Live têm WER similar em silêncio, mas o Zoom falha massivamente em sussurros.</span></li><li><span class="s" data-s="k1">O pipeline de áudio (VAD) é crítico: cortar áudio &#39;silencioso&#39; pode elevar o WER de 10% para 51% em sussurros.</span></li><li><span class="s" data-s="k2">Configurações de idioma afetam a recuperação: forçar inglês pode apagar completamente partes em outros idiomas para alguns sistemas.</span></li><li><span class="s" data-s="k3">A taxonomia proposta separa erros de reconhecimento, formatação, manejo de idioma e falhas no pré-processamento de áudio.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.16919" rel="noopener">Beyond Word Error Rate: A Failure Taxonomy of Streaming Dictation ASR</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.16919" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

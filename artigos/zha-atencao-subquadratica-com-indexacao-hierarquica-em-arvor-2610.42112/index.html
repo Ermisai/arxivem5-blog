@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ZHA: Atenção Subquadrática com Indexação Hierárquica em Árvore — arXiv em 5</title>
+<meta name="description" content="Um novo método de atenção esparsa que usa uma árvore de resumos compressivos para reduzir a complexidade computacional em contextos longos, mantendo a expressividade da atenção densa.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ZHA: Atenção Subquadrática com Indexação Hierárquica em Árvore">
+<meta property="og:description" content="Um novo método de atenção esparsa que usa uma árvore de resumos compressivos para reduzir a complexidade computacional em contextos longos, mantendo a expressividade da atenção densa.">
+<meta property="og:image" content="../../assets/papers/2610.42112/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>LLMs</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.42112" rel="noopener">arXiv:2610.42112</a>
+    </div>
+    <h1><span class="s" data-s="t">ZHA: Atenção Subquadrática com Indexação Hierárquica em Árvore</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um novo método de atenção esparsa que usa uma árvore de resumos compressivos para reduzir a complexidade computacional em contextos longos, mantendo a expressividade da atenção densa.</span></p>
+    <p class="byline">
+      <span>Lufkin et al.</span>
+      <span>9 min de leitura</span>
+<span>30/10/2026</span>    </p>
+    <div class="listen" data-article="2610.42112" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=LgRhawNRNgI" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Gargalo Quadrático da Atenção</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A arquitetura Transformer revolucionou o processamento de linguagem natural graças ao mecanismo de atenção, que permite que cada token da sequência interaja com todos os outros.</span> <span class="s" data-s="b0-p0-s1">Essa capacidade de mapeamento &#39;tudo-para-tudo&#39; é fundamental para a expressividade dos grandes modelos de linguagem (LLMs).</span> <span class="s" data-s="b0-p0-s2">No entanto, essa mesma propriedade impõe um custo computacional e de memória quadrático em relação ao comprimento da sequência.</span> <span class="s" data-s="b0-p0-s3">Durante a fase de pré-filling (prefill), o custo quadrático domina as outras operações, e durante a geração (decode), a necessidade de reler o cache de chaves e valores (KV cache) para cada novo token gera um gargalo de largura de banda e armazenamento que cresce linearmente com o contexto.</span></p><p><span class="s" data-s="b0-p1-s0">Esse gargalo tem proibido o uso eficiente de contextos extremamente longos, apesar da demanda crescente por modelos capazes de raciocinar sobre documentos extensos ou manter memórias de longo prazo.</span> <span class="s" data-s="b0-p1-s1">Diversas abordagens foram propostas para contornar essa limitação, mas muitas delas apresentam trade-offs severos.</span> <span class="s" data-s="b0-p1-s2">Modelos de espaço de estado (state-space models) e atenção de janela deslizante substituem o cache KV completo por um estado de tamanho fixo.</span> <span class="s" data-s="b0-p1-s3">Embora eliminem o custo assintótico quadrático, esse estado fixo satura em contextos longos, resultando em perda de informação e pior desempenho em tarefas que exigem recuperação precisa de detalhes distantes.</span></p>        <h2><span class="s" data-s="b1-h">Limitações das Abordagens Existentes</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Métodos híbridos tentam equilibrar isso, alternando entre atenção densa e misturadores de estado fixo, mas camadas que ainda usam atenção densa dominam o custo em contextos suficientemente longos.</span> <span class="s" data-s="b1-p0-s1">Outras estratégias focam na compressão direta da sequência ou na evicção offline do cache KV, removendo tokens considerados irrelevantes.</span> <span class="s" data-s="b1-p0-s2">No entanto, essas abordagens frequentemente falham empiricamente porque é praticamente impossível saber antecipadamente, ou em média, se um token específico será útil para uma consulta futura.</span> <span class="s" data-s="b1-p0-s3">Isso leva a uma fragilidade onde a compressão pode eliminar informações cruciais sem aviso.</span></p><p><span class="s" data-s="b1-p1-s0">Uma família promissora de métodos são as atenções esparsas finas, que permitem que cada consulta (query) selecione seu próprio subconjunto esparso de chaves e valores do contexto.</span> <span class="s" data-s="b1-p1-s1">Métodos como DSA e MSA usam um indexador leve para pontuar a relevância de cada par chave-valor para cada consulta, executando a atenção completa apenas nos pares mais relevantes.</span> <span class="s" data-s="b1-p1-s2">A vantagem é a precisão: cada consulta vê o que precisa.</span> <span class="s" data-s="b1-p1-s3">O problema é que esse indexador relocou o custo da atenção para a etapa de indexação.</span> <span class="s" data-s="b1-p1-s4">Em contextos próximos a 1 milhão de tokens, mesmo com otimizações, o custo do indexador pode se tornar proibitivo, e muitos desses métodos oferecem apenas ganhos de fator constante, escalando mal na prática.</span></p>        <h2><span class="s" data-s="b2-h">Introduzindo o ZHA: Indexação Hierárquica</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Neste artigo, os autores da Zyphra Research apresentam o Zyphra Hierarchical Attention (ZHA), um método de atenção esparsa assintoticamente subquadrático.</span> <span class="s" data-s="b2-p0-s1">A ideia central é construir um indexador baseado em uma estrutura de árvore hierárquica sobre o cache KV.</span> <span class="s" data-s="b2-p0-s2">Em vez de comparar cada consulta com todas as chaves individuais, o ZHA constrói uma árvore de resumos compressivos das chaves.</span> <span class="s" data-s="b2-p0-s3">Durante a fase de pré-filling, o cache KV é dividido em chunks, e para cada chunk, um nó de chave comprimido é criado no nível superior da árvore como uma soma ponderada pelas atenções das chaves originais.</span></p><p><span class="s" data-s="b2-p1-s0">Essa estrutura permite que as consultas futuras naveguem da raiz da árvore até as folhas para recuperar um subconjunto esparso de chaves relevantes.</span> <span class="s" data-s="b2-p1-s1">A inovação chave do ZHA é que, ao crescer iterativamente a profundidade da árvore conforme o contexto se expande, o custo total, incluindo o roteamento e a atenção final, cresce de forma sublinear em relação ao comprimento da sequência.</span> <span class="s" data-s="b2-p1-s2">Isso resulta em uma escalabilidade geral subquadrática (mas superlinear) para a atenção.</span> <span class="s" data-s="b2-p1-s3">O método promete ser uma solução escalável para contextos de centenas de milhões ou bilhões de tokens, sem a saturação de estados fixos ou o custo quadrático da atenção densa.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.42112/figure3.webp" alt="Diagrama da arquitetura ZHA mostrando a construção da árvore de resumos compressivos e o roteamento esparso para recuperação de chaves." loading="lazy">
+          <figcaption>
+            Diagrama da arquitetura ZHA mostrando a construção da árvore de resumos compressivos e o roteamento esparso para recuperação de chaves.
+            <span class="source">Figura 3 do paper · Lufkin et al., arXiv:2610.42112</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b4-h">Como o Roteamento Hierárquico Funciona</span></h2>
+<p><span class="s" data-s="b4-p0-s0">O mecanismo do ZHA opera em duas fases distintas: construção da árvore e roteamento esparso.</span> <span class="s" data-s="b4-p0-s1">Durante a construção, o cache KV é particionado em chunks de tokens contíguos.</span> <span class="s" data-s="b4-p0-s2">Para cada chunk, um nó de chave comprimido é gerado no nível superior da hierarquia.</span> <span class="s" data-s="b4-p0-s3">Essa compressão não é uma simples média; é uma soma ponderada pelas atenções, computada em relação às próprias chaves do chunk.</span> <span class="s" data-s="b4-p0-s4">Isso preserva a informação estrutural mais importante do grupo de tokens.</span></p><p><span class="s" data-s="b4-p1-s0">Durante o decode, quando uma nova consulta chega, ela não compara diretamente com todas as chaves do histórico.</span> <span class="s" data-s="b4-p1-s1">Em vez disso, ela inicia a busca na raiz da árvore.</span> <span class="s" data-s="b4-p1-s2">A consulta é comparada com os nós de resumo no nível mais alto, e o algoritmo decide quais subárvores são relevantes.</span> <span class="s" data-s="b4-p1-s3">Esse processo de roteamento &#39;top-down&#39; continua até que as folhas (as chaves originais ou chunks finais) sejam selecionadas.</span> <span class="s" data-s="b4-p1-s4">Apenas as chaves selecionadas por esse caminho hierárquico participam do cálculo final de atenção.</span> <span class="s" data-s="b4-p1-s5">Isso reduz drasticamente o número de comparações necessárias, transformando um problema O(N^2) em um problema muito mais leve, dependendo da geometria da árvore.</span></p>        <h2><span class="s" data-s="b5-h">Treinamento via Distilação KL</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Uma das maiores barreiras para adotar novas arquiteturas de atenção é a necessidade de retreinamento extensivo dos modelos.</span> <span class="s" data-s="b5-p0-s1">O ZHA foi projetado para ser aplicado a modelos pré-treinados existentes com um custo mínimo.</span> <span class="s" data-s="b5-p0-s2">Os autores demonstram que basta uma fase curta de distilação de conhecimento (KL distillation) sobre alguns bilhões de tokens.</span> <span class="s" data-s="b5-p0-s3">Durante essa fase, o modelo original (teacher) gera os pesos de atenção densa padrão, e o novo módulo do ZHA (student) é treinado para imitar essa distribuição de atenção.</span></p><p><span class="s" data-s="b5-p1-s0">Os únicos parâmetros aprendíveis adicionados pelo ZHA são um conjunto de &#39;reference queries&#39; (consultas de referência) usadas no indexador.</span> <span class="s" data-s="b5-p1-s1">Os autores tentaram abordagens mais complexas, como LoRA para essas consultas ou fatoração explícita das probabilidades de atenção, mas descobriram que a simplicidade da distilação KL direta era suficiente e mais eficaz.</span> <span class="s" data-s="b5-p1-s2">Esse processo permite que o modelo aprenda a navegar na árvore hierárquica de forma a reproduzir o comportamento de atenção do modelo original, mantendo a precisão sem a necessidade de retreinamento completo do transformer.</span></p>        <h2><span class="s" data-s="b6-h">Resultados de Desempenho e Robustez</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Os experimentos mostram que o ZHA mantém o desempenho em tarefas desafiadoras de recuperação de longo contexto, raciocínio, matemática e codificação agentic.</span> <span class="s" data-s="b6-p0-s1">Ao comparar com a atenção densa e outros métodos esparsos como MSA, o ZHA demonstra precisão competitiva.</span> <span class="s" data-s="b6-p0-s2">A robustez do método é particularmente notável em relação à geometria da árvore.</span> <span class="s" data-s="b6-p0-s3">O ZHA funciona bem tanto com árvores mais profundas (maior hierarquia) quanto mais largas (chunks maiores), indicando que a estrutura hierárquica é flexível o suficiente para se adaptar a diferentes configurações de hardware e requisitos de latência.</span></p><p><span class="s" data-s="b6-p1-s0">Em avaliações específicas, o ZHA converteu modelos base como o Qwen3.6-35B-A3B mantendo a capacidade de recuperação de informações em contextos extensos.</span> <span class="s" data-s="b6-p1-s1">A capacidade de aplicar o método a modelos existentes via distilação curta é um diferencial prático significativo, pois reduz a barreira de entrada para adotar técnicas de atenção subquadrática.</span> <span class="s" data-s="b6-p1-s2">Os autores observaram que o desempenho do ZHA tende a melhorar com o aumento da escala do modelo, sendo mais estável em modelos de 4B parâmetros ou mais, onde os pesos de atenção originais são menos ruidosos, facilitando o processo de distilação.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.42112/figure5.webp" alt="Gráfico comparando a precisão do ZHA com atenção densa e MSA em tarefas de raciocínio e recuperação, mostrando desempenho mantido." loading="lazy">
+          <figcaption>
+            Gráfico comparando a precisão do ZHA com atenção densa e MSA em tarefas de raciocínio e recuperação, mostrando desempenho mantido.
+            <span class="source">Figura 5 do paper · Lufkin et al., arXiv:2610.42112</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Escalabilidade Subquadrática e Latência</span></h2>
+<p><span class="s" data-s="b8-p0-s0">O principal argumento teórico e empírico do ZHA é sua escalabilidade.</span> <span class="s" data-s="b8-p0-s1">Enquanto a atenção densa escala quadraticamente e métodos esparsos baseados em indexadores simples podem ter custos de indexação quadráticos ou lineares altos, o ZHA escala subquadraticamente.</span> <span class="s" data-s="b8-p0-s2">Modelos de latência (roofline models) desenvolvidos pelos autores mostram que, para um nível fixo de esparsidade (top-p), o tempo de decode do ZHA cresce muito mais lentamente que o da atenção densa conforme o contexto se aproxima de 1 milhão de tokens ou mais.</span></p><p><span class="s" data-s="b8-p1-s0">Isso significa que, em contextos muito longos, o ZHA não apenas é mais rápido, mas potencialmente viabiliza tarefas que seriam impossíveis devido a limites de memória ou tempo de inferência.</span> <span class="s" data-s="b8-p1-s1">A escalabilidade subquadrática é atingida porque o custo de roteamento na árvore é proporcional ao logaritmo ou raiz quadrada do contexto, dependendo da geometria, enquanto o custo da atenção final é proporcional ao número de chaves selecionadas, que também é controlado pela esparsidade.</span> <span class="s" data-s="b8-p1-s2">Isso contrasta com a atenção densa, onde o custo da atenção final é linear no tamanho do cache, mas o custo de indexação é zero, e com métodos que indexam tudo, onde o custo de indexação é alto.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.42112/figure8.webp" alt="Gráfico de latência demonstrando a escalabilidade subquadrática do ZHA em comparação com atenção densa e MSA em contextos longos." loading="lazy">
+          <figcaption>
+            Gráfico de latência demonstrando a escalabilidade subquadrática do ZHA em comparação com atenção densa e MSA em contextos longos.
+            <span class="source">Figura 8 do paper · Lufkin et al., arXiv:2610.42112</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">Limitações e Degradação em Esparsidade Extrema</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Apesar dos resultados promissores, o paper reconhece limitações importantes.</span> <span class="s" data-s="b10-p0-s1">Empiricamente, o ZHA performa muito bem para contextos até 256K tokens.</span> <span class="s" data-s="b10-p0-s2">No entanto, em níveis cada vez maiores de esparsidade, o desempenho começa a degradar.</span> <span class="s" data-s="b10-p0-s3">Isso ocorre porque, à medida que a árvore se torna mais profunda ou a esparsidade mais agressiva, a quantidade de informação retida nas chaves selecionadas diminui, potencialmente perdendo nuances contextuais críticas.</span> <span class="s" data-s="b10-p0-s4">A degradação sugere que há um limite prático para quão esparsa a atenção pode ser sem comprometer a inteligência do modelo, especialmente em tarefas que exigem raciocínio complexo.</span></p><p><span class="s" data-s="b10-p1-s0">Além disso, a eficácia do ZHA depende da geometria da árvore.</span> <span class="s" data-s="b10-p1-s1">Embora robusta a variações, a escolha de parâmetros como o número de níveis (L) e o tamanho dos chunks (C) requer ajuste.</span> <span class="s" data-s="b10-p1-s2">O paper não valida empiricamente a escalabilidade para contextos de centenas de milhões de tokens, embora o modelo teórico sugira que seria possível.</span> <span class="s" data-s="b10-p1-s3">Os experimentos atuais são limitados em escala de contexto, deixando em aberto como o método se comportaria em regimes de &#39;needle-in-a-haystack&#39; extremos ou em tarefas de agregação de conhecimento massivo.</span></p>        <h2><span class="s" data-s="b11-h">Direções Futuras e Conclusão</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Os autores apontam várias melhorias potenciais para o algoritmo ZHA.</span> <span class="s" data-s="b11-p0-s1">Uma delas é aprender dinamicamente os limites dos chunks em vez de defini-los arbitrariamente, o que poderia adaptar a árvore à estrutura natural dos dados.</span> <span class="s" data-s="b11-p0-s2">Outra ideia é introduzir um viés de recência na árvore, tornando-a mais detalhada perto do token atual e mais resumida em partes antigas, refletindo a importância temporal variável.</span> <span class="s" data-s="b11-p0-s3">Também é possível ajustar os parâmetros do modelo base durante o fine-tuning com conjuntos de treinamento de longo contexto, permitindo que o resto do transformer compense a degradação causada pela esparsidade.</span></p><p><span class="s" data-s="b11-p1-s0">Outra linha de pesquisa envolve augmentar a árvore com resumos compressivos dos valores (value summaries), permitindo que nós podados durante o roteamento contribuam com saídas de atenção grosseiras.</span> <span class="s" data-s="b11-p1-s1">Isso preservaria uma visibilidade aproximada sobre todo o cache KV, combinando atenção de nível de token nas regiões selecionadas com contribuições de nível de resumo das subárvores podadas.</span> <span class="s" data-s="b11-p1-s2">Em resumo, o ZHA representa um passo significativo em direção a LLMs com janelas de contexto efetivas de bilhões de tokens, oferecendo uma alternativa viável à atenção quadrática, embora ainda haja trabalho a ser feito para garantir robustez em esparsidades extremas e contextos ultra-longos.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b12-t">Impacto da Escala do Modelo</span></h3>
+          <p><span class="s" data-s="b12-c-s0">O desempenho do ZHA durante a conversão melhora significativamente com o tamanho do modelo.</span> <span class="s" data-s="b12-c-s1">Modelos pequenos (abaixo de 1B parâmetros) lutam com tarefas de recuperação como RULER porque os pesos de atenção originais são ruidosos, dificultando a distilação.</span> <span class="s" data-s="b12-c-s2">Em modelos de 4B parâmetros ou mais, a distilação é muito mais bem-sucedida, sugerindo que o ZHA será ainda mais eficaz em modelos de grande escala futuros.</span></p>
+        </aside>
+        <aside class="callout">
+          <h3><span class="s" data-s="b13-t">Simplicidade da Implementação</span></h3>
+          <p><span class="s" data-s="b13-c-s0">Diferente de métodos complexos que adicionam LoRA ou fatorações elaboradas, o ZHA requer apenas uma fase de aquecimento KL para treinar as &#39;reference queries&#39;.</span> <span class="s" data-s="b13-c-s1">Os autores descobriram que abordagens mais complexas adicionavam complexidade sem melhorar o desempenho em ablações preliminares, validando a eficácia da abordagem minimalista.</span></p>
+        </aside>
+
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">ZHA usa uma árvore hierárquica de resumos compressivos para reduzir o custo da atenção de quadrático para subquadrático, permitindo contextos muito longos.</span></li><li><span class="s" data-s="k1">O método pode ser aplicado a modelos pré-treinados existentes com apenas uma fase curta de distilação KL, sem necessidade de retreinamento completo.</span></li><li><span class="s" data-s="k2">Embora robusto, o desempenho do ZHA degrada em níveis extremos de esparsidade, limitando sua eficácia em contextos ultra-longos além de 256K nos testes atuais.</span></li><li><span class="s" data-s="k3">A escalabilidade subquadrática do ZHA promete viabilizar janelas de contexto de centenas de milhões ou bilhões de tokens em LLMs futuros.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.42112" rel="noopener">Subquadratic Attention with a Hierarchical Tree-Structured Indexer</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.42112" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

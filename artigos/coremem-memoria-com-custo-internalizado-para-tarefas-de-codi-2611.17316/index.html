@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CoReMem: Memória com Custo Internalizado para Tarefas de Codificação Sucessivas — arXiv em 5</title>
+<meta name="description" content="Agentes de código em repositórios evoluídos precisam decidir o que lembrar. O CoReMem introduz uma estrutura onde o valor da memória é medido prospectivamente, equilibrando utilidade futura e custo de escrita/leitura.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CoReMem: Memória com Custo Internalizado para Tarefas de Codificação Sucessivas">
+<meta property="og:description" content="Agentes de código em repositórios evoluídos precisam decidir o que lembrar. O CoReMem introduz uma estrutura onde o valor da memória é medido prospectivamente, equilibrando utilidade futura e custo de escrita/leitura.">
+<meta property="og:image" content="../../assets/papers/2611.17316/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Agentes</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.17316" rel="noopener">arXiv:2611.17316</a>
+    </div>
+    <h1><span class="s" data-s="t">CoReMem: Memória com Custo Internalizado para Tarefas de Codificação Sucessivas</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Agentes de código em repositórios evoluídos precisam decidir o que lembrar.</span> <span class="s" data-s="d-s1">O CoReMem introduz uma estrutura onde o valor da memória é medido prospectivamente, equilibrando utilidade futura e custo de escrita/leitura.</span></p>
+    <p class="byline">
+      <span>Li et al.</span>
+      <span>7 min de leitura</span>
+<span>12/11/2026</span>    </p>
+    <div class="listen" data-article="2611.17316" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=Bb3XE6DGRR8" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Memória em Tarefas Sucessivas</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Em desenvolvimento de software real, agentes de codificação raramente enfrentam problemas isolados.</span> <span class="s" data-s="b0-p0-s1">Eles operam em repositórios que evoluem ao longo do tempo, lidando com tarefas que chegam sequencialmente.</span> <span class="s" data-s="b0-p0-s2">Cada nova tarefa herda o estado do código deixado pelas anteriores.</span> <span class="s" data-s="b0-p0-s3">O desafio central não é apenas resolver o bug atual, mas decidir que informações guardar para tarefas futuras que ainda são desconhecidas.</span></p><p><span class="s" data-s="b0-p1-s0">Pesquisas anteriores frequentemente estudavam questões de repositório de forma independente ou transferiam experiência geral entre repositórios diferentes.</span> <span class="s" data-s="b0-p1-s1">Outros métodos acumulavam memória, mas resetavam o estado do repositório entre as tarefas, o que não reflete a realidade de um projeto vivo.</span> <span class="s" data-s="b0-p1-s2">O CoReMem, desenvolvido por pesquisadores da Yale University, Tsinghua University e Goodvision AI, foca especificamente no cenário onde tanto o estado do repositório quanto a memória são herdados por tarefas invisíveis no futuro.</span></p><p><span class="s" data-s="b0-p2-s0">Neste contexto, o agente precisa equilibrar dois custos: o esforço para escrever e ler a memória, e o benefício potencial de usar essa memória para resolver a próxima tarefa mais rápido.</span> <span class="s" data-s="b0-p2-s1">Escrever muita memória é caro e pode poluir o contexto.</span> <span class="s" data-s="b0-p2-s2">Escrever pouco pode fazer o agente redescobrir informações já adquiridas.</span> <span class="s" data-s="b0-p2-s3">O CoReMem propõe uma estrutura que internaliza esses custos, guiando o design da memória e a adaptação do agente através de uma avaliação prospectiva do valor da memória na próxima tarefa.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.17316/figure2.webp" alt="Comparação de cenários de memória: CoReMem carrega tanto o estado do repositório quanto a memória para tarefas sucessivas, enquanto outros métodos mantêm a memória isolada, transferem experiência entre repositórios distintos ou resetam o código base." loading="lazy">
+          <figcaption>
+            Comparação de cenários de memória: CoReMem carrega tanto o estado do repositório quanto a memória para tarefas sucessivas, enquanto outros métodos mantêm a memória isolada, transferem experiência entre repositórios distintos ou resetam o código base.
+            <span class="source">Figura 2 do paper · Li et al., arXiv:2611.17316</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">A Ideia Central: Âncoras e Valoração Prospectiva</span></h2>
+<p><span class="s" data-s="b2-p0-s0">A inovação principal do CoReMem reside em como a memória é estruturada e como seu valor é medido.</span> <span class="s" data-s="b2-p0-s1">Em vez de armazenar resumos gerais ou logs completos, o sistema constrói uma memória compacta baseada em &#39;âncoras&#39;.</span> <span class="s" data-s="b2-p0-s2">Uma âncora consiste em duas partes: uma localização no repositório (WHERE) e uma verificação executável (VERIFY).</span> <span class="s" data-s="b2-p0-s3">Por exemplo, a memória pode indicar que a função &#39;is_main_check()&#39; pula a regra SIM102 sob &#39;__main__&#39; em um arquivo específico, e fornecer o comando de teste para verificar isso.</span></p><p><span class="s" data-s="b2-p1-s0">Para determinar quais âncoras são valiosas, os autores introduzem a &#39;Valoração Prospectiva de Segmentos&#39;.</span> <span class="s" data-s="b2-p1-s1">Este mecanismo compara execuções da próxima tarefa com e sem segmentos individuais da trajetória da tarefa anterior, mantendo o mesmo estado herdado do repositório.</span> <span class="s" data-s="b2-p1-s2">Se a presença de uma âncora reduz significativamente o esforço necessário para resolver a nova tarefa, ela é considerada valiosa.</span> <span class="s" data-s="b2-p1-s3">Se não, ela é descartada, evitando o acúmulo de ruído.</span></p><p><span class="s" data-s="b2-p2-s0">Essa abordagem contrasta com métodos que otimizam a memória baseada no ganho na tarefa que a produziu.</span> <span class="s" data-s="b2-p2-s1">No CoReMem, o foco é estritamente no ganho para a tarefa sucessora.</span> <span class="s" data-s="b2-p2-s2">Isso garante que a memória contenha apenas informações que realmente aceleram o agente em cenários futuros, alinhando o design da memória com o objetivo final de eficiência em tarefas sucessivas.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.17316/figure1.webp" alt="Ilustração do uso de âncoras: a memória escrita na tarefa 1 fornece uma localização e uma verificação para a tarefa 2, permitindo que o modelo atue diretamente nos passos 1 e 6, pulando a exploração inicial que seria necessária sem a memória." loading="lazy">
+          <figcaption>
+            Ilustração do uso de âncoras: a memória escrita na tarefa 1 fornece uma localização e uma verificação para a tarefa 2, permitindo que o modelo atue diretamente nos passos 1 e 6, pulando a exploração inicial que seria necessária sem a memória.
+            <span class="source">Figura 1 do paper · Li et al., arXiv:2611.17316</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b4-h">Adaptação do Agente e Crédito de Valor</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Ter uma boa memória não basta; o agente precisa saber usá-la.</span> <span class="s" data-s="b4-p0-s1">O CoReMem inclui um módulo de adaptação do agente que estima o valor da memória &#39;on-policy&#39; durante a execução.</span> <span class="s" data-s="b4-p0-s2">Isso é feito comparando grupos de rollout (execuções) com e sem memória.</span> <span class="s" data-s="b4-p0-s3">A recompensa usada nesse treinamento prioriza a resolução da tarefa e penaliza o número de passos, mas apenas nas execuções bem-sucedidas.</span></p><p><span class="s" data-s="b4-p1-s0">Um componente crítico aqui é o &#39;Crédito de Valor com Portão de Proveniência&#39;.</span> <span class="s" data-s="b4-p1-s1">Em vez de atribuir o ganho de performance apenas ao resultado final, o sistema identifica quais passos específicos do agente utilizaram as âncoras fornecidas pela memória.</span> <span class="s" data-s="b4-p1-s2">O termo de valor adicional é atribuído apenas a esses passos, enquanto cada passo mantém o crédito pelo resultado final.</span> <span class="s" data-s="b4-p1-s3">Isso permite que o modelo aprenda a confiar e a agir sobre as informações da memória de forma precisa, em vez de apenas aprender a resolver o problema de qualquer maneira.</span></p><p><span class="s" data-s="b4-p2-s0">Esse treinamento pós-treinamento (post-training) internaliza o custo.</span> <span class="s" data-s="b4-p2-s1">O agente aprende que usar a memória economiza passos e tokens, mas também aprende que ignorar a memória ou usá-la incorretamente pode ser prejudicial.</span> <span class="s" data-s="b4-p2-s2">O resultado é um modelo que se adapta dinamicamente ao contexto herdado, reduzindo o esforço cognitivo e computacional necessário para tarefas sucessivas.</span></p>        <h2><span class="s" data-s="b5-h">Resultados Experimentais no ChainSWE</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os autores avaliaram o CoReMem no benchmark ChainSWE, utilizando o mini-swe-agent com 100 cadeias de tarefas divididas em treinamento e teste sobre repositórios disjuntos.</span> <span class="s" data-s="b5-p0-s1">Eles compararam o CoReMem com a ausência de memória, com o histórico completo das tarefas anteriores e com três métodos de memória existentes: Mem0, MemOp e ReasoningBank.</span></p><p><span class="s" data-s="b5-p1-s0">Com o modelo de ator congelado, o CoReMem reduziu o número de passos em todos os seis modelos de ator testados, com reduções significativas de 9% a 13% em três deles.</span> <span class="s" data-s="b5-p1-s1">Crucialmente, a taxa de resolução não caiu; em cinco dos modelos, ela aumentou, e permaneceu inalterada no Opus.</span> <span class="s" data-s="b5-p1-s2">Em termos de eficiência, o CoReMem operou dentro de -7% a +5% do total de tokens em comparação com a execução sem memória, demonstrando que a economia de passos não veio à custa de um consumo excessivo de tokens.</span></p><p><span class="s" data-s="b5-p2-s0">Os métodos concorrentes (Mem0, MemOp, ReasoningBank) consumiram significativamente mais tokens do que o CoReMem em cinco dos seis modelos.</span> <span class="s" data-s="b5-p2-s1">Isso sugere que a abordagem de âncoras compactas é mais eficiente do que armazenar resumos de contexto ou experiências gerais distiladas.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.17316/figure3.webp" alt="Gráfico mostrando a redução de passos e tokens do CoReMem em comparação com a ausência de memória, destacando a eficiência superior em resolver tarefas por token gasto." loading="lazy">
+          <figcaption>
+            Gráfico mostrando a redução de passos e tokens do CoReMem em comparação com a ausência de memória, destacando a eficiência superior em resolver tarefas por token gasto.
+            <span class="source">Figura 3 do paper · Li et al., arXiv:2611.17316</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Ablação e Análise Detalhada</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Para entender o contributo de cada módulo, os autores realizaram ablações.</span> <span class="s" data-s="b7-p0-s1">O Módulo 1 (M1), que define as âncoras, mostrou-se eficaz: a memória do CoReMem empacota mais âncoras por mil caracteres injetados do que os concorrentes, e o agente atua em 1.32 âncoras por mil caracteres, contra 0.92 do MemOp, 0.19 do ReasoningBank e 0.14 do Mem0.</span></p><p><span class="s" data-s="b7-p1-s0">O Módulo 2 (M2), o treinamento pós-treinamento com internalização de custo, reduziu ainda mais os passos.</span> <span class="s" data-s="b7-p1-s1">O treinamento apenas com base na resolução (resolve-only RL) reduziu os passos no modelo 27B, mas o CoReMem completo foi superior.</span> <span class="s" data-s="b7-p1-s2">Isso prova que considerar o custo dos passos durante o treinamento é essencial para a eficiência.</span></p><p><span class="s" data-s="b7-p2-s0">O Módulo 3 (M3), o crédito de valor com portão de proveniência, mudou a forma como o modelo trata a memória.</span> <span class="s" data-s="b7-p2-s1">Sem ele, o modelo tende a ignorar a memória ou a usá-la de forma menos precisa.</span> <span class="s" data-s="b7-p2-s2">Com ele, o modelo aprende a associar o sucesso diretamente ao uso das âncoras, melhorando a confiabilidade da recuperação de memória.</span></p>        <h2><span class="s" data-s="b8-h">Impacto no Custo e Eficiência</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Um dos pontos fortes do CoReMem é a melhoria na relação custo-benefício.</span> <span class="s" data-s="b8-p0-s1">O treinamento pós-treinamento reduziu os passos em até 26% contra a execução sem memória, com 9% a 19% menos tokens totais.</span> <span class="s" data-s="b8-p0-s2">A taxa de resolução por token total aumentou de 38% a 46%, com uma média de 41%.</span> <span class="s" data-s="b8-p0-s3">Isso significa que, para cada token gasto, o agente é mais provável de resolver a tarefa.</span></p><p><span class="s" data-s="b8-p1-s0">Em termos financeiros, para modelos servidos por API, o CoReMem melhorou a resolução por dólar.</span> <span class="s" data-s="b8-p1-s1">Isso é particularmente relevante para aplicações comerciais, onde o custo de inferência é um fator limitante.</span> <span class="s" data-s="b8-p1-s2">O método não apenas torna o agente mais rápido, mas também mais barato de operar em escala.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b9-t">Limitações do Estudo</span></h3>
+          <p><span class="s" data-s="b9-c-s0">Os experimentos principais usam repositórios Python no mini-swe-agent.</span> <span class="s" data-s="b9-c-s1">O treinamento pós-treinamento cobre apenas três modelos de ator de peso aberto.</span> <span class="s" data-s="b9-c-s2">Outras linguagens de programação e modelos maiores ainda não foram testados.</span> <span class="s" data-s="b9-c-s3">O estudo mede esforço em passos e tokens, mas não relata latência de tempo real ou uso de energia.</span> <span class="s" data-s="b9-c-s4">Como a memória é acumulada e atualizada ao longo de históricos longos do repositório é uma questão em aberto.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b10-h">Considerações Finais e Ética</span></h2>
+<p><span class="s" data-s="b10-p0-s0">O CoReMem representa um avanço na forma como pensamos sobre memória em agentes de código.</span> <span class="s" data-s="b10-p0-s1">Ao focar no valor prospectivo e na estrutura de âncoras, ele evita o ruído e o custo excessivo de métodos anteriores.</span> <span class="s" data-s="b10-p0-s2">A internalização do custo no treinamento do agente garante que a memória seja usada de forma eficiente e confiável.</span></p><p><span class="s" data-s="b10-p1-s0">Do ponto de vista ético, o trabalho utiliza benchmarks públicos e modelos licenciados, sem participantes humanos.</span> <span class="s" data-s="b10-p1-s1">As sessões rodam em containers isolados.</span> <span class="s" data-s="b10-p1-s2">No entanto, a memória de longo prazo pode reter conteúdo do repositório, como caminhos de arquivos e comandos.</span> <span class="s" data-s="b10-p1-s3">Em repositórios privados, isso exige políticas rigorosas de controle de acesso e remoção de segredos antes do armazenamento.</span> <span class="s" data-s="b10-p1-s4">A memória, sendo texto plano, pode ser auditada e deletada, o que oferece transparência.</span></p>        <h2><span class="s" data-s="b11-h">O Que Levar Embora</span></h2>
+<p><span class="s" data-s="b11-p0-s0">A memória para tarefas sucessivas não é sobre guardar tudo, mas sobre guardar o que importa.</span> <span class="s" data-s="b11-p0-s1">O CoReMem mostra que âncoras específicas (localização + verificação) são mais valiosas do que resumos gerais.</span> <span class="s" data-s="b11-p0-s2">Medir o valor da memória com base no ganho na próxima tarefa, e não na tarefa atual, é crucial para a eficiência.</span> <span class="s" data-s="b11-p0-s3">Treinar o agente para internalizar o custo de usar a memória resulta em menos passos, menos tokens e maior taxa de resolução.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">CoReMem usa âncoras (localização e verificação) para memória compacta, otimizada para tarefas sucessivas herdadas.</span></li><li><span class="s" data-s="k1">A valoração prospectiva mede o valor da memória com base no ganho na próxima tarefa, não na atual.</span></li><li><span class="s" data-s="k2">O treinamento pós-treinamento internaliza o custo, reduzindo passos e tokens sem perder taxa de resolução.</span></li><li><span class="s" data-s="k3">Em benchmarks ChainSWE, o CoReMem superou métodos concorrentes em eficiência de tokens e custo por resolução.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.17316" rel="noopener">CoReMem: Cost-Internalizing Memory for Successive Coding Tasks with Prospective Valuation</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.17316" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

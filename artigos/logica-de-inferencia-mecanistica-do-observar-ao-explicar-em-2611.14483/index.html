@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lógica de Inferência Mecanística: Do Observar ao Explicar em Redes Neurais — arXiv em 5</title>
+<meta name="description" content="O paper propõe um framework rigoroso de cinco princípios para transformar observações locais em explicações causais cumulativas, fechando a lacuna entre interpretabilidade e descoberta científica.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Lógica de Inferência Mecanística: Do Observar ao Explicar em Redes Neurais">
+<meta property="og:description" content="O paper propõe um framework rigoroso de cinco princípios para transformar observações locais em explicações causais cumulativas, fechando a lacuna entre interpretabilidade e descoberta científica.">
+<meta property="og:image" content="../../assets/papers/2611.14483/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Redes neurais</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.14483" rel="noopener">arXiv:2611.14483</a>
+    </div>
+    <h1><span class="s" data-s="t">Lógica de Inferência Mecanística: Do Observar ao Explicar em Redes Neurais</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">O paper propõe um framework rigoroso de cinco princípios para transformar observações locais em explicações causais cumulativas, fechando a lacuna entre interpretabilidade e descoberta científica.</span></p>
+    <p class="byline">
+      <span>Hu et al.</span>
+      <span>8 min de leitura</span>
+<span>10/11/2026</span>    </p>
+    <div class="listen" data-article="2611.14483" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=98UVzi3srXI" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Interpretabilidade Mecanística</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A interpretabilidade mecanística (MI) em redes neurais artificiais (ANNs) avançou significativamente nas últimas décadas.</span> <span class="s" data-s="b0-p0-s1">Hoje, não estudamos apenas as saídas preditivas, mas os cálculos internos como objetos de investigação científica.</span> <span class="s" data-s="b0-p0-s2">Ferramentas modernas permitem identificar neurônios, features, circuitos e padrões dinâmicos associados ao comportamento do modelo.</span> <span class="s" data-s="b0-p0-s3">No entanto, o sucesso dessas ferramentas observacionais criou um novo problema: a lacuna entre &#39;ver&#39; um feature e &#39;entender&#39; a computação que o gera tornou-se mais ampla e sutil.</span></p><p><span class="s" data-s="b0-p1-s0">Em estudos anteriores, havia uma tendência a concluir que, se uma informação era recuperável de uma representação (via probing), o modelo a utilizava ativamente.</span> <span class="s" data-s="b0-p1-s1">Da mesma forma, intervenções foram usadas para estabelecer relevância causal sem identificar o papel computacional exato do componente.</span> <span class="s" data-s="b0-p1-s2">Trabalhos recentes tentaram abordar isso com frameworks conceituais ou práticas localizadas, mas faltava uma lógica geral para mover resultados de interpretabilidade para afirmações mecanísticas formais.</span></p><p><span class="s" data-s="b0-p2-s0">Os autores, pesquisadores do Georgia Tech e McGill University, identificam que a neurociência enfrentou problemas inferenciais similares ao tentar entender o cérebro.</span> <span class="s" data-s="b0-p2-s1">A neurociência fatorou questões amplas em perguntas mais precisas, separando o que um componente representa de como a informação é organizada, transformada e preservada.</span> <span class="s" data-s="b0-p2-s2">Este paper coalesce essas insights em um framework para a MI, propondo que precisamos de uma &#39;lógica de inferência&#39; para conectar evidências de diferentes classes quando dissecamos sistemas neurais complexos.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.14483/figure1.webp" alt="Diagrama da lógica recursiva de inferência mecanística. Mostra os cinco princípios (P1-P5) e como eles conectam descobertas internas ao modelo a hipóteses testáveis em outros domínios, com a restrição P0 de que escolhas de medição limitam cada inferência." loading="lazy">
+          <figcaption>
+            Diagrama da lógica recursiva de inferência mecanística. Mostra os cinco princípios (P1-P5) e como eles conectam descobertas internas ao modelo a hipóteses testáveis em outros domínios, com a restrição P0 de que escolhas de medição limitam cada inferência.
+            <span class="source">Figura 1 do paper · Hu et al., arXiv:2611.14483</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">A Lógica Recursiva de Inferência</span></h2>
+<p><span class="s" data-s="b2-p0-s0">O cerne da proposta é a organização da pesquisa mecanística como um processo recursivo guiado por cinco princípios.</span> <span class="s" data-s="b2-p0-s1">Este framework não é apenas uma lista de verificação, mas uma estrutura lógica que informa perguntas futuras e revisa reivindicações anteriores.</span> <span class="s" data-s="b2-p0-s2">O processo reconhece que uma única estudo pode abordar um subconjunto dessas questões e precisa revisitá-las conforme novas evidências surgem.</span></p><p><span class="s" data-s="b2-p1-s0">A estrutura começa com a noção de que não existe um único nível de abstração correto.</span> <span class="s" data-s="b2-p1-s1">Para um sistema neural dado com um comportamento de interesse, podemos investigar diferentes objetos candidatos: neurônios individuais, features abstratas, circuitos, geometria de populações ou dinâmicas temporais.</span> <span class="s" data-s="b2-p1-s2">A escolha do objeto explicativo é fundamental e restrita pelas escolhas de medição (P0).</span></p><p><span class="s" data-s="b2-p2-s0">Os princípios são desenhados para serem aplicados sequencialmente, mas também recursivamente.</span> <span class="s" data-s="b2-p2-s1">A evidência de um nível informa as perguntas do próximo, e discrepâncias podem exigir revisitar o objeto ou o nível de análise.</span> <span class="s" data-s="b2-p2-s2">Isso transforma a MI de uma coleção de achados locais em conhecimento cumulativo sobre mecanismos dentro dos modelos.</span></p>        <h2><span class="s" data-s="b3-h">Princípio 0: Restrições de Medição</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Antes dos cinco princípios principais, os autores introduzem uma restrição fundamental: P0.</span> <span class="s" data-s="b3-p0-s1">Toda inferência é constrangida pelas escolhas de medição.</span> <span class="s" data-s="b3-p0-s2">Isso significa que a forma como observamos o modelo (qual técnica usamos, qual granularidade, qual tipo de perturbação) limita estritamente o que podemos inferir.</span> <span class="s" data-s="b3-p0-s3">Não existe uma &#39;visão de Deus&#39; ou observação neutra.</span></p><p><span class="s" data-s="b3-p1-s0">Se escolhemos observar apenas a ativação de neurônios individuais, perdemos informações sobre dinâmicas de população.</span> <span class="s" data-s="b3-p1-s1">Se usamos probing linear, podemos falhar em detectar não-linearidades complexas.</span> <span class="s" data-s="b3-p1-s2">P0 serve como um lembrete constante de que a inferência mecanística é sempre condicional ao método de observação.</span> <span class="s" data-s="b3-p1-s3">Ignorar P0 leva a conclusões prematuras sobre a natureza dos mecanismos subjacentes.</span></p>        <h2><span class="s" data-s="b4-h">Princípio 1: Escolha do Objeto Explicativo</span></h2>
+<p><span class="s" data-s="b4-p0-s0">O primeiro passo ativo é P1: Qual objeto explica o fenômeno?</span> <span class="s" data-s="b4-p0-s1">O pesquisador deve escolher entre unidades individuais (neurônios), features latentes, circuitos locais, geometria de populações ou dinâmicas temporais.</span> <span class="s" data-s="b4-p0-s2">Esta escolha não é trivial e depende do comportamento de interesse.</span> <span class="s" data-s="b4-p0-s3">Por exemplo, para entender reconhecimento de objetos, uma feature específica pode ser mais relevante que a dinâmica temporal global.</span></p><p><span class="s" data-s="b4-p1-s0">A escolha do objeto define o escopo da explicação.</span> <span class="s" data-s="b4-p1-s1">Focar em neurônios individuais pode levar a explicações fragmentadas, enquanto focar em circuitos ou populações pode revelar lógica computacional emergente.</span> <span class="s" data-s="b4-p1-s2">P1 exige justificativa para a granularidade da análise.</span> <span class="s" data-s="b4-p1-s3">Não se pode saltar diretamente para explicações de alto nível sem considerar se o nível inferior oferece insights causais mais precisos.</span></p>        <h2><span class="s" data-s="b5-h">Princípio 2: Uso Computacional da Informação</span></h2>
+<p><span class="s" data-s="b5-p0-s0">P2 aborda a lacuna clássica entre representação e uso.</span> <span class="s" data-s="b5-p0-s1">Apenas porque uma informação é decodificável de uma representação (probe) não significa que o modelo a usa ativamente em seus cálculos.</span> <span class="s" data-s="b5-p0-s2">P2 exige testar se a informação representada é efetivamente usada na computação subsequente.</span></p><p><span class="s" data-s="b5-p1-s0">Isso vai além do probing passivo.</span> <span class="s" data-s="b5-p1-s1">Envolve intervenções que perturbam a informação específica para ver se o comportamento do modelo muda de acordo com o uso esperado da informação.</span> <span class="s" data-s="b5-p1-s2">Se a remoção ou alteração de uma feature não afeta a saída do modelo, ela pode ser um artefato de treinamento, não um mecanismo funcional.</span> <span class="s" data-s="b5-p1-s3">P2 separa correlação estatística de utilidade computacional.</span></p><p><span class="s" data-s="b5-p2-s0">Este princípio combate a armadilha de assumir que &#39;se está lá, é usado&#39;.</span> <span class="s" data-s="b5-p2-s1">Muitos features em redes neurais são redundantes ou residuais.</span> <span class="s" data-s="b5-p2-s2">Identificar quais features são essenciais para a computação atual é um passo crítico para uma explicação mecanística válida.</span></p>        <h2><span class="s" data-s="b6-h">Princípio 3: Identificação do Papel Causal</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Uma vez estabelecido que uma informação é usada (P2), P3 pergunta: Qual operação ela realiza?</span> <span class="s" data-s="b6-p0-s1">Identificar o papel causal significa mapear como a perturbação dessa informação afeta a saída (Δy).</span> <span class="s" data-s="b6-p0-s2">Isso requer isolar o efeito causal específico de um componente ou feature.</span></p><p><span class="s" data-s="b6-p1-s0">Os autores destacam que intervenções devem ser desenhadas para distinguir entre diferentes operações computacionais.</span> <span class="s" data-s="b6-p1-s1">Por exemplo, uma feature pode atuar como um filtro, um multiplicador de atenção ou um memorizador.</span> <span class="s" data-s="b6-p1-s2">P3 exige que o pesquisador identifique a função lógica ou matemática que o componente executa no pipeline de cálculo do modelo.</span></p><p><span class="s" data-s="b6-p2-s0">Sem P3, temos apenas relevância causal, mas não compreensão do mecanismo.</span> <span class="s" data-s="b6-p2-s1">Saber que &#39;X afeta Y&#39; não é suficiente; precisamos saber &#39;como&#39; X afeta Y. Isso transforma achados empíricos em descrições funcionais precisas.</span></p>        <h2><span class="s" data-s="b7-h">Princípio 4: Organização das Dependências</span></h2>
+<p><span class="s" data-s="b7-p0-s0">P4 expande a visão de componentes individuais para a estrutura do circuito.</span> <span class="s" data-s="b7-p0-s1">Como os papéis causais identificados em P3 se organizam?</span> <span class="s" data-s="b7-p0-s2">As dependências são em série, convergentes ou divergentes?</span> <span class="s" data-s="b7-p0-s3">Este princípio busca reconstruir a arquitetura lógica do cálculo.</span></p><p><span class="s" data-s="b7-p1-s0">Isso envolve mapear como a informação flui entre diferentes features ou neurônios.</span> <span class="s" data-s="b7-p1-s1">A geometria da população e as conexões sinápticas (ou pesos de atenção) definem essa organização.</span> <span class="s" data-s="b7-p1-s2">P4 exige que o pesquisador identifique a topologia do circuito que implementa a função computacional.</span></p><p><span class="s" data-s="b7-p2-s0">A organização das dependências revela a robustez e a modularidade do mecanismo.</span> <span class="s" data-s="b7-p2-s1">Circuitos com dependências convergentes podem ser mais robustos a ruído, enquanto circuitos em série podem ser mais fáceis de interpretar.</span> <span class="s" data-s="b7-p2-s2">P4 conecta a micro-arquitetura à macro-funcionalidade.</span></p>        <h2><span class="s" data-s="b8-h">Princípio 5: Invariância e Generalização</span></h2>
+<p><span class="s" data-s="b8-p0-s0">P5 pergunta: O que permanece invariante?</span> <span class="s" data-s="b8-p0-s1">Um mecanismo genuíno deve ser robusto a variações em sementes aleatórias, implementações ou condições de entrada.</span> <span class="s" data-s="b8-p0-s2">Testar a invariância é crucial para distinguir entre um mecanismo fundamental e um artefato acidental do treinamento.</span></p><p><span class="s" data-s="b8-p1-s0">Se um circuito identificado em um modelo com semente A não aparece em um modelo com semente B, mesmo com a mesma arquitetura e tarefa, a explicação mecanística está fraca.</span> <span class="s" data-s="b8-p1-s1">P5 exige que o pesquisador verifique a estabilidade do mecanismo proposto através de múltiplas instâncias ou condições.</span></p><p><span class="s" data-s="b8-p2-s0">A invariância também é a ponte para a descoberta &#39;além do modelo&#39;.</span> <span class="s" data-s="b8-p2-s1">Mecanismos que são invariantes a implementações específicas sugerem princípios computacionais gerais, não apenas propriedades de um modelo particular.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b9-t">Da Descoberta Interna à Hipótese Externa</span></h3>
+          <p><span class="s" data-s="b9-c-s0">O framework distingue duas fases: &#39;within-model discovery&#39; (descoberta interna) e &#39;beyond-model discovery&#39; (descoberta externa).</span> <span class="s" data-s="b9-c-s1">A primeira gera hipóteses de mecanismos plausíveis dentro do modelo.</span> <span class="s" data-s="b9-c-s2">A segunda exige evidência independente para testar se esses mecanismos revelam verdades sobre o mundo real ou domínios cognitivos, não apenas sobre a arquitetura da rede.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b10-h">Estrutura Recursiva e Acúmulo de Conhecimento</span></h2>
+<p><span class="s" data-s="b10-p0-s0">A força do framework reside na sua recursividade.</span> <span class="s" data-s="b10-p0-s1">As setas vermelhas no diagrama do paper mostram como as inferências se alimentam.</span> <span class="s" data-s="b10-p0-s2">A evidência de P5 (invariância) pode levar a revisar P1 (objeto escolhido).</span> <span class="s" data-s="b10-p0-s3">Se um mecanismo não é invariante, talvez o objeto de estudo esteja errado ou o nível de abstração seja inadequado.</span></p><p><span class="s" data-s="b10-p1-s0">Este processo permite que a MI avance de forma cumulativa.</span> <span class="s" data-s="b10-p1-s1">Em vez de cada paper apresentar um novo feature isolado, os pesquisadores podem construir sobre explicações mecanísticas anteriores, refinando-as com novos princípios.</span> <span class="s" data-s="b10-p1-s2">A lógica proposta transforma a MI de uma disciplina descritiva para uma explicativa.</span></p><p><span class="s" data-s="b10-p2-s0">A recursividade também lida com a complexidade.</span> <span class="s" data-s="b10-p2-s1">Sistemas neurais são tão complexos que uma explicação completa de uma vez é impossível.</span> <span class="s" data-s="b10-p2-s2">O framework permite decompor o problema em etapas gerenciáveis, onde cada etapa é validada antes de avançar para a próxima, mas sempre aberta a revisão.</span></p>        <h2><span class="s" data-s="b11-h">Limitações e Escopo do Paper</span></h2>
+<p><span class="s" data-s="b11-p0-s0">É crucial notar que este paper é conceitual.</span> <span class="s" data-s="b11-p0-s1">Ele não apresenta novos algoritmos de MI, nem resultados empíricos extensivos em modelos grandes.</span> <span class="s" data-s="b11-p0-s2">O foco está na fundamentação lógica e na organização do campo.</span> <span class="s" data-s="b11-p0-s3">Os autores argumentam que a falta de uma lógica de inferência está impedindo o progresso científico na MI, e propõem este framework como solução.</span></p><p><span class="s" data-s="b11-p1-s0">O paper não fornece um guia passo-a-passo para implementação.</span> <span class="s" data-s="b11-p1-s1">A aplicação prática dos cinco princípios requer julgamento expert e adaptação ao contexto específico do modelo e da tarefa.</span> <span class="s" data-s="b11-p1-s2">Além disso, a distinção entre &#39;within-model&#39; e &#39;beyond-model&#39; discovery é mantida intencionalmente.</span> <span class="s" data-s="b11-p1-s3">O framework MI não garante que mecanismos encontrados em ANNs se apliquem ao cérebro humano ou a outros domínios sem evidência independente.</span></p><p><span class="s" data-s="b11-p2-s0">Os autores reconhecem que a validação final de hipóteses &#39;beyond-model&#39; requer dados externos.</span> <span class="s" data-s="b11-p2-s1">O framework MI fornece as hipóteses e a plausibilidade interna, mas a conexão com o mundo real depende de outras disciplinas.</span> <span class="s" data-s="b11-p2-s2">Isso evita o reducionismo de assumir que entender a rede neural é suficiente para entender a inteligência.</span></p>        <h2><span class="s" data-s="b12-h">Implicações para a Pesquisa Futura</span></h2>
+<p><span class="s" data-s="b12-p0-s0">Para pesquisadores de MI, este paper sugere uma mudança de mentalidade.</span> <span class="s" data-s="b12-p0-s1">Em vez de focar apenas em encontrar novos features ou circuitos, devemos focar em construir explicações causais robustas e invariantes.</span> <span class="s" data-s="b12-p0-s2">Cada estudo deve explicitamente abordar, na medida do possível, os cinco princípios.</span></p><p><span class="s" data-s="b12-p1-s0">Para a comunidade de IA em geral, a MI com lógica rigorosa pode levar a modelos mais confiáveis e explicáveis.</span> <span class="s" data-s="b12-p1-s1">Se podemos identificar e invariantizar mecanismos específicos, podemos criar modelos que generalizam melhor e são mais fáceis de depurar.</span> <span class="s" data-s="b12-p1-s2">A lógica de inferência proposta é um passo em direção a uma ciência da IA mais madura.</span></p><p><span class="s" data-s="b12-p2-s0">O framework também tem implicações para a neurociência computacional.</span> <span class="s" data-s="b12-p2-s1">Ao formalizar a inferência mecanística, a MI pode oferecer ferramentas quantitativas para testar hipóteses neurocientíficas, e a neurociência pode oferecer insights sobre como organizar a análise de sistemas artificiais complexos.</span></p>        <h2><span class="s" data-s="b13-h">Conclusão</span></h2>
+<p><span class="s" data-s="b13-p0-s0">O paper &#39;Mechanistic Interpretability Needs a Logic of Inference&#39; identifica um gargalo crítico na interpretabilidade mecanística: a falta de uma estrutura lógica para transformar observações em explicações causais.</span> <span class="s" data-s="b13-p0-s1">Ao propor cinco princípios organizados em um processo recursivo, os autores oferecem um caminho para tornar a MI mais rigorosa e cumulativa.</span></p><p><span class="s" data-s="b13-p1-s0">A proposta não é uma revolução tecnológica, mas uma revolução metodológica.</span> <span class="s" data-s="b13-p1-s1">Ela exige que os pesquisadores sejam mais explícitos sobre suas escolhas de medição, validem o uso computacional das informações, identifiquem papéis causais precisos, mapeiem organizações de circuitos e testem invariância.</span></p><p><span class="s" data-s="b13-p2-s0">No final, o objetivo é claro: transformar a MI de uma coleção de anecdotes técnicas em uma ciência de descoberta de mecanismos, capaz de gerar hipóteses testáveis tanto dentro quanto fora dos modelos artificiais.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">A interpretabilidade mecanística precisa de uma lógica formal para conectar observações a explicações causais, evitando conclusões prematuras baseadas apenas em correlações.</span></li><li><span class="s" data-s="k1">Os cinco princípios (P1-P5) formam um processo recursivo que guia a escolha do objeto, validação do uso, papel causal, organização do circuito e invariância.</span></li><li><span class="s" data-s="k2">O framework distingue descoberta interna ao modelo (hipóteses de mecanismos) de descoberta externa (validação com evidência independente do mundo real).</span></li><li><span class="s" data-s="k3">A invariância (P5) é crucial para distinguir mecanismos fundamentais de artefatos de treinamento, permitindo generalização e acúmulo de conhecimento.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.14483" rel="noopener">Mechanistic Interpretability Needs a Logic of Inference</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.14483" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

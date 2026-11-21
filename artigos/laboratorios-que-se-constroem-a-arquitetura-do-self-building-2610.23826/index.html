@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Laboratórios que se constroem: a arquitetura do Self-Building Lab — arXiv em 5</title>
+<meta name="description" content="Um sistema autônomo que lê fotos de um laboratório vazio, reconstrói um gêmeo digital, gera código de controle para robôs e valida experimentalmente novos protocolos de química sem engenharia manual prévia.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Laboratórios que se constroem: a arquitetura do Self-Building Lab">
+<meta property="og:description" content="Um sistema autônomo que lê fotos de um laboratório vazio, reconstrói um gêmeo digital, gera código de controle para robôs e valida experimentalmente novos protocolos de química sem engenharia manual prévia.">
+<meta property="og:image" content="../../assets/papers/2610.23826/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Robótica</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.23826" rel="noopener">arXiv:2610.23826</a>
+    </div>
+    <h1><span class="s" data-s="t">Laboratórios que se constroem: a arquitetura do Self-Building Lab</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um sistema autônomo que lê fotos de um laboratório vazio, reconstrói um gêmeo digital, gera código de controle para robôs e valida experimentalmente novos protocolos de química sem engenharia manual prévia.</span></p>
+    <p class="byline">
+      <span>Bai et al.</span>
+      <span>9 min de leitura</span>
+<span>16/10/2026</span>    </p>
+    <div class="listen" data-article="2610.23826" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=FxC0-TLo4bU" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O gargalo da flexibilidade em laboratórios autônomos</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Os laboratórios autônomos (Self-Driving Laboratories, SDLs) prometem acelerar a descoberta científica ao automatizar o ciclo completo de design, fabricação, teste e análise.</span> <span class="s" data-s="b0-p0-s1">No entanto, a autonomia atual é rígida: cada SDL é construído para executar procedimentos específicos para os quais foi programado.</span> <span class="s" data-s="b0-p0-s2">Adaptar um laboratório existente a uma nova pergunta científica exige uma engenharia manual extensiva, integrando hardware e desenvolvendo software do zero.</span> <span class="s" data-s="b0-p0-s3">Isso transforma a flexibilidade do laboratório no principal gargalo para a escalabilidade da descoberta.</span></p><p><span class="s" data-s="b0-p1-s0">O problema não é apenas a execução, mas a configuração inicial.</span> <span class="s" data-s="b0-p1-s1">Novas questões de pesquisa frequentemente requerem instrumentação ou procedimentos não antecipados durante o desenvolvimento da plataforma.</span> <span class="s" data-s="b0-p1-s2">Extender essas capacidades depende de especialistas que integram hardware e desenvolvem software, um processo demorado que depende de conhecimento tácito difícil de preservar ou transferir.</span> <span class="s" data-s="b0-p1-s3">Mudanças na disposição dos equipamentos podem até comprometer a confiabilidade dos fluxos de trabalho existentes.</span></p><p><span class="s" data-s="b0-p2-s0">Este paper apresenta o Self-Building Lab (SBL), uma abordagem que transfere o papel do pesquisador da configuração manual para a especificação de objetivos científicos.</span> <span class="s" data-s="b0-p2-s1">O sistema é capaz de projetar, configurar e operar sua própria configuração de laboratório, partindo de qualquer estado inicial — desde uma sala vazia até um SDL funcional.</span> <span class="s" data-s="b0-p2-s2">O SBL identifica as lacunas de capacidade necessárias para o objetivo científico e constrói as interfaces, habilidades robóticas e fluxos de trabalho ausentes, validando-os em um gêmeo digital antes da execução física.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.23826/figure1.webp" alt="Ciclo conceitual do SBL: o objetivo científico guia a identificação de lacunas, o desenvolvimento no gêmeo digital e a validação no laboratório físico, com feedback para reutilização futura." loading="lazy">
+          <figcaption>
+            Ciclo conceitual do SBL: o objetivo científico guia a identificação de lacunas, o desenvolvimento no gêmeo digital e a validação no laboratório físico, com feedback para reutilização futura.
+            <span class="source">Figura 1 do paper · Bai et al., arXiv:2610.23826</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">Arquitetura de três agentes e o Gêmeo Digital</span></h2>
+<p><span class="s" data-s="b2-p0-s0">A arquitetura do SBL é orquestrada por três agentes principais: o Agente Científico, o Agente do Gêmeo (Twin Agent) e o Agente de Segurança.</span> <span class="s" data-s="b2-p0-s1">O Agente Científico traduz o objetivo do usuário em planos experimentais.</span> <span class="s" data-s="b2-p0-s2">O Agente do Gêmeo é responsável por construir a representação digital do laboratório, desenvolver habilidades relevantes para a tarefa e validar os fluxos de trabalho em simulação.</span> <span class="s" data-s="b2-p0-s3">O Agente de Segurança usa o gêmeo para análise de cenários e gera &#39;guardrails&#39; (barreiras de proteção) de runtime que todas as comandos físicos devem atravessar.</span></p><p><span class="s" data-s="b2-p1-s0">O ponto de partida para o SBL pode variar drasticamente.</span> <span class="s" data-s="b2-p1-s1">Se o laboratório estiver vazio, o sistema constrói o layout, o gêmeo digital, as habilidades e os fluxos de trabalho.</span> <span class="s" data-s="b2-p1-s2">Se houver equipamentos manuais, ele cria o gêmeo e as habilidades.</span> <span class="s" data-s="b2-p1-s3">Se já existir um SDL, ele adapta os fluxos de trabalho.</span> <span class="s" data-s="b2-p1-s4">O input inicial consiste em fotografias do espaço, identificadores de dispositivos e interfaces de automação existentes.</span> <span class="s" data-s="b2-p1-s5">A partir disso, o Agente do Gêmeo reconstrói a identidade, geometria, articulação e arranjo espacial dos equipamentos.</span></p><p><span class="s" data-s="b2-p2-s0">A reconstrução do gêmeo digital começa com a identificação dos dispositivos nas fotos e na documentação.</span> <span class="s" data-s="b2-p2-s1">Para cada dispositivo, o agente busca modelos CAD (Computer-Aided Design) e arquivos URDF (Unified Robot Description Format).</span> <span class="s" data-s="b2-p2-s2">Se não estiverem disponíveis, ele reconstrói um modelo 3D aproximado usando especificações do fabricante e imagens de referência.</span> <span class="s" data-s="b2-p2-s3">O agente estima dimensões usando objetos de referência conhecidos, decompõe o dispositivo em componentes (quadros, gabinetes, mecanismos móveis) e os constrói a partir de primitivas geométricas e malhas personalizadas usando Python.</span></p>        <h2><span class="s" data-s="b3-h">Da simulação à execução: habilidades e validação</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Uma vez que o gêmeo digital está calibrado, o SBL identifica as habilidades necessárias para o fluxo de trabalho desejado.</span> <span class="s" data-s="b3-p0-s1">Se uma habilidade não existir, o sistema a desenvolve usando o gêmeo digital.</span> <span class="s" data-s="b3-p0-s2">Isso envolve a geração de código de controle para os robôs e instrumentos, testando-as virtualmente contra as restrições da tarefa.</span> <span class="s" data-s="b3-p0-s3">O Agente de Segurança analisa cenários de risco no ambiente simulado, gerando restrições de runtime, como limites de velocidade do robô e paradas de proteção acionadas por força, que são aplicadas durante a execução física.</span></p><p><span class="s" data-s="b3-p1-s0">A validação não ocorre apenas na simulação.</span> <span class="s" data-s="b3-p1-s1">O SBL usa um processo de tentativa e erro no mundo real, com aprovação do usuário, para refinar as habilidades.</span> <span class="s" data-s="b3-p1-s2">O feedback do estado físico é usado para calibrar o gêmeo digital, criando um ciclo de melhoria contínua.</span> <span class="s" data-s="b3-p1-s3">Traços de execução física e simulação são usados para a &#39;distilação de habilidades&#39;, onde o conhecimento adquirido é retido na memória do agente para reutilização em tarefas futuras.</span> <span class="s" data-s="b3-p1-s4">Isso permite que o sistema aprenda com falhas e sucessos, tornando-se mais robusto ao longo do tempo.</span></p><p><span class="s" data-s="b3-p2-s0">A segurança é uma camada crítica.</span> <span class="s" data-s="b3-p2-s1">O sistema não confia apenas na recusa do modelo de linguagem a instruções inseguras; testes mostram que modelos como o GPT-6-Astra podem obedecê-las.</span> <span class="s" data-s="b3-p2-s2">Portanto, as verificações baseadas no gêmeo e os guardrails de runtime são essenciais.</span> <span class="s" data-s="b3-p2-s3">Eles fornecem um espaço para exploração segura, enquanto limitações físicas são impostas para prevenir danos.</span> <span class="s" data-s="b3-p2-s4">A validade das verificações baseadas no gêmeo depende da precisão da geometria, dos estados dos dispositivos e das interações físicas representadas no twin.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.23826/figure2.webp" alt="Arquitetura do SBL: o Agente Científico planeja, o Agente do Gêmeo constrói e valida no digital, e o Agente de Segurança impõe guardrails para a execução física segura." loading="lazy">
+          <figcaption>
+            Arquitetura do SBL: o Agente Científico planeja, o Agente do Gêmeo constrói e valida no digital, e o Agente de Segurança impõe guardrails para a execução física segura.
+            <span class="source">Figura 2 do paper · Bai et al., arXiv:2610.23826</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Implementação técnica e infraestrutura</span></h2>
+<p><span class="s" data-s="b5-p0-s0">A implementação do SBL utilizada no estudo envolve uma plataforma experimental composta por um manipulador robótico xArm5 de cinco graus de liberdade montado em um trilho linear motorizado, equipado com um gripper paralelo e um sensor de força/torque de 6 eixos.</span> <span class="s" data-s="b5-p0-s1">O tratamento de líquidos foi realizado por um robô Opentrons OT-2 com pipetas de oito canais e um canal único.</span> <span class="s" data-s="b5-p0-s2">O selamento de microplacas foi feito por um selador térmico Agilent PlateLoc, e a caracterização por um leitor multimodal BioTek Cytation5.</span> <span class="s" data-s="b5-p0-s3">As observações do laboratório foram fornecidas por câmeras Intel RealSense D435i e D405.</span></p><p><span class="s" data-s="b5-p1-s0">Software, o sistema utiliza o modelo openai-gpt6-astra para construir representações laboratoriais, gerar fluxos de trabalho e invocar ferramentas de planejamento e controle.</span> <span class="s" data-s="b5-p1-s1">O gêmeo digital foi implementado no NVIDIA Isaac Sim 6.1 usando Universal Scene Description (USD).</span> <span class="s" data-s="b5-p1-s2">O planejamento de movimento do robô utilizou cuRobo, com verificação de colisão realizada em uma pipeline de GPU.</span> <span class="s" data-s="b5-p1-s3">Todos os dispositivos se conectam através de uma rede privada Tailscale.</span></p><p><span class="s" data-s="b5-p2-s0">Os agentes interagem com os instrumentos através de duas interfaces: REST e o Model Context Protocol (MCP).</span> <span class="s" data-s="b5-p2-s1">Para requisições REST, uma API central verifica a autorização do agente e registra cada reivindicação de dispositivo.</span> <span class="s" data-s="b5-p2-s2">O agente então envia comandos diretamente ao instrumento com o token de reivindicação.</span> <span class="s" data-s="b5-p2-s3">A interface MCP fornece acesso a um conjunto selecionado de ferramentas aprovadas.</span> <span class="s" data-s="b5-p2-s4">Todas as máquinas expõem endpoints HTTP autenticados com esquemas OpenAPI e documentação das funções disponíveis.</span></p>        <h2><span class="s" data-s="b6-h">Validação experimental: Síntese de Pontos Quânticos</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Para validar as capacidades end-to-end do SBL, os autores realizaram um experimento real de síntese de pontos quânticos.</span> <span class="s" data-s="b6-p0-s1">O objetivo científico era preparar soluções tampão em diferentes pH (8.5, 9.0, 9.5 e 10.0) e realizar reações químicas para sintetizar os pontos.</span> <span class="s" data-s="b6-p0-s2">O sistema precisou integrar o manejo de sólidos (dispenser de pó), transporte móvel, manejo de líquidos (pipetagem) e medição espectroscópica.</span></p><p><span class="s" data-s="b6-p1-s0">O SBL identificou que faltavam habilidades específicas para a inserção precisa de tubos e o manejo de microplacas profundas.</span> <span class="s" data-s="b6-p1-s1">Ele desenvolveu interfaces de controle de servo-junta para o braço robótico e estabeleceu condições de sucesso baseadas em feedback de força e torque, já que a calibração de cena por câmeras não era precisa o suficiente para operações de inserção fina.</span> <span class="s" data-s="b6-p1-s2">Isso demonstrou a capacidade do sistema de adaptar-se a limitações físicas e desenvolver novas habilidades de controle para superar lacunas de precisão.</span></p><p><span class="s" data-s="b6-p2-s0">A execução bem-sucedida da síntese provou que o SBL pode ir de um objetivo científico abstrato à execução física segura, com intervenção humana mínima.</span> <span class="s" data-s="b6-p2-s1">O sistema gerou o fluxo de trabalho, controlou os robôs, manipulou os reagentes químicos (Cd(NO3)2, MPA e tiureia) e mediu os espectros de absorção e emissão.</span> <span class="s" data-s="b6-p2-s2">Os resultados confirmaram que o sistema pode lidar com a complexidade de múltiplos instrumentos e a precisão necessária para reações químicas sensíveis.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.23826/figure6.webp" alt="Escalabilidade do SBL: integração de estações de trabalho sólidas, manipuladores móveis e estações de líquidos em um fluxo de trabalho coordenado gerado automaticamente." loading="lazy">
+          <figcaption>
+            Escalabilidade do SBL: integração de estações de trabalho sólidas, manipuladores móveis e estações de líquidos em um fluxo de trabalho coordenado gerado automaticamente.
+            <span class="source">Figura 6 do paper · Bai et al., arXiv:2610.23826</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Escalabilidade e coordenação multi-robô</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Além do experimento de química, o SBL foi testado em cenários de simulação que envolvem escalabilidade.</span> <span class="s" data-s="b8-p0-s1">A Figura 6 mostra a integração de múltiplos robôs e estações de trabalho: uma estação de manejo de sólidos UR3/UR5, um manipulador móvel e uma estação de líquidos baseada em xArm.</span> <span class="s" data-s="b8-p0-s2">Dado um objetivo de alto nível para preparação de buffers, o SBL gerou um fluxo de trabalho coordenado em simulação, incluindo modelos de simulação de pó e fluido relevantes para a tarefa.</span></p><p><span class="s" data-s="b8-p1-s0">Isso demonstra que o sistema não se limita a uma única estação de trabalho.</span> <span class="s" data-s="b8-p1-s1">Ele pode projetar layouts laboratoriais e coordenar vários robôs para realizar tarefas distribuídas.</span> <span class="s" data-s="b8-p1-s2">A capacidade de gerar modelos de simulação específicos para a tarefa (como o comportamento de pós e fluidos) é crucial para validar fluxos de trabalho complexos antes da execução física.</span> <span class="s" data-s="b8-p1-s3">Isso abre caminho para laboratórios autônomos maiores e mais complexos, onde a coordenação espacial e temporal entre múltiplos agentes é essencial.</span></p><p><span class="s" data-s="b8-p2-s0">A escalabilidade também implica a capacidade de reutilizar habilidades e memórias adquiridas.</span> <span class="s" data-s="b8-p2-s1">Um fluxo de trabalho desenvolvido para um tipo de reação pode informar a configuração de outro, reduzindo o tempo de configuração inicial.</span> <span class="s" data-s="b8-p2-s2">O sistema aprende com a experiência, tornando-se mais eficiente à medida que é exposto a uma variedade maior de tarefas e configurações laboratoriais.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b9-t">Limitações Críticas e o Papel Humano</span></h3>
+          <p><span class="s" data-s="b9-c-s0">O SBL não elimina a necessidade de expertise humana.</span> <span class="s" data-s="b9-c-s1">Falhas de dispositivos que não geram erros de API deixam o agente incapaz de distinguir sucesso de falha.</span> <span class="s" data-s="b9-c-s2">Operações de inserção fina exigiram sensores de força que câmeras não podiam fornecer.</span> <span class="s" data-s="b9-c-s3">Além disso, durante tarefas de longo prazo, o agente pode fazer suposições erradas ou tomar decisões excessivamente cautelosas, exigindo intervenção humana para resolver conflitos ou esclarecer objetivos.</span> <span class="s" data-s="b9-c-s4">A segurança física ainda depende de guardrails impostos, não apenas da inteligência do agente.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b10-h">Limitações e o futuro da automação científica</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Apesar dos avanços, o SBL tem limitações claras.</span> <span class="s" data-s="b10-p0-s1">A capacidade de construir depende do que a infraestrutura do laboratório permite observar e verificar.</span> <span class="s" data-s="b10-p0-s2">Se um dispositivo falhar silenciosamente (sem erro de API), o agente não pode detectar o problema.</span> <span class="s" data-s="b10-p0-s3">Operações que exigem precisão milimétrica ou sensibilidade tátil fina podem exigir sensores adicionais que não estão disponíveis em todas as configurações.</span> <span class="s" data-s="b10-p0-s4">A interpretação e ponderação de diferentes fontes de informação ainda requerem expertise humana.</span></p><p><span class="s" data-s="b10-p1-s0">A comunicação entre agentes e humanos também é um desafio.</span> <span class="s" data-s="b10-p1-s1">Desacordos entre agentes podem levar a trocas repetitivas que exigem intervenção humana para resolução.</span> <span class="s" data-s="b10-p1-s2">O sistema precisa ser capaz de expor suposições, evidências conflitantes e consequências operacionais relevantes para uma decisão.</span> <span class="s" data-s="b10-p1-s3">Os pesquisadores retêm a responsabilidade pelos objetivos científicos e fornecem fatos físicos que as interfaces disponíveis não podem observar.</span></p><p><span class="s" data-s="b10-p2-s0">Este trabalho redefine a relação entre humanos e máquinas em laboratórios autônomos.</span> <span class="s" data-s="b10-p2-s1">Em vez de programar cada movimento, os humanos especificam objetivos e fornecem contexto quando o sistema encontra condições não resolvidas.</span> <span class="s" data-s="b10-p2-s2">Isso requer treinamento de pesquisadores para trabalhar em ambientes SBL, onde a integração humano-agente-robô é central.</span> <span class="s" data-s="b10-p2-s3">O futuro da automação científica não é a substituição total do humano, mas a amplificação da expertise humana através de sistemas que se adaptam e constroem suas próprias capacidades.</span></p>        <h2><span class="s" data-s="b11-h">Conclusão</span></h2>
+<p><span class="s" data-s="b11-p0-s0">O Self-Building Lab representa um passo significativo em direção a laboratórios autônomos verdadeiramente flexíveis.</span> <span class="s" data-s="b11-p0-s1">Ao integrar a identificação, desenvolvimento e validação de capacidades operacionais no processo científico autônomo, o SBL reduz a barreira de entrada para a automação experimental.</span> <span class="s" data-s="b11-p0-s2">Ele permite que pesquisadores de diversas áreas utilizem laboratórios robóticos complexos sem precisar ser especialistas em integração de hardware e software.</span></p><p><span class="s" data-s="b11-p1-s0">A demonstração na síntese de pontos quânticos e a escalabilidade em simulação mostram o potencial do sistema para acelerar a descoberta científica.</span> <span class="s" data-s="b11-p1-s1">No entanto, a dependência de sensores adicionais, a necessidade de supervisão humana para falhas silenciosas e a complexidade da coordenação multi-agente indicam que o caminho para a autonomia total ainda é longo.</span> <span class="s" data-s="b11-p1-s2">O SBL é uma ferramenta poderosa para expansão, mas não um substituto completo para a inteligência e o julgamento humano no laboratório.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b12-t">O que levar para casa</span></h3>
+          <p><span class="s" data-s="b12-c-s0">1.</span> <span class="s" data-s="b12-c-s1">O SBL constrói laboratórios autônomos a partir de fotos e descrições, gerando gêmeos digitais e código de controle para robôs sem engenharia manual prévia.</span> <span class="s" data-s="b12-c-s2">2.</span> <span class="s" data-s="b12-c-s3">A arquitetura usa três agentes (Científico, Gêmeo, Segurança) para planejar, simular e validar fluxos de trabalho antes da execução física.</span> <span class="s" data-s="b12-c-s4">3.</span> <span class="s" data-s="b12-c-s5">O sistema foi validado na síntese real de pontos quânticos, adaptando-se a limitações de precisão através de feedback de força e torque.</span> <span class="s" data-s="b12-c-s6">4.</span> <span class="s" data-s="b12-c-s7">Limitações incluem a incapacidade de detectar falhas silenciosas de dispositivos e a necessidade contínua de supervisão humana para decisões complexas.</span></p>
+        </aside>
+
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">O SBL constrói laboratórios autônomos a partir de fotos e descrições, gerando gêmeos digitais e código de controle para robôs sem engenharia manual prévia.</span></li><li><span class="s" data-s="k1">A arquitetura usa três agentes (Científico, Gêmeo, Segurança) para planejar, simular e validar fluxos de trabalho antes da execução física.</span></li><li><span class="s" data-s="k2">O sistema foi validado na síntese real de pontos quânticos, adaptando-se a limitações de precisão através de feedback de força e torque.</span></li><li><span class="s" data-s="k3">Limitações incluem a incapacidade de detectar falhas silenciosas de dispositivos e a necessidade contínua de supervisão humana para decisões complexas.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.23826" rel="noopener">Self-Building Labs</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.23826" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

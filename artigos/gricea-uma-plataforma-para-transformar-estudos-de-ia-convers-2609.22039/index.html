@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gricea: uma plataforma para transformar estudos de IA conversacional em artefatos reproduzíveis e reutilizáveis — arXiv em 5</title>
+<meta name="description" content="Pesquisadores da Johns Hopkins criaram uma ferramenta que representa estudos sobre chatbots como configurações executáveis — e descobriram que 96% dos papers publicados omitem informações essenciais para replicação.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Gricea: uma plataforma para transformar estudos de IA conversacional em artefatos reproduzíveis e reutilizáveis">
+<meta property="og:description" content="Pesquisadores da Johns Hopkins criaram uma ferramenta que representa estudos sobre chatbots como configurações executáveis — e descobriram que 96% dos papers publicados omitem informações essenciais para replicação.">
+<meta property="og:image" content="../../assets/papers/2609.22039/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Agentes</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2609.22039" rel="noopener">arXiv:2609.22039</a>
+    </div>
+    <h1><span class="s" data-s="t">Gricea: uma plataforma para transformar estudos de IA conversacional em artefatos reproduzíveis e reutilizáveis</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Pesquisadores da Johns Hopkins criaram uma ferramenta que representa estudos sobre chatbots como configurações executáveis — e descobriram que 96% dos papers publicados omitem informações essenciais para replicação.</span></p>
+    <p class="byline">
+      <span>Sharma et al.</span>
+      <span>9 min de leitura</span>
+<span>18/09/2026</span>    </p>
+    <div class="listen" data-article="2609.22039" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=eP2oUGtmiAo" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema da reprodutibilidade em pesquisa com IA conversacional</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Sistemas de IA conversacional — chatbots baseados em modelos de linguagem — estão se tornando infraestrutura cotidiana para busca de informação, comunicação e trabalho.</span> <span class="s" data-s="b0-p0-s1">Entender como esses sistemas afetam comportamento humano, confiança e tomada de decisão exige estudos empíricos controlados, onde pesquisadores manipulam aspectos do design (prompts, modelos, interface) e observam os efeitos nos participantes.</span></p><p><span class="s" data-s="b0-p1-s0">Mas há um problema: quando outro pesquisador tenta reproduzir ou estender um estudo publicado, frequentemente faltam peças essenciais.</span> <span class="s" data-s="b0-p1-s1">O texto do prompt exato, a configuração do modelo, o fluxo da interface, as perguntas dos questionários — tudo isso fica fragmentado em código, configurações e materiais suplementares que raramente são preservados de forma completa.</span> <span class="s" data-s="b0-p1-s2">Sem essas informações, é impossível saber se diferenças nos resultados vêm de mudanças intencionais no design ou de detalhes não documentados.</span></p><p><span class="s" data-s="b0-p2-s0">Esse gap entre relatar um estudo em um paper e preservar a informação necessária para reproduzi-lo impede a construção cumulativa de conhecimento.</span> <span class="s" data-s="b0-p2-s1">Cada novo pesquisador precisa reconstruir o experimento do zero, sem garantia de que está replicando fielmente as condições originais.</span> <span class="s" data-s="b0-p2-s2">É como tentar seguir uma receita que lista os ingredientes mas omite as quantidades e o tempo de forno.</span></p>        <h2><span class="s" data-s="b1-h">A proposta: estudos como artefatos executáveis</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Gricea é uma plataforma que representa estudos sobre IA conversacional como artefatos de pesquisa configuráveis e executáveis.</span> <span class="s" data-s="b1-p0-s1">Em vez de apenas descrever o método em texto, os pesquisadores constroem o estudo inteiro dentro da plataforma — procedimento, interface, configuração do agente, tarefas conversacionais — e esse artefato completo pode ser inspecionado, executado, compartilhado e reutilizado por outros.</span></p><p><span class="s" data-s="b1-p1-s0">A ideia central é que o estudo executável se torna parte do registro metodológico, ao lado do paper.</span> <span class="s" data-s="b1-p1-s1">Outro pesquisador pode abrir o artefato, ver exatamente como o agente foi configurado, quais prompts foram usados, como a interface funcionava, e então decidir o que manter e o que variar em um novo experimento.</span> <span class="s" data-s="b1-p1-s2">Isso reduz drasticamente o custo de reprodução e extensão, porque o ponto de partida é o próprio sistema funcionando, não uma descrição textual dele.</span></p><p><span class="s" data-s="b1-p2-s0">Os autores, da Johns Hopkins University, desenvolveram Gricea depois de uma análise formativa de papers sobre IA conversacional, identificando os elementos que variam entre estudos: modelos, prompts, retrieval-augmented generation (RAG), interface, fluxo de tarefas, atribuição de condições, timing e medidas.</span> <span class="s" data-s="b1-p2-s1">A plataforma organiza esses elementos em uma representação compartilhada que funciona tanto para pesquisadores quanto, potencialmente, para agentes de IA que possam interpretar e construir sobre estudos anteriores.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.22039/figure1.webp" alt="Visão geral do Gricea: estudos são representados como artefatos executáveis que preservam escolhas configuradas e defaults. Outros pesquisadores podem inspecionar, modificar e reimplantar, construindo conhecimento coletivo sobre uma base compartilhada." loading="lazy">
+          <figcaption>
+            Visão geral do Gricea: estudos são representados como artefatos executáveis que preservam escolhas configuradas e defaults. Outros pesquisadores podem inspecionar, modificar e reimplantar, construindo conhecimento coletivo sobre uma base compartilhada.
+            <span class="source">Figura 1 do paper · Sharma et al., arXiv:2609.22039</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Study Flow e Task Flow: a estrutura metodológica</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Gricea organiza um estudo em duas camadas conectadas: Study Flow e Task Flow.</span> <span class="s" data-s="b3-p0-s1">O Study Flow define o procedimento experimental completo — a sequência de etapas que um participante atravessa, incluindo consentimento, instruções, tarefas conversacionais, questionários e debriefing.</span> <span class="s" data-s="b3-p0-s2">É o esqueleto do experimento, análogo ao que você descreveria na seção de método de um paper.</span></p><p><span class="s" data-s="b3-p1-s0">Cada tarefa conversacional dentro do Study Flow é definida por um Task Flow independente, que especifica o pipeline do agente: qual modelo de linguagem, quais prompts de sistema, se há RAG (recuperação de informação para fundamentar respostas), quais ações o participante pode realizar, modalidade (texto ou voz), e como a conversa progride.</span> <span class="s" data-s="b3-p1-s1">Essa separação é metodologicamente importante: permite que você varie aspectos da tarefa (trocar o modelo, mudar o prompt) sem reconstruir todo o procedimento do estudo.</span></p><p><span class="s" data-s="b3-p2-s0">A plataforma suporta configurações complexas: múltiplos agentes em uma mesma conversa, interfaces customizadas (chat com código editável, interação por voz durante uma tarefa de direção simulada, surveys integrados), atribuição de condições entre participantes, e versionamento de configurações.</span> <span class="s" data-s="b3-p2-s1">Tudo isso fica preservado no artefato, incluindo não apenas as escolhas explícitas do pesquisador mas também os defaults que não foram alterados — porque esses defaults também fazem parte das condições experimentais.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.22039/figure2.webp" alt="Interface de autoria do Gricea: à esquerda, montagem do procedimento de estudo em múltiplas etapas; à direita, configuração independente de pipelines de agentes e scaffolds de interface para tarefas conversacionais específicas." loading="lazy">
+          <figcaption>
+            Interface de autoria do Gricea: à esquerda, montagem do procedimento de estudo em múltiplas etapas; à direita, configuração independente de pipelines de agentes e scaffolds de interface para tarefas conversacionais específicas.
+            <span class="source">Figura 2 do paper · Sharma et al., arXiv:2609.22039</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Replicando papers publicados: o teste de expressividade</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Para avaliar se Gricea consegue representar estudos reais além daqueles usados para informar seu design, os autores tentaram replicar todos os 29 papers com estudos empíricos publicados no CUI 2026 (Conference on Conversational User Interfaces).</span> <span class="s" data-s="b5-p0-s1">A pergunta era: a plataforma fornece os recursos necessários para implementar esses designs publicados?</span></p><p><span class="s" data-s="b5-p1-s0">Resultado: 27 dos 29 estudos foram replicados, sendo 10 completamente (configuração completa do estudo) e 17 parcialmente (porções conversacionais, quando materiais externos ou hardware específico impediam replicação total).</span> <span class="s" data-s="b5-p1-s1">Isso demonstra que Gricea suporta uma ampla gama de designs: manipulações de prompt, comparações de modelos, conversas de role-play, avaliações com mídia fixa, sessões repetidas, tarefas de fala versus digitação.</span></p><p><span class="s" data-s="b5-p2-s0">Mas o achado mais revelador veio das lacunas de informação.</span> <span class="s" data-s="b5-p2-s1">Em 28 dos 29 papers — 96% —, os autores encontraram informações incompletas ou materiais indisponíveis que impediriam uma replicação fiel.</span> <span class="s" data-s="b5-p2-s2">Textos de questionários, prompts exatos do agente, inputs de grounding (a informação usada para fundamentar as respostas), materiais de estímulo: tudo isso estava frequentemente ausente ou descrito de forma vaga, mesmo em papers que passaram por peer review.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b6-t">96% dos papers omitem informações essenciais</span></h3>
+          <p><span class="s" data-s="b6-c-s0">Dos 29 estudos do CUI 2026, apenas um tinha informação completa para replicação fiel.</span> <span class="s" data-s="b6-c-s1">Os demais omitiam prompts, questionários, materiais de estímulo ou configurações de grounding — detalhes que mudam fundamentalmente a experiência do participante e os resultados.</span> <span class="s" data-s="b6-c-s2">Isso não é falha dos autores individuais, mas evidência de que o formato atual de publicação não preserva o que é necessário para reprodução.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b7-h">Teste de usabilidade: pesquisadores construindo seus próprios estudos</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Além da replicação, os autores conduziram um estudo de usabilidade onde pesquisadores e praticantes de IA, com backgrounds diversos, usaram Gricea para implementar suas próprias questões de pesquisa.</span> <span class="s" data-s="b7-p0-s1">Cada participante recebeu treinamento, depois teve tempo para construir um estudo endereçando uma questão que eles mesmos definiram.</span></p><p><span class="s" data-s="b7-p1-s0">Os participantes implementaram uma variedade impressionante de designs: comparações de modelos para tarefas de raciocínio, estudos sobre viés em recomendações de carreira, efeitos de personalidade do agente em persuasão, impacto de hedging linguístico (expressões de incerteza) em confiança, agentes para suporte a saúde mental, sistemas de tutoria, e muito mais.</span> <span class="s" data-s="b7-p1-s1">Essa diversidade demonstra a expressividade da plataforma — ela não força um único tipo de estudo, mas acomoda diferentes procedimentos, interfaces, modelos e medidas.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.22039/figure3.webp" alt="Interfaces configuráveis no Gricea: chat com surveys integrados (superior esquerdo), interação por voz durante tarefa de direção (superior direito), codificação conversacional com workspace editável (inferior esquerdo), e participante interagindo com dois agentes conversacionais." loading="lazy">
+          <figcaption>
+            Interfaces configuráveis no Gricea: chat com surveys integrados (superior esquerdo), interação por voz durante tarefa de direção (superior direito), codificação conversacional com workspace editável (inferior esquerdo), e participante interagindo com dois agentes conversacionais.
+            <span class="source">Figura 3 do paper · Sharma et al., arXiv:2609.22039</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">O que os usuários valorizaram e onde travaram</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Os participantes do estudo de usabilidade destacaram recursos que facilitam não apenas a autoria individual, mas a construção sobre trabalho anterior: versionamento (para rastrear mudanças), inspectabilidade (ver exatamente como outro estudo foi configurado), templates (pontos de partida para designs comuns), e links compartilháveis.</span> <span class="s" data-s="b9-p0-s1">Esses recursos estendem o valor da plataforma além da conveniência individual — eles tornam o método mais fácil de auditar e interpretar.</span></p><p><span class="s" data-s="b9-p1-s0">Mas também houve fricções.</span> <span class="s" data-s="b9-p1-s1">Alguns participantes tiveram dificuldade com a distinção conceitual entre Study Flow e Task Flow, especialmente ao tentar passar dados entre etapas.</span> <span class="s" data-s="b9-p1-s2">Outros queriam mais controle sobre o comportamento do agente (como forçar certos tipos de resposta em momentos específicos) ou sobre a lógica de ramificação do procedimento (condições mais complexas para determinar qual etapa vem a seguir).</span></p><p><span class="s" data-s="b9-p2-s0">A interface de configuração de prompts e RAG, embora poderosa, exigiu curva de aprendizado.</span> <span class="s" data-s="b9-p2-s1">Participantes sem experiência técnica conseguiram construir estudos válidos, mas levaram mais tempo e precisaram de mais suporte.</span> <span class="s" data-s="b9-p2-s2">Isso aponta para uma tensão de design: quanto mais controle você oferece, mais complexa a interface fica.</span> <span class="s" data-s="b9-p2-s3">Os autores reconhecem que equilibrar expressividade e usabilidade permanece um desafio.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.22039/table2.webp" alt="Questões de pesquisa implementadas por participantes como estudos válidos e executáveis no Gricea, ilustrando a diversidade de designs expressáveis através da representação compartilhada: desde viés em recomendações até suporte a saúde mental." loading="lazy">
+          <figcaption>
+            Questões de pesquisa implementadas por participantes como estudos válidos e executáveis no Gricea, ilustrando a diversidade de designs expressáveis através da representação compartilhada: desde viés em recomendações até suporte a saúde mental.
+            <span class="source">Tabela 2 do paper · Sharma et al., arXiv:2609.22039</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b11-h">Por que questões relacionadas exigem configurações inspecionáveis</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Um insight importante dos autores é que estudos endereçando questões de pesquisa relacionadas frequentemente implementam condições experimentais substancialmente diferentes.</span> <span class="s" data-s="b11-p0-s1">Por exemplo, dois estudos sobre incerteza e confiança: um comparou modelos e prompts durante conversas de planejamento de viagem; outro manipulou hedging linguístico e friction de decisão em conselhos financeiros com alocação explícita de recursos.</span></p><p><span class="s" data-s="b11-p1-s0">Além do modelo subjacente, esses estudos diferem em atribuição de condições, progressão conversacional, ações disponíveis e operacionalização de confiança.</span> <span class="s" data-s="b11-p1-s1">Sem preservar as configurações em uma representação compartilhada, é difícil para pesquisadores subsequentes identificar quais partes manter e quais variar ao investigar uma hipótese relacionada.</span></p><p><span class="s" data-s="b11-p2-s0">O mesmo vale para estudos sobre contato conversacional com outgroups (grupos externos).</span> <span class="s" data-s="b11-p2-s1">Trabalhos anteriores compararam diálogo individual com um chatbot expressando perspectiva vegana versus ensaio estático, e diálogo em grupo mediado por facilitador com agente fundamentado em discussões de membros do outgroup versus documento com esse material.</span> <span class="s" data-s="b11-p2-s2">Ambos investigam consequências de exposição interativa a perspectiva de outgroup, mas diferem em quem participa, de quem é a perspectiva, como mensagens são compostas, e como mudança de atitude é medida.</span> <span class="s" data-s="b11-p2-s3">Preservar configurações em artefato compartilhado permite comparar operacionalizações e desenhar estudos subsequentes que retenham ou variem aspectos específicos.</span></p>        <h2><span class="s" data-s="b12-h">Limitações e o que fica em aberto</span></h2>
+<p><span class="s" data-s="b12-p0-s0">Gricea não resolve todos os problemas de reprodutibilidade.</span> <span class="s" data-s="b12-p0-s1">A plataforma não pode preservar modelos de linguagem que mudam ao longo do tempo (quando você usa APIs comerciais, o modelo por trás do endpoint pode ser atualizado).</span> <span class="s" data-s="b12-p0-s2">Ela também não captura contexto social ou organizacional que pode afetar como participantes interpretam tarefas — elementos que vão além da configuração técnica.</span></p><p><span class="s" data-s="b12-p1-s0">O estudo de replicação focou em papers de uma única conferência (CUI 2026), e os autores reconhecem que essa amostra pode não representar toda a diversidade de pesquisa em IA conversacional.</span> <span class="s" data-s="b12-p1-s1">Estudos que dependem de hardware específico (robôs incorporados, realidade virtual) ou de sistemas externos complexos (plataformas comerciais com APIs proprietárias) ficam fora do escopo atual da plataforma.</span></p><p><span class="s" data-s="b12-p2-s0">A usabilidade para pesquisadores sem background técnico, embora demonstrada, ainda exige investimento de tempo.</span> <span class="s" data-s="b12-p2-s1">A curva de aprendizado pode ser uma barreira, especialmente para configurações mais complexas.</span> <span class="s" data-s="b12-p2-s2">E a questão de como incentivar a comunidade de pesquisa a adotar uma plataforma compartilhada — mudando práticas estabelecidas de publicação e compartilhamento — permanece em aberto.</span> <span class="s" data-s="b12-p2-s3">Tecnologia sozinha não muda cultura acadêmica.</span></p><p><span class="s" data-s="b12-p3-s0">Finalmente, Gricea representa um ponto específico no espaço de design de ferramentas para ciência aberta.</span> <span class="s" data-s="b12-p3-s1">Outras abordagens — como notebooks computacionais, containers Docker, ou protocolos de pré-registro — endereçam aspectos diferentes de reprodutibilidade.</span> <span class="s" data-s="b12-p3-s2">A questão não é qual ferramenta é melhor, mas como diferentes ferramentas podem se complementar para tornar pesquisa mais transparente e cumulativa.</span></p>        <h2><span class="s" data-s="b13-h">O que isso significa para pesquisa em IA conversacional</span></h2>
+<p><span class="s" data-s="b13-p0-s0">Gricea propõe uma mudança de prática: estudos sobre IA conversacional deveriam ser preservados como artefatos executáveis, não apenas descritos em texto.</span> <span class="s" data-s="b13-p0-s1">Isso não substitui o paper — a narrativa, a justificativa teórica, a interpretação dos resultados ainda precisam de prosa.</span> <span class="s" data-s="b13-p0-s2">Mas o artefato executável complementa o paper, preservando o que o texto não consegue capturar: a experiência exata do participante, a configuração precisa do sistema, os detalhes que fazem diferença para replicação.</span></p><p><span class="s" data-s="b13-p1-s0">A plataforma reduz o custo de construir estudos customizados, integrando procedimento, interface, configuração de agente e coleta de dados em um único ambiente.</span> <span class="s" data-s="b13-p1-s1">Isso pode democratizar quem conduz pesquisa em IA conversacional, reduzindo a barreira de expertise em engenharia.</span> <span class="s" data-s="b13-p1-s2">Mas também cria uma base compartilhada para construção cumulativa de conhecimento: estudos podem literalmente construir sobre estudos anteriores, variando aspectos específicos enquanto mantêm o resto constante.</span></p><p><span class="s" data-s="b13-p2-s0">Os números da replicação são um alerta: se 96% dos papers publicados omitem informações essenciais, o problema não é de autores individuais, mas do sistema de publicação.</span> <span class="s" data-s="b13-p2-s1">Gricea oferece uma solução técnica — uma forma de preservar configurações — mas a adoção depende de mudanças em incentivos, normas de revisão por pares, e expectativas de transparência.</span> <span class="s" data-s="b13-p2-s2">A ferramenta existe; resta ver se a comunidade vai usá-la.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Gricea representa estudos sobre chatbots como artefatos executáveis que preservam configuração completa (prompts, modelos, interface, fluxo), permitindo inspeção e reutilização por outros pesquisadores.</span></li><li><span class="s" data-s="k1">Replicação de 29 papers do CUI 2026 mostrou que 96% omitem informações essenciais (questionários, prompts exatos, materiais) que impedem reprodução fiel, mesmo após peer review.</span></li><li><span class="s" data-s="k2">Pesquisadores de backgrounds diversos construíram estudos válidos na plataforma, desde viés em recomendações até suporte a saúde mental, demonstrando expressividade do sistema.</span></li><li><span class="s" data-s="k3">A plataforma não resolve tudo: modelos que mudam, contexto social e hardware específico ficam fora do escopo, e adoção depende de mudança em práticas acadêmicas estabelecidas.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2609.22039" rel="noopener">Gricea: An Open Science Platform for Conversational AI Research</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2609.22039" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

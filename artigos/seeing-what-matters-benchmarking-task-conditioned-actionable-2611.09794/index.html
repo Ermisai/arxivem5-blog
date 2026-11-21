@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Seeing What Matters: Benchmarking Task-Conditioned Actionable Spatial Belief for Manipulation — arXiv em 5</title>
+<meta name="description" content="Um benchmark que avalia se robôs e VLMs selecionam as visões certas para executar comandos específicos, revelando que modelos atuais falham em vincular linguagem a evidência espacial funcional.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Seeing What Matters: Benchmarking Task-Conditioned Actionable Spatial Belief for Manipulation">
+<meta property="og:description" content="Um benchmark que avalia se robôs e VLMs selecionam as visões certas para executar comandos específicos, revelando que modelos atuais falham em vincular linguagem a evidência espacial funcional.">
+<meta property="og:image" content="../../assets/papers/2611.09794/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Robótica</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.09794" rel="noopener">arXiv:2611.09794</a>
+    </div>
+    <h1><span class="s" data-s="t">Seeing What Matters: Benchmarking Task-Conditioned Actionable Spatial Belief for Manipulation</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um benchmark que avalia se robôs e VLMs selecionam as visões certas para executar comandos específicos, revelando que modelos atuais falham em vincular linguagem a evidência espacial funcional.</span></p>
+    <p class="byline">
+      <span>Jian et al.</span>
+      <span>9 min de leitura</span>
+<span>06/11/2026</span>    </p>
+    <div class="listen" data-article="2611.09794" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=92ozNH6BIKo" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Crença Espacial Genérica</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Em robótica de manipulação, existe uma distinção crítica entre descrever uma cena e obter evidência para executar uma ação.</span> <span class="s" data-s="b0-p0-s1">Benchmarks de raciocínio espacial tradicional avaliam se um modelo pode descrever um ambiente, mas isso não garante que o agente adquiriu a informação necessária para tornar um comando executável.</span> <span class="s" data-s="b0-p0-s2">Uma visão que é informativa para uma tarefa pode ser inútil para outra, mesmo na mesma estação de trabalho.</span></p><p><span class="s" data-s="b0-p1-s0">Considere uma estação de café.</span> <span class="s" data-s="b0-p1-s1">Para tamper (comprimir o pó), o robô precisa observar a cesta do portafilter, a superfície do puck e o alinhamento do tamper.</span> <span class="s" data-s="b0-p1-s2">Para colocar um copo, ele precisa verificar o alinhamento entre copo e bico, suporte e folga.</span> <span class="s" data-s="b0-p1-s3">Para moer, precisa ver o funil, o canal de saída e os controles relevantes.</span> <span class="s" data-s="b0-p1-s4">O espaço físico é inalterado, mas a evidência espacial necessária muda radicalmente com o comando.</span></p><p><span class="s" data-s="b0-p2-s0">Trabalhos recentes expandiram o raciocínio espacial de perguntas passivas para construção ativa de crença e interação corporificada.</span> <span class="s" data-s="b0-p2-s1">Projetos como Theory of Space estudam se agentes podem adquirir, manter e revisar crenças espaciais através da exploração.</span> <span class="s" data-s="b0-p2-s2">ESI-Bench avalia inteligência espacial através de loops de percepção-ação.</span> <span class="s" data-s="b0-p2-s3">No entanto, essas abordagens muitas vezes medem a precisão da resposta espacial ou a qualidade da representação global, sem garantir que a visão selecionada expõe a evidência funcional necessária para a próxima ação.</span></p><p><span class="s" data-s="b0-p3-s0">O sucesso final da manipulação, por si só, não revela se o agente selecionou a evidência correta, se usou atalhos ou se foi resgatado pelo controlador.</span> <span class="s" data-s="b0-p3-s1">Uma crença geometricamente precisa pode conter muitos fatos enquanto omite a única relação que torna a próxima ação segura e executável.</span> <span class="s" data-s="b0-p3-s2">É necessário um controle rigoroso que avalie se a visão selecionada expõe a evidência necessária para uma habilidade compartilhada e scriptada.</span></p>        <h2><span class="s" data-s="b1-h">Seeing What Matters: O Benchmark</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Os autores apresentam o &#39;Seeing What Matters&#39;, um benchmark para crença espacial acionável condicionada à tarefa em manipulação simulada de mesa.</span> <span class="s" data-s="b1-p0-s1">O benchmark opera em três domínios: estação de café, gavetas/armários e micro-ondas/aparelhos.</span> <span class="s" data-s="b1-p0-s2">Ele fornece 860 casos de avaliação congelados.</span> <span class="s" data-s="b1-p0-s3">Ao expandir através de métodos, orçamentos e repetições de inferência, gera mais de 115.000 episódios do avaliador sob dois protocolos: acionabilidade em loop fechado e generalização funcional fora da distribuição (OOD) para o mesmo objeto.</span></p><p><span class="s" data-s="b1-p1-s0">Cada caso emparelha um conjunto de visões RGB candidatas com um comando de manipulação, habilidades scriptadas compartilhadas e pós-condições ocultas.</span> <span class="s" data-s="b1-p1-s1">Isso permite que o benchmark meça diretamente se uma política de seleção de visões adquire as observações que o comando realmente precisa.</span> <span class="s" data-s="b1-p1-s2">A avaliação não se baseia na completude da cena, mas na aquisição da evidência que o comando atual exige.</span></p><p><span class="s" data-s="b1-p2-s0">O benchmark também fornece um pipeline de referência diagnóstico que mantém um estado de crença espacial-funcional e classifica as visões pela evidência faltante.</span> <span class="s" data-s="b1-p2-s1">Este pipeline atua como uma âncora de calibração fixa, permitindo comparar métodos que não têm acesso a privilégios de avaliação, mas ainda assim precisam aprender a vincular comando a evidência.</span> <span class="s" data-s="b1-p2-s2">A ideia central é que a crença espacial para manipulação deve ser avaliada não pela completude do nível da cena, mas por se ela adquire a evidência que o comando atual requer.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.09794/figure3.webp" alt="Fluxo do sistema: o comando e o livro de registro identificam a evidência faltante, levando à seleção de visão e atualização da crença. O processo é guiado pela necessidade funcional do comando, não apenas pela exploração visual." loading="lazy">
+          <figcaption>
+            Fluxo do sistema: o comando e o livro de registro identificam a evidência faltante, levando à seleção de visão e atualização da crença. O processo é guiado pela necessidade funcional do comando, não apenas pela exploração visual.
+            <span class="source">Figura 3 do paper · Jian et al., arXiv:2611.09794</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Metodologia: Do Comando à Evidência</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O cerne do benchmark é a distinção entre crença espacial agnóstica à tarefa e crença acionável condicionada ao comando.</span> <span class="s" data-s="b3-p0-s1">Na abordagem agnóstica, o agente explora o ambiente para construir um mapa ou representação geral, sem saber qual ação virá em seguida.</span> <span class="s" data-s="b3-p0-s2">Na abordagem condicionada, o comando define quais predicados espaciais são relevantes.</span> <span class="s" data-s="b3-p0-s3">O sistema mantém um &#39;livro de registro&#39; (ledger) que rastreia quais evidências funcionais foram adquiridas e quais ainda faltam para satisfazer as pré-condições da habilidade scriptada.</span></p><p><span class="s" data-s="b3-p1-s0">O pipeline de referência utiliza metadados de cobertura funcional para classificar as visões candidatas.</span> <span class="s" data-s="b3-p1-s1">Ele não apenas verifica se o objeto está presente, mas se a parte funcional específica (como o alinhamento do bico do café com o copo) está visível e clara.</span> <span class="s" data-s="b3-p1-s2">Quando o agente seleciona uma visão, ele atualiza o registro.</span> <span class="s" data-s="b3-p1-s3">Se a evidência ainda estiver faltante, ele pode realizar uma revisão de crença induzida pela ação (AIBR) para adquirir uma nova visão, mas isso consome orçamento de visão.</span></p><p><span class="s" data-s="b3-p2-s0">A avaliação é feita em um simulador realista.</span> <span class="s" data-s="b3-p2-s1">As pós-condições (o estado final desejado após a ação) são ocultas durante a seleção de visão, mas usadas pelo avaliador para determinar o sucesso.</span> <span class="s" data-s="b3-p2-s2">Isso força o agente a depender exclusivamente da qualidade da evidência visual adquirida durante a fase de percepção.</span> <span class="s" data-s="b3-p2-s3">Se o agente escolher uma visão que não revela o alinhamento necessário, a ação falhará, mesmo que o robô tenha &#39;visto&#39; o copo e o bico de forma genérica.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.09794/figure4.webp" alt="Exemplos visuais de como comandos diferentes exigem evidências distintas. A colocação de copo requer alinhamento copo-bico, enquanto moer requer a cadeia funil-canal-cesta. A correspondência errada motiva a revisão local da crença." loading="lazy">
+          <figcaption>
+            Exemplos visuais de como comandos diferentes exigem evidências distintas. A colocação de copo requer alinhamento copo-bico, enquanto moer requer a cadeia funil-canal-cesta. A correspondência errada motiva a revisão local da crença.
+            <span class="source">Figura 4 do paper · Jian et al., arXiv:2611.09794</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Resultados: Acionabilidade em Loop Fechado</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os resultados no protocolo de acionabilidade em loop fechado (C.1, com orçamento de H=5 visões) mostram que a seleção de visão condicionada à tarefa transforma a crença espacial em ação executável.</span> <span class="s" data-s="b5-p0-s1">O seletor de referência diagnóstico, com revisão de crença induzida pela ação, atingiu 98,8% de sucesso médio.</span> <span class="s" data-s="b5-p0-s2">Isso melhora o método &#39;History Active&#39; em 45,9 pontos e o &#39;Target Ledger&#39; em 86,4 pontos.</span></p><p><span class="s" data-s="b5-p1-s0">Essa melhoria não é explicada apenas pela memória.</span> <span class="s" data-s="b5-p1-s1">O livro de registro deve expor qual predicado faltante deve determinar a próxima visão.</span> <span class="s" data-s="b5-p1-s2">As curvas de orçamento confirmam que a vantagem do seletor de referência persiste em vários níveis de orçamento (H=1, 3, 5, 8).</span> <span class="s" data-s="b5-p1-s3">No entanto, os resultados de teto não significam que o benchmark foi resolvido em todos os regimes de observação.</span></p><p><span class="s" data-s="b5-p2-s0">Um teste de estresse com orçamento rígido de H=1 (apenas uma visão inicial) revela dificuldades residuais.</span> <span class="s" data-s="b5-p2-s1">Mesmo com a permissão de adquirir observações adicionais após um erro, o método de referência cai para 19,0% no domínio C.1 e 58,6% no C.2.</span> <span class="s" data-s="b5-p2-s2">Isso expõe a dificuldade real que fica oculta pelos ajustes principais de H=5 e H=3, mostrando que a seleção inicial crítica é o ponto de falha mais sensível.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.09794/table1.webp" alt="Resultados principais nos dois protocolos de avaliação. C.1 mostra acionabilidade em loop fechado; C.2 mostra generalização funcional OOD. O seletor de referência (VBM+AIBR) domina, enquanto métodos genéricos falham." loading="lazy">
+          <figcaption>
+            Resultados principais nos dois protocolos de avaliação. C.1 mostra acionabilidade em loop fechado; C.2 mostra generalização funcional OOD. O seletor de referência (VBM+AIBR) domina, enquanto métodos genéricos falham.
+            <span class="source">Tabela 1 do paper · Jian et al., arXiv:2611.09794</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Generalização Funcional OOD</span></h2>
+<p><span class="s" data-s="b7-p0-s0">No protocolo de generalização funcional fora da distribuição (OOD) para o mesmo objeto (C.2), o desafio é maior.</span> <span class="s" data-s="b7-p0-s1">O agente pode observar a máquina de café, mas falhar se observar a parte funcional errada para o comando.</span> <span class="s" data-s="b7-p0-s2">O seletor de referência com reparo opcional atingiu 98,9% de sucesso e 70,0% de seletividade de evidência funcional.</span></p><p><span class="s" data-s="b7-p1-s0">Políticas agnósticas à categoria ou atalhos de categoria falharam, apesar de verem partes plausíveis dos objetos.</span> <span class="s" data-s="b7-p1-s1">Por exemplo, a política &#39;Category Shortcut&#39; teve 0% de sucesso em tarefas como Tamp e Insert.</span> <span class="s" data-s="b7-p1-s2">A política &#39;Spatial Only&#39; também teve 0%.</span> <span class="s" data-s="b7-p1-s3">Isso demonstra que a presença de objetos no campo de visão não é suficiente; é necessário vincular o comando às partes funcionais específicas.</span></p><p><span class="s" data-s="b7-p2-s0">A visualização de evidência funcional mostra a dissociação: a observação da evidência funcional alvo acompanha o sucesso, enquanto a observação da evidência de comando errado não.</span> <span class="s" data-s="b7-p2-s1">Isso confirma que o sucesso depende da precisão da seleção de evidência, não apenas da cobertura visual geral.</span> <span class="s" data-s="b7-p2-s2">O benchmark prova que a crença espacial deve ser funcionalmente vinculada ao comando para ser útil.</span></p>        <h2><span class="s" data-s="b8-h">Teste de Estresse com Modelos de Fundação</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Os autores realizaram um teste de estresse rigoroso com sete modelos de linguagem e visão (VLMs) de última geração: Grok 4.3, Grok 4.6, Amazon Nova Pro, Qwen3-VL-8B, Gemma 3 27B, Llama 4 Maverick e Sonar Pro.</span> <span class="s" data-s="b8-p0-s1">O protocolo foi estrito: os modelos precisavam processar 1.500 casos, retornar JSON válido, selecionar exatamente três visões únicas de um conjunto de doze e manter a ordem dos casos.</span> <span class="s" data-s="b8-p0-s2">Apenas sete modelos passaram pelo filtro.</span></p><p><span class="s" data-s="b8-p1-s0">Os resultados foram decepcionantes para o estado da arte.</span> <span class="s" data-s="b8-p1-s1">O sucesso pós-condição dos VLMs variou de 26,0% a 42,9%.</span> <span class="s" data-s="b8-p1-s2">Grok 4.3 liderou com 42,9%, seguido por Grok 4.6 com 42,5%.</span> <span class="s" data-s="b8-p1-s3">Todos os sete modelos clusterizaram dentro de uma banda de 16,9 pontos, sugerindo uma falha sistemática na seleção de visão condicionada à tarefa, não uma fraqueza isolada de um fornecedor.</span></p><p><span class="s" data-s="b8-p2-s0">O modelo mais forte ficou 55,9 pontos abaixo do seletor de referência diagnóstico no ajuste principal.</span> <span class="s" data-s="b8-p2-s1">Isso indica que o ranking baseado em prompts atuais não recupera as regras de vínculo comando-evidência do benchmark.</span> <span class="s" data-s="b8-p2-s2">A lacuna não é uma comparação controlada de arquitetura, mas mostra que a classificação por prompt não é suficiente para robótica de manipulação precisa.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.09794/figure10.webp" alt="Teste de estresse de orçamento de uma única visão. O gráfico revela a dificuldade residual que fica oculta pelos ajustes principais de H=5 e H=3, mostrando onde os métodos falham quando não podem corrigir erros iniciais." loading="lazy">
+          <figcaption>
+            Teste de estresse de orçamento de uma única visão. O gráfico revela a dificuldade residual que fica oculta pelos ajustes principais de H=5 e H=3, mostrando onde os métodos falham quando não podem corrigir erros iniciais.
+            <span class="source">Figura 10 do paper · Jian et al., arXiv:2611.09794</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">Análise de Padrões e Limitações</span></h2>
+<p><span class="s" data-s="b10-p0-s0">O padrão em nível de tarefa é consistente entre os modelos: tarefas como Tamp e Place, que envolvem partes visualmente salientes e grandes (cesta do portafilter, alinhamento copo-bico), permitem pontuações quase perfeitas de vários VLMs.</span> <span class="s" data-s="b10-p0-s1">Já tarefas como Insert, Serve e Grind exigem observar cadeias funcionais menores ou parcialmente ocultas (caminho funil-canal, folga da bandeja de gotejamento, contato moedor-receptor), onde os VLMs falham em priorizar.</span></p><p><span class="s" data-s="b10-p1-s0">Isso sugere que a lacuna é impulsionada pela incapacidade dos modelos de vincular o comando à cadeia específica de evidência de parte funcional, e não por uma falha generalizada em perceber a cena.</span> <span class="s" data-s="b10-p1-s1">Os modelos podem ver o objeto, mas não entendem quais detalhes visuais são logicamente necessários para a ação subsequente.</span></p><p><span class="s" data-s="b10-p2-s0">O benchmark também testa a robustez do pipeline de referência.</span> <span class="s" data-s="b10-p2-s1">Substituir os metadados de cobertura do pipeline por escore derivados congelados de RGB preserva 98,5%/98,9% de sucesso, mas embaralhar os escores visuais colapsa o sucesso para 15%/11%.</span> <span class="s" data-s="b10-p2-s2">Isso confirma que o resultado depende do conteúdo da imagem e da lógica de seleção, não de artefatos de avaliação.</span></p><p><span class="s" data-s="b10-p3-s0">Limitações incluem o foco em ambientes simulados e domésticos controlados.</span> <span class="s" data-s="b10-p3-s1">A generalização para cenários não estruturados ou dinâmicos não foi avaliada.</span> <span class="s" data-s="b10-p3-s2">Além disso, o benchmark avalia políticas de seleção de visão, não a execução completa da manipulação, embora use habilidades scriptadas para isolar o problema de percepção.</span> <span class="s" data-s="b10-p3-s3">A queda drástica no teste de H=1 mostra que a robustez inicial é frágil.</span></p>        <h2><span class="s" data-s="b11-h">Conclusão</span></h2>
+<p><span class="s" data-s="b11-p0-s0">O &#39;Seeing What Matters&#39; estabelece que a crença espacial para manipulação deve ser avaliada pela sua capacidade de adquirir a evidência que o comando atual requer, não pela completude da cena.</span> <span class="s" data-s="b11-p0-s1">Benchmarks passivos falham em capturar essa nuance, levando a uma superestimação da capacidade de agentes baseados em VLMs para robótica.</span></p><p><span class="s" data-s="b11-p1-s0">A lacuna de 55,9 pontos entre os melhores VLMs e o pipeline de referência diagnóstico é significativa.</span> <span class="s" data-s="b11-p1-s1">Ela sugere que, para avançar na robótica corporificada, precisamos de métodos que vinculem explicitamente comandos a evidências funcionais espaciais, indo além da percepção genérica.</span> <span class="s" data-s="b11-p1-s2">O benchmark fornece uma base sólida para medir esse progresso futuro.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b12-t">A Lacuna dos VLMs</span></h3>
+          <p><span class="s" data-s="b12-c-s0">Os melhores modelos de linguagem e visão atuais (Grok, Llama, etc.) atingem apenas 42,9% de sucesso no benchmark.</span> <span class="s" data-s="b12-c-s1">Isso não é uma falha de percepção, mas de vinculação lógica: eles veem o objeto, mas não sabem quais detalhes visuais são necessários para a ação específica.</span> <span class="s" data-s="b12-c-s2">A crença espacial precisa ser funcionalmente condicionada ao comando.</span></p>
+        </aside>
+        <aside class="callout">
+          <h3><span class="s" data-s="b13-t">Orçamento de Visão</span></h3>
+          <p><span class="s" data-s="b13-c-s0">O teste de estresse com apenas uma visão inicial (H=1) revela que o sucesso cai para 19-58%, mesmo para o melhor método.</span> <span class="s" data-s="b13-c-s1">Isso mostra que a seleção inicial crítica é o ponto mais frágil.</span> <span class="s" data-s="b13-c-s2">A capacidade de corrigir erros depois (revisão de crença) ajuda, mas não salva a falta de uma visão informativa inicial.</span></p>
+        </aside>
+
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">O benchmark &#39;Seeing What Matters&#39; avalia se agentes selecionam visões que fornecem evidência funcional específica para um comando, não apenas uma descrição genérica da cena.</span></li><li><span class="s" data-s="k1">Modelos VLMs de ponta falham sistematicamente (26-43% de sucesso) ao vincular comandos a evidências espaciais funcionais, mesmo percebendo os objetos corretamente.</span></li><li><span class="s" data-s="k2">O sucesso na manipulação depende de observar partes funcionais específicas (ex: alinhamento bico-copo), não apenas da presença do objeto no campo de visão.</span></li><li><span class="s" data-s="k3">O teste de estresse com orçamento de visão igual a 1 expõe a fragilidade da seleção inicial, mostrando que a robustez depende criticamente da primeira escolha.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.09794" rel="noopener">Seeing What Matters: Benchmarking Task-Conditioned Actionable Spatial Belief for Manipulation</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.09794" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

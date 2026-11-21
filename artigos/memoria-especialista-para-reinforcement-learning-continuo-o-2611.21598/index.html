@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Memória Especialista para Reinforcement Learning Contínuo: O Agente ENA — arXiv em 5</title>
+<meta name="description" content="O paper propõe um agente de aprendizado por reforço contínuo que usa busca evolutiva, detecção de regimes físicos e reuso bayesiano de políticas para mitigar o esquecimento catastrófico sem calcular gradientes.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Memória Especialista para Reinforcement Learning Contínuo: O Agente ENA">
+<meta property="og:description" content="O paper propõe um agente de aprendizado por reforço contínuo que usa busca evolutiva, detecção de regimes físicos e reuso bayesiano de políticas para mitigar o esquecimento catastrófico sem calcular gradientes.">
+<meta property="og:image" content="../../assets/papers/2611.21598/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Aprendizado por reforço</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.21598" rel="noopener">arXiv:2611.21598</a>
+    </div>
+    <h1><span class="s" data-s="t">Memória Especialista para Reinforcement Learning Contínuo: O Agente ENA</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">O paper propõe um agente de aprendizado por reforço contínuo que usa busca evolutiva, detecção de regimes físicos e reuso bayesiano de políticas para mitigar o esquecimento catastrófico sem calcular gradientes.</span></p>
+    <p class="byline">
+      <span>Zarate et al.</span>
+      <span>7 min de leitura</span>
+<span>16/11/2026</span>    </p>
+    <div class="listen" data-article="2611.21598" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=O83y5i_oqXU" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema do Esquecimento Catastrófico em RL Contínuo</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Em Aprendizado por Reforço (RL), agentes são tipicamente treinados sob a suposição de que o ambiente é estacionário.</span> <span class="s" data-s="b0-p0-s1">Quando as dinâmicas do ambiente mudam — por exemplo, alterações na física de um robô ou nas regras de um jogo —, um agente com uma única política tende a adaptar-se sobrescrevendo os parâmetros que codificavam o comportamento anterior.</span> <span class="s" data-s="b0-p0-s2">Esse fenômeno é conhecido como esquecimento catastrófico.</span> <span class="s" data-s="b0-p0-s3">Ao retornar às condições originais, o agente precisa reaprender tudo do zero.</span></p><p><span class="s" data-s="b0-p1-s0">O Aprendizado por Reforço Contínuo (Continual RL) busca agentes que se adaptem a mudanças sem perder o desempenho em dinâmicas previamente encontradas.</span> <span class="s" data-s="b0-p1-s1">Abordagens existentes protegem ou particionam os pesos de uma rede compartilhada através de regularização, replay de experiências ou cabeças específicas para tarefas.</span> <span class="s" data-s="b0-p1-s2">Outra família mantém políticas separadas para cada contexto detectado, recuperando-as quando o contexto retorna.</span></p><p><span class="s" data-s="b0-p2-s0">Os autores deste paper, Blas Eugenio Vicco Zarate e Miguel Hernán Vicco, da Universidad Nacional del Litoral (Argentina), investigam uma terceira rota: a neuroevolução.</span> <span class="s" data-s="b0-p2-s1">Diferente do gradiente descendente, a neuroevolução treina redes neurais através de mutação e seleção em uma população de candidatos.</span> <span class="s" data-s="b0-p2-s2">A questão central é se um conjunto pequeno de habilidades, geradas por busca evolutiva, pode ser transformado em uma memória reutilizável que mitigue o esquecimento quando combinado com detecção de ambiente e busca dirigida por falhas.</span></p>        <h2><span class="s" data-s="b1-h">A Arquitetura do Agente Neuroplástico Evolutivo (ENA)</span></h2>
+<p><span class="s" data-s="b1-p0-s0">O Agente Neuroplástico Evolutivo (ENA) é projetado para operar sem computar gradientes.</span> <span class="s" data-s="b1-p0-s1">Ele mantém uma população de pequenas redes neurais, chamadas de especialistas, cada uma carregando uma pontuação escalar de &#39;Confiança&#39; (Trust).</span> <span class="s" data-s="b1-p0-s2">Durante o treinamento, o ambiente é apresentado sequencialmente, mas o agente nunca recebe notificações explícitas sobre quando o ambiente muda ou qual ambiente está sendo experimentado.</span> <span class="s" data-s="b1-p0-s3">Ele observa apenas estados, ações, recompensas e finais de episódio.</span></p><p><span class="s" data-s="b1-p1-s0">O mecanismo do ENA opera em ciclos.</span> <span class="s" data-s="b1-p1-s1">Em cada episódio de treinamento, um especialista é selecionado para atuar.</span> <span class="s" data-s="b1-p1-s2">Sua recompensa total atualiza sua pontuação de Confiança.</span> <span class="s" data-s="b1-p1-s3">Em seguida, um valor chamado &#39;Plasticidade&#39; decide quanta da população será reavaliada.</span> <span class="s" data-s="b1-p1-s4">Essa Plasticidade é modulada dinamicamente pelo déficit de desempenho do especialista ativo: quanto pior o desempenho, maior o esforço de busca por novas soluções.</span></p><p><span class="s" data-s="b1-p2-s0">Políticas validadas são arquivadas em um &#39;Hall of Fame&#39;.</span> <span class="s" data-s="b1-p2-s1">O ENA possui duas habilidades principais para tornar esse arquivo útil em mudanças de ambiente: detecção de ambiente e seleção de especialistas.</span> <span class="s" data-s="b1-p2-s2">A detecção identifica transições nas dinâmicas físicas e reconhece regimes já encontrados, baseando-se estritamente nas observações não assistidas do agente.</span> <span class="s" data-s="b1-p2-s3">A seleção de especialistas decide qual especialista arquivado deve ser implantado, utilizando Reuso Bayesiano de Políticas (Bayesian Policy Reuse), que integra a evidência do detector com as recompensas episódicas observadas.</span></p>        <h2><span class="s" data-s="b2-h">Mecanismos de Detecção e Indexação</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Um dos pilares do ENA é a capacidade de indexar especialistas pelo regime físico em que foram validados.</span> <span class="s" data-s="b2-p0-s1">Isso responde à pergunta de pesquisa RQ1a: preservar políticas bem-sucedidas é suficiente?</span> <span class="s" data-s="b2-p0-s2">Os autores descobrem que não.</span> <span class="s" data-s="b2-p0-s3">O arquivamento sem indexação explícita pelo regime físico não melhora a confiabilidade e, em alguns casos, piora o desempenho.</span></p><p><span class="s" data-s="b2-p1-s0">No ambiente CartPole, a detecção de ambiente avalia a precisão preditiva sob modelos de transição de cada regime conhecido.</span> <span class="s" data-s="b2-p1-s1">Se o modelo atual não se ajusta bem aos dados recentes, o detector sinaliza uma mudança de física.</span> <span class="s" data-s="b2-p1-s2">No ambiente mais complexo HalfCheetah, o detector aplica uma perturbação estruturada (um chirp mecânico) e analisa as características da resposta mecânica para identificar o regime.</span></p><p><span class="s" data-s="b2-p2-s0">Quando uma mudança de física é confirmada, o detector inicia um novo regime, resetando as evidências do detector, as estatísticas de entrada e o histórico de recompensas.</span> <span class="s" data-s="b2-p2-s1">Isso permite que o ENA crie &#39;nichos&#39; distintos para diferentes dinâmicas.</span> <span class="s" data-s="b2-p2-s2">O arquivo de especialistas é organizado por esses nichos, permitindo que, ao retornar a um regime anterior, o sistema recupere o especialista correto através do Reuso Bayesiano de Políticas.</span></p>        <h2><span class="s" data-s="b3-h">Plasticidade e Busca Dirigida por Falhas</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O ENA introduz um mecanismo de &#39;Plasticidade&#39; que ajusta dinamicamente o esforço de busca.</span> <span class="s" data-s="b3-p0-s1">Em vez de avaliar uniformemente toda a população em todos os momentos, o agente concentra recursos computacionais quando o desempenho cai.</span> <span class="s" data-s="b3-p0-s2">Se o especialista ativo apresenta um déficit de performance, a Plasticidade aumenta, levando a uma reavaliação mais intensa de outros candidatos na população.</span></p><p><span class="s" data-s="b3-p1-s0">Essa abordagem responde à pergunta de pesquisa RQ2: a concentração dinâmica de esforço de busca durante falhas de desempenho alcança retenção competitiva enquanto reduz o custo computacional?</span> <span class="s" data-s="b3-p1-s1">A busca é &#39;dirigida por falhas&#39; no sentido de que a necessidade de explorar novas soluções é acionada pela deterioração do desempenho atual, não por um cronograma fixo.</span></p><p><span class="s" data-s="b3-p2-s0">Os especialistas na população evoluem através de mutações, cruzamentos e a introdução de novos especialistas (&#39;gladiadores&#39;).</span> <span class="s" data-s="b3-p2-s1">Os gladiadores, uma vez arquivados no Hall of Fame, nunca são substituídos, servindo como memórias estáveis de soluções anteriores.</span> <span class="s" data-s="b3-p2-s2">A seleção do especialista ativo para o próximo episódio segue uma política epsilon-greedily baseada na pontuação de Confiança, permitindo exploração ocasional de especialistas menos confiáveis.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.21598/figure2.webp" alt="Gráfico de caixa mostrando a confiabilidade de teste de cada variante do ENA no CartPole. A versão completa (ENA-Combined) apresenta a maior confiabilidade e consistência entre as 30 réplicas testadas, superando variantes sem Plasticidade, sem Hall of Fame ou sem detecção de ambiente." loading="lazy">
+          <figcaption>
+            Gráfico de caixa mostrando a confiabilidade de teste de cada variante do ENA no CartPole. A versão completa (ENA-Combined) apresenta a maior confiabilidade e consistência entre as 30 réplicas testadas, superando variantes sem Plasticidade, sem Hall of Fame ou sem detecção de ambiente.
+            <span class="source">Figura 2 do paper · Zarate et al., arXiv:2611.21598</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Avaliação no CartPole: Ablação e Retenção</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os autores avaliaram a arquitetura no ambiente não estacionário CartPole, onde a física muda sequencialmente entre cinco ambientes.</span> <span class="s" data-s="b5-p0-s1">A ablação dos componentes do ENA revela a importância de cada módulo.</span> <span class="s" data-s="b5-p0-s2">A versão completa (ENA-Combined), com Plasticidade, Hall of Fame e detecção de ambiente, alcançou uma taxa de sucesso média de 83,2% nos testes.</span></p><p><span class="s" data-s="b5-p1-s0">Sem nenhum dos módulos especializados, o ENA-NoSkill atingiu apenas 38,5% de confiabilidade.</span> <span class="s" data-s="b5-p1-s1">A adição da Plasticidade foi crucial para adquirir políticas competentes nos ambientes mais difíceis.</span> <span class="s" data-s="b5-p1-s2">No entanto, apenas a combinação de Plasticidade com o arquivamento indexado pela detecção de ambiente permitiu a retenção consistente do desempenho em todos os ambientes aprendidos.</span></p><p><span class="s" data-s="b5-p2-s0">Os resultados mostram que o arquivamento sozinho (ENA-HoF) é insuficiente e pode até reduzir a confiabilidade se não houver detecção para organizar o arquivo.</span> <span class="s" data-s="b5-p2-s1">A detecção de ambiente não apenas indexa o arquivo, mas também aumenta a capacidade do Hall of Fame, permitindo que o agente mantenha mais especialistas válidos simultaneamente.</span> <span class="s" data-s="b5-p2-s2">A retenção foi medida como a razão entre o retorno no teste final e o retorno no final da fase de treinamento; valores acima de 100% indicam que o desempenho foi mantido ou até melhorado.</span></p>        <h2><span class="s" data-s="b6-h">Desempenho no HalfCheetah e Comparação com Gradientes</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Para testar a escalabilidade para ambientes mais complexos, o ENA foi avaliado no HalfCheetah.</span> <span class="s" data-s="b6-p0-s1">Aqui, o detector de ambiente usa perturbações mecânicas para identificar regimes.</span> <span class="s" data-s="b6-p0-s2">Os resultados mostram que o ENA é capaz de adaptar-se a novos regimes e recuperar especialistas anteriores, mantendo seu retorno de fase de treinamento nos ambientes deixados para trás.</span></p><p><span class="s" data-s="b6-p1-s0">É importante notar que, embora o ENA mostre boa retenção relativa, seu retorno absoluto é significativamente menor do que o de métodos baseados em gradiente como PPO (Proximal Policy Optimization) e SAC (Soft Actor-Critic).</span> <span class="s" data-s="b6-p1-s1">No HalfCheetah, o ENA-Combined manteve, em média, 115,6% de retenção, enquanto PPO e SAC mantiveram 39,2% e 34,4%, respectivamente.</span> <span class="s" data-s="b6-p1-s2">No entanto, os retornos absolutos do ENA eram muito inferiores aos dos métodos de gradiente.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.21598/figure3.webp" alt="Confiabilidade de teste no CartPole comparando ENA com DQN, PPO e SAC sob orçamentos iguais de passos de ambiente. O ENA demonstra maior confiabilidade na recuperação de desempenho após mudanças de ambiente." loading="lazy">
+          <figcaption>
+            Confiabilidade de teste no CartPole comparando ENA com DQN, PPO e SAC sob orçamentos iguais de passos de ambiente. O ENA demonstra maior confiabilidade na recuperação de desempenho após mudanças de ambiente.
+            <span class="source">Figura 3 do paper · Zarate et al., arXiv:2611.21598</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Limitações e Custos Computacionais</span></h2>
+<p><span class="s" data-s="b8-p0-s0">O paper não estabelece superioridade do ENA sobre outros métodos de aprendizado contínuo em termos de desempenho absoluto.</span> <span class="s" data-s="b8-p0-s1">As evidências concernem à arquitetura completa e não isolam a otimização livre de gradientes como causa única da retenção.</span> <span class="s" data-s="b8-p0-s2">Além disso, o custo computacional da busca evolutiva é alto.</span> <span class="s" data-s="b8-p0-s3">A ablação mostrou que a Plasticidade aumenta o número de avaliações de candidatos, embora o aumento exato não tenha sido estatisticamente significativo em todas as métricas, podendo chegar a mais de 800.000 passos adicionais por réplica.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b9-t">Atenção: Retenção Relativa vs. Absoluta</span></h3>
+          <p><span class="s" data-s="b9-c-s0">Ao comparar ENA com PPO/SAC, observe que a &#39;retenção&#39; do ENA é alta porque seu desempenho inicial é baixo.</span> <span class="s" data-s="b9-c-s1">Ele não esquece porque nunca aprendeu muito.</span> <span class="s" data-s="b9-c-s2">O desafio real é manter alto desempenho após aprender profundamente.</span> <span class="s" data-s="b9-c-s3">O ENA mostra que é possível não esquecer, mas ainda não aprende tão rápido ou tão bem quanto métodos baseados em gradiente.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b10-h">Detecção de Ambientes Não Vistos</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Uma questão importante é como o ENA lida com ambientes nunca vistos durante o treinamento.</span> <span class="s" data-s="b10-p0-s1">No CartPole, o detector reconheceu um ambiente não visto (Neptune) como sendo similar a um já conhecido (Earth) na maioria das réplicas, permitindo uma transferência parcial de conhecimento.</span> <span class="s" data-s="b10-p0-s2">No entanto, em outros ambientes não vistos (Brown-dwarf), o detector falhou em reconhecer similaridades, e o agente teve que aprender quase do zero, embora ainda assim melhor do que se não tivesse nenhuma memória.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.21598/figure5.webp" alt="Teste congelado no CartPole mostrando o retorno médio por episódio ao longo de 50 réplicas. As linhas tracejadas marcam as mudanças de ambiente. O ENA mantém o desempenho estável ao mudar de ambiente, enquanto métodos de política única sofrem quedas bruscas." loading="lazy">
+          <figcaption>
+            Teste congelado no CartPole mostrando o retorno médio por episódio ao longo de 50 réplicas. As linhas tracejadas marcam as mudanças de ambiente. O ENA mantém o desempenho estável ao mudar de ambiente, enquanto métodos de política única sofrem quedas bruscas.
+            <span class="source">Figura 5 do paper · Zarate et al., arXiv:2611.21598</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b12-h">Conclusões e Perspectivas</span></h2>
+<p><span class="s" data-s="b12-p0-s0">O Agente Neuroplástico Evolutivo (ENA) demonstra que é possível mitigar o esquecimento catastrófico em RL contínuo sem usar gradientes, desde que se combine arquivamento de especialistas, detecção de regimes físicos e seleção bayesiana.</span> <span class="s" data-s="b12-p0-s1">A detecção de ambiente é um componente crítico; sem ela, o arquivamento perde sua utilidade prática devido à falta de indexação correta.</span></p><p><span class="s" data-s="b12-p1-s0">Os autores concluem que a memória pode ser construída online, sem rótulos, mas os mecanismos de detecção variam entre domínios.</span> <span class="s" data-s="b12-p1-s1">No CartPole, modelos de transição funcionam bem; no HalfCheetah, perturbações mecânicas são necessárias.</span> <span class="s" data-s="b12-p1-s2">O trabalho abre caminho para agentes mais robustos a mudanças de domínio, especialmente em cenários onde o cálculo de gradientes é proibitivo ou impraticável, embora ainda haja um abismo de desempenho em relação aos métodos baseados em gradiente.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">O ENA mitiga o esquecimento catastrófico arquivando políticas especialistas indexadas por regimes físicos detectados, sem usar gradientes.</span></li><li><span class="s" data-s="k1">A ablação mostra que a detecção de mudança de ambiente é crítica; apenas arquivar não é suficiente sem indexação correta.</span></li><li><span class="s" data-s="k2">Em ambientes não estacionários, o ENA retém melhor o desempenho anterior, mas tem retorno absoluto menor que métodos baseados em gradiente como PPO e SAC.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.21598" rel="noopener">Mitigating Catastrophic Forgetting with Physics-Indexed Specialist Memory: the Evolutionary Neuroplastic Agent</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.21598" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

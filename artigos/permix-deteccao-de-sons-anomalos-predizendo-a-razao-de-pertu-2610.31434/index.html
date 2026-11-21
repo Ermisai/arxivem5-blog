@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PerMix: Detecção de sons anômalos predizendo a razão de perturbação em amostras mistas — arXiv em 5</title>
+<meta name="description" content="Um novo enfoque para detecção de anomalias em áudio que reformula o mixup, ajustando a margem angular e o contraste supervisionado com base na proporção real de cada classe na amostra gerada, superando métodos anteriores no benchmark DCASE 2020.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PerMix: Detecção de sons anômalos predizendo a razão de perturbação em amostras mistas">
+<meta property="og:description" content="Um novo enfoque para detecção de anomalias em áudio que reformula o mixup, ajustando a margem angular e o contraste supervisionado com base na proporção real de cada classe na amostra gerada, superando métodos anteriores no benchmark DCASE 2020.">
+<meta property="og:image" content="../../assets/papers/2610.31434/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Áudio</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.31434" rel="noopener">arXiv:2610.31434</a>
+    </div>
+    <h1><span class="s" data-s="t">PerMix: Detecção de sons anômalos predizendo a razão de perturbação em amostras mistas</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um novo enfoque para detecção de anomalias em áudio que reformula o mixup, ajustando a margem angular e o contraste supervisionado com base na proporção real de cada classe na amostra gerada, superando métodos anteriores no benchmark DCASE 2020.</span></p>
+    <p class="byline">
+      <span>Choi et al.</span>
+      <span>8 min de leitura</span>
+<span>22/10/2026</span>    </p>
+    <div class="listen" data-article="2610.31434" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=Ja-_E4ZtL84" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Supervisão Mismatched no Mixup</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A detecção de sons anômalos (ASD) é fundamental para a manutenção preditiva de máquinas industriais.</span> <span class="s" data-s="b0-p0-s1">O desafio central reside na escassez de dados de falhas: é difícil coletar exemplos de todos os tipos possíveis de anomalias.</span> <span class="s" data-s="b0-p0-s2">Por isso, o paradigma predominante tornou-se o aprendizado auto-supervisionado, onde o modelo é treinado exclusivamente com dados de operação normal.</span> <span class="s" data-s="b0-p0-s3">A ideia é que, ao aprender bem a distribuição de normalidade, qualquer desvio significativo seja identificado como anomalia.</span></p><p><span class="s" data-s="b0-p1-s0">Dentro desse paradigma, as abordagens baseadas em classificação têm se destacado.</span> <span class="s" data-s="b0-p1-s1">Elas utilizam tarefas pretextuais, como prever o ID da máquina ou as condições de operação, para extrair representações robustas.</span> <span class="s" data-s="b0-p1-s2">Para melhorar a separação entre classes, é comum empregar perdas com margem angular, como ArcFace, que forçam os embeddings de uma mesma classe a serem compactos e distantes de outras classes.</span></p><p><span class="s" data-s="b0-p2-s0">Para aumentar a robustez, técnicas de mixup foram introduzidas.</span> <span class="s" data-s="b0-p2-s1">O mixup cria novas amostras de treinamento misturando linearmente dois exemplos originais e suas etiquetas.</span> <span class="s" data-s="b0-p2-s2">No contexto de ASD, isso ajuda o modelo a generalizar melhor.</span> <span class="s" data-s="b0-p2-s3">No entanto, métodos anteriores como NAMix e OS-SCL apresentam uma falha estrutural crítica: eles rotulam a amostra mista baseada apenas na primeira amostra (âncora), independentemente da proporção com que ela contribui para a mistura.</span></p>        <h2><span class="s" data-s="b1-h">A Falha da Margem Angular Fixa</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Essa abordagem fixa cria um problema de supervisão desalinhada.</span> <span class="s" data-s="b1-p0-s1">Se a amostra de origem (a âncora) representa apenas uma pequena fração, digamos 10%, da amostra mista gerada, o modelo ainda recebe a supervisão completa da classe da âncora.</span> <span class="s" data-s="b1-p0-s2">Isso é enganoso, pois a amostra mista contém 90% de informação de outra classe.</span> <span class="s" data-s="b1-p0-s3">Além disso, a margem angular aplicada pela perda é fixa, punindo igualmente amostras que são quase puras e amostras que são altamente perturbadas por outra classe.</span></p><p><span class="s" data-s="b1-p1-s0">Essa rigidez reduz a sensibilidade do modelo a perturbações sutis.</span> <span class="s" data-s="b1-p1-s1">Como a margem é a mesma para todos, o modelo pode não aprender a distinguir adequadamente onde termina a distribuição normal e onde começa o ruído ou a anomalia, especialmente nas bordas das classes.</span> <span class="s" data-s="b1-p1-s2">A compactação excessiva das distribuições de classe pode fazer com que pequenas anomalias sejam ignoradas ou classificadas erroneamente como normais, pois o modelo as vê como parte da nuvem de pontos da classe majoritária.</span></p><p><span class="s" data-s="b1-p2-s0">Os autores identificam que a solução não está apenas em adicionar mais complexidade ao modelo, mas em reformular a função de perda para refletir a realidade estatística da amostra mista.</span> <span class="s" data-s="b1-p2-s1">Se a amostra é majoritariamente de uma classe, a supervisão deve refletir isso.</span> <span class="s" data-s="b1-p2-s2">Se é minoritária, a penalidade deve ser ajustada.</span> <span class="s" data-s="b1-p2-s3">É aqui que entra o PerMix.</span></p>        <h2><span class="s" data-s="b2-h">A Proposta: PerMix e a Razão de Perturbação</span></h2>
+<p><span class="s" data-s="b2-p0-s0">O PerMix propõe uma nova tarefa pretextual: em vez de prever a classe da âncora, o modelo deve prever a razão de perturbação da classe dominante na amostra mista.</span> <span class="s" data-s="b2-p0-s1">Isso envolve reformular o logit da perda de margem angular.</span> <span class="s" data-s="b2-p0-s2">Em vez de uma margem fixa, a penalidade da margem é escalonada pela razão de perturbação.</span> <span class="s" data-s="b2-p0-s3">Ou seja, se a amostra mista é muito diferente da classe alvo (alta perturbação), a margem aplicada é menor, evitando que o modelo tente forçar indevidamente essa amostra &#39;contaminada&#39; para o centro da classe normal.</span></p><p><span class="s" data-s="b2-p1-s0">Essa reformulação permite que o modelo seja mais sensível a desvios.</span> <span class="s" data-s="b2-p1-s1">Amostras que estão perto do centro da distribuição normal recebem uma penalidade de margem maior, incentivando a compactação.</span> <span class="s" data-s="b2-p1-s2">Amostras que estão longe, seja por serem misturas complexas ou por serem anomalias reais, recebem uma penalidade ajustada, permitindo que elas se afastem do centro sem serem penalizadas excessivamente por não serem &#39;puras&#39;.</span></p><p><span class="s" data-s="b2-p2-s0">Além da perda de margem adaptativa, o PerMix introduz uma modificação na perda de contraste supervisionado (SCL).</span> <span class="s" data-s="b2-p2-s1">Nos métodos anteriores, pares positivos eram formados baseados na âncora, o que causava inconsistência quando a âncora era minoritária.</span> <span class="s" data-s="b2-p2-s2">No PerMix, os pares positivos são formados com base na classe dominante da amostra mista.</span> <span class="s" data-s="b2-p2-s3">Isso alinha a supervisão com a informação predominante no sinal, resolvendo o problema de mismatch supervisionado.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.31434/figure1.webp" alt="Visualização t-SNE mostrando que o PerMix separa melhor anomalias de normais que o método anterior (OS-SCL) na classe ToyConveyor." loading="lazy">
+          <figcaption>
+            Visualização t-SNE mostrando que o PerMix separa melhor anomalias de normais que o método anterior (OS-SCL) na classe ToyConveyor.
+            <span class="source">Figura 1 do paper · Choi et al., arXiv:2610.31434</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b4-h">Detalhes da Implementação e Perdas</span></h2>
+<p><span class="s" data-s="b4-p0-s0">A arquitetura do PerMix é flexível e pode ser aplicada a diferentes backbones.</span> <span class="s" data-s="b4-p0-s1">Os autores testam com um encoder leve baseado em MobileFaceNet e com o modelo grande BEATs.</span> <span class="s" data-s="b4-p0-s2">A geração das amostras mistas envolve perturbar a amostra âncora com R amostras aleatórias, onde R é amostrado uniformemente de {1, 2, 3}.</span> <span class="s" data-s="b4-p0-s3">Isso cria uma variedade de níveis de perturbação durante o treinamento.</span></p><p><span class="s" data-s="b4-p1-s0">A perda principal, L_per, é a versão reformulada da margem angular.</span> <span class="s" data-s="b4-p1-s1">Ela usa uma margem m = 0.4 e um fator de escala s = 30.</span> <span class="s" data-s="b4-p1-s2">A ideia é que o logit seja ajustado de forma que a distância angular efetiva dependa da razão da classe dominante.</span> <span class="s" data-s="b4-p1-s3">Se a razão é baixa, a margem efetiva diminui, facilitando a separação de amostras que não se encaixam bem na classe.</span></p><p><span class="s" data-s="b4-p2-s0">A segunda componente é a perda de contraste baseada na dominância, L_dom.</span> <span class="s" data-s="b4-p2-s1">Ela força embeddings de amostras que pertencem à mesma classe dominante a serem próximos no espaço latente.</span> <span class="s" data-s="b4-p2-s2">Isso complementa a perda de margem, que foca na separação de classes, enquanto o contraste foca na coesão dentro da classe dominante.</span> <span class="s" data-s="b4-p2-s3">Juntas, as duas perdas criam uma representação onde as classes normais são compactas e bem separadas, mas com tolerância adaptativa para a variabilidade natural e perturbações.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b5-t">Por que a classe dominante importa?</span></h3>
+          <p><span class="s" data-s="b5-c-s0">Ao usar a classe dominante para formar pares positivos no contraste supervisionado, o PerMix evita que amostras mistas com âncoras minoritárias sejam empurradas erroneamente para clusters de classes irrelevantes.</span> <span class="s" data-s="b5-c-s1">Isso resolve o &#39;supervision mismatch&#39; que limitava métodos como OS-SCL e NAMix.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b6-h">Avaliação no Benchmark DCASE 2020</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Os experimentos foram conduzidos no dataset DCASE 2020 Task 2, um benchmark padrão para ASD.</span> <span class="s" data-s="b6-p0-s1">O dataset contém gravações de seis tipos de máquinas, com múltiplos IDs, totalizando 41 classes.</span> <span class="s" data-s="b6-p0-s2">A avaliação utiliza AUC (Area Under the Curve) e pAUC (partial AUC), este último focado na região de baixa taxa de falsos positivos, que é crítica em aplicações industriais onde alarmes falsos são custosos.</span></p><p><span class="s" data-s="b6-p1-s0">O PerMix com backbone TFSTgram-MFN alcançou uma média de AUC de 95.89% e pAUC de 90.98%.</span> <span class="s" data-s="b6-p1-s1">Com o modelo grande BEATs, os resultados foram ainda mais impressionantes: 96.56% de AUC e 92.41% de pAUC.</span> <span class="s" data-s="b6-p1-s2">Esses números superam o estado da arte anterior, TFSTgram (OS-SCL), que obteve 95.71% de AUC e 90.23% de pAUC com o mesmo encoder leve.</span></p><p><span class="s" data-s="b6-p2-s0">A melhoria é particularmente notável em classes desafiadoras, como ToyConveyor, onde o sinal é dominado por ruído de fundo.</span> <span class="s" data-s="b6-p2-s1">O PerMix conseguiu um pAUC de 72.99% com o encoder leve e 77.78% com o BEATs, os melhores resultados entre os métodos comparados.</span> <span class="s" data-s="b6-p2-s2">Isso sugere que a abordagem é mais robusta a ruídos e consegue aprender uma distribuição normal mais precisa, mesmo em condições adversas.</span></p>        <h2><span class="s" data-s="b7-h">Análise dos Componentes da Perda</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Para entender a contribuição de cada parte do PerMix, os autores realizaram um estudo ablação.</span> <span class="s" data-s="b7-p0-s1">Substituir a perda ArcFace padrão pela L_per (margem adaptativa) resultou em uma melhoria substancial no AUC e pAUC para ambos os backbones.</span> <span class="s" data-s="b7-p0-s2">Isso confirma que prever a razão de perturbação aumenta a sensibilidade a sinais anômalos sutis.</span></p><p><span class="s" data-s="b7-p1-s0">Adicionar a perda de contraste baseada na dominância (L_dom) à ArcFace não trouxe ganhos significativos.</span> <span class="s" data-s="b7-p1-s1">Isso ocorre porque a ArcFace já compacta as distribuições de classe suficientemente, deixando pouco espaço para o contraste melhorar.</span> <span class="s" data-s="b7-p1-s2">No entanto, adicionar L_dom à L_per melhorou ambas as métricas, indicando que as duas perdas são complementares.</span></p><p><span class="s" data-s="b7-p2-s0">A L_per empurra as amostras mistas para longe do centro da classe com base na sua razão de perturbação, enquanto a L_dom puxa amostras da mesma classe dominante juntas.</span> <span class="s" data-s="b7-p2-s1">Essa combinação cria um espaço de características onde a normalidade é bem definida, mas com fronteiras flexíveis o suficiente para lidar com a variabilidade inerente aos dados de áudio industrial.</span></p>        <h2><span class="s" data-s="b8-h">Visualização e Interpretação</span></h2>
+<p><span class="s" data-s="b8-p0-s0">A visualização t-SNE dos embeddings da classe ToyConveyor usando o modelo BEATs revela a eficácia do PerMix.</span> <span class="s" data-s="b8-p0-s1">Com o método anterior OS-SCL, vários exemplos anômalos são mapeados para dentro dos clusters normais, o que explica a dificuldade em detectar essas anomalias.</span> <span class="s" data-s="b8-p0-s2">Isso ocorre porque a supervisão fixa não consegue distinguir adequadamente a fronteira entre normal e anômalo nessas condições de ruído.</span></p><p><span class="s" data-s="b8-p1-s0">Em contraste, com o PerMix, os exemplos normais permanecem em clusters compactos e bem separados, e os exemplos anômalos são claramente afastados desses clusters.</span> <span class="s" data-s="b8-p1-s1">Essa separação mais nítida é diretamente atribuível à reformulação da margem angular e ao alinhamento da supervisão com a classe dominante.</span> <span class="s" data-s="b8-p1-s2">O modelo aprende a representar a &#39;normalidade&#39; de forma mais precisa, tornando as anomalias mais visíveis no espaço latente.</span></p>        <h2><span class="s" data-s="b9-h">Limitações e Escopo</span></h2>
+<p><span class="s" data-s="b9-p0-s0">É importante notar que o PerMix foi avaliado principalmente no benchmark DCASE 2020 Task 2.</span> <span class="s" data-s="b9-p0-s1">Embora os autores também mencionem avaliações no DCASE 2022 Task 2 para testar generalização sob mudança de domínio, os resultados detalhados focam no dataset de 2020.</span> <span class="s" data-s="b9-p0-s2">A eficácia do método em outros domínios ou tipos de dados de áudio não industriais não é explorada em profundidade neste artigo.</span></p><p><span class="s" data-s="b9-p1-s0">Além disso, o método depende da qualidade da tarefa pretextual original.</span> <span class="s" data-s="b9-p1-s1">Se a classificação das classes normais for ruim, a predição da razão de perturbação pode ser afetada.</span> <span class="s" data-s="b9-p1-s2">O PerMix não resolve problemas fundamentais de coleta de dados ou desbalanceamento extremo de classes que não sejam tratados pela própria tarefa de classificação.</span> <span class="s" data-s="b9-p1-s3">Ele é uma melhoria na função de perda, não uma solução mágica para todos os problemas de ASD.</span></p><p><span class="s" data-s="b9-p2-s0">Outra consideração é a complexidade computacional.</span> <span class="s" data-s="b9-p2-s1">Embora o PerMix possa ser aplicado a backbones leves, o uso de modelos grandes como o BEATs requer recursos significativos para fine-tuning.</span> <span class="s" data-s="b9-p2-s2">Os autores utilizam GPUs NVIDIA RTX 4090, o que pode não estar acessível para todos os pesquisadores ou aplicações em tempo real com restrições de hardware.</span></p>        <h2><span class="s" data-s="b10-h">Conclusão</span></h2>
+<p><span class="s" data-s="b10-p0-s0">O PerMix apresenta uma contribuição sólida para a detecção de sons anômalos baseada em aprendizado auto-supervisionado.</span> <span class="s" data-s="b10-p0-s1">Ao reformular a tarefa pretextual para prever a razão de perturbação e ajustar a margem angular e o contraste supervisionado de acordo, os autores resolvem problemas de supervisão desalinhada presentes em métodos anteriores.</span></p><p><span class="s" data-s="b10-p1-s0">Os resultados no benchmark DCASE 2020 Task 2 demonstram que essa abordagem é eficaz, superando o estado da arte tanto em backbones leves quanto em modelos grandes.</span> <span class="s" data-s="b10-p1-s1">A capacidade de separar melhor anomalias sutis, especialmente em condições de ruído, torna o PerMix uma ferramenta valiosa para manutenção preditiva.</span></p><p><span class="s" data-s="b10-p2-s0">O código-fonte está disponível no GitHub, permitindo que a comunidade valide e estenda o trabalho.</span> <span class="s" data-s="b10-p2-s1">Para desenvolvedores e cientistas de dados trabalhando com ASD, o PerMix oferece um caminho claro para melhorar a robustez dos modelos através de uma reformulação cuidadosa da função de perda, em vez de apenas adicionar complexidade arquitetural.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">O PerMix resolve o problema de supervisão desalinhada no mixup ao prever a razão de perturbação da classe dominante, ajustando a margem angular de forma adaptativa.</span></li><li><span class="s" data-s="k1">A perda de contraste supervisionado é modificada para formar pares positivos baseados na classe dominante, melhorando a coesão dos clusters normais.</span></li><li><span class="s" data-s="k2">O método alcança estado da arte no benchmark DCASE 2020 Task 2, com melhorias significativas em classes ruidosas como ToyConveyor.</span></li><li><span class="s" data-s="k3">A abordagem é modular e pode ser aplicada a diferentes backbones, desde encoders leves quanto modelos grandes como o BEATs.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.31434" rel="noopener">PerMix: Anomalous sound detection by predicting the perturbation ratio of mixed samples</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.31434" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Como Modelos Visuais-Linguísticos Planejam a Próxima Etapa: Mecanismos de Planejamento em VLMs — arXiv em 5</title>
+<meta name="description" content="Este paper desmonta o &#39;plano interno&#39; de VLMs ao listar objetos, revelando como eles rastreiam progresso e evitam repetições usando cabeças de atenção específicas e patching causal.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Como Modelos Visuais-Linguísticos Planejam a Próxima Etapa: Mecanismos de Planejamento em VLMs">
+<meta property="og:description" content="Este paper desmonta o &#39;plano interno&#39; de VLMs ao listar objetos, revelando como eles rastreiam progresso e evitam repetições usando cabeças de atenção específicas e patching causal.">
+<meta property="og:image" content="../../assets/papers/2611.21600/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>LLMs</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.21600" rel="noopener">arXiv:2611.21600</a>
+    </div>
+    <h1><span class="s" data-s="t">Como Modelos Visuais-Linguísticos Planejam a Próxima Etapa: Mecanismos de Planejamento em VLMs</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Este paper desmonta o &#39;plano interno&#39; de VLMs ao listar objetos, revelando como eles rastreiam progresso e evitam repetições usando cabeças de atenção específicas e patching causal.</span></p>
+    <p class="byline">
+      <span>Gandikota et al.</span>
+      <span>8 min de leitura</span>
+<span>16/11/2026</span>    </p>
+    <div class="listen" data-article="2611.21600" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=xow5-XRH3Yc" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Sequencialidade em Imagens</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Modelos Visuais-Linguísticos (VLMs) enfrentam um desafio fundamental que não existe em modelos puramente de linguagem: a imagem é uma entrada bidimensional, enquanto a saída é uma sequência unidimensional de tokens.</span> <span class="s" data-s="b0-p0-s1">Não há uma ordem intrínseca nas imagens; o modelo precisa decidir onde olhar primeiro, depois segundo, e assim por diante.</span> <span class="s" data-s="b0-p0-s2">Quando um VLM descreve uma imagem, ele nomeia objetos um por um, raramente se repetindo.</span> <span class="s" data-s="b0-p0-s3">Isso implica que o modelo não apenas reconhece conteúdo, mas também planeja a ordem de exposição e mantém um estado de progresso ao longo da geração.</span></p><p><span class="s" data-s="b0-p1-s0">Trabalhos anteriores identificaram partes desse mecanismo, como as &#39;Gaze Heads&#39; (cabeças de olhar), que direcionam a atenção para a região correta da imagem.</span> <span class="s" data-s="b0-p1-s1">No entanto, como o modelo resolve tarefas com múltiplas respostas, mantendo o controle do que já foi dito, permanecia obscuro.</span> <span class="s" data-s="b0-p1-s2">Em um transformer autoregressivo, o estado não pode ser mantido como uma variável global atualizada; ele deve ser recalculado a cada token, usando os tokens gerados anteriormente.</span> <span class="s" data-s="b0-p1-s3">Este paper investiga exatamente como esse recálculo de progresso ocorre.</span></p><p><span class="s" data-s="b0-p2-s0">Os autores, da Northeastern University, propõem que o modelo utiliza um plano estruturado e modular.</span> <span class="s" data-s="b0-p2-s1">Eles caracterizam esse plano em quatro partes principais: vinculação (binding), transmissão (relay), seleção (select) e leitura (gaze).</span> <span class="s" data-s="b0-p2-s2">Para validar essa hipótese, eles não dependem apenas de observações correlacionais, mas utilizam técnicas de causal patching em modelos Qwen3-VL e outros, isolando cada etapa para ver seu efeito direto na saída do modelo.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.21600/figure1.webp" alt="Visão geral do mecanismo: o modelo resolve a tarefa no token da forma, vincula o ponteiro, transmite para o token dois-pontos e seleciona a próxima região." loading="lazy">
+          <figcaption>
+            Visão geral do mecanismo: o modelo resolve a tarefa no token da forma, vincula o ponteiro, transmite para o token dois-pontos e seleciona a próxima região.
+            <span class="source">Figura 1 do paper · Gandikota et al., arXiv:2611.21600</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">O Experimento de Recuperação Sintética</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Para estudar causalmente esse planejamento, os autores projetaram uma tarefa sintética controlada.</span> <span class="s" data-s="b2-p0-s1">Eles usam imagens compostas por uma tira de painéis, onde cada painel contém uma forma geométrica e uma letra.</span> <span class="s" data-s="b2-p0-s2">A pergunta ao modelo é algo como: &#39;Qual é o rótulo do painel com a estrela?&#39;.</span> <span class="s" data-s="b2-p0-s3">Essa configuração permite controlar exatamente quais objetos o modelo deve descrever e em que ordem, algo difícil de fazer com descrições abertas de fotos naturais.</span></p><p><span class="s" data-s="b2-p1-s0">A tarefa é dividida em dois cenários: recuperação única (um objeto correspondente) e recuperação em lista (múltiplos objetos correspondentes).</span> <span class="s" data-s="b2-p1-s1">No cenário de lista, o modelo deve listar todas as letras dos painéis que contêm a forma solicitada, sem repetições.</span> <span class="s" data-s="b2-p1-s2">Isso força o modelo a desenvolver um mecanismo de rastreamento de progresso.</span> <span class="s" data-s="b2-p1-s3">Se o modelo falhar nesse rastreamento, ele tenderá a repetir a mesma resposta ou pular itens aleatoriamente.</span></p><p><span class="s" data-s="b2-p2-s0">Os autores testaram essa tarefa em seis modelos diferentes, incluindo Qwen3-VL, Gemma 3, Idefics3, LLaVA-OneVision e Pixtral, com tamanhos variando de 2B a 32B.</span> <span class="s" data-s="b2-p2-s1">A escolha de múltiplos modelos permite verificar se o mecanismo descoberto é uma característica geral dos VLMs ou um artefato de uma arquitetura específica.</span> <span class="s" data-s="b2-p2-s2">Os resultados mostram que, embora a implementação exata possa variar ligeiramente, a lógica modular do plano é consistente.</span></p>        <h2><span class="s" data-s="b3-h">O Mecanismo de Quatro Etapas</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O cerne deste paper é a descrição detalhada do mecanismo interno que permite ao VLM planejar.</span> <span class="s" data-s="b3-p0-s1">O processo começa quando o modelo processa o token da forma solicitada (por exemplo, &#39;star&#39;).</span> <span class="s" data-s="b3-p0-s2">Neste ponto, as &#39;Binding Heads&#39; (cabeças de vinculação) ativam-se.</span> <span class="s" data-s="b3-p0-s3">Elas correspondem os tokens de texto relevantes da pergunta contra a imagem, resolvendo-os em ponteiros para as regiões da imagem correspondentes.</span> <span class="s" data-s="b3-p0-s4">É importante notar que essa vinculação ocorre cedo, muito antes do modelo gerar a resposta final.</span></p><p><span class="s" data-s="b3-p1-s0">Em seguida, as &#39;Relay Heads&#39; (cabeças de transmissão) carregam esses ponteiros do token da forma para o token onde a resposta deve ser produzida (geralmente o token &#39;:&#39; ou &#39;Answer:&#39;).</span> <span class="s" data-s="b3-p1-s1">Em modelos como o Qwen3-VL, um único vetor residual no token dois-pontos carrega essa informação em mais de 65% dos casos.</span> <span class="s" data-s="b3-p1-s2">Isso demonstra que a informação visual é transferida de forma explícita através da arquitetura do transformer, não apenas implícita na atenção distribuída.</span></p><p><span class="s" data-s="b3-p2-s0">Uma vez que o ponteiro chega ao token de resposta, as &#39;Gaze Heads&#39; executam a leitura.</span> <span class="s" data-s="b3-p2-s1">Elas direcionam a atenção para a região apontada e extraem o conceito visual correspondente (a letra no painel).</span> <span class="s" data-s="b3-p2-s2">Finalmente, as cabeças de linguagem e os MLPs tardios traduzem esse conceito visual em um token de linguagem (a letra &#39;T&#39;, por exemplo).</span> <span class="s" data-s="b3-p2-s3">Esse ciclo de vincular, transmitir, olhar e gerar forma a base da descrição única.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.21600/figure11.webp" alt="Mecanismo para listas: o modelo vincula múltiplos painéis, transmite os ponteiros e seleciona o próximo painel não descrito após o último." loading="lazy">
+          <figcaption>
+            Mecanismo para listas: o modelo vincula múltiplos painéis, transmite os ponteiros e seleciona o próximo painel não descrito após o último.
+            <span class="source">Figura 11 do paper · Gandikota et al., arXiv:2611.21600</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Rastreamento de Progresso e Evitação de Repetições</span></h2>
+<p><span class="s" data-s="b5-p0-s0">A parte mais sofisticada do mecanismo é como o modelo lida com múltiplas respostas.</span> <span class="s" data-s="b5-p0-s1">Quando há vários painéis correspondentes, o modelo precisa saber quais já foram listados.</span> <span class="s" data-s="b5-p0-s2">Os autores descobrem que o modelo recalcula seu progresso a cada token.</span> <span class="s" data-s="b5-p0-s3">Após gerar uma resposta (por exemplo, a letra &#39;T&#39;), as Binding Heads vinculam essa resposta de volta ao painel de onde ela veio.</span> <span class="s" data-s="b5-p0-s4">O token vírgula (&#39;,&#39;) então atua como um cursor, transformando essa informação em um sinal de progresso: a posição na imagem até a qual a lista foi escrita.</span></p><p><span class="s" data-s="b5-p1-s0">Um passo de &#39;Seleção&#39; (Select Step) então escolhe a região não descrita mais próxima após o cursor.</span> <span class="s" data-s="b5-p1-s1">Se não houver mais regiões, o modelo gera o token de fim de sequência (&lt;EOS&gt;).</span> <span class="s" data-s="b5-p1-s2">Esse mecanismo é robusto: se os autores bloqueiam a atenção do token vírgula ao token da resposta anterior, o modelo começa a repetir a mesma letra em 56% a 97% dos casos, dependendo do modelo.</span> <span class="s" data-s="b5-p1-s3">Isso prova causalmente que a vírgula e a resposta anterior são essenciais para o rastreamento de progresso.</span></p><p><span class="s" data-s="b5-p2-s0">Os autores também analisam o que o vetor residual do token vírgula contém.</span> <span class="s" data-s="b5-p2-s1">Usando sondas lineares (ridge probes), eles mostram que o estado do painel já escrito é recuperado com alta precisão (até 100% em algumas camadas).</span> <span class="s" data-s="b5-p2-s2">A ordem dos estados ao longo da profundidade da rede é consistente: primeiro um skip, depois uma contagem, depois o cursor, e por fim a escolha da fonte.</span> <span class="s" data-s="b5-p2-s3">Isso sugere que a arquitetura do transformer organiza implicitamente a lógica de controle sequencial.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b6-t">Validação Causal com Patching</span></h3>
+          <p><span class="s" data-s="b6-c-s0">Os autores não apenas observam correlações; eles realizam &#39;causal patching&#39;.</span> <span class="s" data-s="b6-c-s1">Isso envolve substituir os vetores residuais de um token por outros de um caso diferente para ver se a saída do modelo muda conforme o esperado.</span> <span class="s" data-s="b6-c-s2">Por exemplo, ao substituir o vetor do token &#39;:&#39; no caso alvo pelo do caso fonte, eles conseguem forçar o modelo a olhar para o painel errado, provando que aquele vetor carrega o ponteiro causal.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b7-h">Robustez e Generalização</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Uma questão crucial é se esse mecanismo é específico para a tarefa sintética ou se generaliza para o mundo real.</span> <span class="s" data-s="b7-p0-s1">Os autores testam o mecanismo em imagens de quadrinhos com prompts mais longos e complexos.</span> <span class="s" data-s="b7-p0-s2">Os resultados mostram que as mesmas cabeças de Gaze e Binding continuam funcionando, embora com algumas variações na profundidade das camadas onde os ponteiros são mais fortes.</span> <span class="s" data-s="b7-p0-s3">Isso indica que a arquitetura de planejamento é robusta a mudanças no estilo da imagem e na complexidade do prompt.</span></p><p><span class="s" data-s="b7-p1-s0">Eles também testam o mecanismo em perguntas de lista sobre fotos naturais.</span> <span class="s" data-s="b7-p1-s1">Embora a tarefa seja mais difícil devido à variabilidade das imagens, as cabeças identificadas na tarefa sintética ainda desempenham papéis semelhantes na recuperação de conteúdo.</span> <span class="s" data-s="b7-p1-s2">Isso sugere que, mesmo em tarefas complexas e não estruturadas, os VLMs podem estar utilizando um subconjunto desses mecanismos modulares para organizar sua atenção e geração de texto.</span></p><p><span class="s" data-s="b7-p2-s0">O estudo também compara a eficácia das cabeças descobertas com rankings publicados anteriormente.</span> <span class="s" data-s="b7-p2-s1">A busca de patching de query dos autores compartilha significativamente mais cabeças com o ranking de Gaze publicado do que outros métodos de ranking anteriores.</span> <span class="s" data-s="b7-p2-s2">Isso valida que a abordagem causal é mais precisa para identificar os componentes funcionais reais do modelo.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.21600/figure17.webp" alt="O que o vetor residual da vírgula contém: sondas mostram que o painel escrito é recuperado com alta precisão nas camadas intermediárias." loading="lazy">
+          <figcaption>
+            O que o vetor residual da vírgula contém: sondas mostram que o painel escrito é recuperado com alta precisão nas camadas intermediárias.
+            <span class="source">Figura 17 do paper · Gandikota et al., arXiv:2611.21600</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Limitações e Implicações</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Apesar dos avanços, o paper reconhece limitações.</span> <span class="s" data-s="b9-p0-s1">Nem todos os modelos testados resolvem a tarefa de lista com a mesma eficiência.</span> <span class="s" data-s="b9-p0-s2">LLaVA-OneVision e Idefics3 tiveram desempenho inferior na tarefa de lista com o prompt específico, e LLaVA-OneVision tendia a listar letras de todos os painéis, independentemente da forma.</span> <span class="s" data-s="b9-p0-s3">Isso indica que a robustez do mecanismo de planejamento varia entre arquiteturas e que alguns modelos podem não ter desenvolvido plenamente a capacidade de rastreamento de progresso modular.</span></p><p><span class="s" data-s="b9-p1-s0">Além disso, o estudo foca em uma tarefa sintética específica.</span> <span class="s" data-s="b9-p1-s1">Embora haja evidências de generalização para quadrinhos e fotos naturais, o plano exato pode ser mais fragmentado ou menos explícito em tarefas de descrição livre, onde o modelo tem mais liberdade criativa.</span> <span class="s" data-s="b9-p1-s2">O paper não explora como esse planejamento interage com raciocínio lógico complexo ou com tarefas que exigem inferência causal além da simples recuperação de objetos.</span></p><p><span class="s" data-s="b9-p2-s0">Apesar dessas limitações, o trabalho oferece uma ferramenta poderosa para auditoria e depuração de modelos.</span> <span class="s" data-s="b9-p2-s1">Ao isolar as etapas de planejamento, os pesquisadores podem identificar onde o modelo falha: se ele não encontra o objeto, se não transmite o ponteiro corretamente, ou se falha no rastreamento de progresso.</span> <span class="s" data-s="b9-p2-s2">Isso abre caminho para intervenções diretas no modelo, permitindo corrigir erros de planejamento sem necessidade de retreinamento pesado.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.21600/figure19.webp" alt="Comparação de rankings: a busca por patching de query dos autores compartilha mais cabeças com o ranking de Gaze publicado do que métodos anteriores." loading="lazy">
+          <figcaption>
+            Comparação de rankings: a busca por patching de query dos autores compartilha mais cabeças com o ranking de Gaze publicado do que métodos anteriores.
+            <span class="source">Figura 19 do paper · Gandikota et al., arXiv:2611.21600</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b11-h">Conclusão: Um Novo Olhar sobre o Raciocínio Visual</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Este paper desmonta a caixa preta do planejamento em VLMs, mostrando que eles não apenas &#39;veem&#39; e &#39;falam&#39;, mas seguem um algoritmo estruturado para coordenar essas ações.</span> <span class="s" data-s="b11-p0-s1">A descoberta de que o modelo recalcula seu progresso a cada token, usando componentes modulares de vinculação e seleção, desafia a noção de que o raciocínio em LLMs/VLMs é puramente estatístico e distribuído.</span> <span class="s" data-s="b11-p0-s2">Em vez disso, há uma arquitetura de controle explícita embutida nas camadas intermediárias.</span></p><p><span class="s" data-s="b11-p1-s0">Para desenvolvedores e cientistas de dados, isso significa que podemos começar a intervir nos processos internos dos modelos.</span> <span class="s" data-s="b11-p1-s1">Se sabemos que as &#39;Gaze Heads&#39; são responsáveis por olhar para a região correta, podemos monitorar ou ajustar essas cabeças para melhorar a precisão em tarefas críticas.</span> <span class="s" data-s="b11-p1-s2">Além disso, entender como o modelo evita repetições pode inspirar novos métodos de regularização ou estruturação de prompts para tarefas de geração de listas.</span></p><p><span class="s" data-s="b11-p2-s0">O trabalho da Northeastern University estabelece um novo paradigma para estudar modelos multimodais.</span> <span class="s" data-s="b11-p2-s1">Ao criar tarefas sintéticas que permitem o controle causal rigoroso, os autores fornecem um modelo para desvendar outros aspectos do raciocínio em IA.</span> <span class="s" data-s="b11-p2-s2">Isso não apenas explica como os VLMs atuais funcionam, mas também aponta o caminho para modelos mais confiáveis, explicáveis e robustos no futuro.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">VLMs não geram texto aleatoriamente; eles seguem um plano modular com etapas distintas de vinculação, seleção e leitura.</span></li><li><span class="s" data-s="k1">O modelo recalcula seu progresso a cada token, usando o token anterior como cursor para evitar repetir objetos já descritos.</span></li><li><span class="s" data-s="k2">Cabeças de &#39;Gaze&#39; e &#39;Binding&#39; são responsáveis por localizar regiões na imagem e traduzi-las em tokens de linguagem.</span></li><li><span class="s" data-s="k3">O mecanismo foi validado causalmente em modelos de 2B a 32B, mostrando robustez entre diferentes formatos de imagem e idiomas.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.21600" rel="noopener">How VLMs Plan What&#39;s Next</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.21600" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

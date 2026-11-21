@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GEPA-Curator: Filtragem de Sinais Ruidosos em Agentes Auto-Reflexivos — arXiv em 5</title>
+<meta name="description" content="O paper introduz um módulo de curadoria de dados que filtra falhas ruidosas e recupera sucessos passados para otimizar prompts de agentes LLM, melhorando a estabilidade do aprendizado.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GEPA-Curator: Filtragem de Sinais Ruidosos em Agentes Auto-Reflexivos">
+<meta property="og:description" content="O paper introduz um módulo de curadoria de dados que filtra falhas ruidosas e recupera sucessos passados para otimizar prompts de agentes LLM, melhorando a estabilidade do aprendizado.">
+<meta property="og:image" content="../../assets/papers/2610.37651/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Agentes</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.37651" rel="noopener">arXiv:2610.37651</a>
+    </div>
+    <h1><span class="s" data-s="t">GEPA-Curator: Filtragem de Sinais Ruidosos em Agentes Auto-Reflexivos</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">O paper introduz um módulo de curadoria de dados que filtra falhas ruidosas e recupera sucessos passados para otimizar prompts de agentes LLM, melhorando a estabilidade do aprendizado.</span></p>
+    <p class="byline">
+      <span>Yu et al.</span>
+      <span>7 min de leitura</span>
+<span>27/10/2026</span>    </p>
+    <div class="listen" data-article="2610.37651" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=ST_eliUSCJc" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Atribuição de Falha em Agentes</span></h2>
+<p><span class="s" data-s="b0-p0-s0">O aprendizado recursivo de auto-melhoria (RSI) promete que agentes baseados em LLMs podem melhorar seu próprio comportamento ao analisar experiências passadas.</span> <span class="s" data-s="b0-p0-s1">A abordagem reflexiva de otimização de prompts, utilizada em frameworks como o GEPA, funciona fazendo com que um &#34;Refletor&#34; analise trajetórias de execução para identificar lições e revisar o prompt do agente.</span> <span class="s" data-s="b0-p0-s2">A premissa central é que o sucesso ou fracasso em tarefas anteriores contém sinais generalizáveis para tarefas futuras.</span></p><p><span class="s" data-s="b0-p1-s0">Contudo, em ambientes agênticos complexos, atribuir a causa de uma falha exclusivamente ao prompt é problemático.</span> <span class="s" data-s="b0-p1-s1">O sucesso é frequentemente avaliado por um &#34;juiz&#34; baseado em LLM (LLM-as-a-judge) e a execução é mediada por um &#34;harness&#34; que interage com ambientes externos.</span> <span class="s" data-s="b0-p1-s2">Uma falha pode decorrer de limitações do harness, indisponibilidade de ferramentas, ou ruído na avaliação, não de uma fraqueza no prompt.</span> <span class="s" data-s="b0-p1-s3">Tratar esses sinais ruidosos como válidos leva o Refletor a fazer atualizações desnecessárias ou prejudiciais ao prompt.</span></p><p><span class="s" data-s="b0-p2-s0">Por exemplo, se um agente falha ao comprar um item porque o botão de compra está com defeito no site, otimizar o prompt para &#34;buscar alternativas&#34; é contraproducente.</span> <span class="s" data-s="b0-p2-s1">O problema persiste porque o mecanismo de compra estava quebrado, não porque o agente não sabia como agir.</span> <span class="s" data-s="b0-p2-s2">Trabalhos anteriores tentam mitigar isso usando conjuntos de validação para rejeitar mutações de prompts que pioram o desempenho, mas isso ocorre apenas após a mutação ser gerada, não melhorando a qualidade do sinal de aprendizado em si.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.37651/figure1.webp" alt="Diagrama do sistema GEPA-Curator: o Curador atua como um filtro externo ao otimizador de prompts, selecionando tarefas relevantes e recuperando sucessos passados para enriquecer o contexto de aprendizado." loading="lazy">
+          <figcaption>
+            Diagrama do sistema GEPA-Curator: o Curador atua como um filtro externo ao otimizador de prompts, selecionando tarefas relevantes e recuperando sucessos passados para enriquecer o contexto de aprendizado.
+            <span class="source">Figura 1 do paper · Yu et al., arXiv:2610.37651</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">A Proposta: GEPA-Curator</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Os autores apresentam o GEPA-Curator, um framework que atua como um &#34;harness&#34; sobre otimizadores de prompts existentes, como o GEPA.</span> <span class="s" data-s="b2-p0-s1">O objetivo é curar quais experiências do agente devem ser usadas para otimizar o prompt.</span> <span class="s" data-s="b2-p0-s2">O sistema possui dois componentes principais: curadoria de tarefas e recuperação de sucessos anteriores.</span> <span class="s" data-s="b2-p0-s3">A curadoria de tarefas filtra aquelas que provavelmente fornecem sinais de aprendizado ruidosos ou não confiáveis, enquanto a recuperação de sucessos retrieve trajetórias bem-sucedidas passadas para fornecer contexto adicional ao otimizador.</span></p><p><span class="s" data-s="b2-p1-s0">Essa abordagem reconhece que nem todas as falhas são iguais.</span> <span class="s" data-s="b2-p1-s1">Ao distinguir entre falhas &#34;otimizáveis&#34; (onde o prompt pode ser melhorado) e falhas &#34;impossíveis&#34; ou &#34;instáveis&#34; (flaky), o sistema evita contaminar o prompt com aprendizados errôneos.</span> <span class="s" data-s="b2-p1-s2">A curadoria não é baseada apenas em sucesso ou fracasso binário, mas utiliza informações contextuais para diagnosticar a causa raiz da falha, como limitações do ambiente ou ambiguidade da tarefa.</span></p><p><span class="s" data-s="b2-p2-s0">O GEPA-Curator não substitui o otimizador de prompts, mas o augmenta.</span> <span class="s" data-s="b2-p2-s1">Ele opera em um loop externo, decidindo quais dados alimentar o processo de reflexão.</span> <span class="s" data-s="b2-p2-s2">Isso permite que o otimizador foque em exemplos onde a ação do agente foi o fator determinante para o resultado, ignorando casos onde fatores externos dominaram o desfecho.</span></p>        <h2><span class="s" data-s="b3-h">Mecanismo de Curadoria e Recuperação</span></h2>
+<p><span class="s" data-s="b3-p0-s0">A curadoria de tarefas envolve categorizar as tarefas em grupos como &#34;Fáceis&#34;, &#34;Otimizáveis&#34;, &#34;Impossíveis&#34; e &#34;Instáveis&#34; (Flaky).</span> <span class="s" data-s="b3-p0-s1">Tarefas fáceis já têm sucesso constante.</span> <span class="s" data-s="b3-p0-s2">Tarefas otimizáveis podem melhorar com mudanças no prompt.</span> <span class="s" data-s="b3-p0-s3">Tarefas impossíveis falham constantemente devido a limitações externas, e tarefas instáveis têm sucesso misto devido a ruído no ambiente ou na avaliação.</span> <span class="s" data-s="b3-p0-s4">O Curador diagnostica tarefas como impossíveis ou flaky se identificarem causas como falhas no harness, tarefas mal especificadas ou ruído no juiz.</span></p><p><span class="s" data-s="b3-p1-s0">Além de filtrar, o GEPA-Curator realiza a recuperação de sucessos anteriores.</span> <span class="s" data-s="b3-p1-s1">Quando um otimizador de prompts analisa uma tarefa, ele também recebe como contexto trajetórias de sucesso passadas para tarefas similares.</span> <span class="s" data-s="b3-p1-s2">Isso ajuda o Refletor a entender não apenas o que deu errado, mas também padrões de comportamento que levaram ao sucesso em contextos análogos, fornecendo um sinal de aprendizado mais robusto e menos propenso a overfitting em ruídos específicos.</span></p><p><span class="s" data-s="b3-p2-s0">A seleção de tarefas para o minibatch de otimização é feita de forma estratégica, priorizando tarefas que oferecem o melhor sinal de aprendizado.</span> <span class="s" data-s="b3-p2-s1">Isso contrasta com a seleção aleatória ou baseada apenas em frequência de erro, comum em abordagens anteriores.</span> <span class="s" data-s="b3-p2-s2">A combinação de filtragem de ruído e enriquecimento com sucesso prévio cria um ciclo de aprendizado mais limpo.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b4-t">O Perigo do Aprendizado Ruidoso</span></h3>
+          <p><span class="s" data-s="b4-c-s0">Misturar tarefas impossíveis ou instáveis com tarefas otimizáveis prejudica significativamente o aprendizado.</span> <span class="s" data-s="b4-c-s1">Em experimentos, a precisão atingiu apenas 12/16 tarefas resolvidas quando essas categorias foram misturadas, comparado a quase perfeição quando apenas tarefas otimizáveis e fáceis foram usadas.</span></p>
+        </aside>
+        <figure class="figure">
+          <img src="../../assets/papers/2610.37651/figure2.webp" alt="Curvas de validação do GEPA mostram que a presença de tarefas impossíveis ou flaky reduz o pico de desempenho e a estabilidade do aprendizado, enquanto a mistura com tarefas fáceis mantém a alta performance." loading="lazy">
+          <figcaption>
+            Curvas de validação do GEPA mostram que a presença de tarefas impossíveis ou flaky reduz o pico de desempenho e a estabilidade do aprendizado, enquanto a mistura com tarefas fáceis mantém a alta performance.
+            <span class="source">Figura 2 do paper · Yu et al., arXiv:2610.37651</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b6-h">Análise dos Sinais de Falha</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Os autores realizaram experimentos motivacionais para entender como sinais ruidosos impactam o aprendizado.</span> <span class="s" data-s="b6-p0-s1">Eles categorizaram tarefas do benchmark GoBrowse em GitLab e analisaram as causas de falha.</span> <span class="s" data-s="b6-p0-s2">A maioria dos diagnósticos de tarefas impossíveis foi atribuída a limitações do harness ou ambiente, como ferramentas indisponíveis.</span> <span class="s" data-s="b6-p0-s3">Tarefas flaky frequentemente apresentavam causas como tarefas defeituosas ou especulativas.</span></p><p><span class="s" data-s="b6-p1-s0">Um experimento comparou a curadoria do GEPA-Curator com um método de aprendizado de currículo numérico, que ajusta a seleção de tarefas apenas com base em históricos binários de sucesso e fracasso.</span> <span class="s" data-s="b6-p1-s1">O método numérico obteve desempenho inferior ao GEPA e à curadoria semântica do GEPA-Curator, demonstrando que informações binárias são insuficientes para distinguir entre falhas acionáveis e ruído.</span></p><p><span class="s" data-s="b6-p2-s0">A curadoria semântica permitiu que o sistema identificasse que tarefas com sucesso misto podiam ser tanto flaky quanto sensíveis ao prompt.</span> <span class="s" data-s="b6-p2-s1">Ao usar evidências dos rastros de execução, o Curador pôde distinguir melhor o ruído do ambiente de falhas reais do prompt, resultando em atualizações de prompt mais precisas.</span></p>        <h2><span class="s" data-s="b7-h">Resultados Empíricos</span></h2>
+<p><span class="s" data-s="b7-p0-s0">O GEPA-Curator foi avaliado nos benchmarks GoBrowse, ALFWorld, AppWorld e τ-bench, usando Gemini 3.1 Pro e Claude Opus 5 como modelos otimizadores.</span> <span class="s" data-s="b7-p0-s1">No GoBrowse, o GEPA-Curator superou o GEPA e o prompt inicial em todos os domínios (GitLab, Shopping, Shopping Admin, Reddit).</span> <span class="s" data-s="b7-p0-s2">Com Gemini 3.1 Pro, obteve ganhos de desempenho significativos, demonstrando a eficácia da curadoria em ambientes web complexos.</span></p><p><span class="s" data-s="b7-p1-s0">Nos benchmarks adicionais, o GEPA-Curator mostrou melhorias consistentes sobre o GEPA e o ACE.</span> <span class="s" data-s="b7-p1-s1">No ALFWorld, com Gemini 3.1 Pro, a taxa de sucesso subiu para 91.8%, superando o ACE em 1.7%.</span> <span class="s" data-s="b7-p1-s2">No AppWorld Test-N, o ganho foi de 46.2% com Gemini e 46.4% com Claude Opus 5, superando ambos os baselines.</span> <span class="s" data-s="b7-p1-s3">Esses resultados sugerem que a curadoria de tarefas e a recuperação de sucessos são métodos gerais que beneficiam a otimização além de datasets ruidosos.</span></p><p><span class="s" data-s="b7-p2-s0">Os ganhos variam dependendo do benchmark e do modelo otimizador.</span> <span class="s" data-s="b7-p2-s1">Com Claude Opus 5, o GEPA-Curator superou o GEPA em 2.6% no ALFWorld, 15.9% no AppWorld Test-N e 13.9% no AppWorld Test-C, mantendo-se competitivo no τ-bench.</span> <span class="s" data-s="b7-p2-s2">A média de ganhos sobre o GEPA foi de 8.1% com Claude e 14.3% com Gemini, indicando robustez através de diferentes modelos base.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.37651/table1.webp" alt="Tabela 1: GEPA-Curator supera o GEPA e o Seed Prompt em todas as categorias do benchmark GoBrowse, com ganhos consistentes em GitLab, Shopping, Shopping Admin e Reddit." loading="lazy">
+          <figcaption>
+            Tabela 1: GEPA-Curator supera o GEPA e o Seed Prompt em todas as categorias do benchmark GoBrowse, com ganhos consistentes em GitLab, Shopping, Shopping Admin e Reddit.
+            <span class="source">Tabela 1 do paper · Yu et al., arXiv:2610.37651</span>
+          </figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="../../assets/papers/2610.37651/table2.webp" alt="Tabela 2: GEPA-Curator apresenta ganhos significativos sobre o GEPA e o ACE em benchmarks como ALFWorld, AppWorld e τ-bench, validando a eficácia da abordagem em diversos domínios." loading="lazy">
+          <figcaption>
+            Tabela 2: GEPA-Curator apresenta ganhos significativos sobre o GEPA e o ACE em benchmarks como ALFWorld, AppWorld e τ-bench, validando a eficácia da abordagem em diversos domínios.
+            <span class="source">Tabela 2 do paper · Yu et al., arXiv:2610.37651</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">Ablações e Componentes Chave</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Estudos de ablação no subset GitLab do WebArena isolaram o impacto de cada componente.</span> <span class="s" data-s="b10-p0-s1">A remoção da seleção de Pareto (parte da curadoria) reduziu ligeiramente o desempenho.</span> <span class="s" data-s="b10-p0-s2">A curadoria de tarefas sozinha e a recuperação de sucessos sozinha ambas superaram o baseline GEPA, com a recuperação de sucessos tendo uma leve vantagem (+1.9% vs +1.4%).</span> <span class="s" data-s="b10-p0-s3">A combinação completa do GEPA-Curator atingiu 88.6% de sucesso, demonstrando sinergia entre os componentes.</span></p><p><span class="s" data-s="b10-p1-s0">A análise mostra que a curadoria de tarefas é crucial para evitar a contaminação por sinais ruidosos, enquanto a recuperação de sucessos fornece o contexto necessário para otimizações mais inteligentes.</span> <span class="s" data-s="b10-p1-s1">Juntos, eles permitem que o otimizador de prompts tome decisões mais informadas, evitando atualizações baseadas em falhas externas e aproveitando padrões de sucesso anteriores.</span></p><p><span class="s" data-s="b10-p2-s0">Os resultados das ablações reforçam que a filtragem de ruído e o enriquecimento de contexto são complementares.</span> <span class="s" data-s="b10-p2-s1">A curadoria sozinha já traz benefícios, mas a adição de trajetórias de sucesso passadas maximiza o potencial de aprendizado do agente, resultando em prompts mais robustos e generalizáveis.</span></p>        <h2><span class="s" data-s="b11-h">Limitações e Considerações Finais</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Apesar dos resultados promissores, o paper não aborda a escalabilidade da curadoria semântica em escala massiva.</span> <span class="s" data-s="b11-p0-s1">O diagnóstico de tarefas como impossíveis ou flaky requer análise detalhada dos rastros de execução, o que pode ser computacionalmente custoso.</span> <span class="s" data-s="b11-p0-s2">Além disso, a eficácia do Curador depende da qualidade do modelo otimizador e da capacidade do LLM-judge em avaliar corretamente as trajetórias.</span></p><p><span class="s" data-s="b11-p1-s0">Outra limitação é a dependência da disponibilidade de trajetórias de sucesso passadas.</span> <span class="s" data-s="b11-p1-s1">Em cenários onde o agente encontra tarefas completamente novas sem histórico de sucesso, a recuperação de sucessos pode não ser aplicável.</span> <span class="s" data-s="b11-p1-s2">O sistema é projetado para melhorar o aprendizado incremental, mas seu comportamento em cenários de zero-shot ou poucos-shot não é o foco principal.</span></p><p><span class="s" data-s="b11-p2-s0">O GEPA-Curator representa um avanço prático na otimização de prompts para agentes, ao reconhecer que a qualidade do sinal de aprendizado é tão importante quanto a quantidade.</span> <span class="s" data-s="b11-p2-s1">Ao filtrar ruídos e aproveitar sucessos anteriores, o framework oferece uma via mais estável para a auto-melhoria de agentes LLM, mitigando um dos principais gargalos do aprendizado reflexivo.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Fracassos em agentes não indicam sempre falhas no prompt; podem ser ruído de ambiente ou ferramentas.</span></li><li><span class="s" data-s="k1">O GEPA-Curator filtra tarefas impossíveis ou instáveis antes da otimização, evitando aprendizado tóxico.</span></li><li><span class="s" data-s="k2">Recuperação de trajetórias de sucesso anteriores fornece contexto valioso para o otimizador de prompts.</span></li><li><span class="s" data-s="k3">Métodos baseados apenas em curricula numéricas são inferiores à curadoria semântica proposta.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.37651" rel="noopener">GEPA-Curator: Curated Learning for Self Improving Agents</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.37651" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

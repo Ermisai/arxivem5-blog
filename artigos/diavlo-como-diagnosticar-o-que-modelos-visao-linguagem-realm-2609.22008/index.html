@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DiaVLo: como diagnosticar o que modelos visão-linguagem realmente aprenderam a fazer — arXiv em 5</title>
+<meta name="description" content="Pesquisadores da TU Delft criaram um framework que compara o comportamento esperado e o comportamento observado de modelos multimodais, revelando quando eles acertam pelas razões erradas ou priorizam conceitos diferentes dos humanos.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DiaVLo: como diagnosticar o que modelos visão-linguagem realmente aprenderam a fazer">
+<meta property="og:description" content="Pesquisadores da TU Delft criaram um framework que compara o comportamento esperado e o comportamento observado de modelos multimodais, revelando quando eles acertam pelas razões erradas ou priorizam conceitos diferentes dos humanos.">
+<meta property="og:image" content="../../assets/papers/2609.22008/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Imagem</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2609.22008" rel="noopener">arXiv:2609.22008</a>
+    </div>
+    <h1><span class="s" data-s="t">DiaVLo: como diagnosticar o que modelos visão-linguagem realmente aprenderam a fazer</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Pesquisadores da TU Delft criaram um framework que compara o comportamento esperado e o comportamento observado de modelos multimodais, revelando quando eles acertam pelas razões erradas ou priorizam conceitos diferentes dos humanos.</span></p>
+    <p class="byline">
+      <span>Corti et al.</span>
+      <span>10 min de leitura</span>
+<span>18/09/2026</span>    </p>
+    <div class="listen" data-article="2609.22008" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=QPnPxfcjzAY" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema: benchmarks medem desempenho, não comportamento</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Modelos visão-linguagem (VLMs) combinam três componentes: um codificador visual (como o CLIP), uma camada de projeção intermediária e um modelo de linguagem decoder (como o Vicuna).</span> <span class="s" data-s="b0-p0-s1">Essa arquitetura tem funcionado bem em benchmarks offline e aplicações práticas, mas trabalhos recentes mostraram pontos cegos críticos na percepção visual e discrepâncias de desempenho em tarefas centradas em visão.</span></p><p><span class="s" data-s="b0-p1-s0">O desempenho agregado em benchmarks não conta a história completa.</span> <span class="s" data-s="b0-p1-s1">Um modelo pode acertar uma resposta por razões completamente diferentes das que um humano usaria.</span> <span class="s" data-s="b0-p1-s2">Pode ignorar detalhes visuais importantes e compensar com conhecimento linguístico.</span> <span class="s" data-s="b0-p1-s3">Ou pode organizar e priorizar conceitos de forma imprevisível.</span> <span class="s" data-s="b0-p1-s4">Benchmarks tradicionais medem acurácia, mas não verificam se o modelo exibe os comportamentos desejados e evita os indesejados.</span></p><p><span class="s" data-s="b0-p2-s0">Métodos de interpretabilidade existentes tentam preencher essa lacuna.</span> <span class="s" data-s="b0-p2-s1">Alguns são black-box (precisam apenas de acesso via API), outros são white-box (precisam de acesso completo ao modelo).</span> <span class="s" data-s="b0-p2-s2">Mas esses métodos geralmente dependem de proxies que não mapeiam naturalmente para cenários reais onde humanos usam VLMs.</span> <span class="s" data-s="b0-p2-s3">Falta uma forma sistemática de definir o que esperamos que o modelo faça e verificar se ele realmente faz isso.</span></p>        <h2><span class="s" data-s="b1-h">A ideia: especificar comportamentos esperados e observados</span></h2>
+<p><span class="s" data-s="b1-p0-s0">DiaVLo (Diagnosing Behaviours of Vision-Language Models) propõe diagnosticar VLMs como uma adição ao benchmarking tradicional.</span> <span class="s" data-s="b1-p0-s1">A ideia central é construir duas especificações paralelas: uma de comportamentos esperados (SHOULD-KNOW, ou SK) e outra de comportamentos observados (REALLY-KNOW, ou RK).</span> <span class="s" data-s="b1-p0-s2">Comparando as duas, o framework identifica alinhamentos e desalinhamentos.</span></p><p><span class="s" data-s="b1-p1-s0">Os comportamentos esperados são definidos por representações simbólicas das entradas visuais, verificadas por humanos quanto à correção e relevância para a tarefa.</span> <span class="s" data-s="b1-p1-s1">Os comportamentos observados vêm de prompts que pedem ao próprio VLM para verbalizar as razões estruturadas por trás de suas respostas, produzindo auto-explicações de seu comportamento.</span></p><p><span class="s" data-s="b1-p2-s0">Além da comparação semântica, DiaVLo usa modelagem causal para quantificar a influência de conceitos visuais nas saídas do modelo e mitigar inconsistências nas auto-explicações.</span> <span class="s" data-s="b1-p2-s1">O framework gera comportamentos observados contrafactuais sinteticamente e estima efeitos no nível de conceitos usando um estimador Double Machine Learning.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.22008/figure1.webp" alt="Visão geral do DiaVLo: o framework posiciona diagnóstico como complemento ao benchmarking, permitindo definir comportamentos esperados e verificar se os comportamentos observados do modelo correspondem a eles." loading="lazy">
+          <figcaption>
+            Visão geral do DiaVLo: o framework posiciona diagnóstico como complemento ao benchmarking, permitindo definir comportamentos esperados e verificar se os comportamentos observados do modelo correspondem a eles.
+            <span class="source">Figura 1 do paper · Corti et al., arXiv:2609.22008</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Como funciona: grafos de cena e auto-reflexão</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O pipeline do DiaVLo tem dois processos paralelos.</span> <span class="s" data-s="b3-p0-s1">No topo, a geração de comportamentos esperados começa com a criação automática de grafos de cena a partir das imagens.</span> <span class="s" data-s="b3-p0-s2">Um grafo de cena é uma representação estruturada da imagem em triplas (sujeito, relação, objeto) — por exemplo, (&#39;vaso&#39;, &#39;está em&#39;, &#39;mesa&#39;).</span> <span class="s" data-s="b3-p0-s3">Esses grafos candidatos são então refinados por humanos, que verificam se as triplas são corretas e relevantes para a pergunta ou tarefa em questão.</span></p><p><span class="s" data-s="b3-p1-s0">Na parte inferior do pipeline, o VLM é solicitado a gerar sua resposta e, crucialmente, a estruturar a justificativa por trás dela.</span> <span class="s" data-s="b3-p1-s1">O modelo produz triplas REALLY-KNOW que descrevem os conceitos e relações que ele afirma ter usado para chegar à resposta.</span> <span class="s" data-s="b3-p1-s2">Essas auto-explicações são então comparadas semanticamente com as triplas SHOULD-KNOW.</span></p><p><span class="s" data-s="b3-p2-s0">A comparação resulta em três categorias de comportamento.</span> <span class="s" data-s="b3-p2-s1">Comportamentos &#39;Alinhados&#39; ocorrem quando uma tripla RK corresponde semanticamente a uma SK — o modelo usou conceitos esperados.</span> <span class="s" data-s="b3-p2-s2">Comportamentos &#39;Expandidos&#39; aparecem quando o modelo menciona conceitos válidos que não estavam nas SKs, mas que são relevantes.</span> <span class="s" data-s="b3-p2-s3">Comportamentos &#39;Divergentes&#39; surgem quando o modelo usa conceitos ou relações que não correspondem às expectativas humanas ou que são irrelevantes para a tarefa.</span></p><p><span class="s" data-s="b3-p3-s0">Para a verificação causal, DiaVLo gera variações contrafactuais das triplas RK e observa como as respostas do modelo mudam.</span> <span class="s" data-s="b3-p3-s1">Um estimador Double Machine Learning calcula o efeito causal de cada conceito na saída, permitindo identificar quais conceitos realmente influenciam o comportamento do modelo versus quais aparecem nas auto-explicações mas têm pouco impacto real.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.22008/figure2.webp" alt="Método detalhado: no topo, grafos de cena são gerados e curados por humanos para produzir SKs relevantes. Abaixo, o VLM verbaliza suas razões (RKs) e o framework computa efeitos causais de conceitos." loading="lazy">
+          <figcaption>
+            Método detalhado: no topo, grafos de cena são gerados e curados por humanos para produzir SKs relevantes. Abaixo, o VLM verbaliza suas razões (RKs) e o framework computa efeitos causais de conceitos.
+            <span class="source">Figura 2 do paper · Corti et al., arXiv:2609.22008</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Experimentos: quatro modelos, quatro benchmarks</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os autores testaram DiaVLo em quatro VLMs open-source: InternVL2 8B, LLaVa-1.6 7B, Qwen2.5-VL 7B e ShareGPT4V 7B.</span> <span class="s" data-s="b5-p0-s1">Todos têm cerca de 7-8 bilhões de parâmetros e representam arquiteturas populares na comunidade.</span> <span class="s" data-s="b5-p0-s2">Os modelos foram hospedados localmente em duas GPUs NVIDIA A10, usando parametrização padrão e decodificação greedy para reprodutibilidade.</span></p><p><span class="s" data-s="b5-p1-s0">Quatro datasets foram escolhidos para cobrir diferentes tipos de tarefa.</span> <span class="s" data-s="b5-p1-s1">LLaVa-Bench contém 60 perguntas abertas, diversas e desafiadoras — os autores esperavam que os modelos tivessem dificuldade aqui.</span> <span class="s" data-s="b5-p1-s2">MMBench forneceu perguntas de legendagem das classes &#39;Image Scene&#39; (75 amostras) e &#39;Image Topic&#39; (64), reformuladas como abertas.</span> <span class="s" data-s="b5-p1-s3">SEED-Bench 2 contribuiu com múltipla escolha de compreensão de cena (75) e raciocínio visual (75).</span> <span class="s" data-s="b5-p1-s4">VQA v2 trouxe perguntas de múltipla escolha sobre contagem de pessoas (75) e ações de pessoas (75).</span></p><p><span class="s" data-s="b5-p2-s0">Para a curação humana, foram recrutados 520 trabalhadores no Prolific, de países de língua inglesa, com taxa de aprovação ≥95%.</span> <span class="s" data-s="b5-p2-s1">O salário médio foi de 8 libras por hora.</span> <span class="s" data-s="b5-p2-s2">Cada anotador trabalhou em 5 amostras de dados, cobrindo um número variável de triplas SK candidatas.</span> <span class="s" data-s="b5-p2-s3">O estudo recebeu aprovação ética da instituição dos autores.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b6-t">Qualidade da curação humana</span></h3>
+          <p><span class="s" data-s="b6-c-s0">Entre 580 e 1798 triplas SK iniciais foram geradas por dataset.</span> <span class="s" data-s="b6-c-s1">Após validação humana, 51.7% a 58.5% foram consideradas relevantes.</span> <span class="s" data-s="b6-c-s2">Entre 38.7% e 46% das triplas validadas eram novas (não estavam nos candidatos iniciais).</span> <span class="s" data-s="b6-c-s3">Apenas cerca de 11% no máximo precisaram de correções por especialistas — principalmente erros de digitação e formatação.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b7-h">Resultados: três tipos de comportamento</span></h2>
+<p><span class="s" data-s="b7-p0-s0">A primeira pergunta de pesquisa foi: que tipos comuns de comportamento DiaVLo identifica?</span> <span class="s" data-s="b7-p0-s1">A resposta veio da classificação das triplas RK em Alinhadas, Expandidas e Divergentes, usando limiares de similaridade semântica.</span> <span class="s" data-s="b7-p0-s2">Os autores exploraram diferentes limiares e inspecionaram qualitativamente 200 amostras, cobrindo 952 triplas RK, para identificar padrões recorrentes.</span></p><p><span class="s" data-s="b7-p1-s0">Comportamentos claramente alinhados e claramente divergentes apareceram, como esperado.</span> <span class="s" data-s="b7-p1-s1">Mas o framework também revelou comportamentos mais nuançados.</span> <span class="s" data-s="b7-p1-s2">Os VLMs mostraram-se seletivos nos conceitos que usam, às vezes relacionando-os de forma diferente dos humanos.</span> <span class="s" data-s="b7-p1-s3">Em alguns casos, os modelos favoreceram descrições amplas em vez de aspectos composicionais das entradas visuais — por exemplo, mencionando &#39;sala de estar&#39; em vez de detalhar objetos específicos e suas relações espaciais.</span></p><p><span class="s" data-s="b7-p2-s0">As distribuições de comportamentos variaram entre modelos e datasets.</span> <span class="s" data-s="b7-p2-s1">Alguns modelos apresentaram mais comportamentos Expandidos em certos benchmarks, sugerindo que vão além das expectativas humanas básicas mas de forma válida.</span> <span class="s" data-s="b7-p2-s2">Outros mostraram mais Divergências, indicando desalinhamento mais profundo entre o raciocínio do modelo e as especificações humanas.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.22008/figure4.webp" alt="Distribuição de comportamentos identificados: quantidade de triplas Alinhadas, Expandidas e Divergentes para cada combinação de modelo e benchmark, mostrando variação entre arquiteturas e tarefas." loading="lazy">
+          <figcaption>
+            Distribuição de comportamentos identificados: quantidade de triplas Alinhadas, Expandidas e Divergentes para cada combinação de modelo e benchmark, mostrando variação entre arquiteturas e tarefas.
+            <span class="source">Figura 4 do paper · Corti et al., arXiv:2609.22008</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Informatividade: comportamentos correlacionam com desempenho</span></h2>
+<p><span class="s" data-s="b9-p0-s0">A segunda pergunta foi: quão informativos são os comportamentos encontrados?</span> <span class="s" data-s="b9-p0-s1">Mesmo que um VLM tenha bom desempenho, não é garantido que os comportamentos que DiaVLo identifica se alinhem com esse desempenho.</span> <span class="s" data-s="b9-p0-s2">Os autores estudaram isso de duas formas.</span></p><p><span class="s" data-s="b9-p1-s0">Primeiro, calcularam quão bem as similaridades entre SK e RK descrevem o desempenho do modelo.</span> <span class="s" data-s="b9-p1-s1">Como não há razão para assumir relação linear entre essas variáveis, usaram Informação Mútua (MI) via bootstrap.</span> <span class="s" data-s="b9-p1-s2">Os resultados mostraram que as classificações de comportamento de DiaVLo carregam informação sobre o desempenho medido — ou seja, os comportamentos diagnosticados não são ortogonais à acurácia.</span></p><p><span class="s" data-s="b9-p2-s0">Segundo, fizeram comparações pareadas entre modelos através dos datasets, explorando as distribuições de efeitos causais no nível de conceitos.</span> <span class="s" data-s="b9-p2-s1">Para mitigar vieses, reportaram medianas de estimativas causais através de 100 divisões aleatórias dos dados.</span> <span class="s" data-s="b9-p2-s2">As distribuições revelaram que diferentes modelos atribuem pesos causais diferentes aos mesmos conceitos, e que a importância causal de conceitos varia entre tipos de tarefa.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.22008/figure5.webp" alt="Distribuições de efeitos causais estimados: mostram como diferentes conceitos influenciam as respostas dos modelos, com variação entre VLMs e benchmarks. Comparações completas estão no apêndice do paper." loading="lazy">
+          <figcaption>
+            Distribuições de efeitos causais estimados: mostram como diferentes conceitos influenciam as respostas dos modelos, com variação entre VLMs e benchmarks. Comparações completas estão no apêndice do paper.
+            <span class="source">Figura 5 do paper · Corti et al., arXiv:2609.22008</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b11-h">O que os comportamentos revelam sobre VLMs</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Os padrões encontrados sugerem que VLMs organizam e priorizam informação visual de formas que nem sempre correspondem à intuição humana.</span> <span class="s" data-s="b11-p0-s1">Um modelo pode acertar uma resposta mas por razões parcialmente divergentes das esperadas — usando conceitos corretos mas relações diferentes, ou focando em aspectos mais gerais da cena em vez de detalhes composicionais.</span></p><p><span class="s" data-s="b11-p1-s0">Os comportamentos Expandidos são particularmente interessantes.</span> <span class="s" data-s="b11-p1-s1">Eles indicam que o modelo identificou conceitos válidos e relevantes que humanos não especificaram explicitamente nas SKs.</span> <span class="s" data-s="b11-p1-s2">Isso pode ser positivo (o modelo captura nuances) ou problemático (o modelo se distrai com informação periférica).</span> <span class="s" data-s="b11-p1-s3">DiaVLo não resolve essa ambiguidade automaticamente, mas a torna visível para análise.</span></p><p><span class="s" data-s="b11-p2-s0">As estimativas causais adicionam uma camada de verificação.</span> <span class="s" data-s="b11-p2-s1">Nem tudo que o modelo menciona em suas auto-explicações tem efeito causal real na saída.</span> <span class="s" data-s="b11-p2-s2">Conceitos com baixo efeito causal mas alta frequência nas RKs podem indicar vieses de verbalização — o modelo &#39;acha&#39; que deveria mencionar certos conceitos, mas eles não dirigem realmente seu comportamento.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b12-t">Além de acurácia agregada</span></h3>
+          <p><span class="s" data-s="b12-c-s0">Benchmarks tradicionais reportam acurácia média em categorias amplas.</span> <span class="s" data-s="b12-c-s1">DiaVLo oferece contexto: dois modelos com acurácia similar podem exibir comportamentos muito diferentes.</span> <span class="s" data-s="b12-c-s2">Um pode estar alinhado com raciocínio humano; outro pode compensar pontos cegos visuais com viés linguístico.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b13-h">Limitações: fidelidade, escala e estabilidade</span></h2>
+<p><span class="s" data-s="b13-p0-s0">Os autores são explícitos sobre as limitações.</span> <span class="s" data-s="b13-p0-s1">A primeira é a fidelidade das auto-explicações.</span> <span class="s" data-s="b13-p0-s2">DiaVLo depende de VLMs verbalizando suas razões, e adiciona verificação causal para mitigar inconsistências.</span> <span class="s" data-s="b13-p0-s3">Mas isso não é equivalente a garantir que as auto-explicações sejam fiéis aos mecanismos internos do modelo.</span> <span class="s" data-s="b13-p0-s4">Auto-explicações podem ser menos confiáveis que outros métodos de IA explicável em alguns casos, e são suscetíveis a vieses e correlações espúrias.</span></p><p><span class="s" data-s="b13-p1-s0">A segunda limitação é a dependência de curação humana.</span> <span class="s" data-s="b13-p1-s1">DiaVLo atualmente requer que humanos refinem as triplas SK candidatas para garantir relevância.</span> <span class="s" data-s="b13-p1-s2">Isso impõe limites de escalabilidade por dataset.</span> <span class="s" data-s="b13-p1-s3">Os autores sugerem que pipelines de crowdsourcing mais escaláveis poderiam usar fluxos Find-Fix-Verify: identificar automaticamente SKs problemáticas, rotear correções para VLMs ou humanos dependendo da severidade, e ter humanos verificando apenas um subconjunto.</span> <span class="s" data-s="b13-p1-s4">Mas isso exigiria balancear precisão e recall cuidadosamente.</span></p><p><span class="s" data-s="b13-p2-s0">A terceira limitação é a instabilidade no seguimento de instruções.</span> <span class="s" data-s="b13-p2-s1">Os VLMs testados lutaram com as perguntas nos datasets usados, às vezes retornando strings vazias.</span> <span class="s" data-s="b13-p2-s2">Isso aconteceu em diferentes datasets e com diferentes estratégias de decodificação (greedy, beam search, amostragem).</span> <span class="s" data-s="b13-p2-s3">Os modelos também tiveram dificuldade em seguir o template ao estruturar suas justificativas.</span> <span class="s" data-s="b13-p2-s4">Os autores suspeitam que isso seja subproduto dos dados de treinamento (predominantemente conversacionais) e do tamanho dos modelos.</span></p><p><span class="s" data-s="b13-p3-s0">Finalmente, o trabalho testou apenas modelos com cerca de 7-8 bilhões de parâmetros.</span> <span class="s" data-s="b13-p3-s1">Modelos maiores podem exibir comportamentos diferentes, potencialmente com auto-explicações mais estáveis e maior capacidade de seguir instruções estruturadas.</span> <span class="s" data-s="b13-p3-s2">Mas o custo computacional de hospedar e executar modelos maiores repetidamente para análise causal seria substancialmente maior.</span></p>        <h2><span class="s" data-s="b14-h">Implicações para desenvolvimento e auditoria</span></h2>
+<p><span class="s" data-s="b14-p0-s0">DiaVLo não substitui benchmarks ou métodos de interpretabilidade — complementa ambos.</span> <span class="s" data-s="b14-p0-s1">Benchmarks continuam essenciais para medir desempenho agregado.</span> <span class="s" data-s="b14-p0-s2">Métodos de interpretabilidade white-box continuam necessários para entender mecanismos internos.</span> <span class="s" data-s="b14-p0-s3">Mas DiaVLo preenche um espaço intermediário: permite especificar comportamentos desejados em termos humanamente interpretáveis e verificar sistematicamente se modelos os exibem.</span></p><p><span class="s" data-s="b14-p1-s0">Para desenvolvedores de VLMs, o framework oferece uma forma de diagnosticar onde o comportamento do modelo diverge das expectativas, mesmo quando a acurácia é aceitável.</span> <span class="s" data-s="b14-p1-s1">Isso pode informar decisões sobre arquitetura, dados de treinamento e fine-tuning.</span> <span class="s" data-s="b14-p1-s2">Se um modelo consistentemente ignora relações espaciais composicionais em favor de categorias gerais de cena, isso sugere limitações específicas do codificador visual ou da camada de projeção.</span></p><p><span class="s" data-s="b14-p2-s0">Para auditoria e implantação responsável, DiaVLo fornece ferramentas para identificar comportamentos indesejados antes que causem problemas em produção.</span> <span class="s" data-s="b14-p2-s1">Se um modelo médico consistentemente usa conceitos Divergentes ao diagnosticar certas condições, isso é um sinal de alerta mesmo se a acurácia final parecer razoável.</span> <span class="s" data-s="b14-p2-s2">O framework torna esses desalinhamentos visíveis e quantificáveis.</span></p><p><span class="s" data-s="b14-p3-s0">O trabalho também aponta para direções futuras.</span> <span class="s" data-s="b14-p3-s1">Comportamentos no nível de sistema — como um VLM interage com ferramentas externas, como prioriza informação em diálogos multi-turno — poderiam ser diagnosticados com extensões de DiaVLo.</span> <span class="s" data-s="b14-p3-s2">E os insights sobre comportamentos poderiam informar técnicas de mitigação, como ajustar prompts, re-treinar componentes específicos ou adicionar camadas de verificação.</span></p>        <h2><span class="s" data-s="b15-h">O que fica em aberto</span></h2>
+<p><span class="s" data-s="b15-p0-s0">DiaVLo demonstra que é possível diagnosticar comportamentos de VLMs de forma sistemática, mas muitas questões permanecem.</span> <span class="s" data-s="b15-p0-s1">A fidelidade das auto-explicações é uma limitação fundamental que o framework mitiga mas não resolve.</span> <span class="s" data-s="b15-p0-s2">Trabalhos futuros precisarão desenvolver métodos mais robustos para verificar se as razões verbalizadas correspondem aos mecanismos causais internos.</span></p><p><span class="s" data-s="b15-p1-s0">A escalabilidade da curação humana é outro desafio aberto.</span> <span class="s" data-s="b15-p1-s1">Os autores propõem caminhos usando crowdsourcing estruturado e VLMs como juízes, mas a implementação e validação dessas abordagens ficam para trabalho futuro.</span> <span class="s" data-s="b15-p1-s2">Há um trade-off fundamental entre precisão diagnóstica e custo de curação que cada aplicação precisará balancear.</span></p><p><span class="s" data-s="b15-p2-s0">Finalmente, o trabalho não testa modelos maiores ou mais recentes, e não explora como comportamentos mudam com fine-tuning ou adaptação de domínio.</span> <span class="s" data-s="b15-p2-s1">VLMs são uma tecnologia em rápida evolução, e frameworks de diagnóstico precisarão evoluir junto.</span> <span class="s" data-s="b15-p2-s2">Mas DiaVLo estabelece princípios e métodos que podem ser adaptados: especificar comportamentos esperados, extrair comportamentos observados, comparar semanticamente, e verificar causalmente.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">DiaVLo diagnostica VLMs comparando comportamentos esperados (especificados por humanos via grafos de cena) com comportamentos observados (auto-explicações do modelo), identificando alinhamentos e divergências.</span></li><li><span class="s" data-s="k1">Experimentos com quatro VLMs em quatro benchmarks revelaram que modelos podem acertar por razões diferentes das humanas, favorecendo descrições gerais sobre relações composicionais.</span></li><li><span class="s" data-s="k2">Estimativas causais mostraram que nem todos os conceitos mencionados nas auto-explicações influenciam realmente as respostas, revelando vieses de verbalização dos modelos.</span></li><li><span class="s" data-s="k3">Limitações incluem dependência de auto-explicações (cuja fidelidade não é garantida), necessidade de curação humana (limitando escala) e instabilidade no seguimento de instruções pelos modelos testados.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2609.22008" rel="noopener">DiaVLo: Diagnosing Behaviours of Vision-Language Models</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2609.22008" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

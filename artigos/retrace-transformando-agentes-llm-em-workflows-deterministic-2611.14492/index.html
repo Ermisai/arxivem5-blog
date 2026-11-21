@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ReTrace: Transformando Agentes LLM em Workflows Determinísticos para Escala — arXiv em 5</title>
+<meta name="description" content="O paper ReTrace propõe distilar agentes que usam ferramentas em fluxos de trabalho estáticos, removendo a necessidade de planejamento com LLM em tempo de execução para reduzir latência e custo.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ReTrace: Transformando Agentes LLM em Workflows Determinísticos para Escala">
+<meta property="og:description" content="O paper ReTrace propõe distilar agentes que usam ferramentas em fluxos de trabalho estáticos, removendo a necessidade de planejamento com LLM em tempo de execução para reduzir latência e custo.">
+<meta property="og:image" content="../../assets/papers/2611.14492/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Agentes</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.14492" rel="noopener">arXiv:2611.14492</a>
+    </div>
+    <h1><span class="s" data-s="t">ReTrace: Transformando Agentes LLM em Workflows Determinísticos para Escala</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">O paper ReTrace propõe distilar agentes que usam ferramentas em fluxos de trabalho estáticos, removendo a necessidade de planejamento com LLM em tempo de execução para reduzir latência e custo.</span></p>
+    <p class="byline">
+      <span>Hou et al.</span>
+      <span>8 min de leitura</span>
+<span>10/11/2026</span>    </p>
+    <div class="listen" data-article="2611.14492" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=hxx_Go5uvHM" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Custo Oculto do Planejamento Dinâmico</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A automação de processos de negócios tradicionais envolve a execução repetitiva de Procedimentos Operacionais Padrão (SOPs) sobre novos inputs.</span> <span class="s" data-s="b0-p0-s1">Historicamente, isso era feito construindo workflows manualmente, conectando ferramentas e ramificações em código.</span> <span class="s" data-s="b0-p0-s2">Recentemente, Agentes baseados em Grandes Modelos de Linguagem (LLMs) surgiram como uma alternativa, onde um proprietário de processo escreve um SOP em linguagem natural e o agente lê e executa as etapas, chamando ferramentas conforme necessário.</span></p><p><span class="s" data-s="b0-p1-s0">O problema fundamental dessa abordagem é o custo de runtime.</span> <span class="s" data-s="b0-p1-s1">Para cada execução, o agente precisa chamar o LLM para decidir qual passo seguir, rotear dados e transformar informações.</span> <span class="s" data-s="b0-p1-s2">Em alta escala, essa latência e o custo por token se tornam proibitivos.</span> <span class="s" data-s="b0-p1-s3">Em nossa plataforma de automação empresarial, analisamos 5.115 automações criadas entre abril e junho de 2026.</span> <span class="s" data-s="b0-p1-s4">Embora 91,8% fossem agentes que planejam em tempo de execução, as sete automações mais frequentemente executadas eram workflows fixos.</span> <span class="s" data-s="b0-p1-s5">Para procedimentos com três a cinco ferramentas, a escolha do próximo passo consumia 37–43% do tempo de execução, além do custo de tokens.</span></p><p><span class="s" data-s="b0-p2-s0">Essa discrepância entre o que os usuários criam (agentes flexíveis) e o que é executado em escala (workflows fixos) motiva a necessidade de uma ponte entre as duas abordagens.</span> <span class="s" data-s="b0-p2-s1">Se um procedimento é executado milhares de vezes, construir um workflow uma vez e reutilizá-lo paga o custo inicial de construção.</span> <span class="s" data-s="b0-p2-s2">Estimativas sugerem que a construção se paga após cerca de 75 execuções, enquanto alguns workflows executaram centenas de milhares de vezes em três meses.</span></p>        <h2><span class="s" data-s="b1-h">A Ideia Central: Distilação de Raciocínio</span></h2>
+<p><span class="s" data-s="b1-p0-s0">O ReTrace propõe transformar um SOP e algumas execuções logadas de um agente (traces) em um workflow reutilizável onde o código, e não o LLM, seleciona o próximo passo.</span> <span class="s" data-s="b1-p0-s1">A inovação não está apenas em extrair as chamadas de ferramenta, mas em extrair a lógica condicional por trás delas.</span></p><p><span class="s" data-s="b1-p1-s0">Traces de agentes comuns mostram a sequência de ações: &#39;chamar ferramenta X&#39;, &#39;chamar ferramenta Y&#39;.</span> <span class="s" data-s="b1-p1-s1">No entanto, as chamadas de ferramenta sozinhas não explicam por que a ação foi tomada.</span> <span class="s" data-s="b1-p1-s2">O raciocínio (reasoning) que o agente gera antes de agir frequentemente contém a justificativa, como &#39;o pedido já foi enviado, portanto escalar para humano&#39;.</span> <span class="s" data-s="b1-p1-s3">O ReTrace utiliza esse raciocínio para inferir as condições que levam a cada decisão.</span></p><p><span class="s" data-s="b1-p2-s0">O processo começa coletando traces que incluem tanto as ações quanto o texto de raciocínio.</span> <span class="s" data-s="b1-p2-s1">Em seguida, o sistema extrai as condições, as ferramentas e as fontes de entrada por trás de cada passo.</span> <span class="s" data-s="b1-p2-s2">Essas condições são mescladas através de múltiplas execuções para formar um documento de regras compacto.</span> <span class="s" data-s="b1-p2-s3">Cada regra é vinculada à sua evidência (o trace específico que a gerou), permitindo auditoria e depuração.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.14492/figure1.webp" alt="Comparação visual: Agentes tradicionais chamam o LLM a cada passo, enquanto o ReTrace compila as regras em código antes da implantação, eliminando o planner em runtime." loading="lazy">
+          <figcaption>
+            Comparação visual: Agentes tradicionais chamam o LLM a cada passo, enquanto o ReTrace compila as regras em código antes da implantação, eliminando o planner em runtime.
+            <span class="source">Figura 1 do paper · Hou et al., arXiv:2611.14492</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Metodologia: Das Traces ao Workflow Executável</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O pipeline do ReTrace opera em três fases principais.</span> <span class="s" data-s="b3-p0-s1">Primeiro, a extração de regras.</span> <span class="s" data-s="b3-p0-s2">Os autores combinam o raciocínio do agente com seus registros de ferramentas para recuperar condições de ação, fontes de entrada e alternativas que não foram executadas em nenhum trace logado.</span> <span class="s" data-s="b3-p0-s3">Isso é crucial porque um trace pode não cobrir todos os cenários de erro ou sucesso, mas o raciocínio do agente pode sugerir como lidar com eles.</span></p><p><span class="s" data-s="b3-p1-s0">Segundo, a geração do documento de regras.</span> <span class="s" data-s="b3-p1-s1">As condições extraídas são consolidadas em um documento único.</span> <span class="s" data-s="b3-p1-s2">Este documento atua como uma especificação intermediária.</span> <span class="s" data-s="b3-p1-s3">Ele não é dependente de plataforma, o que significa que a mesma lógica pode ser compilada para diferentes orquestradores.</span> <span class="s" data-s="b3-p1-s4">A única etapa que depende da plataforma é a geração final do código executável.</span></p><p><span class="s" data-s="b3-p2-s0">Terceiro, a compilação para workflow.</span> <span class="s" data-s="b3-p2-s1">O documento de regras é traduzido para código executável.</span> <span class="s" data-s="b3-p2-s2">No τ²-bench e no SOP-Bench, isso resultou em código Python.</span> <span class="s" data-s="b3-p2-s3">Na plataforma interna da Amazon, resultou em grafos de workflow tipados.</span> <span class="s" data-s="b3-p2-s4">Em tempo de execução, o código avalia as condições para decidir o próximo passo.</span> <span class="s" data-s="b3-p2-s5">Se uma ferramenta ainda precisar de um LLM (por exemplo, para classificar um documento), a chamada ocorre, mas o roteamento do fluxo de trabalho é determinístico e rápido.</span></p>        <h2><span class="s" data-s="b4-h">Por que o Raciocínio é Crítico?</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Um ponto central do paper é a distinção entre ações observadas e lógica inferida.</span> <span class="s" data-s="b4-p0-s1">Se um agente olha up um pedido e depois escala para um humano, o trace mostra apenas a sequência.</span> <span class="s" data-s="b4-p0-s2">Sem o raciocínio, não sabemos se a decisão foi baseada no status de envio ou em outro fator.</span> <span class="s" data-s="b4-p0-s3">O ReTrace depende do fato de que o agente escreveu uma explicação clara.</span></p><p><span class="s" data-s="b4-p1-s0">Os autores notam que fornecer mais traces brutos não é suficiente.</span> <span class="s" data-s="b4-p1-s1">Com muitos traces longos, o gerador de workflow pode acabar escrevendo código pior, devido ao ruído e à redundância.</span> <span class="s" data-s="b4-p1-s2">O raciocínio serve como um filtro semântico que agrupa comportamentos similares sob regras gerais.</span> <span class="s" data-s="b4-p1-s3">No entanto, isso introduz uma dependência: se o raciocínio do agente for enganoso ou incompleto, as regras derivadas serão falhas.</span></p><p><span class="s" data-s="b4-p2-s0">O sistema também lida com a ambiguidade.</span> <span class="s" data-s="b4-p2-s1">Quando diferentes traces sugerem condições conflitantes, o documento de regras precisa resolver essas contradições.</span> <span class="s" data-s="b4-p2-s2">O ReTrace mantém o vínculo com a evidência original, permitindo que desenvolvedores vejam por que uma regra foi gerada e se ela é válida para novos inputs.</span></p>        <h2><span class="s" data-s="b5-h">Resultados: Velocidade e Custo</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Avaliamos o ReTrace em três contextos: 79 procedimentos da plataforma de produção da Amazon, o benchmark τ²-bench e o SOP-Bench.</span> <span class="s" data-s="b5-p0-s1">Nos procedimentos internos, os workflows ReTrace alcançaram 93,8% de conclusão, contra 96,8% para o agente original, mas com 24% de custo menor por tarefa.</span> <span class="s" data-s="b5-p0-s2">A perda de precisão é pequena comparada à economia de custo.</span></p><p><span class="s" data-s="b5-p1-s0">No τ²-bench, a diferença de desempenho é mais visível em termos de tempo.</span> <span class="s" data-s="b5-p1-s1">Os workflows ReTrace alcançaram 75,8% de sucesso na tarefa, enquanto o agente alcançou 80,6%.</span> <span class="s" data-s="b5-p1-s2">No entanto, o tempo de execução caiu de 170 segundos para 1,3 segundos por tarefa.</span> <span class="s" data-s="b5-p1-s3">Essa é uma redução de mais de dois ordens de magnitude, tornando o ReTrace viável para aplicações que exigem baixa latência.</span></p><p><span class="s" data-s="b5-p2-s0">Os gráficos de tempo de execução mostram que o ReTrace mantém um tempo consistente abaixo de 2,5 segundos, independentemente da profundidade da tarefa (número de chamadas de ferramenta).</span> <span class="s" data-s="b5-p2-s1">Em contraste, o tempo do agente cresce linearmente com a complexidade, pois cada passo requer uma nova inferência do LLM.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.14492/table1.webp" alt="Tabela 1: Resultados principais. ReTrace reduz o tempo de 170s para 1,3s no τ²-bench, com sucesso de 75,8%, comparado a 80,6% do agente." loading="lazy">
+          <figcaption>
+            Tabela 1: Resultados principais. ReTrace reduz o tempo de 170s para 1,3s no τ²-bench, com sucesso de 75,8%, comparado a 80,6% do agente.
+            <span class="source">Tabela 1 do paper · Hou et al., arXiv:2611.14492</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Reparo Iterativo e Ajuste Fino</span></h2>
+<p><span class="s" data-s="b7-p0-s0">O sucesso inicial do ReTrace não é perfeito.</span> <span class="s" data-s="b7-p0-s1">No τ²-bench, com k=2 workflows (pequeno conjunto de traces de treinamento), o sucesso era de 66,7%.</span> <span class="s" data-s="b7-p0-s2">No entanto, o sistema suporta um processo de reparo.</span> <span class="s" data-s="b7-p0-s3">Ao usar falhas de treinamento rotuladas para corrigir as regras, três rodadas de reparo elevaram o sucesso para 81,2%, superando ligeiramente o agente.</span></p><p><span class="s" data-s="b7-p1-s0">Esse mecanismo de reparo é essencial para a adoção prática.</span> <span class="s" data-s="b7-p1-s1">Ele permite que o workflow seja refinado com base em erros reais, sem a necessidade de retreinar o modelo ou chamar o LLM para planejamento.</span> <span class="s" data-s="b7-p1-s2">O custo de gerar o workflow é amortizado, e o ajuste fino é feito via código ou configuração de regras, que é mais barato e rápido do que inferência.</span></p><p><span class="s" data-s="b7-p2-s0">No SOP-Bench, a situação é diferente.</span> <span class="s" data-s="b7-p2-s1">Sem reparo, o ReTrace fica atrás da geração few-shot (80,6% vs 83,6%).</span> <span class="s" data-s="b7-p2-s2">Com reparo, ele atinge 87,8% a 0,40s por tarefa, enquanto o agente leva 46,6s.</span> <span class="s" data-s="b7-p2-s3">Isso demonstra que, para tarefas mais curtas e simples, a distilação é extremamente eficiente, mas requer um conjunto de treinamento representativo para alcançar alta precisão.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.14492/figure2.webp" alt="Figura 2: O processo de reparo no τ²-bench mostra como rodadas iterativas corrigem falhas, elevando o sucesso de 66,7% para 81,2%." loading="lazy">
+          <figcaption>
+            Figura 2: O processo de reparo no τ²-bench mostra como rodadas iterativas corrigem falhas, elevando o sucesso de 66,7% para 81,2%.
+            <span class="source">Figura 2 do paper · Hou et al., arXiv:2611.14492</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Limitações e Riscos</span></h2>
+<p><span class="s" data-s="b9-p0-s0">O ReTrace tem limitações claras.</span> <span class="s" data-s="b9-p0-s1">Primeiro, ele depende da qualidade do raciocínio do agente.</span> <span class="s" data-s="b9-p0-s2">Se o agente toma decisões por motivos errados ou não os explica, as regras derivadas serão incorretas.</span> <span class="s" data-s="b9-p0-s3">O sistema verifica se o código gerado carrega corretamente e se reproduz os passos logados, mas não verifica se as condições recuperadas são semanticamente corretas para novos inputs.</span></p><p><span class="s" data-s="b9-p1-s0">Segundo, a generalização é limitada.</span> <span class="s" data-s="b9-p1-s1">A avaliação cobre apenas novos inputs para os mesmos procedimentos, não a transferência para novos procedimentos.</span> <span class="s" data-s="b9-p1-s2">Se o SOP ou as ferramentas mudarem, o workflow precisa ser reconstruído.</span> <span class="s" data-s="b9-p1-s3">Isso não é uma vantagem em cenários dinâmicos onde as regras de negócio mudam frequentemente.</span></p><p><span class="s" data-s="b9-p2-s0">Além disso, a coleta de traces é crucial.</span> <span class="s" data-s="b9-p2-s1">Os autores escolheram traces aleatoriamente, o que pode não cobrir todos os ramos do fluxo de trabalho.</span> <span class="s" data-s="b9-p2-s2">Em um procedimento do SOP-Bench, os resultados variaram em até 50 pontos dependendo da amostra de traces usada.</span> <span class="s" data-s="b9-p2-s3">Misturar traces de sucesso e falha ajuda, mas não é garantido.</span> <span class="s" data-s="b9-p2-s4">A seleção de traces que cobrem diferentes cenários é um passo manual ou semi-automático importante.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b10-t">Viés e Responsabilidade</span></h3>
+          <p><span class="s" data-s="b10-c-s0">O ReTrace não remove vieses.</span> <span class="s" data-s="b10-c-s1">Se o agente original tomava decisões enviesadas, o workflow compilado repetirá essas decisões em escala.</span> <span class="s" data-s="b10-c-s2">Os proprietários do workflow devem revisar as condições recuperadas, restringir o acesso às ferramentas e exigir revisão humana para ações com consequências significativas.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b11-h">Considerações Éticas e de Segurança</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Os autores destacam riscos éticos.</span> <span class="s" data-s="b11-p0-s1">Traces de agentes podem conter informações sensíveis.</span> <span class="s" data-s="b11-p0-s2">Na avaliação interna, apenas resultados agregados foram relatados.</span> <span class="s" data-s="b11-p0-s3">A reutilização de um workflow pode amplificar erros ou decisões injustas.</span> <span class="s" data-s="b11-p0-s4">O código baseado em seleção de passos não remove vieses presentes no agente original ou no SOP.</span></p><p><span class="s" data-s="b11-p1-s0">Além disso, a eficiência do ReTrace pode incentivar a automação em larga escala de processos que antes eram humanos, potencialmente levando à coleta não autorizada ou uso de dados sensíveis.</span> <span class="s" data-s="b11-p1-s1">A avaliação não mediu diferenças nas taxas de erro entre grupos de usuários, o que é uma lacuna importante para auditorias de justiça algorítmica.</span></p><p><span class="s" data-s="b11-p2-s0">Os autores recomendam que os proprietários do workflow revisem as condições recuperadas e restrinjam o acesso às ferramentas.</span> <span class="s" data-s="b11-p2-s1">Isso é especialmente importante porque o mesmo automação pode escalar rapidamente, afetando milhares de usuários.</span></p>        <h2><span class="s" data-s="b12-h">Conclusão: Quando Usar ReTrace?</span></h2>
+<p><span class="s" data-s="b12-p0-s0">O ReTrace oferece uma solução pragmática para automação de alto volume.</span> <span class="s" data-s="b12-p0-s1">Para procedimentos que rodam milhares de vezes, a economia de tempo e custo é significativa.</span> <span class="s" data-s="b12-p0-s2">A redução de 170s para 1,3s no τ²-bench é um argumento forte para adoção em cenários de baixa latência.</span></p><p><span class="s" data-s="b12-p1-s0">No entanto, não é uma solução mágica.</span> <span class="s" data-s="b12-p1-s1">Ela exige investimento inicial em coleta de traces e reparo de regras.</span> <span class="s" data-s="b12-p1-s2">Para processos que mudam frequentemente ou que exigem alta flexibilidade, o agente original pode ser preferível.</span> <span class="s" data-s="b12-p1-s3">O ReTrace é ideal para SOPs estáveis e bem definidos, onde a consistência e a velocidade são mais importantes do que a capacidade de lidar com cenários nunca vistos.</span></p><p><span class="s" data-s="b12-p2-s0">O paper abre caminho para futuras pesquisas em verificação automática de condições recuperadas e seleção inteligente de traces para cobrir o espaço de estados do workflow.</span> <span class="s" data-s="b12-p2-s1">Enquanto isso, para equipes de engenharia que buscam otimizar custos de LLM, o ReTrace é uma ferramenta valiosa no arsenal de automação.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">ReTrace converte o raciocínio de agentes em regras de código, eliminando chamadas de LLM para planejamento em runtime.</span></li><li><span class="s" data-s="k1">Redução drástica de tempo: de 170s para 1,3s por tarefa no τ²-bench, com custo 24% menor em produção.</span></li><li><span class="s" data-s="k2">O método depende criticamente da qualidade do &#39;raciocínio&#39; gerado pelo agente; traces ruins levam a regras ruins.</span></li><li><span class="s" data-s="k3">Workflows compilados são mais rápidos, mas exigem manutenção manual se as regras de negócio mudarem.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.14492" rel="noopener">ReTrace: Distilling Tool-Using Agents into Planner-Free Workflows</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.14492" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

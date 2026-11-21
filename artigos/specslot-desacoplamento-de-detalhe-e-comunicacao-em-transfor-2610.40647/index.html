@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SpecSlot: Desacoplamento de detalhe e comunicação em Transformers de espaço pixel — arXiv em 5</title>
+<meta name="description" content="Um novo método de tokenização que separa a densidade espacial da subdivisão espectral, permitindo maior detalhe sem aumentar o custo do attention global em geradores de imagem.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpecSlot: Desacoplamento de detalhe e comunicação em Transformers de espaço pixel">
+<meta property="og:description" content="Um novo método de tokenização que separa a densidade espacial da subdivisão espectral, permitindo maior detalhe sem aumentar o custo do attention global em geradores de imagem.">
+<meta property="og:image" content="../../assets/papers/2610.40647/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Imagem</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.40647" rel="noopener">arXiv:2610.40647</a>
+    </div>
+    <h1><span class="s" data-s="t">SpecSlot: Desacoplamento de detalhe e comunicação em Transformers de espaço pixel</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um novo método de tokenização que separa a densidade espacial da subdivisão espectral, permitindo maior detalhe sem aumentar o custo do attention global em geradores de imagem.</span></p>
+    <p class="byline">
+      <span>Yang et al.</span>
+      <span>6 min de leitura</span>
+<span>29/10/2026</span>    </p>
+    <div class="listen" data-article="2610.40647" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=bym0qgNGNPE" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O custo do detalhe em Transformers de espaço pixel</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Os Transformers geradores de espaço pixel (pixel-space) aprendem diretamente do ruído aos pixels da imagem, eliminando a necessidade de um autoencoder previamente treinado e contornando o gargalo de compressão.</span> <span class="s" data-s="b0-p0-s1">No entanto, essa simplicidade tem um preço computacional elevado: a imagem de resolução completa deve ser representada como uma sequência de tokens.</span> <span class="s" data-s="b0-p0-s2">A abordagem padrão utiliza um token por patch espacial da imagem.</span> <span class="s" data-s="b0-p0-s3">Consequentemente, capturar detalhes mais finos exige aumentar o número de tokens, o que torna o mecanismo de atenção global quadraticamente mais caro.</span></p>        <h2><span class="s" data-s="b1-h">A limitação do acoplamento espacial-espectral</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Em modelos tradicionais, como o JiT (Jigsaw-Transformer), reduzir o tamanho do patch de 16x16 para 8x8 em uma imagem de 256x256 aumenta o número de tokens de 256 para 1.024.</span> <span class="s" data-s="b1-p0-s1">Isso eleva o custo da atenção densa em 16 vezes.</span> <span class="s" data-s="b1-p0-s2">Métodos existentes tentam mitigar esse custo através de atenção eficiente (janelas, esparsidade) ou sistemas multiescala, mas mantêm o acoplamento entre o detalhe de saída e a grade espacial.</span> <span class="s" data-s="b1-p0-s3">Ou seja, para ter mais detalhes, você é forçado a ter mais comunicação global, mesmo que nem todos os detalhes necessitem desse contexto amplo.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.40647/figure1.webp" alt="Exemplos de imagens geradas pelo SpecSlot, demonstrando a qualidade visual alcançada com a nova tokenização." loading="lazy">
+          <figcaption>
+            Exemplos de imagens geradas pelo SpecSlot, demonstrando a qualidade visual alcançada com a nova tokenização.
+            <span class="source">Figura 1 do paper · Yang et al., arXiv:2610.40647</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">A intuição: frequências baixas precisam de contexto global</span></h2>
+<p><span class="s" data-s="b3-p0-s0">A observação central deste trabalho é que detalhes finos não exigem necessariamente mais comunicação global.</span> <span class="s" data-s="b3-p0-s1">No domínio da frequência, a estrutura de baixa frequência carrega a organização geral da imagem e se beneficia do intercâmbio de informações por toda a imagem.</span> <span class="s" data-s="b3-p0-s2">Já os detalhes de alta frequência são predominantemente locais.</span> <span class="s" data-s="b3-p0-s3">Um token que carrega estrutura ampla ganha ao trocar informações com a imagem inteira; um token que carrega ruído ou textura fina não.</span></p>        <h2><span class="s" data-s="b4-h">SpecSlot: Leitura, Alocação e Roteamento</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Baseado nisso, os autores propõem o SpecSlot, um Transformer de fluxo retificado (rectified-flow) que desacopla o detalhe de saída do comprimento da sequência de atenção global.</span> <span class="s" data-s="b4-p0-s1">O método organiza a computação em três operações: Leitura (Read), Alocação (Allocate) e Roteamento (Route).</span> <span class="s" data-s="b4-p0-s2">A ideia é tornar os papéis de saída explícitos e usá-los para controlar a comunicação, separando a densidade das âncoras espaciais da subdivisão espectral.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.40647/figure2.webp" alt="Fluxo de dados do SpecSlot. Cada âncora expande em K slots. Blocos globais processam apenas o slot de baixa frequência, enquanto blocos locais misturam todos os slots." loading="lazy">
+          <figcaption>
+            Fluxo de dados do SpecSlot. Cada âncora expande em K slots. Blocos globais processam apenas o slot de baixa frequência, enquanto blocos locais misturam todos os slots.
+            <span class="source">Figura 2 do paper · Yang et al., arXiv:2610.40647</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b6-h">Mecanismo: A alocação como problema de orçamento</span></h2>
+<p><span class="s" data-s="b6-p0-s0">O SpecSlot introduz duas variáveis de alocação: W (densidade de âncoras espaciais) e K (subdivisão espectral por âncora).</span> <span class="s" data-s="b6-p0-s1">O orçamento total de tokens N é dividido em W âncoras e K slots por âncora.</span> <span class="s" data-s="b6-p0-s2">Isso permite que o modelo aumente o detalhe espectral (aumentando K) sem aumentar a sequência global de atenção, que permanece restrita às W âncoras.</span> <span class="s" data-s="b6-p0-s3">A comunicação global é gasta apenas no papel que dela precisa.</span></p>        <h2><span class="s" data-s="b7-h">Read: Âncoras Espaciais e Expansão de Slots</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Na fase de Leitura, o modelo extrai evidências de entrada em uma grade de âncoras não sobrepostas.</span> <span class="s" data-s="b7-p0-s1">Cada célula da grade é projetada em um vetor de âncora.</span> <span class="s" data-s="b7-p0-s2">Um mixer de entrada (uma convolução residual depthwise) permite a troca de evidências entre células vizinhas antes da divisão em papéis.</span> <span class="s" data-s="b7-p0-s3">Em seguida, cada vetor de âncora é expandido em K estados ocultos (slots).</span> <span class="s" data-s="b7-p0-s4">Esses slots compartilham a mesma informação de entrada inicial, mas seus papéis são definidos por posições de slot aprendidas e pela estrutura de roteamento posterior.</span></p>        <h2><span class="s" data-s="b8-h">Allocate: Coeficientes DCT e Síntese de Pixel</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Na fase de Alocação, cada slot recebe uma fatia fixa e disjunta de coeficientes da Transformada Discreta de Cosseno (DCT) do patch de saída.</span> <span class="s" data-s="b8-p0-s1">Os índices radiais da DCT são ordenados por frequência e divididos igualmente entre os K slots.</span> <span class="s" data-s="b8-p0-s2">O slot 0 recebe as frequências mais baixas (estrutura global), enquanto os slots subsequentes recebem frequências progressivamente mais altas (detalhes finos).</span> <span class="s" data-s="b8-p0-s3">Essa divisão radial garante que cada coeficiente seja previsto exatamente uma vez, cobrindo todo o grid de saída.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.40647/figure3.webp" alt="Comparação da alocação: JiT gasta todos os tokens em uma sequência global única, enquanto SpecSlot separa W âncoras de K slots, mantendo a atenção global restrita." loading="lazy">
+          <figcaption>
+            Comparação da alocação: JiT gasta todos os tokens em uma sequência global única, enquanto SpecSlot separa W âncoras de K slots, mantendo a atenção global restrita.
+            <span class="source">Figura 3 do paper · Yang et al., arXiv:2610.40647</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">Route: Roteamento baseado em papel espectral</span></h2>
+<p><span class="s" data-s="b10-p0-s0">O Roteamento é onde a eficiência computacional é realizada.</span> <span class="s" data-s="b10-p0-s1">Apenas o slot atribuído ao grupo de menor frequência (slot 0) de cada âncora participa da etapa de atenção global.</span> <span class="s" data-s="b10-p0-s2">Todos os K slots de cada âncora interagem localmente dentro do seu próprio bloco.</span> <span class="s" data-s="b10-p0-s3">Isso significa que o custo da atenção global escala apenas com W (o número de âncoras), não com N (o número total de slots).</span> <span class="s" data-s="b10-p0-s4">Detalhes finos são refinados localmente, sem a sobrecarga de comunicação global.</span></p>        <h2><span class="s" data-s="b11-h">Decodificação e Correção Espacial</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Após as etapas de processamento, os estados finais dos slots são usados para decodificar uma base espectral sobreposta (lapped-DCT) e uma correção espacial local.</span> <span class="s" data-s="b11-p0-s1">Uma cabeça espacial adicional adiciona uma correção local à previsão espectral, reutilizando os mesmos estados dos slots sem introduzir novos tokens.</span> <span class="s" data-s="b11-p0-s2">O estado generativo, o alvo e a função de perda permanecem no espaço pixel, garantindo consistência com os objetivos de fluxo retificado tradicionais.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b12-t">Diferença crucial no custo</span></h3>
+          <p><span class="s" data-s="b12-c-s0">Enquanto o JiT-B/8 usa 1.024 tokens e atenção global densa, o SpecSlot-K4 também usa 1.024 tokens, mas mantém a atenção global restrita a apenas 256 âncoras.</span> <span class="s" data-s="b12-c-s1">O detalhe extra vem da subdivisão espectral local, não de comunicação global.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b13-h">Resultados no ImageNet-256</span></h2>
+<p><span class="s" data-s="b13-p0-s0">No ImageNet-256, o SpecSlot oferece dois pontos operacionais não dominados entre o JiT-B/16 e o JiT-B/8.</span> <span class="s" data-s="b13-p0-s1">O modelo SpecSlot-K4 atinge um FID comparável ao controle JiT-CM (JiT com FLOPs correspondentes) em quase o mesmo custo computacional, mas converge mais rápido nos estágios iniciais de treinamento.</span> <span class="s" data-s="b13-p0-s2">Isso demonstra que a separação de papéis permite uma utilização mais eficiente do orçamento de tokens para a mesma qualidade final.</span></p>        <h2><span class="s" data-s="b14-h">Resultados no ImageNet-512 e Eficiência</span></h2>
+<p><span class="s" data-s="b14-p0-s0">O ganho é mais pronunciado no ImageNet-512.</span> <span class="s" data-s="b14-p0-s1">O SpecSlot-K4 melhora o FID em 2.84 em relação ao controle JiT-CM, utilizando 3.9% menos FLOPs.</span> <span class="s" data-s="b14-p0-s2">Além disso, ele se aproxima do FID do JiT-B/16 (que é mais caro) com 38.2% menos custo computacional.</span> <span class="s" data-s="b14-p0-s3">A tabela de resultados mostra que o modelo mantém alta taxa de imagens por segundo (throughput), indicando que a eficiência teórica se traduz em performance prática.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.40647/table1.webp" alt="Tabela de resultados mostrando FID, IS e GFLOPs. O SpecSlot-K4 no ImageNet-512 tem FID de 9.14 com 208.24 GFLOPs, superando o JiT-CM (11.98 FID) e se aproximando do JiT-B/16 (8.45 FID) com custo similar." loading="lazy">
+          <figcaption>
+            Tabela de resultados mostrando FID, IS e GFLOPs. O SpecSlot-K4 no ImageNet-512 tem FID de 9.14 com 208.24 GFLOPs, superando o JiT-CM (11.98 FID) e se aproximando do JiT-B/16 (8.45 FID) com custo similar.
+            <span class="source">Tabela 1 do paper · Yang et al., arXiv:2610.40647</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b16-h">Geração Texto-Imagem</span></h2>
+<p><span class="s" data-s="b16-p0-s0">A eficácia do método também se estende à geração condicional por texto.</span> <span class="s" data-s="b16-p0-s1">No benchmark DPG-Bench, o SpecSlot supera o JiT-B/8 em 1.06 pontos, enquanto utiliza 40.6% menos custo de forward.</span> <span class="s" data-s="b16-p0-s2">Isso sugere que a capacidade de modelar detalhes finos localmente, sem sacrificar a estrutura global, beneficia tanto a geração de classes quanto a geração guiada por prompts textuais.</span></p>        <h2><span class="s" data-s="b17-h">Limitações e Escopo</span></h2>
+<p><span class="s" data-s="b17-p0-s0">É importante notar que os resultados foram obtidos em configurações específicas de fluxo retificado e que o modelo foi treinado com um orçamento de tokens fixo.</span> <span class="s" data-s="b17-p0-s1">A eficácia do roteamento depende da premissa de que detalhes de alta frequência são de fato locais, o que é verdade para imagens naturais, mas pode não se aplicar a todos os domínios de dados.</span> <span class="s" data-s="b17-p0-s2">Além disso, a complexidade de implementação é maior devido à necessidade de gerenciar múltiplos slots e bases espectrais sobrepostas.</span></p>        <h2><span class="s" data-s="b18-h">Conclusão</span></h2>
+<p><span class="s" data-s="b18-p0-s0">O SpecSlot demonstra que a tokenização pode ser vista como um problema de alocação explícita.</span> <span class="s" data-s="b18-p0-s1">Ao separar a densidade espacial da resolução espectral e restringir a atenção global aos papéis de baixa frequência, é possível alcançar alta qualidade visual com custos computacionais reduzidos.</span> <span class="s" data-s="b18-p0-s2">Este trabalho abre novas direções para a eficiência de Transformers de espaço pixel, mostrando que detalhe e comunicação global não precisam ser acoplados.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">SpecSlot separa a densidade de âncoras espaciais da resolução espectral, reduzindo o custo de atenção global.</span></li><li><span class="s" data-s="k1">Apenas a componente de baixa frequência participa do attention global; detalhes finos são processados localmente.</span></li><li><span class="s" data-s="k2">Em ImageNet-512, melhora o FID em 2.84 sobre o controle JiT com 3.9% menos FLOPs.</span></li><li><span class="s" data-s="k3">Em geração texto-imagem, supera JiT-B/8 no DPG-Bench com 40.6% menos custo de forward.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.40647" rel="noopener">Read, Allocate, Route: Role-Coupled Tokenization for Pixel-Space Generative Transformers</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.40647" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

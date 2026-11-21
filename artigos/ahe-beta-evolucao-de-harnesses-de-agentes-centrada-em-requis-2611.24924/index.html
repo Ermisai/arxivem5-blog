@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AHE-Beta: Evolução de Harnesses de Agentes Centrada em Requisitos de Usuário — arXiv em 5</title>
+<meta name="description" content="Este paper apresenta um loop automatizado para melhorar prompts e ferramentas de agentes de código, substituindo métricas de benchmark por simulação de interação humana e descoberta de requisitos implícitos.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AHE-Beta: Evolução de Harnesses de Agentes Centrada em Requisitos de Usuário">
+<meta property="og:description" content="Este paper apresenta um loop automatizado para melhorar prompts e ferramentas de agentes de código, substituindo métricas de benchmark por simulação de interação humana e descoberta de requisitos implícitos.">
+<meta property="og:image" content="../../assets/papers/2611.24924/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Agentes</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.24924" rel="noopener">arXiv:2611.24924</a>
+    </div>
+    <h1><span class="s" data-s="t">AHE-Beta: Evolução de Harnesses de Agentes Centrada em Requisitos de Usuário</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Este paper apresenta um loop automatizado para melhorar prompts e ferramentas de agentes de código, substituindo métricas de benchmark por simulação de interação humana e descoberta de requisitos implícitos.</span></p>
+    <p class="byline">
+      <span>Lin et al.</span>
+      <span>7 min de leitura</span>
+<span>18/11/2026</span>    </p>
+    <div class="listen" data-article="2611.24924" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=_I8XY5upcRU" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Engenharia de Harnesses</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Agentes de codificação estão cada vez mais integrados em fluxos de trabalho de software de longo prazo, desde a resolução de issues em repositórios reais até workflows complexos de terminal.</span> <span class="s" data-s="b0-p0-s1">O desempenho desses agentes não depende apenas da capacidade do modelo de linguagem base (LLM), mas também do &#39;harness&#39; ao seu redor.</span> <span class="s" data-s="b0-p0-s2">O harness é o conjunto de prompts, ferramentas e middleware que molda como o modelo executa tarefas e interage com o usuário.</span></p><p><span class="s" data-s="b0-p1-s0">Para um modelo fixo, o comportamento varia drasticamente dependendo do design do harness.</span> <span class="s" data-s="b0-p1-s1">Designs eficazes são frequentemente específicos para cada modelo, o que motiva a necessidade de evoluir esses harnesses.</span> <span class="s" data-s="b0-p1-s2">Na engenharia de software real, essa evolução é impulsionada por requisitos explícitos (solicitados pelo usuário) e implícitos (expectativas não declaradas).</span> <span class="s" data-s="b0-p1-s3">No entanto, métodos existentes de evolução de harnesses frequentemente ignoram esses requisitos implícitos e as necessidades de interação.</span></p><p><span class="s" data-s="b0-p2-s0">Os métodos tradicionais usam um único agente de evolução para modificar o harness e selecionam mudanças com base em pontuações de benchmark.</span> <span class="s" data-s="b0-p2-s1">Essa abordagem tende a produzir patches estreitos, otimizados para tarefas específicas, levando a ótimos locais que não generalizam bem para cenários reais.</span> <span class="s" data-s="b0-p2-s2">O artigo &#39;Agentic Harness Engineering Beta&#39; (AHE-Beta), de pesquisadores da Fudan University, Peking University, Renmin University of China e Shanghai Qiji Zhifeng Co., Ltd, propõe um ciclo centrado em requisitos que traz práticas de engenharia real para a evolução de harnesses.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.24924/figure1.webp" alt="Diagrama do fluxo AHE-Beta: simulação de usuários, modificação por equipe de agentes e seleção de mudanças baseada em requisitos verificados." loading="lazy">
+          <figcaption>
+            Diagrama do fluxo AHE-Beta: simulação de usuários, modificação por equipe de agentes e seleção de mudanças baseada em requisitos verificados.
+            <span class="source">Figura 1 do paper · Lin et al., arXiv:2611.24924</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">O Método: Um Loop de Engenharia Autônomo</span></h2>
+<p><span class="s" data-s="b2-p0-s0">O AHE-Beta mantém o modelo base M fixo e evolui apenas o harness H, cujo código reside em um repositório Gitea.</span> <span class="s" data-s="b2-p0-s1">Cada rodada do loop consiste em três etapas principais: avaliação orientada pelo usuário, modificação baseada em equipe e seleção orientada por requisitos.</span> <span class="s" data-s="b2-p0-s2">O elemento central que conecta essas etapas são os &#39;requisitos&#39;, definidos como comportamentos esperados do harness independentes de uma única tarefa, com critérios de aceitação e evidências coletadas das sessões.</span></p><p><span class="s" data-s="b2-p1-s0">Na primeira etapa, a Avaliação Orientada pelo Usuário, um simulador de usuário trabalha com o harness atual para completar tarefas de evolução.</span> <span class="s" data-s="b2-p1-s1">Diferente de avaliações passivas, o simulador interage em múltiplos turnos, fileando issues (problemas) à medida que surgem e fornecendo uma avaliação final.</span> <span class="s" data-s="b2-p1-s2">O simulador não inspeciona a implementação interna do harness; ele interage apenas pela interface voltada ao usuário, observando respostas e atualizações de progresso.</span></p><p><span class="s" data-s="b2-p2-s0">A segunda etapa, Modificação Baseada em Equipe, envolve uma equipe de agentes com papéis específicos.</span> <span class="s" data-s="b2-p2-s1">O &#39;Triage&#39; filtra as issues, o &#39;Architect&#39; consolida os requisitos identificando causas raiz, o &#39;PM&#39; (Product Manager) descobre requisitos implícitos não declarados e os &#39;Developers&#39; implementam as mudanças como Pull Requests (PRs).</span> <span class="s" data-s="b2-p2-s2">Essa estrutura evita que um único agente tome decisões enviesadas ou narrow-sighted.</span></p>        <h2><span class="s" data-s="b3-h">Detalhes da Simulação e Personas</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Um componente crítico do AHE-Beta é o uso de personas realistas para o simulador de usuário.</span> <span class="s" data-s="b3-p0-s1">A biblioteca de personas contém 50 perfis, cada um descrevendo sete dimensões, como nível de exigência (acceptance bar), expectativa de autonomia do agente e capacidade de verificar resultados.</span> <span class="s" data-s="b3-p0-s2">Essas personas são baseadas em dados reais de escrita e atividade no GitHub de desenvolvedores, garantindo que as expectativas reflitam práticas reais.</span></p><p><span class="s" data-s="b3-p1-s0">A interação multi-turno é projetada para capturar necessidades emergentes.</span> <span class="s" data-s="b3-p1-s1">O simulador declara sua intenção antes de selecionar uma ação, permitindo que ele expresse necessidades que vão além das opções disponíveis no menu de ações.</span> <span class="s" data-s="b3-p1-s2">Isso cria um registro de intenções (goal ledger) que acompanha o progresso, novas metas e razões para revisões.</span> <span class="s" data-s="b3-p1-s3">Essa abordagem segue a teoria de Norman sobre como usuários formam intenções, agem e avaliam o feedback do sistema.</span></p><p><span class="s" data-s="b3-p2-s0">Ao longo da sessão, o simulador registra lacunas entre suas intenções declaradas e o que o sistema permite.</span> <span class="s" data-s="b3-p2-s1">Essas lacunas são traduzidas em issues que alimentam a equipe de modificação.</span> <span class="s" data-s="b3-p2-s2">O objetivo não é apenas corrigir erros de execução, mas alinhar o comportamento do harness com as expectativas implícitas de diferentes tipos de usuários, desde aqueles que buscam alta autonomia até aqueles que preferem supervisão detalhada.</span></p>        <h2><span class="s" data-s="b4-h">Seleção e Implementação de Mudanças</span></h2>
+<p><span class="s" data-s="b4-p0-s0">A etapa de Seleção Orientada por Requisitos garante que apenas mudanças que resolvem requisitos verificados sejam incorporadas ao harness.</span> <span class="s" data-s="b4-p0-s1">Um PR é mesclado apenas após passar por admissão e revisão.</span> <span class="s" data-s="b4-p0-s2">Diferentemente de métodos anteriores, nenhum passo consulta pontuações de benchmark ou verificadores de tarefas.</span> <span class="s" data-s="b4-p0-s3">Isso evita a otimização excessiva para métricas artificiais e foca na utilidade prática percebida pelo simulador.</span></p><p><span class="s" data-s="b4-p1-s0">Os requisitos consolidados pelo Architect e os novos PRDs (Product Requirements Documents) descobertos pelo PM são combinados para formar a lista de admissões.</span> <span class="s" data-s="b4-p1-s1">Os Developers implementam essas mudanças, criando código que deve ser generalizável, não apenas um patch para uma tarefa específica.</span> <span class="s" data-s="b4-p1-s2">O processo inclui revisões de código entre os próprios agentes para garantir qualidade e consistência.</span></p><p><span class="s" data-s="b4-p2-s0">O algoritmo itera por várias rodadas.</span> <span class="s" data-s="b4-p2-s1">Em cada rodada, o harness evolui, e o simulador testa a nova versão.</span> <span class="s" data-s="b4-p2-s2">Se uma mudança introduz regressões ou falha em atender a um requisito crítico, ela pode ser rejeitada ou refinada.</span> <span class="s" data-s="b4-p2-s3">O ciclo continua até que um número pré-definido de rodadas seja atingido ou que a satisfação do usuário estabilize.</span> <span class="s" data-s="b4-p2-s4">O resultado final é um harness que foi refinado iterativamente com base em feedback contínuo e estruturado.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.24924/figure2.webp" alt="Comparação de desempenho em 38 tarefas não vistas: AHE-Beta supera Base Harness, Meta-Harness, AHE e Claude Code em pass@1 e satisfação do usuário." loading="lazy">
+          <figcaption>
+            Comparação de desempenho em 38 tarefas não vistas: AHE-Beta supera Base Harness, Meta-Harness, AHE e Claude Code em pass@1 e satisfação do usuário.
+            <span class="source">Figura 2 do paper · Lin et al., arXiv:2611.24924</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b6-h">Resultados Empíricos</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Os autores avaliaram o AHE-Beta em 38 tarefas do índice Harbor, abrangendo Codificação, Otimização, Análise e Uso de Ferramentas.</span> <span class="s" data-s="b6-p0-s1">Nenhuma dessas tarefas fazia parte das tarefas de evolução usadas para treinar o harness.</span> <span class="s" data-s="b6-p0-s2">O modelo base utilizado foi o GLM-5.3-Flash.</span> <span class="s" data-s="b6-p0-s3">O AHE-Beta alcançou um pass@1 de 33,3%, comparado a 21,9% do Base Harness.</span> <span class="s" data-s="b6-p0-s4">Isso representa um ganho significativo de precisão, superando também outros harnesses evoluídos como Meta-Harness e AHE, além de um harness manualmente projetado, o Claude Code.</span></p><p><span class="s" data-s="b6-p1-s0">Além da precisão, a satisfação do usuário simulada aumentou de 2,59 para 3,04 em uma escala de 1 a 4.</span> <span class="s" data-s="b6-p1-s1">O AHE-Beta também demonstrou eficiência: usou 40,8% menos tokens por tarefa do que o Base Harness.</span> <span class="s" data-s="b6-p1-s2">Isso sugere que o harness evoluído não apenas é mais preciso, mas também mais direto e menos propenso a diálogos desnecessários ou explorações ineficientes.</span></p><p><span class="s" data-s="b6-p2-s0">A análise por domínio mostrou que os ganhos foram consistentes em Codificação, Otimização e Análise.</span> <span class="s" data-s="b6-p2-s1">No entanto, o uso de ferramentas apresentou desafios menores, indicando que a interação multi-turno pode ser mais complexa de otimizar para tarefas que exigem coordenação externa.</span> <span class="s" data-s="b6-p2-s2">Os resultados indicam que a abordagem centrada em requisitos é superior à otimização baseada apenas em verificadores de tarefas.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.24924/figure3.webp" alt="Curvas de evolução mostrando o aumento contínuo de satisfação do usuário e pass@1 ao longo das rodadas do AHE-Beta." loading="lazy">
+          <figcaption>
+            Curvas de evolução mostrando o aumento contínuo de satisfação do usuário e pass@1 ao longo das rodadas do AHE-Beta.
+            <span class="source">Figura 3 do paper · Lin et al., arXiv:2611.24924</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Generalização e Transferência</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Um dos achados mais importantes é a capacidade de generalização.</span> <span class="s" data-s="b8-p0-s1">O harness evoluído pelo AHE-Beta foi testado sem nenhuma modificação adicional em dois outros modelos: GLM-5.3 e DeepSeek-V4.1-Flash.</span> <span class="s" data-s="b8-p0-s2">No GLM-5.3, o pass@1 melhorou em 15,8% em relação ao Base Harness.</span> <span class="s" data-s="b8-p0-s3">No DeepSeek-V4.1-Flash, houve um aumento de 5,3%.</span> <span class="s" data-s="b8-p0-s4">Isso demonstra que as melhorias no harness não são overfitting ao modelo específico usado durante a evolução, mas representam melhorias na interface e na lógica de interação que são transferíveis.</span></p><p><span class="s" data-s="b8-p1-s0">Essa transferibilidade é crucial para a engenharia de software prática, onde diferentes modelos podem ser usados em diferentes estágios do pipeline.</span> <span class="s" data-s="b8-p1-s1">Um harness robusto deve funcionar bem independentemente do motor de linguagem subjacente, desde que a interface seja bem definida.</span> <span class="s" data-s="b8-p1-s2">Os resultados sugerem que a evolução centrada em requisitos produz harnesses mais modulares e adaptáveis.</span></p>        <h2><span class="s" data-s="b9-h">Validação Humana e Preferência</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Para validar se o simulador de usuário realmente captura necessidades humanas, os autores realizaram um teste A/B cego com humanos.</span> <span class="s" data-s="b9-p0-s1">Em 48 pares válidos, os usuários reais preferiram o AHE-Beta em 31 casos.</span> <span class="s" data-s="b9-p0-s2">As pontuações médias em cinco dimensões de experiência foram consistentemente mais altas para o AHE-Beta.</span> <span class="s" data-s="b9-p0-s3">A preferência direcional dos humanos coincide com as avaliações do simulador, validando a premissa de que a simulação pode ser um proxy eficaz para feedback humano em estágios iniciais de desenvolvimento.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b10-t">Limitações do Estudo</span></h3>
+          <p><span class="s" data-s="b10-c-s0">O estudo é limitado pelo tempo e recursos computacionais, testando até 32 cenários em seis rodadas.</span> <span class="s" data-s="b10-c-s1">O uso de um único modelo de simulador e um conjunto selecionado de personas pode não cobrir toda a diversidade de usuários reais.</span> <span class="s" data-s="b10-c-s2">Além disso, perfis enviesados podem favorecer certos grupos, e um harness muito proativo pode agir além do que os usuários permitem se os requisitos não estiverem claros.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b11-h">Conclusão e Futuro</span></h2>
+<p><span class="s" data-s="b11-p0-s0">O AHE-Beta representa um passo significativo na automação da engenharia de harnesses, conectando a experiência do usuário à evolução contínua do sistema.</span> <span class="s" data-s="b11-p0-s1">Ao substituir métricas de benchmark por um loop de feedback centrado em requisitos, o método produz agentes mais úteis e eficientes.</span> <span class="s" data-s="b11-p0-s2">O futuro do trabalho inclui incorporar feedback de implantações reais, criar branches de harnesses personalizados para diferentes perfis de usuário e explorar a evolução conjunta de harnesses e modelos.</span></p><p><span class="s" data-s="b11-p1-s0">Para desenvolvedores e cientistas de dados, a lição principal é que a otimização de agentes de IA não deve ser apenas sobre passar em benchmarks, mas sobre alinhar o comportamento do sistema com as expectativas reais dos usuários, incluindo aquelas que não são declaradas explicitamente.</span> <span class="s" data-s="b11-p1-s1">A estrutura de equipe de agentes (Triage, Architect, PM, Developers) oferece um modelo replicável para essa tarefa complexa.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">O AHE-Beta evolui o &#39;harness&#39; (prompts/ferramentas) mantendo o modelo base fixo, focando em necessidades reais de usuários simulados.</span></li><li><span class="s" data-s="k1">O método supera benchmarks tradicionais em pass@1 e satisfação do usuário, usando 40% menos tokens que a versão base.</span></li><li><span class="s" data-s="k2">A evolução é guiada por uma equipe de agentes (Triage, Architect, PM, Developers) que convertem feedback em mudanças generalizáveis.</span></li><li><span class="s" data-s="k3">Os ganhos generalizam para outros modelos (GLM-5.3, DeepSeek-V4.1) sem retreinamento, indicando robustez da abordagem.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.24924" rel="noopener">Agentic Harness Engineering Beta: Requirement-Centered Evolution of Agent Harnesses</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.24924" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>
