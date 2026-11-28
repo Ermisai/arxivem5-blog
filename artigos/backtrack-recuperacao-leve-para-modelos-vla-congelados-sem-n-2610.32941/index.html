@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Backtrack: Recuperação Leve para Modelos VLA Congelados sem Novo Treinamento — arXiv em 5</title>
+<meta name="description" content="Um mecanismo que adiciona menos de 1% de parâmetros a modelos Vision-Language-Action para detectar falhas e reverter movimentos do robô, evitando retreinamento ou coleta de dados de recuperação.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Backtrack: Recuperação Leve para Modelos VLA Congelados sem Novo Treinamento">
+<meta property="og:description" content="Um mecanismo que adiciona menos de 1% de parâmetros a modelos Vision-Language-Action para detectar falhas e reverter movimentos do robô, evitando retreinamento ou coleta de dados de recuperação.">
+<meta property="og:image" content="../../assets/papers/2610.32941/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Robótica</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.32941" rel="noopener">arXiv:2610.32941</a>
+    </div>
+    <h1><span class="s" data-s="t">Backtrack: Recuperação Leve para Modelos VLA Congelados sem Novo Treinamento</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um mecanismo que adiciona menos de 1% de parâmetros a modelos Vision-Language-Action para detectar falhas e reverter movimentos do robô, evitando retreinamento ou coleta de dados de recuperação.</span></p>
+    <p class="byline">
+      <span>Landeg et al.</span>
+      <span>9 min de leitura</span>
+<span>23/10/2026</span>    </p>
+    <div class="listen" data-article="2610.32941" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=8cHM5eLuSiY" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">A Fragilidade dos Modelos VLA Fora da Distribuição</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Os modelos Vision-Language-Action (VLA) representam um avanço significativo na manipulação robótica, combinando representações visuais e linguísticas de modelos pré-treinados para gerar ações.</span> <span class="s" data-s="b0-p0-s1">No entanto, sua robustez permanece um problema crítico.</span> <span class="s" data-s="b0-p0-s2">Mesmo VLAs treinados em datasets diversos e multi-embodiment tornam-se frágeis quando enfrentam estados fora da distribuição de treinamento (OOD).</span> <span class="s" data-s="b0-p0-s3">Mudanças modestas na câmera, na inicialização do robô ou na composição da cena podem reduzir drasticamente as taxas de sucesso.</span></p><p><span class="s" data-s="b0-p1-s0">Este problema é especialmente agudo em VLAs compactos, como o SmolVLA.</span> <span class="s" data-s="b0-p1-s1">Embora seu backbone de visão e linguagem se beneficie de pré-treinamento amplo, seu treinamento robótico é limitado a menos de 30.000 episódios, coletados principalmente de um único embodiment.</span> <span class="s" data-s="b0-p1-s2">Dados de imitação robótica são construídos majoritariamente a partir de demonstrações bem-sucedidas, contendo pouquíssimos exemplos de como recuperar quando algo dá errado.</span></p><p><span class="s" data-s="b0-p2-s0">Quando um VLA comete um erro — soltar um objeto, derrubar algo ou assumir uma configuração desconhecida — ele frequentemente coloca o sistema em um estado não representado em seus dados de treino.</span> <span class="s" data-s="b0-p2-s1">Permitir mais tempo de execução geralmente não resolve a falha; no benchmark LIBERO-Long, dobrar o orçamento de passos aumenta o sucesso em apenas 2,3–3,7 pontos percentuais.</span> <span class="s" data-s="b0-p2-s2">Soluções tradicionais exigem coleta cara de dados de recuperação ou retreinamento da política, custos que podem precisar ser pagos para cada nova tarefa ou embodiment.</span></p>        <h2><span class="s" data-s="b1-h">A Ideia Central: Reverter o Erro, Não o Mundo</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Os autores propõem uma estratégia de recuperação diferente: em vez de tentar corrigir o ambiente (o que seria outro problema de manipulação complexo), eles focam em reverter a configuração do braço robótico.</span> <span class="s" data-s="b1-p0-s1">A hipótese é que, após um erro, o braço pode estar em uma configuração familiar ou próxima de uma configuração onde a política original funcionaria melhor.</span></p><p><span class="s" data-s="b1-p1-s0">Apresentam o Backtrack, um mecanismo leve de detecção e recuperação para VLAs congelados.</span> <span class="s" data-s="b1-p1-s1">Ele não requer dados de recuperação, nem retreinamento do modelo principal, nem um modelo separado de inferência.</span> <span class="s" data-s="b1-p1-s2">Em vez disso, utiliza uma pequena cabeça de previsão de falha que lê as representações internas já computadas pela política congelada.</span></p><p><span class="s" data-s="b1-p2-s0">Quando a probabilidade prevista de falha excede um limiar, um controlador pausa a política, reverte os movimentos recentes do braço armazenados em um buffer e devolve o controle à política inalterada.</span> <span class="s" data-s="b1-p2-s1">Isso permite que o robô tente novamente a partir de uma configuração anterior, potencialmente mais segura.</span> <span class="s" data-s="b1-p2-s2">O método explora a intuição de que retrazer o movimento pode desfazer parte do desvio que levou à falha, retornando o robô a um estado melhor representado nos dados de treinamento.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.32941/figure1.webp" alt="Visão geral do Backtrack: um cabeçote leve detecta falhas usando features do VLA congelado. Se a probabilidade exceder o limiar, o controlador reverte o movimento do braço antes de retomar o controle." loading="lazy">
+          <figcaption>
+            Visão geral do Backtrack: um cabeçote leve detecta falhas usando features do VLA congelado. Se a probabilidade exceder o limiar, o controlador reverte o movimento do braço antes de retomar o controle.
+            <span class="source">Figura 1 do paper · Landeg et al., arXiv:2610.32941</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Mecanismo: Cabeçote de Previsão e Controle de Reversão</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O núcleo do Backtrack é o Failure Prediction Head (FPH).</span> <span class="s" data-s="b3-p0-s1">Este é um módulo leve acoplado à política congelada, composto por uma camada de pooling multi-head attention (MAP) sobre os tokens de features da política, seguida por uma rede feed-forward de três camadas que produz uma probabilidade escalar de falha.</span> <span class="s" data-s="b3-p0-s2">Crucialmente, o FPH consome ativações que a política já calcula durante a geração normal de ações, eliminando a necessidade de um forward pass adicional pelo backbone.</span></p><p><span class="s" data-s="b3-p1-s0">Os autores avaliam três pontos de extração de features (feature taps): as embeddings do prefixo que o VLM recebe como entrada (pre), a representação de saída do VLM para esse prefixo (post), e o post concatenado com os estados ocultos do expert de ação (post expert).</span> <span class="s" data-s="b3-p1-s1">Para o modelo autoregressivo π0-FAST, que não tem um expert de ação separado, o post é a representação do prefixo após o prefill, antes da geração do primeiro token de ação.</span></p><p><span class="s" data-s="b3-p2-s0">O custo computacional é mínimo.</span> <span class="s" data-s="b3-p2-s1">O FPH é avaliado uma vez por chunk de ação e reutiliza ativações existentes.</span> <span class="s" data-s="b3-p2-s2">O overhead de parâmetros depende da largura das features, não do tamanho total da política.</span> <span class="s" data-s="b3-p2-s3">Ele adiciona no máximo 0,88% dos parâmetros do SmolVLA (450M) e apenas 0,48% do π0.5 (3,6B).</span> <span class="s" data-s="b3-p2-s4">Isso torna a solução escalável e viável para implantação em sistemas com restrições de memória.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.32941/table1.webp" alt="A tabela 1 comprova a leveza do método: o cabeçote de previsão adiciona menos de 1% de parâmetros ao modelo original, variando de 0,48% a 0,88% dependendo do tamanho da política." loading="lazy">
+          <figcaption>
+            A tabela 1 comprova a leveza do método: o cabeçote de previsão adiciona menos de 1% de parâmetros ao modelo original, variando de 0,48% a 0,88% dependendo do tamanho da política.
+            <span class="source">Tabela 1 do paper · Landeg et al., arXiv:2610.32941</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Treinamento com Rollouts e Balanceamento de Dados</span></h2>
+<p><span class="s" data-s="b5-p0-s0">O treinamento do FPH requer apenas supervisão binária simples: saber se um rollout autônomo da política congelada terminou em sucesso ou falha.</span> <span class="s" data-s="b5-p0-s1">Os autores coletam rollouts em todos os quatro suites do benchmark LIBERO.</span> <span class="s" data-s="b5-p0-s2">Um desafio crítico é o desbalanceamento de dados: as falhas não são distribuídas uniformemente.</span> <span class="s" data-s="b5-p0-s3">Por exemplo, para o π0-FAST, 56% dos frames de falha vêm do LIBERO-Long, enquanto apenas 7% vêm do LIBERO-Object.</span></p><p><span class="s" data-s="b5-p1-s0">Se o treinamento seguisse a distribuição natural, o FPH se especializaria apenas nas suites onde a política falha mais, perdendo generalidade.</span> <span class="s" data-s="b5-p1-s1">Para mitigar isso, os autores amostram com peso igual sobre as células (suite, label), garantindo que o FPH aprenda a detectar falhas em todos os contextos.</span> <span class="s" data-s="b5-p1-s2">Cada FPH é treinado por 20.000 passos com Adam, batch size 32 e learning rate de 10^-4, sem ponderação adicional de classe positiva além do amostrador balanceado.</span></p><p><span class="s" data-s="b5-p2-s0">Para o SmolVLA, foram usados 20.000 episódios de rollout, com 3.464 falhas identificadas.</span> <span class="s" data-s="b5-p2-s1">O π0-FAST teve 7.953 episódios e 812 falhas, enquanto o π0.5 teve 14.000 episódios e apenas 676 falhas.</span> <span class="s" data-s="b5-p2-s2">Em todos os casos, 100.000 frames amostrados foram utilizados para treinar e validar o cabeçote, garantindo uma base de dados robusta apesar da rarefação das falhas em alguns modelos.</span></p>        <h2><span class="s" data-s="b6-h">Estratégia de Reversão: Fixa e Adaptativa</span></h2>
+<p><span class="s" data-s="b6-p0-s0">O gatilho para a recuperação ocorre quando a probabilidade prevista de falha excede um limiar específico (t).</span> <span class="s" data-s="b6-p0-s1">Nesse momento, a política é pausada e o controlador Backtrack inicia a reversão.</span> <span class="s" data-s="b6-p0-s2">Ele replaya os movimentos do braço alcançados anteriormente em ordem inversa, recalculando a probabilidade de falha no mesmo intervalo em que chunks de ação seriam gerados.</span></p><p><span class="s" data-s="b6-p1-s0">Os autores testam duas variantes de reversão.</span> <span class="s" data-s="b6-p1-s1">Na variante fixa, o controlador recua por um número predeterminado de passos.</span> <span class="s" data-s="b6-p1-s2">Na variante adaptativa, a reversão continua até que a probabilidade de falha caia abaixo de um segundo limiar mais baixo, sujeito a comprimentos mínimos e máximos de recuo.</span> <span class="s" data-s="b6-p1-s3">A intuição é que a reversão adaptativa pode ser mais eficiente, parando assim que o robô atinge um estado considerado seguro pelo FPH.</span></p><p><span class="s" data-s="b6-p2-s0">Durante a execução normal, os movimentos alcançados são adicionados a um buffer.</span> <span class="s" data-s="b6-p2-s1">Os movimentos executados durante a fase de backtracking não são adicionados ao buffer, evitando loops de reversão infinitos ou dependências incorretas.</span> <span class="s" data-s="b6-p2-s2">O estado resultante é observado pela VLA inalterada, e o loop de controle continua normalmente, com a política tentando gerar ações a partir da nova configuração.</span></p>        <h2><span class="s" data-s="b7-h">Resultados: Onde a Recuperação Paga</span></h2>
+<p><span class="s" data-s="b7-p0-s0">A avaliação principal ocorre no LIBERO, com foco especial no LIBERO-Long, uma suite de tarefas de longo horizonte onde todas as três políticas falham com mais frequência.</span> <span class="s" data-s="b7-p0-s1">Os resultados mostram que o Backtrack reduz significativamente as taxas de falha: 19,0% para o SmolVLA, 30,3% para o π0.5 e 48,2% para o π0-FAST.</span> <span class="s" data-s="b7-p0-s2">Em todos os casos, os intervalos de confiança de 95% excluem zero, indicando robustez estatística.</span></p><p><span class="s" data-s="b7-p1-s0">A melhoria agregada sobre todas as quatro suites do LIBERO é de 20,3%, 26,2% e 19,6% respectivamente.</span> <span class="s" data-s="b7-p1-s1">É importante notar que a ordem de melhoria não é preservada entre a suite de longo horizonte e o benchmark geral: o π0-FAST tem a maior redução no LIBERO-Long, mas a menor redução geral.</span> <span class="s" data-s="b7-p1-s2">Isso sugere que a eficácia da recuperação depende fortemente das características da suite de avaliação.</span></p><p><span class="s" data-s="b7-p2-s0">Em suites mais curtas, onde a taxa de sucesso de controle já é alta (84,6% a 99,2%), o efeito do Backtrack é menor ou até negativo em alguns casos.</span> <span class="s" data-s="b7-p2-s1">Por exemplo, no LIBERO-Object, o π0-FAST teve uma ligeira redução de 0,20% no sucesso.</span> <span class="s" data-s="b7-p2-s2">Isso ilustra uma trade-off fundamental: a intervenção pode perturbar episódios que estariam sendo bem-sucedidos.</span> <span class="s" data-s="b7-p2-s3">A identidade simples ΔS = cF - bS (onde c é a fração de falhas recuperadas e b é a fração de sucessos perturbados) mostra que a melhoria líquida só é positiva se b/c &lt; F/S.</span> <span class="s" data-s="b7-p2-s4">Em tarefas onde o sucesso é alto (F/S grande), tolera-se menos perturbação.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b8-t">Seleção de Configuração no LIBERO-Long</span></h3>
+          <p><span class="s" data-s="b8-c-s0">As configurações do Backtrack foram selecionadas no LIBERO-Long, onde há maior margem para melhoria, e transferidas para as outras suites.</span> <span class="s" data-s="b8-c-s1">Isso explica por que os ganhos são maiores no LIBERO-Long (+7,4 pp para SmolVLA) e menores ou negativos em suites onde o sucesso base já é próximo do teto.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b9-h">Detecção de Falhas e Generalização</span></h2>
+<p><span class="s" data-s="b9-p0-s0">A precisão da detecção de falhas pelo FPH é alta.</span> <span class="s" data-s="b9-p0-s1">Em 10.000 episódios com Backtrack ativado, apenas 29 falhas ocorreram sem que o gatilho tivesse sido acionado, resultando em taxas de sucesso condicionais à não-trigger de 99,71% para SmolVLA, 99,99% para π0.5 e 99,94% para π0-FAST.</span> <span class="s" data-s="b9-p0-s2">Isso indica que o FPH é eficaz em identificar a maioria dos cenários de falha antes que eles se concretizem.</span></p><p><span class="s" data-s="b9-p1-s0">Além disso, a avaliação offline do FPH no π0.5, usando rollouts mantidos em separado, mostrou uma AUROC de 0,977 ao nível de episódio, separando com alta precisão episódios que falhariam daqueles que teriam sucesso.</span> <span class="s" data-s="b9-p1-s1">Isso valida a capacidade do cabeçote de aprender padrões gerais de falha, não apenas ruído específico de execução.</span></p><p><span class="s" data-s="b9-p2-s0">O Backtrack também foi testado no MetaWorld, outro benchmark popular.</span> <span class="s" data-s="b9-p2-s1">Todas as doze configurações de controlador testadas com o SmolVLA melhoraram a política não assistida.</span> <span class="s" data-s="b9-p2-s2">Isso sugere que a abordagem é generalizável além do LIBERO e eficaz mesmo em ambientes com dinâmicas diferentes.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.32941/table6.webp" alt="Tabela 6 mostra os resultados detalhados no SmolVLA com LIBERO-Long. O controle base tinha 61% de sucesso; com Backtrack, a taxa subiu significativamente, demonstrando a eficácia da reversão adaptativa." loading="lazy">
+          <figcaption>
+            Tabela 6 mostra os resultados detalhados no SmolVLA com LIBERO-Long. O controle base tinha 61% de sucesso; com Backtrack, a taxa subiu significativamente, demonstrando a eficácia da reversão adaptativa.
+            <span class="source">Tabela 6 do paper · Landeg et al., arXiv:2610.32941</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b11-h">Limitações e Considerações Finais</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Apesar dos resultados promissores, o paper reconhece limitações.</span> <span class="s" data-s="b11-p0-s1">O Backtrack é eficaz principalmente em tarefas onde a política base falha frequentemente.</span> <span class="s" data-s="b11-p0-s2">Em tarefas fáceis, o risco de perturbar sucessos pode superar o benefício da recuperação de falhas.</span> <span class="s" data-s="b11-p0-s3">Além disso, a estratégia de reversão assume que o erro está na configuração do braço e não no ambiente.</span> <span class="s" data-s="b11-p0-s4">Se um objeto foi movido para uma posição irreversível por outro agente ou evento externo, voltar o braço pode não resolver o problema.</span></p><p><span class="s" data-s="b11-p1-s0">Outra limitação implícita é a dependência da qualidade do FPH.</span> <span class="s" data-s="b11-p1-s1">Se o cabeçote tiver alta taxa de falsos positivos, ele pode interromper execuções bem-sucedidas desnecessariamente.</span> <span class="s" data-s="b11-p1-s2">Se tiver falsos negativos, perde-se a oportunidade de recuperação.</span> <span class="s" data-s="b11-p1-s3">O balanceamento cuidadoso dos dados de treinamento é essencial para mitigar esses riscos.</span></p><p><span class="s" data-s="b11-p2-s0">Em conclusão, o Backtrack demonstra que uma fração significativa das falhas em VLAs pode ser recuperada com um mecanismo simples de retorno e tentativa, sem a necessidade de coletar dados de recuperação ou modificar a política subjacente.</span> <span class="s" data-s="b11-p2-s1">O custo é baixo, a implementação é modular e o ganho é mensurável, especialmente em cenários de longo horizonte onde a robustez é mais crítica.</span></p>        <h2><span class="s" data-s="b12-h">Implicações para o Desenvolvimento de Robótica</span></h2>
+<p><span class="s" data-s="b12-p0-s0">Este trabalho oferece um caminho prático para melhorar a confiabilidade de VLAs em produção.</span> <span class="s" data-s="b12-p0-s1">Ao evitar a coleta massiva de dados de falha e o retreinamento contínuo, o Backtrack permite que modelos pré-treinados sejam implantados com maior confiança.</span> <span class="s" data-s="b12-p0-s2">Isso reduz a barreira de entrada para o uso de VLAs em ambientes reais, onde a coleta de dados é cara e lenta.</span></p><p><span class="s" data-s="b12-p1-s0">A modularidade do FPH permite que ele seja acoplado a diferentes arquiteturas de VLA, como as baseadas em flow-matching (SmolVLA, π0.5) e as autoregressivas (π0-FAST).</span> <span class="s" data-s="b12-p1-s1">Essa flexibilidade sugere que a ideia pode ser estendida a outras famílias de modelos de ação, desde que se tenha acesso às representações internas do backbone.</span></p><p><span class="s" data-s="b12-p2-s0">Para pesquisadores e engenheiros, o Backtrack serve como um exemplo de como alavancar informações latentes nos modelos para melhorar a segurança e a robustez, sem aumentar drasticamente a complexidade computacional.</span> <span class="s" data-s="b12-p2-s1">A próxima etapa natural envolve investigar se a reversão pode ser combinada com pequenas correções de ação, em vez de apenas a reversão pura, para lidar com erros mais sutis.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Backtrack usa um pequeno cabeçote de previsão de falha treinado apenas em rollouts do modelo congelado, sem precisar de demonstrações de recuperação.</span></li><li><span class="s" data-s="k1">Ao detectar risco alto de falha, o sistema reverte o movimento do braço robótico para um estado anterior, permitindo que a política original tente novamente.</span></li><li><span class="s" data-s="k2">Reduz a taxa de falhas em até 48% em tarefas de longo horizonte no benchmark LIBERO-Long, com custo computacional mínimo.</span></li><li><span class="s" data-s="k3">Funciona em diferentes famílias de geração de ações (flow-matching e autoregressivo), mostrando robustez arquitetônica.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.32941" rel="noopener">If at First You Don&#39;t Succeed, Backtrack: Lightweight Recovery for Frozen VLAs</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.32941" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MESH: Avaliando a audição espacial distribuída além da transcrição — arXiv em 5</title>
+<meta name="description" content="O benchmark MESH expõe a falha de modelos atuais em associar fala à sua fonte física em ambientes multi-receptor, revelando que ter mais microfones não resolve a ambiguidade espacial.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MESH: Avaliando a audição espacial distribuída além da transcrição">
+<meta property="og:description" content="O benchmark MESH expõe a falha de modelos atuais em associar fala à sua fonte física em ambientes multi-receptor, revelando que ter mais microfones não resolve a ambiguidade espacial.">
+<meta property="og:image" content="../../assets/papers/2611.16787/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Áudio</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.16787" rel="noopener">arXiv:2611.16787</a>
+    </div>
+    <h1><span class="s" data-s="t">MESH: Avaliando a audição espacial distribuída além da transcrição</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">O benchmark MESH expõe a falha de modelos atuais em associar fala à sua fonte física em ambientes multi-receptor, revelando que ter mais microfones não resolve a ambiguidade espacial.</span></p>
+    <p class="byline">
+      <span>Wen et al.</span>
+      <span>9 min de leitura</span>
+<span>12/11/2026</span>    </p>
+    <div class="listen" data-article="2611.16787" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=CEfItTbo3r8" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema da audição distribuída</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Em ambientes acústicos reais, o som não vem de uma única fonte isolada.</span> <span class="s" data-s="b0-p0-s1">Múltiplas fontes, algumas estáticas e outras em movimento, criam uma cena acústica complexa sobreposta a ruídos ambientais e reverberação.</span> <span class="s" data-s="b0-p0-s2">Para sistemas de escuta distribuída, onde vários receptores com arrays de microfones observam essa cena de locais diferentes, o desafio vai além de transcrever o que foi dito.</span> <span class="s" data-s="b0-p0-s3">É preciso identificar quem fala, onde está a fonte e como ela se move no espaço 3D.</span></p><p><span class="s" data-s="b0-p1-s0">Os benchmarks existentes focam em componentes isolados: previsão espacial numérica, transcrição seletiva ou processamento de fala distribuído.</span> <span class="s" data-s="b0-p1-s1">No entanto, eles falham em avaliar se o sinal de fala permanece associado à fonte física correta ao longo do tempo e entre diferentes receptores.</span> <span class="s" data-s="b0-p1-s2">Uma estimativa de direção correta pode deixar a distância indefinida, e uma transcrição fluente pode pertencer ao orador errado.</span> <span class="s" data-s="b0-p1-s3">Essa desconexão entre a informação acústica disponível e sua interpretação correta é o gap que o MESH busca medir.</span></p><p><span class="s" data-s="b0-p2-s0">Introduzido por pesquisadores da Shanghai Jiao Tong University e Nanjing University, o MESH (Multi-receiver Evaluation of Spatial Hearing across Egocentric and Allocentric Views) propõe uma avaliação holística.</span> <span class="s" data-s="b0-p2-s1">O dataset contém aproximadamente 40.000 perguntas distribuídas em 13 tarefas estáticas e dinâmicas de localização e transcrição espacial.</span> <span class="s" data-s="b0-p2-s2">O objetivo é testar se os modelos podem integrar evidências de múltiplos receptores para construir uma compreensão espacial coerente da cena acústica.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.16787/figure1.webp" alt="Visão geral do MESH mostrando a combinação de visões egocêntricas (local do receptor) e allocêntricas (mundo compartilhado) para avaliar a associação entre fala e fonte." loading="lazy">
+          <figcaption>
+            Visão geral do MESH mostrando a combinação de visões egocêntricas (local do receptor) e allocêntricas (mundo compartilhado) para avaliar a associação entre fala e fonte.
+            <span class="source">Figura 1 do paper · Wen et al., arXiv:2611.16787</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">Duas perspectivas, um único cenário</span></h2>
+<p><span class="s" data-s="b2-p0-s0">O cerne da proposta do MESH é a distinção entre duas perspectivas coordenadas: a visão egocêntrica e a visão allocêntrica.</span> <span class="s" data-s="b2-p0-s1">A visão egocêntrica representa a auto-percepção de um único receptor.</span> <span class="s" data-s="b2-p0-s2">As consultas espaciais e previsões usam o sistema de coordenadas local desse dispositivo.</span> <span class="s" data-s="b2-p0-s3">Nesse cenário, o modelo recebe apenas o registro local, mas pode colaborar com pares (peers) que fornecem metadados, como poses de robôs, transcrições de reproduções e intervalos de tempo.</span> <span class="s" data-s="b2-p0-s4">Isso simula um cenário onde um agente tem acesso limitado ao seu próprio sensor, mas pode consultar outros dispositivos.</span></p><p><span class="s" data-s="b2-p1-s0">A visão allocêntrica, por outro lado, utiliza um sistema de coordenadas de mundo 3D compartilhado.</span> <span class="s" data-s="b2-p1-s1">Aqui, o modelo tem acesso a todos os registros sincronizados dos receptores e aos metadados globais.</span> <span class="s" data-s="b2-p1-s2">O objetivo é avaliar se o sistema consegue entender a localização das fontes e o conteúdo da fala em um quadro de referência comum, integrando informações de todos os ouvintes.</span> <span class="s" data-s="b2-p1-s3">Essa distinção é crucial porque a resolução de ambiguidades espaciais muitas vezes depende da capacidade de cruzar dados de múltiplas perspectivas.</span></p><p><span class="s" data-s="b2-p2-s0">O dataset foi construído com 800 cenas base que abrangem 100 salas.</span> <span class="s" data-s="b2-p2-s1">Cada cena base gera uma realização estática e duas dinâmicas independentemente amostradas, compartilhando conteúdo de fala, ruído e layout inicial.</span> <span class="s" data-s="b2-p2-s2">As gravações são de primeira ordem (First-Order Ambisonics - FOA), capturando observações espaciais em cada receptor.</span> <span class="s" data-s="b2-p2-s3">O movimento prescrito das fontes e dos receptores altera a geometria ao longo do tempo, criando cenários dinâmicos que testam a robustez dos modelos a mudanças contínuas no ambiente acústico.</span></p>        <h2><span class="s" data-s="b3-h">Metodologia de avaliação rigorosa</span></h2>
+<p><span class="s" data-s="b3-p0-s0">A avaliação do MESH é estruturada em 19.117 perguntas estáticas e 20.882 dinâmicas.</span> <span class="s" data-s="b3-p0-s1">As tarefas incluem localização estática e dinâmica (direção e distância) e transcrição espacial.</span> <span class="s" data-s="b3-p0-s2">Para localização, as previsões são consideradas corretas se estiverem dentro de 20 graus de erro de direção, 20% de erro relativo de distância ou 2 metros de erro na posição no mundo.</span> <span class="s" data-s="b3-p0-s3">Na localização dinâmica, o sistema deve prever valores espaciais absolutos em uma grade de 0,5 segundos, mantendo a atribuição consistente da fonte entre os rastros de direção.</span></p><p><span class="s" data-s="b3-p1-s0">A transcrição espacial é avaliada pela Taxa de Erro de Palavra (WER) do corpus, que reflete tanto a seleção correta do alvo quanto o reconhecimento de fala.</span> <span class="s" data-s="b3-p1-s1">Perguntas que consultam regiões vazias são avaliadas separadamente por precisão de resposta vazia.</span> <span class="s" data-s="b3-p1-s2">Para sintetizar o desempenho, os autores definem uma pontuação &#39;Overall&#39; que pondera igualmente a localização e a transcrição, normalizando os erros para uma escala de 0 a 100.</span> <span class="s" data-s="b3-p1-s3">Isso permite comparar modelos que podem ter fortes pontos em uma métrica e fracos em outra.</span></p><p><span class="s" data-s="b3-p2-s0">Os autores avaliaram onze configurações de modelos de áudio e um agente de linguagem (MESH-agent).</span> <span class="s" data-s="b3-p2-s1">Os modelos incluem LALMs (Large Audio-Language Models) como Qwen3-Omni, Spatial-Omni, JAEGER, BAT e MiDasheng-Spatial, além do Qwen3.8-Omni-Flash.</span> <span class="s" data-s="b3-p2-s2">O MESH-agent usa um planejador Qwen3-14B congelado para coordenar modelos de áudio especialistas e ferramentas de processamento de sinal.</span> <span class="s" data-s="b3-p2-s3">Essa diversidade permite testar desde abordagens end-to-end até sistemas agênticos que chamam ferramentas especializadas.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.16787/table1.webp" alt="Tabela comparativa destacando que o MESH é o único benchmark público a avaliar explicitamente todos os critérios espaciais combinados, ao contrário de protocolos anteriores." loading="lazy">
+          <figcaption>
+            Tabela comparativa destacando que o MESH é o único benchmark público a avaliar explicitamente todos os critérios espaciais combinados, ao contrário de protocolos anteriores.
+            <span class="source">Tabela 1 do paper · Wen et al., arXiv:2611.16787</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Resultados: o abismo na localização dinâmica</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os resultados revelam um desempenho insatisfatório dos modelos atuais em tarefas de localização espacial, especialmente nas dinâmicas.</span> <span class="s" data-s="b5-p0-s1">A melhor precisão para estimativa estática de distância foi de apenas 21,90%, e para rastreamento dinâmico de direção, foi de 41,54%.</span> <span class="s" data-s="b5-p0-s2">Essas cifras são alarmantemente baixas, indicando que mesmo os modelos mais avançados falham em mapear corretamente a posição física das fontes em movimento.</span> <span class="s" data-s="b5-p0-s3">A transcrição espacial também mostrou WERs elevados, variando de 59,15% a 73,10% em quatro tarefas, sugerindo que a confusão entre oradores é um problema persistente.</span></p><p><span class="s" data-s="b5-p1-s0">Ao analisar os modelos individuais, o Qwen3.8-Omni-Flash destacou-se em algumas métricas de localização estática, alcançando 41,37% de precisão na direção e 50,03% na direção combinada.</span> <span class="s" data-s="b5-p1-s1">No entanto, seu desempenho em transcrição dinâmica caiu para 73,32% no score geral.</span> <span class="s" data-s="b5-p1-s2">O MESH-agent, que utiliza chamadas de ferramenta agêntica, obteve o melhor score geral na visão egocêntrica (34,97%), mas ainda assim ficou longe de uma resolução confiável.</span> <span class="s" data-s="b5-p1-s3">Isso sugere que a arquitetura do modelo importa, mas não é suficiente para superar as limitações fundamentais na associação fonte-fala.</span></p><p><span class="s" data-s="b5-p2-s0">A tabela de resultados egocêntricos mostra que modelos como BAT e MiDasheng-Spatial tiveram desempenhos próximos de zero em várias métricas de localização, enquanto modelos baseados em FOA (First-Order Ambisonics) tiveram melhorias marginais.</span> <span class="s" data-s="b5-p2-s1">O JAEGER Neural e Classical também mostraram dificuldades significativas.</span> <span class="s" data-s="b5-p2-s2">Esses números não são apenas ruído estatístico; eles indicam uma falha sistêmica na capacidade dos modelos de extrair geometria espacial precisa a partir de sinais de áudio complexos e sobrepostos.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.16787/table2.webp" alt="Tabela de resultados egocêntricos mostrando a baixa precisão de localização dinâmica (41,54%) e os altos WERs, evidenciando a dificuldade dos modelos atuais." loading="lazy">
+          <figcaption>
+            Tabela de resultados egocêntricos mostrando a baixa precisão de localização dinâmica (41,54%) e os altos WERs, evidenciando a dificuldade dos modelos atuais.
+            <span class="source">Tabela 2 do paper · Wen et al., arXiv:2611.16787</span>
+          </figcaption>
+        </figure>
+        <aside class="callout">
+          <h3><span class="s" data-s="b7-t">A ilusão da informação abundante</span></h3>
+          <p><span class="s" data-s="b7-c-s0">Um dos achados mais importantes do MESH é que ter acesso a mais dados não garante melhor desempenho.</span> <span class="s" data-s="b7-c-s1">As ablações mostram que as informações de pares (peer information) e os registros distribuídos proporcionam apenas melhorias seletivas.</span> <span class="s" data-s="b7-c-s2">Não há ganhos consistentes na localização espacial apenas ao adicionar gravações de outros receptores.</span> <span class="s" data-s="b7-c-s3">Isso indica que os modelos atuais não sabem como integrar eficientemente a geometria dos receptores com as observações acústicas.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b8-h">Por que os modelos falham?</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Os estudos de ablação e experimentos adicionais revelam que os modelos existentes não conseguem aproveitar efetivamente as informações de pares.</span> <span class="s" data-s="b8-p0-s1">Em cenários com múltiplos oradores e dinâmicos, a associação entre a fala e a fonte física correta se torna extremamente difícil.</span> <span class="s" data-s="b8-p0-s2">O gráfico de ablação mostra que a remoção de metadados ou o acesso limitado a gravações de outros receptores impacta o desempenho, mas a presença desses dados não resolve o problema central de ambiguidade.</span></p><p><span class="s" data-s="b8-p1-s0">A dificuldade parece residir na incapacidade dos modelos de manter a identidade da fonte ao longo do tempo e do espaço.</span> <span class="s" data-s="b8-p1-s1">Em cenas lotadas, onde as vozes se sobrepõem e os movimentos alteram a geometria acústica rapidamente, os modelos tendem a falhar na rastreamento consistente.</span> <span class="s" data-s="b8-p1-s2">Eles podem transcrever corretamente o que foi dito, mas atribuem a fala à pessoa errada ou na posição errada.</span> <span class="s" data-s="b8-p1-s3">Essa falha na associação é o gargalo principal que o MESH expõe.</span></p><p><span class="s" data-s="b8-p2-s0">Além disso, a análise por condições mostra que o desempenho varia com a contagem de humanos, a relação sinal-ruído (SNR) e a distância da fonte.</span> <span class="s" data-s="b8-p2-s1">Modelos que recebem entradas FOA separadas (WXYZ como clipes de áudio distintos) podem ter comportamentos diferentes daqueles que recebem o canal omnidirecional ou entradas nativas de quatro canais.</span> <span class="s" data-s="b8-p2-s2">No entanto, nenhuma configuração conseguiu superar a barreira fundamental de precisão espacial necessária para aplicações robustas.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.16787/figure4.webp" alt="Gráfico de ablação demonstrando que os modelos têm dificuldade em aproveitar informações de receptores vizinhos, com ganhos inconsistentes ao adicionar metadados ou gravações." loading="lazy">
+          <figcaption>
+            Gráfico de ablação demonstrando que os modelos têm dificuldade em aproveitar informações de receptores vizinhos, com ganhos inconsistentes ao adicionar metadados ou gravações.
+            <span class="source">Figura 4 do paper · Wen et al., arXiv:2611.16787</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">Limitações do benchmark e do dataset</span></h2>
+<p><span class="s" data-s="b10-p0-s0">É crucial entender o escopo do MESH.</span> <span class="s" data-s="b10-p0-s1">O dataset usa misturas simuladas de salas de exposição e fala lida em inglês.</span> <span class="s" data-s="b10-p0-s2">A generalização para conversas espontâneas, outros idiomas e ambientes de gravação física ainda não foi testada.</span> <span class="s" data-s="b10-p0-s3">O movimento é restrito a caminhos horizontais com altura fixa e yaw do robô, e longos intervalos de silêncio estão sub-representados.</span> <span class="s" data-s="b10-p0-s4">A interpolação de IRs (Funções de Resposta ao Impulso) aproxima a propagação variável no tempo sem modelagem exata do efeito Doppler.</span></p><p><span class="s" data-s="b10-p1-s0">As suposições de observação também são restritivas.</span> <span class="s" data-s="b10-p1-s1">As gravações são sincronizadas, as poses dos receptores e os logs de reprodução são conhecidos, e a própria reprodução de cada receptor é idealmente removida.</span> <span class="s" data-s="b10-p1-s2">A contagem de fontes e as pistas de seleção de alvo são fornecidas quando necessário.</span> <span class="s" data-s="b10-p1-s3">O benchmark não avalia deriva de relógio, calibração incerta, gravações perdidas ou controle ativo do receptor.</span> <span class="s" data-s="b10-p1-s4">A avaliação offline não estabelece desempenho em tempo real ou viabilidade de implantação embarcada.</span></p><p><span class="s" data-s="b10-p2-s0">Os autores também destacam que a sobreposição com os dados de pré-treinamento dos modelos não pode ser descartada.</span> <span class="s" data-s="b10-p2-s1">Além disso, a auditoria de escuta humana preliminar envolveu apenas um subconjunto pequeno de cenas e não estabelece consistência cruzada entre receptores.</span> <span class="s" data-s="b10-p2-s2">Os intervalos de confiança relatados não levam em conta comparações múltiplas.</span> <span class="s" data-s="b10-p2-s3">Esses limites são importantes para contextualizar os resultados: o MESH é um teste rigoroso em um domínio controlado, mas não uma prova definitiva de desempenho em todos os cenários do mundo real.</span></p>        <h2><span class="s" data-s="b11-h">Conclusão: o gap entre informação e compreensão</span></h2>
+<p><span class="s" data-s="b11-p0-s0">O MESH introduz uma avaliação necessária para o campo de audição espacial.</span> <span class="s" data-s="b11-p0-s1">Ao cobrir 13 tarefas de localização e transcrição sob condições estáticas e dinâmicas, ele revela dificuldades persistentes em associar fala à fonte física correta.</span> <span class="s" data-s="b11-p0-s2">O fato de que a informação espacial distribuída não está sendo usada efetivamente pelos modelos atuais é um achado significativo.</span> <span class="s" data-s="b11-p0-s3">Há um gap claro entre o acesso à informação acústica distribuída e a capacidade de usá-la para compreensão espacial da fala.</span></p><p><span class="s" data-s="b11-p1-s0">Para o futuro, os modelos precisam integrar melhor os metadados dos pares, a geometria dos receptores e as observações acústicas através de diferentes locais, mantendo a identidade da fonte ao longo do tempo.</span> <span class="s" data-s="b11-p1-s1">A disponibilidade do dataset, do pipeline de construção e do código de avaliação pelo Shanghai Jiao Tong University e Nanjing University oferece uma base sólida para pesquisas futuras.</span> <span class="s" data-s="b11-p1-s2">O MESH serve como um espelho crítico, mostrando que, apesar dos avanços em LALMs, a audição espacial colaborativa ainda está em seus estágios iniciais.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b12-t">Impacto Ético e de Privacidade</span></h3>
+          <p><span class="s" data-s="b12-c-s0">A compreensão espacial da fala pode apoiar interfaces assistivas e robôs, mas também habilitar monitoramento e rastreamento de oradores sem consentimento.</span> <span class="s" data-s="b12-c-s1">Associações incorretas podem atribuir uma fala à pessoa errada.</span> <span class="s" data-s="b12-c-s2">O desempenho no benchmark não estabelece adequação para vigilância ou decisões conseqüenciais.</span> <span class="s" data-s="b12-c-s3">A implantação requer salvaguardas de privacidade e validação no ambiente pretendido.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b13-h">O que levar para casa</span></h2>
+<p><span class="s" data-s="b13-p0-s0">O MESH não é apenas mais um benchmark de transcrição.</span> <span class="s" data-s="b13-p0-s1">Ele desafia a suposição de que modelos de áudio grandes podem resolver problemas espaciais complexos apenas com mais dados.</span> <span class="s" data-s="b13-p0-s2">A precisão de localização dinâmica abaixo de 50% é um lembrete duro de que a geometria acústica é difícil de inferir.</span> <span class="s" data-s="b13-p0-s3">Para desenvolvedores de sistemas de escuta distribuída, o papel destaca a necessidade de novas abordagens que vão além da transcrição pura, focando na associação robusta de fontes e rastreamento espacial consistente.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">O MESH expõe que a precisão de localização dinâmica em modelos atuais é baixa (41,54%), indicando falha em rastrear fontes em movimento.</span></li><li><span class="s" data-s="k1">Ter acesso a múltiplos receptores e metadados não resolve automaticamente a ambiguidade espacial; os modelos não integram bem essas informações.</span></li><li><span class="s" data-s="k2">A transcrição espacial tem WERs altos (59-73%), mostrando que confundir oradores é um problema persistente em cenas complexas.</span></li><li><span class="s" data-s="k3">O benchmark revela um gap entre a disponibilidade de informação acústica distribuída e a capacidade atual dos sistemas de usá-la para compreensão espacial.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.16787" rel="noopener">MESH: Multi-receiver Evaluation of Spatial Hearing across Egocentric and Allocentric Views</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.16787" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

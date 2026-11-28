@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SADL: Evitando o Colapso de Representação em Modelos Mundiais via Geometria de Oferta e Demanda — arXiv em 5</title>
+<meta name="description" content="Este paper identifica por que regularizadores de demanda em arquiteturas JEPAs falham ao ignorar a &#39;oferta&#39; do encoder e propõe o SADL, um regulador adaptativo que equilibra essas duas capacidades para estabilizar o aprendizado.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SADL: Evitando o Colapso de Representação em Modelos Mundiais via Geometria de Oferta e Demanda">
+<meta property="og:description" content="Este paper identifica por que regularizadores de demanda em arquiteturas JEPAs falham ao ignorar a &#39;oferta&#39; do encoder e propõe o SADL, um regulador adaptativo que equilibra essas duas capacidades para estabilizar o aprendizado.">
+<meta property="og:image" content="../../assets/papers/2611.21596/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Redes neurais</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.21596" rel="noopener">arXiv:2611.21596</a>
+    </div>
+    <h1><span class="s" data-s="t">SADL: Evitando o Colapso de Representação em Modelos Mundiais via Geometria de Oferta e Demanda</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Este paper identifica por que regularizadores de demanda em arquiteturas JEPAs falham ao ignorar a &#39;oferta&#39; do encoder e propõe o SADL, um regulador adaptativo que equilibra essas duas capacidades para estabilizar o aprendizado.</span></p>
+    <p class="byline">
+      <span>Sun et al.</span>
+      <span>7 min de leitura</span>
+<span>16/11/2026</span>    </p>
+    <div class="listen" data-article="2611.21596" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema Silencioso do Colapso em JEPAs</span></h2>
+<p><span class="s" data-s="b0-p0-s0">As Joint-Embedding Predictive Architectures (JEPAs), como LeWorldModel (LeWM) e INTACT, representam uma mudança de paradigma em relação à reconstrução de pixels.</span> <span class="s" data-s="b0-p0-s1">Em vez de prever cada pixel de uma imagem futura, esses modelos aprendem representações latentes que capturam a dinâmica do mundo.</span> <span class="s" data-s="b0-p0-s2">Um encoder Eθ mapeia entradas para uma representação H, que é projetada por um projetor Pϕ em um ponto final Z. Regularizadores de demanda são aplicados em Z para garantir que a geometria das representações seja útil para tarefas de controle ou classificação.</span></p><p><span class="s" data-s="b0-p1-s0">No entanto, os autores identificam uma falha fundamental: um projetor bem regularizado não garante que o encoder H tenha preservado a variação entre amostras.</span> <span class="s" data-s="b0-p1-s1">O problema começa na inicialização.</span> <span class="s" data-s="b0-p1-s2">Em modelos LeWM e INTACT, a representação H é dominada por um componente compartilhado por todas as entradas, carregando apenas 0,01% de sua energia em variação amostral.</span> <span class="s" data-s="b0-p1-s3">Após uma epoch de treinamento com um regularizador de demanda, esse número sobe apenas para 3-5%.</span> <span class="s" data-s="b0-p1-s4">O resto da informação útil é perdido.</span></p><p><span class="s" data-s="b0-p2-s0">Por que isso acontece?</span> <span class="s" data-s="b0-p2-s1">A previsibilidade não é sinônimo de utilidade.</span> <span class="s" data-s="b0-p2-s2">Suprimir distinções entre amostras torna o alvo mais fácil de prever, mas transforma estados diferentes em entradas de controle indistinguíveis.</span> <span class="s" data-s="b0-p2-s3">Os autores descobrem que dois mecanismos mantêm esse colapso.</span> <span class="s" data-s="b0-p2-s4">Primeiro, a normalização por lote (Batch Normalization - BN) no projetor subtrai a média do batch.</span> <span class="s" data-s="b0-p2-s5">Isso coloca o componente compartilhado no espaço nulo do Jacobiano do projetor.</span> <span class="s" data-s="b0-p2-s6">Segundo, a variação restante cresce principalmente através do gradiente da tarefa e se concentra em poucas direções, resultando em um &#39;effective rank&#39; baixo.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.21596/figure1.webp" alt="Diagrama do SADL mostrando como a demanda e a oferta de representações são equilibradas. O regulador de demanda D(Z) e a excitação determinam a capacidade de demanda q, enquanto excitação e transmissão determinam a capacidade de oferta k. A disparidade é penalizada pelo Supply Regularizer S." loading="lazy">
+          <figcaption>
+            Diagrama do SADL mostrando como a demanda e a oferta de representações são equilibradas. O regulador de demanda D(Z) e a excitação determinam a capacidade de demanda q, enquanto excitação e transmissão determinam a capacidade de oferta k. A disparidade é penalizada pelo Supply Regularizer S.
+            <span class="source">Figura 1 do paper · Sun et al., arXiv:2611.21596</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">A Mecânica do Colapso: Espaço Nulo e Gradientes Vanishing</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Para entender a profundidade do problema, precisamos olhar para a propagação de gradiente.</span> <span class="s" data-s="b2-p0-s1">A correção fornecida por um regularizador de demanda D(Z) sobre a representação H é dada pelo produto do Jacobiano do projetor JP(H) e o gradiente em Z. Se uma perturbação ΔH está no espaço nulo de JP, o gradiente em H se torna zero.</span> <span class="s" data-s="b2-p0-s2">No caso de projetores com Batch Normalization, adicionar um vetor constante c a todas as linhas de H não altera Z. Portanto, a direção compartilhada (o &#39;mean&#39;) tem gradiente zero tanto para o regularizador de demanda quanto para a perda da tarefa.</span></p><p><span class="s" data-s="b2-p1-s0">Isso significa que nenhum sinal de correção atinge o componente compartilhado de H. Enquanto isso, a variação amostral restante é concentrada em poucas direções, com um effective rank de cerca de 15.</span> <span class="s" data-s="b2-p1-s1">O gradiente do endpoint atinge essas direções, mas não consegue expandi-las significativamente.</span> <span class="s" data-s="b2-p1-s2">O projetor pode remixar e amplificar a variação existente para satisfazer a demanda, mas não pode recuperar o que H perdeu.</span> <span class="s" data-s="b2-p1-s3">Consequentemente, Z herda uma versão atenuada da degradação de H.</span></p><p><span class="s" data-s="b2-p2-s0">Os autores demonstram que o problema não reside em qual regularizador de demanda é universalmente melhor, mas sim na falta de correspondência entre a capacidade de demanda do endpoint e a capacidade de oferta do encoder.</span> <span class="s" data-s="b2-p2-s1">A oferta tem duas limitações distintas: o encoder pode falhar em excitar direções dependentes da amostra, ou o projetor pode falhar em transmiti-las.</span> <span class="s" data-s="b2-p2-s2">Ignorar essa dinâmica leva a colapsos frequentes, observados em 50% das sementes aleatórias em baselines sem correção.</span></p>        <h2><span class="s" data-s="b3-h">SADL: A Solução de Oferta e Demanda</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O SADL (Supply And Demand Loss) é proposto para corrigir essa assimetria.</span> <span class="s" data-s="b3-p0-s1">A ideia central é adicionar um regulador de oferta (Supply Regularizer) diretamente em H, coordenado com o regulador de demanda em Z. O SADL não altera a arquitetura nem adiciona parâmetros treináveis.</span> <span class="s" data-s="b3-p0-s2">Ele funciona lendo a capacidade de demanda q do regularizador existente e medindo a capacidade de oferta k de H. Se a oferta for insuficiente para atender à demanda (k &lt; q), o SADL aplica uma correção.</span></p><p><span class="s" data-s="b3-p1-s0">A capacidade de demanda q é determinada pela satisfação do regularizador de demanda (qreg) e pela excitação do endpoint (qexc).</span> <span class="s" data-s="b3-p1-s1">Já a capacidade de oferta k é definida pelo menor valor entre a excitação (kexc) e a transmissão (ktr) em H. A excitação mede a variação dependente da amostra, enquanto a transmissão mede a associação linear entre H e Z. O regulador de oferta S é unidirecional: ele só atua quando k &lt; q, evitando interferência desnecessária quando a representação já está saudável.</span></p><p><span class="s" data-s="b3-p2-s0">Matematicamente, o SADL utiliza funções de medição baseadas em estatísticas de batch.</span> <span class="s" data-s="b3-p2-s1">A excitação Fexc(U) usa o logaritmo do determinante da matriz de covariância centrada, normalizado pela energia não centrada.</span> <span class="s" data-s="b3-p2-s2">Isso torna a métrica sensível à presença de um componente compartilhado dominante.</span> <span class="s" data-s="b3-p2-s3">A transmissão Ftr mede a associação linear entre H e Z. Ao combinar essas métricas, o SADL cria um sinal de gradiente que corrige H nas direções onde ele falha, seja na excitação inicial ou na transmissão para Z.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b4-t">O Mecanismo de Gradiente Unidirecional</span></h3>
+          <p><span class="s" data-s="b4-c-s0">O SADL é projetado para ser robusto.</span> <span class="s" data-s="b4-c-s1">O regulador de oferta S é ativo apenas quando a capacidade de oferta k é menor que a demanda q. Isso evita que o SADL perturbe representações que já estão bem formadas.</span> <span class="s" data-s="b4-c-s2">Além disso, o uso de stop-gradient em Z durante o cálculo de q garante que a demanda seja lida de forma estável, sem feedback imediato que pudesse causar instabilidade numérica.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b5-h">Resultados: Estabilidade e Performance</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os experimentos foram conduzidos no LeWorldModel (LeWM) e INTACT, avaliando tarefas de controle como PushT, Cube, Reacher e TwoRoom.</span> <span class="s" data-s="b5-p0-s1">Os autores testaram o SADL com três regularizadores de demanda diferentes: VISReg, SIGReg e QQWorld.</span> <span class="s" data-s="b5-p0-s2">Em configurações de treinamento conjunto de quatro tarefas, o SADL reduziu a taxa de colapso de 50% para 0% em dez sementes aleatórias.</span> <span class="s" data-s="b5-p0-s3">Isso representa uma melhoria significativa na estabilidade do treinamento.</span></p><p><span class="s" data-s="b5-p1-s0">A qualidade das representações também melhorou drasticamente.</span> <span class="s" data-s="b5-p1-s1">Após uma epoch de treinamento, o effective rank do encoder com SADL é de 3,4 a 6,4 vezes maior do que a baseline sem SADL.</span> <span class="s" data-s="b5-p1-s2">O erro de previsão latente caiu para 1/20 a 1/303 do valor original.</span> <span class="s" data-s="b5-p1-s3">Em termos de performance de controle, o INTACT com SADL superou 95% de sucesso médio em controle sem busca, superando a baseline que ficava em torno de 44%.</span> <span class="s" data-s="b5-p1-s4">O SADL também mostrou robustez, mantendo a performance mesmo quando o peso da perda variava por ordens de magnitude.</span></p><p><span class="s" data-s="b5-p2-s0">Além do controle, o SADL foi testado em quatro conjuntos de dados de imagem, melhorando consistentemente a precisão e a estabilidade em diferentes sementes.</span> <span class="s" data-s="b5-p2-s1">Os autores notam que parte da correção ocorre através do viés β da LayerNorm final do encoder, que cresce para cancelar a média compartilhada, reduzindo a norma da média do batch de H de 13-14,7 para cerca de 1,4.</span> <span class="s" data-s="b5-p2-s2">Isso demonstra que o SADL consegue reparar até checkpoints quase colapsados.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.21596/table2.webp" alt="Tabela de ablação mostrando que o SADL atinge 95% de sucesso com estabilidade, enquanto métodos sem ele falham. A tabela compara o desempenho do INTACT com e sem SADL, demonstrando a robustez do método." loading="lazy">
+          <figcaption>
+            Tabela de ablação mostrando que o SADL atinge 95% de sucesso com estabilidade, enquanto métodos sem ele falham. A tabela compara o desempenho do INTACT com e sem SADL, demonstrando a robustez do método.
+            <span class="source">Tabela 2 do paper · Sun et al., arXiv:2611.21596</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Limitações e Trabalhos Futuros</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Apesar dos resultados promissores, os autores destacam limitações importantes.</span> <span class="s" data-s="b7-p0-s1">O argumento do espaço nulo apresentado na seção 3.1 é específico para projetores com Batch Normalization.</span> <span class="s" data-s="b7-p0-s2">Projetores com outras normalizações têm invariâncias diferentes, que não foram analisadas neste trabalho.</span> <span class="s" data-s="b7-p0-s3">Além disso, a métrica de transmissão ktr mede apenas associação de segunda ordem, o que pode não capturar relações não-lineares complexas.</span></p><p><span class="s" data-s="b7-p1-s0">Os modelos avaliados são ViT-Tiny e ViT-Small.</span> <span class="s" data-s="b7-p1-s1">Em conjuntos de dados menores onde a baseline já é saudável, como CIFAR-10, o ganho do SADL está dentro do ruído das sementes.</span> <span class="s" data-s="b7-p1-s2">Isso sugere que o método é mais crítico em cenários de maior complexidade ou onde o colapso é uma ameaça iminente.</span> <span class="s" data-s="b7-p1-s3">O paper não aborda a generalização para operadores de transmissão não-lineares, multimodais ou temporalmente estruturados, que são áreas naturais para expansão futura.</span></p><p><span class="s" data-s="b7-p2-s0">Outra limitação é a dependência da leitura da demanda.</span> <span class="s" data-s="b7-p2-s1">O SADL mede a demanda baseada na estrutura já atingida em Z. Se o regularizador de demanda for mal configurado ou se a representação em Z estiver muito degradada antes da correção, o SADL pode ter dificuldade em recuperar a informação.</span> <span class="s" data-s="b7-p2-s2">No entanto, os experimentos mostram que o método é eficaz em reparar checkpoints próximos do colapso, indicando uma certa tolerância a esses cenários.</span></p>        <h2><span class="s" data-s="b8-h">Conclusão</span></h2>
+<p><span class="s" data-s="b8-p0-s0">O SADL introduz um princípio de baixo custo e alto impacto para o aprendizado de representações estáveis.</span> <span class="s" data-s="b8-p0-s1">Ao corresponder a capacidade de demanda do endpoint com a capacidade de oferta do encoder, o método previne o colapso e acelera a convergência.</span> <span class="s" data-s="b8-p0-s2">A abordagem é agnóstica ao regularizador de demanda específico e não requer ajustes finos adicionais, tornando-a uma ferramenta valiosa para o desenvolvimento de modelos mundiais mais robustos.</span></p><p><span class="s" data-s="b8-p1-s0">Para desenvolvedores e cientistas de dados que trabalham com JEPAs, a lição principal é clara: a regularização apenas no espaço projetado é insuficiente.</span> <span class="s" data-s="b8-p1-s1">A geometria do encoder deve ser monitorada e corrigida ativamente.</span> <span class="s" data-s="b8-p1-s2">O SADL oferece um mecanismo elegante para fazer isso, sem a complexidade adicional de redes auxiliares ou parâmetros extras.</span> <span class="s" data-s="b8-p1-s3">À medida que os modelos mundiais se tornam mais complexos, técnicas como o SADL serão essenciais para garantir que as representações latentes capturem a riqueza do mundo real, e não apenas sua média.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.21596/table21.webp" alt="Resultados finais no INTACT onde o SADL atinge 95% de sucesso, superando a baseline que fica em 44%. A tabela compara o desempenho em diferentes épocas, mostrando a superioridade do SADL." loading="lazy">
+          <figcaption>
+            Resultados finais no INTACT onde o SADL atinge 95% de sucesso, superando a baseline que fica em 44%. A tabela compara o desempenho em diferentes épocas, mostrando a superioridade do SADL.
+            <span class="source">Tabela 21 do paper · Sun et al., arXiv:2611.21596</span>
+          </figcaption>
+        </figure>
+
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">O colapso em JEPAs ocorre porque o componente compartilhado fica no espaço nulo do projetor, ignorado pelos gradientes de demanda.</span></li><li><span class="s" data-s="k1">O SADL adiciona um regulador de oferta que corrige o encoder apenas quando a variação amostral está abaixo da demanda do endpoint.</span></li><li><span class="s" data-s="k2">Em testes de controle, o SADL reduziu o colapso de 50% para 0% e aumentou o sucesso do INTACT para mais de 95%.</span></li><li><span class="s" data-s="k3">O método é leve, sem parâmetros extras, e funciona com múltiplos regularizadores de demanda, oferecendo estabilidade robusta.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.21596" rel="noopener">SADL: On the Demand-Supply Geometry of Representation Collapse</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.21596" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

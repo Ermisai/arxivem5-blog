@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>O Jogo da Imitação Pessoal: Quando LLMs tentam ser você — arXiv em 5</title>
+<meta name="description" content="Pesquisadores da UIUC propõem um desafio mais rigoroso que o Teste de Turing: replicar a identidade única de um indivíduo. Um estudo mostra que LLMs treinados em dados pessoais podem enganar amigos próximos, levantando questões sobre privacidade e autenticidade digital.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="O Jogo da Imitação Pessoal: Quando LLMs tentam ser você">
+<meta property="og:description" content="Pesquisadores da UIUC propõem um desafio mais rigoroso que o Teste de Turing: replicar a identidade única de um indivíduo. Um estudo mostra que LLMs treinados em dados pessoais podem enganar amigos próximos, levantando questões sobre privacidade e autenticidade digital.">
+<meta property="og:image" content="../../assets/papers/2611.24888/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>LLMs</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.24888" rel="noopener">arXiv:2611.24888</a>
+    </div>
+    <h1><span class="s" data-s="t">O Jogo da Imitação Pessoal: Quando LLMs tentam ser você</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Pesquisadores da UIUC propõem um desafio mais rigoroso que o Teste de Turing: replicar a identidade única de um indivíduo.</span> <span class="s" data-s="d-s1">Um estudo mostra que LLMs treinados em dados pessoais podem enganar amigos próximos, levantando questões sobre privacidade e autenticidade digital.</span></p>
+    <p class="byline">
+      <span>Wellyanto et al.</span>
+      <span>10 min de leitura</span>
+<span>18/11/2026</span>    </p>
+    <div class="listen" data-article="2611.24888" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=iX3zeBfIRjU" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">Além do Teste de Turing: A busca pela identidade única</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Em 1950, Alan Turing propôs o &#39;Imitation Game&#39;, hoje conhecido como Teste de Turing, para responder à pergunta &#39;As máquinas podem pensar?&#39;.</span> <span class="s" data-s="b0-p0-s1">O cenário era simples: um interrogador humano conversava com dois participantes, um humano e uma máquina, sem saber qual era qual.</span> <span class="s" data-s="b0-p0-s2">Se o interrogador não conseguisse distinguir a máquina do humano, a máquina &#39;passava&#39; no teste.</span> <span class="s" data-s="b0-p0-s3">Durante décadas, esse foi o padrão-ouro para avaliar a inteligência artificial conversacional.</span> <span class="s" data-s="b0-p0-s4">No entanto, com o advento dos Large Language Models (LLMs), como o GPT-3.5 e seus sucessores, a barreira foi ultrapassada.</span> <span class="s" data-s="b0-p0-s5">Esses modelos, treinados em vastos repositórios de texto da internet, tornaram-se mestres em emular a conversa humana genérica.</span></p><p><span class="s" data-s="b0-p1-s0">Mas emular um &#39;humano&#39; é diferente de emular &#39;você&#39;.</span> <span class="s" data-s="b0-p1-s1">A capacidade de um modelo de gerar texto coerente e plausível não significa que ele capture a identidade singular de um indivíduo.</span> <span class="s" data-s="b0-p1-s2">É aqui que entra a proposta do paper &#39;Who are you?</span> <span class="s" data-s="b0-p1-s3">The Personal Imitation Game&#39;, de pesquisadores da University of Illinois at Urbana-Champaign.</span> <span class="s" data-s="b0-p1-s4">Eles argumentam que o verdadeiro desafio não é fingir ser humano, mas sim fingir ser uma pessoa específica, com sua voz, seus padrões de pensamento e suas experiências únicas.</span></p><p><span class="s" data-s="b0-p2-s0">Os autores introduzem o &#39;Personal Imitation Game&#39; (PIG), uma variante mais exigente do teste clássico.</span> <span class="s" data-s="b0-p2-s1">Em vez de comparar uma IA contra um humano anônimo, o PIG coloca a IA contra pessoas que conhecem bem o alvo.</span> <span class="s" data-s="b0-p2-s2">O objetivo é determinar se uma máquina pode replicar tão fielmente a identidade digital de um indivíduo que até seus amigos e colegas mais próximos sejam enganados.</span> <span class="s" data-s="b0-p2-s3">Isso abre caminho para uma nova classe de aplicações: agentes pessoais que não apenas auxiliam, mas realmente &#39;são&#39; você no digital, desde assistentes virtuais até legados digitais para gerações futuras.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.24888/figure1.webp" alt="Ilustra as três variantes do Personal Imitation Game. O interrogador deve distinguir entre o alvo (target) e o imitador (impersonator), que pode ser humano ou IA. A segunda variante, central, é o foco do estudo: um LLM imita um autor do paper usando seus dados pessoais." loading="lazy">
+          <figcaption>
+            Ilustra as três variantes do Personal Imitation Game. O interrogador deve distinguir entre o alvo (target) e o imitador (impersonator), que pode ser humano ou IA. A segunda variante, central, é o foco do estudo: um LLM imita um autor do paper usando seus dados pessoais.
+            <span class="source">Figura 1 do paper · Wellyanto et al., arXiv:2611.24888</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">Como funciona o Personal Imitation Game</span></h2>
+<p><span class="s" data-s="b2-p0-s0">O PIG é estruturado como um jogo de detetive conversacional.</span> <span class="s" data-s="b2-p0-s1">Um interrogador humano interage por escrito com dois participantes anônimos: o &#39;alvo&#39; (target), cuja identidade é conhecida pelo interrogador, e o &#39;imitador&#39; (impersonator), que tenta mimetizar o alvo.</span> <span class="s" data-s="b2-p0-s2">Diferente do Teste de Turing clássico, onde o imitador é uma máquina genérica, aqui o imitador pode ser tanto outra IA quanto outro humano.</span> <span class="s" data-s="b2-p0-s3">Os participantes recebem um prompt conversacional e têm um tempo limitado para discutir o tema.</span> <span class="s" data-s="b2-p0-s4">Ao final, o interrogador deve declarar qual dos dois é o alvo real.</span></p><p><span class="s" data-s="b2-p1-s0">O paper explora três variantes deste jogo.</span> <span class="s" data-s="b2-p1-s1">Na primeira, todos os participantes são humanos, servindo como linha de base para entender como as pessoas distinguem identidades umas das outras.</span> <span class="s" data-s="b2-p1-s2">Na segunda, o alvo é um dos autores do paper, o interrogador é um amigo ou colega próximo, e o imitador é um sistema baseado em LLM.</span> <span class="s" data-s="b2-p1-s3">Esta é a configuração central do estudo, pois testa a capacidade da IA de enganar quem conhece o alvo.</span> <span class="s" data-s="b2-p1-s4">Na terceira variante, o alvo é a IA e o imitador é um humano, invertendo a dinâmica para ver se pessoas podem imitar uma IA treinada em dados pessoais.</span></p><p><span class="s" data-s="b2-p2-s0">A distinção crucial feita pelos autores é entre &#39;agentes personalizados&#39; e &#39;agentes pessoais&#39;.</span> <span class="s" data-s="b2-p2-s1">Agentes personalizados são ferramentas adaptadas às suas preferências (como um filtro de e-mail).</span> <span class="s" data-s="b2-p2-s2">Agentes pessoais, como o foco deste paper, tentam replicar sua identidade em conversa.</span> <span class="s" data-s="b2-p2-s3">A pergunta de pesquisa não é &#39;a máquina pode pensar?&#39;, mas &#39;a máquina pode pensar como eu?&#39;.</span> <span class="s" data-s="b2-p2-s4">Para responder a isso, os pesquisadores precisaram primeiro entender quais sinais os humanos usam para identificar uns aos outros no texto.</span></p>        <h2><span class="s" data-s="b3-h">Estabelecendo a linha de base humana</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Antes de testar as IAs, os autores realizaram um estudo com 30 participantes humanos para estabelecer uma linha de base.</span> <span class="s" data-s="b3-p0-s1">Eles formaram 10 grupos de três pessoas (um alvo, um imitador humano e um interrogador), onde todos se conheciam.</span> <span class="s" data-s="b3-p0-s2">O objetivo era medir com que precisão as pessoas podem discernir identidades a partir de mensagens de texto e quais características elas utilizam para isso.</span></p><p><span class="s" data-s="b3-p1-s0">Os resultados da linha de base revelaram padrões interessantes.</span> <span class="s" data-s="b3-p1-s1">Em 30 rodadas, os interrogadores identificaram corretamente o alvo em 17 casos, uma taxa de sucesso de 56,7%.</span> <span class="s" data-s="b3-p1-s2">Estatisticamente, essa taxa não é distinguível do acaso (p=0.58), sugerindo que, em conversas curtas e anônimas, distinguir identidades humanas próximas é mais difícil do que se poderia imaginar.</span> <span class="s" data-s="b3-p1-s3">No entanto, a confiança dos interrogadores variou significativamente.</span> <span class="s" data-s="b3-p1-s4">Os que acertaram relataram uma confiança média de 85,9%, enquanto os que erraram tiveram uma média de 71,9%.</span></p><p><span class="s" data-s="b3-p2-s0">Os autores analisaram também os sinais que os interrogadores usavam para tomar suas decisões.</span> <span class="s" data-s="b3-p2-s1">Eles identificaram três categorias principais: características estilométricas (vocabulário, escolha de palavras, estrutura de frases), traços de personalidade (sinais de curiosidade, diligência, humor) e fatos biográficos (idade, gênero, profissão).</span> <span class="s" data-s="b3-p2-s2">A Figura 5 do paper mostra a distribuição desses sinais.</span> <span class="s" data-s="b3-p2-s3">Curiosamente, o estilo de escrita e a personalidade foram os sinais mais prevalentes, superando os fatos biográficos brutos.</span> <span class="s" data-s="b3-p2-s4">Isso indica que, no texto, a &#39;voz&#39; importa mais que os dados cadastrais.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.24888/figure5.webp" alt="Heatmap mostrando a distribuição dos sinais usados pelos interrogadores. Características estilométricas e traços de personalidade dominam sobre fatos biográficos, especialmente em grupos com menor vínculo social." loading="lazy">
+          <figcaption>
+            Heatmap mostrando a distribuição dos sinais usados pelos interrogadores. Características estilométricas e traços de personalidade dominam sobre fatos biográficos, especialmente em grupos com menor vínculo social.
+            <span class="source">Figura 5 do paper · Wellyanto et al., arXiv:2611.24888</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">A arquitetura do Imitador de IA</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Com a linha de base estabelecida, os pesquisadores construíram um sistema de IA para jogar o PIG.</span> <span class="s" data-s="b5-p0-s1">O alvo foi um dos autores do paper, e o dataset usado foi uma autoetnografia composta por dez anos de mensagens pessoais digitais.</span> <span class="s" data-s="b5-p0-s2">Essa quantidade massiva de dados permitiu que o modelo capturasse nuances que datasets públicos não conseguem.</span> <span class="s" data-s="b5-p0-s3">A arquitetura do sistema, detalhada na Figura 6, combina recuperação de informações (RAG) com prompts dinâmicos.</span></p><p><span class="s" data-s="b5-p1-s0">As mensagens históricas são processadas e indexadas em um banco de dados vetorial.</span> <span class="s" data-s="b5-p1-s1">Quando uma nova mensagem chega no jogo, o sistema não apenas recupera mensagens relevantes do passado, mas também constrói um prompt dinâmico que inclui sinais estáticos de identidade (como a personalidade do autor) e o contexto atual da conversa.</span> <span class="s" data-s="b5-p1-s2">O LLM então gera uma resposta que tenta imitar o alvo, usando tanto o estilo encontrado nos dados históricos quanto a personalidade definida.</span></p><p><span class="s" data-s="b5-p2-s0">O desafio técnico aqui é equilibrar a fidelidade aos dados com a coerência contextual.</span> <span class="s" data-s="b5-p2-s1">O modelo não pode apenas copiar e colar frases antigas; ele precisa sintetizar uma resposta nova que soe como o autor, mantendo a consistência do tópico de conversa.</span> <span class="s" data-s="b5-p2-s2">Os autores observaram que o modelo se beneficiava enormemente da profundidade temporal dos dados.</span> <span class="s" data-s="b5-p2-s3">Dez anos de mensagens fornecem uma riqueza de variações no estilo e no conteúdo que um dataset menor não poderia oferecer, permitindo uma imitação mais robusta e menos repetitiva.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.24888/figure6.webp" alt="Arquitetura do Imitador de IA. Mensagens históricas são pré-processadas e indexadas em um banco de dados vetorial. Um prompt dinâmico combina sinais de identidade estáticos com mensagens relevantes do histórico e o contexto atual do jogo." loading="lazy">
+          <figcaption>
+            Arquitetura do Imitador de IA. Mensagens históricas são pré-processadas e indexadas em um banco de dados vetorial. Um prompt dinâmico combina sinais de identidade estáticos com mensagens relevantes do histórico e o contexto atual do jogo.
+            <span class="source">Figura 6 do paper · Wellyanto et al., arXiv:2611.24888</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">O estudo de engano: IA vs. Amigos</span></h2>
+<p><span class="s" data-s="b7-p0-s0">A parte mais crítica do paper foi a avaliação do sistema de IA.</span> <span class="s" data-s="b7-p0-s1">Os autores recrutaram 20 amigos e colegas do autor-alvo para atuarem como interrogadores.</span> <span class="s" data-s="b7-p0-s2">Cada interrogador participou de rodadas onde o alvo real (o autor) e o imitador de IA eram apresentados anonimamente.</span> <span class="s" data-s="b7-p0-s3">O objetivo era ver se os interrogadores poderiam distinguir o autor de seu próprio &#39;clone&#39; digital.</span></p><p><span class="s" data-s="b7-p1-s0">Os resultados foram surpreendentes e preocupantes.</span> <span class="s" data-s="b7-p1-s1">Em 10 rodadas onde os interrogadores precisavam escolher entre o imitador de IA e os amigos do autor (que atuavam como imitadores humanos ou alvos secundários), os interrogadores escolheram o sistema de IA como sendo o alvo em 7 casos.</span> <span class="s" data-s="b7-p1-s2">Quando comparados diretamente contra o autor real em 20 rodadas, os interrogadores identificaram o autor corretamente em 13 casos, e a IA em 7.</span> <span class="s" data-s="b7-p1-s3">Nenhuma dessas taxas foi estatisticamente distinguível do acaso neste tamanho de amostra.</span></p><p><span class="s" data-s="b7-p2-s0">Isso significa que, para uma parcela significativa dos amigos e colegas do autor, a IA foi tão convincente quanto a pessoa real.</span> <span class="s" data-s="b7-p2-s1">Em alguns casos, a IA foi considerada mais &#39;autêntica&#39; do que o próprio autor, possivelmente porque o modelo tendia a exagerar certos traços de personalidade ou a usar um vocabulário mais &#39;polido&#39; do que o uso casual do dia a dia.</span> <span class="s" data-s="b7-p2-s2">O estudo demonstra que, com dados suficientes, um LLM pode criar uma representação digital indistinguível de um indivíduo para seu círculo social próximo.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b8-t">A armadilha da confiança</span></h3>
+          <p><span class="s" data-s="b8-c-s0">Os interrogadores que erraram a identificação da IA relataram menor confiança em suas decisões.</span> <span class="s" data-s="b8-c-s1">Isso sugere que a &#39;intuição&#39; de que algo está errado pode ser um sinal fraco de que a interação não é humana, mas a falta de evidências concretas (como erros factuais) impede a detecção precisa.</span> <span class="s" data-s="b8-c-s2">A confiança não é um indicador calibrado de precisão.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b9-h">O papel do vínculo social</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Um dos achados mais sutis do estudo humano foi a relação entre a força do vínculo social (tie strength) e a capacidade de detecção.</span> <span class="s" data-s="b9-p0-s1">Os autores mediram quão próximos os participantes eram uns dos outros.</span> <span class="s" data-s="b9-p0-s2">Eles esperavam que laços mais fortes facilitassem a detecção, pois amigos próximos conhecem melhor os padrões uns dos outros.</span></p><p><span class="s" data-s="b9-p1-s0">No entanto, os dados mostraram um padrão ambíguo.</span> <span class="s" data-s="b9-p1-s1">Em grupos com laços muito fortes, a taxa de sucesso dos interrogadores foi extremamente polarizada: alguns grupos tiveram 0% de sucesso (todos foram enganados ou falharam em identificar), enquanto outros tiveram 100%.</span> <span class="s" data-s="b9-p1-s2">Isso sugere que, embora o conhecimento mútuo ajude, ele também pode levar a vieses.</span> <span class="s" data-s="b9-p1-s3">Amigos podem ter expectativas tão altas ou tão específicas que qualquer desvio, mesmo que pequeno, seja notado, ou, inversamente, podem estar tão predispostos a aceitar a identidade do outro que falham em questionar anomalias sutis.</span></p><p><span class="s" data-s="b9-p2-s0">A correlação pontual entre a força do vínculo e o sucesso do interrogador foi fraca e estatisticamente insignificante (r=-0.27, p=0.23).</span> <span class="s" data-s="b9-p2-s1">Os autores concluem que, embora a proximidade social influencie a dinâmica, ela não é um fator determinante único para a detecção de imitações.</span> <span class="s" data-s="b9-p2-s2">A qualidade da imitação da IA e a capacidade estilométrica do modelo parecem ser fatores mais críticos do que a profundidade da relação entre os humanos.</span></p>        <h2><span class="s" data-s="b10-h">Limitações e implicações</span></h2>
+<p><span class="s" data-s="b10-p0-s0">É crucial notar as limitações deste estudo.</span> <span class="s" data-s="b10-p0-s1">A amostra foi pequena: apenas um autor foi usado como alvo, e os interrogadores eram seu círculo social específico.</span> <span class="s" data-s="b10-p0-s2">Isso limita a generalização para outras personalidades ou culturas.</span> <span class="s" data-s="b10-p0-s3">Além disso, o estudo focou em conversas de texto curto e estruturado.</span> <span class="s" data-s="b10-p0-s4">A imitação pode falhar em contextos mais longos ou complexos onde a consistência de longo prazo é testada.</span></p><p><span class="s" data-s="b10-p1-s0">Outra limitação é a natureza dos dados pessoais.</span> <span class="s" data-s="b10-p1-s1">A autoetnografia de dez anos, embora rica, é um recorte específico da vida do autor.</span> <span class="s" data-s="b10-p1-s2">Um modelo treinado em dados de redes sociais públicas, por exemplo, pode ter um desempenho diferente, possivelmente mais ruidoso ou menos íntimo.</span> <span class="s" data-s="b10-p1-s3">Os autores também não exploraram extensivamente como a IA poderia ser melhorada além do RAG básico, deixando espaço para futuras pesquisas em fine-tuning específico para identidade.</span></p><p><span class="s" data-s="b10-p2-s0">As implicações éticas e de privacidade são profundas.</span> <span class="s" data-s="b10-p2-s1">Se uma IA pode enganar seus amigos próximos, ela pode ser usada para phishing direcionado, manipulação política ou fraudes financeiras com uma eficácia sem precedentes.</span> <span class="s" data-s="b10-p2-s2">A possibilidade de &#39;clones digitais&#39; levanta questões sobre consentimento: quem é dono da sua voz digital?</span> <span class="s" data-s="b10-p2-s3">Você deve poder controlar ou remover sua representação em IA após sua morte?</span> <span class="s" data-s="b10-p2-s4">O paper abre a caixa de Pandora da identidade digital, mostrando que a barreira entre o humano e o simulacro está se tornando cada vez mais tênue.</span></p>        <h2><span class="s" data-s="b11-h">Conclusão: O fim da autenticidade óbvia</span></h2>
+<p><span class="s" data-s="b11-p0-s0">O &#39;Personal Imitation Game&#39; não prova que IAs são conscientes ou que substituirão humanos em todas as interações.</span> <span class="s" data-s="b11-p0-s1">Ele prova, no entanto, que a distinção entre humano e máquina, baseada apenas em texto conversacional, está se tornando opaca.</span> <span class="s" data-s="b11-p0-s2">Para o público geral, isso significa que a verificação de identidade precisa evoluir para além da confiança cega em mensagens de texto.</span></p><p><span class="s" data-s="b11-p1-s0">Para a comunidade de pesquisa, o paper estabelece um novo benchmark.</span> <span class="s" data-s="b11-p1-s1">O foco muda de &#39;a IA pode conversar?&#39; para &#39;a IA pode ser alguém específico?&#39;.</span> <span class="s" data-s="b11-p1-s2">Isso exige métricas mais sofisticadas, que vão além da perplexidade do modelo, para avaliar a fidelidade identitária.</span> <span class="s" data-s="b11-p1-s3">À medida que os modelos melhoram e os datasets pessoais se tornam mais acessíveis, a capacidade de criar clones digitais convincentes só aumentará.</span></p><p><span class="s" data-s="b11-p2-s0">O estudo da UIUC serve como um aviso e uma demonstração técnica.</span> <span class="s" data-s="b11-p2-s1">Ele nos mostra que nossa identidade digital, construída ao longo de anos de mensagens e interações, é um ativo poderoso, mas também vulnerável.</span> <span class="s" data-s="b11-p2-s2">A pergunta &#39;Quem você é?&#39; agora tem uma resposta que uma máquina pode dar, e, em muitos casos, ela será difícil de distinguir da verdade.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">O &#39;Personal Imitation Game&#39; exige que uma IA imite um indivíduo específico, não apenas um humano genérico.</span></li><li><span class="s" data-s="k1">Um modelo treinado em 10 anos de mensagens pessoais enganou 35% dos interrogadores contra amigos reais.</span></li><li><span class="s" data-s="k2">A força do vínculo social afeta a capacidade de detecção, mas não garante sucesso absoluto.</span></li><li><span class="s" data-s="k3">Estilometria e fatos biográficos são os sinais mais usados para distinguir humanos de IAs neste contexto.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.24888" rel="noopener">Who are you? The Personal Imitation Game</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.24888" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

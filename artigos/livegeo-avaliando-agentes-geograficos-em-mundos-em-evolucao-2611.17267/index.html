@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LiveGeo: Avaliando Agentes Geográficos em Mundos em Evolução Contínua — arXiv em 5</title>
+<meta name="description" content="O LiveGeo introduz um benchmark e uma plataforma (GeoWorld) que simulam ambientes geográficos dinâmicos, revelando que agentes LLM falham ao adaptar decisões quando o mundo muda independentemente deles.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LiveGeo: Avaliando Agentes Geográficos em Mundos em Evolução Contínua">
+<meta property="og:description" content="O LiveGeo introduz um benchmark e uma plataforma (GeoWorld) que simulam ambientes geográficos dinâmicos, revelando que agentes LLM falham ao adaptar decisões quando o mundo muda independentemente deles.">
+<meta property="og:image" content="../../assets/papers/2611.17267/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Agentes</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.17267" rel="noopener">arXiv:2611.17267</a>
+    </div>
+    <h1><span class="s" data-s="t">LiveGeo: Avaliando Agentes Geográficos em Mundos em Evolução Contínua</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">O LiveGeo introduz um benchmark e uma plataforma (GeoWorld) que simulam ambientes geográficos dinâmicos, revelando que agentes LLM falham ao adaptar decisões quando o mundo muda independentemente deles.</span></p>
+    <p class="byline">
+      <span>Zhou et al.</span>
+      <span>7 min de leitura</span>
+<span>12/11/2026</span>    </p>
+    <div class="listen" data-article="2611.17267" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=pMroaqHtph8" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">A Falácia do Mapa Estático</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A inteligência geográfica, definida como a capacidade de compreender, raciocinar e agir sobre informações do mundo real, avançou significativamente com o surgimento de modelos de linguagem e visão-linguagem.</span> <span class="s" data-s="b0-p0-s1">No entanto, a forma como avaliamos esses agentes ainda reflete uma visão ultrapassada da realidade.</span> <span class="s" data-s="b0-p0-s2">A maioria dos benchmarks existentes opera sobre estados geográficos fixos.</span> <span class="s" data-s="b0-p0-s3">Eles tratam o mundo como uma fotografia estática, onde as estradas, os pontos de interesse e os eventos não mudam durante a execução da tarefa.</span></p><p><span class="s" data-s="b0-p1-s0">Essa abordagem ignora uma característica fundamental do mundo real: a evolução temporal contínua e independente.</span> <span class="s" data-s="b0-p1-s1">Em cenários reais, condições de tráfego, disponibilidade de locais e eventos regionais mudam constantemente, muitas vezes sem relação direta com as ações do agente.</span> <span class="s" data-s="b0-p1-s2">Avaliações que não incorporam essa dinâmica não conseguem medir a verdadeira confiabilidade de um agente, pois ignoram a necessidade de verificação contínua e replanejamento.</span></p><p><span class="s" data-s="b0-p2-s0">O paper LiveGeo, desenvolvido por pesquisadores da National University of Singapore, Zhejiang University, Beijing University of Posts and Telecommunications e University of Oxford, busca corrigir essa lacuna.</span> <span class="s" data-s="b0-p2-s1">Eles introduzem o LiveGeo, um benchmark projetado especificamente para avaliar a tomada de decisão confiável em ambientes geográficos que evoluem continuamente.</span> <span class="s" data-s="b0-p2-s2">O objetivo não é apenas ver se o agente chega ao destino, mas se ele mantém a validade de suas decisões à medida que o mundo ao seu redor se transforma.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.17267/figure1.webp" alt="Visão geral do GeoWorld e LiveGeo. O mundo evolui independentemente do agente, e o tempo avança conforme as ações do agente são executadas. O benchmark avalia tarefas atômicas, composicionais e dinâmicas." loading="lazy">
+          <figcaption>
+            Visão geral do GeoWorld e LiveGeo. O mundo evolui independentemente do agente, e o tempo avança conforme as ações do agente são executadas. O benchmark avalia tarefas atômicas, composicionais e dinâmicas.
+            <span class="source">Figura 1 do paper · Zhou et al., arXiv:2611.17267</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">GeoWorld: Uma Plataforma de Simulação Dinâmica</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Para implementar o LiveGeo, os autores criaram o GeoWorld, uma plataforma interativa e controlável de ambiente geográfico.</span> <span class="s" data-s="b2-p0-s1">Diferente de simulações tradicionais que reiniciam o estado do mundo a cada teste, o GeoWorld mantém uma estrutura geográfica persistente, baseada em dados reais de redes viárias e locais, acoplada a estados mundiais variáveis no tempo.</span> <span class="s" data-s="b2-p0-s2">Esses estados incluem condições de estradas, status de lugares e eventos regionais.</span></p><p><span class="s" data-s="b2-p1-s0">A inovação central do GeoWorld reside na independência da evolução do mundo em relação ao agente.</span> <span class="s" data-s="b2-p1-s1">O mundo avança seu próprio processo temporal, independentemente de o agente esteja ativo ou não.</span> <span class="s" data-s="b2-p1-s2">O tempo no ambiente avança conforme as ações do agente são executadas, mas as mudanças externas (como uma rua que se fecha ou um evento que começa) ocorrem de forma autônoma.</span> <span class="s" data-s="b2-p1-s3">Isso força o agente a lidar com a incerteza e a dinâmica real, em vez de apenas navegar por um labirinto predefinido.</span></p><p><span class="s" data-s="b2-p2-s0">Além disso, o GeoWorld preserva histórias de estados verificáveis.</span> <span class="s" data-s="b2-p2-s1">Cada interação do agente é registrada contra o estado do mundo naquele momento específico.</span> <span class="s" data-s="b2-p2-s2">Isso permite uma análise granular de falhas: é possível determinar se o agente falhou porque não compreendeu a geografia, porque fez uma suposição incorreta sobre a dinâmica do mundo, ou porque não conseguiu atualizar seu plano quando o ambiente mudou.</span> <span class="s" data-s="b2-p2-s3">Essa rastreabilidade é crucial para diagnosticar as limitações atuais dos agentes de linguagem.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.17267/figure2.webp" alt="Arquitetura do GeoWorld. Uma estrutura geográfica persistente G é combinada com estados mundiais Xt que evoluem com o tempo. O mundo muda independentemente das ações do agente, que interage através de ferramentas unificadas." loading="lazy">
+          <figcaption>
+            Arquitetura do GeoWorld. Uma estrutura geográfica persistente G é combinada com estados mundiais Xt que evoluem com o tempo. O mundo muda independentemente das ações do agente, que interage através de ferramentas unificadas.
+            <span class="source">Figura 2 do paper · Zhou et al., arXiv:2611.17267</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b4-h">O Desafio do Replanejamento Baseado em Evidências</span></h2>
+<p><span class="s" data-s="b4-p0-s0">O LiveGeo não testa apenas a capacidade de planejar rotas ou buscar informações.</span> <span class="s" data-s="b4-p0-s1">Ele avalia três dimensões críticas: grounding geográfico, viabilidade geográfica e confiabilidade sob evolução do mundo.</span> <span class="s" data-s="b4-p0-s2">O &#39;grounding&#39; refere-se à capacidade do agente de observar e relatar fielmente eventos relevantes.</span> <span class="s" data-s="b4-p0-s3">A &#39;viabilidade&#39; testa se o agente entende as restrições físicas e lógicas do ambiente.</span> <span class="s" data-s="b4-p0-s4">Já a &#39;confiabilidade&#39; mede se o agente consegue manter a validade de suas decisões à medida que o mundo evolui.</span></p><p><span class="s" data-s="b4-p1-s0">Em tarefas dinâmicas, o agente deve adquirir ativamente informações relevantes para a tarefa, verificar se as evidências que sustentam suas decisões anteriores ainda são válidas e revisar seus planos quando necessário.</span> <span class="s" data-s="b4-p1-s1">Isso exige um ciclo contínuo de percepção, verificação e ação.</span> <span class="s" data-s="b4-p1-s2">Um agente que planeja uma rota com base em dados estáticos pode falhar miseravelmente se uma ponte fechar ou um evento público bloquear o caminho, a menos que ele tenha mecanismos robustos para detectar essa mudança e replanejar.</span></p><p><span class="s" data-s="b4-p2-s0">Os benchmarks anteriores frequentemente focam em aplicações específicas ou fluxos de trabalho, medindo apenas se a tarefa final foi concluída.</span> <span class="s" data-s="b4-p2-s1">Isso mascara as causas profundas do fracasso.</span> <span class="s" data-s="b4-p2-s2">O LiveGeo, ao isolar essas dimensões, permite entender exatamente onde o agente quebra.</span> <span class="s" data-s="b4-p2-s3">Por exemplo, um agente pode ter sucesso em uma tarefa estática, mas falhar completamente em uma dinâmica, não por falta de conhecimento geográfico, mas por incapacidade de integrar novas evidências em tempo real.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b5-t">A Ilusão da Competência Estática</span></h3>
+          <p><span class="s" data-s="b5-c-s0">Resultados preliminares mostram que mesmo modelos de linguagem de última geração (frontier LLMs) lutam com tarefas geográficas estáticas.</span> <span class="s" data-s="b5-c-s1">Não há um modelo que se destaque consistentemente em todas as tarefas.</span> <span class="s" data-s="b5-c-s2">Isso sugere que o problema não é apenas a escala do modelo, mas a falta de mecanismos adequados de raciocínio espacial e temporal.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b6-h">Resultados: O Colapso sob Dinâmica</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Os experimentos do LiveGeo revelam uma disparidade alarmante entre o desempenho em ambientes estáticos e dinâmicos.</span> <span class="s" data-s="b6-p0-s1">Os autores avaliaram nove modelos de linguagem diferentes em tarefas que variam de simples (atômicas) a complexas (composicionais).</span> <span class="s" data-s="b6-p0-s2">Em cenários estáticos, alguns modelos apresentam taxas de sucesso moderadas, mas essa performance despenca drasticamente quando a dinâmica do mundo é introduzida.</span></p><p><span class="s" data-s="b6-p1-s0">A Figura 5 do paper ilustra essa queda.</span> <span class="s" data-s="b6-p1-s1">Ao comparar o desempenho de tarefas estáticas para cenários de &#39;Task-Only Dynamics&#39; (onde apenas as tarefas relevantes mudam) e &#39;Shared Dynamics&#39; (onde o mundo inteiro evolui independentemente), observa-se uma redução significativa nas taxas de sucesso para todos os modelos.</span> <span class="s" data-s="b6-p1-s2">Nenhum modelo conseguiu manter a robustez observada no ambiente estático, indicando que o conhecimento pré-treinado não se traduz em confiabilidade dinâmica.</span></p><p><span class="s" data-s="b6-p2-s0">Além disso, a análise detalhada identificou gargalos específicos.</span> <span class="s" data-s="b6-p2-s1">Os agentes tiveram dificuldade em &#39;event grounding&#39;, ou seja, em observar e reportar corretamente todos os eventos necessários para a tarefa.</span> <span class="s" data-s="b6-p2-s2">Mesmo quando conseguiam observar, muitos falhavam em &#39;replanning&#39;, ou seja, em ajustar suas decisões finais com base nas novas informações.</span> <span class="s" data-s="b6-p2-s3">Isso confirma que o problema não é apenas a coleta de dados, mas a integração cognitiva dessas mudanças no plano de ação.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.17267/figure31.webp" alt="Comparação de nove modelos em grounding de eventos, replanejamento e sucesso geral. Mostra a queda de performance em cenários dinâmicos, destacando a dificuldade dos agentes em manter decisões válidas." loading="lazy">
+          <figcaption>
+            Comparação de nove modelos em grounding de eventos, replanejamento e sucesso geral. Mostra a queda de performance em cenários dinâmicos, destacando a dificuldade dos agentes em manter decisões válidas.
+            <span class="source">Figura 31 do paper · Zhou et al., arXiv:2611.17267</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Limitações e Escopo do Estudo</span></h2>
+<p><span class="s" data-s="b8-p0-s0">É importante notar que o LiveGeo e o GeoWorld, apesar de serem avanços significativos, têm limitações inerentes.</span> <span class="s" data-s="b8-p0-s1">O ambiente, embora baseado em dados reais, é uma simulação.</span> <span class="s" data-s="b8-p0-s2">A complexidade de interações humanas, imprevistos não estruturados e a riqueza sensorial de um ambiente físico não são totalmente capturados.</span> <span class="s" data-s="b8-p0-s3">Os agentes avaliados operam através de ferramentas abstratas e não têm percepção direta do mundo, dependendo de APIs e consultas.</span></p><p><span class="s" data-s="b8-p1-s0">Além disso, o estudo foca em tarefas geográficas urbanas e regionais.</span> <span class="s" data-s="b8-p1-s1">A generalização para outros contextos, como ambientes rurais, submarinos ou espaciais, pode exigir adaptações significativas na plataforma GeoWorld.</span> <span class="s" data-s="b8-p1-s2">A evolução do mundo no GeoWorld, embora autônoma, é governada por regras definidas pelos pesquisadores.</span> <span class="s" data-s="b8-p1-s3">Embora isso permita controle experimental, pode não capturar a totalidade do caos e da imprevisibilidade do mundo real.</span></p><p><span class="s" data-s="b8-p2-s0">Outra limitação reside na natureza dos modelos avaliados.</span> <span class="s" data-s="b8-p2-s1">A maioria dos testes foi realizada com modelos de linguagem de propósito geral, adaptados para tarefas geográficas via prompting ou fine-tuning leve.</span> <span class="s" data-s="b8-p2-s2">Não está claro se arquiteturas específicas, projetadas para raciocínio espacial-temporal, superariam os gargalos identificados.</span> <span class="s" data-s="b8-p2-s3">O paper abre a questão, mas não fornece a solução definitiva para a robustez dinâmica.</span></p>        <h2><span class="s" data-s="b9-h">O Caminho para Agentes Confiáveis</span></h2>
+<p><span class="s" data-s="b9-p0-s0">A principal contribuição do LiveGeo não é apenas apresentar números de desempenho, mas oferecer uma infraestrutura flexível e extensível para a comunidade.</span> <span class="s" data-s="b9-p0-s1">Ao disponibilizar o GeoWorld e o benchmark LiveGeo, os autores da National University of Singapore, Zhejiang University, Beijing University of Posts and Telecommunications e University of Oxford convidam pesquisadores a desenvolverem agentes que vão além do planejamento estático.</span></p><p><span class="s" data-s="b9-p1-s0">O futuro dos agentes geográficos depende da capacidade de sustentar decisões confiáveis em mundos em evolução.</span> <span class="s" data-s="b9-p1-s1">Isso requer novos algoritmos de verificação de evidências, mecanismos de atenção temporal e estratégias de replanejamento proativo.</span> <span class="s" data-s="b9-p1-s2">O LiveGeo serve como um espelho crítico, mostrando que, embora os LLMs tenham avançado em conhecimento factual, eles ainda estão longe de serem agentes confiáveis em ambientes dinâmicos e incertos.</span></p><p><span class="s" data-s="b9-p2-s0">Para desenvolvedores e cientistas de dados, a mensagem é clara: avaliar agentes em ambientes estáticos é insuficiente.</span> <span class="s" data-s="b9-p2-s1">A verdadeira inteligência geográfica envolve a capacidade de navegar na mudança.</span> <span class="s" data-s="b9-p2-s2">O LiveGeo estabelece um novo padrão de avaliação, forçando a comunidade a enfrentar a complexidade temporal que define o mundo real.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.17267/figure5.webp" alt="Impacto da evolução do mundo no sucesso das tarefas. Mostra a queda percentual nas taxas de sucesso ao passar de cenários estáticos para dinâmicos, evidenciando a fragilidade dos modelos atuais." loading="lazy">
+          <figcaption>
+            Impacto da evolução do mundo no sucesso das tarefas. Mostra a queda percentual nas taxas de sucesso ao passar de cenários estáticos para dinâmicos, evidenciando a fragilidade dos modelos atuais.
+            <span class="source">Figura 5 do paper · Zhou et al., arXiv:2611.17267</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b11-h">Conclusão</span></h2>
+<p><span class="s" data-s="b11-p0-s0">O paper LiveGeo destaca uma lacuna crítica na avaliação de agentes de IA: a incapacidade de lidar com a evolução contínua do ambiente.</span> <span class="s" data-s="b11-p0-s1">Ao introduzir o GeoWorld e o benchmark LiveGeo, os autores demonstram que a performance em tarefas estáticas não garante confiabilidade em cenários dinâmicos.</span> <span class="s" data-s="b11-p0-s2">Os agentes lutam para adquirir novas evidências, verificar a validade de suas suposições e replanejar adequadamente.</span></p><p><span class="s" data-s="b11-p1-s0">Este estudo não é uma revolução, mas um diagnóstico necessário.</span> <span class="s" data-s="b11-p1-s1">Ele expõe as limitações atuais dos LLMs e fornece as ferramentas para que a comunidade possa trabalhar em soluções mais robustas.</span> <span class="s" data-s="b11-p1-s2">Para quem constrói sistemas de IA para o mundo real, ignorar a dinâmica temporal é um risco inaceitável.</span> <span class="s" data-s="b11-p1-s3">O LiveGeo oferece o primeiro passo concreto para medir e melhorar essa capacidade essencial.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">O LiveGeo avalia agentes em ambientes onde o estado geográfico evolui independentemente da ação do agente, exigindo verificação contínua de evidências.</span></li><li><span class="s" data-s="k1">Modelos de ponta falham em tarefas estáticas e têm desempenho ainda pior em cenários dinâmicos, indicando que conhecimento estático não garante robustez.</span></li><li><span class="s" data-s="k2">O principal gargalo identificado é a incapacidade dos agentes de adquirir novas evidências relevantes e replanejar quando suposições anteriores se tornam inválidas.</span></li><li><span class="s" data-s="k3">A plataforma GeoWorld permite rastrear histórias de estados verificáveis, isolando falhas de compreensão geográfica de falhas de execução.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.17267" rel="noopener">LiveGeo: Benchmarking Geographic Agents in Continuously Evolving Worlds</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.17267" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

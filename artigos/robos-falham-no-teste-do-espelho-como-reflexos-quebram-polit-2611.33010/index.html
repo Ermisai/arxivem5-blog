@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Robôs falham no teste do espelho: como reflexos quebram políticas de manipulação — arXiv em 5</title>
+<meta name="description" content="O benchmark RoboDojo-Mirror revela que espelhos simples causam quedas drásticas no desempenho de robôs, não por colisão física, mas por falhas na interpretação espacial e direcionamento a alvos fantasma.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Robôs falham no teste do espelho: como reflexos quebram políticas de manipulação">
+<meta property="og:description" content="O benchmark RoboDojo-Mirror revela que espelhos simples causam quedas drásticas no desempenho de robôs, não por colisão física, mas por falhas na interpretação espacial e direcionamento a alvos fantasma.">
+<meta property="og:image" content="../../assets/papers/2611.33010/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Robótica</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.33010" rel="noopener">arXiv:2611.33010</a>
+    </div>
+    <h1><span class="s" data-s="t">Robôs falham no teste do espelho: como reflexos quebram políticas de manipulação</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">O benchmark RoboDojo-Mirror revela que espelhos simples causam quedas drásticas no desempenho de robôs, não por colisão física, mas por falhas na interpretação espacial e direcionamento a alvos fantasma.</span></p>
+    <p class="byline">
+      <span>Liu et al.</span>
+      <span>7 min de leitura</span>
+<span>24/11/2026</span>    </p>
+    <div class="listen" data-article="2611.33010" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=611x3qBu1ls" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O teste do espelho aplicado à IA encarnada</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Em psicologia animal, o teste do espelho é um marco para avaliar a autoconsciência: um animal reconhece que sua reflexão é ele mesmo e usa essa informação para guiar ações.</span> <span class="s" data-s="b0-p0-s1">Para a robótica moderna, a questão é diferente e mais prática.</span> <span class="s" data-s="b0-p0-s2">Os autores deste paper investigam se políticas de manipulação de IA (Embodied AI) conseguem operar robustamente em ambientes contendo reflexos.</span> <span class="s" data-s="b0-p0-s3">Não se trata de autoconhecimento, mas de integridade operacional.</span> <span class="s" data-s="b0-p0-s4">Espelhos criam uma discrepância estruturada entre o que a câmera vê e o que é fisicamente manipulável.</span></p><p><span class="s" data-s="b0-p1-s0">Avanços recentes em políticas generalistas de robôs, como modelos Vision-Language-Action (VLA) e World Action Models, mostraram grande capacidade em tarefas padrão.</span> <span class="s" data-s="b0-p1-s1">No entanto, o desempenho em condições limpas não garante robustez.</span> <span class="s" data-s="b0-p1-s2">Reflexos não são apenas ruído visual; eles duplicam conteúdo relevante para a tarefa em locais com relação geométrica conhecida ao cenário físico, mas sem volume manipulável.</span> <span class="s" data-s="b0-p1-s3">Isso testa duas capacidades complementares: manter a manipulação confiável na presença de reflexos e, potencialmente, usar reflexos para agir sobre alvos ocultos.</span></p><p><span class="s" data-s="b0-p2-s0">A motivação vem da observação de que reflexos podem adjacenciar objetos reais, formando contornos compostos, ou revelar alvos ocultos.</span> <span class="s" data-s="b0-p2-s1">Se um robô confunde a imagem refletida com o objeto real, ele falha.</span> <span class="s" data-s="b0-p2-s2">Este paper introduz o RoboDojo-Mirror, um benchmark que isola esse efeito, comparando cenários sem espelho com configurações de espelho único, espelhos duplos e superfícies de mesa espelhada, mantendo os objetivos de tarefa inalterados.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.33010/figure1.webp" alt="Visão geral do benchmark RoboDojo-Mirror. Mostra as quatro configurações experimentais (sem espelho, espelho único, espelhos duplos, mesa espelhada) e a queda drástica nas taxas de sucesso para modelos WALL-OSS e Awomo-0.5 quando reflexos estão presentes." loading="lazy">
+          <figcaption>
+            Visão geral do benchmark RoboDojo-Mirror. Mostra as quatro configurações experimentais (sem espelho, espelho único, espelhos duplos, mesa espelhada) e a queda drástica nas taxas de sucesso para modelos WALL-OSS e Awomo-0.5 quando reflexos estão presentes.
+            <span class="source">Figura 1 do paper · Liu et al., arXiv:2611.33010</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">Metodologia: Isolando o efeito do reflexo</span></h2>
+<p><span class="s" data-s="b2-p0-s0">O benchmark foi construído sobre o RoboDojo, preservando os objetivos de manipulação, critérios de sucesso e checkpoints das políticas.</span> <span class="s" data-s="b2-p0-s1">A avaliação ocorre em quatro condições de cena: sem espelho (baseline), um espelho único posicionado verticalmente, dois espelhos (criando reflexos múltiplos) e uma mesa com superfície espelhada.</span> <span class="s" data-s="b2-p0-s2">Em cada configuração, o mesmo conjunto de oito tarefas é executado, permitindo medir a mudança relativa em relação à baseline de cada política.</span></p><p><span class="s" data-s="b2-p1-s0">Para garantir que a degradação não seja apenas devido à presença de um obstáculo físico adicional, os autores incluíram um controle crítico: painéis não reflexivos geometricamente correspondentes.</span> <span class="s" data-s="b2-p1-s1">Se a queda de desempenho fosse apenas por colisão ou obstrução do espaço de movimento, os painéis cinzas deveriam ter o mesmo efeito.</span> <span class="s" data-s="b2-p1-s2">A comparação direta entre espelhos e painéis mate permite distinguir falhas de percepção de falhas mecânicas.</span></p><p><span class="s" data-s="b2-p2-s0">O protocolo inclui diagnósticos específicos.</span> <span class="s" data-s="b2-p2-s1">Os autores analisam trajetórias e contatos para categorizar os erros.</span> <span class="s" data-s="b2-p2-s2">As falhas foram agrupadas em três tipos principais: colisão (contato não intencional com a superfície do espelho), direcionamento fantasma (o robô tenta interagir com o objeto refletido como se fosse real) e deslocalização espacial (o robô julga incorretamente a posição dos objetos reais devido à presença do reflexo).</span> <span class="s" data-s="b2-p2-s3">Essa granularidade é essencial para entender o &#39;porquê&#39; da falha, não apenas o &#39;se&#39; houve falha.</span></p>        <h2><span class="s" data-s="b3-h">Resultados: Quedas generalizadas e inesperadas</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Os resultados são consistentes e alarmantes.</span> <span class="s" data-s="b3-p0-s1">Cinco políticas distintas foram testadas, abrangendo modelos VLA, World Action Models e políticas agenticas.</span> <span class="s" data-s="b3-p0-s2">Em todas elas, a introdução de espelhos reduziu a taxa de sucesso agregada.</span> <span class="s" data-s="b3-p0-s3">A média de queda, calculada sobre as três condições com espelho, variou de 10,8 a 56,7 pontos percentuais.</span> <span class="s" data-s="b3-p0-s4">No cenário mais extremo, com mesa espelhada, a queda chegou a 62,5 pontos percentuais para alguns modelos.</span></p><p><span class="s" data-s="b3-p1-s0">Analisando dados específicos de modelos como WALL-OSS e Awomo-0.5, a queda é brutal.</span> <span class="s" data-s="b3-p1-s1">Para o WALL-OSS, a taxa de sucesso caiu de 67,5% (sem espelho) para 21,7% (espelho único) e 15,0% (espelhos duplos).</span> <span class="s" data-s="b3-p1-s2">Com a mesa espelhada, ficou em 25,0%.</span> <span class="s" data-s="b3-p1-s3">O Awomo-0.5 teve queda de 60,8% para 15,8% (espelho único) e 6,7% (espelhos duplos).</span> <span class="s" data-s="b3-p1-s4">Esses números não são marginais; representam uma quebra fundamental na capacidade do robô de executar tarefas básicas.</span></p><p><span class="s" data-s="b3-p2-s0">O controle com painéis não reflexivos descartou a hipótese de colisão física como causa única.</span> <span class="s" data-s="b3-p2-s1">Entre 50% e 88% das falhas específicas do espelho ocorreram sem nenhum registro de contato do robô com o painel ou espelho.</span> <span class="s" data-s="b3-p2-s2">Isso significa que o robô falhou sem bater no obstáculo.</span> <span class="s" data-s="b3-p2-s3">Ele simplesmente agiu de forma incorreta com base na entrada visual, confirmando que o problema é perceptivo e cognitivo, não mecânico.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.33010/table1.webp" alt="Tabela 1 resume o desempenho das tarefas sob perturbações de espelho. Mostra a pontuação e taxa de sucesso, evidenciando a queda generalizada e indicando a fração de episódios com contato registrado, que é baixa, reforçando a falha perceptiva." loading="lazy">
+          <figcaption>
+            Tabela 1 resume o desempenho das tarefas sob perturbações de espelho. Mostra a pontuação e taxa de sucesso, evidenciando a queda generalizada e indicando a fração de episódios com contato registrado, que é baixa, reforçando a falha perceptiva.
+            <span class="source">Tabela 1 do paper · Liu et al., arXiv:2611.33010</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Análise de falhas: Fantasma e deslocalização</span></h2>
+<p><span class="s" data-s="b5-p0-s0">A análise de trajetórias revelou dois comportamentos de falha recorrentes.</span> <span class="s" data-s="b5-p0-s1">O primeiro é o &#39;direcionamento fantasma&#39; (phantom targeting).</span> <span class="s" data-s="b5-p0-s2">O robô identifica características visuais de um objeto na reflexão e gera ações para interagir com essa localização imaginária.</span> <span class="s" data-s="b5-p0-s3">Como o objeto refletido não existe no espaço físico, o robô move-se para um ponto vazio ou atinge o espelho sem propósito de manipulação válida.</span></p><p><span class="s" data-s="b5-p1-s0">O segundo é a &#39;deslocalização espacial&#39; (spatial mislocalization).</span> <span class="s" data-s="b5-p1-s1">O robô subestima ou superestima a posição dos objetos reais porque o reflexo altera a profundidade aparente ou a geometria da cena na imagem da câmera.</span> <span class="s" data-s="b5-p1-s2">Isso leva a preensões mal calculadas ou empurrões que não alcançam o alvo.</span> <span class="s" data-s="b5-p1-s3">Esses erros são particularmente perigosos porque podem parecer pequenos desvios em simulações simples, mas resultam em falhas catastróficas em tarefas que exigem precisão.</span></p><p><span class="s" data-s="b5-p2-s0">Os diagnósticos adicionais exploraram cenários específicos, como preensão em mesa espelhada e empurrar objetos conectados visualmente a sua reflexão.</span> <span class="s" data-s="b5-p2-s1">Em todos os casos, a presença do reflexo introduziu ruído sistemático que as políticas atuais não sabem filtrar.</span> <span class="s" data-s="b5-p2-s2">Isso sugere que os modelos não possuem um módulo robusto de &#39;desreflexão&#39; ou compreensão profunda de que imagens refletidas não correspondem a volumes manipuláveis diretos.</span></p>        <h2><span class="s" data-s="b6-h">Validação em robôs reais e limitações</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Os autores validaram os achados em robôs reais, testando as políticas π0.5 e FastWAM.</span> <span class="s" data-s="b6-p0-s1">Os resultados em hardware real seguiram a tendência observada em simulação.</span> <span class="s" data-s="b6-p0-s2">Para a tarefa de &#39;produzir e colocar&#39; (produce placement), a taxa de sucesso caiu de 90% para 60% com espelho vertical e para 40% com mesa espelhada.</span> <span class="s" data-s="b6-p0-s3">Em tarefas mais complexas como &#39;empilhar blocos&#39;, a queda foi ainda mais severa, indo de 80% para 0% na mesa espelhada para ambas as políticas.</span></p><p><span class="s" data-s="b6-p1-s0">É importante notar as limitações deste estudo.</span> <span class="s" data-s="b6-p1-s1">O benchmark foca em manipulação de objetos externos em ambientes controlados de mesa.</span> <span class="s" data-s="b6-p1-s2">Não avalia se o robô pode usar reflexos estrategicamente, por exemplo, para ver objetos atrás de obstáculos.</span> <span class="s" data-s="b6-p1-s3">A capacidade de usar reflexos como informação auxiliar não foi testada, apenas a robustez contra a confusão que eles causam.</span> <span class="s" data-s="b6-p1-s4">Além disso, o estudo não propõe uma solução para o problema, mas estabelece a vulnerabilidade como um alvo concreto.</span></p><p><span class="s" data-s="b6-p2-s0">Outra limitação é o escopo das políticas.</span> <span class="s" data-s="b6-p2-s1">Embora cinco tipos diferentes tenham sido testados, a diversidade de arquiteturas pode não cobrir todas as abordagens possíveis de IA encarnada.</span> <span class="s" data-s="b6-p2-s2">O fato de todas terem falhado sugere uma lacuna comum no treinamento ou na arquitetura atual, mas não descarta que políticas futuras, treinadas especificamente com dados reflexivos ou com módulos de profundidade mais robustos, possam superar esse teste.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b7-t">A ilusão da robustez</span></h3>
+          <p><span class="s" data-s="b7-c-s0">O desempenho alto em ambientes de laboratório limpos não implica robustez.</span> <span class="s" data-s="b7-c-s1">Espelhos expõem que muitos robôs operam por correlação estatística superficial, não por compreensão causal do espaço 3D.</span> <span class="s" data-s="b7-c-s2">Sem isso, qualquer alteração geométrica simples que duplique informações visuais quebra a política.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b8-h">Conclusão: Um novo padrão de avaliação</span></h2>
+<p><span class="s" data-s="b8-p0-s0">O paper conclui que a robustez a reflexos deve ser um critério explícito na avaliação de inteligência encarnada.</span> <span class="s" data-s="b8-p0-s1">A falha não é acidental; é estrutural nas políticas atuais.</span> <span class="s" data-s="b8-p0-s2">A introdução do RoboDojo-Mirror fornece um protocolo reprodutível para medir essa fraqueza.</span> <span class="s" data-s="b8-p0-s3">Para pesquisadores, o próximo passo é desenvolver métodos que permitam aos robôs distinguir entre alvos físicos e suas projeções ópticas.</span></p><p><span class="s" data-s="b8-p1-s0">Isso tem implicações diretas para a implantação de robôs em ambientes domésticos e industriais, onde superfícies reflexivas (vidros, metais polidos, janelas) são onipresentes.</span> <span class="s" data-s="b8-p1-s1">Se um robô não consegue distinguir sua própria mão no espelho da mão de um colega, ou um objeto refletido de um real, sua operação é insegura e ineficiente.</span> <span class="s" data-s="b8-p1-s2">O teste do espelho, portanto, torna-se um barômetro para a maturidade da percepção robótica.</span></p><p><span class="s" data-s="b8-p2-s0">O código e os dados do benchmark estão disponíveis publicamente, convidando a comunidade a melhorar a resiliência dos robôs.</span> <span class="s" data-s="b8-p2-s1">A mensagem é clara: antes de falar em autonomia geral, precisamos garantir que os robôs não sejam enganados por sua própria imagem.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b9-t">Dica para desenvolvedores</span></h3>
+          <p><span class="s" data-s="b9-c-s0">Ao treinar ou fine-tunar políticas de robótica, inclua cenários com superfícies reflexivas no dataset de treinamento.</span> <span class="s" data-s="b9-c-s1">Ignorar esse domínio leva a modelos que falham silenciosamente em ambientes reais ricos em materiais brilhantes.</span></p>
+        </aside>
+
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Espelhos causam quedas de 10 a 62 pontos percentuais no sucesso de robôs, mesmo sem colisão física.</span></li><li><span class="s" data-s="k1">As falhas são perceptivas: robôs confundem reflexos com objetos reais (direcionamento fantasma) ou erram a posição espacial.</span></li><li><span class="s" data-s="k2">O benchmark RoboDojo-Mirror prova que a robustez a reflexos é uma lacuna comum em diversos tipos de políticas de IA.</span></li><li><span class="s" data-s="k3">Avaliações de robótica devem incluir superfícies reflexivas para testar a verdadeira compreensão do espaço 3D.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.33010" rel="noopener">Embodied AI Fails the Mirror Test: How a Simple Mirror Breaks Robot Policies</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.33010" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

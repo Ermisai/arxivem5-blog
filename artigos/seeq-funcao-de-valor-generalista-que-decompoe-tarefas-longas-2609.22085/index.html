@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SeeQ: função de valor generalista que decompõe tarefas longas em subtarefas para guiar robôs de manipulação — arXiv em 5</title>
+<meta name="description" content="Pesquisadores da Carnegie Mellon treinam uma função Q que aprende valores de subtarefas curtas em vez da tarefa completa, encurtando o horizonte de predição e permitindo que políticas robóticas recuperem de erros em tarefas de manipulação que duram minutos.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SeeQ: função de valor generalista que decompõe tarefas longas em subtarefas para guiar robôs de manipulação">
+<meta property="og:description" content="Pesquisadores da Carnegie Mellon treinam uma função Q que aprende valores de subtarefas curtas em vez da tarefa completa, encurtando o horizonte de predição e permitindo que políticas robóticas recuperem de erros em tarefas de manipulação que duram minutos.">
+<meta property="og:image" content="../../assets/papers/2609.22085/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Robótica</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2609.22085" rel="noopener">arXiv:2609.22085</a>
+    </div>
+    <h1><span class="s" data-s="t">SeeQ: função de valor generalista que decompõe tarefas longas em subtarefas para guiar robôs de manipulação</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Pesquisadores da Carnegie Mellon treinam uma função Q que aprende valores de subtarefas curtas em vez da tarefa completa, encurtando o horizonte de predição e permitindo que políticas robóticas recuperem de erros em tarefas de manipulação que duram minutos.</span></p>
+    <p class="byline">
+      <span>Singh et al.</span>
+      <span>11 min de leitura</span>
+<span>18/09/2026</span>    </p>
+    <div class="listen" data-article="2609.22085" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=7OfKughL2SQ" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema: políticas generalistas quebram em tarefas longas</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Políticas robóticas generalistas — modelos treinados em dados diversos que seguem instruções em linguagem natural — prometem robôs que transferem conhecimento entre objetos, cenários e plataformas.</span> <span class="s" data-s="b0-p0-s1">Mas essas políticas ainda são frágeis em tarefas complexas que se estendem por múltiplos estágios ou que exigem precisão e tentativas repetidas.</span> <span class="s" data-s="b0-p0-s2">Erros se acumulam ao longo do tempo, comportamentos de recuperação são raros nos datasets de demonstração, e a política imita indiscriminadamente ações boas e ruins.</span></p><p><span class="s" data-s="b0-p1-s0">Funções de valor oferecem um caminho: elas distinguem ações que fazem progresso daquelas que levam a falhas, permitindo guiar uma política base para comportamentos melhores.</span> <span class="s" data-s="b0-p1-s1">Trabalhos recentes mostraram que funções Q aprendidas podem melhorar substancialmente políticas de imitação no mundo real.</span> <span class="s" data-s="b0-p1-s2">O ideal seria treinar uma única função Q generalista que melhore políticas em muitas tarefas, aproveitando pré-treino em larga escala e dados robóticos diversos.</span></p><p><span class="s" data-s="b0-p2-s0">O obstáculo está no horizonte temporal.</span> <span class="s" data-s="b0-p2-s1">Métodos eficazes de aprendizado de valor, como temporal-difference (TD) learning, tornam-se instáveis em horizontes longos — exatamente o regime onde tarefas complexas apresentam os maiores desafios.</span> <span class="s" data-s="b0-p2-s2">Algumas abordagens descartam TD e regridem diretamente para retornos de Monte Carlo, mas sem TD a função de valor não consegue melhorar a política muito além da política que coletou os dados, limitando a utilidade do aprendizado de valor.</span></p><p><span class="s" data-s="b0-p3-s0">Este paper introduz SeeQ (Subtask-elicited Q-functions), uma abordagem que usa TD learning mas evita horizontes longos ao redefinir o alvo de predição: em vez de modelar sucesso esparso na tarefa completa, a função Q estima o retorno esperado para a subtarefa atualmente ativa.</span> <span class="s" data-s="b0-p3-s1">Isso transforma aprendizado de valor de horizonte longo em aprendizado de horizonte curto, no nível de subtarefas.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.22085/figure1.webp" alt="Pipeline completo do SeeQ: pré-treino em dados diversos com anotações de subtarefa, fine-tuning na tarefa alvo e steering da política base em tempo de teste escolhendo a melhor entre N sequências de ações candidatas segundo os valores Q preditos." loading="lazy">
+          <figcaption>
+            Pipeline completo do SeeQ: pré-treino em dados diversos com anotações de subtarefa, fine-tuning na tarefa alvo e steering da política base em tempo de teste escolhendo a melhor entre N sequências de ações candidatas segundo os valores Q preditos.
+            <span class="source">Figura 1 do paper · Singh et al., arXiv:2609.22085</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">A intuição: tarefas longas são sequências de objetivos curtos</span></h2>
+<p><span class="s" data-s="b2-p0-s0">A ideia central explora uma estrutura comum em tarefas de manipulação: embora a tarefa especifique um resultado distante, o comportamento do robô a cada momento está tipicamente direcionado a um objetivo imediato.</span> <span class="s" data-s="b2-p0-s1">Tarefas multi-estágio progridem por marcos intermediários — agarrar um objeto antes de colocá-lo, por exemplo.</span> <span class="s" data-s="b2-p0-s2">Tarefas que exigem precisão ou deliberação podem demandar tentativas repetidas para completar um estágio, mas cada tentativa segue um objetivo de horizonte curto.</span></p><p><span class="s" data-s="b2-p1-s0">Em ambos os casos, avaliar progresso em direção à subtarefa ativa requer um horizonte de predição mais curto do que avaliar sucesso na tarefa completa.</span> <span class="s" data-s="b2-p1-s1">Se conseguirmos estimar valores para subtarefas em vez de para a tarefa inteira, encurtamos o horizonte e tornamos TD learning viável novamente.</span></p><p><span class="s" data-s="b2-p2-s0">Durante treinamento, anotações de subtarefa presentes em dados robóticos offline fornecem a decomposição e permitem aprender de datasets amplos e potencialmente subótimos.</span> <span class="s" data-s="b2-p2-s1">O desafio está em tempo de teste: não queremos exigir anotações humanas ou sistemas modulares de predição de subtarefa.</span> <span class="s" data-s="b2-p2-s2">A solução do SeeQ é modificar a arquitetura da função Q para prever autorregressivamente a subtarefa ativa em linguagem natural antes de estimar seu valor.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.22085/figure2.webp" alt="Arquitetura do SeeQ: o modelo primeiro gera a subtarefa ativa em texto usando next-token prediction, depois prediz o valor Q escalar condicionado na instrução da tarefa e na subtarefa gerada. Isso alinha a estimativa de valor com as capacidades de geração de texto do VLM pré-treinado." loading="lazy">
+          <figcaption>
+            Arquitetura do SeeQ: o modelo primeiro gera a subtarefa ativa em texto usando next-token prediction, depois prediz o valor Q escalar condicionado na instrução da tarefa e na subtarefa gerada. Isso alinha a estimativa de valor com as capacidades de geração de texto do VLM pré-treinado.
+            <span class="source">Figura 2 do paper · Singh et al., arXiv:2609.22085</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b4-h">Como funciona: predição de subtarefa como prefixo para valor</span></h2>
+<p><span class="s" data-s="b4-p0-s0">O SeeQ é instanciado usando um backbone PaliGemma de 3B parâmetros, um vision-language model pré-treinado.</span> <span class="s" data-s="b4-p0-s1">A arquitetura recebe como entrada o estado atual (observações visuais), uma sequência de ações candidatas (action chunk), e a instrução da tarefa em linguagem natural.</span> <span class="s" data-s="b4-p0-s2">A saída é um valor Q escalar.</span></p><p><span class="s" data-s="b4-p1-s0">A modificação crucial está na estrutura interna.</span> <span class="s" data-s="b4-p1-s1">O modelo primeiro rola a subtarefa ativa no estado s em texto usando uma perda de next-token prediction.</span> <span class="s" data-s="b4-p1-s2">Somente depois de gerar essa descrição de subtarefa é que o modelo prediz o valor Q(s, a, l, ˜l), onde s é o estado, a é a ação, l é a instrução da tarefa e ˜l é a subtarefa predita.</span> <span class="s" data-s="b4-p1-s3">Essa arquitetura autoregressiva tem dois benefícios: elimina a necessidade de anotações de subtarefa em tempo de teste e melhora robustez próximo a transições de subtarefa.</span></p><p><span class="s" data-s="b4-p2-s0">O objetivo de treinamento combina duas perdas.</span> <span class="s" data-s="b4-p2-s1">A primeira é a perda de predição de subtarefa, calculada como cross-entropy sobre os tokens da subtarefa ground-truth.</span> <span class="s" data-s="b4-p2-s2">A segunda é a perda de valor Q, que usa TD learning com best-of-N backups: durante treinamento, o modelo avalia N chunks de ação candidatos e usa o valor máximo para o backup de Bellman.</span> <span class="s" data-s="b4-p2-s3">Essa escolha torna o backup mais robusto a ruído nos dados.</span></p><p><span class="s" data-s="b4-p3-s0">Crucialmente, o alvo de valor não é o retorno da tarefa completa, mas o retorno da subtarefa ativa.</span> <span class="s" data-s="b4-p3-s1">Se a subtarefa atual é &#39;alcançar a xícara&#39;, o valor Q estima a probabilidade de completar essa subtarefa específica, não de completar toda a tarefa de &#39;pendurar a camisa no cabide&#39;.</span> <span class="s" data-s="b4-p3-s2">Isso encurta dramaticamente o horizonte de predição: de minutos para segundos.</span></p><p><span class="s" data-s="b4-p4-s0">A perda total é a soma ponderada das duas componentes: L = L_subtask + λ_Q * L_Q, onde λ_subtask = 0.1 no paper.</span> <span class="s" data-s="b4-p4-s1">Essa ponderação reflete que a predição de subtarefa é auxiliar, mas importante para alinhar as representações internas com as capacidades de geração de texto do VLM.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b5-t">Best-of-N steering em tempo de teste</span></h3>
+          <p><span class="s" data-s="b5-c-s0">Na inferência, a política base gera N=8 sequências de ações candidatas.</span> <span class="s" data-s="b5-c-s1">O SeeQ avalia cada uma e o robô executa a de maior valor Q. Esse mecanismo permite que a função de valor corrija erros da política base sem retreiná-la, escolhendo ações que fazem progresso mesmo quando a política sugere várias opções subótimas.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b6-h">Treinamento em dois estágios: pré-treino generalista e fine-tuning</span></h2>
+<p><span class="s" data-s="b6-p0-s0">O SeeQ é treinado em dois estágios.</span> <span class="s" data-s="b6-p0-s1">Primeiro, pré-treino em dados diversos: o modelo é treinado no RoboCOIN, um dataset de manipulação robótica com anotações de subtarefa, restrito a embodiments bimanuais.</span> <span class="s" data-s="b6-p0-s2">Isso resulta em 131 tarefas e aproximadamente 40 mil episódios.</span> <span class="s" data-s="b6-p0-s3">Esse pré-treino generalista permite que o modelo aprenda priors visuais e motores transferíveis.</span></p><p><span class="s" data-s="b6-p1-s0">Segundo, fine-tuning na tarefa alvo: a função Q generalista resultante é ajustada em dados da tarefa específica de interesse.</span> <span class="s" data-s="b6-p1-s1">A quantidade de dados downstream varia entre tarefas — o paper não especifica números exatos, mas os experimentos usam entre 97 e 473 episódios por tarefa.</span> <span class="s" data-s="b6-p1-s2">A política base também é ajustada nos mesmos dados da tarefa alvo.</span></p><p><span class="s" data-s="b6-p2-s0">Durante treinamento e inferência, o método usa N=8 chunks de ação candidatos tanto para backups TD-BoN quanto para steering best-of-N da política.</span> <span class="s" data-s="b6-p2-s1">A política base é π0.5, uma política de difusão treinada por imitação.</span> <span class="s" data-s="b6-p2-s2">Todos os experimentos rodam a 60 Hz em robôs reais.</span></p>        <h2><span class="s" data-s="b7-h">Experimentos: quatro tarefas bimanuais de manipulação no mundo real</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Os autores avaliam em quatro tarefas reais de manipulação bimanual, cada uma durando de 1 a 3 minutos e testando coordenação, precisão e raciocínio sobre múltiplos estágios.</span> <span class="s" data-s="b7-p0-s1">Três tarefas usam plataforma xArm-7 bimanual com braços de 7 graus de liberdade; uma usa plataforma YAM bimanual.</span></p><p><span class="s" data-s="b7-p1-s0">Tarefa 1, shirt-hang (386 episódios): remover um cabide de uma barra, inseri-lo em ambas as mangas de uma camiseta e pendurar a camisa de volta na barra.</span> <span class="s" data-s="b7-p1-s1">Exige coordenação bimanual e posicionamento preciso para guiar o cabide em cada manga.</span></p><p><span class="s" data-s="b7-p2-s0">Tarefa 2, lid-sealing (447 episódios): pegar a tampa de um recipiente de armazenamento de alimentos, colocá-la no recipiente e fechar todas as quatro abas de travamento.</span> <span class="s" data-s="b7-p2-s1">Exige alinhamento preciso entre tampa e borda para vedação adequada.</span></p><p><span class="s" data-s="b7-p3-s0">Tarefa 3, grocery-packing (473 episódios): embalar itens de supermercado deformáveis de formas e tamanhos variados em caixas.</span> <span class="s" data-s="b7-p3-s1">Exige agarrar objetos diversos, seguir instruções que variam entre episódios (tanto o conjunto de objetos quanto as caixas atribuídas mudam), e coordenação bimanual para passar objetos de um braço para outro quando o objeto está do lado oposto à caixa alvo.</span></p><p><span class="s" data-s="b7-p4-s0">Tarefa 4, lego-disassembly (97 episódios de treino): separar blocos Lego montados de cores diferentes e colocar cada bloco na bandeja da cor correspondente.</span> <span class="s" data-s="b7-p4-s1">Similar a grocery-packing, a instrução varia entre episódios.</span> <span class="s" data-s="b7-p4-s2">Exige raciocinar sobre orientação para segurar os blocos e como separá-los, além de coordenação bimanual para handoffs.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.22085/figure3.webp" alt="Snapshots das quatro tarefas de avaliação em robôs reais: shirt-hang, lid-sealing, grocery-packing e lego-disassembly. Todas exigem coordenação bimanual, precisão e raciocínio sobre múltiplos estágios ao longo de 1-3 minutos de execução." loading="lazy">
+          <figcaption>
+            Snapshots das quatro tarefas de avaliação em robôs reais: shirt-hang, lid-sealing, grocery-packing e lego-disassembly. Todas exigem coordenação bimanual, precisão e raciocínio sobre múltiplos estágios ao longo de 1-3 minutos de execução.
+            <span class="source">Figura 3 do paper · Singh et al., arXiv:2609.22085</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Resultados: SeeQ dobra taxa de sucesso em múltiplas tarefas</span></h2>
+<p><span class="s" data-s="b9-p0-s0">A tabela principal compara a política base sozinha contra a mesma política guiada por SeeQ via best-of-8 action selection, em 24 tentativas por tarefa.</span> <span class="s" data-s="b9-p0-s1">Em shirt-hang, a base acerta 10/24 (42%) e SeeQ melhora para 22/24 (92%).</span> <span class="s" data-s="b9-p0-s2">Em lid-sealing, de 10/24 (42%) para 15/24 (62%).</span> <span class="s" data-s="b9-p0-s3">Em grocery-packing, de 9/24 (38%) para 17/24 (71%).</span> <span class="s" data-s="b9-p0-s4">Em lego-disassembly, de 5/24 (21%) para 10/24 (42%).</span></p><p><span class="s" data-s="b9-p1-s0">O ganho é consistente mas varia em magnitude.</span> <span class="s" data-s="b9-p1-s1">Em shirt-hang, SeeQ mais que dobra a taxa de sucesso.</span> <span class="s" data-s="b9-p1-s2">Em lego-disassembly, também dobra, mas a taxa absoluta permanece baixa (42%), sugerindo que a tarefa é intrinsecamente difícil ou que 97 episódios de treino não são suficientes para fine-tuning robusto.</span></p><p><span class="s" data-s="b9-p2-s0">Os autores observam que a função Q é especialmente útil para selecionar a melhor ação em estados que exigem precisão e para prevenir que erros se acumulem ao longo de rollouts mais longos.</span> <span class="s" data-s="b9-p2-s1">Em outras palavras, SeeQ não apenas melhora desempenho médio, mas aumenta robustez: a política comete menos erros irreversíveis.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b10-t">Comparação com baselines de valor</span></h3>
+          <p><span class="s" data-s="b10-c-s0">SeeQ supera funções Q treinadas com TD no nível de tarefa (que sofrem com horizonte longo) e com SARSA no nível de subtarefa (que não generalizam bem).</span> <span class="s" data-s="b10-c-s1">Em shirt-hang, task-level TD atinge 12/24 vs 22/24 do SeeQ.</span> <span class="s" data-s="b10-c-s2">Subtask-level SARSA chega a 17/24, melhor que task-level mas ainda abaixo do SeeQ, que combina TD com predição autoregressiva de subtarefa.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b11-h">Análise qualitativa: o que a função Q aprendeu</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Os autores visualizam predições de valor ao longo de trajetórias para entender o comportamento interno do SeeQ.</span> <span class="s" data-s="b11-p0-s1">Em uma trajetória de RoboCOIN held-out, TD no nível de tarefa fornece valores baixos e ruidosos, falhando em capturar progresso.</span> <span class="s" data-s="b11-p0-s2">Monte Carlo no nível de tarefa produz valores ligeiramente mais informativos mas ainda ruidosos.</span> <span class="s" data-s="b11-p0-s3">SARSA no nível de subtarefa captura algum progresso mas é menos suave.</span></p><p><span class="s" data-s="b11-p1-s0">SeeQ, em contraste, produz valores que aumentam monotonicamente à medida que o robô progride em cada subtarefa e caem abruptamente em transições de subtarefa, refletindo corretamente que uma nova subtarefa começa.</span> <span class="s" data-s="b11-p1-s1">Esse padrão confirma que o modelo aprendeu a estrutura de subtarefas e consegue estimar valores de horizonte curto de forma confiável.</span></p><p><span class="s" data-s="b11-p2-s0">Em avaliações reais de SeeQ, os gráficos de valor mostram a função Q escolhendo entre chunks de ação candidatos.</span> <span class="s" data-s="b11-p2-s1">Quando o robô comete um erro — por exemplo, posiciona mal o cabide — o valor cai.</span> <span class="s" data-s="b11-p2-s2">Quando a política base propõe uma ação de recuperação bem-sucedida, o valor sobe novamente.</span> <span class="s" data-s="b11-p2-s3">Isso demonstra que SeeQ não apenas avalia progresso nominal, mas distingue tentativas que recuperam de erros daquelas que perpetuam falhas.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.22085/figure4.webp" alt="Predições qualitativas de valor: SeeQ captura progresso dentro de subtarefas com valores suaves que sobem monotonicamente e caem em transições. Baselines task-level TD e Monte Carlo são ruidosos; subtask-level SARSA é melhor mas menos suave que SeeQ." loading="lazy">
+          <figcaption>
+            Predições qualitativas de valor: SeeQ captura progresso dentro de subtarefas com valores suaves que sobem monotonicamente e caem em transições. Baselines task-level TD e Monte Carlo são ruidosos; subtask-level SARSA é melhor mas menos suave que SeeQ.
+            <span class="source">Figura 4 do paper · Singh et al., arXiv:2609.22085</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b13-h">Ablations: o que importa no design do SeeQ</span></h2>
+<p><span class="s" data-s="b13-p0-s0">Os autores conduzem ablations para isolar contribuições de componentes individuais.</span> <span class="s" data-s="b13-p0-s1">Primeiro, importância do pré-treino generalista: treinar SeeQ do zero apenas em dados da tarefa alvo reduz desempenho substancialmente.</span> <span class="s" data-s="b13-p0-s2">Em shirt-hang, sem pré-treino a taxa cai de 22/24 para valores não especificados no trecho fornecido, mas o texto indica que pré-treino é crítico.</span></p><p><span class="s" data-s="b13-p1-s0">Segundo, supervisão de subtarefa: remover a perda de predição de subtarefa (λ_subtask = 0) degrada desempenho.</span> <span class="s" data-s="b13-p1-s1">A supervisão de linguagem natural alinha representações internas com o VLM pré-treinado e melhora robustez próximo a transições de subtarefa.</span> <span class="s" data-s="b13-p1-s2">Decodificar a subtarefa predita em tempo de teste também é importante: usar ground-truth em vez da predição do modelo piora resultados, sugerindo que o modelo aprende representações internas melhores quando forçado a gerar subtarefas.</span></p><p><span class="s" data-s="b13-p2-s0">Terceiro, qualidade dos dados de treinamento: os autores comparam fine-tuning em dados coletados por Reinforcement Learning from AI Critique (RaC) versus teleoperação humana.</span> <span class="s" data-s="b13-p2-s1">RaC é um método que usa crítica de modelos de linguagem para melhorar iterativamente a política.</span> <span class="s" data-s="b13-p2-s2">Dados RaC, apesar de subótimos em alguns aspectos, permitem que SeeQ aprenda funções Q úteis, demonstrando que o método tolera dados de qualidade variada.</span></p>        <h2><span class="s" data-s="b14-h">Limitações e o que o paper não mostra</span></h2>
+<p><span class="s" data-s="b14-p0-s0">O paper avalia em apenas quatro tarefas, todas bimanuais e todas de manipulação de objetos rígidos ou semi-rígidos.</span> <span class="s" data-s="b14-p0-s1">Não está claro como SeeQ se comporta em tarefas de locomoção, manipulação de objetos altamente deformáveis, ou cenários com dinâmica de contato complexa.</span> <span class="s" data-s="b14-p0-s2">O número de episódios de treino varia (97 a 473), mas não há análise sistemática de quantos dados são necessários para convergência.</span></p><p><span class="s" data-s="b14-p1-s0">Todos os experimentos usam N=8 candidatos para best-of-N.</span> <span class="s" data-s="b14-p1-s1">Não sabemos como desempenho escala com N maior ou menor, nem o custo computacional de avaliar múltiplos candidatos em tempo real.</span> <span class="s" data-s="b14-p1-s2">O paper não reporta latências de inferência, o que é crítico para deployment em 60 Hz.</span></p><p><span class="s" data-s="b14-p2-s0">A decomposição em subtarefas depende de anotações humanas durante treinamento.</span> <span class="s" data-s="b14-p2-s1">Embora o modelo aprenda a prever subtarefas em tempo de teste, a qualidade dessa predição depende da qualidade e consistência das anotações no dataset de pré-treino.</span> <span class="s" data-s="b14-p2-s2">Se anotadores humanos discordam sobre fronteiras de subtarefas, o modelo pode aprender decomposições ambíguas.</span></p><p><span class="s" data-s="b14-p3-s0">O paper não compara com métodos de aprendizado hierárquico que aprendem decomposições de subtarefa de forma não supervisionada, como options ou skills descobertos automaticamente.</span> <span class="s" data-s="b14-p3-s1">Também não explora se SeeQ pode generalizar para tarefas completamente novas sem fine-tuning — todos os experimentos incluem fine-tuning na tarefa alvo.</span></p><p><span class="s" data-s="b14-p4-s0">Finalmente, o escopo é restrito a embodiments bimanuais.</span> <span class="s" data-s="b14-p4-s1">Não está claro se a abordagem transfere para robôs móveis, quadrúpedes ou manipuladores de braço único.</span> <span class="s" data-s="b14-p4-s2">O pré-treino em RoboCOIN usa apenas embodiments bimanuais, o que pode limitar a generalização.</span></p>        <h2><span class="s" data-s="b15-h">Por que isso importa</span></h2>
+<p><span class="s" data-s="b15-p0-s0">SeeQ mostra que é possível treinar funções de valor generalistas que melhoram políticas robóticas em tarefas de horizonte longo, desde que reformulemos o problema.</span> <span class="s" data-s="b15-p0-s1">Em vez de aprender valores esparsos sobre minutos de execução, aprendemos valores densos sobre segundos de subtarefas.</span> <span class="s" data-s="b15-p0-s2">Isso torna TD learning viável novamente e permite que a função Q melhore a política além dos dados de treinamento.</span></p><p><span class="s" data-s="b15-p1-s0">A contribuição arquitetural — prever subtarefa antes de prever valor — é elegante e prática.</span> <span class="s" data-s="b15-p1-s1">Elimina a necessidade de sistemas modulares de predição de subtarefa em tempo de teste e alinha o aprendizado de valor com as capacidades de geração de texto de VLMs pré-treinados.</span> <span class="s" data-s="b15-p1-s2">Isso abre caminho para funções de valor que raciocinam explicitamente sobre estrutura de tarefa em linguagem natural.</span></p><p><span class="s" data-s="b15-p2-s0">Os resultados reais são encorajadores: dobrar taxa de sucesso em múltiplas tarefas complexas é um ganho substancial.</span> <span class="s" data-s="b15-p2-s1">Mas o método ainda exige fine-tuning por tarefa e anotações de subtarefa durante pré-treino.</span> <span class="s" data-s="b15-p2-s2">O próximo passo seria aprender decomposições de subtarefa de forma não supervisionada ou generalizar zero-shot para tarefas novas.</span> <span class="s" data-s="b15-p2-s3">Por enquanto, SeeQ demonstra que funções Q generalistas são viáveis se encurtarmos o horizonte de predição através de estrutura de subtarefa.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">SeeQ aprende valores de subtarefas curtas em vez de tarefas completas, encurtando o horizonte de predição e tornando TD learning eficaz em manipulação de horizonte longo.</span></li><li><span class="s" data-s="k1">A arquitetura prediz a subtarefa ativa em linguagem natural antes de estimar valor, eliminando necessidade de anotações em tempo de teste e alinhando com VLMs pré-treinados.</span></li><li><span class="s" data-s="k2">Em quatro tarefas bimanuais reais, SeeQ dobra taxa de sucesso via best-of-N steering, de 21-42% para 42-92%, mostrando que funções Q generalistas melhoram políticas robóticas.</span></li><li><span class="s" data-s="k3">Limitações: depende de anotações de subtarefa no pré-treino, exige fine-tuning por tarefa, e foi testado apenas em manipulação bimanual com 97-473 episódios por tarefa.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2609.22085" rel="noopener">SeeQ: Training Generalist Value Functions for Long-Horizon Robotic Manipulation</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2609.22085" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

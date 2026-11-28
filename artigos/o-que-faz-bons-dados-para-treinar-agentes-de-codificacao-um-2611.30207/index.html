@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>O que faz bons dados para treinar agentes de codificação: um estudo sistemático no SWE-Gym — arXiv em 5</title>
+<meta name="description" content="Os autores auditam o conjunto de dados SWE-Gym e descobrem que a maioria das tarefas &#39;não resolvidas&#39; são, na verdade, mal rotuladas. Ao corrigir falsos negativos e positivos nos testes, os agentes de RL aprendem significativamente melhor.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="O que faz bons dados para treinar agentes de codificação: um estudo sistemático no SWE-Gym">
+<meta property="og:description" content="Os autores auditam o conjunto de dados SWE-Gym e descobrem que a maioria das tarefas &#39;não resolvidas&#39; são, na verdade, mal rotuladas. Ao corrigir falsos negativos e positivos nos testes, os agentes de RL aprendem significativamente melhor.">
+<meta property="og:image" content="../../assets/papers/2611.30207/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Agentes</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.30207" rel="noopener">arXiv:2611.30207</a>
+    </div>
+    <h1><span class="s" data-s="t">O que faz bons dados para treinar agentes de codificação: um estudo sistemático no SWE-Gym</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Os autores auditam o conjunto de dados SWE-Gym e descobrem que a maioria das tarefas &#39;não resolvidas&#39; são, na verdade, mal rotuladas.</span> <span class="s" data-s="d-s1">Ao corrigir falsos negativos e positivos nos testes, os agentes de RL aprendem significativamente melhor.</span></p>
+    <p class="byline">
+      <span>Zhang et al.</span>
+      <span>8 min de leitura</span>
+<span>23/11/2026</span>    </p>
+    <div class="listen" data-article="2611.30207" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=m-WtH_UoBKs" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema oculto nos dados de treinamento</span></h2>
+<p><span class="s" data-s="b0-p0-s0">O aprendizado por reforço (RL) tornou-se o padrão para treinar agentes de codificação, onde modelos como o Qwen3.5-9B aprendem a corrigir bugs em repositórios reais.</span> <span class="s" data-s="b0-p0-s1">O processo geralmente usa coleções de tarefas extraídas do GitHub, como o SWE-Gym.</span> <span class="s" data-s="b0-p0-s2">Nessas coleções, cada tarefa consiste em um repositório, uma issue (problema reportado) e os testes unitários do pull request que resolveu o problema.</span> <span class="s" data-s="b0-p0-s3">O agente vê a issue, mas não os testes; ele recebe recompensa apenas se seus patches (correções) fizerem os testes passarem.</span> <span class="s" data-s="b0-p0-s4">Os testes ocultos atuam, portanto, como os rótulos de recompensa.</span></p>        <h2><span class="s" data-s="b1-h">O problema oculto nos dados de treinamento</span></h2>
+<p><span class="s" data-s="b1-p0-s0">O problema fundamental é que a validação inicial de uma tarefa no SWE-Gym é insuficiente.</span> <span class="s" data-s="b1-p0-s1">A coleção aceita uma tarefa apenas verificando que o patch de referência passa nos testes e que o código original falha.</span> <span class="s" data-s="b1-p0-s2">Isso garante que a recompensa é alcançável, mas não garante que ela seja correta.</span> <span class="s" data-s="b1-p0-s3">Testes podem rotular incorretamente patches de duas maneiras principais: falsos negativos (FN) e falsos positivos (FP).</span> <span class="s" data-s="b1-p0-s4">Um falso negativo ocorre quando um patch correto é rejeitado porque o teste verifica algo não especificado na issue.</span> <span class="s" data-s="b1-p0-s5">Um falso positivo ocorre quando um patch incorreto é aceito porque os testes não cobrem um caminho de código quebrado.</span></p>        <h2><span class="s" data-s="b2-h">O problema oculto nos dados de treinamento</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Receitas padrão de RL muitas vezes descartam tarefas que o modelo nunca resolve ou grupos sem variância de recompensa, sem inspecionar a qualidade dos testes.</span> <span class="s" data-s="b2-p0-s1">Isso cria um viés perigoso: uma taxa de passagem baixa pode indicar dificuldade real, mas também pode indicar que os rótulos estão errados.</span> <span class="s" data-s="b2-p0-s2">Se o teste rejeita correções válidas, o agente recebe feedback negativo injusto, aprendendo padrões errados ou desistindo de soluções corretas.</span> <span class="s" data-s="b2-p0-s3">Os autores deste paper questionam: o que torna uma tarefa boa para treinamento?</span> <span class="s" data-s="b2-p0-s4">A resposta exige auditar a correção dos rótulos de recompensa, não apenas a dificuldade da tarefa.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.30207/figure1.webp" alt="Exemplos de como testes ocultos distorcem o treinamento: (a) Falso negativo onde um patch correto é rejeitado por verificar um método privado não mencionado na issue; (b) Falso positivo onde um patch errado passa nos testes porque estes não verificam o tipo de retorno esperado." loading="lazy">
+          <figcaption>
+            Exemplos de como testes ocultos distorcem o treinamento: (a) Falso negativo onde um patch correto é rejeitado por verificar um método privado não mencionado na issue; (b) Falso positivo onde um patch errado passa nos testes porque estes não verificam o tipo de retorno esperado.
+            <span class="source">Figura 1 do paper · Zhang et al., arXiv:2611.30207</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b4-h">Metodologia: Audição executada com LLMs</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Para responder à pergunta de pesquisa, os autores realizaram uma auditoria sistemática do SWE-Gym.</span> <span class="s" data-s="b4-p0-s1">O processo não se baseia apenas em julgamento humano ou em heurísticas simples, mas em execução real de código.</span> <span class="s" data-s="b4-p0-s2">Eles utilizaram duas famílias de grandes modelos de linguagem (LLMs), Claude Opus 5.5 e GPT-6.1 Sol, para atuar como juízes.</span> <span class="s" data-s="b4-p0-s3">Cada afirmação (assertion) nos testes de cada tarefa foi avaliada contra a descrição da issue.</span></p>        <h2><span class="s" data-s="b5-h">Metodologia: Audição executada com LLMs</span></h2>
+<p><span class="s" data-s="b5-p0-s0">A metodologia é rigorosa para evitar falsos positivos na própria auditoria.</span> <span class="s" data-s="b5-p0-s1">Uma suspeita de erro conta apenas se a execução reproduzir o problema.</span> <span class="s" data-s="b5-p0-s2">Para falsos negativos, os autores geraram patches alternativos que seguem estritamente o que a issue pede, mas que foram rejeitados pelos testes originais.</span> <span class="s" data-s="b5-p0-s3">Se um patch alternativo, logicamente correto, falha nos testes, a tarefa é marcada como FN-flawed (defeituosa por falso negativo).</span> <span class="s" data-s="b5-p0-s4">Para falsos positivos, eles procuraram contra-exemplos executáveis: entradas que fazem o patch passar nos testes originais, mas que expõem uma falha lógica não coberta pelos testes existentes.</span></p>        <h2><span class="s" data-s="b6-h">Metodologia: Audição executada com LLMs</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Essa abordagem de &#39;audição executada&#39; permite distinguir entre tarefas difíceis e tarefas mal construídas.</span> <span class="s" data-s="b6-p0-s1">Os autores não confiam apenas na opinião dos LLMs; eles exigem evidência de execução.</span> <span class="s" data-s="b6-p0-s2">O objetivo era transformar o SWE-Gym bruto em um conjunto de dados verificado, onde cada veredito de erro tem uma prova concreta de que o teste está falhando em sua função de rotulagem correta.</span> <span class="s" data-s="b6-p0-s3">Esse processo resultou no lançamento do SWE-Gym-Verified, contendo 1.087 tarefas auditadas, cada uma com seu veredito e evidência executada.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.30207/figure2.webp" alt="Fluxo de auditoria que converte SWE-Gym em SWE-Gym-Verified. O processo identifica tarefas com erros de rótulo, remove ou repara testes defeituosos e gera conjuntos de treinamento balanceados para comparação com o original." loading="lazy">
+          <figcaption>
+            Fluxo de auditoria que converte SWE-Gym em SWE-Gym-Verified. O processo identifica tarefas com erros de rótulo, remove ou repara testes defeituosos e gera conjuntos de treinamento balanceados para comparação com o original.
+            <span class="source">Figura 2 do paper · Zhang et al., arXiv:2611.30207</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Resultados: Falsos negativos dominam as tarefas não resolvidas</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Os resultados da auditoria revelaram uma correlação forte e surpreendente entre a dificuldade percebida de uma tarefa e a presença de falsos negativos.</span> <span class="s" data-s="b8-p0-s1">Dos 2.001 tarefas auditadas, 55% apresentaram pelo menos um erro de rótulo.</span> <span class="s" data-s="b8-p0-s2">O ponto crucial é que esses erros não são distribuídos uniformemente.</span> <span class="s" data-s="b8-p0-s3">Nas tarefas que o modelo base (Qwen3.5-9B) nunca resolveu (taxa de passagem zero), 74% eram afetadas por falsos negativos.</span> <span class="s" data-s="b8-p0-s4">Em contraste, apenas 20% das tarefas que o modelo às vezes resolvia tinham esse problema.</span></p>        <h2><span class="s" data-s="b9-h">Resultados: Falsos negativos dominam as tarefas não resolvidas</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Isso significa que &#39;não resolvido&#39; muitas vezes significa &#39;mal rotulado&#39;.</span> <span class="s" data-s="b9-p0-s1">Os falsos negativos frequentemente envolvem comportamentos que a issue não solicita, como interfaces não especificadas, strings exatas ou escolhas de design arbitrárias.</span> <span class="s" data-s="b9-p0-s2">Por exemplo, um teste pode exigir o uso de um método privado ou uma flag interna que não é mencionada no relatório do bug.</span> <span class="s" data-s="b9-p0-s3">Quando os autores repararam essas tarefas, adicionando os requisitos ausentes aos testes, a taxa de passagem do modelo base aumentou em média 2.1 pontos em uma escala de oito amostras.</span> <span class="s" data-s="b9-p0-s4">Em um caso extremo, uma única frase adicional no teste fez o modelo passar de zero para sete de oito tentativas.</span></p>        <h2><span class="s" data-s="b10-h">Resultados: Falsos negativos dominam as tarefas não resolvidas</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Os falsos positivos também foram comuns, mas ocorreram em diferentes níveis de dificuldade.</span> <span class="s" data-s="b10-p0-s1">Cerca de 26,1% dos patches que passavam nos testes do conjunto limpo eram falsos positivos.</span> <span class="s" data-s="b10-p0-s2">Isso indica que mesmo em tarefas &#39;fáceis&#39; ou resolvidas, o agente pode estar recebendo recompensa por soluções incorretas.</span> <span class="s" data-s="b10-p0-s3">Esses patches enganosos passam nos testes originais porque os testes não cobrem certos caminhos de código ou tipos de dados.</span> <span class="s" data-s="b10-p0-s4">A presença de falsos positivos representa uma forma de &#39;reward hacking&#39;, onde o agente otimiza para passar nos testes, não para resolver o problema real.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b11-t">A ilusão da taxa de passagem</span></h3>
+          <p><span class="s" data-s="b11-c-s0">Uma taxa de passagem alta ou baixa não indica necessariamente a qualidade do aprendizado.</span> <span class="s" data-s="b11-c-s1">Ela apenas mostra se a tarefa gera recompensa, não se essa recompensa está correta.</span> <span class="s" data-s="b11-c-s2">Filtrar tarefas por taxa de passagem não remove tarefas com rótulos errados; pelo contrário, pode manter tarefas com falsos negativos que impedem o modelo de aprender correções válidas.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b12-h">Experimento de treinamento: Dados auditados vencem</span></h2>
+<p><span class="s" data-s="b12-p0-s0">Para medir o impacto prático desses erros, os autores treinaram o modelo Qwen3.5-9B usando RL (algoritmo GRPO) em três conjuntos de treinamento de 512 tarefas, todos balanceados por dificuldade e tamanho.</span> <span class="s" data-s="b12-p0-s1">O conjunto &#39;Orig&#39; usava as tarefas originais do SWE-Gym.</span> <span class="s" data-s="b12-p0-s2">O conjunto &#39;Clean&#39; usava tarefas do SWE-Gym-Verified, onde falsos negativos foram reparados ou removidos.</span> <span class="s" data-s="b12-p0-s3">Um terceiro conjunto, &#39;Orig+Filter&#39;, aplicou um filtro de taxa de passagem ao conjunto original, removendo tarefas não resolvidas, mas sem auditar os testes.</span></p>        <h2><span class="s" data-s="b13-h">Experimento de treinamento: Dados auditados vencem</span></h2>
+<p><span class="s" data-s="b13-p0-s0">O treinamento foi realizado com o mesmo número de passos e sementes aleatórias para garantir comparabilidade.</span> <span class="s" data-s="b13-p0-s1">Os modelos foram avaliados em benchmarks mantidos fora dos dados de treinamento: SWE-bench Verified e SWE-bench Pro.</span> <span class="s" data-s="b13-p0-s2">O modelo treinado no conjunto &#39;Clean&#39; (dados auditados) superou significativamente o modelo treinado no conjunto &#39;Orig&#39;.</span> <span class="s" data-s="b13-p0-s3">Especificamente, ele obteve ganhos de 2.4 pontos no SWE-bench Verified e 2.7 pontos no SWE-bench Pro.</span></p>        <h2><span class="s" data-s="b14-h">Experimento de treinamento: Dados auditados vencem</span></h2>
+<p><span class="s" data-s="b14-p0-s0">O resultado mais crítico é a comparação com o &#39;Orig+Filter&#39;.</span> <span class="s" data-s="b14-p0-s1">O filtro simples de taxa de passagem, uma prática comum na área, não mostrou ganhos de desempenho.</span> <span class="s" data-s="b14-p0-s2">Isso confirma que remover tarefas não resolvidas não é suficiente, pois essas tarefas provavelmente contêm falsos negativos que prejudicam o aprendizado.</span> <span class="s" data-s="b14-p0-s3">A melhoria veio exclusivamente da correção da qualidade dos rótulos de recompensa, não da redução da dificuldade ou do volume de dados.</span> <span class="s" data-s="b14-p0-s4">Isso demonstra que a precisão do sinal de recompensa é mais importante do que a quantidade de experiências de treinamento.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.30207/figure4.webp" alt="Gráficos mostrando que o modelo treinado nos dados auditados (Clean) supera o original (Orig) em benchmarks de avaliação. O filtro de taxa de passagem (Orig+Filter) não proporcionou ganhos significativos, destacando a importância da correção de rótulos." loading="lazy">
+          <figcaption>
+            Gráficos mostrando que o modelo treinado nos dados auditados (Clean) supera o original (Orig) em benchmarks de avaliação. O filtro de taxa de passagem (Orig+Filter) não proporcionou ganhos significativos, destacando a importância da correção de rótulos.
+            <span class="source">Figura 4 do paper · Zhang et al., arXiv:2611.30207</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b16-h">Limitações e trabalho futuro</span></h2>
+<p><span class="s" data-s="b16-p0-s0">Apesar dos resultados promissores, os autores destacam várias limitações.</span> <span class="s" data-s="b16-p0-s1">A auditoria dependeu de LLMs como juízes, o que introduz viés potencial.</span> <span class="s" data-s="b16-p0-s2">Embora tenham usado duas famílias de modelos e exigido execução para confirmar erros, os vieses dos LLMs não podem ser totalmente caracterizados.</span> <span class="s" data-s="b16-p0-s3">O conjunto auditado também é relativamente pequeno (1.087 tarefas), e não está claro se os mesmos padrões se mantêm em escalas maiores ou para outras arquiteturas de modelos.</span></p>        <h2><span class="s" data-s="b17-h">Limitações e trabalho futuro</span></h2>
+<p><span class="s" data-s="b17-p0-s0">Outra questão em aberto é a eficácia da reparação versus remoção de tarefas defeituosas.</span> <span class="s" data-s="b17-p0-s1">Os autores repararam apenas 42 tarefas alterando o enunciado ou os testes, mas a maioria foi removida ou substituída.</span> <span class="s" data-s="b17-p0-s2">Não está claro se a reparação sistemática de todos os falsos negativos traria ganhos ainda maiores.</span> <span class="s" data-s="b17-p0-s3">Além disso, o estudo não resolveu completamente o problema dos falsos positivos.</span> <span class="s" data-s="b17-p0-s4">Embora tenham identificado que um quarto dos patches que passam são incorretos, adicionar novos testes para capturá-los não mudou as pontuações nos benchmarks de forma detectável, sugerindo que a remoção de falsos positivos pode ser menos crítica do que a eliminação de falsos negativos para o desempenho inicial.</span></p>        <h2><span class="s" data-s="b18-h">Limitações e trabalho futuro</span></h2>
+<p><span class="s" data-s="b18-p0-s0">O impacto dual também é mencionado: agentes de codificação mais capazes podem ser usados para escrever código malicioso ou automatizar tarefas com consequências econômicas.</span> <span class="s" data-s="b18-p0-s1">Os dados vêm de repositórios públicos, mas a capacidade de gerar patches eficientes eleva os riscos.</span> <span class="s" data-s="b18-p0-s2">Os autores lançaram o SWE-Gym-Verified e o pipeline de auditoria para permitir que a comunidade verifique e conteste vereditos individuais, promovendo transparência e melhoria contínua dos conjuntos de dados de treinamento.</span></p>        <h2><span class="s" data-s="b19-h">Conclusão</span></h2>
+<p><span class="s" data-s="b19-p0-s0">Este paper demonstra que a qualidade dos dados de treinamento é tão crítica quanto a arquitetura do modelo ou o algoritmo de RL.</span> <span class="s" data-s="b19-p0-s1">No SWE-Gym, a maioria das tarefas que parecem difíceis são, na verdade, mal construídas, com testes que rejeitam correções válidas.</span> <span class="s" data-s="b19-p0-s2">Ao auditar e corrigir esses rótulos, os autores mostram que é possível treinar agentes mais capazes sem aumentar o custo computacional.</span> <span class="s" data-s="b19-p0-s3">A mensagem central é clara: em RL para codificação, a taxa de passagem não é suficiente.</span> <span class="s" data-s="b19-p0-s4">Os rótulos de recompensa devem ser verificados executavelmente, ou o agente aprenderá a enganar os testes, em vez de resolver problemas reais.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">74% das tarefas que um modelo base nunca resolve tem testes que rejeitam correções válidas (falsos negativos).</span></li><li><span class="s" data-s="k1">Treinar com dados auditados aumenta a pontuação em benchmarks em 2.4 a 2.7 pontos, sem aumentar o custo computacional.</span></li><li><span class="s" data-s="k2">Um terço dos patches que passam nos testes originais são falsos positivos, enganando o agente com recompensas erradas.</span></li><li><span class="s" data-s="k3">O conjunto SWE-Gym-Verified libera evidências executadas para cada veredito, permitindo auditoria transparente.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.30207" rel="noopener">What Makes Good Data for Training Coding Agents? A Systematic Study on SWE-Gym</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.30207" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

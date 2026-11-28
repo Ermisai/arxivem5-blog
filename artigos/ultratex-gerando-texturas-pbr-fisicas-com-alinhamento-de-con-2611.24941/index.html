@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UltraTex: Gerando Texturas PBR Físicas com Alinhamento de Conhecimento — arXiv em 5</title>
+<meta name="description" content="Um framework cascateado que usa modelos de linguagem e visão para separar aparência de material, gerando mapas metálicos e de rugosidade consistentes a partir de uma única imagem.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UltraTex: Gerando Texturas PBR Físicas com Alinhamento de Conhecimento">
+<meta property="og:description" content="Um framework cascateado que usa modelos de linguagem e visão para separar aparência de material, gerando mapas metálicos e de rugosidade consistentes a partir de uma única imagem.">
+<meta property="og:image" content="../../assets/papers/2611.24941/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Imagem</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.24941" rel="noopener">arXiv:2611.24941</a>
+    </div>
+    <h1><span class="s" data-s="t">UltraTex: Gerando Texturas PBR Físicas com Alinhamento de Conhecimento</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um framework cascateado que usa modelos de linguagem e visão para separar aparência de material, gerando mapas metálicos e de rugosidade consistentes a partir de uma única imagem.</span></p>
+    <p class="byline">
+      <span>Bao et al.</span>
+      <span>7 min de leitura</span>
+<span>18/11/2026</span>    </p>
+    <div class="listen" data-article="2611.24941" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=Nr-hVIoZOKM" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Ambiguidade em Texturas PBR</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Geração de texturas para renderização baseada em física (PBR) a partir de uma única imagem de referência é um problema intrinsecamente ambíguo.</span> <span class="s" data-s="b0-p0-s1">Na imagem observada, a identidade do material, a reflectância da superfície e a iluminação estão entrelaçadas.</span> <span class="s" data-s="b0-p0-s2">Uma região brilhante pode ser metal polido, um revestimento gloss, ou apenas uma iluminação forte.</span> <span class="s" data-s="b0-p0-s3">Métodos anteriores focavam em corresponder a aparência visual, mas falhavam em inferir atributos intrínsecos como metalicidade e rugosidade com precisão.</span></p><p><span class="s" data-s="b0-p1-s0">Texturas PBR separam a aparência visível das propriedades intrínsecas do material.</span> <span class="s" data-s="b0-p1-s1">Enquanto o albedo define a cor base, a metalicidade e a rugosidade determinam como a superfície responde a diferentes condições de luz.</span> <span class="s" data-s="b0-p1-s2">Isso permite que ativos 3D sejam reiluminados de forma plausível em jogos e filmes.</span> <span class="s" data-s="b0-p1-s3">No entanto, gerar esses mapas de forma automática é difícil porque as propriedades de metalicidade e rugosidade são abstratas e não são diretamente observáveis como pixels de cor.</span></p><p><span class="s" data-s="b0-p2-s0">Abordagens anteriores de inverse rendering dependiam de setups de captura controlados, como flash co-localizado, para expor pistas físicas como reflexos especulares.</span> <span class="s" data-s="b0-p2-s1">Essas técnicas não generalizam bem para imagens &#39;in-the-wild&#39;.</span> <span class="s" data-s="b0-p2-s2">Métodos generativos recentes usam modelos de difusão para sintetizar texturas multi-view, melhorando a geração de albedo, mas ainda produzem mapas metálicos e de rugosidade imprecisos, muitas vezes atribuindo valores metálicos incorretos ou gerando rugosidade excessivamente conservadora.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.24941/figure1.webp" alt="Galeria de texturas PBR geradas pelo UltraTex. A primeira linha mostra albedo, metálico e rugosidade. A segunda linha é um close-up que revela detalhes finos de material sob iluminação ambiental." loading="lazy">
+          <figcaption>
+            Galeria de texturas PBR geradas pelo UltraTex. A primeira linha mostra albedo, metálico e rugosidade. A segunda linha é um close-up que revela detalhes finos de material sob iluminação ambiental.
+            <span class="source">Figura 1 do paper · Bao et al., arXiv:2611.24941</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">A Abordagem Cascateada do UltraTex</span></h2>
+<p><span class="s" data-s="b2-p0-s0">UltraTex propõe um framework cascateado de difusão multi-view que alinha conhecimento físico ao processo generativo.</span> <span class="s" data-s="b2-p0-s1">O pipeline opera em duas etapas.</span> <span class="s" data-s="b2-p0-s2">Na primeira, o modelo prediz conjuntamente mapas de albedo e normais de shading no espaço global.</span> <span class="s" data-s="b2-p0-s3">Na segunda, ele prediz mapas de metalicidade e rugosidade (MR), condicionados no albedo gerado, na imagem de referência e em priores semânticos de material.</span></p><p><span class="s" data-s="b2-p1-s0">Essa separação em estágios é crucial.</span> <span class="s" data-s="b2-p1-s1">A primeira etapa foca na reconstrução geométrica e de cor base, enquanto a segunda etapa lida com as propriedades físicas abstratas.</span> <span class="s" data-s="b2-p1-s2">Ao condicionar a segunda etapa no albedo já gerado, o modelo tem acesso a uma representação mais limpa da cor base, o que ajuda a isolar as variações de reflexo e rugosidade.</span> <span class="s" data-s="b2-p1-s3">Isso evita que o modelo confunda padrões de cor com propriedades de superfície.</span></p><p><span class="s" data-s="b2-p2-s0">O modelo é construído sobre um backbone de difusão de imagem, mas estendido para lidar com múltiplas vistas.</span> <span class="s" data-s="b2-p2-s1">As texturas são representadas como canais de uma imagem RGB para compatibilidade com os modelos de difusão existentes.</span> <span class="s" data-s="b2-p2-s2">O treinamento é feito separadamente para cada etapa, permitindo que o modelo aprenda as complexidades de cada tipo de mapa de textura de forma focada.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.24941/figure2.webp" alt="Diagrama do pipeline UltraTex. A Etapa 1 gera albedo e normais de shading. A Etapa 2 usa esses outputs junto com tokens semânticos de um VLM para gerar mapas metálicos e de rugosidade." loading="lazy">
+          <figcaption>
+            Diagrama do pipeline UltraTex. A Etapa 1 gera albedo e normais de shading. A Etapa 2 usa esses outputs junto com tokens semânticos de um VLM para gerar mapas metálicos e de rugosidade.
+            <span class="source">Figura 2 do paper · Bao et al., arXiv:2611.24941</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b4-h">Etapa 1: Albedo e Normais no Espaço Global</span></h2>
+<p><span class="s" data-s="b4-p0-s0">A primeira etapa gera mapas de albedo ortográficos e normais de shading no espaço global a partir da imagem de referência e das normais geométricas renderizadas.</span> <span class="s" data-s="b4-p0-s1">O modelo usa um Two-Step Architecture.</span> <span class="s" data-s="b4-p0-s2">Primeiro, um Multi-Modal Transformer (MM-T) funde os tokens de condição (imagem de referência e normais geométricas) com os latentes de vista por vista.</span> <span class="s" data-s="b4-p0-s3">Isso integra as informações de aparência e geometria local antes da geração.</span></p><p><span class="s" data-s="b4-p1-s0">Em seguida, um Multi-View Transformer (MV-T) realiza o raciocínio global.</span> <span class="s" data-s="b4-p1-s1">Ele descarta os tokens de condição e processa apenas os latentes de todas as N vistas.</span> <span class="s" data-s="b4-p1-s2">Isso permite que o modelo capture correlações entre as vistas e garanta coerência 3D.</span> <span class="s" data-s="b4-p1-s3">O auto-attention global nessa etapa assegura que as texturas geradas sejam consistentes quando vistas de diferentes ângulos, evitando inconsistências visuais.</span></p><p><span class="s" data-s="b4-p2-s0">Um diferencial importante é a estimativa conjunta de normais de shading no espaço global.</span> <span class="s" data-s="b4-p2-s1">Diferente das normais no espaço tangente, que dependem da parametrização UV e podem causar costuras, as normais no espaço global são independentes das UVs.</span> <span class="s" data-s="b4-p2-s2">Isso fornece uma supervisão geométrica mais robusta para a geração de albedo, incentivando detalhes de superfície de alta frequência e evitando artefatos comuns em métodos anteriores.</span></p>        <h2><span class="s" data-s="b5-h">Etapa 2: Semântica de Material com VLMs</span></h2>
+<p><span class="s" data-s="b5-p0-s0">A segunda etapa é onde o UltraTex se destaca ao introduzir conhecimento físico explícito.</span> <span class="s" data-s="b5-p0-s1">Para prever mapas de metalicidade e rugosidade, o modelo precisa entender não apenas como a imagem parece, mas do que o objeto é feito.</span> <span class="s" data-s="b5-p0-s2">Os autores utilizam um adaptador leve guiado por um Modelo de Linguagem e Visão (VLM), especificamente o Qwen3.5-4B.</span> <span class="s" data-s="b5-p0-s3">Este VLM é congelado e usado apenas para extrair características visuais de camadas intermediárias.</span></p><p><span class="s" data-s="b5-p1-s0">O adaptador transforma essas características em tokens de material intrínseco 1D.</span> <span class="s" data-s="b5-p1-s1">Esses tokens são injetados nos blocos de denoising do modelo de difusão.</span> <span class="s" data-s="b5-p1-s2">Eles atuam como âncoras de conhecimento semântico em nível de parte.</span> <span class="s" data-s="b5-p1-s3">Por exemplo, o modelo pode aprender que uma roda é feita de borracha (alta rugosidade, não metálica) e um para-choque é feito de metal (baixa rugosidade, metálico), mesmo que a aparência visual seja ambígua.</span></p><p><span class="s" data-s="b5-p2-s0">Essa injeção de semântica é crucial porque mapas metálicos e de rugosidade são parâmetros abstratos.</span> <span class="s" data-s="b5-p2-s1">O modelo não pode simplesmente aprender por correspondência de pixels.</span> <span class="s" data-s="b5-p2-s2">Ele precisa de um prior que lhe diga quais regiões devem ser metálicas e quais não.</span> <span class="s" data-s="b5-p2-s3">O adaptador VLM fornece essa informação contextual, permitindo que o modelo tome decisões fisicamente plausíveis sobre as propriedades do material.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.24941/figure6.webp" alt="Comparação visual. O UltraTex remove sombras e luzes gravadas (baked-in lighting), gerando atributos de material fisicamente precisos, ao contrário de métodos concorrentes que mantêm artefatos de iluminação." loading="lazy">
+          <figcaption>
+            Comparação visual. O UltraTex remove sombras e luzes gravadas (baked-in lighting), gerando atributos de material fisicamente precisos, ao contrário de métodos concorrentes que mantêm artefatos de iluminação.
+            <span class="source">Figura 6 do paper · Bao et al., arXiv:2611.24941</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Alinhamento Fotométrico para Interação Luz-Material</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Além da semântica, o UltraTex utiliza alinhamento de representação fotométrica para guiar o aprendizado da interação entre material e luz.</span> <span class="s" data-s="b7-p0-s1">Como os mapas MR são abstratos, a supervisão direta é difícil.</span> <span class="s" data-s="b7-p0-s2">Em vez disso, o modelo é treinado para alinhar suas características intermediárias de difusão com renderizações de material sob iluminação controlada.</span></p><p><span class="s" data-s="b7-p1-s0">Isso torna as variações de metalicidade e rugosidade observáveis através da intensidade dos reflexos, da nitidez especular e do contraste de reflectância local.</span> <span class="s" data-s="b7-p1-s1">O modelo aprende a prever MR de forma a produzir respostas fotométricas corretas, mesmo sem supervisão explícita da iluminação.</span> <span class="s" data-s="b7-p1-s2">Isso permite uma previsão de material de alta fidelidade, baseada em como a luz realmente interage com a superfície.</span></p><p><span class="s" data-s="b7-p2-s0">O objetivo é que o modelo internalize as leis da física de renderização.</span> <span class="s" data-s="b7-p2-s1">Se ele gera um mapa metálico incorreto, a renderização fotométrica resultante será fisicamente inconsistente.</span> <span class="s" data-s="b7-p2-s2">Ao alinhar as representações internas com essas renderizações de controle, o modelo é forçado a aprender relações causais profundas entre a textura e a aparência física.</span></p>        <h2><span class="s" data-s="b8-h">Resultados e Avaliação</span></h2>
+<p><span class="s" data-s="b8-p0-s0">O UltraTex foi avaliado em um dataset de 130K objetos do Objaverse-XL e TexVerse, renderizados em 32 vistas com iluminação aleatória.</span> <span class="s" data-s="b8-p0-s1">As métricas quantitativas mostram que o UltraTex supera métodos open-source como Paint-it, DreamMat e LumiTex, bem como métodos comerciais como Hyper3D e TripoAI.</span> <span class="s" data-s="b8-p0-s2">Em particular, ele obtém melhores resultados em CLIP-I (similaridade semântica) e métricas de erro especular (MSEM/MSER).</span></p><p><span class="s" data-s="b8-p1-s0">Estudos de usuário também indicam preferência significativa.</span> <span class="s" data-s="b8-p1-s1">Em comparações pareadas, o UltraTex foi preferido em 89% dos casos contra Hyper3D v2.0 e em 83% contra Hunyuan3D v3.1.</span> <span class="s" data-s="b8-p1-s2">Os avaliadores destacaram a qualidade da renderização, a precisão do albedo e, principalmente, a precisão dos materiais metálicos e de rugosidade.</span></p><p><span class="s" data-s="b8-p2-s0">A geração de texturas de alta resolução (4K UV) é feita através de upscaling super-resolução e inpainting de regiões não observadas.</span> <span class="s" data-s="b8-p2-s1">O pipeline é eficiente, treinado em 32 GPUs A100 por cerca de 2 dias.</span> <span class="s" data-s="b8-p2-s2">A capacidade de remover iluminação gravada (baked-in lighting) é um ponto forte, permitindo que os ativos gerados sejam reiluminados em ambientes virtuais sem artefatos visuais.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.24941/figure12.webp" alt="Ablação do adaptador VLM. Sem os tokens semânticos, o modelo falha em distinguir materiais metálicos de plásticos, atribuindo propriedades incorretas a regiões que deveriam ser não metálicas." loading="lazy">
+          <figcaption>
+            Ablação do adaptador VLM. Sem os tokens semânticos, o modelo falha em distinguir materiais metálicos de plásticos, atribuindo propriedades incorretas a regiões que deveriam ser não metálicas.
+            <span class="source">Figura 12 do paper · Bao et al., arXiv:2611.24941</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">Limitações e Trabalho Futuro</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Apesar dos resultados promissores, o UltraTex tem limitações claras.</span> <span class="s" data-s="b10-p0-s1">Ele não lida bem com materiais complexos que envolvem transporte de luz não padrão, como transparências, translucidez, caustics ou efeitos BRDF avançados.</span> <span class="s" data-s="b10-p0-s2">O modelo tende a aproximar gemstones usando padrões de albedo e baixa rugosidade, mas não pode representar a luz passando através do material.</span></p><p><span class="s" data-s="b10-p1-s0">Essa limitação decorre do conjunto de dados de treinamento, que se concentra em albedo, metalicidade e rugosidade.</span> <span class="s" data-s="b10-p1-s1">A ausência de canais como especular, coat, transmissão e subsurface scattering restringe o que o modelo pode aprender.</span> <span class="s" data-s="b10-p1-s2">O futuro do trabalho depende da disponibilidade de datasets em larga escala com anotações mais ricas.</span></p><p><span class="s" data-s="b10-p2-s0">Outra direção é estender o framework para modelos de material mais expressivos, mantendo a robustez e escalabilidade da geração PBR multi-view.</span> <span class="s" data-s="b10-p2-s1">Enquanto isso, o UltraTex representa um avanço significativo para a geração de texturas físicas realistas a partir de imagens únicas, fechando a lacuna entre aparência visual e propriedade material.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">UltraTex usa um pipeline em duas etapas: primeiro gera albedo e normais, depois estima mapas metálicos e de rugosidade.</span></li><li><span class="s" data-s="k1">Um adaptador baseado em VLM fornece semântica de material para guiar a geração de propriedades físicas abstratas.</span></li><li><span class="s" data-s="k2">Alinhamento fotométrico permite que o modelo aprenda como a luz interage com o material sem supervisão explícita de iluminação.</span></li><li><span class="s" data-s="k3">O método supera abordagens comerciais em precisão material e plausibilidade física, mas falha em materiais não padrão como transparências.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.24941" rel="noopener">UltraTex: Aligning Physical Knowledge for High-Fidelity PBR Texture Generation</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.24941" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

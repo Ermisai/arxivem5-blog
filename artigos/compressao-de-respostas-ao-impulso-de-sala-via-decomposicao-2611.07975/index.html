@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Compressão de Respostas ao Impulso de Sala via Decomposição de Tensores de Ordem Superior — arXiv em 5</title>
+<meta name="description" content="Este paper explora como modelar respostas ao impulso de sala (RIRs) multicanal como tensores de baixa rank, usando decomposições poládicas canônicas e blocos para comprimir dados acústicos com menor erro de reconstrução.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Compressão de Respostas ao Impulso de Sala via Decomposição de Tensores de Ordem Superior">
+<meta property="og:description" content="Este paper explora como modelar respostas ao impulso de sala (RIRs) multicanal como tensores de baixa rank, usando decomposições poládicas canônicas e blocos para comprimir dados acústicos com menor erro de reconstrução.">
+<meta property="og:image" content="../../assets/papers/2611.07975/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Áudio</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.07975" rel="noopener">arXiv:2611.07975</a>
+    </div>
+    <h1><span class="s" data-s="t">Compressão de Respostas ao Impulso de Sala via Decomposição de Tensores de Ordem Superior</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Este paper explora como modelar respostas ao impulso de sala (RIRs) multicanal como tensores de baixa rank, usando decomposições poládicas canônicas e blocos para comprimir dados acústicos com menor erro de reconstrução.</span></p>
+    <p class="byline">
+      <span>Blochberger et al.</span>
+      <span>5 min de leitura</span>
+<span>05/11/2026</span>    </p>
+    <div class="listen" data-article="2611.07975" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=8HF5pTCsViY" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Dimensionalidade Acústica</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Em processamento de sinais acústicos de salas, a Resposta ao Impulso de Sala (RIR) é fundamental.</span> <span class="s" data-s="b0-p0-s1">Ela descreve o caminho acústico ponto a ponto entre uma fonte sonora e um microfone, capturando reflexões, difrações e absorções causadas pela geometria e materiais do ambiente.</span> <span class="s" data-s="b0-p0-s2">Para aplicações como localização de fonte, separação de fontes ou realidade virtual, precisamos de múltiplas RIRs.</span> <span class="s" data-s="b0-p0-s3">O problema é que, em salas médias, uma RIR pode ter milhares de amostras; em grandes espaços, como catedrais, pode ter centenas de milhares.</span> <span class="s" data-s="b0-p0-s4">Representar isso como Filtros de Resposta Finita ao Impulso (FIR) gera uma quantidade massiva de parâmetros, tornando o armazenamento e a convolução em tempo real computacionalmente custosos.</span></p>        <h2><span class="s" data-s="b1-h">Modelos Polos-Zero e a Conexão com Tensores</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Uma alternativa compacta são os modelos de Resposta ao Impulso Infinita (IIR), especificamente o modelo de Polos-Zero (PZ).</span> <span class="s" data-s="b1-p0-s1">Esse modelo representa a RIR como uma função de transferência IIR, capturando os modos da sala (ressonâncias) através de seus polos.</span> <span class="s" data-s="b1-p0-s2">Uma descoberta chave deste trabalho é a conexão matemática entre o modelo PZ e a Decomposição Poládica Canônica (CPD) de tensores.</span> <span class="s" data-s="b1-p0-s3">A CPD é uma forma de decompor um tensor em uma soma de tensores de rank-1.</span> <span class="s" data-s="b1-p0-s4">Os autores mostram que as primeiras reflexões da RIR formam uma soma esparsa de rank-1, enquanto a reverberação tardia admite uma CPD onde os fatores são determinados pelos polos do modelo PZ.</span> <span class="s" data-s="b1-p0-s5">Isso motiva o uso de decomposições de tensores de ordem superior para compressão.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.07975/figure1.webp" alt="Visualização da similaridade entre RIRs tensorizados em uma sala tipo caixa. Cores mais escuras indicam menor distância Chordal entre os subespaços de fatores, sugerindo grupos naturais para compressão conjunta." loading="lazy">
+          <figcaption>
+            Visualização da similaridade entre RIRs tensorizados em uma sala tipo caixa. Cores mais escuras indicam menor distância Chordal entre os subespaços de fatores, sugerindo grupos naturais para compressão conjunta.
+            <span class="source">Figura 1 do paper · Blochberger et al., arXiv:2611.07975</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Decomposição de Termos em Blocos (BTD) e Esquemas Propostos</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Para explorar essa estrutura, os autores propõem duas esquemas de compressão multicanal baseados na Decomposição de Termos em Blocos (BTD).</span> <span class="s" data-s="b3-p0-s1">A BTD é uma generalização da CPD, onde o tensor é decomposto em uma soma de blocos, cada um sendo um produto de matrizes de fatores e um núcleo (core).</span> <span class="s" data-s="b3-p0-s2">O primeiro esquema, SMCBTD (Stacked Multichannel BTD), aplica a decomposição diretamente a um tensor de (D+1) modos, empilhando os canais.</span> <span class="s" data-s="b3-p0-s3">O segundo, JMCBTD (Joint Multichannel BTD), é mais sofisticado: ele identifica subconjuntos de canais acusticamente similares e compartilha fatores entre eles.</span> <span class="s" data-s="b3-p0-s4">Essa similaridade é descoberta usando clustering espectral em grafos de afinidade de subespaços de fatores, como ilustrado na Figura 1, onde canais próximos em termos acústicos são agrupados para compartilhar informação.</span></p>        <h2><span class="s" data-s="b4-h">Otimização via HOOI</span></h2>
+<p><span class="s" data-s="b4-p0-s0">A otimização desses modelos é feita através de um procedimento iterativo chamado Higher-Order Orthogonal Iteration (HOOI).</span> <span class="s" data-s="b4-p0-s1">O HOOI é uma extensão da decomposição em valores singulares (SVD) para tensores.</span> <span class="s" data-s="b4-p0-s2">Ele alterna entre a atualização dos fatores de cada modo e a projeção do tensor original para o núcleo (core).</span> <span class="s" data-s="b4-p0-s3">No caso do JMCBTD, o algoritmo trabalha com conjuntos de trabalho menores devido ao clustering, o que reduz a necessidade de memória intermediária e melhora a escalabilidade para um grande número de canais.</span> <span class="s" data-s="b4-p0-s4">A escolha da ordem de tensorização D (número de modos além do tempo) é crítica.</span> <span class="s" data-s="b4-p0-s5">Os autores testam D=3, D=4 e D=5, buscando o ponto ideal entre complexidade e precisão.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.07975/figure4.webp" alt="Comparação de taxa de compressão versus erro de reconstrução. O método JMCBTD com D=3 supera o baseline GLRAM, especialmente com núcleos escalares (Kd=1), validando a conexão PZ-CPD." loading="lazy">
+          <figcaption>
+            Comparação de taxa de compressão versus erro de reconstrução. O método JMCBTD com D=3 supera o baseline GLRAM, especialmente com núcleos escalares (Kd=1), validando a conexão PZ-CPD.
+            <span class="source">Figura 4 do paper · Blochberger et al., arXiv:2611.07975</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b6-h">Avaliação Experimental e Resultados</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Os autores avaliaram os métodos em dados simulados e reais.</span> <span class="s" data-s="b6-p0-s1">Nos dados simulados de um array compacto, o JMCBTD e o SMCBTD mostraram erro de reconstrução consistentemente menor que o método GLRAM (Generalized Low-Rank Approximation of Matrices) e decomposições unicanal separadas.</span> <span class="s" data-s="b6-p0-s2">O ganho foi mais pronunciado com núcleos escalares (Kd=1), o que apoia a hipótese de que a CPD (caso especial da BTD) é a representação mais eficiente para dados acústicos típicos.</span> <span class="s" data-s="b6-p0-s3">A Figura 4 ilustra essa vantagem, mostrando que para a mesma taxa de compressão, o erro em dB é significativamente menor nos métodos propostos.</span></p>        <h2><span class="s" data-s="b7-h">Datasets Reais: SMARD, SRIRACHA e ChurchIR</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Nos datasets reais, o ganho foi ainda mais claro.</span> <span class="s" data-s="b7-p0-s1">No SMARD (arrays compactos em sala pequena), o JMCBTD com D=3 e Kd=1 apresentou ganho de 8 a 10 dB no erro de reconstrução sobre o GLRAM.</span> <span class="s" data-s="b7-p0-s2">No SRIRACHA (sala tipo caixa com posições densas), o ganho foi de 5 a 8 dB.</span> <span class="s" data-s="b7-p0-s3">Um achado importante é que o aumento da ordem de tensorização de D=2 para D=3 traz melhorias significativas, mas de D=3 para D=4 ou 5, os ganhos são marginais na maioria dos cenários.</span> <span class="s" data-s="b7-p0-s4">Isso sugere que D=3 é um &#39;ponto doce&#39; prático, capturando a estrutura multilinear essencial sem custo computacional excessivo.</span> <span class="s" data-s="b7-p0-s5">A exceção foi o dataset ChurchIR, onde D=4 mostrou ganho adicional, possivelmente devido à maior densidade modal em ambientes altamente reverberantes.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b8-t">Limitação de Memória e Tempo</span></h3>
+          <p><span class="s" data-s="b8-c-s0">Aumentar a ordem de tensorização D eleva exponencialmente a necessidade de memória temporária para resíduos intermediários durante o HOOI.</span> <span class="s" data-s="b8-c-s1">Isso limita a faixa de taxas de compressão viáveis em D=4 e D=5, especialmente para arrays grandes.</span> <span class="s" data-s="b8-c-s2">O JMCBTD mitiga isso parcialmente ao usar conjuntos de trabalho menores no clustering, mas o custo computacional ainda justifica a preferência por D=3 na maioria das aplicações práticas.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b9-h">Eficiência Downstream e Precisão Reduzida</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Um benefício crucial da compressão não é apenas o tamanho do arquivo, mas a eficiência da convolução downstream.</span> <span class="s" data-s="b9-p0-s1">Modelos comprimidos via CPD/BTD permitem algoritmos de convolução mais rápidos, comparáveis aos do GLRAM.</span> <span class="s" data-s="b9-p0-s2">Além disso, os experimentos de precisão de ponto flutuante mostraram que os modelos podem ser armazenados em 16-bit (half-precision) com erro de reconstrução negligenciável.</span> <span class="s" data-s="b9-p0-s3">Isso torna a técnica compatível com hardware moderno de áudio e inferência.</span> <span class="s" data-s="b9-p0-s4">A quantização agressiva para 8-bit foi mais sensível ao formato, indicando que o futuro trabalho deve otimizar a robustez a baixas precisões.</span></p>        <h2><span class="s" data-s="b10-h">Limitações e Trabalhos Futuros</span></h2>
+<p><span class="s" data-s="b10-p0-s0">O paper reconhece limitações.</span> <span class="s" data-s="b10-p0-s1">O clustering em duas etapas do JMCBTD pode não ser ótimo; uma abordagem de clustering em um único passo seria desejável.</span> <span class="s" data-s="b10-p0-s2">Além disso, a detecção de rank multilinear foi tratada como hiperparâmetro fixo, enquanto um método data-driven seria mais robusto.</span> <span class="s" data-s="b10-p0-s3">A performance do JMCBTD depende da existência de grupos de canais similares; se não houver estrutura clara, o ganho pode ser menor.</span> <span class="s" data-s="b10-p0-s4">O trabalho atual não cobre a otimização de quantização 8-bit, deixando isso para futuras extensões.</span> <span class="s" data-s="b10-p0-s5">Apesar disso, o estudo estabelece uma base sólida para compressão acústica baseada em tensores.</span></p>        <h2><span class="s" data-s="b11-h">Conclusão</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Os autores demonstram que a decomposição de tensores de ordem superior, especificamente a BTD e sua variante conjunta JMCBTD, oferece uma maneira eficaz de comprimir RIRs multicanal.</span> <span class="s" data-s="b11-p0-s1">Ao explorar a estrutura de baixa rank implícita nos modelos de polos-zero, eles alcançam erros de reconstrução menores que métodos de matriz tradicionais como o GLRAM.</span> <span class="s" data-s="b11-p0-s2">A ordenação D=3 emerge como o equilíbrio ideal entre precisão e custo.</span> <span class="s" data-s="b11-p0-s3">Esses modelos comprimidos não só economizam armazenamento, mas também habilitam convolução eficiente e suporte a precisão reduzida, sendo promissores para aplicações em tempo real em ambientes virtuais e sistemas de áudio multicanal.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">RIRs longos podem ser representados compactamente usando modelos de polos-zero, que implicam estrutura de baixa rank em tensores.</span></li><li><span class="s" data-s="k1">O método JMCBTD agrupa canais similares via clustering espectral, compartilhando fatores para melhorar a compressão conjunta.</span></li><li><span class="s" data-s="k2">Ordenação tensorial D=3 oferece o melhor equilíbrio entre ganho de precisão e custo computacional na maioria dos cenários.</span></li><li><span class="s" data-s="k3">Modelos comprimidos permitem convolução eficiente downstream e suportam armazenamento em precisão reduzida (16-bit).</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.07975" rel="noopener">Joint Higher-Order Low-Rank Tensor Decompositions for Multichannel Acoustic System Compression</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.07975" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

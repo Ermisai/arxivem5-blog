@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SpeakerTurn: Detecção de Turnos Semânticos Condição ao Falante em Ambientes Multi-Falantes — arXiv em 5</title>
+<meta name="description" content="Um framework que usa uma referência de voz para distinguir quando um usuário-alvo terminou de falar, mesmo com ruído e sobreposições, unindo transcrição e decisão de turno.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpeakerTurn: Detecção de Turnos Semânticos Condição ao Falante em Ambientes Multi-Falantes">
+<meta property="og:description" content="Um framework que usa uma referência de voz para distinguir quando um usuário-alvo terminou de falar, mesmo com ruído e sobreposições, unindo transcrição e decisão de turno.">
+<meta property="og:image" content="../../assets/papers/2610.39828/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Áudio</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.39828" rel="noopener">arXiv:2610.39828</a>
+    </div>
+    <h1><span class="s" data-s="t">SpeakerTurn: Detecção de Turnos Semânticos Condição ao Falante em Ambientes Multi-Falantes</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um framework que usa uma referência de voz para distinguir quando um usuário-alvo terminou de falar, mesmo com ruído e sobreposições, unindo transcrição e decisão de turno.</span></p>
+    <p class="byline">
+      <span>Li et al.</span>
+      <span>9 min de leitura</span>
+<span>29/10/2026</span>    </p>
+    <div class="listen" data-article="2610.39828" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=twQ8lME3_go" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Ambiguidade em Ambientes Multi-Falantes</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Sistemas de diálogo por voz, especialmente os assistentes pessoais, operam em um desafio fundamental: determinar não apenas o que foi dito, mas quem disse e se a fala daquela pessoa está completa.</span> <span class="s" data-s="b0-p0-s1">Em cenários reais, múltiplos falantes podem estar presentes simultaneamente.</span> <span class="s" data-s="b0-p0-s2">Um problema crítico surge quando um falante interferente completa uma frase, enquanto o usuário designado (o alvo) está apenas pausando, reconhecendo o que foi dito ou pedindo tempo para pensar.</span> <span class="s" data-s="b0-p0-s3">Se o sistema confiar apenas na completude semântica da frase, ele pode interpretar erroneamente a fala do interferente como um comando final, interrompendo o usuário alvo no meio de sua explicação.</span></p><p><span class="s" data-s="b0-p1-s0">A detecção tradicional de turnos (turn-taking) muitas vezes trata a fala como um fluxo contínuo sem considerar a atribuição específica a um indivíduo.</span> <span class="s" data-s="b0-p1-s1">Modelos de atividade de voz (VAD) e diarização identificam quando alguém está falando e quem é, mas não necessariamente avaliam o estado semântico da contribuição desse falante específico.</span> <span class="s" data-s="b0-p1-s2">Por outro lado, modelos linguísticos podem prever se uma sequência de palavras parece completa, mas falham ao ignorar o contexto de quem está falando.</span> <span class="s" data-s="b0-p1-s3">A interseção desses dois problemas — atribuição de falante e inferência semântica de turno — é o foco do trabalho apresentado por Li, Shan e colaboradores.</span></p><p><span class="s" data-s="b0-p2-s0">A proposta central é que as decisões semânticas devem permanecer associadas ao falante inscrito (target speaker), apesar das interpretações concorrentes geradas por vozes concorrentes.</span> <span class="s" data-s="b0-p2-s1">Em sistemas de full-duplex, onde a escuta e a geração são contínuas, essa atribuição é vital.</span> <span class="s" data-s="b0-p2-s2">Os autores argumentam que a transcrição, a discriminação de turnos e a atribuição de interrupção fornecem evidências distintas que devem ser avaliadas separadamente.</span> <span class="s" data-s="b0-p2-s3">Um modelo pode ser excelente em transcrever o alvo, mas falhar em decidir se ele deve responder, ou vice-versa.</span></p><p><span class="s" data-s="b0-p3-s0">Para abordar essa ambiguidade, o paper introduz o SpeakerTurn, um framework que condiciona a inferência de turno semântico a uma referência de voz do alvo.</span> <span class="s" data-s="b0-p3-s1">Diferente de abordagens modulares que separam a identificação acústica da decisão linguística, o SpeakerTurn integra essas etapas.</span> <span class="s" data-s="b0-p3-s2">Ele utiliza uma arquitetura baseada em Large Language Models (LLMs) adaptados, que recebe tanto a mistura de áudio quanto uma referência de áudio do falante alvo.</span> <span class="s" data-s="b0-p3-s3">O objetivo é gerar simultaneamente a transcrição do alvo e o estado do turno, permitindo que o sistema tome decisões mais precisas sobre quando interagir.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.39828/figure1.webp" alt="Fluxo de construção dos dados e divisões de teste usadas na avaliação. A supervisão usa o prefixo observado e recibos de geração sintética. Misturas de voz gravada carregam apenas rótulos de presença. Os experimentos focam no teste sintético original e na comparação de validação pareada." loading="lazy">
+          <figcaption>
+            Fluxo de construção dos dados e divisões de teste usadas na avaliação. A supervisão usa o prefixo observado e recibos de geração sintética. Misturas de voz gravada carregam apenas rótulos de presença. Os experimentos focam no teste sintético original e na comparação de validação pareada.
+            <span class="source">Figura 1 do paper · Li et al., arXiv:2610.39828</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">Arquitetura e Metodologia: Joint Supervision</span></h2>
+<p><span class="s" data-s="b2-p0-s0">A base do SpeakerTurn é o CocktailASR-1, um modelo de reconhecimento de fala pré-treinado capaz de transcrever um alvo diretamente de uma mistura de áudio, utilizando uma referência de voz para filtrar as outras fontes.</span> <span class="s" data-s="b2-p0-s1">O CocktailASR-1 suporta saída vazia quando o alvo não está presente, o que é uma propriedade essencial para este trabalho.</span> <span class="s" data-s="b2-p0-s2">Os autores estendem essa interface supervisionando conjuntamente a transcrição do alvo e o estado semântico do turno.</span> <span class="s" data-s="b2-p0-s3">Isso significa que o modelo não aprende apenas a converter áudio em texto, mas também a mapear esse texto para um estado conversacional específico.</span></p><p><span class="s" data-s="b2-p1-s0">A arquitetura do modelo, ilustrada na Figura 2, mantém o caminho acústico congelado (frozen), herdado do CocktailASR-1, e aplica adaptação via LoRA (Low-Rank Adaptation) nas partes do LLM.</span> <span class="s" data-s="b2-p1-s1">LoRA é uma técnica de fine-tuning eficiente que atualiza apenas uma pequena fração dos parâmetros do modelo, preservando o conhecimento prévio enquanto se adapta à tarefa específica.</span> <span class="s" data-s="b2-p1-s2">Existem dois braços de saída: um para o texto alvo e outro para as decisões de turno.</span> <span class="s" data-s="b2-p1-s3">Ambos compartilham a mesma representação acústica congelada, mas utilizam pesos LoRA separados para gerar as saídas.</span></p><p><span class="s" data-s="b2-p2-s0">O modelo é treinado para distinguir cinco estados semânticos de turno para o falante alvo: 1) Completo: o usuário terminou sua contribuição e espera resposta; 2) Incompleto: o usuário ainda está falando ou pausando dentro de uma frase; 3) Backchannel: o usuário está fazendo sons de confirmação (como &#39;uh-huh&#39;) sem contribuir com conteúdo novo; 4) Espera (Wait): o usuário está explicitamente ou implicitamente pedindo tempo ou pausando a interação; 5) Ausência do Alvo: o falante designado não está falando ou não está presente na mistura.</span></p><p><span class="s" data-s="b2-p3-s0">Além dos cinco estados, há uma tarefa separada de detecção de interrupção.</span> <span class="s" data-s="b2-p3-s1">Isso é importante porque uma interrupção não é apenas um estado de turno, mas uma ação ativa de um falante (geralmente o sistema ou outro humano) que corta a fala do alvo.</span> <span class="s" data-s="b2-p3-s2">O modelo deve distinguir entre uma interrupção intencional e outras sobreposições de fala.</span> <span class="s" data-s="b2-p3-s3">A supervisão conjunta força o modelo a vincular as decisões semânticas ao conteúdo correspondente do alvo, em vez de tratar a detecção de turno como uma classificação acústica isolada.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.39828/figure2.webp" alt="Arquitetura do SpeakerTurn com caminho acústico congelado e LoRA treinável. Ambos os braços conjuntos herdam o mesmo caminho acústico congelado e usam pesos LoRA separados para o LLM. O texto alvo e as decisões são saídas geradas; um resumo estruturado é adicionado apenas no braço CoT." loading="lazy">
+          <figcaption>
+            Arquitetura do SpeakerTurn com caminho acústico congelado e LoRA treinável. Ambos os braços conjuntos herdam o mesmo caminho acústico congelado e usam pesos LoRA separados para o LLM. O texto alvo e as decisões são saídas geradas; um resumo estruturado é adicionado apenas no braço CoT.
+            <span class="source">Figura 2 do paper · Li et al., arXiv:2610.39828</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b4-h">Chain-of-Thought (CoT) e Supervisão Estruturada</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Uma das contribuições investigadas no paper é o uso de Chain-of-Thought (CoT) estruturado para melhorar as decisões.</span> <span class="s" data-s="b4-p0-s1">A ideia é que, ao forçar o modelo a representar explicitamente a presença do falante, as pistas semânticas e o contexto do assistente antes de gerar a decisão final, ele possa tomar decisões mais robustas.</span> <span class="s" data-s="b4-p0-s2">No braço CoT, o modelo gera um resumo estruturado intermediário que codifica essas informações.</span> <span class="s" data-s="b4-p0-s3">Isso testa se a supervisão intermediária melhora o raciocínio do modelo, sem assumir que o modelo possui um raciocínio interno fiel ou consciente.</span></p><p><span class="s" data-s="b4-p1-s0">A hipótese por trás do CoT é que a representação explícita de cues (pistas) auxilia o modelo a desambiguar situações complexas.</span> <span class="s" data-s="b4-p1-s1">Por exemplo, se o alvo diz &#39;Espera...&#39; e o interferente fala uma frase completa, o CoT pode ajudar o modelo a registrar que o alvo está em estado de &#39;Espera&#39; e que a fala do interferente é irrelevante para a decisão de turno do alvo.</span> <span class="s" data-s="b4-p1-s2">No entanto, os resultados mostram que essa abordagem tem efeitos mistos.</span> <span class="s" data-s="b4-p1-s3">Embora o CoT melhore a qualidade da transcrição do alvo (reduzindo o erro de caracteres), ele não melhora significativamente a F1 macro da detecção de turno.</span></p><p><span class="s" data-s="b4-p2-s0">Isso sugere que a complexidade adicional de gerar o raciocínio estruturado pode não ser necessária para a tarefa de classificação de turno, ou que o modelo já captura essas informações de forma implícita nos pesos do LoRA.</span> <span class="s" data-s="b4-p2-s1">A separação entre a melhoria na transcrição e a estagnação na detecção de turno destaca a necessidade de avaliar essas métricas separadamente.</span> <span class="s" data-s="b4-p2-s2">Melhorar a precisão do texto não garante que o modelo entenda melhor o estado conversacional do falante.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b5-t">Limitações do Dataset Sintético</span></h3>
+          <p><span class="s" data-s="b5-c-s0">Os experimentos são realizados em um conjunto de testes sintético.</span> <span class="s" data-s="b5-c-s1">Embora isso permita controle preciso sobre sobreposições e rótulos, os resultados podem não generalizar perfeitamente para ambientes reais com ruído acústico complexo, eco e variações de qualidade de microfone.</span> <span class="s" data-s="b5-c-s2">Os autores reconhecem que métodos de construção de diálogos sintéticos têm limites nas anotações geradas e nos limites de observação conhecidos.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b6-h">Resultados e Análise</span></h2>
+<p><span class="s" data-s="b6-p0-s0">No conjunto de testes sintético, o SpeakerTurn atinge uma F1 macro de cinco estados de 0.811 e uma Taxa de Erro de Caracteres (CER) de transcrição do alvo de 4.20%.</span> <span class="s" data-s="b6-p0-s1">Esses números indicam um desempenho sólido na distinção dos estados conversacionais e na recuperação do texto do alvo.</span> <span class="s" data-s="b6-p0-s2">Um ponto forte é a capacidade do modelo de resolver corretamente todos os dez pares de interrupção com troca de referência (reference-swapped interruption pairs).</span> <span class="s" data-s="b6-p0-s3">Isso significa que, mesmo quando a referência de áudio é trocada ou ambígua, o modelo consegue identificar corretamente quem deve responder e se a interrupção é válida.</span></p><p><span class="s" data-s="b6-p1-s0">A análise detalhada revela que o desempenho em transcrição, discriminação de turno e retenção de reconhecimento são distintos.</span> <span class="s" data-s="b6-p1-s1">Um modelo pode ter baixa CER (transcreve bem o alvo) mas falhar em detectar que o alvo ainda está falando (estado incompleto).</span> <span class="s" data-s="b6-p1-s2">Isso é crítico para sistemas de interação em tempo real.</span> <span class="s" data-s="b6-p1-s3">Se o sistema transcreve perfeitamente, mas acha que o turno acabou, ele pode responder prematuramente, interrompendo o usuário.</span></p><p><span class="s" data-s="b6-p2-s0">Os autores comparam configurações de decisão apenas (decision-only) versus configurações com CoT estruturado.</span> <span class="s" data-s="b6-p2-s1">A configuração CoT melhora a transcrição de validação, demonstrando que a representação estruturada ajuda na recuperação do texto.</span> <span class="s" data-s="b6-p2-s2">No entanto, a F1 macro de turno não melhora.</span> <span class="s" data-s="b6-p2-s3">Isso reforça a ideia de que a tarefa de classificação de turno e a tarefa de transcrição, embora relacionadas, exigem otimizações diferentes.</span> <span class="s" data-s="b6-p2-s4">A adição de complexidade para raciocínio estruturado não se traduz em melhorias na tomada de decisão de turno neste cenário.</span></p><p><span class="s" data-s="b6-p3-s0">Outro ponto importante é a diferença de comportamento entre a transcrição em formato joint (conjunta) e o reconhecimento de interface nativa.</span> <span class="s" data-s="b6-p3-s1">O modelo foi projetado para operar em um fluxo contínuo, mas a avaliação mostra que as decisões de turno podem variar dependendo de como o áudio é segmentado ou fornecido ao modelo.</span> <span class="s" data-s="b6-p3-s2">Isso destaca a importância de considerar a interface de entrada e a granularidade temporal na implementação de sistemas reais.</span></p>        <h2><span class="s" data-s="b7-h">Discussão e Implicações para Sistemas de Diálogo</span></h2>
+<p><span class="s" data-s="b7-p0-s0">O trabalho do SpeakerTurn destaca a necessidade de repensar a arquitetura dos sistemas de diálogo multi-falantes.</span> <span class="s" data-s="b7-p0-s1">Em vez de depender de módulos separados para VAD, diarização, ASR e detecção de turno, a abordagem de joint supervision oferece uma maneira unificada de lidar com a ambiguidade.</span> <span class="s" data-s="b7-p0-s2">Ao treinar o modelo para prever o texto e o estado do turno simultaneamente, ele aprende a correlacionar características acústicas e linguísticas específicas do falante alvo.</span></p><p><span class="s" data-s="b7-p1-s0">A distinção entre os cinco estados semânticos é particularmente útil para assistentes que precisam ser polidos e não invasivos.</span> <span class="s" data-s="b7-p1-s1">Saber a diferença entre &#39;incompleto&#39; e &#39;backchannel&#39; permite que o sistema espere adequadamente ou apenas confirme a escuta, sem interromper o fluxo natural da conversa.</span> <span class="s" data-s="b7-p1-s2">A detecção de interrupção separada garante que o sistema possa reagir a intervenções reais sem confundí-las com sobreposições normais.</span></p><p><span class="s" data-s="b7-p2-s0">No entanto, os resultados também servem como um aviso contra a otimização excessiva de uma única métrica.</span> <span class="s" data-s="b7-p2-s1">A melhoria na transcrição com CoT, sem ganho na detecção de turno, mostra que métricas de desempenho de ASR não são proxies válidos para a qualidade da interação conversacional.</span> <span class="s" data-s="b7-p2-s2">Desenvolvedores devem avaliar a detecção de turno e a transcrição separadamente ao adaptar modelos para ambientes multi-falantes.</span></p><p><span class="s" data-s="b7-p3-s0">As limitações do dataset sintético são um ponto de atenção.</span> <span class="s" data-s="b7-p3-s1">Embora o controle experimental seja valioso para isolar variáveis, a generalização para cenários do mundo real requer validação em dados gravados com ruído e variações naturais.</span> <span class="s" data-s="b7-p3-s2">Os autores mencionam que misturas de voz gravada carregam apenas rótulos de presença, o que limita a granularidade da avaliação em dados reais.</span> <span class="s" data-s="b7-p3-s3">Futuros trabalhos podem explorar a transferência do modelo treinado sinteticamente para domínios reais, possivelmente com adaptação adicional.</span></p>        <h2><span class="s" data-s="b8-h">Conclusão</span></h2>
+<p><span class="s" data-s="b8-p0-s0">O SpeakerTurn apresenta uma abordagem robusta para a detecção de turnos semânticos condicionada ao falante em ambientes multi-falantes.</span> <span class="s" data-s="b8-p0-s1">Ao integrar a transcrição do alvo e a classificação de estado do turno em um único framework baseado em LLM, os autores demonstram que é possível distinguir com precisão quando um usuário alvo terminou de falar, mesmo na presença de interferentes.</span> <span class="s" data-s="b8-p0-s2">Os resultados mostram que a atribuição de alvo, a discriminação semântica e a retenção de reconhecimento são tarefas distintas que devem ser avaliadas separadamente.</span></p><p><span class="s" data-s="b8-p1-s0">A investigação sobre a supervisão de Chain-of-Thought estruturado oferece insights valiosos sobre o trade-off entre complexidade do modelo e ganho de desempenho.</span> <span class="s" data-s="b8-p1-s1">Embora o CoT melhore a transcrição, ele não melhora a detecção de turno, sugerindo que a representação implícita pode ser suficiente para essa tarefa.</span> <span class="s" data-s="b8-p1-s2">Este trabalho abre caminho para sistemas de diálogo mais naturais e responsivos, capazes de lidar com a complexidade das conversas humanas em ambientes sociais.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">A completude semântica não define o turno; a identidade do falante é crucial para saber quando responder.</span></li><li><span class="s" data-s="k1">SpeakerTurn adapta o CocktailASR-1 para prever simultaneamente o texto do alvo e seu estado conversacional.</span></li><li><span class="s" data-s="k2">O modelo distingue cinco estados: completo, incompleto, backchannel, espera e ausência do alvo.</span></li><li><span class="s" data-s="k3">A supervisão de raciocínio estruturado (CoT) melhora a transcrição, mas não a precisão da detecção de turno.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.39828" rel="noopener">SpeakerTurn: Target-Speaker Semantic Turn Detection in Multi-Speaker Environments</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.39828" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

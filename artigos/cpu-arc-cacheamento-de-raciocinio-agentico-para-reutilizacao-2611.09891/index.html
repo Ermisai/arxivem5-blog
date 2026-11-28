@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CPU-ARC: Cacheamento de Raciocínio Agêntico para Reutilização Eficiente em CPU — arXiv em 5</title>
+<meta name="description" content="Este paper introduz ARCs, caches executáveis em CPU construídos a partir de traços de raciocínio de LLMs, permitindo reutilizar lógica já validada para novos problemas, reduzindo custos em até 291x sem perder precisão.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CPU-ARC: Cacheamento de Raciocínio Agêntico para Reutilização Eficiente em CPU">
+<meta property="og:description" content="Este paper introduz ARCs, caches executáveis em CPU construídos a partir de traços de raciocínio de LLMs, permitindo reutilizar lógica já validada para novos problemas, reduzindo custos em até 291x sem perder precisão.">
+<meta property="og:image" content="../../assets/papers/2611.09891/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>LLMs</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.09891" rel="noopener">arXiv:2611.09891</a>
+    </div>
+    <h1><span class="s" data-s="t">CPU-ARC: Cacheamento de Raciocínio Agêntico para Reutilização Eficiente em CPU</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Este paper introduz ARCs, caches executáveis em CPU construídos a partir de traços de raciocínio de LLMs, permitindo reutilizar lógica já validada para novos problemas, reduzindo custos em até 291x sem perder precisão.</span></p>
+    <p class="byline">
+      <span>Belcak et al.</span>
+      <span>8 min de leitura</span>
+<span>06/11/2026</span>    </p>
+    <div class="listen" data-article="2611.09891" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=MJ216rX9DWk" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Redundância Computacional em LLMs</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Os modelos de linguagem grandes (LLMs) enfrentam uma ineficiência estrutural fundamental: eles reinventam a roda a cada nova solicitação.</span> <span class="s" data-s="b0-p0-s1">Ao conflar a resolução de tarefas com a execução das soluções, os modelos são forçados a resolver cada problema do zero, mesmo quando a lógica subjacente já foi aplicada anteriormente.</span> <span class="s" data-s="b0-p0-s2">Isso é particularmente problemático em cenários de agentes de IA e software habilitado por IA, onde consultas repetitivas compartilham instruções e planos, variando apenas nos dados de entrada (payloads).</span></p><p><span class="s" data-s="b0-p1-s0">Considere um exemplo simples de um benchmark matemático popular.</span> <span class="s" data-s="b0-p1-s1">A pergunta original pede para encontrar o número de divisores positivos de 196.</span> <span class="s" data-s="b0-p1-s2">Uma versão reescrita da mesma pergunta mantém os parâmetros numéricos, mas altera a redação.</span> <span class="s" data-s="b0-p1-s3">Outra versão reparametrizada altera o número para 144, mantendo a estrutura da pergunta.</span> <span class="s" data-s="b0-p1-s4">Em todos os casos, o raciocínio necessário — fatoração prima e aplicação da fórmula de contagem de divisores — permanece idêntico.</span> <span class="s" data-s="b0-p1-s5">No entanto, um LLM padrão refaz todo o processo de pensamento para cada variação, desperdiçando recursos computacionais significativos.</span></p><p><span class="s" data-s="b0-p2-s0">Essa redundância não é apenas um custo desnecessário; ela impede a escalabilidade eficiente de sistemas que dependem de raciocínio complexo.</span> <span class="s" data-s="b0-p2-s1">Métodos existentes de cacheamento em nível de sistema (SLC) tentam mitigar isso reconhecendo padrões repetitivos em conversas de LLMs.</span> <span class="s" data-s="b0-p2-s2">Ao contrário do cacheamento dentro de uma única instância de inferência, os SLCs são mantidos em nível de sistema, permitindo que entradas de cache sejam compartilhadas entre todas as instâncias de inferência e reutilizadas além da instância original onde foram criadas.</span></p><p><span class="s" data-s="b0-p3-s0">Os benefícios potenciais dos SLCs são claros: redução de custo e latência, melhoria na correza através de revisão humana ou por agentes juízes, e maior explicabilidade, permitindo que humanos inspecionem o processo de raciocínio.</span> <span class="s" data-s="b0-p3-s1">No entanto, o desafio reside em garantir que o cache seja robusto a pequenas perturbações nas consultas, que a resposta ao acerto do cache (cache hit) seja correta e que o custo de construção e manutenção seja viável.</span></p>        <h2><span class="s" data-s="b1-h">Limitações dos Caches Monolíticos e a Abordagem Agêntica</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Os trabalhos anteriores sobre cacheamento em nível de sistema geralmente se enquadram em duas categorias: cacheamento monolítico e cacheamento baseado em embeddings.</span> <span class="s" data-s="b1-p0-s1">O cacheamento monolítico, como o prefix cache, armazena tokens ou embeddings parciais.</span> <span class="s" data-s="b1-p0-s2">Embora eficiente para completions repetitivas, ele não captura a lógica semântica ou o raciocínio abstrato por trás da resposta.</span> <span class="s" data-s="b1-p0-s3">Se a entrada mudar ligeiramente, mesmo que a lógica seja a mesma, o cache pode não ser acionado.</span></p><p><span class="s" data-s="b1-p1-s0">O cacheamento baseado em embeddings tenta superar isso mapeando consultas para vetores de similaridade.</span> <span class="s" data-s="b1-p1-s1">No entanto, esses métodos muitas vezes falham em garantir a correza exata da resposta, pois a similaridade vetorial não implica equivalência lógica.</span> <span class="s" data-s="b1-p1-s2">Além disso, eles carecem de explicabilidade direta, pois é difícil inspecionar o que exatamente está sendo armazenado e por que uma determinada resposta foi retornada.</span></p><p><span class="s" data-s="b1-p2-s0">O paper propõe uma nova abordagem: Agentic Reasoning Caching (ARC).</span> <span class="s" data-s="b1-p2-s1">Em vez de armazenar tokens ou embeddings, o CPU-ARC constrói caches executáveis em CPU a partir de traços de raciocínio de LLMs.</span> <span class="s" data-s="b1-p2-s2">A ideia central é que, uma vez que uma tarefa foi raciocinada, a aplicação de sua solução a uma nova instância de problema pode ser feita de forma muito eficiente e com pouco envolvimento de modelos de linguagem.</span> <span class="s" data-s="b1-p2-s3">Os ARCs são projetados para serem robustos, explicáveis e continuamente treináveis.</span></p><p><span class="s" data-s="b1-p3-s0">Essa abordagem separa explicitamente o raciocínio da execução.</span> <span class="s" data-s="b1-p3-s1">O LLM é usado apenas uma vez para gerar o traço de raciocínio original.</span> <span class="s" data-s="b1-p3-s2">Esse traço é então compilado em uma função executável em CPU.</span> <span class="s" data-s="b1-p3-s3">Para novas consultas, o sistema verifica se a nova entrada se enquadra na classe de problemas coberta pelo cache.</span> <span class="s" data-s="b1-p3-s4">Se sim, a função compilada é executada diretamente, eliminando a necessidade de invocar o LLM novamente para a maioria das tarefas.</span></p>        <h2><span class="s" data-s="b2-h">Como Funciona o CPU-ARC: Da Lógica ao Código</span></h2>
+<p><span class="s" data-s="b2-p0-s0">O mecanismo do CPU-ARC envolve três etapas principais: construção, compilação e invocação.</span> <span class="s" data-s="b2-p0-s1">Na fase de construção, um LLM fonte (S) é solicitado a resolver um problema original (q(o)).</span> <span class="s" data-s="b2-p0-s2">O LLM gera um traço de raciocínio detalhado, incluindo a decomposição do problema, as etapas lógicas e a resposta final.</span> <span class="s" data-s="b2-p0-s3">Este traço é então processado por um construtor (B), que extrai as funções semânticas subjacentes.</span></p><p><span class="s" data-s="b2-p1-s0">A compilação é o coração do método.</span> <span class="s" data-s="b2-p1-s1">O construtor converte as funções semânticas extraídas do traço de raciocínio em código executável em CPU.</span> <span class="s" data-s="b2-p1-s2">Isso envolve identificar as variáveis, as operações matemáticas ou lógicas e as regras de aplicação.</span> <span class="s" data-s="b2-p1-s3">O resultado é um cache entry (ARC) que representa uma classe de problemas, não apenas uma instância específica.</span> <span class="s" data-s="b2-p1-s4">Por exemplo, para o problema dos divisores de 196, o ARC extrai a lógica de fatoração prima e a fórmula de contagem, compilando-a em uma função genérica que aceita qualquer número como entrada.</span></p><p><span class="s" data-s="b2-p2-s0">Na fase de invocação, quando uma nova consulta chega, o sistema primeiro tenta correspondê-la com os ARCs existentes.</span> <span class="s" data-s="b2-p2-s1">Isso é feito através de uma verificação de similaridade estrutural ou lógica, não apenas de palavras-chave.</span> <span class="s" data-s="b2-p2-s2">Se houver uma correspondência, a função compilada é executada com os novos parâmetros.</span> <span class="s" data-s="b2-p2-s3">Se não houver correspondência, o sistema pode recorrer ao LLM fonte para gerar um novo traço de raciocínio, que então pode ser compilado e adicionado ao cache para uso futuro.</span></p><p><span class="s" data-s="b2-p3-s0">Um aspecto crucial é a robustez a perturbações.</span> <span class="s" data-s="b2-p3-s1">Os ARCs são projetados para generalizar além da instância de problema única usada durante a construção.</span> <span class="s" data-s="b2-p3-s2">Eles podem lidar com variações na redação (testes fraseais), variações nos valores dos parâmetros (testes paramétricos) e combinações de ambas (testes combinados).</span> <span class="s" data-s="b2-p3-s3">Isso garante que o cache seja útil em cenários do mundo real, onde as consultas podem variar ligeiramente em forma e conteúdo.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b3-t">A Vantagem da Execução em CPU</span></h3>
+          <p><span class="s" data-s="b3-c-s0">Ao compilar o raciocínio em código executável em CPU, o CPU-ARC evita os custos elevados de inferência de LLMs.</span> <span class="s" data-s="b3-c-s1">A execução em CPU é determinística, rápida e barata, permitindo que o sistema escalone horizontalmente sem a necessidade de GPUs caras para cada consulta.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b4-h">Avaliação: Correta, Robusta e Barata</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Os autores avaliam os caches agênticos em três eixos principais: correza, robustez a perturbações e custo.</span> <span class="s" data-s="b4-p0-s1">Para medir a correza, eles usam duas métricas: alinhamento com o rótulo dourado (golden label alignment) e alinhamento com a resposta do transcript (transcript answer alignment).</span> <span class="s" data-s="b4-p0-s2">O primeiro mede a fração de problemas para os quais o cache produz a resposta correta, conforme definido pelo benchmark.</span> <span class="s" data-s="b4-p0-s3">O segundo mede a fração de problemas para os quais a resposta do cache é semanticamente equivalente à resposta do modelo fonte.</span></p><p><span class="s" data-s="b4-p1-s0">Um alinhamento próximo entre o modelo fonte e o cache em ambas as métricas indica que o cache reproduz fielmente o raciocínio do modelo fonte.</span> <span class="s" data-s="b4-p1-s1">Uma lacuna significativa, onde o cache tem desempenho inferior ao modelo fonte em relação ao rótulo dourado, sinalizaria que a construção do cache perdeu informações.</span> <span class="s" data-s="b4-p1-s2">Os autores destacam que, como o raciocínio do modelo fonte pode às vezes estar em desacordo com os rótulos dourados, analisar ambas as métricas em conjunto permite entender se o modelo favorece a verdade fundamental ou seu próprio raciocínio.</span></p><p><span class="s" data-s="b4-p2-s0">Para avaliar a robustez a perturbações, os testes são aplicados apenas aos problemas para os quais o cache já produz a resposta correta.</span> <span class="s" data-s="b4-p2-s1">Isso garante que a substância sendo perturbada é conhecida por ser corretamente manipulada pelo cache.</span> <span class="s" data-s="b4-p2-s2">Os testes incluem variações fraseais, paramétricas e combinadas.</span> <span class="s" data-s="b4-p2-s3">O objetivo é verificar se o cache generaliza bem além da instância original, mesmo sem ver a nova consulta durante a construção.</span></p><p><span class="s" data-s="b4-p3-s0">O custo é medido em três figuras: o custo do modelo fonte para resolver o problema original, o custo de construção do entry de cache e o custo de invocação do cache.</span> <span class="s" data-s="b4-p3-s1">A razão entre o custo de invocação e o custo do modelo fonte quantifica a economia por invocação.</span> <span class="s" data-s="b4-p3-s2">O custo de construção é um overhead único, amortizado ao longo de múltiplas invocações.</span> <span class="s" data-s="b4-p3-s3">Os autores relatam que o CPU-ARC é de 16 a 291 vezes mais barato para invocar do que o modelo fonte, dependendo do benchmark e da complexidade do problema.</span></p>        <h2><span class="s" data-s="b5-h">Resultados em Benchmarks Matemáticos e Científicos</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os experimentos foram realizados em uma variedade de benchmarks matemáticos e científicos difíceis.</span> <span class="s" data-s="b5-p0-s1">Os resultados mostram que os ARCs apresentam desempenho equivalente ao dos LLMs de ponta (frontier LLMs) em uma ampla gama de tarefas.</span> <span class="s" data-s="b5-p0-s2">Isso é particularmente impressionante, considerando que o cache é executado em CPU e não depende da inferência do LLM para cada consulta.</span></p><p><span class="s" data-s="b5-p1-s0">Em tarefas de física, como as do benchmark SciBench, o CPU-ARC demonstrou capacidade de generalizar para problemas que envolvem leis físicas complexas, como a lei dos gases ideais.</span> <span class="s" data-s="b5-p1-s1">O cache extraiu a lógica subjacente da lei, compilou-a em uma função e foi capaz de resolver variações do problema com diferentes parâmetros de entrada, mantendo a precisão.</span></p><p><span class="s" data-s="b5-p2-s0">Os resultados também destacam a robustez do sistema.</span> <span class="s" data-s="b5-p2-s1">Mesmo com perturbações significativas na redação ou nos parâmetros dos problemas, os ARCs mantiveram um alto nível de correza.</span> <span class="s" data-s="b5-p2-s2">Isso sugere que a extração de funções semânticas e a compilação em código executável são métodos eficazes para capturar a essência lógica dos problemas, independentemente de como eles são apresentados.</span></p><p><span class="s" data-s="b5-p3-s0">Além da correza e robustez, o custo é um diferencial competitivo.</span> <span class="s" data-s="b5-p3-s1">A economia de 16 a 291 vezes no custo de invocação torna o CPU-ARC uma opção viável para aplicações em larga escala onde o raciocínio repetitivo é comum.</span> <span class="s" data-s="b5-p3-s2">O overhead de construção é único e, uma vez amortizado, o custo marginal por consulta é drasticamente reduzido.</span></p>        <h2><span class="s" data-s="b6-h">Limitações e Considerações Finais</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Apesar dos resultados promissores, o paper reconhece algumas limitações.</span> <span class="s" data-s="b6-p0-s1">A construção do cache depende da qualidade do traço de raciocínio gerado pelo modelo fonte.</span> <span class="s" data-s="b6-p0-s2">Se o modelo fonte gerar um raciocínio incorreto ou incompleto, o cache resultante também será defeituoso.</span> <span class="s" data-s="b6-p0-s3">Portanto, a precisão do cache está intrinsecamente ligada à precisão do modelo fonte.</span></p><p><span class="s" data-s="b6-p1-s0">Além disso, a generalização do cache é limitada pela classe de problemas que ele consegue extrair.</span> <span class="s" data-s="b6-p1-s1">Se uma nova consulta exigir um tipo de raciocínio fundamentalmente diferente do que foi armazenado no cache, o sistema não poderá reutilizar o entry existente.</span> <span class="s" data-s="b6-p1-s2">Isso requer um mecanismo de correspondência robusto para identificar quando um novo raciocínio é necessário.</span></p><p><span class="s" data-s="b6-p2-s0">Os autores também mencionam que o custo de construção do cache pode ser significativo para problemas muito complexos, onde a extração de funções semânticas e a compilação são mais difíceis.</span> <span class="s" data-s="b6-p2-s1">No entanto, esse custo é único e é compensado pelas economias de longo prazo nas invocações subsequentes.</span></p><p><span class="s" data-s="b6-p3-s0">Em resumo, o CPU-ARC representa um avanço significativo na eficiência de sistemas de IA baseados em LLMs.</span> <span class="s" data-s="b6-p3-s1">Ao separar o raciocínio da execução e aproveitar a capacidade de execução em CPU, o método oferece uma maneira escalável e econômica de reutilizar conhecimento já adquirido.</span> <span class="s" data-s="b6-p3-s2">Isso abre novas possibilidades para aplicações de IA em larga escala, onde a eficiência computacional é crítica.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">LLMs repetem trabalho desnecessário; o CPU-ARC extrai a lógica abstrata para reutilizá-la em problemas similares.</span></li><li><span class="s" data-s="k1">Os ARCs são caches robustos, explicáveis e treináveis continuamente, executados inteiramente em CPU.</span></li><li><span class="s" data-s="k2">Avaliações mostram desempenho equivalente a LLMs de ponta em tarefas matemáticas e científicas.</span></li><li><span class="s" data-s="k3">O custo de invocação é 16 a 291 vezes menor que o modelo fonte, com overhead de construção único.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.09891" rel="noopener">CPU-ARC: Agentic Reasoning Caching for on-CPU Reasoning Reuse</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.09891" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

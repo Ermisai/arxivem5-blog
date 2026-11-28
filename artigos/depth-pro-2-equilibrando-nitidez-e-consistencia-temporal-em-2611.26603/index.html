@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Depth Pro 2: Equilibrando nitidez e consistência temporal em profundidade monocular — arXiv em 5</title>
+<meta name="description" content="O Depth Pro 2 resolve o trade-off clássico entre detalhes nítidos e estabilidade temporal em estimativa de profundidade, usando um transformer multi-view que opera em resolução nativa.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Depth Pro 2: Equilibrando nitidez e consistência temporal em profundidade monocular">
+<meta property="og:description" content="O Depth Pro 2 resolve o trade-off clássico entre detalhes nítidos e estabilidade temporal em estimativa de profundidade, usando um transformer multi-view que opera em resolução nativa.">
+<meta property="og:image" content="../../assets/papers/2611.26603/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Imagem</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.26603" rel="noopener">arXiv:2611.26603</a>
+    </div>
+    <h1><span class="s" data-s="t">Depth Pro 2: Equilibrando nitidez e consistência temporal em profundidade monocular</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">O Depth Pro 2 resolve o trade-off clássico entre detalhes nítidos e estabilidade temporal em estimativa de profundidade, usando um transformer multi-view que opera em resolução nativa.</span></p>
+    <p class="byline">
+      <span>Hu et al.</span>
+      <span>7 min de leitura</span>
+<span>19/11/2026</span>    </p>
+    <div class="listen" data-article="2611.26603" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=MTFb7Otylk8" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O dilema da profundidade monocular: nitidez versus estabilidade</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Estimar profundidade densa a partir de uma única câmera (monocular) é uma tarefa fundamental para visão computacional, mas historicamente esbarra em um compromisso difícil.</span> <span class="s" data-s="b0-p0-s1">Métodos projetados para imagens estáticas tendem a produzir mapas de profundidade com bordas extremamente nítidas, preservando detalhes finos como pelos ou texturas complexas.</span> <span class="s" data-s="b0-p0-s2">No entanto, quando aplicados a vídeos, esses métodos falham em manter a consistência temporal: a profundidade estimada para um mesmo objeto flutua frame a frame, criando um efeito de &#34;piscar&#34; visualmente perturbador.</span></p><p><span class="s" data-s="b0-p1-s0">Por outro lado, métodos otimizados para vídeos priorizam a consistência temporal, usando atenção temporal sobre múltiplos frames ou priors de difusão.</span> <span class="s" data-s="b0-p1-s1">Embora estabilizem a cena no tempo, eles frequentemente operam em resoluções reduzidas ou aplicam suavizações agressivas que borrão as bordas dos objetos.</span> <span class="s" data-s="b0-p1-s2">A análise dos autores mostra que existe uma dicotomia clara: métodos de imagem ficam no extremo da nitidez com instabilidade temporal, enquanto métodos de vídeo ficam na consistência com perda de detalhe.</span></p><p><span class="s" data-s="b0-p2-s0">Este trade-off limita aplicações práticas que exigem ambos os atributos simultaneamente, como a criação de efeitos de desfoque de fundo (bokeh) sintético em vídeos de alta qualidade ou a navegação autônoma em tempo real.</span> <span class="s" data-s="b0-p2-s1">Para separar corretamente um sujeito do fundo, é necessário um mapa de profundidade preciso, nítido nas transições e estável ao longo do tempo.</span> <span class="s" data-s="b0-p2-s2">É neste espaço vazio que o Depth Pro 2, da Apple, se posiciona.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.26603/figure1.webp" alt="Comparação visual: InfiniDepth mantém detalhes mas perde consistência; π3 é estável mas borrado. O Depth Pro 2 alcança ambos." loading="lazy">
+          <figcaption>
+            Comparação visual: InfiniDepth mantém detalhes mas perde consistência; π3 é estável mas borrado. O Depth Pro 2 alcança ambos.
+            <span class="source">Figura 1 do paper · Hu et al., arXiv:2611.26603</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">A arquitetura: Transformer Multi-View em Resolução Nativa</span></h2>
+<p><span class="s" data-s="b2-p0-s0">A inovação central do Depth Pro 2 não é apenas uma melhoria incremental, mas uma reavaliação da arquitetura para lidar com variabilidade de entrada.</span> <span class="s" data-s="b2-p0-s1">O modelo é um transformer multi-view leve que ingere um número flexível de frames (de 1 a 32) e os processa conjuntamente.</span> <span class="s" data-s="b2-p0-s2">Ao invés de tratar cada frame isoladamente ou depender de mecanismos temporais complexos e pesados, o modelo usa atenção cruzada (cross-attention) para alinhar as previsões entre frames.</span></p><p><span class="s" data-s="b2-p1-s0">A arquitetura inicia com um encoder baseado em ViT (Vision Transformer), pré-treinado para processamento de imagem única, mas adaptado para o contexto multi-frame.</span> <span class="s" data-s="b2-p1-s1">Os primeiros terços dos blocos do transformer utilizam apenas auto-atendimento (self-attention) dentro do mesmo frame para capturar características de baixo nível de forma eficiente.</span> <span class="s" data-s="b2-p1-s2">Nos dois terços restantes, o modelo alterna entre auto-atendimento intra-frame e atenção inter-frame.</span> <span class="s" data-s="b2-p1-s3">Isso permite que o modelo compartilhe informação espacial entre frames sem perder a capacidade de processar imagens únicas.</span></p><p><span class="s" data-s="b2-p2-s0">Um detalhe crucial de design é a invariância à permutação de frames.</span> <span class="s" data-s="b2-p2-s1">O modelo não codifica a ordem temporal dos frames na posição dos tokens.</span> <span class="s" data-s="b2-p2-s2">Isso torna a rede equivariante, permitindo que ela processe qualquer número de frames e reutilize pesos de checkpoints pré-treinados em imagens sem necessidade de treinar novos blocos para o contexto de vídeo.</span> <span class="s" data-s="b2-p2-s3">Isso simplifica o treinamento e aumenta a robustez.</span></p>        <h2><span class="s" data-s="b3-h">Preservando detalhes: Processamento em Resolução Nativa</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Para combater o borramento de bordas, o Depth Pro 2 opera na resolução nativa da imagem de entrada.</span> <span class="s" data-s="b3-p0-s1">Muitos métodos anteriores reduziam a resolução para economizar memória ou computação, o que inevitavelmente suavizava detalhes finos.</span> <span class="s" data-s="b3-p0-s2">O Depth Pro 2 inicializa seu transformer a partir dos pesos do DINOv3, um modelo específico para gerar características densas e de alta resolução.</span></p><p><span class="s" data-s="b3-p1-s0">As imagens são divididas em patches de 16x16 pixels, transformados em tokens.</span> <span class="s" data-s="b3-p1-s1">Para codificar a posição espacial desses tokens, os autores usam embeddings rotatórios 2D (RoPE).</span> <span class="s" data-s="b3-p1-s2">Uma escolha importante foi normalizar as coordenadas dividindo pelo lado mais longo da imagem, preservando a proporção (aspect ratio).</span> <span class="s" data-s="b3-p1-s3">Normalizar por cada eixo independentemente descartaria informações sobre a forma da imagem, o que é prejudicial para a precisão geométrica.</span></p><p><span class="s" data-s="b3-p2-s0">O decoder utilizado é o DPT (Dense Prediction Transformer), que extrai tokens em diferentes níveis de profundidade do transformer, monta mapas de características em resoluções variadas e os projeta para uma dimensão de canal comum.</span> <span class="s" data-s="b3-p2-s1">Isso permite que o modelo capture contextos globais e locais simultaneamente, essencial para prever mapas de profundidade densos e precisos.</span></p>        <h2><span class="s" data-s="b4-h">Da profundidade relativa à métrica: o papel da distância focal</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Um dos grandes desafios da estimativa monocular é a escala.</span> <span class="s" data-s="b4-p0-s1">Redes neurais tendem a prever profundidade relativa (qual objeto está mais perto do que outro), mas não a distância absoluta em metros.</span> <span class="s" data-s="b4-p0-s2">O Depth Pro 2 aborda isso predizendo profundidade inversa normalizada pela distância focal da câmera.</span> <span class="s" data-s="b4-p0-s3">Isso significa que a rede aprende a geometria da cena em relação ao campo de visão (FOV) do sensor.</span></p><p><span class="s" data-s="b4-p1-s0">Para recuperar a profundidade métrica real (em metros), o modelo precisa da distância focal.</span> <span class="s" data-s="b4-p1-s1">O Depth Pro 2 inclui um estimador leve de campo de visão que processa as imagens de entrada para prever o FOV, convertendo-o em distância focal.</span> <span class="s" data-s="b4-p1-s2">Se os dados intrínsecos da câmera (EXIF) estiverem disponíveis, o modelo os utiliza diretamente, ignorando o estimador.</span> <span class="s" data-s="b4-p1-s3">Essa abordagem híbrida garante que o modelo seja útil tanto em cenários com metadados completos quanto em situações onde a informação da câmera deve ser inferida.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.26603/figure3.webp" alt="Arquitetura do Depth Pro 2: Transformer multi-view processa frames juntos e um decoder DPT gera mapas de profundidade inversa." loading="lazy">
+          <figcaption>
+            Arquitetura do Depth Pro 2: Transformer multi-view processa frames juntos e um decoder DPT gera mapas de profundidade inversa.
+            <span class="source">Figura 3 do paper · Hu et al., arXiv:2611.26603</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b6-h">Treinamento simplificado: um único currículo</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Muitos métodos de estado da arte utilizam currículos de treinamento complexos e multi-etapas, alternando entre datasets de imagem e vídeo em fases distintas.</span> <span class="s" data-s="b6-p0-s1">Os autores do Depth Pro 2 adotam uma abordagem mais direta: treinam uma única rede em clipes de 1 a 32 frames, misturando datasets de imagem única, vídeo e visão multi-ângulo.</span></p><p><span class="s" data-s="b6-p1-s0">Ao treinar com imagens únicas, o modelo aprende a inferir a escala métrica a partir de um único frame, aproveitando a informação da distância focal.</span> <span class="s" data-s="b6-p1-s1">Ao treinar com vídeos, ele aprende a minimizar a flutuação temporal através de uma perda de consistência temporal.</span> <span class="s" data-s="b6-p1-s2">Essa mistura permite que o modelo aprenda a generalizar para ambos os domínios sem a necessidade de ajustes manuais complexos ou re-treinamento parcial.</span> <span class="s" data-s="b6-p1-s3">A eficiência do treinamento é um benefício colateral importante desta arquitetura unificada.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b7-t">Eficiência Computacional</span></h3>
+          <p><span class="s" data-s="b7-c-s0">O Depth Pro 2-S processa vídeo 1080p em streaming a 53 fps em uma única GPU.</span> <span class="s" data-s="b7-c-s1">O modelo maior, Depth Pro 2-H+, opera a 8 fps, estabelecendo um novo estado da arte em precisão, nitidez e consistência.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b8-h">Resultados: Rompendo a fronteira de Pareto</span></h2>
+<p><span class="s" data-s="b8-p0-s0">A avaliação do Depth Pro 2 foi realizada em configurações zero-shot, testando o modelo em datasets que não foram usados no treinamento.</span> <span class="s" data-s="b8-p0-s1">Os datasets incluem iBims, Middlebury, KITTI, Sintel e Spring, entre outros.</span> <span class="s" data-s="b8-p0-s2">A métrica de precisão métrica (delta1) mostra que o Depth Pro 2 lidera em comparação com métodos de imagem única e de vídeo, tanto com intrínsecos conhecidos quanto estimados.</span></p><p><span class="s" data-s="b8-p1-s0">Para nitidez de bordas, os autores usam a pontuação F1 baseada em bordas.</span> <span class="s" data-s="b8-p1-s1">O Depth Pro 2 alcança as melhores pontuações em vários datasets, superando métodos como InfiniDepth que são conhecidos por sua nitidez.</span> <span class="s" data-s="b8-p1-s2">Isso confirma que operar em resolução nativa e usar o decoder DPT eficazmente preserva os detalhes finos.</span></p><p><span class="s" data-s="b8-p2-s0">A consistência temporal foi medida através do jitter (flutuação) em sequências de vídeo.</span> <span class="s" data-s="b8-p2-s1">O Depth Pro 2 apresenta jitter significativamente menor que métodos de imagem única, rivalizando ou superando métodos de vídeo dedicados.</span> <span class="s" data-s="b8-p2-s2">O gráfico de nitidez versus consistência temporal mostra o Depth Pro 2 posicionado no canto superior esquerdo (alta nitidez, baixo jitter), enquanto métodos anteriores se espalham ao longo de uma linha de compromisso.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.26603/figure2.webp" alt="Gráfico de dispersão: Depth Pro 2 domina a região de alta nitidez e alta consistência temporal, superando métodos de imagem e vídeo." loading="lazy">
+          <figcaption>
+            Gráfico de dispersão: Depth Pro 2 domina a região de alta nitidez e alta consistência temporal, superando métodos de imagem e vídeo.
+            <span class="source">Figura 2 do paper · Hu et al., arXiv:2611.26603</span>
+          </figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="../../assets/papers/2611.26603/table3.webp" alt="Tabela de resultados: Depth Pro 2-H+ lidera em precisão métrica e consistência temporal em vídeos, com menor rank médio." loading="lazy">
+          <figcaption>
+            Tabela de resultados: Depth Pro 2-H+ lidera em precisão métrica e consistência temporal em vídeos, com menor rank médio.
+            <span class="source">Tabela 3 do paper · Hu et al., arXiv:2611.26603</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b11-h">Limitações e considerações práticas</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Apesar dos resultados impressionantes, é importante notar que o modelo depende da qualidade da estimativa da distância focal quando os dados EXIF não estão disponíveis.</span> <span class="s" data-s="b11-p0-s1">Erros na estimativa do FOV podem levar a erros de escala na profundidade métrica.</span> <span class="s" data-s="b11-p0-s2">Além disso, embora o modelo seja mais eficiente que métodos baseados em difusão, o processamento multi-view ainda consome mais recursos que métodos de imagem única, especialmente para o modelo H+ em vídeos longos.</span></p><p><span class="s" data-s="b11-p1-s0">O modelo foi avaliado principalmente em datasets com ground truth denso e de alta qualidade.</span> <span class="s" data-s="b11-p1-s1">Cenários extremos, como movimentos muito rápidos com borrão de movimento (motion blur) severo ou iluminação muito baixa, podem desafiar a robustez do modelo, embora a arquitetura de atenção multi-view ajude a mitigar ruídos temporais.</span> <span class="s" data-s="b11-p1-s2">A generalização para domínios muito diferentes dos dados de treinamento (como imagens médicas ou satélite) não foi explorada em detalhe neste trabalho.</span></p>        <h2><span class="s" data-s="b12-h">Conclusão</span></h2>
+<p><span class="s" data-s="b12-p0-s0">O Depth Pro 2 representa um avanço significativo na estimativa de profundidade monocular ao eliminar o trade-off entre nitidez e consistência temporal.</span> <span class="s" data-s="b12-p0-s1">Ao processar imagens e vídeos em resolução nativa com uma arquitetura transformer multi-view unificada, os autores da Apple demonstraram que é possível alcançar alta precisão métrica, bordas nítidas e estabilidade temporal simultaneamente.</span></p><p><span class="s" data-s="b12-p1-s0">A liberação de uma família de modelos, desde o leve S até o poderoso H+, oferece opções para diferentes requisitos de latência e qualidade.</span> <span class="s" data-s="b12-p1-s1">Isso torna o Depth Pro 2 uma ferramenta valiosa para aplicações que vão desde edição de vídeo criativa até percepção em robótica e realidade aumentada, onde a precisão geométrica e a fluidez temporal são críticas.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">O Depth Pro 2 unifica estimativa de profundidade para imagens e vídeos em uma única arquitetura escalável.</span></li><li><span class="s" data-s="k1">A chave é processar frames juntos em resolução nativa, evitando o borramento típico de métodos temporais.</span></li><li><span class="s" data-s="k2">O modelo prediz profundidade inversa normalizada pela distância focal, recuperando escala métrica com precisão.</span></li><li><span class="s" data-s="k3">Define uma nova fronteira de Pareto entre precisão métrica, nitidez de bordas e consistência temporal.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.26603" rel="noopener">Depth Pro 2: Sharp and Temporally Consistent Metric Monocular Depth</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.26603" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

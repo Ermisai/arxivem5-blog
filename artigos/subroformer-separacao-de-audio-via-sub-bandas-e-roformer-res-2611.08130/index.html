@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SubRoformer: Separação de Áudio via Sub-bandas e RoFormer Residual — arXiv em 5</title>
+<meta name="description" content="Uma arquitetura híbrida que combina análise em sub-bandas de baixa taxa com Transformers axiais para separar instrumentos musicais com alta fidelidade e eficiência computacional.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SubRoformer: Separação de Áudio via Sub-bandas e RoFormer Residual">
+<meta property="og:description" content="Uma arquitetura híbrida que combina análise em sub-bandas de baixa taxa com Transformers axiais para separar instrumentos musicais com alta fidelidade e eficiência computacional.">
+<meta property="og:image" content="../../assets/papers/2611.08130/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Áudio</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.08130" rel="noopener">arXiv:2611.08130</a>
+    </div>
+    <h1><span class="s" data-s="t">SubRoformer: Separação de Áudio via Sub-bandas e RoFormer Residual</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Uma arquitetura híbrida que combina análise em sub-bandas de baixa taxa com Transformers axiais para separar instrumentos musicais com alta fidelidade e eficiência computacional.</span></p>
+    <p class="byline">
+      <span>Wu et al.</span>
+      <span>8 min de leitura</span>
+<span>05/11/2026</span>    </p>
+    <div class="listen" data-article="2611.08130" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=V5GImpLjD9Q" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Desafio da Separação de Fontes Musicais</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A separação de fontes musicais (MSS) é o problema de isolar componentes individuais — como vocais, baixo, bateria e outros instrumentos — a partir de uma gravação misturada.</span> <span class="s" data-s="b0-p0-s1">Esse processo é fundamental para aplicações que vão desde remixagem e restauração de áudio até análise de informação musical e geração de conteúdo.</span> <span class="s" data-s="b0-p0-s2">No entanto, a tarefa é inerentemente difícil: instrumentos diferentes frequentemente se sobrepõem tanto no tempo quanto na frequência, e suas características sonoras variam drasticamente com o tom, a articulação e as condições de gravação.</span></p><p><span class="s" data-s="b0-p1-s0">Métodos tradicionais, baseados em análise de cena auditiva ou fatoração matricial, dependem de suposições como independência de fonte ou harmônicos, que nem sempre se sustentam em gravações reais.</span> <span class="s" data-s="b0-p1-s1">A era das redes neurais supervisionadas trouxe avanços significativos, mas exige pares de dados (mistura e stems isolados) que são escassos.</span> <span class="s" data-s="b0-p1-s2">Além disso, há um trade-off constante entre a necessidade de capturar detalhes acústicos finos (como transientes e fase) e a limitação de comprimento de sequência que os modelos de contexto longo, como Transformers, podem processar eficientemente.</span></p><p><span class="s" data-s="b0-p2-s0">Sistemas existentes operam predominantemente em dois formatos: formas de onda brutas ou espectrogramas de banda larga.</span> <span class="s" data-s="b0-p2-s1">Entradas em forma de onda contêm um número massivo de amostras, exigindo encoders aprendidos para compressão.</span> <span class="s" data-s="b0-p2-s2">Já os sistemas baseados em STFT (Short-Time Fourier Transform) expõem a estrutura de frequência em uma grade comum, mas impõem um compromisso fixo de resolução tempo-frequência para todas as faixas.</span> <span class="s" data-s="b0-p2-s3">O SubRoformer propõe uma terceira via, combinando a análise em sub-bandas com uma arquitetura Transformer residual otimizada para lidar com essa complexidade.</span></p><p><span class="s" data-s="b0-p3-s0">Os autores, Chunyat Wu, Chuang Ding, Paris Smaragdis e Qiuqiang Kong, provenientes do Chinese University of Hong Kong, Moonstep AI e MIT, apresentam o SubRoformer como uma arquitetura que decompõe a mistura em sinais localizados em frequência e de menor taxa.</span> <span class="s" data-s="b0-p3-s1">O objetivo é permitir que o modelo de separação foque em relações temporais e cruzadas entre bandas, sem ser sobrecarregado pela resolução de amostragem original do áudio.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.08130/figure1.webp" alt="Visão geral do SubRoformer: o frontend fixo converte a mistura em sub-bandas demoduladas e decimadas; características complexas locais são processadas por blocos de taxa fina e um RoFormer axial com patches temporais; o caminho inverso interpola, remodula e soma as sub-bandas estimadas." loading="lazy">
+          <figcaption>
+            Visão geral do SubRoformer: o frontend fixo converte a mistura em sub-bandas demoduladas e decimadas; características complexas locais são processadas por blocos de taxa fina e um RoFormer axial com patches temporais; o caminho inverso interpola, remodula e soma as sub-bandas estimadas.
+            <span class="source">Figura 1 do paper · Wu et al., arXiv:2611.08130</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">Arquitetura: Frontend de Sub-bandas e Separação Axial</span></h2>
+<p><span class="s" data-s="b2-p0-s0">O cerne do SubRoformer reside em sua estratégia de pré-processamento e separação.</span> <span class="s" data-s="b2-p0-s1">O frontend converte a entrada analítica (forma de onda estéreo) em um banco de 128 sub-bandas sobrepostas.</span> <span class="s" data-s="b2-p0-s2">Diferente de métodos que usam apenas escalas mel, o SubRoformer utiliza uma escala mel para as bandas de baixa frequência e uma escala linear com intervalos de 390 Hz para as altas frequências.</span> <span class="s" data-s="b2-p0-s3">Essa escolha visa capturar melhor a densidade harmônica nas baixas frequências enquanto mantém resolução suficiente para os agudos.</span></p><p><span class="s" data-s="b2-p1-s0">Após a análise, cada sub-banda é demodulada e decimada por um fator de 60, resultando em um sinal de base complexa com taxa de amostragem de 800 Hz.</span> <span class="s" data-s="b2-p1-s1">Em seguida, aplica-se uma STFT local com janela Hann de 32 pontos e hop de 8 amostras, gerando uma grade temporal fina de 100 quadros por segundo.</span> <span class="s" data-s="b2-p1-s2">Esta grade fina é crucial para prever máscaras complexas precisas, preservando detalhes temporais que seriam perdidos em downsamples mais agressivos.</span></p><p><span class="s" data-s="b2-p2-s0">O módulo de separação, baseado em RoFormer (um Transformer com atenção axial e residual), opera em uma representação temporalmente comprimida.</span> <span class="s" data-s="b2-p2-s1">Os quadros da grade fina são agrupados em patches temporais com fator de quatro.</span> <span class="s" data-s="b2-p2-s2">Isso reduz a taxa de entrada para o corpo do RoFormer para apenas 25 quadros por segundo.</span> <span class="s" data-s="b2-p2-s3">Essa redução drástica no comprimento da sequência permite que o modelo processe contextos temporais muito mais longos com custo computacional gerenciável, essencial para capturar a estrutura musical de longo prazo.</span></p><p><span class="s" data-s="b2-p3-s0">O RoFormer axial é composto por camadas que modelam dependências tanto no tempo quanto na frequência.</span> <span class="s" data-s="b2-p3-s1">No SubRoformer-S, há seis camadas com dimensão de modelo de 384; no SubRoformer-B, doze camadas com dimensão de 576.</span> <span class="s" data-s="b2-p3-s2">A arquitetura axial permite que a atenção seja calculada de forma eficiente em duas dimensões (tempo e banda), capturando relações cruzadas entre diferentes instrumentos que ocupam faixas de frequência distintas.</span></p>        <h2><span class="s" data-s="b3-h">Mecanismo de Fusão e Predição de Máscaras</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Uma inovação chave do SubRoformer é o mecanismo de fusão residual gated.</span> <span class="s" data-s="b3-p0-s1">O modelo não depende apenas das características de baixa taxa processadas pelo RoFormer.</span> <span class="s" data-s="b3-p0-s2">Ele combina o contexto de longo alcance (obtido nos patches de 25 Hz) com as características de alta resolução (da grade de 100 Hz) através de uma fusão residual com gate.</span> <span class="s" data-s="b3-p0-s3">Isso permite que o modelo utilize informações temporais globais para guiar a precisão local das máscaras.</span></p><p><span class="s" data-s="b3-p1-s0">O objetivo final é estimar máscaras complexas para cada stem (vocal, baixo, bateria, outros).</span> <span class="s" data-s="b3-p1-s1">As máscaras complexas operam no domínio da frequência complexa, preservando tanto a magnitude quanto a fase do sinal original, o que é crítico para a reconstrução de áudio de alta qualidade.</span> <span class="s" data-s="b3-p1-s2">A predição ocorre na taxa fina de 100 Hz, garantindo que transientes rápidos e detalhes finos sejam capturados corretamente.</span></p><p><span class="s" data-s="b3-p2-s0">Após a estimativa das máscaras, o processo de reconstrução inverte as etapas do frontend.</span> <span class="s" data-s="b3-p2-s1">As sub-bandas estimadas são interpoladas, remoduladas e somadas para gerar a forma de onda final de cada stem.</span> <span class="s" data-s="b3-p2-s2">O uso de um banco de sub-bandas sobrepostas e um caminho de síntese explícito ajuda a mitigar artefatos de aliasing e garante uma transição suave entre as bandas.</span></p><p><span class="s" data-s="b3-p3-s0">A decisão de separar a redução temporal em duas formas — decimação de taxa de amostragem nas sub-bandas e agrupamento em patches no Transformer — é estratégica.</span> <span class="s" data-s="b3-p3-s1">A primeira reduz a carga computacional da análise espectral local, enquanto a segunda permite que o modelo de atenção opere em uma sequência mais curta, focando na estrutura musical sem perder a resolução necessária para a síntese.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b4-t">Eficiência Computacional e Resolução Temporal</span></h3>
+          <p><span class="s" data-s="b4-c-s0">Ao reduzir a taxa de processamento do Transformer de 100 Hz para 25 Hz, o SubRoformer diminui significativamente o custo de memória e cálculo da atenção quadrática, permitindo o uso de modelos maiores (como o SubRoformer-B) sem inviabilizar o treinamento.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b5-h">Configuração Experimental e Treinamento</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os experimentos foram conduzidos no conjunto de dados MUSDB18-HQ, que contém 100 músicas de treino e 50 de teste, com áudio não compactado a 44.1 kHz.</span> <span class="s" data-s="b5-p0-s1">Todos os modelos foram reamostrados para 48 kHz e operam em sinais estéreo.</span> <span class="s" data-s="b5-p0-s2">O treinamento utilizou uma política de aumento de dados consistente, incluindo escalonamento de ganho, troca de canais estéreo, inversão temporal e inversão de polaridade, além de stem-dependent mixup.</span></p><p><span class="s" data-s="b5-p1-s0">A otimização foi feita com AdamW, taxa de aprendizado máxima de 3e-4, e schedule coseno sem restarts.</span> <span class="s" data-s="b5-p1-s1">O treinamento foi realizado com precisão mista bfloat16.</span> <span class="s" data-s="b5-p1-s2">O SubRoformer-S foi treinado em uma única GPU RTX 4090, enquanto o SubRoformer-B utilizou seis GPUs RTX 5090.</span> <span class="s" data-s="b5-p1-s3">Um ponto importante é que os modelos foram treinados apenas com os 100 tracks do MUSDB18-HQ, sem dados externos adicionais, o que testa a capacidade de generalização do modelo dentro do domínio específico.</span></p><p><span class="s" data-s="b5-p2-s0">Para fins de comparação, os autores também avaliaram configurações com 64 sub-bandas e fatores de decimação diferentes, demonstrando a robustez da abordagem.</span> <span class="s" data-s="b5-p2-s1">A ablação mostrou que manter a grade fina de 100 Hz para a predição de máscaras é crucial, mesmo quando o corpo do Transformer opera em 25 Hz.</span></p><p><span class="s" data-s="b5-p3-s0">O uso de um Average Moving Exponential (EMA) dos parâmetros, com decaimento de 0.999, ajudou a estabilizar o treinamento e melhorar a performance final.</span> <span class="s" data-s="b5-p3-s1">O treinamento durou um milhão de atualizações do otimizador para ambos os tamanhos de modelo no cenário de dados limitados.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.08130/figure4.webp" alt="Comparação de SDR médio no teste MUSDB18-HQ versus número total de parâmetros. O SubRoformer atinge desempenho superior com menos parâmetros que sistemas concorrentes como BS-RoFormer e Mel-RoFormer." loading="lazy">
+          <figcaption>
+            Comparação de SDR médio no teste MUSDB18-HQ versus número total de parâmetros. O SubRoformer atinge desempenho superior com menos parâmetros que sistemas concorrentes como BS-RoFormer e Mel-RoFormer.
+            <span class="source">Figura 4 do paper · Wu et al., arXiv:2611.08130</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Resultados e Análise de Desempenho</span></h2>
+<p><span class="s" data-s="b7-p0-s0">No conjunto de teste do MUSDB18-HQ, o SubRoformer-B, treinado apenas com os dados do próprio conjunto, atingiu um SDR médio de 10.63 dB across os quatro stems.</span> <span class="s" data-s="b7-p0-s1">Este resultado supera o BS-RoFormer (treinado com dados públicos similares) em 0.61 dB e o Mel-RoFormer em 0.99 dB.</span> <span class="s" data-s="b7-p0-s2">A comparação é favorável em todos os stems em relação ao Mel-RoFormer.</span></p><p><span class="s" data-s="b7-p1-s0">É importante notar que o BS-RoFormer ainda mantém uma vantagem de 1.38 dB no stem de baixo.</span> <span class="s" data-s="b7-p1-s1">Isso sugere que, embora a abordagem de sub-bandas seja geral e eficaz, há desafios específicos na separação de frequências graves muito densas, onde a resolução temporal e espectral precisa ser ainda mais refinada.</span></p><p><span class="s" data-s="b7-p2-s0">Quando 500 músicas adicionais foram usadas no treinamento, um único modelo multi-stem do SubRoformer alcançou um SDR médio de 11.59 dB, estabelecendo novo estado da arte entre sistemas single-model treinados com dados extras.</span> <span class="s" data-s="b7-p2-s1">Isso demonstra a escalabilidade da arquitetura quando mais dados estão disponíveis.</span></p><p><span class="s" data-s="b7-p3-s0">A eficiência do modelo também é destacada.</span> <span class="s" data-s="b7-p3-s1">Como mostrado na Figura 4, o SubRoformer atinge alto desempenho com menos parâmetros totais comparado a alguns concorrentes, graças à compressão temporal eficiente do RoFormer axial e à análise de sub-bandas otimizada.</span></p>        <h2><span class="s" data-s="b8-h">Limitações e Trabalhos Futuros</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Apesar dos resultados promissores, os autores destacam limitações importantes.</span> <span class="s" data-s="b8-p0-s1">Os resultados apresentados são baseados em um único seed de inicialização para algumas ablações, o que significa que as observações são direcionais e não causais.</span> <span class="s" data-s="b8-p0-s2">Para validar robustez, seriam necessários múltiplos seeds, medições de eficiência detalhadas e ablações com parâmetros correspondentes em todos os stems.</span></p><p><span class="s" data-s="b8-p1-s0">A comparação com o BS-RoFormer no stem de baixo revela que a separação de fontes graves continua sendo um ponto de dificuldade.</span> <span class="s" data-s="b8-p1-s1">A arquitetura atual pode não capturar perfeitamente as nuances de baixa frequência em misturas complexas, sugerindo necessidade de ajustes na resolução das sub-bandas inferiores ou no mecanismo de atenção para essas faixas.</span></p><p><span class="s" data-s="b8-p2-s0">Além disso, o uso de um banco de sub-bandas fixo e pré-definido, embora eficiente, limita a adaptabilidade do modelo a gêneros musicais com características espectrais muito distintas das presentes no MUSDB18.</span> <span class="s" data-s="b8-p2-s1">Modelos que aprendem a divisão de bandas dinamicamente poderiam oferecer ganhos adicionais, mas ao custo de maior complexidade.</span></p><p><span class="s" data-s="b8-p3-s0">Os autores enfatizam que a transformação de resultados preliminares em afirmações robustas de journal requer mais experimentação controlada.</span> <span class="s" data-s="b8-p3-s1">A comunidade deve considerar o SubRoformer como uma arquitetura sólida e eficiente, mas ainda em evolução, especialmente no que tange à generalização para além dos dados de treino padrão e à separação de fontes de baixa frequência.</span></p>        <h2><span class="s" data-s="b9-h">Conclusão</span></h2>
+<p><span class="s" data-s="b9-p0-s0">O SubRoformer representa um avanço significativo na separação de fontes musicais ao combinar análise de sub-bandas com Transformers axiais residuais.</span> <span class="s" data-s="b9-p0-s1">Ao decompor o áudio em sinais de baixa taxa e processar contexto temporal em patches, o modelo equilibra eficiência computacional e fidelidade acústica.</span></p><p><span class="s" data-s="b9-p1-s0">Os resultados no MUSDB18-HQ demonstram que é possível alcançar estado da arte sem dados externos, superando métodos anteriores em eficiência e desempenho geral.</span> <span class="s" data-s="b9-p1-s1">A arquitetura oferece uma alternativa viável para sistemas de MSS que precisam de alta qualidade e baixo custo de inferência.</span></p><p><span class="s" data-s="b9-p2-s0">Para desenvolvedores e pesquisadores, o SubRoformer destaca a importância de não tratar tempo e frequência de forma monolítica.</span> <span class="s" data-s="b9-p2-s1">A separação de preocupações — análise local fina versus modelagem global eficiente — é uma estratégia poderosa para problemas de áudio de alta resolução.</span></p><p><span class="s" data-s="b9-p3-s0">O código e os checkpoints foram liberados, permitindo que a comunidade valide e estenda a abordagem.</span> <span class="s" data-s="b9-p3-s1">A expectativa é que futuras pesquisas explorem ajustes nas sub-bandas graves e validações estatísticas mais rigorosas para consolidar as vantagens do SubRoformer como padrão na área.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">SubRoformer divide o áudio em 128 sub-bandas, reduzindo a taxa de amostragem e o custo computacional do Transformer.</span></li><li><span class="s" data-s="k1">O modelo prediz máscaras complexas em 100 Hz, mas processa contexto temporal em apenas 25 Hz usando patches.</span></li><li><span class="s" data-s="k2">Alcança SDR médio de 10.63 dB no MUSDB18-HQ sem dados extras, superando o BS-RoFormer em 0.61 dB.</span></li><li><span class="s" data-s="k3">A abordagem mantém detalhes acústicos finos enquanto modela relações de longo alcance entre bandas.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.08130" rel="noopener">SubRoformer: Subband Time-Domain Representation for Music Source Separation</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.08130" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Conversão de sotaque com supervisão sintética: por que gerar oito candidatos é melhor que um — arXiv em 5</title>
+<meta name="description" content="Pesquisadores da EURECOM mostram que selecionar alvos de treinamento entre múltiplas realizações estocásticas melhora a conversão de sotaque sem perder identidade do falante.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Conversão de sotaque com supervisão sintética: por que gerar oito candidatos é melhor que um">
+<meta property="og:description" content="Pesquisadores da EURECOM mostram que selecionar alvos de treinamento entre múltiplas realizações estocásticas melhora a conversão de sotaque sem perder identidade do falante.">
+<meta property="og:image" content="../../assets/papers/2610.01961/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Áudio</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.01961" rel="noopener">arXiv:2610.01961</a>
+    </div>
+    <h1><span class="s" data-s="t">Conversão de sotaque com supervisão sintética: por que gerar oito candidatos é melhor que um</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Pesquisadores da EURECOM mostram que selecionar alvos de treinamento entre múltiplas realizações estocásticas melhora a conversão de sotaque sem perder identidade do falante.</span></p>
+    <p class="byline">
+      <span>Qu et al.</span>
+      <span>10 min de leitura</span>
+<span>01/10/2026</span>    </p>
+    <div class="listen" data-article="2610.01961" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=dHwT48XSCRs" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema da conversão de sotaque sem dados paralelos</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Conversão de sotaque (accent conversion, AC) é a tarefa de modificar o sotaque de uma gravação de fala enquanto se preserva a identidade do falante e o conteúdo linguístico.</span> <span class="s" data-s="b0-p0-s1">Idealmente, você treinaria um modelo com gravações da mesma pessoa dizendo a mesma frase em sotaques diferentes.</span> <span class="s" data-s="b0-p0-s2">Na prática, esse tipo de dado paralelo é raríssimo.</span></p><p><span class="s" data-s="b0-p1-s0">A alternativa é usar síntese de fala para gerar alvos de treinamento artificiais.</span> <span class="s" data-s="b0-p1-s1">Mas aqui surge um problema: geradores de fala modernos são estocásticos.</span> <span class="s" data-s="b0-p1-s2">Dado o mesmo texto e a mesma condição de sotaque, cada amostragem produz uma realização ligeiramente diferente.</span> <span class="s" data-s="b0-p1-s3">Algumas capturam melhor o sotaque-alvo, outras preservam melhor as características do falante original.</span> <span class="s" data-s="b0-p1-s4">Qual delas usar como alvo de treinamento?</span></p><p><span class="s" data-s="b0-p2-s0">A resposta óbvia seria pegar a primeira amostra gerada e seguir em frente.</span> <span class="s" data-s="b0-p2-s1">Mas os autores da EURECOM propõem uma abordagem diferente: gerar múltiplas realizações estocásticas para cada condição de origem-sotaque, avaliar todas elas conjuntamente quanto à qualidade do sotaque e à preservação da fonte, e usar a melhor como supervisão.</span> <span class="s" data-s="b0-p2-s2">A pergunta central é se esse esforço adicional realmente melhora o modelo final.</span></p>        <h2><span class="s" data-s="b1-h">A ideia: seleção conjunta de sotaque e preservação</span></h2>
+<p><span class="s" data-s="b1-p0-s0">O framework proposto opera em dois estágios.</span> <span class="s" data-s="b1-p0-s1">No primeiro, os autores constroem dados sintéticos de treinamento gerando múltiplos candidatos para cada par (transcrição de origem, sotaque-alvo).</span> <span class="s" data-s="b1-p0-s2">Cada candidato é uma forma de onda de áudio acompanhada de uma sequência de tokens discretos que representam conteúdo linguístico, prosódia e estilo de fala.</span></p><p><span class="s" data-s="b1-p1-s0">Esses candidatos são então avaliados em quatro dimensões: (A) a forma de onda exibe o sotaque-alvo solicitado?</span> <span class="s" data-s="b1-p1-s1">(W) a transcrição automática corresponde ao texto original?</span> <span class="s" data-s="b1-p1-s2">(S) a similaridade com o falante original é alta?</span> <span class="s" data-s="b1-p1-s3">(D) a duração está dentro de limites razoáveis?</span> <span class="s" data-s="b1-p1-s4">Candidatos que falham em qualquer critério são descartados.</span> <span class="s" data-s="b1-p1-s5">Entre os que passam, o sistema escolhe aquele com a maior probabilidade de sotaque-alvo, medida por um classificador de sotaque treinado separadamente.</span></p><p><span class="s" data-s="b1-p2-s0">No segundo estágio, a sequência de tokens associada ao candidato selecionado é usada como alvo de supervisão para treinar o modelo de conversão final.</span> <span class="s" data-s="b1-p2-s1">Esse modelo é autorregressivo: gera tokens condicionados na transcrição e no rótulo categórico do sotaque-alvo.</span> <span class="s" data-s="b1-p2-s2">A síntese acústica subsequente é congelada e usa a forma de onda original apenas para condicionar o timbre da voz.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.01961/figure1.webp" alt="Visão geral do pipeline: o gerador categórico Gϕ produz N=8 pares de forma de onda e tokens. Avaliação conjunta (A, W, S, D) filtra candidatos inviáveis e seleciona a sequência de tokens z* que supervisiona o modelo final pθ." loading="lazy">
+          <figcaption>
+            Visão geral do pipeline: o gerador categórico Gϕ produz N=8 pares de forma de onda e tokens. Avaliação conjunta (A, W, S, D) filtra candidatos inviáveis e seleciona a sequência de tokens z* que supervisiona o modelo final pθ.
+            <span class="source">Figura 1 do paper · Qu et al., arXiv:2610.01961</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Construção do gerador categórico</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O gerador categórico Gϕ é construído em duas etapas.</span> <span class="s" data-s="b3-p0-s1">Primeiro, os autores usam o modelo Vevo2 pré-treinado em modo de geração condicionada por referência.</span> <span class="s" data-s="b3-p0-s2">Dado um par (referência de áudio no sotaque-alvo, sua transcrição) e a transcrição de origem, o Vevo2 gera uma sequência de tokens de conteúdo-estilo que captura o conteúdo linguístico da origem enquanto herda informações de sotaque e estilo da referência.</span> <span class="s" data-s="b3-p0-s3">A síntese acústica usa a forma de onda original para preservar o timbre do falante.</span></p><p><span class="s" data-s="b3-p1-s0">Essas sequências de tokens selecionadas servem como alvos de treinamento para a segunda etapa: adaptar o backbone autorregressivo do Vevo2 para controle categórico de sotaque.</span> <span class="s" data-s="b3-p1-s1">Cada sotaque-alvo é representado por uma sequência treinável de 32 embeddings de sotaque.</span> <span class="s" data-s="b3-p1-s2">Módulos LoRA compartilhados de rank 32 adaptam as projeções de query, key, value e output.</span> <span class="s" data-s="b3-p1-s3">Primeiro, apenas os embeddings de sotaque são otimizados; depois, embeddings e LoRA são ajustados conjuntamente via cross-entropy autorregressiva.</span> <span class="s" data-s="b3-p1-s4">Todos os demais parâmetros do backbone permanecem congelados.</span></p><p><span class="s" data-s="b3-p2-s0">Após seleção de checkpoint no conjunto de desenvolvimento, Gϕ é fixado.</span> <span class="s" data-s="b3-p2-s1">Agora, dado um par (transcrição, rótulo de sotaque), ele pode amostrar sequências de tokens de conteúdo-estilo sem precisar de áudio de referência.</span> <span class="s" data-s="b3-p2-s2">Essa capacidade de amostragem estocástica é o que permite gerar múltiplos candidatos para a mesma condição.</span></p>        <h2><span class="s" data-s="b4-h">Avaliação e seleção de candidatos</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Para cada condição (transcrição de origem, sotaque-alvo), o sistema gera N=8 pares de forma de onda e sequência de tokens.</span> <span class="s" data-s="b4-p0-s1">Cada forma de onda é avaliada em quatro critérios.</span> <span class="s" data-s="b4-p0-s2">O critério de sotaque (A) usa um classificador de sotaque treinado separadamente: a probabilidade prevista para o sotaque-alvo deve exceder um limiar.</span> <span class="s" data-s="b4-p0-s3">O critério de taxa de erro de palavra (W) transcreve automaticamente a forma de onda e compara com a transcrição original; o WER deve ficar abaixo de um limite.</span> <span class="s" data-s="b4-p0-s4">O critério de similaridade de falante (S) compara embeddings de falante extraídos da forma de onda gerada e da original usando WavLM; a similaridade cosseno deve superar um patamar.</span> <span class="s" data-s="b4-p0-s5">O critério de duração (D) verifica se a duração está dentro de 0,5 a 2,0 vezes a duração original.</span></p><p><span class="s" data-s="b4-p1-s0">Candidatos que falham em qualquer critério são descartados.</span> <span class="s" data-s="b4-p1-s1">Entre os que passam, o sistema seleciona aquele com a maior probabilidade de sotaque-alvo segundo o classificador.</span> <span class="s" data-s="b4-p1-s2">Essa probabilidade atua como proxy da qualidade de realização do sotaque na forma de onda.</span> <span class="s" data-s="b4-p1-s3">A sequência de tokens associada a essa forma de onda selecionada é então usada como alvo de supervisão para treinar o modelo de conversão final.</span></p><p><span class="s" data-s="b4-p2-s0">Esse esquema de seleção é deliberadamente conservador: prefere descartar condições ambíguas a usar alvos de baixa qualidade.</span> <span class="s" data-s="b4-p2-s1">No pool completo de construção, apenas 22,18% das condições têm um primeiro candidato viável.</span> <span class="s" data-s="b4-p2-s2">Com oito gerações, a cobertura sobe para 54,29%.</span> <span class="s" data-s="b4-p2-s3">Mas o aumento de cobertura por si só não prova benefício downstream.</span> <span class="s" data-s="b4-p2-s4">Para isolar o efeito da seleção, os autores comparam N=1 e N=8 nas mesmas 6.600 condições onde o primeiro candidato é viável.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b5-t">Comparação controlada, não apenas mais dados</span></h3>
+          <p><span class="s" data-s="b5-c-s0">O experimento central compara usar o primeiro candidato gerado (N=1) versus selecionar entre oito candidatos (N=8) nas mesmas condições de origem-sotaque, com mesma divisão de dados, mesma inicialização e mesmo protocolo de otimização.</span> <span class="s" data-s="b5-c-s1">Isso isola o efeito da seleção do efeito de simplesmente ter mais exemplos de treinamento.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b6-h">Treinamento do modelo de conversão final</span></h2>
+<p><span class="s" data-s="b6-p0-s0">O modelo de conversão final pθ é treinado para gerar sequências de tokens de conteúdo-estilo condicionadas na transcrição de origem e no rótulo categórico de sotaque-alvo.</span> <span class="s" data-s="b6-p0-s1">A arquitetura é a mesma do gerador categórico Gϕ: embeddings de sotaque e módulos LoRA adaptam o backbone autorregressivo congelado.</span> <span class="s" data-s="b6-p0-s2">A diferença está na supervisão: agora os alvos são as sequências de tokens selecionadas pelo processo de avaliação conjunta.</span></p><p><span class="s" data-s="b6-p1-s0">Durante a inferência, pθ gera uma única sequência de tokens dado o par (transcrição, sotaque-alvo).</span> <span class="s" data-s="b6-p1-s1">Essa sequência é então passada para a síntese acústica congelada, que usa a forma de onda de origem apenas para condicionar o timbre.</span> <span class="s" data-s="b6-p1-s2">Não há necessidade de áudio de referência de sotaque-alvo nem de geração de múltiplos candidatos na inferência.</span> <span class="s" data-s="b6-p1-s3">Todo o custo adicional de amostragem e seleção fica restrito ao treinamento.</span></p><p><span class="s" data-s="b6-p2-s0">Os autores treinam três modelos independentes com sementes aleatórias diferentes para cada configuração (N=1 e N=8).</span> <span class="s" data-s="b6-p2-s1">Isso permite calcular médias e avaliar a consistência dos ganhos.</span> <span class="s" data-s="b6-p2-s2">A otimização usa cross-entropy autorregressiva sobre as sequências de tokens, com warm-start categórico idêntico para ambas as configurações dentro de cada semente.</span></p>        <h2><span class="s" data-s="b7-h">Resultados: múltiplas amostras melhoram o sotaque</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Na comparação controlada entre N=1 e N=8, a supervisão com oito amostras aumenta a precisão média de classificação de sotaque-alvo em 2,49 pontos percentuais.</span> <span class="s" data-s="b7-p0-s1">A métrica Δptgt, que mede a diferença entre a probabilidade do sotaque-alvo e a do sotaque de origem, aumenta em 1,93 pontos percentuais.</span> <span class="s" data-s="b7-p0-s2">Esses ganhos são consistentes nas três sementes de treinamento.</span></p><p><span class="s" data-s="b7-p1-s0">A taxa de erro de palavra (WER) aumenta ligeiramente, de 7,52% para 7,81%, uma diferença de 0,29 pontos percentuais.</span> <span class="s" data-s="b7-p1-s1">A similaridade de falante (SIM), medida por embeddings WavLM, permanece praticamente inalterada: 0,7139 para N=1 versus 0,7134 para N=8.</span> <span class="s" data-s="b7-p1-s2">Esses resultados mostram que a seleção entre múltiplas realizações estocásticas melhora a evidência de sotaque-alvo medida pelo probe de classificação, com impacto mínimo na preservação do falante e pequeno aumento no erro de transcrição.</span></p><p><span class="s" data-s="b7-p2-s0">Os autores também testam estratégias alternativas de uso dos candidatos viáveis.</span> <span class="s" data-s="b7-p2-s1">Random Near-Best amostra aleatoriamente entre candidatos dentro de 0,05 da maior probabilidade de sotaque.</span> <span class="s" data-s="b7-p2-s2">Soft Top-2 combina as perdas dos dois candidatos de maior rank.</span> <span class="s" data-s="b7-p2-s3">Soft Near-Best aplica soft-min aos candidatos dentro da margem de 0,05.</span> <span class="s" data-s="b7-p2-s4">A estratégia Selected Top-1, que usa apenas o candidato de maior probabilidade de sotaque, alcança a maior precisão média de sotaque e o menor WER médio, embora Soft Top-2 produza a maior similaridade de falante.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.01961/table2.webp" alt="Comparação controlada entre N=1 e N=8 nas mesmas condições de treinamento. Médias sobre três sementes mostram ganho consistente de 2,49 pp em precisão de sotaque com oito amostras, enquanto similaridade de falante permanece estável." loading="lazy">
+          <figcaption>
+            Comparação controlada entre N=1 e N=8 nas mesmas condições de treinamento. Médias sobre três sementes mostram ganho consistente de 2,49 pp em precisão de sotaque com oito amostras, enquanto similaridade de falante permanece estável.
+            <span class="source">Tabela 2 do paper · Qu et al., arXiv:2610.01961</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Desempenho geral de conversão</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Na avaliação completa sobre o conjunto AC-Eval3K, o sistema proposto alcança WER de 7,81%, a mais baixa entre os sistemas avaliados.</span> <span class="s" data-s="b9-p0-s1">A precisão de classificação de sotaque-alvo é de 30,31%, com Δptgt de +11,01 pontos percentuais.</span> <span class="s" data-s="b9-p0-s2">Sistemas de referência como Vevo-Style, SeedVC-v2 e StarGANv2-VC obtêm pontuações automáticas de sotaque-alvo mais altas, enquanto Vevo2 alcança a maior similaridade de falante (SIM).</span> <span class="s" data-s="b9-p0-s3">Isso reflete diferentes pontos de operação no trade-off entre sotaque, conteúdo e preservação de falante, em vez de dominância de um único sistema em todas as métricas.</span></p><p><span class="s" data-s="b9-p1-s0">Nos testes de escuta, o sistema proposto obtém as maiores médias observadas em todas as três medidas perceptuais: naturalidade (N-MOS de 3,690), similaridade com o falante original (S-MOS de 3,560) e similaridade com o sotaque-alvo (A-MOS de 3,131).</span> <span class="s" data-s="b9-p1-s1">Esses resultados de MOS são médias descritivas sem estimativas de incerteza.</span></p><p><span class="s" data-s="b9-p2-s0">A avaliação é realizada em seis sotaques-alvo, mas os autores não especificam quais.</span> <span class="s" data-s="b9-p2-s1">Os sistemas externos não foram treinados ou avaliados sob condições idênticas ao sistema proposto; todos usam o mesmo pipeline de avaliação, mas diferem em dados de treinamento, arquitetura e protocolo de inferência.</span> <span class="s" data-s="b9-p2-s2">Isso limita a interpretação das comparações diretas.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.01961/table1.webp" alt="Resultados automáticos e perceptuais: o método proposto alcança o menor WER (7,81%) e as maiores notas médias em naturalidade, similaridade de falante e similaridade de sotaque. Sistemas externos não são diretamente comparáveis por diferenças de treinamento." loading="lazy">
+          <figcaption>
+            Resultados automáticos e perceptuais: o método proposto alcança o menor WER (7,81%) e as maiores notas médias em naturalidade, similaridade de falante e similaridade de sotaque. Sistemas externos não são diretamente comparáveis por diferenças de treinamento.
+            <span class="source">Tabela 1 do paper · Qu et al., arXiv:2610.01961</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b11-h">O que fica em aberto</span></h2>
+<p><span class="s" data-s="b11-p0-s0">A avaliação é limitada a seis sotaques-alvo e a um único conjunto de dados de avaliação.</span> <span class="s" data-s="b11-p0-s1">Os autores não reportam quais sotaques foram testados nem o tamanho do conjunto de treinamento sintético final.</span> <span class="s" data-s="b11-p0-s2">A comparação com sistemas externos é informativa, mas não controlada: cada sistema foi treinado com dados diferentes, usa arquiteturas diferentes e pode ter acesso a informações diferentes na inferência.</span></p><p><span class="s" data-s="b11-p1-s0">O experimento controlado entre N=1 e N=8 usa apenas 6.600 das 29.754 condições de origem-sotaque disponíveis, aquelas onde o primeiro candidato já é viável.</span> <span class="s" data-s="b11-p1-s1">Isso garante comparação justa, mas também significa que o benefício da seleção é testado em um subconjunto potencialmente mais fácil.</span> <span class="s" data-s="b11-p1-s2">O impacto da seleção em condições onde o primeiro candidato falha não é diretamente avaliado.</span></p><p><span class="s" data-s="b11-p2-s0">O custo computacional de gerar e avaliar oito candidatos por condição de treinamento é significativo, mas não é quantificado.</span> <span class="s" data-s="b11-p2-s1">A seleção requer um classificador de sotaque, um modelo de ASR, um extrator de embeddings de falante e síntese acústica para cada candidato.</span> <span class="s" data-s="b11-p2-s2">Esse overhead é aceitável no treinamento, mas a viabilidade em cenários de dados muito maiores permanece uma questão aberta.</span></p><p><span class="s" data-s="b11-p3-s0">Os autores mencionam que trabalhos futuros estenderão a avaliação a configurações de sotaque mais amplas e avaliarão independentemente o efeito multi-amostra pareado.</span> <span class="s" data-s="b11-p3-s1">A generalização para sotaques não vistos durante o treinamento, a robustez a ruído e reverberação, e a aplicação a outras tarefas de conversão de fala são direções naturais que não foram exploradas neste trabalho.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b12-t">Uso de ChatGPT declarado</span></h3>
+          <p><span class="s" data-s="b12-c-s0">Os autores declaram explicitamente que ChatGPT foi usado apenas para edição de linguagem e refinamento estilístico.</span> <span class="s" data-s="b12-c-s1">Todas as afirmações científicas, resultados experimentais, análises e conclusões foram revisadas e verificadas independentemente pelos autores.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b13-h">Por que isso importa</span></h2>
+<p><span class="s" data-s="b13-p0-s0">Conversão de sotaque tem aplicações em acessibilidade, dublagem, ensino de línguas e preservação de privacidade de fala.</span> <span class="s" data-s="b13-p0-s1">A escassez de dados paralelos é o principal obstáculo prático, e supervisão sintética é a alternativa viável.</span> <span class="s" data-s="b13-p0-s2">Este trabalho mostra que a qualidade da supervisão sintética pode ser melhorada não apenas gerando mais dados, mas selecionando melhor entre realizações estocásticas da mesma condição.</span></p><p><span class="s" data-s="b13-p1-s0">A formulação do problema como seleção multi-amostra é geral e pode ser aplicada a outras tarefas de conversão de fala onde geradores estocásticos são usados para construir alvos de treinamento.</span> <span class="s" data-s="b13-p1-s1">A ideia de avaliar candidatos conjuntamente em múltiplas dimensões (sotaque, conteúdo, falante) e transferir a seleção do nível de forma de onda para o nível de representação discreta é uma contribuição metodológica que vai além do domínio específico de conversão de sotaque.</span></p><p><span class="s" data-s="b13-p2-s0">Os resultados mostram que o ganho de 2,49 pontos percentuais em precisão de sotaque vem com um custo modesto: aumento de 0,29 pontos percentuais em WER e similaridade de falante praticamente inalterada.</span> <span class="s" data-s="b13-p2-s1">Esse trade-off é favorável, especialmente considerando que o custo adicional de amostragem e seleção ocorre apenas no treinamento, não na inferência.</span> <span class="s" data-s="b13-p2-s2">O modelo final usa apenas transcrição e rótulo categórico de sotaque, sem necessidade de áudio de referência.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Gerar oito candidatos sintéticos e escolher o melhor aumenta a precisão de sotaque em 2,49 pontos percentuais, com impacto mínimo na preservação do falante.</span></li><li><span class="s" data-s="k1">O método alcança 7,81% de taxa de erro de palavra, a mais baixa entre os sistemas avaliados, e as maiores notas em testes de escuta.</span></li><li><span class="s" data-s="k2">A avaliação é limitada a seis sotaques-alvo e não compara todos os sistemas sob condições idênticas de treinamento.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.01961" rel="noopener">Multi-sample Synthetic Supervision for Accent Conversion</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.01961" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Energias Clássicas Aprendem a Raciocinar 1.000x Mais Rápido que Modelos em Loop — arXiv em 5</title>
+<meta name="description" content="Um novo modelo baseado em energia, CRAM, resolve Sudoku e labirintos com precisão total, treinando em milissegundos e usando uma fração dos FLOPs de abordagens recorrentes modernas.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Energias Clássicas Aprendem a Raciocinar 1.000x Mais Rápido que Modelos em Loop">
+<meta property="og:description" content="Um novo modelo baseado em energia, CRAM, resolve Sudoku e labirintos com precisão total, treinando em milissegundos e usando uma fração dos FLOPs de abordagens recorrentes modernas.">
+<meta property="og:image" content="../../assets/papers/2611.17309/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Redes neurais</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.17309" rel="noopener">arXiv:2611.17309</a>
+    </div>
+    <h1><span class="s" data-s="t">Energias Clássicas Aprendem a Raciocinar 1.000x Mais Rápido que Modelos em Loop</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um novo modelo baseado em energia, CRAM, resolve Sudoku e labirintos com precisão total, treinando em milissegundos e usando uma fração dos FLOPs de abordagens recorrentes modernas.</span></p>
+    <p class="byline">
+      <span>Hoover et al.</span>
+      <span>7 min de leitura</span>
+<span>12/11/2026</span>    </p>
+    <div class="listen" data-article="2611.17309" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=VVwIIQ7RDIs" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Custo Oculto do Raciocínio Recorrente</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Nos últimos anos, modelos em loop (looped models) emergiram como uma alternativa promissora ao Chain-of-Thought tradicional.</span> <span class="s" data-s="b0-p0-s1">A ideia central é simples: aplicar repetidamente uma camada ou bloco de camadas à entrada até que o modelo converge para uma resposta estável.</span> <span class="s" data-s="b0-p0-s2">Pequenas redes com milhões de parâmetros já demonstraram sucesso em puzzles lógicos como Sudoku e labirintos.</span> <span class="s" data-s="b0-p0-s3">No entanto, essa abordagem esconde custos computacionais proibitivos.</span> <span class="s" data-s="b0-p0-s4">O treinamento depende de Backpropagation Through Time (BPTT) truncado, que exige propagar gradientes através de múltiplas iterações do loop, tornando o processo lento e instável.</span></p><p><span class="s" data-s="b0-p1-s0">Além da lentidão, os motivos pelos quais esses modelos funcionam permanecem pouco claros.</span> <span class="s" data-s="b0-p1-s1">Muitos tentam imitar as propriedades desejáveis das redes de energia — como estabilidade garantida e parada antecipada — adicionando módulos extras ou cabeças de halting (parada) ao loop.</span> <span class="s" data-s="b0-p1-s2">Mas isso é como reconstruir uma casa tijolo por tijolo quando se poderia usar uma fundação sólida.</span> <span class="s" data-s="b0-p1-s3">Os autores questionam: por que não aprender a função de energia diretamente?</span> <span class="s" data-s="b0-p1-s4">Se puzzles de lógica têm uma energia correspondente que, quando minimizada, resolve o problema, por que não treinar essa energia a partir de dados?</span></p><p><span class="s" data-s="b0-p2-s0">Este paper apresenta o CRAM (Compact Reasoning Associative Memory), uma versão aprendível da energia proposta por Hopfield e Tank nos anos 80.</span> <span class="s" data-s="b0-p2-s1">Diferente dos modelos em loop que simulam a dinâmica de energia, o CRAM a aprende explicitamente.</span> <span class="s" data-s="b0-p2-s2">O resultado é um modelo que não apenas resolve puzzles, mas o faz com uma eficiência computacional que desafia a intuição atual sobre o custo do raciocínio algorítmico em redes neurais.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.17309/figure1.webp" alt="O CRAM aprende uma função de energia que guia a busca por soluções. O treinamento baixa a energia das soluções corretas e a eleva das incorretas, sem diferenciar através do trajeto de raciocínio. A inferência para quando a energia cai abaixo de um limiar aprendido." loading="lazy">
+          <figcaption>
+            O CRAM aprende uma função de energia que guia a busca por soluções. O treinamento baixa a energia das soluções corretas e a eleva das incorretas, sem diferenciar através do trajeto de raciocínio. A inferência para quando a energia cai abaixo de um limiar aprendido.
+            <span class="source">Figura 1 do paper · Hoover et al., arXiv:2611.17309</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">A Mecânica da Energia Aprendida</span></h2>
+<p><span class="s" data-s="b2-p0-s0">O coração do CRAM é uma função de energia parametrizável.</span> <span class="s" data-s="b2-p0-s1">Para cada célula de um puzzle (seja uma grade de Sudoku ou um nó em um labirinto), o modelo mantém uma distribuição de probabilidade sobre os valores possíveis.</span> <span class="s" data-s="b2-p0-s2">A energia total do estado é composta por três termos: uma entropia negativa que incentiva certezas (distribuições one-hot), uma energia de interação que modela as restrições entre células vizinhas, e um termo de entrada que fixa os dados observados do puzzle.</span></p><p><span class="s" data-s="b2-p1-s0">Matematicamente, a energia E(p) é definida como a soma da entropia de cada célula, mais a soma das interações entre pares de células, ponderada por matrizes de pesos aprendíveis K, e mais os biases que representam as pistas iniciais.</span> <span class="s" data-s="b2-p1-s1">Quando a distribuição de uma célula se torna one-hot (certeza absoluta), o termo de entropia desaparece, e a energia se reduz à soma dos custos das escolhas feitas.</span> <span class="s" data-s="b2-p1-s2">Isso conecta diretamente a inferência neural à minimização de energia clássica.</span></p><p><span class="s" data-s="b2-p2-s0">Durante a inferência, o CRAM não faz previsões diretas.</span> <span class="s" data-s="b2-p2-s1">Em vez disso, ele realiza uma descida de gradiente na energia.</span> <span class="s" data-s="b2-p2-s2">Cada célula tem um estado neuronal recorrente que evolui para minimizar a energia global.</span> <span class="s" data-s="b2-p2-s3">O sistema é atualizado iterativamente, ajustando as crenças das células até que a energia não possa mais ser reduzida.</span> <span class="s" data-s="b2-p2-s4">Diferente dos modelos em loop determinísticos, o CRAM introduz ruído durante a busca (via amostragem de Gibbs focada) para escapar de mínimos locais espúrios, permitindo que diferentes cadeias de busca explorem o espaço de soluções independentemente.</span></p>        <h2><span class="s" data-s="b3-h">Treinamento sem Diferenciação do Loop</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O ganho de eficiência mais significativo do CRAM reside em seu método de treinamento.</span> <span class="s" data-s="b3-p0-s1">Modelos em loop tradicionais precisam diferenciar através do processo de inferência (BPTT), o que é computacionalmente caro e instável.</span> <span class="s" data-s="b3-p0-s2">O CRAM evita isso completamente.</span> <span class="s" data-s="b3-p0-s3">Ele é treinado para baixar a energia das soluções corretas observadas nos dados e elevar a energia de soluções incorretas (negativas) geradas pelo próprio modelo.</span></p><p><span class="s" data-s="b3-p1-s0">Os autores utilizam principalmente um objetivo de pseudolikelihood (PL).</span> <span class="s" data-s="b3-p1-s1">Em vez de calcular a distribuição de Boltzmann completa, que é intratável, a pseudolikelihood aproxima a probabilidade do estado considerando apenas as condições locais de cada célula.</span> <span class="s" data-s="b3-p1-s2">Isso permite o uso de SGD (Stochastic Gradient Descent) padrão com momento, sem a necessidade de propagar gradientes através das iterações de descida de energia.</span> <span class="s" data-s="b3-p1-s3">O treinamento se torna essencialmente uma otimização estática dos pesos da energia, não da dinâmica temporal.</span></p><p><span class="s" data-s="b3-p2-s0">Essa abordagem tem implicações profundas.</span> <span class="s" data-s="b3-p2-s1">O treinamento do CRAM no Sudoku-Extreme leva apenas 42 milissegundos em uma GPU H200.</span> <span class="s" data-s="b3-p2-s2">Para comparação, modelos em loop equivalentes levam horas ou dias.</span> <span class="s" data-s="b3-p2-s3">Além disso, a pseudolikelihood permite que o modelo aprenda as restrições subjacentes do puzzle sem precisar saber explicitamente as regras.</span> <span class="s" data-s="b3-p2-s4">Ele descobre, por exemplo, que dois números iguais não podem estar na mesma linha, simplesmente porque as soluções válidas têm baixa energia nessas configurações e as inválidas têm alta energia.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.17309/figure2.webp" alt="Comparação de eficiência: O CRAM atinge a mesma acurácia dos melhores modelos em loop, mas usando pelo menos 282x menos FLOPs na inferência. O gráfico mostra a relação entre precisão e custo computacional no Sudoku-Extreme." loading="lazy">
+          <figcaption>
+            Comparação de eficiência: O CRAM atinge a mesma acurácia dos melhores modelos em loop, mas usando pelo menos 282x menos FLOPs na inferência. O gráfico mostra a relação entre precisão e custo computacional no Sudoku-Extreme.
+            <span class="source">Figura 2 do paper · Hoover et al., arXiv:2611.17309</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Resultados: Velocidade e Eficiência Extremas</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os resultados experimentais do CRAM são robustos.</span> <span class="s" data-s="b5-p0-s1">No benchmark Sudoku-Extreme, o modelo resolve 99,996% dos puzzles de teste após apenas 42ms de treinamento.</span> <span class="s" data-s="b5-p0-s2">No Maze-Unique, atinge 100% de acurácia após 132ms de treinamento.</span> <span class="s" data-s="b5-p0-s3">Esses tempos incluem o ajuste do limiar de parada, que é determinado pela energia máxima das soluções de treinamento.</span> <span class="s" data-s="b5-p0-s4">A inferência é igualmente rápida: o CRAM resolve os puzzles em milissegundos, usando uma fração mínima dos recursos computacionais.</span></p><p><span class="s" data-s="b5-p1-s0">A eficiência na inferência é outro ponto forte.</span> <span class="s" data-s="b5-p1-s1">O CRAM usa pelo menos 282x menos FLOPs (operações de ponto flutuante) do que os modelos em loop na acurácia máxima comparável.</span> <span class="s" data-s="b5-p1-s2">Isso ocorre porque a descida de energia é um processo iterativo que pode parar cedo.</span> <span class="s" data-s="b5-p1-s3">Se um puzzle é fácil, a energia converge rapidamente.</span> <span class="s" data-s="b5-p1-s4">Se é difícil, mais iterações são necessárias.</span> <span class="s" data-s="b5-p1-s5">Essa adaptabilidade ao custo computacional é uma vantagem intrínseca das redes de energia que os modelos em loop estáticos não possuem naturalmente.</span></p><p><span class="s" data-s="b5-p2-s0">Os autores também demonstraram que o CRAM é capaz de aprender pesos que são interpretáveis e correspondem às regras lógicas dos puzzles.</span> <span class="s" data-s="b5-p2-s1">No Sudoku, os pesos aprendidos refletem corretamente as restrições de linha, coluna e bloco.</span> <span class="s" data-s="b5-p2-s2">No Maze-Unique, os pesos aprendidos descrevem um algoritmo de poda de becos sem saída.</span> <span class="s" data-s="b5-p2-s3">Isso sugere que a energia aprendida não é apenas uma caixa preta, mas uma representação estruturada do conhecimento do domínio.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.17309/figure3.webp" alt="Adaptação de recursos: O custo computacional do CRAM cresce suavemente com a dificuldade do puzzle, ao contrário de modelos em loop que usam uma quantidade fixa de iterações, independentemente da complexidade do problema." loading="lazy">
+          <figcaption>
+            Adaptação de recursos: O custo computacional do CRAM cresce suavemente com a dificuldade do puzzle, ao contrário de modelos em loop que usam uma quantidade fixa de iterações, independentemente da complexidade do problema.
+            <span class="source">Figura 3 do paper · Hoover et al., arXiv:2611.17309</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Limitações e Escopo</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Apesar dos resultados impressionantes, é crucial entender o escopo do trabalho.</span> <span class="s" data-s="b7-p0-s1">Os puzzles avaliados — Sudoku-Extreme, Maze-Unique, N-Rainhas e Coloração de Grafos — pertencem a uma categoria de problemas de lógica onde as restrições podem ser representadas exatamente por uma energia de pares.</span> <span class="s" data-s="b7-p0-s2">Isso significa que a solução pode ser encontrada minimizando uma função de energia que depende apenas de interações locais entre variáveis.</span></p><p><span class="s" data-s="b7-p1-s0">O paper admite que alta acurácia nesses benchmarks não implica escalabilidade para tarefas mais complexas, como o ARC-AGI-1, onde a resposta depende de quantidades latentes que o modelo deve calcular, como distâncias ou contagens.</span> <span class="s" data-s="b7-p1-s1">Os autores mostram que uma extensão latente simples do CRAM pode aprender labirintos mais difíceis, mas aprender essas quantidades latentes de forma geral, sem conhecimento prévio do design da tarefa, permanece um desafio em aberto.</span></p><p><span class="s" data-s="b7-p2-s0">Além disso, os tempos de treinamento reportados são de &#39;warm fit times&#39;, excluindo custos iniciais de compilação de kernel.</span> <span class="s" data-s="b7-p2-s1">Embora isso seja justo para comparações relativas, em cenários de produção onde modelos são carregados raramente, os custos fixos de inicialização podem ser relevantes.</span> <span class="s" data-s="b7-p2-s2">No entanto, mesmo considerando esses fatores, a vantagem de ordem de grandeza do CRAM sobre os modelos em loop permanece clara.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.17309/table2.webp" alt="Tabela comparativa final: O CRAM atinge 100% de acurácia em milissegundos de treinamento, enquanto os modelos base levam horas. A versão com energia definida manualmente também atinge 100%, sugerindo que a complexidade está na representação, não na otimização." loading="lazy">
+          <figcaption>
+            Tabela comparativa final: O CRAM atinge 100% de acurácia em milissegundos de treinamento, enquanto os modelos base levam horas. A versão com energia definida manualmente também atinge 100%, sugerindo que a complexidade está na representação, não na otimização.
+            <span class="source">Tabela 2 do paper · Hoover et al., arXiv:2611.17309</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Conclusão: Energias como Base para Raciocínio</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Este paper demonstra que a abordagem de energia, longe de ser uma relíquia dos anos 80, oferece um framework poderoso e eficiente para o raciocínio algorítmico em redes neurais.</span> <span class="s" data-s="b9-p0-s1">Ao aprender explicitamente a função de energia, o CRAM elimina a necessidade de treinamento recorrente custoso e fornece inferência adaptativa e interpretável.</span></p><p><span class="s" data-s="b9-p1-s0">Os resultados sugerem duas coisas principais.</span> <span class="s" data-s="b9-p1-s1">Primeiro, que energias são uma direção extremamente promissora para treinar raciocínio a partir de dados, oferecendo estabilidade e eficiência.</span> <span class="s" data-s="b9-p1-s2">Segundo, que benchmarks triviais como Sudoku e Maze podem ser enganosos para testar a escalabilidade de técnicas de raciocínio em loop, já que soluções simples podem resolver esses problemas com precisão total.</span></p><p><span class="s" data-s="b9-p2-s0">O CRAM não é a resposta final para todo tipo de raciocínio, especialmente para tarefas que exigem abstração profunda ou cálculo de quantidades latentes complexas.</span> <span class="s" data-s="b9-p2-s1">No entanto, ele estabelece um novo padrão de eficiência e clareza para problemas de restrição, mostrando que às vezes, voltar às bases matemáticas pode ser a maneira mais rápida de avançar.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">CRAM treina em 42ms no Sudoku-Extreme, 1.000x mais rápido que modelos em loop, sem perder acurácia.</span></li><li><span class="s" data-s="k1">O modelo usa 282x menos FLOPs na inferência, adaptando o cálculo à dificuldade do problema.</span></li><li><span class="s" data-s="k2">A energia aprendida revela pesos interpretáveis que correspondem às regras lógicas do enigma.</span></li><li><span class="s" data-s="k3">O método evita BPTT, usando objetivos locais como pseudolikelihood para treinamento eficiente.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.17309" rel="noopener">Classical Energies Learn to Reason 1,000x Faster than Looped Models</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.17309" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

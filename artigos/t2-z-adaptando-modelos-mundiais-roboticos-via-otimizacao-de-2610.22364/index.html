@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>T2-Z: Adaptando Modelos Mundiais Robóticos via Otimização de Latentes em Tempo de Teste — arXiv em 5</title>
+<meta name="description" content="O paper T2-Z propõe um método para que robôs adaptem seus modelos de mundo a fatores ambientais ocultos (como atrito ou massa) otimizando um vetor latente durante a inferência, sem necessidade de re-treinamento.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="T2-Z: Adaptando Modelos Mundiais Robóticos via Otimização de Latentes em Tempo de Teste">
+<meta property="og:description" content="O paper T2-Z propõe um método para que robôs adaptem seus modelos de mundo a fatores ambientais ocultos (como atrito ou massa) otimizando um vetor latente durante a inferência, sem necessidade de re-treinamento.">
+<meta property="og:image" content="../../assets/papers/2610.22364/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Robótica</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.22364" rel="noopener">arXiv:2610.22364</a>
+    </div>
+    <h1><span class="s" data-s="t">T2-Z: Adaptando Modelos Mundiais Robóticos via Otimização de Latentes em Tempo de Teste</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">O paper T2-Z propõe um método para que robôs adaptem seus modelos de mundo a fatores ambientais ocultos (como atrito ou massa) otimizando um vetor latente durante a inferência, sem necessidade de re-treinamento.</span></p>
+    <p class="byline">
+      <span>Zhou et al.</span>
+      <span>7 min de leitura</span>
+<span>15/10/2026</span>    </p>
+    <div class="listen" data-article="2610.22364" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=09uikgvT7GI" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Cegueira Física</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Robôs que operam em ambientes dinâmicos enfrentam um obstáculo fundamental: o que eles veem não é suficiente para prever como o mundo responderá às suas ações.</span> <span class="s" data-s="b0-p0-s1">Duas cenas podem ser visualmente idênticas, mas ter propriedades físicas subjacentes drasticamente diferentes.</span> <span class="s" data-s="b0-p0-s2">Empurrar uma caixa sobre gelo versus sobre carpete gera resultados distintos, mesmo que a ação e a observação inicial sejam as mesmas.</span> <span class="s" data-s="b0-p0-s3">Fatores como atrito, massa, distribuição de massa, rigidez de molas ou regras humanas abstratas (como se um interruptor liga ou desliga a luz) permanecem ocultos aos sensores visuais padrão.</span></p><p><span class="s" data-s="b0-p1-s0">Modelos de mundo tradicionais, que tentam prever o futuro a partir de estados observados, frequentemente falham quando encontram configurações ambientais não vistas durante o treinamento.</span> <span class="s" data-s="b0-p1-s1">Abordagens anteriores tentam resolver isso explicitamente, especificando quais fatores físicos podem variar e como parametrizá-los.</span> <span class="s" data-s="b0-p1-s2">No entanto, essa abordagem não escala para variações desconhecidas ou combinadas.</span> <span class="s" data-s="b0-p1-s3">Exige conhecimento prévio exato do que pode mudar, algo improvável em cenários do mundo real.</span></p><p><span class="s" data-s="b0-p2-s0">Os humanos, por outro lado, usam o que é chamado de &#34;análise por síntese&#34;.</span> <span class="s" data-s="b0-p2-s1">Usamos modelos generativos internos não apenas para antecipar resultados, mas também inversamente para inferir a estrutura latente que melhor explica o que observamos.</span> <span class="s" data-s="b0-p2-s2">A pergunta natural que motiva este trabalho é: seria possível capturar esses fatores ambientais ocultos em uma representação latente que seja otimizada diretamente a partir de interações em tempo de teste?</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.22364/figure1.webp" alt="Ilustração do conceito T2-Z: otimizando um vetor latente para capturar condições ambientais diferentes (ex: massa da bola), levando o modelo a prever resultados distintos para a mesma ação." loading="lazy">
+          <figcaption>
+            Ilustração do conceito T2-Z: otimizando um vetor latente para capturar condições ambientais diferentes (ex: massa da bola), levando o modelo a prever resultados distintos para a mesma ação.
+            <span class="source">Figura 1 do paper · Zhou et al., arXiv:2610.22364</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">A Ideia Central: Latentes de Ambiente Otimizáveis</span></h2>
+<p><span class="s" data-s="b2-p0-s0">O paper introduz o T2-Z (Test-Time Optimization of Environment Latents), uma técnica que augmenta modelos de mundo robóticos com um vetor latente aprendível de ambiente, denotado como z_e.</span> <span class="s" data-s="b2-p0-s1">Este vetor é uma representação compacta e aleatoriamente inicializada, projetada para codificar os fatores não observados que governam como um ambiente responde à interação.</span></p><p><span class="s" data-s="b2-p1-s0">Diferente de abordagens que tentam inferir essas variáveis através de um codificador histórico treinado, o T2-Z trata a inferência do ambiente como um problema de otimização direta.</span> <span class="s" data-s="b2-p1-s1">Durante o treinamento, o método alterna entre dois estágios para permitir que a estrutura latente surja puramente através da predição do mundo, sem supervisão sobre quais fatores existem ou quais valores eles assumem.</span></p><p><span class="s" data-s="b2-p2-s0">No primeiro estágio, o vetor latente z_e é fixado e o modelo de mundo é otimizado para aprender dinâmicas condicionadas por ação compartilhadas entre todos os ambientes de treinamento.</span> <span class="s" data-s="b2-p2-s1">No segundo estágio, o modelo de mundo é congelado e o vetor z_e é otimizado através do erro de predição, permitindo que ele capture a variação específica do ambiente não explicada pelo modelo geral.</span> <span class="s" data-s="b2-p2-s2">Ambos os estágios usam a mesma função de perda de correspondência de fluxo (flow-matching loss).</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.22364/figure3.webp" alt="Diagrama do framework T2-Z mostrando o treinamento alternado entre otimização do modelo de mundo e do latente de ambiente, seguido pela adaptação em tempo de teste." loading="lazy">
+          <figcaption>
+            Diagrama do framework T2-Z mostrando o treinamento alternado entre otimização do modelo de mundo e do latente de ambiente, seguido pela adaptação em tempo de teste.
+            <span class="source">Figura 3 do paper · Zhou et al., arXiv:2610.22364</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b4-h">Mecanismo de Adaptação em Tempo de Teste</span></h2>
+<p><span class="s" data-s="b4-p0-s0">A inovação principal do T2-Z ocorre no momento da inferência.</span> <span class="s" data-s="b4-p0-s1">Quando o robô enfrenta uma nova configuração ambiental não vista durante o treinamento (Out-of-Distribution), o modelo de mundo global permanece congelado.</span> <span class="s" data-s="b4-p0-s2">Em vez disso, um novo vetor z_e é inicializado aleatoriamente e otimizado iterativamente para explicar os resultados das interações observadas.</span></p><p><span class="s" data-s="b4-p1-s0">Para cada interação de teste, o sistema atualiza z_e por múltiplos passos de otimização, minimizando o erro de predição na trajetória observada usando o mesmo objetivo de correspondência de fluxo usado no treinamento.</span> <span class="s" data-s="b4-p1-s1">Isso transforma o modelo de mundo congelado em um simulador adaptado ao ambiente específico naquele momento.</span> <span class="s" data-s="b4-p1-s2">Uma vez otimizado, o latente permite que o robô preveja e compare os resultados de ações candidatas antes da execução.</span></p><p><span class="s" data-s="b4-p2-s0">Como a inferência é baseada em otimização e não amortecida por um codificador de história aprendido, o T2-Z não está atrelado ao número de trajetórias usadas no treinamento.</span> <span class="s" data-s="b4-p2-s1">Ele pode incorporar flexivelmente qualquer número de trajetórias de teste, desde uma única interação até várias, ajustando-se à quantidade de dados disponíveis em tempo real.</span></p>        <h2><span class="s" data-s="b5-h">Implementação e Detalhes Técnicos</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os autores adaptam o modelo de mundo BWM Team, construído sobre a arquitetura Wan2.2-TI2V-5B, que é um modelo generativo de vídeo condicional por ação.</span> <span class="s" data-s="b5-p0-s1">O vetor latente de ambiente z_e tem dimensão 32.</span> <span class="s" data-s="b5-p0-s2">O treinamento começa com 300 atualizações do modelo de mundo, seguidas por 200 atualizações do latente, alternando depois em blocos de 200-200 até a convergência.</span></p><p><span class="s" data-s="b5-p1-s0">As taxas de aprendizado (learning rates) diferem entre os estágios: 10^-5 para o modelo de mundo e 0.03 para o latente de ambiente.</span> <span class="s" data-s="b5-p1-s1">No tempo de teste, o modelo é congelado e utiliza-se um agendamento de taxa de aprendizado de &#34;groso a fino&#34; (coarse-to-fine) de 3.0/1.5/0.5/0.15, com 10 passos cada, totalizando 40 passos de otimização para z_e.</span></p><p><span class="s" data-s="b5-p2-s0">Essa configuração permite que o sistema se adapte rapidamente.</span> <span class="s" data-s="b5-p2-s1">Em tarefas como Friction, Gravity e Mass Collision, uma única trajetória de teste com ação aleatória é suficiente para otimizar o latente.</span> <span class="s" data-s="b5-p2-s2">Em tarefas mais complexas como Light Switch e Mass Balance, duas trajetórias são utilizadas.</span> <span class="s" data-s="b5-p2-s3">A eficiência computacional é mantida ao evitar o re-treinamento completo do modelo pesado de vídeo.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b6-t">O que é Flow-Matching?</span></h3>
+          <p><span class="s" data-s="b6-c-s0">A correspondência de fluxo (flow-matching) é uma técnica de modelagem generativa que aprende a transformar uma distribuição de ruído simples em uma distribuição de dados complexa através de um fluxo contínuo.</span> <span class="s" data-s="b6-c-s1">No T2-Z, ela serve como a função de perda para treinar o modelo de mundo e otimizar o latente, garantindo que as previsões de vídeo sejam fisicamente coerentes e visualmente precisas.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b7-h">Avaliação Experimental</span></h2>
+<p><span class="s" data-s="b7-p0-s0">O T2-Z foi avaliado em 7 configurações simuladas e 4 tarefas robóticas reais.</span> <span class="s" data-s="b7-p0-s1">As simulações cobrem variações de atrito, gravidade, massa de colisão, regras humanas ocultas (interruptores), distribuição de massa e combinações desses fatores.</span> <span class="s" data-s="b7-p0-s2">As tarefas reais incluem fechar portas com diferentes rigidezes de mola, empurrar bolas de massa desconhecida, equilibrar bastões com massas variáveis e puxar objetos macios sob deformação.</span></p><p><span class="s" data-s="b7-p1-s0">As métricas de avaliação incluem Erro Físico (distância em pixels ou ângulo de inclinação), Qualidade de Geração de Vídeo (LPIPS e PSNR) e Sucesso de Ação.</span> <span class="s" data-s="b7-p1-s1">O Sucesso de Ação mede a eficácia do modelo como simulador: o robô prevê o resultado de ações candidatas e executa a que tem maior probabilidade de sucesso no mundo real.</span></p><p><span class="s" data-s="b7-p2-s0">Os resultados quantitativos demonstram melhorias significativas.</span> <span class="s" data-s="b7-p2-s1">Na média das 7 tarefas simuladas, o T2-Z reduziu o erro físico médio de 1.1844 (modelo padrão) para 0.6403.</span> <span class="s" data-s="b7-p2-s2">O erro físico final caiu de 4.5571 para 2.0842.</span> <span class="s" data-s="b7-p2-s3">O sucesso da ação aumentou de 40.0% para 80.0%.</span> <span class="s" data-s="b7-p2-s4">Em tarefas reais, o erro de estado rastreado caiu de 19.30 para 10.85 pixels, e o sucesso da ação subiu de 26.5% para 70.8%.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.22364/table1.webp" alt="Tabela comparativa mostrando que o T2-Z reduz o erro físico e dobra a taxa de sucesso nas tarefas simuladas em comparação com métodos padrão e outros adaptadores." loading="lazy">
+          <figcaption>
+            Tabela comparativa mostrando que o T2-Z reduz o erro físico e dobra a taxa de sucesso nas tarefas simuladas em comparação com métodos padrão e outros adaptadores.
+            <span class="source">Tabela 1 do paper · Zhou et al., arXiv:2610.22364</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Estrutura Emergente dos Latentes</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Um aspecto fascinante do T2-Z é que a estrutura do latente de ambiente emerge organicamente, sem supervisão explícita sobre os fatores físicos.</span> <span class="s" data-s="b9-p0-s1">A Análise de Componentes Principais (PCA) dos vetores z_e aprendidos revela representações estruturadas que refletem os fatores ambientais subjacentes.</span></p><p><span class="s" data-s="b9-p1-s0">Em cenários onde um único fator varia (como apenas o atrito), o latente se organiza em uma estrutura unidimensional clara.</span> <span class="s" data-s="b9-p1-s1">Quando múltiplos fatores variam simultaneamente (como massa e atrito juntos), o latente desenvolve uma organização multidimensional.</span> <span class="s" data-s="b9-p1-s2">Isso indica que o modelo aprendeu a separar e combinar diferentes propriedades físicas no espaço latente, mesmo sem ser instruído a fazer isso.</span></p><p><span class="s" data-s="b9-p2-s0">Além disso, o estudo mostra que a estrutura latente é unificada através de cenas visuais diversas.</span> <span class="s" data-s="b9-p2-s1">Mesmo quando o fundo visual muda drasticamente, a representação do fator ambiental permanece consistente, sugerindo que o modelo consegue desacoplar a semântica física da aparência visual.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.22364/figure6.webp" alt="Resultados qualitativos comparando a precisão do T2-Z contra métodos padrão em diferentes ambientes, mostrando como o T2-Z ajusta a previsão para corresponder aos outcomes dependentes do ambiente." loading="lazy">
+          <figcaption>
+            Resultados qualitativos comparando a precisão do T2-Z contra métodos padrão em diferentes ambientes, mostrando como o T2-Z ajusta a previsão para corresponder aos outcomes dependentes do ambiente.
+            <span class="source">Figura 6 do paper · Zhou et al., arXiv:2610.22364</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b11-h">Limitações e Considerações</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Apesar dos resultados promissores, o T2-Z não é uma solução mágica.</span> <span class="s" data-s="b11-p0-s1">A otimização em tempo de teste requer passos iterativos de gradiente, o que impõe uma sobrecarga computacional durante a inferência.</span> <span class="s" data-s="b11-p0-s2">Embora 40 passos sejam rápidos para modelos modernos, isso limita a velocidade de reação do robô em cenários que exigem tomada de decisão em tempo real estrito.</span></p><p><span class="s" data-s="b11-p1-s0">Além disso, a eficácia do método depende da qualidade do modelo de mundo base.</span> <span class="s" data-s="b11-p1-s1">Se o modelo Wan2.2-TI2V-5B falhar em aprender dinâmicas físicas básicas durante o treinamento, a otimização do latente não poderá compensar essa falha fundamental.</span> <span class="s" data-s="b11-p1-s2">O T2-Z adapta o modelo ao ambiente, mas não corrige erros estruturais do modelo subjacente.</span></p><p><span class="s" data-s="b11-p2-s0">Outra limitação é a sensibilidade à inicialização e à taxa de aprendizado.</span> <span class="s" data-s="b11-p2-s1">A otimização do latente é não-convexa e pode convergir para mínimos locais que não representam a configuração ambiental real, especialmente se houver ruído significativo nas observações.</span> <span class="s" data-s="b11-p2-s2">O agendamento de taxa de aprendizado ajuda, mas não elimina completamente esse risco.</span></p>        <h2><span class="s" data-s="b12-h">Conclusão</span></h2>
+<p><span class="s" data-s="b12-p0-s0">O T2-Z representa um avanço pragmático na robótica de mundo aberto.</span> <span class="s" data-s="b12-p0-s1">Ao tratar a adaptação ambiental como um problema de otimização de latentes em tempo de teste, ele elimina a necessidade de re-treinamento ou de especificação prévia de fatores físicos.</span> <span class="s" data-s="b12-p0-s2">O método permite que robôs generalizem para novas condições físicas usando apenas interações limitadas, melhorando significativamente a precisão da predição e o sucesso das ações.</span></p><p><span class="s" data-s="b12-p1-s0">A emergência de estruturas latentes organizadas sugere que modelos de mundo podem aprender representações abstratas de física de forma não supervisionada, desde que tenham a capacidade de ajustar suas condições internas.</span> <span class="s" data-s="b12-p1-s1">Isso abre caminho para sistemas robóticos mais resilientes e adaptáveis, capazes de lidar com a imprevisibilidade do mundo real sem depender de modelos físicos perfeitos ou simulações exatas.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">T2-Z otimiza um vetor latente de ambiente em tempo de teste para ajustar previsões do modelo, sem alterar os pesos do modelo base.</span></li><li><span class="s" data-s="k1">O método captura fatores físicos não observáveis diretamente, como massa e atrito, através de erro de predição.</span></li><li><span class="s" data-s="k2">Resultados mostram redução de 54% no erro físico e aumento de sucesso de ação de 33% para 73% em tarefas reais.</span></li><li><span class="s" data-s="k3">A estrutura latente emerge organicamente, organizando-se dimensionalmente conforme a complexidade dos fatores ambientais.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.22364" rel="noopener">T2-z: Test-Time Optimization of Environment Latents for Robotic World Models</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.22364" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HoloBoxing: Adaptação de Boxe Humanoide em 7 Minutos com GPU Única — arXiv em 5</title>
+<meta name="description" content="Um pipeline que separa habilidades motoras pré-treinadas de decisões de tarefa, permitindo que um robô humanoide aprenda a boxear em cerca de 7 minutos de treinamento específico, sem redes treinar o controle motor do zero.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HoloBoxing: Adaptação de Boxe Humanoide em 7 Minutos com GPU Única">
+<meta property="og:description" content="Um pipeline que separa habilidades motoras pré-treinadas de decisões de tarefa, permitindo que um robô humanoide aprenda a boxear em cerca de 7 minutos de treinamento específico, sem redes treinar o controle motor do zero.">
+<meta property="og:image" content="../../assets/papers/2610.32909/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Robótica</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.32909" rel="noopener">arXiv:2610.32909</a>
+    </div>
+    <h1><span class="s" data-s="t">HoloBoxing: Adaptação de Boxe Humanoide em 7 Minutos com GPU Única</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um pipeline que separa habilidades motoras pré-treinadas de decisões de tarefa, permitindo que um robô humanoide aprenda a boxear em cerca de 7 minutos de treinamento específico, sem redes treinar o controle motor do zero.</span></p>
+    <p class="byline">
+      <span>Ma et al.</span>
+      <span>8 min de leitura</span>
+<span>23/10/2026</span>    </p>
+    <div class="listen" data-article="2610.32909" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=X3HogbV4Nug" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Adaptação de Tarefa em Robótica</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Treinar robôs humanoides para tarefas complexas de interação, como o boxe, é um desafio que combina execução motora precisa com tomada de decisão estratégica.</span> <span class="s" data-s="b0-p0-s1">Abordagens tradicionais frequentemente tentam aprender o controle das juntas e a lógica da tarefa simultaneamente.</span> <span class="s" data-s="b0-p0-s2">Isso cria um espaço de ação vasto e difícil de explorar, exigindo horas ou dias de treinamento em hardware potente.</span> <span class="s" data-s="b0-p0-s3">O paper HoloBoxing, da Horizon Robotics, propõe uma receita simples para contornar esse gargalo: assumir que a capacidade motora básica já existe e focar apenas no aprendizado da tarefa específica.</span></p><p><span class="s" data-s="b0-p1-s0">Os autores partem da premissa de que controladores de corpo inteiro pré-treinados podem reproduzir movimentos físicos básicos, como socos ou desvios, mas não sabem quando ou onde aplicá-los contra um oponente.</span> <span class="s" data-s="b0-p1-s1">O objetivo do HoloBoxing não é melhorar o controle motor em si, mas adaptar um controlador existente para o contexto de combate.</span> <span class="s" data-s="b0-p1-s2">Essa separação permite que o sistema aproveite conhecimentos motoros reutilizáveis e se concentre exclusivamente nas decisões de alto nível, resultando em um tempo de treinamento adicional de apenas sete minutos em uma única GPU.</span></p><p><span class="s" data-s="b0-p2-s0">Este artigo detalha a arquitetura do HoloBoxing, explicando como a separação de responsabilidades entre planejamento e execução viabiliza tal eficiência.</span> <span class="s" data-s="b0-p2-s1">Vamos analisar o mecanismo de decodificação latente, o papel da inicialização por imitação e os resultados competitivos obtidos em simulação, mantendo um olhar crítico sobre as limitações impostas pela dependência de um controlador pré-existente.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.32909/figure1.webp" alt="Diagrama do pipeline HoloBoxing mostrando as três etapas: ajuste do prior de movimento, imitação de dados e aprendizado por interação, com congelamento seletivo de pesos do modelo." loading="lazy">
+          <figcaption>
+            Diagrama do pipeline HoloBoxing mostrando as três etapas: ajuste do prior de movimento, imitação de dados e aprendizado por interação, com congelamento seletivo de pesos do modelo.
+            <span class="source">Figura 1 do paper · Ma et al., arXiv:2610.32909</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">A Arquitetura de Duas Camadas</span></h2>
+<p><span class="s" data-s="b2-p0-s0">A inovação central do HoloBoxing reside na desconexão entre o que o robô sabe fazer (movimento) e o que ele decide fazer (tática).</span> <span class="s" data-s="b2-p0-s1">O sistema utiliza um controlador de corpo inteiro pré-treinado, chamado HoloMotion v2, que permanece congelado durante o treinamento de boxe.</span> <span class="s" data-s="b2-p0-s2">Este controlador é responsável por traduzir solicitações de movimento em comandos de juntas, garantindo que os movimentos sejam fisicamente executáveis e estáveis.</span> <span class="s" data-s="b2-p0-s3">Sobre esse controlador fixo, é construído um planejador compacto, que atua como a &#39;mente&#39; tática do robô.</span></p><p><span class="s" data-s="b2-p1-s0">O planejador não gera comandos diretos de juntas.</span> <span class="s" data-s="b2-p1-s1">Em vez disso, ele solicita alvos futuros para pontos específicos do corpo.</span> <span class="s" data-s="b2-p1-s2">Essa abstração é crucial.</span> <span class="s" data-s="b2-p1-s3">Se o planejador tentasse prever diretamente as posições futuras de todas as partes do corpo, o espaço de saída seria enorme e difícil de aprender.</span> <span class="s" data-s="b2-p1-s4">O HoloBoxing reduz essa dimensionalidade através de uma representação latente estruturada, permitindo que o planejador foque apenas na intenção do movimento, enquanto o controlador inferior cuida da cinemática e dinâmica.</span></p><p><span class="s" data-s="b2-p2-s0">Essa arquitetura em duas camadas permite que o aprendizado de tarefa seja confinado a uma política superior compacta.</span> <span class="s" data-s="b2-p2-s1">O controlador inferior não precisa ser reajustado para cada nova tarefa; ele serve como uma biblioteca de habilidades motoras já validadas.</span> <span class="s" data-s="b2-p2-s2">O custo de treinamento medido pelo paper exclui o pré-treinamento do controlador HoloMotion v2, focando apenas nos minutos necessários para adaptar o planejador ao contexto de boxe.</span> <span class="s" data-s="b2-p2-s3">Isso redefine o benchmark de eficiência, deslocando o foco do custo absoluto para o custo de adaptação.</span></p>        <h2><span class="s" data-s="b3-h">Decodificação Latente e Representação Compacta</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Para tornar o espaço de ação do planejador tratável, os autores introduzem um decodificador aprendido.</span> <span class="s" data-s="b3-p0-s1">Este componente mapeia um vetor de ação latente de 32 dimensões para uma janela estruturada de alvos corporais futuros.</span> <span class="s" data-s="b3-p0-s2">Sem essa compressão, o planejador teria que gerenciar 225 coordenadas de corpo inteiro, o que tornaria a convergência do aprendizado por reforço extremamente lenta e instável.</span> <span class="s" data-s="b3-p0-s3">O vetor de 32 dimensões atua como um código de alto nível que o decodificador expande para instruções detalhadas.</span></p><p><span class="s" data-s="b3-p1-s0">O decodificador é treinado para reconstruir trajetórias de movimento a partir desses vetores latentes.</span> <span class="s" data-s="b3-p1-s1">A qualidade dessa representação é fundamental: ela não pode apenas minimizar o erro de reconstrução, mas também garantir que os alvos gerados sejam fisicamente executáveis pelo controlador congelado.</span> <span class="s" data-s="b3-p1-s2">O paper destaca que uma baixa perda de reconstrução sozinha é insuficiente; a representação deve preservar a viabilidade física dos movimentos solicitados.</span> <span class="s" data-s="b3-p1-s3">Isso implica que o decodificador aprende não apenas a forma do movimento, mas as restrições impostas pela cinemática do robô.</span></p><p><span class="s" data-s="b3-p2-s0">Durante o treinamento de tarefa, o planejador recebe o estado atual do robô e a posição do oponente como entrada.</span> <span class="s" data-s="b3-p2-s1">Ele então seleciona um vetor de ação latente, que é passado pelo decodificador para gerar os alvos de corpo.</span> <span class="s" data-s="b3-p2-s2">O controlador HoloMotion v2, congelado, recebe esses alvos e calcula os torques e posições de junta necessários para alcançá-los.</span> <span class="s" data-s="b3-p2-s3">Essa interface padronizada permite que o planejador seja treinado independentemente da complexidade da execução motora subjacente.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b4-t">O Custo Real do Treinamento</span></h3>
+          <p><span class="s" data-s="b4-c-s0">O tempo de treinamento adicional reportado é de aproximadamente 7 minutos em uma única GPU RTX 4090.</span> <span class="s" data-s="b4-c-s1">Isso inclui o ajuste da representação latente, a inicialização por imitação e a fase de aprendizado por reforço.</span> <span class="s" data-s="b4-c-s2">O pré-treinamento do controlador base, a preparação de dados e a busca de hiperparâmetros não estão incluídos nesta métrica, o que é honesto, mas requer contexto: a eficiência depende inteiramente da existência prévia do controlador HoloMotion v2.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b5-h">Inicialização por Imitação e Aprendizado por Reforço</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Um dos maiores desafios no aprendizado por reforço para robótica é a exploração inicial.</span> <span class="s" data-s="b5-p0-s1">Começar do zero com políticas aleatórias pode levar a comportamentos instáveis ou perigosos, especialmente em tarefas de contato.</span> <span class="s" data-s="b5-p0-s2">O HoloBoxing mitiga isso através de uma fase de inicialização por imitação de estado medido.</span> <span class="s" data-s="b5-p0-s3">Antes de qualquer recompensa ser aplicada, o planejador é treinado para imitar comportamentos derivados de dados reais ou simulados de alta qualidade.</span></p><p><span class="s" data-s="b5-p1-s0">Nesta etapa, o controlador congelado é usado para rastrear movimentos de referência, coletando pares de observações de estado e alvos futuros executáveis.</span> <span class="s" data-s="b5-p1-s1">Um modelo supervisionado é então treinado para mapear o estado do robô para esses alvos.</span> <span class="s" data-s="b5-p1-s2">Isso fornece ao planejador uma política inicial robusta que já sabe como se mover de forma plausível.</span> <span class="s" data-s="b5-p1-s3">A imitação não ensina o boxe, mas ensina o robô a manter a postura e mover-se de forma coerente, estabelecendo uma base sólida para a refinamento posterior.</span></p><p><span class="s" data-s="b5-p2-s0">Após a inicialização, o sistema entra na fase de aprendizado por reforço.</span> <span class="s" data-s="b5-p2-s1">Aqui, o planejador é refinado para maximizar recompensas específicas de boxe, como acertar o oponente ou manter o equilíbrio.</span> <span class="s" data-s="b5-p2-s2">Como o controlador de execução está congelado e o decodificador já foi ajustado, o espaço de busca do planejador é pequeno e bem definido.</span> <span class="s" data-s="b5-p2-s3">O aprendizado por reforço atua apenas nos pesos do planejador, ajustando as decisões táticas para lidar com a dinâmica imprevisível de um oponente.</span> <span class="s" data-s="b5-p2-s4">O paper relata que a maior parte do tempo de treinamento de 7 minutos é gasta nesta fase de interação, após a representação e a inicialização estarem prontas.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.32909/table1.webp" alt="Tabela detalhando o tempo de treinamento do HoloBoxing (versão de 7 min), mostrando que o processo novo usa uma única RTX 4090 e reutiliza o ajuste da prior de alvo de execuções anteriores." loading="lazy">
+          <figcaption>
+            Tabela detalhando o tempo de treinamento do HoloBoxing (versão de 7 min), mostrando que o processo novo usa uma única RTX 4090 e reutiliza o ajuste da prior de alvo de execuções anteriores.
+            <span class="source">Tabela 1 do paper · Ma et al., arXiv:2610.32909</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Resultados na Liga de Boxe Simulado</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Para avaliar a eficácia do método, os autores realizaram uma liga de boxe simulada envolvendo seis políticas diferentes.</span> <span class="s" data-s="b7-p0-s1">O HoloBoxing na sua versão primária (7 minutos) e na versão de maior orçamento (21,4 minutos) foram comparados contra outros métodos de aprendizado de combate, como RoboStriker e GGSD, além de versões ablativas do próprio HoloBoxing.</span> <span class="s" data-s="b7-p0-s2">A avaliação foi feita em um ambiente padronizado, com o mesmo robô, parâmetros físicos e árbitro para todos os participantes.</span></p><p><span class="s" data-s="b7-p1-s0">Os resultados mostram que a versão de 7 minutos alcançou a segunda posição na liga, com uma classificação Elo de 1541.</span> <span class="s" data-s="b7-p1-s1">A versão de 21,4 minutos liderou com 1669 pontos.</span> <span class="s" data-s="b7-p1-s2">É importante notar que os oponentes externos mantiveram seus pesos originais sem ajuste fino, garantindo que a comparação focasse na capacidade de adaptação do HoloBoxing.</span> <span class="s" data-s="b7-p1-s3">A versão primária venceu sete dos dez combates contra o GGSD e quatro contra o RoboStriker, demonstrando competividade significativa apesar do curto tempo de treinamento.</span></p><p><span class="s" data-s="b7-p2-s0">O desempenho do HoloBoxing destaca a importância das componentes removidas nos experimentos ablativos.</span> <span class="s" data-s="b7-p2-s1">A versão sem o decodificador latente caiu para a quinta posição (Elo 1428), e a versão sem inicialização por imitação caiu para a última (Elo 1362).</span> <span class="s" data-s="b7-p2-s2">Isso confirma que a representação compacta e a inicialização supervisionada são críticas para o sucesso do pipeline.</span> <span class="s" data-s="b7-p2-s3">Sem elas, o aprendizado por reforço sozinha não consegue convergir para um comportamento eficaz dentro do mesmo orçamento de atualizações.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.32909/figure2.webp" alt="Gráfico de trajetórias Elo comparando o HoloBoxing com outros métodos em 150 lutas simuladas, mostrando a superioridade da versão longa e a competitividade da versão de 7 minutos." loading="lazy">
+          <figcaption>
+            Gráfico de trajetórias Elo comparando o HoloBoxing com outros métodos em 150 lutas simuladas, mostrando a superioridade da versão longa e a competitividade da versão de 7 minutos.
+            <span class="source">Figura 2 do paper · Ma et al., arXiv:2610.32909</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Análise Crítica e Limitações</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Embora os resultados sejam impressionantes em termos de eficiência, o paper apresenta limitações claras que devem ser consideradas.</span> <span class="s" data-s="b9-p0-s1">O método depende inteiramente da existência de um controlador de corpo inteiro pré-treinado de alta qualidade.</span> <span class="s" data-s="b9-p0-s2">Se o controlador base não puder executar os alvos gerados pelo decodificador, todo o pipeline falha.</span> <span class="s" data-s="b9-p0-s3">A generalização do HoloBoxing para outros robôs ou tarefas exigiria o desenvolvimento ou aquisição desse controlador base, o que pode ser um custo significativo não refletido no tempo de 7 minutos.</span></p><p><span class="s" data-s="b9-p1-s0">Além disso, os experimentos são realizados inteiramente em simulação.</span> <span class="s" data-s="b9-p1-s1">A transferência para o mundo real, conhecida como sim-to-real, introduz ruídos, atrasos e imperfeições mecânicas que não estão presentes no ambiente simulado.</span> <span class="s" data-s="b9-p1-s2">O paper reconhece que o teste em robôs reais e a transferência de domínio são trabalhos futuros.</span> <span class="s" data-s="b9-p1-s3">A robustez do sistema a perturbações externas e a precisão do modelo físico também são fatores que podem afetar o desempenho fora da simulação.</span></p><p><span class="s" data-s="b9-p2-s0">Outra limitação é o corpus de movimento utilizado para o ajuste da representação latente.</span> <span class="s" data-s="b9-p2-s1">O paper menciona o uso de um corpus de movimento pequeno e uma única semente de treinamento para a tarefa.</span> <span class="s" data-s="b9-p2-s2">Isso levanta questões sobre a estabilidade e a generalização do método.</span> <span class="s" data-s="b9-p2-s3">Estudos independentes com múltiplas sementes e corpora de movimento mais diversificados seriam necessários para isolar os efeitos das componentes e validar a consistência do pipeline.</span> <span class="s" data-s="b9-p2-s4">A avaliação também se concentra em um único tipo de tarefa (boxe), e a aplicabilidade a outras interações físicas não é explorada.</span></p>        <h2><span class="s" data-s="b10-h">Conclusão</span></h2>
+<p><span class="s" data-s="b10-p0-s0">O HoloBoxing apresenta uma receita pragmática para a adaptação de tarefas em robótica humanaide.</span> <span class="s" data-s="b10-p0-s1">Ao separar explicitamente a execução motora das decisões de tarefa, os autores conseguem reduzir drasticamente o custo de treinamento para novas habilidades.</span> <span class="s" data-s="b10-p0-s2">O uso de um decodificador latente compacto e a inicialização por imitação permitem que o aprendizado por reforço converge rapidamente para comportamentos competitivos.</span></p><p><span class="s" data-s="b10-p1-s0">Os resultados na liga simulada validam a abordagem, mostrando que um robô pode aprender a boxear de forma eficaz em minutos de treinamento específico, desde que as habilidades motoras básicas já estejam disponíveis.</span> <span class="s" data-s="b10-p1-s1">Isso representa um passo significativo em direção a robôs mais versáteis e adaptáveis, capazes de aprender novas tarefas sem a necessidade de retreinamento completo.</span> <span class="s" data-s="b10-p1-s2">No entanto, a dependência de controladores pré-treinados e a limitação ao ambiente simulado destacam os desafios restantes para a implementação prática em larga escala.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Separação clara entre o controlador motor congelado (execução) e o planejador de tarefas (decisão), reduzindo drasticamente a complexidade do aprendizado.</span></li><li><span class="s" data-s="k1">Uso de um decodificador latente de 32 dimensões para representar alvos corporais futuros, substituindo a previsão direta de 225 coordenadas.</span></li><li><span class="s" data-s="k2">Inicialização por imitação de estado medido antes do aprendizado por reforço, fornecendo um comportamento inicial estável para exploração.</span></li><li><span class="s" data-s="k3">O método alcançou a segunda posição em uma liga simulada de boxe contra outros agentes, com um custo computacional marginal após o pré-treinamento.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.32909" rel="noopener">HoloBoxing: A Simple Recipe for Humanoid Boxing with 7 Minutes of Single-GPU Training</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.32909" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agentes de IA Local em Simulação de Eletrônica de Potência: Custos e Desempenho — arXiv em 5</title>
+<meta name="description" content="Este paper avalia o custo real de executar agentes de IA localmente em simulações de eletrônica de potência, medindo energia, tempo e tokens para determinar a viabilidade frente à nuvem.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Agentes de IA Local em Simulação de Eletrônica de Potência: Custos e Desempenho">
+<meta property="og:description" content="Este paper avalia o custo real de executar agentes de IA localmente em simulações de eletrônica de potência, medindo energia, tempo e tokens para determinar a viabilidade frente à nuvem.">
+<meta property="og:image" content="../../assets/papers/2611.24880/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Agentes</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.24880" rel="noopener">arXiv:2611.24880</a>
+    </div>
+    <h1><span class="s" data-s="t">Agentes de IA Local em Simulação de Eletrônica de Potência: Custos e Desempenho</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Este paper avalia o custo real de executar agentes de IA localmente em simulações de eletrônica de potência, medindo energia, tempo e tokens para determinar a viabilidade frente à nuvem.</span></p>
+    <p class="byline">
+      <span>Li et al.</span>
+      <span>7 min de leitura</span>
+<span>18/11/2026</span>    </p>
+    <div class="listen" data-article="2611.24880" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=LEE4gieCXdw" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Simulação Iterativa</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A eletrônica de potência é um campo onde o hardware físico é central, mas o desenvolvimento depende massivamente de simulação.</span> <span class="s" data-s="b0-p0-s1">Engenheiros projetam conversores ou estudam redes elétricas através de um loop iterativo: modela-se o circuito, simula-se, medem-se os resultados contra as especificações e revisa-se o modelo.</span> <span class="s" data-s="b0-p0-s2">Esse ciclo se repete até que a especificação seja atendida ou se prove que é inviável.</span></p><p><span class="s" data-s="b0-p1-s0">Historicamente, esse loop era fechado manualmente.</span> <span class="s" data-s="b0-p1-s1">O engenheiro executava o simulador, inspecionava as formas de onda e decidia a próxima modificação.</span> <span class="s" data-s="b0-p1-s2">Modelos de linguagem (LLMs) podiam atuar como consultores, mas ficavam de fora do loop de controle.</span> <span class="s" data-s="b0-p1-s3">A chegada dos agentes de IA, construídos sobre LLMs, mudou isso.</span> <span class="s" data-s="b0-p1-s4">O agente chama ferramentas, lê os resultados e determina a próxima ação, fechando o loop automaticamente.</span></p><p><span class="s" data-s="b0-p2-s0">A escolha entre hospedar esse agente na nuvem ou localmente é crítica.</span> <span class="s" data-s="b0-p2-s1">Para organizações que lidam com projetos sensíveis, dados de clientes ou material controlado por exportação, a implantação local é frequentemente a única opção.</span> <span class="s" data-s="b0-p2-s2">Além disso, os simuladores podem ter licenças restritas ao uso on-premises.</span> <span class="s" data-s="b0-p2-s3">No entanto, um agente local transforma-se em uma carga elétrica real sobre o equipamento da organização.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.24880/figure1.webp" alt="Comparação do fluxo de simulação: à esquerda, o engenheiro fecha o loop manualmente com ajuda do LLM; à direita, o agente fecha o loop autonomamente, editando, simulando e medindo." loading="lazy">
+          <figcaption>
+            Comparação do fluxo de simulação: à esquerda, o engenheiro fecha o loop manualmente com ajuda do LLM; à direita, o agente fecha o loop autonomamente, editando, simulando e medindo.
+            <span class="source">Figura 1 do paper · Li et al., arXiv:2611.24880</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">A Lacuna na Pesquisa Atual</span></h2>
+<p><span class="s" data-s="b2-p0-s0">A maioria dos trabalhos existentes foca no que os agentes podem alcançar quando hospedados em APIs na nuvem.</span> <span class="s" data-s="b2-p0-s1">Há pouca investigação quantitativa sobre o custo de uma implantação local em tarefas reais de simulação.</span> <span class="s" data-s="b2-p0-s2">Quando um agente roda localmente, cada execução consome energia, gera tokens e ocupa tempo de parede (wall-clock time).</span> <span class="s" data-s="b2-p0-s3">Esses recursos têm custos diretos e indiretos.</span></p><p><span class="s" data-s="b2-p1-s0">Para avaliar a viabilidade, quatro quantidades devem ser medidas em suas próprias unidades: 1) a potência consumida pelo dispositivo de inferência, que define a necessidade de fonte de alimentação; 2) a energia consumida até o fim da tarefa, que determina o custo de eletricidade; 3) o número de tokens gerados, já que o orçamento de tokens é o limite imposto pelo software do agente; e 4) o tempo de parede, durante o qual a licença do simulador e a espera do engenheiro estão ocupadas.</span></p><p><span class="s" data-s="b2-p2-s0">Os autores, do ELITEGrid Research Laboratory da Universidade de Alberta, propõem um framework de avaliação sistemática.</span> <span class="s" data-s="b2-p2-s1">O objetivo é caracterizar a fronteira de capacidade de um agente local nessas tarefas e o custo por tarefa resolvida, fornecendo insights práticos para o uso de IA agêntica em eletrônica de potência.</span></p>        <h2><span class="s" data-s="b3-h">Metodologia: O Framework de Medição</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O paper apresenta um framework rigoroso para garantir comparações justas.</span> <span class="s" data-s="b3-p0-s1">Antes de cada lote de testes, os conjuntos de tarefas, os critérios de aceitação e os pontos de operação não divulgados são congelados.</span> <span class="s" data-s="b3-p0-s2">O orçamento de tokens de saída, o conjunto de ferramentas e a versão do executor são fixados.</span> <span class="s" data-s="b3-p0-s3">Isso elimina variáveis ocultas que poderiam enviesar os resultados.</span></p><p><span class="s" data-s="b3-p1-s0">Cada execução ocorre em uma plataforma específica, onde são coletados dados de energia e tempo.</span> <span class="s" data-s="b3-p1-s1">A abordagem mede não apenas se o agente resolveu o problema, mas quanto ele custou para resolvê-lo.</span> <span class="s" data-s="b3-p1-s2">Isso inclui medir a potência drawn (consumida) pelo dispositivo de inferência e a energia acumulada ao longo do tempo.</span></p><p><span class="s" data-s="b3-p2-s0">O framework permite analisar trade-offs entre diferentes configurações.</span> <span class="s" data-s="b3-p2-s1">Por exemplo, é possível comparar o desempenho de um modelo base versus um modelo de raciocínio, ou avaliar o impacto de diferentes orçamentos de tokens.</span> <span class="s" data-s="b3-p2-s2">A ideia é tratar a configuração do agente como um todo, onde hardware, modelo e parâmetros de software interagem para definir o resultado final.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.24880/figure4.webp" alt="Detalhes do framework de medição: (a) condições fixas antes do lote; (b) coleta de dados de energia e tempo durante a execução na plataforma de teste." loading="lazy">
+          <figcaption>
+            Detalhes do framework de medição: (a) condições fixas antes do lote; (b) coleta de dados de energia e tempo durante a execução na plataforma de teste.
+            <span class="source">Figura 4 do paper · Li et al., arXiv:2611.24880</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Resultados: Custo por Tarefa Resolvida</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os resultados mostram que o custo de uma tarefa resolvida não é uma propriedade intrínseca do modelo, mas sim da configuração completa.</span> <span class="s" data-s="b5-p0-s1">Fatores como o orçamento de tokens de saída e a habilitação de raciocínio (reasoning) mudaram drasticamente as taxas de sucesso.</span> <span class="s" data-s="b5-p0-s2">Por exemplo, apenas aumentar o orçamento de tokens mudou o resultado de construção de 1/48 para 32/62 em certas tarefas.</span></p><p><span class="s" data-s="b5-p1-s0">Habilitar o raciocínio aumentou a taxa de sucesso de um modelo em uma família específica de 17% para 67%.</span> <span class="s" data-s="b5-p1-s1">Dentro de uma mesma família de modelos, o tamanho do modelo base alterou a taxa de sucesso de 83% para 57% e quadruplicou a energia por tarefa resolvida.</span> <span class="s" data-s="b5-p1-s2">Isso indica que modelos maiores não são sempre melhores; eles podem ser mais caros e menos eficazes em certos contextos de simulação.</span></p><p><span class="s" data-s="b5-p2-s0">No lado do hardware, o bloqueio do clock (clock locking) alterou o consumo de energia em 66% sem mudar o tempo de parede.</span> <span class="s" data-s="b5-p2-s1">Isso destaca que a eficiência energética depende de detalhes de implementação e configuração do hardware, não apenas da arquitetura do modelo.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.24880/figure12.webp" alt="Relação entre tempo e energia: uma tarefa que passa versus uma que falha no limite de tokens. A falha consome cerca de 2,4 vezes mais energia que o sucesso." loading="lazy">
+          <figcaption>
+            Relação entre tempo e energia: uma tarefa que passa versus uma que falha no limite de tokens. A falha consome cerca de 2,4 vezes mais energia que o sucesso.
+            <span class="source">Figura 12 do paper · Li et al., arXiv:2611.24880</span>
+          </figcaption>
+        </figure>
+        <aside class="callout">
+          <h3><span class="s" data-s="b7-t">O Custo da Falha</span></h3>
+          <p><span class="s" data-s="b7-c-s0">Tarefas que falham ou atingem o limite de tokens sem resolver o problema consomem significativamente mais recursos.</span> <span class="s" data-s="b7-c-s1">No estudo, uma execução que falhou consumiu cerca de 2,4 vezes mais energia que uma que teve sucesso, demonstrando que o custo de tentar e errar é alto em ambientes locais.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b8-h">Implicações para Implantação Local</span></h2>
+<p><span class="s" data-s="b8-p0-s0">A implantação local é escolhida por soberania de dados e restrições de licença.</span> <span class="s" data-s="b8-p0-s1">A questão é: quais tarefas são adequadas para isso?</span> <span class="s" data-s="b8-p0-s2">O paper define um critério de viabilidade.</span> <span class="s" data-s="b8-p0-s3">Uma tarefa é viável localmente quando a probabilidade de sucesso (p) é alta o suficiente para que a energia, o tempo e os tokens de uma tarefa resolvida, escalados por (1-p)/p, sejam aceitáveis.</span></p><p><span class="s" data-s="b8-p1-s0">Nem um dispositivo mais rápido nem um modelo mais barato por execução mudam esse fator fundamental.</span> <span class="s" data-s="b8-p1-s1">No estudo, tarefas que começavam com um modelo existente atendiam ao critério.</span> <span class="s" data-s="b8-p1-s2">Isso inclui diagnosticar e reparar um modelo, realizar etapas de um design existente, ajustar controladores contra resultados simulados e estudos de sistemas de potência que retornam uma configuração ou número.</span></p><p><span class="s" data-s="b8-p2-s0">Em contraste, construir um modelo de conversor do zero a partir de uma especificação não atendeu ao critério com orçamentos menores de tokens.</span> <span class="s" data-s="b8-p2-s1">Com o dobro do orçamento, o custo saltava para horas por tarefa resolvida, comparado a minutos na nuvem.</span> <span class="s" data-s="b8-p2-s2">Isso sugere que a IA local é melhor para refinamento e diagnóstico do que para criação generativa complexa a partir do zero.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.24880/figure16.webp" alt="Comparação de eficiência: uma tarefa de construção resolvida por três implantações diferentes. Mostra o tempo total e as iterações de chamadas de ferramenta (editar, simular, ler)." loading="lazy">
+          <figcaption>
+            Comparação de eficiência: uma tarefa de construção resolvida por três implantações diferentes. Mostra o tempo total e as iterações de chamadas de ferramenta (editar, simular, ler).
+            <span class="source">Figura 16 do paper · Li et al., arXiv:2611.24880</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">Onde Está o Custo e Como Reduzi-lo</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Em escala de estudo, um agente local é uma carga elétrica pequena.</span> <span class="s" data-s="b10-p0-s1">O dispositivo consome dezenas de watts, e uma tarefa de defeito resolvida custa algumas dezenas de quilojoules.</span> <span class="s" data-s="b10-p0-s2">Portanto, a eletricidade é o menor item no modelo de custo para uso de engenharia.</span> <span class="s" data-s="b10-p0-s3">O próximo maior custo é o tempo de parede.</span></p><p><span class="s" data-s="b10-p1-s0">O tempo de parede é crítico porque ocupa a licença do simulador e a atenção do engenheiro.</span> <span class="s" data-s="b10-p1-s1">Um dispositivo que precisa ser mais rápido pode executar vários nós em paralelo ou usar um dispositivo com mais computação e largura de banda de memória.</span> <span class="s" data-s="b10-p1-s2">Nesse caso, o tempo por tarefa resolvida cai, mas o custo de infraestrutura sobe.</span></p><p><span class="s" data-s="b10-p2-s0">Para conjuntos de dados de sistemas de potência, ambas as implantações (local e nuvem) alcançaram os mesmos resultados onde ambas passaram.</span> <span class="s" data-s="b10-p2-s1">Os requisitos adicionais para a implantação local foram uma janela de contexto acima de 131k tokens e o esforço de manter as salvaguardas.</span> <span class="s" data-s="b10-p2-s2">O benefício é que o modelo, os arquivos de estudo e os transcripts permanecem no local.</span></p>        <h2><span class="s" data-s="b11-h">Limitações e Trabalho Futuro</span></h2>
+<p><span class="s" data-s="b11-p0-s0">O paper reconhece limitações.</span> <span class="s" data-s="b11-p0-s1">O estudo foi realizado em um único dispositivo de inferência pequeno, escolhido como o mínimo necessário para o estudo, não como uma configuração de implantação ideal.</span> <span class="s" data-s="b11-p0-s2">Dispositivos maiores ou clusters poderiam mudar os números de tempo e energia, mas a relação fundamental entre sucesso e custo permaneceria.</span></p><p><span class="s" data-s="b11-p1-s0">A fronteira de viabilidade entre tarefas locais e de nuvem é uma propriedade do modelo, do orçamento e do dispositivo, e mudará à medida que a tecnologia evolui.</span> <span class="s" data-s="b11-p1-s1">No entanto, o critério de avaliação e a necessidade de medir p (probabilidade de sucesso) nas tarefas específicas da organização não mudarão.</span></p><p><span class="s" data-s="b11-p2-s0">Grupos de engenharia podem localizar esse limite para sua mistura de tarefas medindo p em um pequeno número de execuções em dois orçamentos diferentes.</span> <span class="s" data-s="b11-p2-s1">Isso permite uma decisão informada sobre quando usar IA local versus nuvem, baseada em dados reais de custo e desempenho, e não em suposições.</span></p>        <h2><span class="s" data-s="b12-h">Conclusão</span></h2>
+<p><span class="s" data-s="b12-p0-s0">Este paper fornece uma avaliação quantitativa robusta de agentes de IA local em simulação de eletrônica de potência.</span> <span class="s" data-s="b12-p0-s1">Ele demonstra que, embora a nuvem seja mais rápida para tarefas complexas de criação do zero, a implantação local é viável e econômica para tarefas de diagnóstico, ajuste e análise de sistemas existentes.</span></p><p><span class="s" data-s="b12-p1-s0">Os principais insights são: 1) O custo é definido pela configuração, não apenas pelo modelo; 2) A eletricidade é um custo menor que o tempo; 3) Tarefas de refinamento são ideais para local; 4) A viabilidade depende da probabilidade de sucesso e do orçamento de tokens.</span></p><p><span class="s" data-s="b12-p2-s0">Para engenheiros e cientistas de dados, o trabalho oferece um framework prático para avaliar se a IA agêntica local vale a pena para suas aplicações específicas, considerando restrições de dados, custos de infraestrutura e necessidades de desempenho.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Agentes locais consomem energia e tempo reais; a nuvem não é a única opção viável para dados sensíveis.</span></li><li><span class="s" data-s="k1">O sucesso depende da configuração, não apenas do modelo: orçamento de tokens e hardware importam mais.</span></li><li><span class="s" data-s="k2">Tarefas de diagnóstico e ajuste são viáveis localmente; criação do zero pode ser proibitiva.</span></li><li><span class="s" data-s="k3">A eletricidade é um custo menor que o tempo de espera e a licença do simulador.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.24880" rel="noopener">Local AI Agents in Power Electronics Simulation: Deployment, Measurements and Costs</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.24880" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

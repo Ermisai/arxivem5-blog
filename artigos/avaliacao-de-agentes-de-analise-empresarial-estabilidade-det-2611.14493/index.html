@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Avaliação de Agentes de Análise Empresarial: Estabilidade, Detecção e Descoberta de Falhas — arXiv em 5</title>
+<meta name="description" content="Um estudo comparativo de três frameworks de avaliação para agentes LLM em ambientes corporativos revela que o acesso ao rastro de execução (trace) é o fator crítico para detectar falhas semânticas e de segurança que testes de texto puro ignoram.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Avaliação de Agentes de Análise Empresarial: Estabilidade, Detecção e Descoberta de Falhas">
+<meta property="og:description" content="Um estudo comparativo de três frameworks de avaliação para agentes LLM em ambientes corporativos revela que o acesso ao rastro de execução (trace) é o fator crítico para detectar falhas semânticas e de segurança que testes de texto puro ignoram.">
+<meta property="og:image" content="../../assets/papers/2611.14493/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Agentes</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.14493" rel="noopener">arXiv:2611.14493</a>
+    </div>
+    <h1><span class="s" data-s="t">Avaliação de Agentes de Análise Empresarial: Estabilidade, Detecção e Descoberta de Falhas</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um estudo comparativo de três frameworks de avaliação para agentes LLM em ambientes corporativos revela que o acesso ao rastro de execução (trace) é o fator crítico para detectar falhas semânticas e de segurança que testes de texto puro ignoram.</span></p>
+    <p class="byline">
+      <span>Zhang et al.</span>
+      <span>5 min de leitura</span>
+<span>10/11/2026</span>    </p>
+    <div class="listen" data-article="2611.14493" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=ix1oOW0-Ii0" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Avaliação de Agentes em Produção</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A implementação de agentes baseados em LLMs para análise empresarial, que geram SQL, invocam ferramentas e sintetizam respostas sobre dados sensíveis, exige frameworks de avaliação confiáveis.</span> <span class="s" data-s="b0-p0-s1">Falhas nesses sistemas têm consequências operacionais diretas e frequentemente escapam à revisão manual.</span> <span class="s" data-s="b0-p0-s2">Em estudos anteriores, falhas silenciosas na geração de SQL — onde o código é sintaticamente válido mas semanticamente incorreto, retornando zero linhas — degradam a qualidade das decisões de negócios.</span></p><p><span class="s" data-s="b0-p1-s0">A maioria das equipes ainda depende de verificação aleatória (spot-checking), que é insuficiente.</span> <span class="s" data-s="b0-p1-s1">Este paper, de autores da Amazon, apresenta um estudo comparativo de três fases que avalia três paradigmas de avaliação distintos: julgamento baseado em LLM com acesso a traces completos, julgamento baseado em LLM apenas em texto com red-teaming, e heurísticas determinísticas.</span> <span class="s" data-s="b0-p1-s2">O objetivo é entender como esses frameworks se comportam em termos de estabilidade, detecção de riscos conhecidos e descoberta de riscos desconhecidos.</span></p>        <h2><span class="s" data-s="b1-h">Metodologia: O Que foi Medido e Como</span></h2>
+<p><span class="s" data-s="b1-p0-s0">O estudo utilizou dois agentes de análise de cadeia de suprimentos da Amazon.</span> <span class="s" data-s="b1-p0-s1">O Agente A analisa previsões de demanda por categoria, enquanto o Agente B analisa prazos de entrega por produto, utilizando um interpretador de código e tabelas de grande escala.</span> <span class="s" data-s="b1-p0-s2">Para garantir uma comparação justa, todos os testes foram realizados em um ambiente de pesquisa controlado, utilizando rastros de execução congelados (frozen execution traces).</span> <span class="s" data-s="b1-p0-s3">Isso isolou a qualidade do framework de avaliação da variabilidade do agente em si.</span></p><p><span class="s" data-s="b1-p1-s0">Os três frameworks avaliados representam filosofias distintas.</span> <span class="s" data-s="b1-p1-s1">O Strands Evals é um juiz baseado em LLM que tem acesso ao trace completo de execução via OpenTelemetry.</span> <span class="s" data-s="b1-p1-s2">O PromptFoo é um juiz baseado em LLM que opera apenas com a saída de texto e contextos injetados, focado em red-teaming.</span> <span class="s" data-s="b1-p1-s3">O Agenta utiliza heurísticas determinísticas, operando apenas sobre representações de string, sem custo de LLM.</span> <span class="s" data-s="b1-p1-s4">A diferença arquitetural chave é a quantidade de informação disponível para o mecanismo de avaliação.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.14493/table1.webp" alt="Mapeamento dos requisitos de avaliação para cada framework. Observe como o Strands avalia todos os requisitos via trace, enquanto o PromptFoo falha em requisitos que exigem contexto de execução, e o Agenta depende de correspondência de string." loading="lazy">
+          <figcaption>
+            Mapeamento dos requisitos de avaliação para cada framework. Observe como o Strands avalia todos os requisitos via trace, enquanto o PromptFoo falha em requisitos que exigem contexto de execução, e o Agenta depende de correspondência de string.
+            <span class="source">Tabela 1 do paper · Zhang et al., arXiv:2611.14493</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Fase 1: Estabilidade dos Mecanismos de Avaliação</span></h2>
+<p><span class="s" data-s="b3-p0-s0">A primeira fase mediu a estabilidade dos frameworks através de medições repetidas.</span> <span class="s" data-s="b3-p0-s1">Em um cenário de produção, se um teste passa em uma execução e falha na próxima sem mudanças no código, a avaliação é inútil para gates de CI/CD.</span> <span class="s" data-s="b3-p0-s2">Os autores mediram a consistência da decisão (se o veredito de pass/fail permanece o mesmo) e o desvio padrão dentro do caso.</span> <span class="s" data-s="b3-p0-s3">A maioria das configurações (97%) atingiu o limiar de estabilidade, mas com nuances importantes.</span></p><p><span class="s" data-s="b3-p1-s0">O Agenta, sendo determinístico, teve 100% de consistência de decisão e desvio padrão zero.</span> <span class="s" data-s="b3-p1-s1">No entanto, como veremos, essa estabilidade é enganosa porque o framework não consegue distinguir corretamente respostas abertas corretas de incorretas.</span> <span class="s" data-s="b3-p1-s2">O PromptFoo manteve alta estabilidade (92% de consistência), mas o Strands apresentou variabilidade maior (82% de consistência), especialmente quando combinado com modelos menos estáveis como o Qwen3.</span> <span class="s" data-s="b3-p1-s3">Isso demonstra que a estabilidade é uma propriedade do par (framework, modelo), não apenas do modelo.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.14493/figure1.webp" alt="A variabilidade do desvio padrão médio por framework e modelo. O PromptFoo é uniforme e estável. O Strands mostra maior variância, com o Qwen3 apresentando instabilidade crítica, enquanto outros modelos mantêm performance aceitável." loading="lazy">
+          <figcaption>
+            A variabilidade do desvio padrão médio por framework e modelo. O PromptFoo é uniforme e estável. O Strands mostra maior variância, com o Qwen3 apresentando instabilidade crítica, enquanto outros modelos mantêm performance aceitável.
+            <span class="source">Figura 1 do paper · Zhang et al., arXiv:2611.14493</span>
+          </figcaption>
+        </figure>
+        <aside class="callout">
+          <h3><span class="s" data-s="b5-t">A Trade-off Estabilidade-Nuance</span></h3>
+          <p><span class="s" data-s="b5-c-s0">Avaliações baseadas em LLM não são confiáveis o suficiente para gates automatizados de CI/CD onde um único flip de veredito pode bloquear ou aprovar uma deploy.</span> <span class="s" data-s="b5-c-s1">No entanto, elas são ideais para o desenvolvimento iterativo, onde o sinal agregado de falhas sistêmicas importa mais que o veredito de um caso individual.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b6-h">Fase 2: Detecção de Riscos Conhecidos</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Na segunda fase, 72 casos de teste com ground-truth foram avaliados para medir a capacidade de detecção de falhas conhecidas.</span> <span class="s" data-s="b6-p0-s1">O Strands Evals alcançou o melhor equilíbrio entre precisão e recall (F1=0.896), capturando 90.9% das falhas com uma taxa de falsos positivos de 10.3%.</span> <span class="s" data-s="b6-p0-s2">O PromptFoo teve recall similar (87.9%), mas gerou 5 vezes mais falsos alarmes (48.7% de FPR).</span> <span class="s" data-s="b6-p0-s3">O Agenta teve recall de 100%, mas uma precisão terrível de 45.8%, indicando que ele marca tudo como falha para evitar erros, o que é inútil na prática.</span></p><p><span class="s" data-s="b6-p1-s0">A chave aqui é o acesso à informação.</span> <span class="s" data-s="b6-p1-s1">O Strands, ao ter acesso ao trace completo, pôde avaliar corretamente a correção da ferramenta (tool correctness) e a fidelidade (faithfulness), onde os outros falharam.</span> <span class="s" data-s="b6-p1-s2">O PromptFoo, vendo apenas texto, não pôde inferir quais ferramentas deveriam ter sido usadas ou se os dados referenciados eram os corretos.</span> <span class="s" data-s="b6-p1-s3">O Agenta falhou completamente em detectar erros semânticos, dependendo de expressões regulares que só capturam erros estruturais óbvios.</span></p>        <h2><span class="s" data-s="b7-h">Fase 3: Descoberta de Riscos Desconhecidos</span></h2>
+<p><span class="s" data-s="b7-p0-s0">A terceira fase buscou falhas não antecipadas.</span> <span class="s" data-s="b7-p0-s1">Os frameworks geraram casos adversariais e funcionais.</span> <span class="s" data-s="b7-p0-s2">O resultado mais crítico foi que 24 falhas novel foram descobertas, com sobreposição zero entre os testes funcionais e os testes de segurança (red-teaming).</span> <span class="s" data-s="b7-p0-s3">Isso confirma que abordagens funcionais e de segurança são complementares e atacam superfícies de falha fundamentalmente diferentes.</span></p><p><span class="s" data-s="b7-p1-s0">Além disso, os mecanismos de avaliação baseados em LLM revelaram erros sutis que revisores humanos inicialmente perderam.</span> <span class="s" data-s="b7-p1-s1">Nove falhas de ground-truth foram inicialmente rotuladas incorretamente como corretas pelos humanos, mas foram corrigidas após a flaguação pelos evaluators automatizados.</span> <span class="s" data-s="b7-p1-s2">Isso sugere que LLMs bem configurados podem atuar como um segundo par de olhos mais rigoroso para padrões de erro complexos.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.14493/table6.webp" alt="Matriz de descoberta combinada. A ausência de sobreposição entre testes funcionais e de segurança prova que nenhuma única abordagem é suficiente para cobrir todas as falhas potenciais." loading="lazy">
+          <figcaption>
+            Matriz de descoberta combinada. A ausência de sobreposição entre testes funcionais e de segurança prova que nenhuma única abordagem é suficiente para cobrir todas as falhas potenciais.
+            <span class="source">Tabela 6 do paper · Zhang et al., arXiv:2611.14493</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Limitações e Escopo do Estudo</span></h2>
+<p><span class="s" data-s="b9-p0-s0">É crucial notar que este estudo foi realizado em um ambiente de pesquisa controlado com traces congelados, não em um deploy de produção em tempo real.</span> <span class="s" data-s="b9-p0-s1">A estabilidade observada pode variar em ambientes de alta concorrência ou com latência de rede.</span> <span class="s" data-s="b9-p0-s2">Além disso, a variabilidade do Strands com certos modelos (como Qwen3) indica que a escolha do modelo judge é crítica.</span> <span class="s" data-s="b9-p0-s3">O estudo não avalia o custo computacional em escala massiva, embora o Agenta seja notado por ter custo zero de LLM.</span></p><p><span class="s" data-s="b9-p1-s0">Outra limitação é o viés dos avaliadores humanos na Fase 2.</span> <span class="s" data-s="b9-p1-s1">O labeling foi feito por poucos especialistas, o que pode introduzir subjetividade.</span> <span class="s" data-s="b9-p1-s2">No entanto, o fato de os evaluators automatizados corrigirem humanos sugere que a automação pode reduzir esse viés em casos de erros sutis.</span></p>        <h2><span class="s" data-s="b10-h">Conclusão: Uma Estratégia em Camadas</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Os autores recomendam uma estratégia de dois frameworks.</span> <span class="s" data-s="b10-p0-s1">Use o Strands (ou equivalente trace-based) para avaliação funcional abrangente, pois ele captura erros semânticos e de ferramenta que text-only perde.</span> <span class="s" data-s="b10-p0-s2">Use o PromptFoo (ou equivalente red-teaming) para validação de segurança, pois ele descobre vulnerabilidades de vazamento de dados que testes funcionais ignoram.</span></p><p><span class="s" data-s="b10-p1-s0">Heurísticas determinísticas como o Agenta podem ser úteis para checks rápidos de sintaxe, mas não devem ser a única linha de defesa.</span> <span class="s" data-s="b10-p1-s1">A informação disponível para o avaliador determina a qualidade da avaliação.</span> <span class="s" data-s="b10-p1-s2">Sem acesso ao trace, você cega o avaliador para a maior parte da complexidade do agente.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">O acesso à informação determina a qualidade da avaliação: traces completos capturam erros semânticos que avaliações baseadas apenas em texto não veem.</span></li><li><span class="s" data-s="k1">Avaliações funcionais e de segurança (red-teaming) são complementares e descobrem falhas distintas, com sobreposição zero nos testes realizados.</span></li><li><span class="s" data-s="k2">Avaliações determinísticas são estáveis mas cegas a erros abertos; LLMs como juiz são mais ruidosos mas muito mais precisos na detecção de nuances.</span></li><li><span class="s" data-s="k3">A estratégia recomendada combina avaliação baseada em trace para funcionalidade e red-teaming adversarial para validação de segurança.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.14493" rel="noopener">Comparative Analysis of Agent Evaluation Frameworks: Stability, Detection, and Discovery in Enterprise Analytics Agents</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.14493" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

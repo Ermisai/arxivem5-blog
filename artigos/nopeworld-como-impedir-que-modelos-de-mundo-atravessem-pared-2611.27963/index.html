@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NoPeWorld: Como impedir que modelos de mundo atravessem paredes — arXiv em 5</title>
+<meta name="description" content="Este artigo explica como o framework NoPeWorld corrige a falha comum de modelos de vídeo atravessarem obstáculos sólidos, utilizando estados internos de modelos de difusão já congelados.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="NoPeWorld: Como impedir que modelos de mundo atravessem paredes">
+<meta property="og:description" content="Este artigo explica como o framework NoPeWorld corrige a falha comum de modelos de vídeo atravessarem obstáculos sólidos, utilizando estados internos de modelos de difusão já congelados.">
+<meta property="og:image" content="../../assets/papers/2611.27963/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Vídeo</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.27963" rel="noopener">arXiv:2611.27963</a>
+    </div>
+    <h1><span class="s" data-s="t">NoPeWorld: Como impedir que modelos de mundo atravessem paredes</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Este artigo explica como o framework NoPeWorld corrige a falha comum de modelos de vídeo atravessarem obstáculos sólidos, utilizando estados internos de modelos de difusão já congelados.</span></p>
+    <p class="byline">
+      <span>Dai et al.</span>
+      <span>8 min de leitura</span>
+<span>20/11/2026</span>    </p>
+    <div class="listen" data-article="2611.27963" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=ffjTq5df-fs" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da &#39;Plataforma 9 ¾&#39; em Modelos de Vídeo</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Os modelos de mundo (world models) de vídeo estão se tornando cada vez mais capazes de gerar sequências temporais coerentes baseadas em comandos de usuário, seja através de poses de câmera ou entradas de teclado.</span> <span class="s" data-s="b0-p0-s1">No entanto, eles compartilham uma falha fundamental de física: a incapacidade de respeitar obstáculos sólidos.</span> <span class="s" data-s="b0-p0-s2">Em termos simples, esses modelos comportam-se como se paredes fossem a &#39;Plataforma 9 ¾&#39; de Harry Potter, permitindo que a câmera ou o agente atravessem barreiras físicas sem colidir ou deslizar ao longo delas.</span></p><p><span class="s" data-s="b0-p1-s0">Essa falha não é apenas um erro estético; ela revela uma desconexão entre a intenção do usuário e a plausibilidade física do mundo gerado.</span> <span class="s" data-s="b0-p1-s1">Quando um usuário instrui uma câmera a se mover para trás em um corredor, e a câmera atravessa a parede final, o modelo falha em impor restrições básicas de não penetração.</span> <span class="s" data-s="b0-p1-s2">Em simuladores gráficos e motores de jogo, isso é resolvido há décadas através de detecção e resposta a colisões.</span> <span class="s" data-s="b0-p1-s3">Nos modelos de vídeo atuais, esse mecanismo está ausente, pois o treinamento geralmente ocorre em trajetórias livres de obstáculos, tornando comandos que levam a colisões casos fora da distribuição (out-of-distribution).</span></p><p><span class="s" data-s="b0-p2-s0">Soluções óbvias, como pedir explicitamente ao modelo via prompt de texto para &#39;parar&#39; ou &#39;deslizar&#39;, mostraram-se ineficazes.</span> <span class="s" data-s="b0-p2-s1">Outras abordagens, como usar estimadores de profundidade externos para detectar obstáculos e interromper o movimento, exigem processamento pós-hoc adicional para cada frame gerado e tendem a cortar a intenção do usuário de forma abrupta, muitas vezes parando o movimento completamente em vez de ajustá-lo suavemente.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.27963/figure1.webp" alt="Ilustração do problema: modelos de mundo de vídeo geram trajetórias que atravessam paredes. A comparação mostra o resultado original falhando contra a correção do NoPeWorld, que para ou desliza ao longo do obstáculo." loading="lazy">
+          <figcaption>
+            Ilustração do problema: modelos de mundo de vídeo geram trajetórias que atravessam paredes. A comparação mostra o resultado original falhando contra a correção do NoPeWorld, que para ou desliza ao longo do obstáculo.
+            <span class="source">Figura 1 do paper · Dai et al., arXiv:2611.27963</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">A Intuição: O Modelo Já Sabe Onde Está a Parede</span></h2>
+<p><span class="s" data-s="b2-p0-s0">O insight central deste trabalho é surpreendente: os geradores de vídeo, especificamente aqueles baseados em Transformers de Difusão (DiT), já codificam implicitamente a informação necessária para prever colisões, mesmo antes de sintetizar os pixels finais.</span> <span class="s" data-s="b2-p0-s1">Estudos anteriores indicaram que modelos de difusão de vídeo capturam estrutura 3D e plausibilidade física.</span> <span class="s" data-s="b2-p0-s2">Os autores descobriram que essa capacidade se estende à previsão de penetração.</span></p><p><span class="s" data-s="b2-p1-s0">Os estados ocultos (hidden states) do DiT contêm sinais robustos sobre a proximidade de obstáculos.</span> <span class="s" data-s="b2-p1-s1">Isso significa que o modelo &#39;sabe&#39; onde estão as paredes durante o processo de denoising, mas seu mecanismo de geração padrão não utiliza esse conhecimento para restringir o movimento.</span> <span class="s" data-s="b2-p1-s2">Em vez de construir uma nova rede de percepção externa, o NoPeWorld explora essa informação latente já existente no modelo gerador.</span></p><p><span class="s" data-s="b2-p2-s0">Para validar essa hipótese e medir a gravidade do problema, os autores introduzem o NoPeBench, um benchmark específico para avaliar a não penetração.</span> <span class="s" data-s="b2-p2-s1">Diferente de benchmarks anteriores que evitam colisões, o NoPeBench testa deliberadamente cenários onde comandos levam a obstáculos, medindo se o modelo consegue manter trajetórias seguras ou corrigir aquelas que violariam a física.</span></p>        <h2><span class="s" data-s="b3-h">O Método NoPeWorld: Detecção e Correção Interna</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O NoPeWorld é um framework leve que opera em duas etapas principais: detecção de risco e resposta de ação.</span> <span class="s" data-s="b3-p0-s1">A arquitetura baseia-se em um cabeçote de previsão (prediction head) pequeno e leve, treinado sobre os estados ocultos de um DiT congelado.</span> <span class="s" data-s="b3-p0-s2">O DiT principal não é ajustado (fine-tuned), preservando seu conhecimento prévio de geração de vídeo.</span></p><p><span class="s" data-s="b3-p1-s0">Durante o treinamento, o cabeçote é exposto a trajetórias de movimento junto com o mapa de ocupação 3D real (ground truth) obtido de simuladores como o Unreal Engine.</span> <span class="s" data-s="b3-p1-s1">O cabeçote aprende a prever dois rótulos cruciais: se uma ação candidata causará uma colisão (penetração) e a distância até o obstáculo.</span> <span class="s" data-s="b3-p1-s2">Essa supervisão geométrica permite que o cabeçote aprenda a mapear os estados latentes do vídeo para informações espaciais de colisão.</span></p><p><span class="s" data-s="b3-p2-s0">Na inferência, o framework opera em dois modos para cobrir diferentes estágios do processo de geração.</span> <span class="s" data-s="b3-p2-s1">No modo de colisão (Collision mode), o cabeçote lê os recursos de denoising inicial do chunk atual de vídeo para detectar se a ação planejada já está comprometida.</span> <span class="s" data-s="b3-p2-s2">No modo de previsão (Prediction mode), ele usa os recursos do chunk anterior para prever se a ação futura causará penetração no próximo chunk.</span> <span class="s" data-s="b3-p2-s3">Isso permite uma correção proativa antes que o vídeo seja totalmente gerado.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.27963/figure2.webp" alt="Diagrama do método NoPeWorld: treinamento com rótulos de geometria real do Unreal Engine sobre estados congelados do DiT, e inferência em dois modos (colisão e previsão) para corrigir trajetórias inseguras." loading="lazy">
+          <figcaption>
+            Diagrama do método NoPeWorld: treinamento com rótulos de geometria real do Unreal Engine sobre estados congelados do DiT, e inferência em dois modos (colisão e previsão) para corrigir trajetórias inseguras.
+            <span class="source">Figura 2 do paper · Dai et al., arXiv:2611.27963</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Substituindo Ações Inseguras por Alternativas Seguras</span></h2>
+<p><span class="s" data-s="b5-p0-s0">A detecção de colisão é apenas metade da solução; a outra é a resposta.</span> <span class="s" data-s="b5-p0-s1">Se o cabeçote identifica que uma ação (por exemplo, mover a câmera para trás) levará a uma penetração na parede, o NoPeWorld não simplesmente para o vídeo.</span> <span class="s" data-s="b5-p0-s2">Em vez disso, ele busca uma ação segura alternativa que melhor preserve a intenção original do usuário.</span></p><p><span class="s" data-s="b5-p1-s0">O objetivo é minimizar o &#39;arrependimento&#39; (regret) da ação.</span> <span class="s" data-s="b5-p1-s1">Se o usuário quer recuar, e há uma parede atrás, a ação segura seria deslizar lateralmente ao longo da parede, mantendo a direção geral recuar o máximo possível sem violar a restrição física.</span> <span class="s" data-s="b5-p1-s2">O framework avalia várias ações candidatas e seleciona aquela que maximiza a similaridade com a intenção original, enquanto garante que a distância ao obstáculo seja não negativa.</span></p><p><span class="s" data-s="b5-p2-s0">Esse processo de substituição é feito de forma diferente para cada modo.</span> <span class="s" data-s="b5-p2-s1">No modo de colisão, a ação é corrigida com base no estado imediato.</span> <span class="s" data-s="b5-p2-s2">No modo de previsão, a ação é ajustada com base na previsão futura, permitindo uma transição mais suave.</span> <span class="s" data-s="b5-p2-s3">A combinação desses dois modos permite que o modelo lide tanto com colisões iminentes quanto com trajetórias que gradualmente se aproximam de barreiras.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b6-t">Benchmark NoPeBench: Avaliando a Física</span></h3>
+          <p><span class="s" data-s="b6-c-s0">O NoPeBench foi criado para testar especificamente a não penetração.</span> <span class="s" data-s="b6-c-s1">Ele possui três tarefas progressivas: Task 1 avalia decisões de passo único em históricos verdadeiros; Task 2 avalia a rolagem (rollout) em laço fechado com 5 segundos de comandos; e Task 3 testa generalização zero-shot em imagens de domínio aberto sem histórico prévio, incluindo obstáculos estáticos e dinâmicos.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b7-h">Resultados: Redução Drástica de Violações</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Os experimentos foram conduzidos em seis modelos de mundo de vídeo open-source diferentes, incluindo LingBot-World 2.0, HY-WorldPlay, Echo-WM, Evoke-Turbo, WorldPlay2 e Hy-Nomas.</span> <span class="s" data-s="b7-p0-s1">O NoPeWorld foi aplicado a todos eles sem re-treinamento dos geradores principais, utilizando apenas o cabeçote leve treinado em um subconjunto de validação.</span></p><p><span class="s" data-s="b7-p1-s0">Os resultados quantitativos mostram uma melhoria significativa.</span> <span class="s" data-s="b7-p1-s1">A taxa média de violação física (penetração ou apagamento de obstáculos) caiu de 74% no modelo original para 16% com o NoPeWorld.</span> <span class="s" data-s="b7-p1-s2">Em modelos específicos como o LingBot-World 2.0, a taxa de violação caiu de 89% para 4% no modo de previsão.</span> <span class="s" data-s="b7-p1-s3">Além disso, o Score de Intenção Segura (SIS) aumentou substancialmente, indicando que o modelo não apenas evita colisões, mas também preserva melhor o movimento pretendido pelo usuário.</span></p><p><span class="s" data-s="b7-p2-s0">Comparado a métodos de base, como prompts de texto ou estimadores de profundidade externos, o NoPeWorld superou consistentemente em métricas combinadas de segurança e intenção.</span> <span class="s" data-s="b7-p2-s1">Enquanto o prompt de texto teve efeito quase nulo e o estimador de profundidade externa, embora eficaz na detecção, tendia a interromper o movimento de forma brusca ou não corrigia a trajetória suavemente, o NoPeWorld conseguiu um equilíbrio superior entre segurança física e continuidade da ação.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.27963/figure5.webp" alt="Generalização zero-shot: NoPeWorld aplicado a imagens de domínio aberto com obstáculos estáticos e dinâmicos. O modelo original viola a parede, enquanto a versão +NoPeWorld corrige a trajetória, mantendo a intenção." loading="lazy">
+          <figcaption>
+            Generalização zero-shot: NoPeWorld aplicado a imagens de domínio aberto com obstáculos estáticos e dinâmicos. O modelo original viola a parede, enquanto a versão +NoPeWorld corrige a trajetória, mantendo a intenção.
+            <span class="source">Figura 5 do paper · Dai et al., arXiv:2611.27963</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Generalização e Robustez</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Um aspecto notável do NoPeWorld é sua capacidade de generalização zero-shot.</span> <span class="s" data-s="b9-p0-s1">O cabeçote de previsão foi treinado em cenas específicas, mas foi testado com sucesso em imagens de domínio aberto, cenários com terceira pessoa, visões em primeira pessoa e obstáculos em movimento.</span> <span class="s" data-s="b9-p0-s2">Isso sugere que a informação de colisão codificada nos estados do DiT é robusta a variações de domínio e ponto de vista.</span></p><p><span class="s" data-s="b9-p1-s0">A avaliação em imagens reais (Task 3) foi realizada usando Julgadores de Linguagem Visual (VLMs) validados contra anotações humanas e geometria 3D.</span> <span class="s" data-s="b9-p1-s1">Os VLMs confirmaram que as trajetórias geradas com o NoPeWorld respeitam os limites físicos em quase todos os casos testados, enquanto os modelos originais falhavam consistentemente.</span> <span class="s" data-s="b9-p1-s2">Essa generalização é crucial para a aplicação prática em ambientes não estruturados.</span></p><p><span class="s" data-s="b9-p2-s0">Além disso, o método mostrou-se eficaz tanto para obstáculos estáticos quanto dinâmicos.</span> <span class="s" data-s="b9-p2-s1">Em cenários com obstáculos em movimento, o NoPeWorld conseguiu ajustar a trajetória da câmera para evitar colisões, demonstrando que a representação latente do DiT captura não apenas a geometria estática, mas também a dinâmica temporal dos objetos.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b10-t">Desempenho Quantitativo Superior</span></h3>
+          <p><span class="s" data-s="b10-c-s0">O NoPeWorld reduziu a taxa de violação de 74% para 16% em média.</span> <span class="s" data-s="b10-c-s1">Em modelos como LingBot-World 2.0, a queda foi de 89% para 4%.</span> <span class="s" data-s="b10-c-s2">O Score de Intenção Segura (SIS) também aumentou, indicando melhor preservação da ação do usuário comparado a prompts ou métodos externos.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b11-h">Limitações e Escopo</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Apesar dos resultados promissores, o trabalho tem limitações importantes.</span> <span class="s" data-s="b11-p0-s1">O NoPeWorld foca exclusivamente na restrição de não penetração.</span> <span class="s" data-s="b11-p0-s2">Ele não lida com interações físicas mais complexas, como empurrar objetos, carregá-los ou quebrá-los.</span> <span class="s" data-s="b11-p0-s3">A abordagem assume que os obstáculos são sólidos e impenetráveis, mas não modela a dinâmica de contato ou a deformação de objetos.</span></p><p><span class="s" data-s="b11-p1-s0">Outra limitação reside na dependência de dados de treinamento para o cabeçote de previsão.</span> <span class="s" data-s="b11-p1-s1">Embora o DiT principal seja congelado, o cabeçote precisa ser treinado com rótulos de colisão precisos.</span> <span class="s" data-s="b11-p1-s2">No experimento, esses rótulos foram obtidos de simuladores como o Unreal Engine.</span> <span class="s" data-s="b11-p1-s3">A eficácia do método em cenários onde a geometria 3D não está disponível ou é extremamente ruidosa pode ser desafiadora, embora os resultados de generalização sugiram robustez.</span></p><p><span class="s" data-s="b11-p2-s0">Além disso, o overhead computacional, embora baixo comparado a redes externas, ainda existe.</span> <span class="s" data-s="b11-p2-s1">A inferência do cabeçote adiciona um passo adicional ao pipeline de geração.</span> <span class="s" data-s="b11-p2-s2">No entanto, dado o tamanho pequeno do cabeçote, esse custo é mínimo comparado ao custo de geração do próprio DiT.</span></p><p><span class="s" data-s="b11-p3-s0">Finalmente, o benchmark NoPeBench, embora inovador, ainda é um subconjunto limitado de desafios de física.</span> <span class="s" data-s="b11-p3-s1">A avaliação em cenários do mundo real, com iluminação variável, oclusões complexas e interações com múltiplos agentes, permanece como uma fronteira aberta para futuros trabalhos.</span></p>        <h2><span class="s" data-s="b12-h">Conclusão</span></h2>
+<p><span class="s" data-s="b12-p0-s0">O NoPeWorld apresenta uma solução elegante para um problema fundamental em modelos de mundo de vídeo: a falta de respeito por restrições físicas básicas.</span> <span class="s" data-s="b12-p0-s1">Ao explorar a informação latente já presente nos estados ocultos de Transformers de Difusão, o método evita a complexidade de redes externas e mantém a coerência temporal e espacial dos vídeos gerados.</span></p><p><span class="s" data-s="b12-p1-s0">A redução de 74% para 16% nas taxas de violação, combinada com a preservação da intenção do usuário e a generalização zero-shot, demonstra que os geradores de vídeo estão mais conscientes de sua geometria interna do que se pensava.</span> <span class="s" data-s="b12-p1-s1">Este trabalho abre caminho para modelos de mundo mais confiáveis e fisicamente plausíveis, um passo essencial para aplicações em simulação, robótica e realidade virtual.</span></p><p><span class="s" data-s="b12-p2-s0">Os autores disponibilizam o código, o benchmark NoPeBench e os pesos do modelo, convidando a comunidade a continuar explorando as fronteiras da física em modelos generativos, desde a não penetração até interações mais complexas de contato e manipulação.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Modelos de mundo atuais falham em respeitar colisões, gerando vídeos onde câmeras atravessam paredes.</span></li><li><span class="s" data-s="k1">O NoPeWorld detecta colisões lendo estados ocultos de Transformers de Difusão (DiT), sem necessidade de redes externas.</span></li><li><span class="s" data-s="k2">Um pequeno cabeçote de previsão treinado sobre o DiT congelado substitui ações inseguras por alternativas seguras.</span></li><li><span class="s" data-s="k3">O método reduz violações físicas de 74% para 16% em seis modelos diferentes, com generalização zero-shot.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.27963" rel="noopener">Non-penetrating World Models</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.27963" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reidentificação de Bagagens: Estratégias para Ambientes Reais com Múltiplas Câmeras — arXiv em 5</title>
+<meta name="description" content="Um estudo prático sobre como detectar e reidentificar malas em aeroportos, analisando o impacto de oclusões, múltiplos ângulos e agregação temporal em um pipeline de vigilância realista.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Reidentificação de Bagagens: Estratégias para Ambientes Reais com Múltiplas Câmeras">
+<meta property="og:description" content="Um estudo prático sobre como detectar e reidentificar malas em aeroportos, analisando o impacto de oclusões, múltiplos ângulos e agregação temporal em um pipeline de vigilância realista.">
+<meta property="og:image" content="../../assets/papers/2610.40643/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Imagem</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.40643" rel="noopener">arXiv:2610.40643</a>
+    </div>
+    <h1><span class="s" data-s="t">Reidentificação de Bagagens: Estratégias para Ambientes Reais com Múltiplas Câmeras</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um estudo prático sobre como detectar e reidentificar malas em aeroportos, analisando o impacto de oclusões, múltiplos ângulos e agregação temporal em um pipeline de vigilância realista.</span></p>
+    <p class="byline">
+      <span>Dhôte et al.</span>
+      <span>8 min de leitura</span>
+<span>29/10/2026</span>    </p>
+    <div class="listen" data-article="2610.40643" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=SNYW08g0yfI" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Desafio da Reidentificação de Bagagens no Mundo Real</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A reidentificação de objetos (Object ReID) é uma tarefa crítica em sistemas de vigilância por vídeo, especialmente em grandes hubs de transporte como aeroportos e estações de trem.</span> <span class="s" data-s="b0-p0-s1">Embora amplamente estudada para reconhecimento facial ou de pedestres, a reidentificação de bagagens apresenta desafios únicos.</span> <span class="s" data-s="b0-p0-s2">O objetivo é associar observações da mesma mala através de câmeras discretas, mesmo quando o ambiente é complexo, com oclusões frequentes, fundos desordenados e multidões.</span></p><p><span class="s" data-s="b0-p1-s0">A maioria das abordagens existentes foca em melhorar a extração de características visuais ou o aprendizado de métricas, assumindo condições relativamente limpas: detecções perfeitas e objetos totalmente visíveis.</span> <span class="s" data-s="b0-p1-s1">No entanto, a implantação real levanta questões sistêmicas que são frequentemente ignoradas.</span> <span class="s" data-s="b0-p1-s2">Quantas câmeras são realmente necessárias para uma reidentificação confiável?</span> <span class="s" data-s="b0-p1-s3">Devo agregar todos os frames disponíveis ou ruídos podem degradar o desempenho?</span> <span class="s" data-s="b0-p1-s4">Como explorar informações de múltiplas câmeras em configurações de vigilância assimétricas?</span></p><p><span class="s" data-s="b0-p2-s0">Neste contexto, o paper &#39;Luggage re-identification: A study of strategies towards a real-world application&#39;, de Quentin Dhote e Romaric Audigier da Université Paris-Saclay, propõe um pipeline end-to-end que opera a partir de múltiplos streams de vídeo.</span> <span class="s" data-s="b0-p2-s1">Em vez de focar apenas no modelo de deep learning, os autores investigam estratégias de seleção e fusão de visões e shots para melhorar o desempenho geral em aplicações práticas, como recuperação de malas perdidas ou análise forense.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.40643/figure1.webp" alt="Visão geral do pipeline proposto: detecção e rastreamento independentes por câmera, construção de representações específicas por cena e matching final entre galeria e consulta." loading="lazy">
+          <figcaption>
+            Visão geral do pipeline proposto: detecção e rastreamento independentes por câmera, construção de representações específicas por cena e matching final entre galeria e consulta.
+            <span class="source">Figura 1 do paper · Dhôte et al., arXiv:2610.40643</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">Uma Abordagem Assimétrica: Galeria vs. Consulta</span></h2>
+<p><span class="s" data-s="b2-p0-s0">O cerne da contribuição deste trabalho é o reconhecimento de que os cenários de &#39;enrollment&#39; (cadastro) e &#39;monitoramento&#39; (consulta) são fundamentalmente diferentes.</span> <span class="s" data-s="b2-p0-s1">O pipeline é dividido em duas cenas disjuntas: a cena &#39;Gallery&#39; e a cena &#39;Query&#39;.</span></p><p><span class="s" data-s="b2-p1-s0">Na cena Gallery, as malas estão em uma esteira rolante após o desembarque.</span> <span class="s" data-s="b2-p1-s1">O movimento é previsível, consistente e controlado.</span> <span class="s" data-s="b2-p1-s2">Isso permite que trajetórias sejam associadas de forma confiável através das câmeras, facilitando a extração de observações representativas de cada instância de mala.</span> <span class="s" data-s="b2-p1-s3">É um ambiente estruturado.</span></p><p><span class="s" data-s="b2-p2-s0">Já a cena Query representa uma área de vigilância não restrita, onde passageiros carregam suas malas por um corredor.</span> <span class="s" data-s="b2-p2-s1">Aqui, o movimento é irregular, a visibilidade é fragmentada devido a oclusões (pessoas passando à frente), e as trajetórias não podem ser associadas consistentemente entre câmeras diferentes.</span> <span class="s" data-s="b2-p2-s2">A mala pode ser vista por poucos segundos ou de ângulos limitados.</span></p><p><span class="s" data-s="b2-p3-s0">Essa assimetria exige que o sistema trate as duas cenas de maneira distinta.</span> <span class="s" data-s="b2-p3-s1">Enquanto a galeria pode tirar proveito de múltiplas câmeras para criar uma representação rica e estável, a consulta deve lidar com a redundância temporal dentro de uma única câmera para compensar a falta de visão multi-ângulo consistente.</span></p>        <h2><span class="s" data-s="b3-h">O Pipeline Proposto: Do Vídeo ao Ranking</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O pipeline proposto consiste em quatro etapas principais, desenhadas para lidar com as características assimétricas mencionadas.</span></p><p><span class="s" data-s="b3-p1-s0">A primeira etapa é Detecção e Rastreamento (Detection and Tracking).</span> <span class="s" data-s="b3-p1-s1">Cada stream de vídeo é processado independentemente.</span> <span class="s" data-s="b3-p1-s2">Um detector de objetos, especificamente o CoDETR, identifica as malas e fornece bounding boxes e scores de confiança.</span> <span class="s" data-s="b3-p1-s3">Apenas detecções com score acima de um limiar são mantidas para reduzir falsos positivos.</span> <span class="s" data-s="b3-p1-s4">O rastreamento é feito por câmera na cena Query, pois não há associação cruzada confiável entre câmeras.</span> <span class="s" data-s="b3-p1-s5">Na cena Gallery, o rastreamento é mais estruturado.</span></p><p><span class="s" data-s="b3-p2-s0">A segunda etapa é a Construção de Representação Específica da Cena.</span> <span class="s" data-s="b3-p2-s1">Para a cena Gallery, uma representação multi-câmera é construída.</span> <span class="s" data-s="b3-p2-s2">Para cada mala, seleciona-se um frame representativo de cada câmera (no total de 5 câmeras na configuração do estudo), escolhendo a observação onde a mala está mais próxima do centro do campo de visão.</span> <span class="s" data-s="b3-p2-s3">Isso resulta em um conjunto fixo de 5 imagens por mala.</span></p><p><span class="s" data-s="b3-p3-s0">Para a cena Query, como as trajetórias são fragmentadas, a representação é construída temporalmente.</span> <span class="s" data-s="b3-p3-s1">Múltiplas observações de um mesmo track (sequência temporal na mesma câmera) são extraídas e combinadas em uma representação de nível de track.</span> <span class="s" data-s="b3-p3-s2">Isso permite que o sistema aproveite a redundância temporal: se uma mala é ocultada por um segundo, as frames anteriores e posteriores ainda podem contribuir para a representação final.</span></p>        <h2><span class="s" data-s="b4-h">Extração de Features e Matching</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Na terceira etapa, features visuais são extraídas para cada instância detectada.</span> <span class="s" data-s="b4-p0-s1">Os autores utilizam o algoritmo TransReID, um modelo baseado em Transformers pré-treinado no grande conjunto de dados MVB e finetunado no dataset construído para este estudo.</span> <span class="s" data-s="b4-p0-s2">As imagens de entrada são redimensionadas para 256x256 pixels.</span></p><p><span class="s" data-s="b4-p1-s0">O TransReID é escolhido por sua capacidade de capturar dependências de longo alcance nas imagens, o que pode ser benéfico para lidar com partes de objetos visíveis mesmo quando o objeto inteiro não está claro.</span> <span class="s" data-s="b4-p1-s1">As features extraídas são agregadas dependendo da estratégia de agregação multi-shot escolhida.</span></p><p><span class="s" data-s="b4-p2-s0">Finalmente, na etapa de Matching Cross-Cena, a reidentificação é realizada comparando as representações da cena Query contra as da cena Gallery.</span> <span class="s" data-s="b4-p2-s1">Cada track de consulta é comparado contra todos os tracks de galeria usando uma métrica de similaridade (distância Euclidiana no espaço de embeddings).</span> <span class="s" data-s="b4-p2-s2">Os candidatos da galeria são então ranqueados.</span> <span class="s" data-s="b4-p2-s3">O objetivo é encontrar a mala na galeria (esteira) que corresponde à mala sendo carregada por um passageiro na consulta.</span></p><p><span class="s" data-s="b4-p3-s0">Este design explora as forças complementares de ambas as cenas: informação multi-visual estruturada na galeria e redundância temporal na consulta.</span> <span class="s" data-s="b4-p3-s1">Isso mitiga efetivamente o impacto de oclusões e variações de ponto de vista em cenários de vigilância realistas.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.40643/figure2.webp" alt="Visualização de um exemplo de recuperação: a mala correta (Rank-1) é destacada entre várias opções de mala na galeria, demonstrando a capacidade do sistema de distinguir objetos visualmente similares." loading="lazy">
+          <figcaption>
+            Visualização de um exemplo de recuperação: a mala correta (Rank-1) é destacada entre várias opções de mala na galeria, demonstrando a capacidade do sistema de distinguir objetos visualmente similares.
+            <span class="source">Figura 2 do paper · Dhôte et al., arXiv:2610.40643</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b6-h">Dataset Realista e Configuração Experimental</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Para avaliar o sistema em condições realistas, os autores construíram um dataset de vídeo multi-câmera a partir de um aeroporto real, na área de alfândega.</span> <span class="s" data-s="b6-p0-s1">O dataset consiste em duas cenas disjuntas: Gallery (esteira de bagagem) e Query (corredor de saída dos passageiros).</span></p><p><span class="s" data-s="b6-p1-s0">A configuração de aquisição envolve 5 câmeras na cena Gallery e 6 câmeras na cena Query.</span> <span class="s" data-s="b6-p1-s1">As câmeras são posicionadas ao redor da área de interesse, orientadas para uma região comum para maximizar a cobertura.</span> <span class="s" data-s="b6-p1-s2">Para estabelecer correspondências entre as cenas, as malas foram anotadas manualmente, selecionando trajetórias consistentes.</span></p><p><span class="s" data-s="b6-p2-s0">O dataset resultante contém 116 malas, com múltiplas observações de cada instância através de diferentes câmeras e passos de tempo.</span> <span class="s" data-s="b6-p2-s1">Isso resulta naturalmente em variações de ponto de vista, iluminação e oclusões parciais.</span> <span class="s" data-s="b6-p2-s2">No total, o dataset possui 579 tracks de galeria e 745 tracks de consulta, com uma média de aproximadamente 18 imagens por track.</span> <span class="s" data-s="b6-p2-s3">Essa configuração permite avaliar estratégias de agregação multi-visão em condições realistas, longe dos benchmarks limpos e sintéticos comuns na literatura.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b7-t">Por que TransReID?</span></h3>
+          <p><span class="s" data-s="b7-c-s0">Os autores optam pelo TransReID em vez de redes CNN tradicionais.</span> <span class="s" data-s="b7-c-s1">Transformers são conhecidos por capturar contextos globais e dependências de longo alcance, o que pode ajudar a distinguir malas que têm padrões visuais locais similares (ex: duas malas pretas idênticas) mas diferenças estruturais ou de contexto mais amplas.</span> <span class="s" data-s="b7-c-s2">O modelo foi pré-treinado no MVB e finetunado no dataset específico do estudo.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b8-h">Estratégias de Agregação e Seleção de Frames</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Uma parte crucial do estudo é a análise de como agregar as features quando múltiplas detecções estão disponíveis para um mesmo objeto ao longo do tempo (na cena Query) ou de diferentes câmeras (na cena Gallery).</span> <span class="s" data-s="b8-p0-s1">Os autores testam várias variantes.</span></p><p><span class="s" data-s="b8-p1-s0">Uma baseline é usar apenas um frame aleatório por track.</span> <span class="s" data-s="b8-p1-s1">Outra baseline usa o frame com a maior confiança de detecção.</span> <span class="s" data-s="b8-p1-s2">Uma terceira variante usa todas as observações disponíveis sem filtragem por confiança, agregando-as diretamente.</span></p><p><span class="s" data-s="b8-p2-s0">A proposta dos autores é uma estratégia de agregação que considera apenas as K detecções mais confiáveis.</span> <span class="s" data-s="b8-p2-s1">Isso visa equilibrar a quantidade de informação (usar mais frames pode ajudar, mas também introduz ruído) com a qualidade dos dados (frames com baixa confiança podem conter detecções erradas ou oclusões severas).</span> <span class="s" data-s="b8-p2-s2">A agregação temporal permite que o sistema &#39;lide&#39; com o fato de que a mala pode não ser vista claramente em todos os frames, mas a combinação de vários frames parcialmente visíveis pode formar uma representação robusta.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.40643/figure3.webp" alt="Comparação de recall: o uso de todas as câmeras disponíveis (multi-view) supera significativamente o uso de uma única câmera, demonstrando o valor da redundância espacial." loading="lazy">
+          <figcaption>
+            Comparação de recall: o uso de todas as câmeras disponíveis (multi-view) supera significativamente o uso de uma única câmera, demonstrando o valor da redundância espacial.
+            <span class="source">Figura 3 do paper · Dhôte et al., arXiv:2610.40643</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">Resultados e Análise</span></h2>
+<p><span class="s" data-s="b10-p0-s0">O desempenho foi avaliado usando métricas padrão de ReID, incluindo CMC (Cumulative Matching Characteristics) nos ranks 1, 5 e 10, e mAP (mean Average Precision).</span> <span class="s" data-s="b10-p0-s1">O protocolo de avaliação é bidirecional: Query-to-Gallery (Q-&gt;G) e Gallery-to-Query (G-&gt;Q).</span></p><p><span class="s" data-s="b10-p1-s0">Os resultados mostram que a abordagem proposta supera as baselines de frame único (aleatório ou de maior confiança).</span> <span class="s" data-s="b10-p1-s1">O uso de agregação temporal e a seleção de frames confiáveis melhoram a robustez.</span> <span class="s" data-s="b10-p1-s2">É importante notar que usar todas as observações sem filtragem pode não ser ideal, pois ruídos e detecções falsas podem degradar a performance, validando a necessidade de estratégias de seleção ou agregação ponderada.</span></p><p><span class="s" data-s="b10-p2-s0">Um ponto chave destacado nos resultados é o impacto do número de câmeras.</span> <span class="s" data-s="b10-p2-s1">A Figura 3 ilustra que usar todas as câmeras disponíveis aumenta a recall em comparação ao uso de apenas uma câmera.</span> <span class="s" data-s="b10-p2-s2">Isso valida a hipótese de que a visão multi-ângulo é essencial para lidar com oclusões.</span> <span class="s" data-s="b10-p2-s3">Se uma câmera perde a mala devido a uma obstrução, outra câmera pode ter uma visão clara.</span></p><p><span class="s" data-s="b10-p3-s0">Além disso, os autores analisam a adaptação cross-dataset.</span> <span class="s" data-s="b10-p3-s1">Treinar em um ambiente e testar em outro é um desafio comum.</span> <span class="s" data-s="b10-p3-s2">O estudo fornece insights sobre como a configuração de câmeras e a estratégia de agregação afetam a generalização do modelo.</span></p>        <h2><span class="s" data-s="b11-h">Limitações e Trabalho Futuro</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Apesar dos resultados promissores, o paper reconhece limitações.</span> <span class="s" data-s="b11-p0-s1">O dataset, embora realista, é limitado a 116 malas e um cenário específico de aeroporto.</span> <span class="s" data-s="b11-p0-s2">A generalização para outros tipos de ambientes ou tipos de objetos pode exigir mais investigação.</span></p><p><span class="s" data-s="b11-p1-s0">O pipeline atual depende de anotações manuais para estabelecer correspondências entre as cenas, o que não é escalável para novos ambientes sem custo de anotação.</span> <span class="s" data-s="b11-p1-s1">Os autores mencionam que o trabalho futuro investigará adaptação de domínio não supervisionada (unsupervised domain adaptation) para manter o desempenho em novos ambientes sem necessidade de novas anotações.</span></p><p><span class="s" data-s="b11-p2-s0">Outra limitação implícita é a complexidade computacional do pipeline end-to-end, que envolve detecção, rastreamento, extração de features e agregação em múltiplos streams.</span> <span class="s" data-s="b11-p2-s1">A eficiência em tempo real para grandes números de câmeras não é o foco principal deste estudo, mas é uma consideração prática importante para implantação em larga escala.</span></p><p><span class="s" data-s="b11-p3-s0">Em resumo, o paper oferece uma contribuição valiosa ao deslocar o foco da &#39;engenharia de features&#39; para a &#39;engenharia de pipeline&#39; em cenários reais.</span> <span class="s" data-s="b11-p3-s1">Ele demonstra que a forma como os dados são coletados, agregados e comparados é tão importante quanto o modelo de deep learning utilizado.</span> <span class="s" data-s="b11-p3-s2">Para cientistas de dados e engenheiros de visão computacional, a lição é clara: em problemas de vigilância real, a robustez vem da redundância (temporal e espacial) e do tratamento cuidadoso da assimetria entre os dados de treinamento e os dados de inferência.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">O problema central não é apenas extrair features, mas gerenciar a assimetria entre câmeras de controle (esteira) e câmeras de consulta (corredor movimentado).</span></li><li><span class="s" data-s="k1">A agregação temporal de detecções dentro de um mesmo track melhora a robustez contra oclusões e falhas de detecção pontuais.</span></li><li><span class="s" data-s="k2">Usar todas as câmeras disponíveis aumenta significativamente a recall em comparação ao uso de uma única câmera, validando a necessidade de visão multi-ângulo.</span></li><li><span class="s" data-s="k3">O pipeline propõe um método end-to-end que combina detecção, rastreamento por câmera e agregação de features antes do matching final.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.40643" rel="noopener">Luggage re-identification: A study of strategies towards a real-world application</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.40643" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

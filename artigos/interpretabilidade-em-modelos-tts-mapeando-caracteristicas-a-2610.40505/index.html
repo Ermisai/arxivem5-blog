@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Interpretabilidade em Modelos TTS: Mapeando Características Acústicas com SAEs e PCA — arXiv em 5</title>
+<meta name="description" content="Este paper propõe um framework para entender quais características acústicas modelos de voz-cloning zero-shot realmente representam, usando autoencoders esparsos e análise de componentes principais para revelar conceitos latentes.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Interpretabilidade em Modelos TTS: Mapeando Características Acústicas com SAEs e PCA">
+<meta property="og:description" content="Este paper propõe um framework para entender quais características acústicas modelos de voz-cloning zero-shot realmente representam, usando autoencoders esparsos e análise de componentes principais para revelar conceitos latentes.">
+<meta property="og:image" content="../../assets/papers/2610.40505/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Áudio</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.40505" rel="noopener">arXiv:2610.40505</a>
+    </div>
+    <h1><span class="s" data-s="t">Interpretabilidade em Modelos TTS: Mapeando Características Acústicas com SAEs e PCA</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Este paper propõe um framework para entender quais características acústicas modelos de voz-cloning zero-shot realmente representam, usando autoencoders esparsos e análise de componentes principais para revelar conceitos latentes.</span></p>
+    <p class="byline">
+      <span>Diwan et al.</span>
+      <span>7 min de leitura</span>
+<span>29/10/2026</span>    </p>
+    <div class="listen" data-article="2610.40505" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=VTjEgCEf-2s" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Caixa Preta em Voice-Cloning</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Modelos de Text-to-Speech (TTS) de zero-shot, capazes de clonar a voz de um falante desconhecido a partir de poucos segundos de áudio, tornaram-se onipresentes.</span> <span class="s" data-s="b0-p0-s1">No entanto, a comunidade científica ainda debate quais propriedades acústicas esses modelos realmente aprendem e representam internamente.</span> <span class="s" data-s="b0-p0-s2">A fala humana é uma entrelaçamento complexo de identidade do falante, textura vocal, emoção e ritmo.</span> <span class="s" data-s="b0-p0-s3">Entender como os modelos decompõem esses sinais é crucial para controle e segurança.</span></p><p><span class="s" data-s="b0-p1-s0">Estudos anteriores focaram em modelos não-clonadores ou usavam métodos qualitativos baseados em linguagem natural.</span> <span class="s" data-s="b0-p1-s1">Este trabalho, de pesquisadores da University of Texas at Austin e New York University, introduz um framework quantitativo para testar a interpretabilidade em modelos autoregressivos de voice-cloning.</span> <span class="s" data-s="b0-p1-s2">O objetivo não é apenas listar o que o modelo sabe, mas verificar se é possível prever e direcionar (steer) essas propriedades durante a geração de áudio.</span></p><p><span class="s" data-s="b0-p2-s0">A pesquisa compara três abordagens principais para extrair features das ativações internas do modelo: Autoencoders Esparsos (SAEs), Análise de Componentes Principais (PCA) e direções aleatórias.</span> <span class="s" data-s="b0-p2-s1">O estudo se concentra no modelo Qwen3-TTS, mas estende a validação para cinco modelos adicionais (Fish, Higgs e CosyVoice2) para testar a generalização entre diferentes arquiteturas.</span> <span class="s" data-s="b0-p2-s2">A hipótese central é que métodos esparsos podem revelar conceitos mais finos e interpretáveis do que métodos densos tradicionais.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.40505/figure2.webp" alt="Diagrama do método de extração de features a partir das ativações do TTS. O fluxo compara SAEs, PCA e direções aleatórias para decompor o residual stream em features interpretáveis." loading="lazy">
+          <figcaption>
+            Diagrama do método de extração de features a partir das ativações do TTS. O fluxo compara SAEs, PCA e direções aleatórias para decompor o residual stream em features interpretáveis.
+            <span class="source">Figura 2 do paper · Diwan et al., arXiv:2610.40505</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">O Framework de Interpretabilidade</span></h2>
+<p><span class="s" data-s="b2-p0-s0">O cerne do trabalho é a extração de features das ativações residuais (residual-stream activations) do modelo TTS.</span> <span class="s" data-s="b2-p0-s1">Em vez de olhar para os logits finais, os autores analisam as representações intermediárias.</span> <span class="s" data-s="b2-p0-s2">Eles aplicam SAEs treinados para decompor essas ativações em um dicionário de features esparsas.</span> <span class="s" data-s="b2-p0-s3">A esparsidade é importante porque assume que, em qualquer momento, apenas um subconjunto pequeno de conceitos acústicos está ativo.</span> <span class="s" data-s="b2-p0-s4">Em contraste, a PCA projeta as ativações em componentes ortogonais densos, capturando a maior variância possível sem a restrição de esparsidade.</span></p><p><span class="s" data-s="b2-p1-s0">Além dos métodos estruturados, os autores usam direções aleatórias como baseline.</span> <span class="s" data-s="b2-p1-s1">Isso serve para verificar se os resultados observados não são apenas artefatos da dimensionalidade alta ou ruído estatístico.</span> <span class="s" data-s="b2-p1-s2">O processo envolve converter as ativações em nível de camada em features de nível de utterance (frase completa).</span> <span class="s" data-s="b2-p1-s3">Para o Qwen3-TTS, eles analisam múltiplas camadas, enquanto para os outros cinco modelos, focam em uma camada específica para manter a comparabilidade.</span></p><p><span class="s" data-s="b2-p2-s0">O framework avalia essas features através de três lentes: sparse probing, steering durante a geração e auto-interpretabilidade quantitativa.</span> <span class="s" data-s="b2-p2-s1">O sparse probing testa se um conceito conhecido (como &#39;pitch&#39; ou &#39;energia&#39;) pode ser previsto com alta precisão usando apenas um pequeno número de features (top-k).</span> <span class="s" data-s="b2-p2-s2">O steering injeta vetores direcionais nessas features durante a síntese para ver se o áudio de saída muda conforme o esperado.</span> <span class="s" data-s="b2-p2-s3">A auto-interpretabilidade usa um LLM de áudio para rotular automaticamente features com alta ativação, validando se o modelo aprendeu conceitos além dos rótulos humanos pré-definidos.</span></p>        <h2><span class="s" data-s="b3-h">Probing: Recuperando Conceitos Conhecidos</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Para avaliar a capacidade de recuperação, os autores coletam exemplos positivos e negativos para 55 conceitos extraídos de extractores automáticos e 21 conceitos rotulados por humanos (como &#39;happy&#39;, &#39;whispered&#39;, &#39;Scottish accent&#39;).</span> <span class="s" data-s="b3-p0-s1">Eles classificam as features de SAE e PCA pela diferença média entre ativações positivas e negativas, selecionando as top-k.</span> <span class="s" data-s="b3-p0-s2">Em seguida, treinam probes logísticos nessas features para prever o valor do conceito.</span></p><p><span class="s" data-s="b3-p1-s0">Os resultados mostram que muitos conceitos acústicos e paralinguísticos são recuperáveis.</span> <span class="s" data-s="b3-p1-s1">No entanto, a esparsidade impõe um limite: poucos conceitos são fortemente preditos por apenas duas features (top-2).</span> <span class="s" data-s="b3-p1-s2">Isso sugere que a representação de conceitos como &#39;emoção&#39; ou &#39;sotaque&#39; pode estar distribuída por muitas features esparsas, ou que a relação entre a feature e o conceito não é linear o suficiente para ser capturada por um probe simples com poucos elementos.</span></p><p><span class="s" data-s="b3-p2-s0">Ao comparar SAEs e PCA, os autores encontram uma distinção clara de utilidade.</span> <span class="s" data-s="b3-p2-s1">Para a previsão esparsa de conceitos humanos, os SAEs superam a PCA em média.</span> <span class="s" data-s="b3-p2-s2">Isso indica que a decomposição esparsa é mais alinhada com a forma como humanos categorizam atributos vocais discretos.</span> <span class="s" data-s="b3-p2-s3">Por outro lado, a PCA se mantém como uma baseline forte para probing denso, capturando variância significativa sem a necessidade de seleção manual de features.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.40505/figure3.webp" alt="Comparação de precisão de recuperação. O gráfico mostra que, embora muitos conceitos sejam recuperáveis, poucos são previstos esparsamente por apenas 2 features, destacando a limitação da esparsidade extrema." loading="lazy">
+          <figcaption>
+            Comparação de precisão de recuperação. O gráfico mostra que, embora muitos conceitos sejam recuperáveis, poucos são previstos esparsamente por apenas 2 features, destacando a limitação da esparsidade extrema.
+            <span class="source">Figura 3 do paper · Diwan et al., arXiv:2610.40505</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Steering: Controlando a Geração</span></h2>
+<p><span class="s" data-s="b5-p0-s0">A prova de fogo para a interpretabilidade é o steering: a capacidade de alterar a saída do modelo manipulando suas representações internas.</span> <span class="s" data-s="b5-p0-s1">Os autores injetam vetores de steering construídos a partir das top-2 features de cada conceito durante a geração do áudio.</span> <span class="s" data-s="b5-p0-s2">Eles avaliam três métricas: mudança no conceito alvo (target change), mudança em conceitos não-alvo (off-target change) e degradação da qualidade (medida por WER e UTMOS).</span></p><p><span class="s" data-s="b5-p1-s0">O steering é eficaz para alterar propriedades como pitch, energia, ruído e características espectrais.</span> <span class="s" data-s="b5-p1-s1">No entanto, o efeito varia drasticamente entre modelos e conceitos.</span> <span class="s" data-s="b5-p1-s2">Um ponto crítico encontrado é que forte capacidade de probing (previsão) não garante forte capacidade de steering.</span> <span class="s" data-s="b5-p1-s3">Um conceito pode ser facilmente identificado pelas features do modelo, mas manipular essas features pode não produzir a mudança acústica desejada de forma limpa.</span></p><p><span class="s" data-s="b5-p2-s0">Além disso, o steering frequentemente causa mudanças off-target.</span> <span class="s" data-s="b5-p2-s1">Ao tentar aumentar a &#39;energia&#39;, o modelo pode inadvertidamente alterar o &#39;pitch&#39; ou a clareza da fala.</span> <span class="s" data-s="b5-p2-s2">Isso reflete a natureza entrelaçada das representações em modelos autoregressivos.</span> <span class="s" data-s="b5-p2-s3">A qualidade do áudio também é afetada; a alteração intencional de propriedades como SNR (Relação Sinal-Ruído) ou RMS (valor eficaz) pode ser interpretada pelo metricador de qualidade como degradação, mesmo que a intenção seja estilística.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.40505/figure5.webp" alt="Impacto do steering nas features do Qwen3-TTS. O gráfico ilustra que as maiores mudanças alvo ocorrem em energia e pitch, mas acompanham-se de perdas de qualidade ou mudanças não intencionais." loading="lazy">
+          <figcaption>
+            Impacto do steering nas features do Qwen3-TTS. O gráfico ilustra que as maiores mudanças alvo ocorrem em energia e pitch, mas acompanham-se de perdas de qualidade ou mudanças não intencionais.
+            <span class="source">Figura 5 do paper · Diwan et al., arXiv:2610.40505</span>
+          </figcaption>
+        </figure>
+        <aside class="callout">
+          <h3><span class="s" data-s="b7-t">A Limitação do Steering</span></h3>
+          <p><span class="s" data-s="b7-c-s0">Um achado crucial é a desconexão entre probing e steering.</span> <span class="s" data-s="b7-c-s1">Um modelo pode aprender a representar um conceito (alta precisão no probe), mas a direção de steering derivada dessa feature pode ser ineficaz ou causar efeitos colaterais indesejados em outras propriedades acústicas.</span> <span class="s" data-s="b7-c-s2">Isso alerta para o uso cego de interpretabilidade para controle.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b8-h">Auto-Interpretabilidade e Descoberta de Novos Conceitos</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Além de validar conceitos conhecidos, o framework foi projetado para descobrir conceitos que os humanos não rotularam.</span> <span class="s" data-s="b8-p0-s1">Os autores usam um LLM de áudio (Gemini) para analisar utterances com alta e baixa ativação em cada feature de SAE.</span> <span class="s" data-s="b8-p0-s2">O LLM propõe rótulos em linguagem natural para essas features.</span> <span class="s" data-s="b8-p0-s3">A validade é testada por coerência (o rótulo descreve o outlier?), precisão (o rótulo prediz clips não vistos?) e estabilidade (o rótulo permanece consistente sob relabeling?).</span></p><p><span class="s" data-s="b8-p1-s0">Essa abordagem revelou 684 features automaticamente validadas no Qwen3-TTS.</span> <span class="s" data-s="b8-p1-s1">Muitas dessas features correspondem a conceitos além do básico, como clusters de falantes, estilos de fala específicos e condições de gravação (ex: ruído de fundo, reverberação).</span> <span class="s" data-s="b8-p1-s2">Isso demonstra que os SAEs capturam nuances finas que extractores padrão e rótulos humanos não cobrem.</span></p><p><span class="s" data-s="b8-p2-s0">A auto-interpretabilidade mostra que os SAEs são superiores à PCA e a direções aleatórias para essa tarefa de descoberta.</span> <span class="s" data-s="b8-p2-s1">A esparsidade ajuda a isolar conceitos específicos, enquanto a PCA tende a misturar variâncias, dificultando a atribuição de um rótulo único e coerente.</span> <span class="s" data-s="b8-p2-s2">Os autores argumentam que essa capacidade de descoberta é vital para entender o que modelos de grande escala realmente aprenderam, além do que foi explicitamente treinado.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.40505/figure9.webp" alt="Validação expandida em 6 modelos. O gráfico confirma que SAEs e PCA mantêm performance consistente em diferentes arquiteturas (Fish, Higgs, CosyVoice2), embora com variações na magnitude das mudanças off-target." loading="lazy">
+          <figcaption>
+            Validação expandida em 6 modelos. O gráfico confirma que SAEs e PCA mantêm performance consistente em diferentes arquiteturas (Fish, Higgs, CosyVoice2), embora com variações na magnitude das mudanças off-target.
+            <span class="source">Figura 9 do paper · Diwan et al., arXiv:2610.40505</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">Generalização e Limitações</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Para testar a robustez, os autores estenderam o probing e o steering para cinco modelos adicionais.</span> <span class="s" data-s="b10-p0-s1">Os resultados mostram que, embora os conceitos fundamentais (pitch, energia) sejam generalizáveis, a eficácia do steering varia.</span> <span class="s" data-s="b10-p0-s2">Alguns modelos respondem melhor a SAEs, outros a PCA.</span> <span class="s" data-s="b10-p0-s3">Isso sugere que a estrutura interna de representação não é universal entre arquiteturas autoregressivas de TTS.</span></p><p><span class="s" data-s="b10-p1-s0">O paper reconhece limitações importantes.</span> <span class="s" data-s="b10-p1-s1">O estudo foca em fala em inglês; a extensão para speech multilingue é deixada como trabalho futuro.</span> <span class="s" data-s="b10-p1-s2">Além disso, a análise é estática (nível de utterance); como as features variam temporalmente dentro de uma frase não é explorada.</span> <span class="s" data-s="b10-p1-s3">A composição de controles (steerar múltiplas features simultaneamente) também não é investigada, o que é um passo necessário para aplicações práticas de controle fino.</span></p><p><span class="s" data-s="b10-p2-s0">Outra limitação é a dependência do LLM de áudio para a auto-interpretabilidade.</span> <span class="s" data-s="b10-p2-s1">Se o LLM falhar em identificar nuances acústicas complexas, as features descobertas podem ser subestimadas ou mal rotuladas.</span> <span class="s" data-s="b10-p2-s2">No entanto, a validação quantitativa (precisão de previsão em held-out clips) mitiga parcialmente esse risco, oferecendo uma métrica objetiva para a qualidade do rótulo.</span></p>        <h2><span class="s" data-s="b11-h">Conclusão e Implicações</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Este trabalho estabelece um benchmark rigoroso para a interpretabilidade de modelos TTS de voice-cloning.</span> <span class="s" data-s="b11-p0-s1">Ao combinar probing, steering e descoberta automática, os autores mostram que esses modelos codificam uma riqueza de propriedades acústicas, mas que a extração e manipulação dessas propriedades são não-triviais.</span> <span class="s" data-s="b11-p0-s2">SAEs se destacam na descoberta de conceitos novos e na previsão esparsa, enquanto PCA oferece uma baseline densa robusta.</span></p><p><span class="s" data-s="b11-p1-s0">Para desenvolvedores e pesquisadores, a mensagem é clara: a interpretabilidade não é apenas sobre entender, mas sobre controlar.</span> <span class="s" data-s="b11-p1-s1">A desconexão entre probing e steering indica que entender o que o modelo sabe não garante que possamos manipulá-lo com precisão.</span> <span class="s" data-s="b11-p1-s2">Futuros trabalhos devem focar em como desentrelaçar essas representações para permitir um controle mais granular e seguro de sistemas de síntese de voz, especialmente em contextos de uso ético e prevenção de deepfakes.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Modelos TTS codificam pitch, energia e sotaque, mas poucos conceitos são previsíveis com poucas features.</span></li><li><span class="s" data-s="k1">SAEs são superiores para descoberta de conceitos novos, enquanto PCA é robusta para baselines densas.</span></li><li><span class="s" data-s="k2">Steering altera propriedades acústicas, mas pode degradar qualidade ou afetar conceitos não-alvo.</span></li><li><span class="s" data-s="k3">Foram validados 684 features automáticas cobrindo estilo e condições de gravação além de rótulos humanos.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.40505" rel="noopener">Discovering Interpretable Acoustic Features in Autoregressive Voice-Cloning TTS Models</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.40505" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

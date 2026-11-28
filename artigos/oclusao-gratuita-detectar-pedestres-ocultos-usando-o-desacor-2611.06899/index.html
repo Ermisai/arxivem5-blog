@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oclusão Gratuita: Detectar Pedestres Ocultos Usando o Desacordo entre Duas Pistas de Profundidade Monocular — arXiv em 5</title>
+<meta name="description" content="Detectar oclusão sem treinar modelos. O paper usa o desacordo entre altura aparente e profundidade mínima para identificar pedestres bloqueados, sem rótulos ou ajuste fino.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Oclusão Gratuita: Detectar Pedestres Ocultos Usando o Desacordo entre Duas Pistas de Profundidade Monocular">
+<meta property="og:description" content="Detectar oclusão sem treinar modelos. O paper usa o desacordo entre altura aparente e profundidade mínima para identificar pedestres bloqueados, sem rótulos ou ajuste fino.">
+<meta property="og:image" content="../../assets/papers/2611.06899/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Imagem</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.06899" rel="noopener">arXiv:2611.06899</a>
+    </div>
+    <h1><span class="s" data-s="t">Oclusão Gratuita: Detectar Pedestres Ocultos Usando o Desacordo entre Duas Pistas de Profundidade Monocular</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Detectar oclusão sem treinar modelos.</span> <span class="s" data-s="d-s1">O paper usa o desacordo entre altura aparente e profundidade mínima para identificar pedestres bloqueados, sem rótulos ou ajuste fino.</span></p>
+    <p class="byline">
+      <span>Onyenweaku et al.</span>
+      <span>9 min de leitura</span>
+<span>04/11/2026</span>    </p>
+    <div class="listen" data-article="2611.06899" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=nfBylcdy2wc" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Oclusão em Ambientes Reais</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A detecção de pedestres é um pilar fundamental para a navegação autônoma, mas a oclusão, quando partes do corpo são bloqueadas por outros objetos, permanece como uma das principais causas de falha em ambientes complexos.</span> <span class="s" data-s="b0-p0-s1">Em situações de rua, é raro ver um pedestre totalmente visível; frequentemente, ele está atrás de carros, árvores ou outros obstáculos.</span> <span class="s" data-s="b0-p0-s2">Para um robô ou veículo autônomo, saber que um pedestre está parcialmente oculto é tão crucial quanto detectar sua presença, pois isso permite ajustar as estimativas de incerteza ou encurtar o horizonte de planejamento.</span></p><p><span class="s" data-s="b0-p1-s0">A literatura tradicional aborda a oclusão de três formas principais: fusão de profundidade (combinando dados de câmeras e LiDAR), aumento de dados simulando oclusão durante o treinamento (mascarando partes dos objetos) ou mecanismos de atenção que re-pesam características visíveis.</span> <span class="s" data-s="b0-p1-s1">No entanto, essas abordagens têm limitações severas.</span> <span class="s" data-s="b0-p1-s2">A fusão de LiDAR é cara e difícil de justificar em plataformas de baixo custo.</span> <span class="s" data-s="b0-p1-s3">Augmentações de oclusão melhoram o desempenho dentro da distribuição de treino, mas muitas vezes falham ao transferir para novos domínios.</span> <span class="s" data-s="b0-p1-s4">Além disso, nenhuma dessas técnicas informa explicitamente se uma detecção específica é oclusiva ou não; elas apenas tentam tornar o detector mais robusto.</span></p><p><span class="s" data-s="b0-p2-s0">Os autores deste trabalho, da Universidade de Lagos, ML Collective e Universidade Federal de Tecnologia de Minna, partem de uma observação prática: detectores treinados em benchmarks padrão (como KITTI) perdem cerca de metade da precisão quando aplicados a cenas de rua reais, como as coletadas em Lagos, Nigéria.</span> <span class="s" data-s="b0-p2-s1">Essa lacuna entre o benchmark e a realidade motiva a busca por sinais que não dependam de anotações locais ou de um domínio de treino idêntico ao de implantação.</span></p>        <h2><span class="s" data-s="b1-h">A Ideia Central: O Desacordo como Sinal</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Em vez de tentar corrigir a detecção ou treinar um classificador de oclusão, os autores propõem extrair o sinal de oclusão diretamente do desacordo entre duas estimativas de distância que um pipeline baseado apenas em câmera já calcula.</span> <span class="s" data-s="b1-p0-s1">A premissa é simples: dois indicadores de distância, quando combinados de maneira específica, divergem sistematicamente quando há um objeto bloqueando a visão do pedestre.</span></p><p><span class="s" data-s="b1-p1-s0">O primeiro indicador é a altura aparente.</span> <span class="s" data-s="b1-p1-s1">Como a caixa delimitadora (bounding box) de um pedestre detectado geralmente abrange toda a extensão vertical da pessoa, mesmo que parte dela esteja oculta, a altura em pixels da caixa permanece relativamente estável, independentemente do nível de oclusão.</span> <span class="s" data-s="b1-p1-s2">O segundo indicador é a profundidade métrica monocular.</span> <span class="s" data-s="b1-p1-s3">Modelos de profundidade, como o Depth Anything V2, preveem a distância até a superfície mais próxima visível em cada ponto da imagem.</span> <span class="s" data-s="b1-p1-s4">Se um pedestre está oculto por um carro, a profundidade medida dentro da caixa do pedestre será a do carro, não a do pedestre atrás dele.</span></p><p><span class="s" data-s="b1-p2-s0">Essa divergência cria um sinal claro.</span> <span class="s" data-s="b1-p2-s1">Para um pedestre visível, a altura aparente e a profundidade mínima concordam sobre a distância.</span> <span class="s" data-s="b1-p2-s2">Para um pedestre oculto, a profundidade é puxada para mais perto (devido ao oclusor), enquanto a altura aparente mantém a estimativa da distância real do pedestre.</span> <span class="s" data-s="b1-p2-s3">O método não precisa saber quem é o oclusor ou recuperar os pixels escondidos; ele apenas precisa notar que as duas estimativas de distância não batem.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.06899/figure1.webp" alt="Diagrama do pipeline de runtime. Duas estimativas de distância monocular são comparadas por detecção. O desacordo gera um score de oclusão sem necessidade de treinamento ou rótulos de oclusão." loading="lazy">
+          <figcaption>
+            Diagrama do pipeline de runtime. Duas estimativas de distância monocular são comparadas por detecção. O desacordo gera um score de oclusão sem necessidade de treinamento ou rótulos de oclusão.
+            <span class="source">Figura 1 do paper · Onyenweaku et al., arXiv:2611.06899</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">O Mecanismo Detalhado: Altura vs. Profundidade Mínima</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O pipeline opera em duas etapas principais.</span> <span class="s" data-s="b3-p0-s1">Primeiro, um detector de objetos (YOLOv8x) identifica pedestres e gera caixas delimitadoras.</span> <span class="s" data-s="b3-p0-s2">Em seguida, para cada caixa, duas estimativas de distância são calculadas em paralelo.</span></p><p><span class="s" data-s="b3-p1-s0">A primeira estimativa, chamada de altura aparente, é derivada da geometria da câmera pinhole.</span> <span class="s" data-s="b3-p1-s1">A fórmula básica envolve a distância focal vertical, a estatura efetiva do pedestre e a altura da caixa em pixels.</span> <span class="s" data-s="b3-p1-s2">Em cenários ideais, pedestres adultos têm uma estatura mediana de cerca de 1,83 metros.</span> <span class="s" data-s="b3-p1-s3">A chave aqui é que, mesmo com oclusão, a caixa do detector tende a cobrir a altura total do corpo visível, mantendo a altura da caixa consistente.</span> <span class="s" data-s="b3-p1-s4">Portanto, essa estimativa é insensível à oclusão, desde que a caixa não encolha drasticamente.</span></p><p><span class="s" data-s="b3-p2-s0">A segunda estimativa vem de um modelo de profundidade monocular métrica (Depth Anything V2).</span> <span class="s" data-s="b3-p2-s1">O modelo é congelado (não é ajustado para esta tarefa) e fornece um mapa de profundidade.</span> <span class="s" data-s="b3-p2-s2">Para cada caixa de pedestre, os autores extraem o valor mínimo de profundidade dentro dessa caixa.</span> <span class="s" data-s="b3-p2-s3">Matematicamente, isso é a profundidade mínima vezes um fator de escala.</span> <span class="s" data-s="b3-p2-s4">A profundidade mínima é sensível à oclusão porque, se houver um objeto mais próximo (o oclusor) dentro da caixa, o modelo retornará a distância desse objeto, não a do pedestre atrás dele.</span></p>        <h2><span class="s" data-s="b4-h">A Fórmula da Pontuação de Oclusão</span></h2>
+<p><span class="s" data-s="b4-p0-s0">O insight crucial do paper é que não precisamos dos valores absolutos de distância, nem da focal exata da câmera ou da estatura precisa do pedestre.</span> <span class="s" data-s="b4-p0-s1">O que importa é a razão entre as duas estimativas.</span> <span class="s" data-s="b4-p0-s2">Se dividirmos a profundidade pela altura aparente, muitos termos de calibração se cancelam.</span></p><p><span class="s" data-s="b4-p1-s0">A pontuação de oclusão final é definida simplesmente como o produto da profundidade mínima pela altura da caixa em pixels.</span> <span class="s" data-s="b4-p1-s1">Por que essa fórmula?</span> <span class="s" data-s="b4-p1-s2">Se o pedestre está visível, a profundidade mínima é a distância dele e a altura da caixa é proporcional à sua altura.</span> <span class="s" data-s="b4-p1-s3">Se ele está oculto, a profundidade mínima diminui (o oclusor está mais perto), enquanto a altura da caixa permanece constante.</span> <span class="s" data-s="b4-p1-s4">Isso faz com que o produto diminua.</span> <span class="s" data-s="b4-p1-s5">Valores mais baixos da pontuação indicam maior probabilidade de oclusão.</span></p><p><span class="s" data-s="b4-p2-s0">Esta abordagem é invariante a um ganho multiplicativo puro no modelo de profundidade.</span> <span class="s" data-s="b4-p2-s1">Se o modelo de profundidade tiver um erro sistemático que escala todos os valores por uma constante, esse fator se cancela na comparação relativa entre detecções.</span> <span class="s" data-s="b4-p2-s2">Isso torna o método robusto a variações de escala que são comuns em modelos monocular.</span> <span class="s" data-s="b4-p2-s3">No entanto, o método exige profundidade métrica (com escala correta) e não funciona bem com profundidade relativa, pois um offset aditivo (um erro constante de distância) introduziria correlação com a distância real, confundindo o sinal de oclusão com a distância do objeto.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.06899/figure2.webp" alt="Exemplo visual no KITTI. O pedestre visível tem concordância entre altura e profundidade. O pedestre oculto mostra divergência, pois a profundidade lê o carro mais próximo." loading="lazy">
+          <figcaption>
+            Exemplo visual no KITTI. O pedestre visível tem concordância entre altura e profundidade. O pedestre oculto mostra divergência, pois a profundidade lê o carro mais próximo.
+            <span class="source">Figura 2 do paper · Onyenweaku et al., arXiv:2611.06899</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b6-h">Validação no KITTI e Controle de Confundidores</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Os autores avaliaram o método no dataset KITTI, usando 1.941 detecções de pedestres.</span> <span class="s" data-s="b6-p0-s1">O principal métrica de avaliação é a Área Sob a Curva (AUC), que mede a capacidade do score de rankizar pedestres fortemente ocluídos acima de pedestres totalmente visíveis.</span></p><p><span class="s" data-s="b6-p1-s0">Os resultados são robustos.</span> <span class="s" data-s="b6-p1-s1">O score atingiu um AUC de 0,909 para detecções fortemente ocluídas.</span> <span class="s" data-s="b6-p1-s2">Um ponto importante é que o detector YOLOv8x falha em detectar 27% dos pedestres fortemente ocluídos.</span> <span class="s" data-s="b6-p1-s3">Ao avaliar apenas as detecções encontradas, o benchmark pode ser otimista.</span> <span class="s" data-s="b6-p1-s4">Para mitigar isso, os autores também avaliaram o score em todos os 709 pedestres anotados no teste, independentemente de terem sido detectados ou não.</span> <span class="s" data-s="b6-p1-s5">Mesmo nesse cenário mais difícil, o AUC permaneceu alto em 0,888.</span></p><p><span class="s" data-s="b6-p2-s0">Uma crítica comum a sinais baseados em profundidade é que eles podem estar capturando apenas a distância do objeto (pedestres mais longe tendem a ser mais ocluídos).</span> <span class="s" data-s="b6-p2-s1">Os autores testaram rigorosamente essa hipótese.</span> <span class="s" data-s="b6-p2-s2">Eles dividiram os dados em faixas de distância fixas.</span> <span class="s" data-s="b6-p2-s3">Dentro de cada faixa, a distância real do pedestre sozinha não consegue distinguir oclusão, com AUC próximo de 0,5, ou seja, acaso.</span> <span class="s" data-s="b6-p2-s4">Em contraste, o score proposto mantém um AUC alto entre 0,894 e 0,925 em todas as faixas.</span> <span class="s" data-s="b6-p2-s5">Isso confirma que o sinal é realmente de oclusão, não de profundidade.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b7-t">Limitação: Profundidade Métrica é Obrigatória</span></h3>
+          <p><span class="s" data-s="b7-c-s0">O método exige que o modelo de profundidade tenha escala métrica correta.</span> <span class="s" data-s="b7-c-s1">Modelos que retornam profundidade relativa (como versões padrão do MiDaS sem calibração) invertem a ranking ou falham.</span> <span class="s" data-s="b7-c-s2">Além disso, se o modelo de profundidade tiver um offset aditivo constante (ex: lê tudo 2 metros mais perto), o score começa a correlacionar-se com a distância, reduzindo a eficácia.</span> <span class="s" data-s="b7-c-s3">A verificação de que o erro do modelo é próximo de um ganho puro é essencial.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b8-h">Generalização para CARLA e Eficiência Computacional</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Para testar a generalização fora do domínio real do KITTI, os autores utilizaram cenas sintéticas do CARLA.</span> <span class="s" data-s="b8-p0-s1">O CARLA permite gerar ground-truth de visibilidade exato (renderizando a cena sem oclusores para saber exatamente o que deveria ser visível).</span> <span class="s" data-s="b8-p0-s2">Nesse ambiente, o score atingiu um AUC de 0,819, superando significativamente a distância sozinha (0,644).</span> <span class="s" data-s="b8-p0-s3">Isso demonstra que o mecanismo de desacordo funciona mesmo com mudanças de domínio e altura de câmera.</span></p><p><span class="s" data-s="b8-p1-s0">Do ponto de vista de eficiência, o cálculo do score é extremamente leve, custando aproximadamente 0,3 ms por frame em uma CPU de laptop.</span> <span class="s" data-s="b8-p1-s1">A maior parte do tempo de inferência é gasta no modelo de profundidade (Depth Anything V2), que é uma rede pesada.</span> <span class="s" data-s="b8-p1-s2">No entanto, como o método não requer treinamento adicional, ajuste fino ou coleta de novos dados de anotação, o custo marginal de implantação é zero.</span> <span class="s" data-s="b8-p1-s3">Uma vez que se tem um pipeline de detecção e profundidade, o sinal de oclusão é gratuito.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.06899/table1.webp" alt="Resultados no KITTI. O score mantém alto AUC em todas as faixas de distância, enquanto a distância sozinha tem desempenho próximo ao acaso." loading="lazy">
+          <figcaption>
+            Resultados no KITTI. O score mantém alto AUC em todas as faixas de distância, enquanto a distância sozinha tem desempenho próximo ao acaso.
+            <span class="source">Tabela 1 do paper · Onyenweaku et al., arXiv:2611.06899</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">Por que Modelos Complexos Falharam?</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Um dos pontos fortes do paper é a análise honesta do porquê abordagens mais complexas falharam.</span> <span class="s" data-s="b10-p0-s1">Os autores testaram três intervenções baseadas em modelo: fusão de profundidade, aumento de dados de oclusão e atenção.</span> <span class="s" data-s="b10-p0-s2">Eles avaliaram 81 checkpoints diferentes.</span></p><p><span class="s" data-s="b10-p1-s0">Nenhuma dessas técnicas melhorou a detecção fora da distribuição de treino.</span> <span class="s" data-s="b10-p1-s1">A fusão de profundidade, em particular, piorou a precisão mesmo dentro da distribuição, corroborando estudos anteriores que mostram que modelos de profundidade monocular podem introduzir ruído que prejudica o detector RGB.</span> <span class="s" data-s="b10-p1-s2">Além disso, ao testar um detector treinado em dados alemães (KITTI) em cenas de Lagos, a precisão caiu pela metade.</span> <span class="s" data-s="b10-p1-s3">Isso destaca a fragilidade de modelos treinados em dados de primeiro mundo para aplicações no Sul Global, onde as condições de rua, iluminação e densidade são diferentes.</span></p><p><span class="s" data-s="b10-p2-s0">O método proposto não sofre dessa fragilidade porque não depende de aprender padrões visuais específicos de oclusão (como texturas de roupas ou formas de corpos).</span> <span class="s" data-s="b10-p2-s1">Ele depende de uma propriedade geométrica fundamental: a luz viaja em linha reta e objetos mais próximos bloqueiam objetos mais longe.</span> <span class="s" data-s="b10-p2-s2">Essa propriedade é universal, independentemente do contexto geográfico ou cultural.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.06899/table6.webp" alt="Ablação de métodos complexos. Técnicas de treinamento não melhoram a detecção fora da distribuição, reforçando a necessidade de sinais geométricos invariantes." loading="lazy">
+          <figcaption>
+            Ablação de métodos complexos. Técnicas de treinamento não melhoram a detecção fora da distribuição, reforçando a necessidade de sinais geométricos invariantes.
+            <span class="source">Tabela 6 do paper · Onyenweaku et al., arXiv:2611.06899</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b12-h">Limitações e Considerações Finais</span></h2>
+<p><span class="s" data-s="b12-p0-s0">Apesar dos resultados promissores, o método tem limitações.</span> <span class="s" data-s="b12-p0-s1">Ele assume que a caixa delimitadora do detector cobre a altura total do pedestre.</span> <span class="s" data-s="b12-p0-s2">Se o detector falhar em detectar partes do corpo ou se a oclusão for tão severa que a caixa se contraia drasticamente, a estimativa de altura aparente pode ser comprometida.</span> <span class="s" data-s="b12-p0-s3">O paper menciona que há uma cauda de caixas de baixa confiança para pedestres fortemente ocluídos que são mais curtas, o que pode afetar a precisão em casos extremos.</span></p><p><span class="s" data-s="b12-p1-s0">Além disso, o método depende da qualidade do modelo de profundidade.</span> <span class="s" data-s="b12-p1-s1">Se o modelo de profundidade tiver erros sistemáticos não-lineares ou não for métrico, o sinal de desacordo pode ser corrompido.</span> <span class="s" data-s="b12-p1-s2">O paper mostra que verificar a ausência de offset aditivo é possível sem rótulos de oclusão, mas isso exige uma validação prévia do modelo de profundidade no domínio de destino.</span></p><p><span class="s" data-s="b12-p2-s0">Em resumo, Occlusion for Free oferece uma solução elegante e prática para um problema persistente.</span> <span class="s" data-s="b12-p2-s1">Em vez de buscar modelos mais complexos que falham em generalizar, os autores exploram a informação latente já presente nos outputs de detecção e profundidade.</span> <span class="s" data-s="b12-p2-s2">Para aplicações em robótica de baixo custo ou em regiões com dados escassos, essa abordagem de sem treinamento e sem rótulos é um avanço significativo na robustez de sistemas de percepção.</span></p>        <h2><span class="s" data-s="b13-h">Takeaways</span></h2>
+<p><span class="s" data-s="b13-p0-s0">1.</span> <span class="s" data-s="b13-p0-s1">O sinal de oclusão emerge naturalmente do desacordo entre altura aparente (estável) e profundidade mínima (sensível ao oclusor).</span></p><p><span class="s" data-s="b13-p1-s0">2.</span> <span class="s" data-s="b13-p1-s1">O método é training-free e label-free, requerendo apenas um detector de objetos e um estimador de profundidade métrica.</span></p><p><span class="s" data-s="b13-p2-s0">3.</span> <span class="s" data-s="b13-p2-s1">A validação em faixas de distância prova que o score mede oclusão, não apenas distância ao objeto.</span></p><p><span class="s" data-s="b13-p3-s0">4.</span> <span class="s" data-s="b13-p3-s1">Abordagens complexas de treinamento falham em transferir para novos domínios; sinais geométricos invariantes são mais robustos.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">O sinal de oclusão emerge naturalmente do desacordo entre altura aparente (estável) e profundidade mínima (sensível ao oclusor).</span></li><li><span class="s" data-s="k1">O método é training-free e label-free, requerendo apenas um detector de objetos e um estimador de profundidade métrica.</span></li><li><span class="s" data-s="k2">A validação em faixas de distância prova que o score mede oclusão, não apenas distância ao objeto.</span></li><li><span class="s" data-s="k3">Abordagens complexas de treinamento falham em transferir para novos domínios; sinais geométricos invariantes são mais robustos.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.06899" rel="noopener">Occlusion for Free: Detecting Occlusion from the Disagreement Between Two Monocular Distance Cues</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.06899" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

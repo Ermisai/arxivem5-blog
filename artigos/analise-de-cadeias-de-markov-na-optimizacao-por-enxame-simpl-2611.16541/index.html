@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Análise de Cadeias de Markov na Optimização por Enxame Simplificada (SSO) — arXiv em 5</title>
+<meta name="description" content="Um estudo teórico rigoroso que decompõe a regra de atualização do algoritmo SSO usando cadeias de Markov finitas, revelando como inércia e redesenho afetam a convergência em problemas discretos.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Análise de Cadeias de Markov na Optimização por Enxame Simplificada (SSO)">
+<meta property="og:description" content="Um estudo teórico rigoroso que decompõe a regra de atualização do algoritmo SSO usando cadeias de Markov finitas, revelando como inércia e redesenho afetam a convergência em problemas discretos.">
+<meta property="og:image" content="../../assets/papers/2611.16541/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Redes neurais</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.16541" rel="noopener">arXiv:2611.16541</a>
+    </div>
+    <h1><span class="s" data-s="t">Análise de Cadeias de Markov na Optimização por Enxame Simplificada (SSO)</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um estudo teórico rigoroso que decompõe a regra de atualização do algoritmo SSO usando cadeias de Markov finitas, revelando como inércia e redesenho afetam a convergência em problemas discretos.</span></p>
+    <p class="byline">
+      <span>Yeh</span>
+      <span>6 min de leitura</span>
+<span>12/11/2026</span>    </p>
+    <div class="listen" data-article="2611.16541" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=u8e3Z2eTDHA" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Teoria Atrasada</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A Optimização por Enxame Simplificada (SSO, do inglês Simplified Swarm Optimisation) foi proposta por Wei-Chang Yeh como um método discreto que remove a complexidade das versões tradicionais.</span> <span class="s" data-s="b0-p0-s1">Enquanto o Particle Swarm Optimization (PSO) clássico depende de vetores de velocidade e fatores de aprendizado, o SSO opera apenas com comparações de números aleatórios contra limiares cumulativos.</span> <span class="s" data-s="b0-p0-s2">Essa simplicidade facilitou sua aplicação em problemas práticos, como alocação de redundância, sequenciamento de desmontagem e ajuste de hiperparâmetros em redes neurais convolucionais.</span> <span class="s" data-s="b0-p0-s3">No entanto, enquanto a prática avançava, a teoria matemática que garante seu comportamento permaneceu estagnada.</span></p>        <h2><span class="s" data-s="b1-h">A Regra de Atualização e a Cadeia de Markov</span></h2>
+<p><span class="s" data-s="b1-p0-s0">O cerne da análise deste paper reside na decomposição da regra de atualização.</span> <span class="s" data-s="b1-p0-s1">Em cada passo, cada variável de solução é atualizada independentemente.</span> <span class="s" data-s="b1-p0-s2">O algoritmo sorteia um número uniforme e decide entre quatro ações: copiar o melhor global (probabilidade c_g), copiar o melhor pessoal (probabilidade c_p), manter o valor atual (inércia, probabilidade c_w) ou redesenhar uniformemente (probabilidade c_r).</span> <span class="s" data-s="b1-p0-s3">Note que c_g + c_p + c_w + c_r = 1.</span> <span class="s" data-s="b1-p0-s4">Esta estrutura é fundamentalmente diferente de outros algoritmos evolutivos ou de enxame, pois não há velocidade nem produtos de fatores de aprendizado.</span></p>        <h2><span class="s" data-s="b2-h">Estrutura Exata sob Memória Congelada</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Para tornar o problema tratável analiticamente, os autores consideram primeiro o cenário de memória congelada, onde os melhores global e pessoal não mudam durante a execução.</span> <span class="s" data-s="b2-p0-s1">Nesse caso, a dinâmica de cada coordenada pode ser modelada como uma Cadeia de Markov Finita.</span> <span class="s" data-s="b2-p0-s2">O kernel de transição para uma coordenada específica assume uma forma explícita: c_w I + (1 - c_w)Π, onde I é a matriz identidade e Π é a matriz de probabilidade de transição baseada nas cópias.</span> <span class="s" data-s="b2-p0-s3">Esta estrutura permite derivar a lei estacionária exata e, crucialmente, a taxa de decaimento da cadeia.</span></p>        <h2><span class="s" data-s="b3-h">Convergência e Taxa Exata</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O resultado mais imediato da análise sob memória congelada é que a taxa de convergência exata é c_w^t.</span> <span class="s" data-s="b3-p0-s1">Isso significa que a inércia (c_w) dita a velocidade com que a informação do melhor ponto se propaga ou se perde se não houver redesenho.</span> <span class="s" data-s="b3-p0-s2">Se c_w for próximo de 1, a cadeia converge lentamente.</span> <span class="s" data-s="b3-p0-s3">Se c_r for zero e o ponto atual não for o ótimo, a cadeia pode ficar presa.</span> <span class="s" data-s="b3-p0-s4">Os autores provam que, para garantir a convergência global em algoritmos elitistas, é necessário que toda configuração tenha probabilidade positiva de ser alcançada, o que requer c_r &gt; 0.</span></p>        <h2><span class="s" data-s="b4-h">Limites de Tempo de Atingimento</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Quando a memória não está congelada e o algoritmo é elitista (mantém o melhor encontrado até agora), a análise se torna mais complexa.</span> <span class="s" data-s="b4-p0-s1">Os autores estabelecem um limite geométrico para o tempo de atingimento (hitting-time).</span> <span class="s" data-s="b4-p0-s2">Eles demonstram que, partindo de uma posição não ótima e mantendo c_r fixo, o número esperado de avaliações para alcançar um único ótimo é pelo menos exp(n c_r / 2).</span> <span class="s" data-s="b4-p0-s3">Este é um limite inferior forte que destaca a dependência exponencial com o tamanho do problema n se c_r não for escalado adequadamente.</span></p>        <h2><span class="s" data-s="b5-h">Análise de Runtime em Funções Unimodais</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Para funções unimodais clássicas como OneMax (contar o número de bits 1) e LeadingOnes (contar bits 1 consecutivos do início), os autores utilizam acoplamento explícito para derivar limites de tempo esperado.</span> <span class="s" data-s="b5-p0-s1">Eles mostram que, com uma taxa de redesenho escalada como m/((m-1)n), o número esperado de gerações é O(n log n) para OneMax e O(n^2) para LeadingOnes, para qualquer tamanho de população.</span> <span class="s" data-s="b5-p0-s2">Isso coloca o SSO em competição teórica com algoritmos evolutivos padrão, mas com uma estrutura de atualização mais simples.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.16541/figure3.webp" alt="Comparação entre limites teóricos e desempenho empírico no OneMax e LeadingOnes, mostrando a proximidade das cotas com a média observada." loading="lazy">
+          <figcaption>
+            Comparação entre limites teóricos e desempenho empírico no OneMax e LeadingOnes, mostrando a proximidade das cotas com a média observada.
+            <span class="source">Figura 3 do paper · Yeh, arXiv:2611.16541</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">O Papel da Inércia: Esperança vs. Realidade</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Um dos achados mais contraintuitivos deste trabalho é o efeito da inércia (c_w).</span> <span class="s" data-s="b7-p0-s1">Teoricamente, sob posições estacionárias e memória congelada, a inércia não pode acelerar a entrada em qualquer conjunto em comparação com a amostragem independente.</span> <span class="s" data-s="b7-p0-s2">Os experimentos confirmam isso: na maioria dos casos testados em OneMax e LeadingOnes, a inércia desacelera a busca.</span> <span class="s" data-s="b7-p0-s3">A Figura 5 ilustra claramente que, para a maioria dos pesos de inércia, o tempo médio de geração aumenta em relação ao caso sem inércia (c_w = 0).</span></p>        <h2><span class="s" data-s="b8-h">Limitações da Inércia em Posições Não Estacionárias</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Os autores advertem que a comparação direta entre inércia e amostragem independente só vale rigorosamente para posições estacionárias.</span> <span class="s" data-s="b8-p0-s1">Em posições transitórias (durante a busca), a inércia pode ter efeitos diferentes.</span> <span class="s" data-s="b8-p0-s2">No entanto, nos benchmarks testados, não houve ganho consistente.</span> <span class="s" data-s="b8-p0-s3">Em funções com lacunas de fitness, como Jump_k, valores moderados de inércia parecem ajudar, sugerindo um mecanismo mediado por memória que não é totalmente capturado pela análise de memória congelada.</span> <span class="s" data-s="b8-p0-s4">Isso indica que a inércia pode preservar informações úteis temporariamente, mas não acelera a convergência global.</span></p>        <h2><span class="s" data-s="b9-h">Mecanismo Interno: Recombinação de Memórias</span></h2>
+<p><span class="s" data-s="b9-p0-s0">O algoritmo SSO possui um mecanismo de recombinação implícito.</span> <span class="s" data-s="b9-p0-s1">Quando os valores de referência (global, pessoal e atual) discordam, as ramificações de cópia podem recombinar as memórias.</span> <span class="s" data-s="b9-p0-s2">O redesenho uniforme (c_r) é forçado apenas onde nenhum ramo ativo detém o valor alvo.</span> <span class="s" data-s="b9-p0-s3">A Figura 6 mostra que a maior parte das atualizações de coordenadas ocorre nas classes onde há discordância, forçando o algoritmo a explorar novas combinações.</span> <span class="s" data-s="b9-p0-s4">Isso explica a eficiência do SSO em problemas como Jump_2, onde precisa escapar de ótimos locais complementares.</span></p>        <h2><span class="s" data-s="b10-h">Comparação com Algoritmos Evolutivos</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Os autores comparam o SSO com o (1+1) Evolutionary Algorithm (EA) e algoritmos genéticos.</span> <span class="s" data-s="b10-p0-s1">Em funções Jump, o SSO precisou de 3,8 a 8,9 vezes menos avaliações que o (1+1) EA com taxa de mutação 1/n.</span> <span class="s" data-s="b10-p0-s2">No entanto, não houve vantagem consistente sobre mutação ajustada ou um algoritmo genético (μ+1) com crossover uniforme.</span> <span class="s" data-s="b10-p0-s3">Isso sugere que a recombinação emergente do SSO não substitui necessariamente o crossover explícito, mas oferece uma alternativa viável e mais simples de implementar.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.16541/figure5.webp" alt="Impacto da inércia: a maioria dos marcadores mostra pior desempenho relativo em comparação com c_w = 0, indicando desaceleração." loading="lazy">
+          <figcaption>
+            Impacto da inércia: a maioria dos marcadores mostra pior desempenho relativo em comparação com c_w = 0, indicando desaceleração.
+            <span class="source">Figura 5 do paper · Yeh, arXiv:2611.16541</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b12-h">Diretrizes de Projeto Baseadas em Teoria</span></h2>
+<p><span class="s" data-s="b12-p0-s0">Com base na análise, os autores propõem diretrizes práticas.</span> <span class="s" data-s="b12-p0-s1">A taxa de redesenho c_r deve ser mantida &gt; 0 e, para garantir tempo polinomial para um único ótimo, deve ser O((log n)/n).</span> <span class="s" data-s="b12-p0-s2">Valores fixos altos de c_r (como 0,2 ou 0,5) resultam em tempos de execução muito maiores.</span> <span class="s" data-s="b12-p0-s3">Para o end-game (fase final), quando a distância ao ótimo é 1, a taxa ideal é m/((m-1)n).</span> <span class="s" data-s="b12-p0-s4">Além disso, manter c_g e c_p &gt; 0 é crucial para permitir a recombinação de memórias complementares.</span></p>        <h2><span class="s" data-s="b13-h">Validação em Problemas de Engenharia</span></h2>
+<p><span class="s" data-s="b13-p0-s0">A utilidade prática da análise foi testada em problemas de alocação de redundância.</span> <span class="s" data-s="b13-p0-s1">Uma versão ajustada da regra de redesenho do SSO melhorou seis dos oito pares de benchmark testados.</span> <span class="s" data-s="b13-p0-s2">A Figura 7 mostra que, em problemas de alocação de redundância com limites de peso, o SSO ajustado superou tanto a versão padrão quanto o (1+1) EA em termos de proximidade do ótimo exato.</span> <span class="s" data-s="b13-p0-s3">Isso valida que a teoria de Markov não é apenas acadêmica, mas pode guiar o tuning de parâmetros para ganhos reais.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.16541/figure7.webp" alt="Desempenho em alocação de redundância: o SSO com peso de redesenho ajustado alcança menor gap relativo para o ótimo." loading="lazy">
+          <figcaption>
+            Desempenho em alocação de redundância: o SSO com peso de redesenho ajustado alcança menor gap relativo para o ótimo.
+            <span class="source">Figura 7 do paper · Yeh, arXiv:2611.16541</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b15-h">Limitações e Trabalho Futuro</span></h2>
+<p><span class="s" data-s="b15-p0-s0">O paper reconhece limitações.</span> <span class="s" data-s="b15-p0-s1">O limite de tempo de atingimento é um pior-caso e pode ser frouxo em paisagens com informação de fitness.</span> <span class="s" data-s="b15-p0-s2">A análise não cobre escalas de tempo que diminuem durante a execução (como em simulated annealing) ou distribuições pesadas.</span> <span class="s" data-s="b15-p0-s3">Além disso, a análise de inércia em posições não estacionárias permanece em aberto.</span> <span class="s" data-s="b15-p0-s4">O acoplamento para atualizações assíncronas também precisa ser redesenhado.</span> <span class="s" data-s="b15-p0-s5">Estes são passos naturais para estender a teoria.</span></p>        <h2><span class="s" data-s="b16-h">Conclusão</span></h2>
+<p><span class="s" data-s="b16-p0-s0">A análise de cadeias de Markov finitas fornece uma compreensão profunda da Simplified Swarm Optimisation.</span> <span class="s" data-s="b16-p0-s1">Ela revela que a simplicidade do SSO vem com trade-offs claros: a inércia não é uma bala de prata e pode ser prejudicial, enquanto o redesenho uniforme é crítico para a convergência global.</span> <span class="s" data-s="b16-p0-s2">As diretrizes derivadas permitem um tuning mais racional dos parâmetros, levando a melhorias práticas em problemas de engenharia discreta.</span> <span class="s" data-s="b16-p0-s3">Este trabalho fecha uma lacuna significativa entre a aplicação heurística e a fundamentação teórica do SSO.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">SSO atualiza variáveis copiando melhores ou redesenhando; a taxa de convergência exata é c_w^t sob memória congelada.</span></li><li><span class="s" data-s="k1">Inércia não acelera a busca em posições estacionárias e pode desacelerar a convergência em OneMax e LeadingOnes.</span></li><li><span class="s" data-s="k2">O redesenho uniforme é essencial para escapar de ótimos locais; a taxa c_r deve ser O((log n)/n) para tempo polinomial.</span></li><li><span class="s" data-s="k3">Versões ajustadas da regra de SSO superaram o algoritmo (1+1) EA em problemas de alocação de redundância.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.16541" rel="noopener">A Finite Markov Chain Analysis of the Simplified Swarm Optimisation Update Rule</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.16541" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

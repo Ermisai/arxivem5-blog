@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Atenção como Teoria de Gauge: Por que laços de Wilson são a única forma possível — arXiv em 5</title>
+<meta name="description" content="Este paper demonstra que, sob simetria de gauge por entidade, a atualização de arestas em grafos é forçada a depender exclusivamente de loops de Wilson. Não é uma escolha de design, mas uma consequência matemática inevitável.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Atenção como Teoria de Gauge: Por que laços de Wilson são a única forma possível">
+<meta property="og:description" content="Este paper demonstra que, sob simetria de gauge por entidade, a atualização de arestas em grafos é forçada a depender exclusivamente de loops de Wilson. Não é uma escolha de design, mas uma consequência matemática inevitável.">
+<meta property="og:image" content="../../assets/papers/2610.37656/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Redes neurais</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.37656" rel="noopener">arXiv:2610.37656</a>
+    </div>
+    <h1><span class="s" data-s="t">Atenção como Teoria de Gauge: Por que laços de Wilson são a única forma possível</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Este paper demonstra que, sob simetria de gauge por entidade, a atualização de arestas em grafos é forçada a depender exclusivamente de loops de Wilson.</span> <span class="s" data-s="d-s1">Não é uma escolha de design, mas uma consequência matemática inevitável.</span></p>
+    <p class="byline">
+      <span>Sarkar et al.</span>
+      <span>8 min de leitura</span>
+<span>27/10/2026</span>    </p>
+    <div class="listen" data-article="2610.37656" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=v3rHfcWWmtM" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Composição Relacional</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Em grafos relacionais, as relações se compõem através das entidades que compartilham.</span> <span class="s" data-s="b0-p0-s1">Se Alice é a mãe de Bob e Bob é o pai de Carol, então Alice é a avó de Carol.</span> <span class="s" data-s="b0-p0-s2">A ordem importa: a mãe do pai não é necessariamente a mesma pessoa que o pai da mãe.</span> <span class="s" data-s="b0-p0-s3">Verificar se essa composição é válida exige fechar o loop, retornando à entidade original e verificando se a transformação composta é consistente.</span> <span class="s" data-s="b0-p0-s4">Esse problema é central em grafos de conhecimento, visão computacional e física teórica.</span></p><p><span class="s" data-s="b0-p1-s0">Modelos tradicionais de atenção em grafos, como o Transformer padrão adaptado para grafos, aplicam pesos às arestas baseados em similaridades diretas entre pares de nós.</span> <span class="s" data-s="b0-p1-s1">No entanto, essa abordagem ignora a estrutura topológica mais profunda: a dependência cíclica.</span> <span class="s" data-s="b0-p1-s2">Se permitirmos que o sistema de coordenadas de cada entidade seja rotacionado independentemente (liberdade de gauge por entidade), a arquitetura do modelo muda fundamentalmente.</span></p><p><span class="s" data-s="b0-p2-s0">O paper Attention as Lattice Gauge Theory: Relations Interact Only Through Wilson Loops, de Aakash Sarkar, Ananya Mukherjee e Motoshige Sato, parte dessa premissa.</span> <span class="s" data-s="b0-p2-s1">Eles mostram que, sob essa simetria, as relações que não compartilham um ciclo não podem interagir.</span> <span class="s" data-s="b0-p2-s2">A única quantidade invariante de gauge para um triângulo de entidades é a holonomia do loop, conhecida em física como Loop de Wilson.</span> <span class="s" data-s="b0-p2-s3">Isso não é uma sugestão de arquitetura, mas uma força matemática.</span></p><p><span class="s" data-s="b0-p3-s0">A implicação é radical: a atenção por loops de Wilson não é apenas uma entre muitas opções de design.</span> <span class="s" data-s="b0-p3-s1">É a única forma que a simetria permite.</span> <span class="s" data-s="b0-p3-s2">Isso conecta três comunidades aparentemente distintas: embeddings de grafos de conhecimento comutativos, o mecanismo de atualização de triângulos do AlphaFold e a Cromodinâmica Quântica em Retículo (Lattice QCD).</span> <span class="s" data-s="b0-p3-s3">Os autores instanciam essa subfamília equivariante como holonomy attention e demonstram seu poder em inferência zero-shot.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.37656/figure1.webp" alt="Visualização do mecanismo de atenção por holonomia em ação zero-shot. À esquerda, a atualização forçada das arestas. À direita, a precisão na inferência de relações S4 não observadas versus a fração de corrupção das arestas, demonstrando robustez." loading="lazy">
+          <figcaption>
+            Visualização do mecanismo de atenção por holonomia em ação zero-shot. À esquerda, a atualização forçada das arestas. À direita, a precisão na inferência de relações S4 não observadas versus a fração de corrupção das arestas, demonstrando robustez.
+            <span class="source">Figura 1 do paper · Sarkar et al., arXiv:2610.37656</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">A Teoria de Gauge em Grafos</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Para entender a proposta, precisamos traduzir conceitos de física de partículas para o contexto de aprendizado de máquina.</span> <span class="s" data-s="b2-p0-s1">Na Teoria de Gauge, temos campos e partículas que se movem nesse campo.</span> <span class="s" data-s="b2-p0-s2">Em grafos, as partículas são as entidades (nós) e as conexões são as relações (arestas).</span> <span class="s" data-s="b2-p0-s3">Cada aresta T_ij pode ser vista como um operador que transporta a informação de j para i.</span></p><p><span class="s" data-s="b2-p1-s0">A liberdade de gauge por entidade significa que podemos rotacionar o sistema de coordenadas de cada nó independentemente sem alterar a física subjacente do problema.</span> <span class="s" data-s="b2-p1-s1">Se mudarmos a base de coordenadas do nó i, o operador T_ij deve se transformar de maneira compensatória para que a mensagem recebida permaneça consistente.</span> <span class="s" data-s="b2-p1-s2">Isso impõe restrições severas sobre como os operadores podem interagir.</span></p><p><span class="s" data-s="b2-p2-s0">No setor de campo puro, onde não há matéria ativa, relações que não formam ciclos fechados não podem interagir.</span> <span class="s" data-s="b2-p2-s1">A interação só ocorre quando formamos um loop.</span> <span class="s" data-s="b2-p2-s2">Para um triângulo formado por nós i, j, k, a composição das relações é H = T_ij T_jk T_ki.</span> <span class="s" data-s="b2-p2-s3">Essa quantidade H é a holonomia do loop.</span> <span class="s" data-s="b2-p2-s4">Ela é invariante sob rotações de gauge se considerarmos o traço ou funções de classe.</span></p><p><span class="s" data-s="b2-p3-s0">O paper prova que a única atualização equivariante possível para uma aresta T_ij é da forma U = Psi(H) T_ij, onde Psi é uma função que equivariante à conjugação.</span> <span class="s" data-s="b2-p3-s1">Ou seja, a aresta só pode ser atualizada multiplicando-a por uma função da holonomia do triângulo ao qual ela pertence.</span> <span class="s" data-s="b2-p3-s2">Não há como escapar dessa estrutura se quisermos respeitar a simetria de gauge.</span> <span class="s" data-s="b2-p3-s3">Isso elimina muitas arquiteturas heurísticas propostas anteriormente.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b3-t">Wilson Loops não são apenas para Físicos</span></h3>
+          <p><span class="s" data-s="b3-c-s0">Em física, loops de Wilson medem o fluxo de campo através de uma superfície.</span> <span class="s" data-s="b3-c-s1">Em grafos, eles medem a consistência da composição relacional.</span> <span class="s" data-s="b3-c-s2">Se H for a identidade, o triângulo é plano e consistente.</span> <span class="s" data-s="b3-c-s3">Se H desviar muito, há uma inconsistência estrutural.</span> <span class="s" data-s="b3-c-s4">Isso permite detectar erros ou relações não observadas sem treinar um classificador tradicional.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b4-h">Unificando Comunidades: Abelian, Não-Abelian e AlphaFold</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Uma das contribuições mais elegantes do paper é mostrar que diferentes abordagens existentes são, na verdade, casos especiais desta teoria geral.</span> <span class="s" data-s="b4-p0-s1">Primeiro, os embeddings de operadores comutativos usados em grafos de conhecimento correspondem ao setor abeliano.</span> <span class="s" data-s="b4-p0-s2">Neles, as matrizes de relação comutam, e a holonomia se reduz a produtos escalares simples.</span> <span class="s" data-s="b4-p0-s3">É uma versão simplificada, mas limitada, da teoria completa.</span></p><p><span class="s" data-s="b4-p1-s0">Em segundo lugar, o AlphaFold, o modelo revolucionário de previsão de estrutura de proteínas, utiliza uma atualização de triângulo em sua stack de pares.</span> <span class="s" data-s="b4-p1-s1">Os autores argumentam que essa atualização é estruturalmente idêntica à atenção por holonomia, mas sem as restrições de gauge rigorosas.</span> <span class="s" data-s="b4-p1-s2">O AlphaFold aprende a achatar o campo de gauge, forçando a holonomia dos triângulos a tender à identidade.</span> <span class="s" data-s="b4-p1-s3">O paper prevê que a inconsistência triangular nas representações de par deve cair com a profundidade do modelo.</span></p><p><span class="s" data-s="b4-p2-s0">Por fim, a Lattice QCD constrói essa teoria de maneira equivariante em retículos discretos.</span> <span class="s" data-s="b4-p2-s1">A conexão entre essas áreas é profunda: todas lidam com a composição de transformações em ciclos.</span> <span class="s" data-s="b4-p2-s2">A diferença está no nível de abstração e nas restrições impostas.</span> <span class="s" data-s="b4-p2-s3">O paper propõe levar a generalidade da QCD para grafos relacionais gerais, criando a holonomy attention.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.37656/table1.webp" alt="Tabela comparativa de precisão em pares não observados. O método holonômico supera significativamente as abordagens uniformes e abelianas, especialmente em cenários com alta corrupção de dados." loading="lazy">
+          <figcaption>
+            Tabela comparativa de precisão em pares não observados. O método holonômico supera significativamente as abordagens uniformes e abelianas, especialmente em cenários com alta corrupção de dados.
+            <span class="source">Tabela 1 do paper · Sarkar et al., arXiv:2610.37656</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b6-h">Holonomy Attention: Implementação e Resultados</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Os autores implementam a subfamília equivariante em grafos relacionais gerais.</span> <span class="s" data-s="b6-p0-s1">O mecanismo funciona alternando dois passos: o passo de matéria e o passo de campo de gauge.</span> <span class="s" data-s="b6-p0-s2">No passo de matéria, os vetores de nó são atualizados por mensagens transportadas, pontuadas pelo produto interno entre xi e Tijxj.</span> <span class="s" data-s="b6-p0-s3">Isso é análogo ao propagador de matéria em um campo de gauge fixo.</span> <span class="s" data-s="b6-p0-s4">No passo de aresta, os operadores de relação são refinados usando as holonomias dos triângulos, permitindo que relações não observadas se comuniquem através de caminhos indiretos.</span></p><p><span class="s" data-s="b6-p1-s0">Os experimentos foram realizados em grafos esparsos com 14 entidades e grau 8.</span> <span class="s" data-s="b6-p1-s1">O foco foi a inferência de relações não observadas do tipo S4, que são cadeias de quatro relações, em um cenário zero-shot, ou seja, sem treinamento supervisionado específico para a tarefa.</span> <span class="s" data-s="b6-p1-s2">O modelo usa apenas a estrutura de composição e a simetria de gauge.</span></p><p><span class="s" data-s="b6-p2-s0">Os resultados são impressionantes.</span> <span class="s" data-s="b6-p2-s1">Com zero por cento de corrupção nas arestas, o modelo atinge alta precisão.</span> <span class="s" data-s="b6-p2-s2">Conforme a fração de arestas corrompidas aumenta, a precisão cai, mas de forma robusta.</span> <span class="s" data-s="b6-p2-s3">Com 50 por cento das arestas corrompidas, o holonomy attention ainda alcança uma precisão de 0.88 na inferência de relações.</span> <span class="s" data-s="b6-p2-s4">Isso é comparável ou ligeiramente inferior a algoritmos especializados de sincronização, mas com uma fração muito menor de parâmetros e sem necessidade de ajuste fino.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b7-t">O Teto Abelian vs. Holonômico</span></h3>
+          <p><span class="s" data-s="b7-c-s0">Arquiteturas comutativas têm um teto de precisão de 0.083 em cenários de inferência complexa.</span> <span class="s" data-s="b7-c-s1">O método holonômico quebra esse teto, alcançando 0.88.</span> <span class="s" data-s="b7-c-s2">Isso ocorre porque o setor não-abeliano captura a ordem das composições, algo que matrizes comutativas perdem.</span> <span class="s" data-s="b7-c-s3">A ordem importa, e o loop de Wilson a preserva.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b8-h">Detecção de Corrupção e Separação de Clusters</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Além da inferência de relações, o paper demonstra o poder da pontuação de holonomia para diagnóstico.</span> <span class="s" data-s="b8-p0-s1">O score de holonomia, que é o traço de H normalizado, é capaz de flagar triângulos corrompidos com uma Área sob a Curva de 0.99.</span> <span class="s" data-s="b8-p0-s2">Isso significa que o modelo pode identificar quais partes do grafo estão estruturalmente inconsistentes com alta precisão.</span></p><p><span class="s" data-s="b8-p1-s0">Em contraste, scores comutativos são limitados a um AUC de 0.76 por uma regra de seleção secundária.</span> <span class="s" data-s="b8-p1-s1">A capacidade de distinguir entre consistência e corrupção sem rótulos é crucial para aplicações em dados reais, onde a qualidade dos dados é frequentemente questionável.</span> <span class="s" data-s="b8-p1-s2">Além disso, o modelo separa clusters de entidades sem necessidade de rótulos, mostrando que a estrutura de gauge captura informações latentes profundas sobre a organização do grafo.</span></p><p><span class="s" data-s="b8-p2-s0">A robustez a corrupção é um ponto forte.</span> <span class="s" data-s="b8-p2-s1">Em grafos com 50 por cento de arestas corrompidas, o modelo ainda consegue recuperar a estrutura subjacente.</span> <span class="s" data-s="b8-p2-s2">Isso sugere que a atenção por holonomia é inerentemente resistente a ruído, pois a consistência do loop exige que múltiplos caminhos concordem, filtrando anomalias locais.</span></p>        <h2><span class="s" data-s="b9-h">Limitações e Direções Futuras</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Apesar dos resultados promissores, o paper reconhece limitações.</span> <span class="s" data-s="b9-p0-s1">A arquitetura atual assume que os operadores de relação são recuperados de uma biblioteca fixa, não gerados dinamicamente a partir do contexto.</span> <span class="s" data-s="b9-p0-s2">O próximo passo é tornar o campo de gauge dinâmico, onde os operadores são gerados pelo próprio modelo.</span> <span class="s" data-s="b9-p0-s3">O resultado de posto um de trabalhos anteriores já restringe esse gerador: o transporte não pode vir apenas das duas entidades, mas deve vir de dados de relação externos fornecidos pelo contexto.</span></p><p><span class="s" data-s="b9-p1-s0">Além disso, os experimentos foram realizados em grafos relativamente pequenos, com apenas 14 entidades.</span> <span class="s" data-s="b9-p1-s1">A escalabilidade para grafos massivos, como os encontrados em redes sociais ou biologia de sistemas, precisa ser validada.</span> <span class="s" data-s="b9-p1-s2">A complexidade computacional do cálculo de holonomias para todos os triângulos pode ser um gargalo em grafos densos.</span></p><p><span class="s" data-s="b9-p2-s0">O paper também aponta para aplicações em física, como lentes gravitacionais multiplano, onde a rotação da imagem é uma linha de Wilson não comutativa de cisalhamentos.</span> <span class="s" data-s="b9-p2-s1">Modelos comutativos falham aqui, com 0.51 contra 0.92 de precisão.</span> <span class="s" data-s="b9-p2-s2">Isso sugere que a atenção por holonomia é essencial para problemas onde a ordem das transformações é fisicamente significativa, como em cadeias cinemáticas ou recuperação de orientação em criomicroscopia eletrônica.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b10-t">O que o Paper Não Mostra</span></h3>
+          <p><span class="s" data-s="b10-c-s0">O paper não compara diretamente com Transformers padrão em tarefas de classificação de grafos massivas.</span> <span class="s" data-s="b10-c-s1">O foco é na inferência relacional zero-shot e na robustez estrutural.</span> <span class="s" data-s="b10-c-s2">Além disso, a geração dinâmica de operadores de relação ainda é uma proposta futura, não implementada nos experimentos principais.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b11-h">Conclusão: A Forma Forçada da Interação</span></h2>
+<p><span class="s" data-s="b11-p0-s0">A mensagem central do paper é clara: a arquitetura não é uma escolha arbitrária.</span> <span class="s" data-s="b11-p0-s1">Sob a premissa de liberdade de gauge por entidade, a interação entre relações é forçada a ocorrer através de loops de Wilson.</span> <span class="s" data-s="b11-p0-s2">Isso unifica conceitos de física de partículas, aprendizado de máquina e biologia computacional.</span></p><p><span class="s" data-s="b11-p1-s0">A holonomy attention oferece uma alternativa robusta e teoricamente fundamentada aos métodos tradicionais de atenção.</span> <span class="s" data-s="b11-p1-s1">Ela não apenas melhora a precisão em tarefas de inferência relacional, mas também fornece interpretabilidade através da detecção de inconsistências estruturais.</span> <span class="s" data-s="b11-p1-s2">Para cientistas de dados e engenheiros de ML, isso representa uma mudança de paradigma: em vez de ajustar pesos arbitrários, devemos respeitar as simetrias subjacentes dos dados.</span></p><p><span class="s" data-s="b11-p2-s0">O futuro do campo pode envolver a integração de operadores dinâmicos gerados por contexto, mantendo a estrutura de gauge.</span> <span class="s" data-s="b11-p2-s1">Se o AlphaFold já está implícitamente aprendendo a achatar o campo de gauge, entender explicitamente essa dinâmica pode acelerar avanços em modelagem molecular e raciocínio relacional complexo.</span> <span class="s" data-s="b11-p2-s2">A atenção, finalmente, encontra sua forma natural na teoria de gauge.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">A liberdade de rotação independente por nó exige que relações interajam apenas através de loops fechados (holonomia).</span></li><li><span class="s" data-s="k1">A atenção por holonomia é a única atualização equivariante permitida pela simetria, unificando Embeddings Comutativos, AlphaFold e QCD.</span></li><li><span class="s" data-s="k2">Em testes zero-shot, o método infere relações não observadas com 0.88 de precisão, superando drasticamente abordagens abelianas.</span></li><li><span class="s" data-s="k3">O modelo separa clusters sem rótulos e detecta corrupções em grafos com 50% de arestas danificadas, mostrando robustez estrutural.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.37656" rel="noopener">Attention as Lattice Gauge Theory: Relations Interact Only Through Wilson Loops</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.37656" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

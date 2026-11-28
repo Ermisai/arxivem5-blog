@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jeveration: Geração de imagens em uma única passada com modelos System One — arXiv em 5</title>
+<meta name="description" content="O paper apresenta o Jeveration, um modelo que gera imagens de alta qualidade em 78ms usando decisões paralelas de um VLM congelado, eliminando a necessidade de inferência autoregressiva ou difusão iterativa.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Jeveration: Geração de imagens em uma única passada com modelos System One">
+<meta property="og:description" content="O paper apresenta o Jeveration, um modelo que gera imagens de alta qualidade em 78ms usando decisões paralelas de um VLM congelado, eliminando a necessidade de inferência autoregressiva ou difusão iterativa.">
+<meta property="og:image" content="../../assets/papers/2611.24738/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Imagem</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.24738" rel="noopener">arXiv:2611.24738</a>
+    </div>
+    <h1><span class="s" data-s="t">Jeveration: Geração de imagens em uma única passada com modelos System One</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">O paper apresenta o Jeveration, um modelo que gera imagens de alta qualidade em 78ms usando decisões paralelas de um VLM congelado, eliminando a necessidade de inferência autoregressiva ou difusão iterativa.</span></p>
+    <p class="byline">
+      <span>Liu et al.</span>
+      <span>7 min de leitura</span>
+<span>18/11/2026</span>    </p>
+    <div class="listen" data-article="2611.24738" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=r5-ACaRflso" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O custo da latência na geração de imagens</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Na geração de imagens moderna, dominam dois paradigmas principais: modelos autoregressivos, que geram tokens um por um, e modelos de difusão, que iterativamente removem ruído.</span> <span class="s" data-s="b0-p0-s1">Ambos exigem múltiplas avaliações sequenciais do modelo para produzir uma única imagem, o que aumenta significativamente a latência de inferência.</span> <span class="s" data-s="b0-p0-s2">Este custo computacional é particularmente relevante em aplicações que exigem resposta em tempo real ou escalabilidade massiva.</span></p><p><span class="s" data-s="b0-p1-s0">O paper Jeveration, de pesquisadores da National University of Singapore, propõe um terceiro paradigma: a geração como uma decisão conjunta em uma única passada (single forward pass).</span> <span class="s" data-s="b0-p1-s1">Inspirado nos modelos System One, como o Jev, que retornam decisões rápidas e paralelas (como escolhas ou pontuações), os autores exploram se o mesmo mecanismo pode ser aplicado à síntese de imagens de alta qualidade.</span></p><p><span class="s" data-s="b0-p2-s0">Essa abordagem visa eliminar a necessidade de amostragem sequencial.</span> <span class="s" data-s="b0-p2-s1">Em vez de construir a imagem passo a passo, o modelo retorna uma imagem completa como uma decisão única, dado um prompt de texto ou uma imagem de entrada.</span> <span class="s" data-s="b0-p2-s2">A ideia central é repurposing o conhecimento visual-semântico adquirido durante o pré-treinamento de grandes modelos vision-language (VLMs) para geração holística.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.24738/figure3.webp" alt="Arquitetura unificada: um modelo VLM congelado gera imagens e previsões densas em uma única passagem, utilizando adaptadores LoRA compartilhados e heads específicos para tarefas." loading="lazy">
+          <figcaption>
+            Arquitetura unificada: um modelo VLM congelado gera imagens e previsões densas em uma única passagem, utilizando adaptadores LoRA compartilhados e heads específicos para tarefas.
+            <span class="source">Figura 3 do paper · Liu et al., arXiv:2611.24738</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">O desafio da coerência global</span></h2>
+<p><span class="s" data-s="b2-p0-s0">A aplicação direta de modelos System One à geração de imagens enfrenta dois desafios críticos.</span> <span class="s" data-s="b2-p0-s1">O primeiro é a coerência global.</span> <span class="s" data-s="b2-p0-s2">Um único prompt admite muitas imagens válidas, mas decisões paralelas independentes em diferentes posições da imagem podem resultar em regiões incompatíveis.</span> <span class="s" data-s="b2-p0-s3">Se o modelo selecionar entradas de um codebook de forma independente para cada posição, ele pode misturar características de diferentes imagens, produzindo resultados incoerentes.</span></p><p><span class="s" data-s="b2-p1-s0">O segundo desafio é a unificação de tarefas.</span> <span class="s" data-s="b2-p1-s1">Para que o modelo seja útil, ele precisa acomodar diferentes requisitos de condicionamento, como geração texto-para-imagem, imagem-para-imagem e previsão densa, tudo dentro da mesma arquitetura.</span> <span class="s" data-s="b2-p1-s2">Manter a consistência global enquanto se lida com estocasticidade é o cerne do problema técnico apresentado.</span></p><p><span class="s" data-s="b2-p2-s0">Os autores demonstram que a seleção paralela direta falha em capturar as dependências entre os códigos da imagem.</span> <span class="s" data-s="b2-p2-s1">A fatoração independente não consegue modelar a correlação total entre as posições, resultando em imagens onde as partes não se encaixam.</span> <span class="s" data-s="b2-p2-s2">É necessário um mecanismo que coordenem as decisões paralelas.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.24738/figure2.webp" alt="Comparação visual: a seleção paralela direta produz imagens incoerentes, enquanto o Jeveration garante coerência global através de um estado aleatório compartilhado." loading="lazy">
+          <figcaption>
+            Comparação visual: a seleção paralela direta produz imagens incoerentes, enquanto o Jeveration garante coerência global através de um estado aleatório compartilhado.
+            <span class="source">Figura 2 do paper · Liu et al., arXiv:2611.24738</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b4-h">Mecanismo: Decisões tipadas e estado aleatório compartilhado</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Jeveration aborda a coerência global introduzindo um estado aleatório compartilhado (shared random state), denotado por ξ. Em vez de amostrar códigos independentemente, o modelo condiciona todas as posições de código a este único estado ξ. Embora os códigos sejam amostrados condicionalmente independentes dados (y, ξ), sua dependência compartilhada em ξ permite que a distribuição resultante capture dependências entre as posições.</span></p><p><span class="s" data-s="b4-p1-s0">Essa abordagem transforma a geração em uma decisão conjunta.</span> <span class="s" data-s="b4-p1-s1">O VLM processa o input e os tokens de decisão em uma única forward pass.</span> <span class="s" data-s="b4-p1-s2">Para geração de imagens, os tokens de decisão começam a partir do estado aleatório ξ. Para previsão densa, eles atuam como consultas espaciais determinísticas.</span> <span class="s" data-s="b4-p1-s3">Isso permite que o modelo coorden suas escolhas de código enquanto decide todas as posições simultaneamente.</span></p><p><span class="s" data-s="b4-p2-s0">O modelo base utilizado é o Qwen3.5-4B, que permanece congelado.</span> <span class="s" data-s="b4-p2-s1">Jeveration adiciona apenas adaptadores LoRA (Low-Rank Adaptation) compartilhados e heads de saída específicos para tarefas.</span> <span class="s" data-s="b4-p2-s2">Essa escolha mantém o conhecimento semântico pré-existente intacto, focando o treinamento na adaptação para a geração paralela.</span></p>        <h2><span class="s" data-s="b5-h">Treinamento em duas fases para guiar a distribuição</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Um problema crítico surge ao treinar o modelo diretamente para gerar imagens: ele tende a ignorar o estado aleatório ξ sob supervisão direta de imagem.</span> <span class="s" data-s="b5-p0-s1">Para resolver isso, os autores implementam um treinamento em duas fases.</span> <span class="s" data-s="b5-p0-s2">Na primeira fase, eles treinam um modelo para aprender a distribuição de imagens como códigos discretos, criando um guia para a segunda fase.</span></p><p><span class="s" data-s="b5-p1-s0">Na segunda fase, o modelo Jeveration é treinado para produzir decisões paralelas que sejam consistentes com as distribuições aprendidas na primeira fase.</span> <span class="s" data-s="b5-p1-s1">O modelo de primeira fase atua como um juiz, fornecendo as distribuições condicionais alvo para a previsão paralela de códigos.</span> <span class="s" data-s="b5-p1-s2">Isso ensina o modelo a usar o estado aleatório ξ de forma eficaz para produzir imagens coerentes.</span></p><p><span class="s" data-s="b5-p2-s0">O treinamento combina dados de geração (FLUX-Reason-6M e Qwen-Image) para texto-para-imagem, pares sintéticos de estilo para imagem-para-imagem e o dataset NYUv2 para previsão densa.</span> <span class="s" data-s="b5-p2-s1">Os adaptadores LoRA de rank-256 são treinados por cerca de 92k passos na primeira fase e 6.7k na segunda.</span></p>        <h2><span class="s" data-s="b6-h">Resultados: Velocidade e Qualidade</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Os resultados mostram que Jeveration gera uma imagem de 512x512 em 78ms em uma única GPU H200.</span> <span class="s" data-s="b6-p0-s1">Isso o torna até 122x mais rápido que o Janus-Pro-7B, um modelo unificado concorrente.</span> <span class="s" data-s="b6-p0-s2">Em termos de qualidade, Jeveration atinge um score de 0.74 no GenEval, superando modelos unificados como JanusFlow, Show-o e MMaDA, e sendo competitivo com modelos geradores dedicados como SDXL e PixArt, que exigem múltiplos passos.</span></p><p><span class="s" data-s="b6-p1-s0">Comparado a modelos geradores únicos (one-step) como SANA-Sprint e FLUX.1-schnell, Jeveration mantém uma qualidade comparável ou superior no GenEval, enquanto sendo significativamente mais rápido devido à sua natureza de single forward pass.</span> <span class="s" data-s="b6-p1-s1">A latência é medida como a mediana de cinco chamadas end-to-end, incluindo decodificação.</span></p><p><span class="s" data-s="b6-p2-s0">O modelo também demonstra forte fidelidade estrutural em tarefas de imagem-para-imagem.</span> <span class="s" data-s="b6-p2-s1">Em geração baseada em bordas HED, profundidade e colorização, Jeveration alcança scores altos de F1 e δ1, indicando que segue bem a estrutura de entrada.</span> <span class="s" data-s="b6-p2-s2">A geração estilizada (Anime, Studio Ghibli, Watercolor) também é realizada com sucesso, mantendo o conteúdo solicitado pelo prompt.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b7-t">Latência Extremamente Baixa</span></h3>
+          <p><span class="s" data-s="b7-c-s0">Jeveration gera uma imagem 512x512 em 78ms em uma GPU H200.</span> <span class="s" data-s="b7-c-s1">Isso representa um speedup de até 122x em relação ao Janus-Pro-7B e 98x em relação ao Janus-Pro-1B, mantendo qualidade competitiva no GenEval.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b8-h">Unificação de Tarefas: Geração e Previsão Densa</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Uma das contribuições mais significativas do paper é a unificação de tarefas.</span> <span class="s" data-s="b8-p0-s1">O mesmo checkpoint do Jeveration suporta geração texto-para-imagem, geração imagem-para-imagem e previsão densa (segmentação, profundidade, normais).</span> <span class="s" data-s="b8-p0-s2">Isso significa que uma única arquitetura e um único conjunto de pesos podem lidar com tanto síntese quanto percepção.</span></p><p><span class="s" data-s="b8-p1-s0">Para previsão densa, o modelo é avaliado no dataset NYUv2.</span> <span class="s" data-s="b8-p1-s1">Jeveration atinge um mIoU de 67.7 na segmentação, abs.δ1 de 0.898 na profundidade e mean error de 24.2 graus nas normais.</span> <span class="s" data-s="b8-p1-s2">Esses resultados são comparáveis a modelos densos dedicados (dense-only) e superam modelos mais antigos como DeepLabV3+.</span> <span class="s" data-s="b8-p1-s3">O custo adicional de suportar múltiplas tarefas é mínimo, sem degradação significativa na qualidade de geração de imagens.</span></p><p><span class="s" data-s="b8-p2-s0">Essa unificação demonstra que o paradigma de decisões tipadas é flexível.</span> <span class="s" data-s="b8-p2-s1">Para tarefas determinísticas como previsão densa, os tokens de decisão atuam como consultas espaciais, enquanto para geração estocástica, eles são condicionados ao estado aleatório.</span> <span class="s" data-s="b8-p2-s2">O modelo aprende a alternar entre esses modos sem necessidade de arquiteturas separadas.</span></p>        <h2><span class="s" data-s="b9-h">Limitações e Escopo</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Apesar dos resultados promissores, o paper tem limitações.</span> <span class="s" data-s="b9-p0-s1">A qualidade da imagem, embora competitiva, ainda não atinge o nível dos maiores modelos de difusão ou autoregressivos de última geração em métricas subjetivas ou de alta fidelidade detalhada.</span> <span class="s" data-s="b9-p0-s2">O modelo é avaliado principalmente em resoluções de 512x512, e a escalabilidade para resoluções muito maiores não é o foco principal deste trabalho inicial.</span></p><p><span class="s" data-s="b9-p1-s0">O treinamento depende de um modelo de primeira fase para guiar a distribuição, o que adiciona uma etapa de complexidade ao pipeline de treinamento.</span> <span class="s" data-s="b9-p1-s1">Além disso, o uso de um VLM congelado limita a capacidade do modelo de aprender novos conceitos visuais complexos sem um fine-tuning adicional significativo, embora os adaptadores LoRA ajudem a mitigar isso.</span></p><p><span class="s" data-s="b9-p2-s0">Os experimentos focam em tarefas visuais específicas.</span> <span class="s" data-s="b9-p2-s1">A extensão do paradigma para outras modalidades (áudio, vídeo) ou tarefas mais complexas de raciocínio visual permanece como trabalho futuro.</span> <span class="s" data-s="b9-p2-s2">O paper estabelece a viabilidade, mas não resolve todos os desafios de geração de alta qualidade em tempo real.</span></p>        <h2><span class="s" data-s="b10-h">Conclusão</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Jeveration apresenta uma nova abordagem para geração de imagens, demonstrando que modelos System One podem gerar imagens de alta qualidade em uma única passada.</span> <span class="s" data-s="b10-p0-s1">Ao condicionar posições de código a um estado aleatório compartilhado e usar um treinamento em duas fases, os autores superam o desafio da coerência global.</span></p><p><span class="s" data-s="b10-p1-s0">O modelo unifica geração e previsão densa em um único checkpoint, oferecendo uma alternativa eficiente em termos de latência para aplicações que exigem resposta rápida.</span> <span class="s" data-s="b10-p1-s1">Com 78ms por imagem em uma H200, Jeveration abre caminho para novas aplicações em tempo real que eram impraticáveis com paradigmas sequenciais ou iterativos.</span></p><p><span class="s" data-s="b10-p2-s0">Este trabalho sugere que o conhecimento visual-semântico de VLMs pode ser repurposed para geração, expandindo o escopo de modelos originalmente projetados para compreensão e decisão.</span> <span class="s" data-s="b10-p2-s1">A eficiência e a unificação de tarefas tornam Jeveration uma contribuição relevante para a interseção entre geração de imagens e inferência rápida.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Jeveration gera imagens em uma única forward pass, sendo até 122x mais rápido que modelos unificados concorrentes.</span></li><li><span class="s" data-s="k1">A coerência global é garantida condicionando todas as posições a um estado aleatório compartilhado.</span></li><li><span class="s" data-s="k2">Um único checkpoint realiza geração texto-para-imagem, imagem-para-imagem e previsão densa.</span></li><li><span class="s" data-s="k3">O modelo base (Qwen3.5-4B) permanece congelado, com apenas adaptadores LoRA treinados.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.24738" rel="noopener">Jeveration: System One Models Now Generate</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.24738" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

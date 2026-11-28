@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Modelos de Mundo Hierárquicos com Dinâmica Implícita: Planejar &#39;Onde&#39; vs. &#39;Como&#39; — arXiv em 5</title>
+<meta name="description" content="O paper ID-WM propõe uma arquitetura hierárquica que separa a busca por subobjetivos viáveis da execução de ações precisas, usando um modelo de difusão para mapear estados próximos e um modelo determinístico como solucionador de dinâmica inversa.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Modelos de Mundo Hierárquicos com Dinâmica Implícita: Planejar &#39;Onde&#39; vs. &#39;Como&#39;">
+<meta property="og:description" content="O paper ID-WM propõe uma arquitetura hierárquica que separa a busca por subobjetivos viáveis da execução de ações precisas, usando um modelo de difusão para mapear estados próximos e um modelo determinístico como solucionador de dinâmica inversa.">
+<meta property="og:image" content="../../assets/papers/2610.42146/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Robótica</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.42146" rel="noopener">arXiv:2610.42146</a>
+    </div>
+    <h1><span class="s" data-s="t">Modelos de Mundo Hierárquicos com Dinâmica Implícita: Planejar &#39;Onde&#39; vs. &#39;Como&#39;</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">O paper ID-WM propõe uma arquitetura hierárquica que separa a busca por subobjetivos viáveis da execução de ações precisas, usando um modelo de difusão para mapear estados próximos e um modelo determinístico como solucionador de dinâmica inversa.</span></p>
+    <p class="byline">
+      <span>Zhou et al.</span>
+      <span>8 min de leitura</span>
+<span>30/10/2026</span>    </p>
+    <div class="listen" data-article="2610.42146" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=-zqGK-FmiPo" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Profecia Autorrealizável em Modelos de Mundo</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Modelos de Mundo (World Models) têm se destacado como uma abordagem poderosa para a tomada de decisão em agentes encarnados.</span> <span class="s" data-s="b0-p0-s1">Ao aprender modelos preditivos da dinâmica do ambiente, eles permitem raciocínio em tempo de teste e a síntese de comportamentos novos para objetivos não vistos, buscando no espaço de ações.</span> <span class="s" data-s="b0-p0-s2">No entanto, o planejamento com esses modelos enfrenta dois desafios fundamentais: a complexidade da busca cresce exponencialmente com o horizonte de planejamento, e os erros de previsão se acumulam ao longo de longas trajetórias.</span></p><p><span class="s" data-s="b0-p1-s0">Devido a esses obstáculos, a maioria dos planejadores baseados em Modelos de Mundo é restrita a tarefas de curto horizonte, depende de abstrações de ação simplificadas ou opera em espaços de alto nível, como a linguagem, sacrificando o controle fino.</span> <span class="s" data-s="b0-p1-s1">A aprendizagem hierárquica oferece uma solução teórica para esse desafio de escalabilidade, decompondo problemas de longo prazo em abstrações gerenciáveis.</span> <span class="s" data-s="b0-p1-s2">Recentemente, estruturas hierárquicas foram introduzidas em planejadores baseados em difusão para evitar modelar trajetórias inteiras diretamente, melhorando a escalabilidade e a generalização além dos dados de treinamento de horizonte fixo.</span></p><p><span class="s" data-s="b0-p2-s0">A questão central que este paper aborda é: como habilitar essas capacidades para modelos de mundo agnósticos a tarefas, permitindo planejamento zero-shot de longo prazo para objetivos não vistos?</span> <span class="s" data-s="b0-p2-s1">Uma abordagem direta seria simplesmente aumentar o horizonte de previsão ou usar abstração de ação.</span> <span class="s" data-s="b0-p2-s2">No entanto, tentativas anteriores de modelos de mundo hierárquicos tipicamente dependem de priors específicos da tarefa para funcionar efetivamente, confiando em habilidades pré-treinadas, políticas de baixo nível ou funções de valor para verificar a viabilidade dos subobjetivos.</span></p><p><span class="s" data-s="b0-p3-s0">Essa dependência surge porque o planejamento é fundamentalmente adversarial: sem essas restrições de ancoragem, um otimizador poderoso explorará inevitavelmente as deficiências de um modelo de mundo aprendido, descobrindo atalhos irreais ou &#39;buracos de minhoca&#39; nas transições de estado.</span> <span class="s" data-s="b0-p3-s1">Para tornar os modelos de mundo hierárquicos adequados para o planejamento, precisamos construir um espaço latente que condense informações de trajetória para minimizar a complexidade da busca, mas que permaneça inerentemente bem comportado para evitar que o planejador explore transições irreais.</span></p>        <h2><span class="s" data-s="b1-h">A Ideia Central: Desacoplar Alcançabilidade de Controle</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Os autores introduzem o ID-WM (Implicit Dynamics World Models), uma arquitetura que se baseia na percepção de que o planejamento eficaz requer o desacoplamento da alcançabilidade topológica dos detalhes de execução.</span> <span class="s" data-s="b1-p0-s1">O framework consiste em dois componentes principais: um modelo de mundo de alto nível baseado em difusão e um modelo de mundo de baixo nível determinístico.</span></p><p><span class="s" data-s="b1-p1-s0">O modelo de alto nível não modela explicitamente a dinâmica completa.</span> <span class="s" data-s="b1-p1-s1">Em vez disso, ele funciona como um gerador de estados vizinhos, mapeando um espaço latente gaussiano simples para o manifold de estados alcançáveis dentro de uma distância fixa do estado atual.</span> <span class="s" data-s="b1-p1-s2">O modelo de baixo nível atua como um solucionador de dinâmica inversa, recuperando as ações precisas necessárias para transitar entre esses subobjetivos.</span></p><p><span class="s" data-s="b1-p2-s0">Ao tratar o ruído gaussiano como uma ação implícita de alto nível, o planejador pode buscar em uma distribuição bem comportada em vez de espaços de habilidades complexos e descontínuos.</span> <span class="s" data-s="b1-p2-s1">Isso permite que o sistema raciocine puramente sobre &#39;para onde ir&#39;, enquanto o modelo de baixo nível recupera o &#39;como chegar&#39; com precisão.</span> <span class="s" data-s="b1-p2-s2">Essa abordagem prioriza a viabilidade física local sobre padrões comportamentais globais, permitindo a síntese de planos de longo prazo a partir de segmentos curtos.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.42146/figure1.webp" alt="Visão geral do ID-WM: o planejamento em alto nível descobre uma sequência de subobjetivos temporalmente abstratos, enquanto o controle de baixo nível extrai ações executáveis entre cada subobjetivo, desacoplando alcançabilidade de controle." loading="lazy">
+          <figcaption>
+            Visão geral do ID-WM: o planejamento em alto nível descobre uma sequência de subobjetivos temporalmente abstratos, enquanto o controle de baixo nível extrai ações executáveis entre cada subobjetivo, desacoplando alcançabilidade de controle.
+            <span class="source">Figura 1 do paper · Zhou et al., arXiv:2610.42146</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Arquitetura Técnica: Como o ID-WM Funciona</span></h2>
+<p><span class="s" data-s="b3-p0-s0">A arquitetura do ID-WM é dividida em dois estágios intercalados.</span> <span class="s" data-s="b3-p0-s1">O primeiro é o planejamento de alto nível.</span> <span class="s" data-s="b3-p0-s2">Dado um estado inicial e um objetivo, o modelo de mundo de alto nível (High-Level World Model - HWM) utiliza uma rede de difusão.</span> <span class="s" data-s="b3-p0-s3">Esta rede é condicionada ao estado atual e a um vetor de ruído gaussiano.</span> <span class="s" data-s="b3-p0-s4">A saída não é uma ação direta, mas uma distribuição de estados futuros possíveis dentro de um horizonte temporal Δ passos à frente.</span></p><p><span class="s" data-s="b3-p1-s0">O uso de difusão aqui é crucial.</span> <span class="s" data-s="b3-p1-s1">Em vez de prever um único futuro determinístico, o modelo gera uma distribuição diversificada de estados vizinhos.</span> <span class="s" data-s="b3-p1-s2">Isso permite que o planejador explore diferentes caminhos viáveis no espaço de estados.</span> <span class="s" data-s="b3-p1-s3">O vetor de ruído atua como um &#39;token&#39; de decisão de alto nível, simplificando o espaço de busca para uma distribuição gaussiana unitária, que é matematicamente mais tratável do que espaços de ações complexos.</span></p><p><span class="s" data-s="b3-p2-s0">O segundo estágio é o controle de baixo nível.</span> <span class="s" data-s="b3-p2-s1">Uma vez que um subobjetivo é selecionado pelo planejador de alto nível, o modelo de mundo de baixo nível (Low-Level World Model - LWM) é ativado.</span> <span class="s" data-s="b3-p2-s2">Este modelo é determinístico e baseado em Transformer.</span> <span class="s" data-s="b3-p2-s3">Ele é condicionado tanto no estado atual quanto no subobjetivo desejado, atuando como um solucionador de dinâmica inversa.</span> <span class="s" data-s="b3-p2-s4">Sua função é calcular a sequência de ações de baixo nível necessárias para mover o agente do estado atual para o subobjetivo, garantindo que a transição seja fisicamente viável.</span></p><p><span class="s" data-s="b3-p3-s0">Esse ciclo se repete: o planejador de alto nível propõe uma nova sequência de subobjetivos, e o controlador de baixo nível executa as ações correspondentes.</span> <span class="s" data-s="b3-p3-s1">Essa estrutura permite que o sistema lide com horizontes de planejamento muito longos, decompondo o problema em subproblemas menores e mais fáceis de resolver, mitigando a acumulação de erros que afetaria um modelo de nível único.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.42146/figure2.webp" alt="Detalhes da arquitetura: o modelo de alto nível (diffusion) gera subobjetivos futuros, enquanto o modelo de baixo nível (transformer) calcula as ações executáveis para alcançá-los, operando de forma interleaved." loading="lazy">
+          <figcaption>
+            Detalhes da arquitetura: o modelo de alto nível (diffusion) gera subobjetivos futuros, enquanto o modelo de baixo nível (transformer) calcula as ações executáveis para alcançá-los, operando de forma interleaved.
+            <span class="source">Figura 2 do paper · Zhou et al., arXiv:2610.42146</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Experimentos e Resultados</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os autores avaliaram o ID-WM em três suites de ambientes: navegação em paredes (Wall), manipulação de objetos (PushT) e navegação em labirintos (Maze).</span> <span class="s" data-s="b5-p0-s1">As tarefas variam de centenas a milhares de passos de ambiente.</span> <span class="s" data-s="b5-p0-s2">O objetivo era testar a capacidade do modelo de gerar subobjetivos viáveis, generalizar para objetivos zero-shot e escalar com a complexidade do ambiente.</span></p><p><span class="s" data-s="b5-p1-s0">Nos testes de geração de estados vizinhos, o modelo de alto nível demonstrou ser capaz de gerar estados futuros diversos e fisicamente alcançáveis.</span> <span class="s" data-s="b5-p1-s1">Em ambientes como PushT, onde há interações complexas entre o agente e o objeto, o modelo capturou bem a distribuição multi-modal das configurações possíveis, mostrando uma cobertura suave das configurações do objeto.</span> <span class="s" data-s="b5-p1-s2">Isso é um pré-requisito necessário para o planejamento, pois permite que o sistema generalize para objetivos não vistos.</span></p><p><span class="s" data-s="b5-p2-s0">Na avaliação de planejamento hierárquico, o ID-WM foi comparado com métodos de aprendizado por imitação (GCBC), aprendizado por reforço offline (HIQL), planejadores baseados em difusão (Diffuser, Hierarchical Diffuser) e planejadores com modelos de mundo de nível único (Single-level WM com MPC).</span> <span class="s" data-s="b5-p2-s1">O ID-WM superou todos os baselines em taxas de sucesso, especialmente em tarefas de longo horizonte.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.42146/figure6.webp" alt="Exemplo de diversidade de planos: o ID-WM gera duas estratégias distintas (horária e anti-horária) para rotacionar um bloco, ambas levando ao sucesso, demonstrando a capacidade de explorar múltiplos caminhos viáveis." loading="lazy">
+          <figcaption>
+            Exemplo de diversidade de planos: o ID-WM gera duas estratégias distintas (horária e anti-horária) para rotacionar um bloco, ambas levando ao sucesso, demonstrando a capacidade de explorar múltiplos caminhos viáveis.
+            <span class="source">Figura 6 do paper · Zhou et al., arXiv:2610.42146</span>
+          </figcaption>
+        </figure>
+        <aside class="callout">
+          <h3><span class="s" data-s="b7-t">Ganho Significativo sobre Baselines</span></h3>
+          <p><span class="s" data-s="b7-c-s0">O ID-WM alcançou uma melhoria de 38,5% sobre os planejadores de política e difusão mais recentes.</span> <span class="s" data-s="b7-c-s1">Crucialmente, houve um ganho de 135% de desempenho sobre modelos de mundo de nível único com MPC, particularmente em configurações complexas e não vistas para tarefas de longo horizonte, mitigando eficazmente a acumulação de erros compostos.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b8-h">Escalabilidade e Generalização</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Uma das contribuições mais importantes do paper é a demonstração de escalabilidade.</span> <span class="s" data-s="b8-p0-s1">Nos testes com labirintos de tamanhos crescentes (de 3x3 até 13x13), enquanto outros métodos degradavam significativamente devido à esparsidade de dados em ambientes maiores, o ID-WM manteve o desempenho mais alto.</span> <span class="s" data-s="b8-p0-s2">Isso ocorre porque o ID-WM combina modelagem de dinâmica local com planejamento de alto nível, efetivamente &#39;costurando&#39; regiões de dados esparsos, sem depender de cobertura global de trajetórias.</span></p><p><span class="s" data-s="b8-p1-s0">Além disso, o modelo escalou bem com o horizonte do objetivo.</span> <span class="s" data-s="b8-p1-s1">Em tarefas de PushT onde os objetivos estavam a mais de 150 passos de distância, o ID-WM manteve uma taxa de sucesso quase perfeita.</span> <span class="s" data-s="b8-p1-s2">Em contraste, um baseline de nível único que tentava buscar em todo o horizonte falhava devido à acumulação de erros.</span> <span class="s" data-s="b8-p1-s3">Isso confirma que a estrutura hierárquica permite que o sistema mantenha a precisão na chegada ao objetivo, mesmo quando a distância é grande.</span></p><p><span class="s" data-s="b8-p2-s0">Os autores também testaram o planejamento baseado em visão, usando observações de alta dimensão (imagens 64x64).</span> <span class="s" data-s="b8-p2-s1">O ID-WM foi capaz de gerar subobjetivos confiáveis e sequenciais, garantindo progresso constante.</span> <span class="s" data-s="b8-p2-s2">Em comparação, um planejador de vídeo baseado em linguagem (AVDC) falhou em produzir planos significativos, provavelmente porque os pares iniciais de objetivo estavam fora da distribuição dos dados de treinamento.</span> <span class="s" data-s="b8-p2-s3">Isso destaca a vantagem da busca iterativa de subobjetivos sobre a geração simultânea, que depende fortemente da cobertura de trajetórias no conjunto de dados.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.42146/table1.webp" alt="Tabela comparativa: o ID-WM apresenta as melhores taxas de sucesso (SR) e cobertura final (Cov) em todos os ambientes testados, superando métodos de aprendizado por imitação, RL offline e planejadores de difusão." loading="lazy">
+          <figcaption>
+            Tabela comparativa: o ID-WM apresenta as melhores taxas de sucesso (SR) e cobertura final (Cov) em todos os ambientes testados, superando métodos de aprendizado por imitação, RL offline e planejadores de difusão.
+            <span class="source">Tabela 1 do paper · Zhou et al., arXiv:2610.42146</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">Limitações e Considerações Finais</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Apesar dos resultados promissores, o paper reconhece limitações importantes.</span> <span class="s" data-s="b10-p0-s1">A primeira é o tempo de inferência.</span> <span class="s" data-s="b10-p0-s2">A dependência da otimização baseada em busca dentro do espaço latente de difusão resulta em tempos de inferência mais altos do que políticas reativas ou modelos de mundo determinísticos.</span> <span class="s" data-s="b10-p0-s3">O planejamento hierárquico adiciona uma camada de complexidade computacional que pode ser um gargalo para aplicações em tempo real estrito.</span></p><p><span class="s" data-s="b10-p1-s0">Uma segunda limitação é que, embora a hierarquia impeça que a complexidade do planejamento escale com o comprimento da trajetória, ela ainda escala com a dimensionalidade do espaço de estados.</span> <span class="s" data-s="b10-p1-s1">Para ambientes altamente complexos com espaços de estado muito grandes, a integração de aprendizado de representações compactas e estruturadas poderia melhorar ainda mais o processo de planejamento.</span></p><p><span class="s" data-s="b10-p2-s0">Os autores sugerem que trabalhos futuros devem explorar planejamento amortizado ou baseado em gradientes para mitigar o gargalo de inferência.</span> <span class="s" data-s="b10-p2-s1">Além disso, a integração de técnicas de representação mais eficientes pode tornar o framework aplicável a ambientes ainda mais complexos.</span> <span class="s" data-s="b10-p2-s2">O ID-WM representa, no entanto, um passo promissor em direção à tomada de decisão robusta e de longo prazo, demonstrando que desacoplar a alcançabilidade da execução é uma estratégia eficaz para superar as limitações dos modelos de mundo monolíticos.</span></p>        <h2><span class="s" data-s="b11-h">Conclusão</span></h2>
+<p><span class="s" data-s="b11-p0-s0">O ID-WM propõe uma nova maneira de pensar sobre o planejamento em agentes encarnados.</span> <span class="s" data-s="b11-p0-s1">Ao separar a questão de &#39;onde ir&#39; (resolvida por um modelo de difusão que gera estados vizinhos viáveis) da questão de &#39;como chegar&#39; (resolvida por um modelo de dinâmica inversa), o sistema evita as armadilhas de erros acumulados e buscas cegas em espaços de alta dimensão.</span> <span class="s" data-s="b11-p0-s2">Os resultados mostram que essa abordagem não apenas supera métodos existentes, mas também generaliza melhor para tarefas não vistas e ambientes complexos, abrindo caminho para agentes mais autônomos e confiáveis.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">ID-WM desacopla o planejamento de alto nível (geração de subobjetivos via difusão) do controle de baixo nível (dinâmica inversa), reduzindo a acumulação de erros em longos horizontes.</span></li><li><span class="s" data-s="k1">O modelo supera baselines de estado da arte em 38,5% e ganha 135% sobre modelos de mundo de nível único, especialmente em tarefas não vistas e de longo prazo.</span></li><li><span class="s" data-s="k2">A abordagem escala bem com a complexidade do ambiente e tamanho do labirinto, &#39;costurando&#39; regiões de dados esparsos sem depender de cobertura global de trajetórias.</span></li><li><span class="s" data-s="k3">A principal limitação é o custo computacional da inferência baseada em busca no espaço latente de difusão, que é maior do que políticas reativas determinísticas.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.42146" rel="noopener">Hierarchical World Models with Implicit Dynamics</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.42146" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

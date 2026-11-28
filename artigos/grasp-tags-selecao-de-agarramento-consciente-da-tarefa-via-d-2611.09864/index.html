@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Grasp-TAGS: Seleção de Agarramento Consciente da Tarefa via Destilação de Crítico para Loco-Manipulação — arXiv em 5</title>
+<meta name="description" content="Um framework que usa um crítico de RL destilado para escolher o melhor agarramento antes do contato, melhorando a rearrumação de objetos grandes em robôs móveis.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Grasp-TAGS: Seleção de Agarramento Consciente da Tarefa via Destilação de Crítico para Loco-Manipulação">
+<meta property="og:description" content="Um framework que usa um crítico de RL destilado para escolher o melhor agarramento antes do contato, melhorando a rearrumação de objetos grandes em robôs móveis.">
+<meta property="og:image" content="../../assets/papers/2611.09864/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Robótica</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.09864" rel="noopener">arXiv:2611.09864</a>
+    </div>
+    <h1><span class="s" data-s="t">Grasp-TAGS: Seleção de Agarramento Consciente da Tarefa via Destilação de Crítico para Loco-Manipulação</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um framework que usa um crítico de RL destilado para escolher o melhor agarramento antes do contato, melhorando a rearrumação de objetos grandes em robôs móveis.</span></p>
+    <p class="byline">
+      <span>Tu et al.</span>
+      <span>8 min de leitura</span>
+<span>06/11/2026</span>    </p>
+    <div class="listen" data-article="2611.09864" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=35aNiNIuBBg" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Escolha Inicial em Loco-Manipulação</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Loco-manipulação é a capacidade de um robô móvel coordenar sua locomoção e manipulação para interagir fisicamente com objetos ao longo de horizontes temporais longos.</span> <span class="s" data-s="b0-p0-s1">Isso é crucial para aplicações como automação de armazéns e robótica de serviço, onde objetos grandes e pesados, como cadeiras, carrinhos ou bagagens, precisam ser rearranjados.</span> <span class="s" data-s="b0-p0-s2">Diferente de pegar e carregar, esses objetos geralmente permanecem em contato com o solo, criando dinâmicas complexas de interação entre robô, objeto e ambiente.</span></p><p><span class="s" data-s="b0-p1-s0">Os métodos tradicionais baseados em modelo, como o Controle Preditivo por Modelo (MPC), exigem conhecimento preciso das dinâmicas do sistema para planejar movimentos.</span> <span class="s" data-s="b0-p1-s1">Já as abordagens baseadas em aprendizado, como Aprendizado por Reforço (RL), reduzem essa necessidade, mas frequentemente assumem que a configuração inicial do agarramento (grasp) é fixa ou predefinida.</span> <span class="s" data-s="b0-p1-s2">Essa suposição é restritiva, pois diferentes agarramentos, mesmo que geometricamente estáveis, podem levar a resultados drasticamente diferentes na manipulação subsequente.</span></p><p><span class="s" data-s="b0-p2-s0">A configuração inicial afeta a rearrumação ao alterar os pontos de contato e as configurações do braço robótico.</span> <span class="s" data-s="b0-p2-s1">Isso muda as forças e movimentos que o robô pode aplicar efetivamente durante empurrões ou arrastos, influenciando a controlabilidade do objeto e o resultado final da tarefa.</span> <span class="s" data-s="b0-p2-s2">Portanto, a escolha do agarramento inicial deve ser tratada como uma variável dependente da tarefa, não como um dado fixo.</span></p><p><span class="s" data-s="b0-p3-s0">Os autores, da Universidade de Minnesota, propõem o Grasp-TAGS, um framework de seleção de agarramento consciente da tarefa para rearrumação de objetos grandes.</span> <span class="s" data-s="b0-p3-s1">O objetivo é avaliar candidatos a agarramentos com base na sua utilidade esperada para a tarefa downstream e selecionar o mais adequado antes que qualquer contato físico ocorra.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.09864/figure1.webp" alt="Diferentes poses de agarramento (g1, g2, g3) na mesma cadeira levam a comportamentos de rearrumação distintos. O Grasp-TAGS seleciona o agarramento com maior utilidade prevista antes da execução." loading="lazy">
+          <figcaption>
+            Diferentes poses de agarramento (g1, g2, g3) na mesma cadeira levam a comportamentos de rearrumação distintos. O Grasp-TAGS seleciona o agarramento com maior utilidade prevista antes da execução.
+            <span class="source">Figura 1 do paper · Tu et al., arXiv:2611.09864</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">A Arquitetura do Grasp-TAGS</span></h2>
+<p><span class="s" data-s="b2-p0-s0">O núcleo do Grasp-TAGS é a ideia de que um único agente de RL pode aprender a lidar com múltiplas configurações iniciais de agarramento, e que o &#39;crítico&#39; desse agente pode ser usado para prever o sucesso futuro de cada agarramento candidato.</span> <span class="s" data-s="b2-p0-s1">O processo começa com o treinamento de uma política hierárquica baseada em PPO (Proximal Policy Optimization) que executa a loco-manipulação usando um controlador de baixo nível pré-treinado.</span></p><p><span class="s" data-s="b2-p1-s0">Em vez de treinar políticas separadas para cada agarramento possível, os autores treinam uma política unificada (PPOg) que opera sobre várias configurações iniciais de agarramento.</span> <span class="s" data-s="b2-p1-s1">Isso permite que a política e seu crítico aprendam as dependências de longo prazo entre a configuração inicial do agarramento e o sucesso da tarefa.</span> <span class="s" data-s="b2-p1-s2">O crítico, que estima o valor esperado de um estado, acaba atribuindo valores diferentes a estados iniciais associados a diferentes agarramentos, capturando implicitamente a qualidade de cada escolha.</span></p><p><span class="s" data-s="b2-p2-s0">Em seguida, ocorre a destilação.</span> <span class="s" data-s="b2-p2-s1">O crítico treinado é destilado em uma rede de utilidade de agarramento (grasp utility network) leve.</span> <span class="s" data-s="b2-p2-s2">Essa rede é treinada para prever a utilidade downstream de um agarramento candidato usando apenas a configuração do agarramento e a informação do objetivo (goal), sem necessidade de executar a tarefa completa.</span> <span class="s" data-s="b2-p2-s3">Isso cria um seletor de agarramento rápido e eficiente.</span></p><p><span class="s" data-s="b2-p3-s0">Na inferência, o sistema gera candidatos de agarramento geometricamente viáveis.</span> <span class="s" data-s="b2-p3-s1">A rede destilada avalia cada um, classificando-os pela utilidade prevista.</span> <span class="s" data-s="b2-p3-s2">O agarramento com a maior utilidade é selecionado e a política de manipulação downstream é executada a partir dessa configuração.</span> <span class="s" data-s="b2-p3-s3">A seleção ocorre antes do contato físico, permitindo que o robô evite configurações iniciais que levem a falhas futuras.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.09864/figure3.webp" alt="Pipeline do Grasp-TAGS: (1) Treinamento da política PPO hierárquica; (2) Destilação do crítico em uma rede de utilidade leve; (3) Seleção do melhor agarramento na inferência." loading="lazy">
+          <figcaption>
+            Pipeline do Grasp-TAGS: (1) Treinamento da política PPO hierárquica; (2) Destilação do crítico em uma rede de utilidade leve; (3) Seleção do melhor agarramento na inferência.
+            <span class="source">Figura 3 do paper · Tu et al., arXiv:2611.09864</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b4-h">Detalhes da Implementação e Treinamento</span></h2>
+<p><span class="s" data-s="b4-p0-s0">O treinamento da política PPO unificada é feito em um ambiente de simulação.</span> <span class="s" data-s="b4-p0-s1">A política é exposta a múltiplas configurações iniciais de agarramento durante o treino, forçando-a a aprender uma estratégia robusta que generaliza entre diferentes pontos de contato.</span> <span class="s" data-s="b4-p0-s2">O crítico aprendido armazena o conhecimento sobre quais configurações iniciais são mais favoráveis para alcançar o objetivo final, considerando a dinâmica complexa do objeto e do ambiente.</span></p><p><span class="s" data-s="b4-p1-s0">A destilação do crítico para a rede de utilidade de agarramento é um passo crucial.</span> <span class="s" data-s="b4-p1-s1">A rede de utilidade é projetada para ser leve, permitindo que a seleção de agarramento seja feita rapidamente antes da execução.</span> <span class="s" data-s="b4-p1-s2">Ela toma como entrada apenas a configuração do agarramento candidato e a pose objetivo do objeto, sem precisar de informações privilegiadas sobre as propriedades físicas exatas do objeto ou do atrito do ambiente.</span></p><p><span class="s" data-s="b4-p2-s0">Essa abordagem elimina a necessidade de modelos dinâmicos precisos ou estimativas complexas de propriedades físicas no momento da seleção.</span> <span class="s" data-s="b4-p2-s1">A utilidade prevista pela rede destilada serve como um proxy para o sucesso da tarefa downstream.</span> <span class="s" data-s="b4-p2-s2">Ao selecionar o agarramento com a maior utilidade, o sistema maximiza a probabilidade de completar a rearrumação com sucesso.</span></p><p><span class="s" data-s="b4-p3-s0">O framework é projetado para ser agnóstico ao tipo específico de loco-manipulação, focando na fase de seleção inicial.</span> <span class="s" data-s="b4-p3-s1">A política de manipulação downstream, que executa o movimento do objeto até o objetivo, é treinada separadamente e assume que o agarramento já foi selecionado.</span> <span class="s" data-s="b4-p3-s2">Isso modula o problema, permitindo que a seleção de agarramento seja otimizada independentemente da política de controle de baixo nível.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b5-t">Por que destilar o crítico?</span></h3>
+          <p><span class="s" data-s="b5-c-s0">Destilar o crítico permite que o sistema preveja o sucesso de um agarramento sem executar a tarefa completa.</span> <span class="s" data-s="b5-c-s1">Isso reduz o custo computacional e permite a seleção antes do contato físico, evitando configurações iniciais que levariam a falhas.</span> <span class="s" data-s="b5-c-s2">A rede leve usa apenas a configuração do agarramento e o objetivo, sem precisar de modelos dinâmicos precisos.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b6-h">Avaliação Experimental</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Os autores avaliaram o Grasp-TAGS em simulação, comparando-o com duas abordagens de linha de base: políticas individuais treinadas para cada agarramento (PPOi) e uma política unificada com seleção aleatória de agarramento (PPOg + Random).</span> <span class="s" data-s="b6-p0-s1">O objetivo era medir a taxa de sucesso, o erro posicional planar, o erro angular e o erro angular de keypoints para rearrumação de objetos grandes, como cadeiras, carrinhos e baldes.</span></p><p><span class="s" data-s="b6-p1-s0">Os resultados mostram que a configuração inicial do agarramento afeta substancialmente o desempenho da loco-manipulação.</span> <span class="s" data-s="b6-p1-s1">Políticas individuais (PPOi) podem superar a seleção aleatória, mas cada política é especializada em uma única configuração de interação robô-objeto.</span> <span class="s" data-s="b6-p1-s2">Como a performance relativa dos agarramentos varia entre diferentes objetivos de rearrumação, a seleção explícita baseada na tarefa é necessária.</span></p><p><span class="s" data-s="b6-p2-s0">O Grasp-TAGS superou tanto as políticas fixas quanto a seleção aleatória em todas as categorias de objetos avaliadas.</span> <span class="s" data-s="b6-p2-s1">Para a cadeira-1, o Grasp-TAGS alcançou uma taxa de sucesso de 93,65%, comparado a 75,88% para a seleção aleatória e entre 69,02% e 78,20% para as políticas individuais de agarramento único.</span> <span class="s" data-s="b6-p2-s2">O método também reduziu o erro angular em cerca de 60%, indicando que a seleção adequada da configuração de interação é benéfica para tarefas que exigem tradução e rotação coordenadas do objeto.</span></p><p><span class="s" data-s="b6-p3-s0">Essa tendência foi observada para todos os outros objetos, incluindo carrinhos e baldes.</span> <span class="s" data-s="b6-p3-s1">O Grasp-TAGS alcançou a maior taxa de sucesso em todos os 4096 ambientes paralelos usados nos experimentos.</span> <span class="s" data-s="b6-p3-s2">Os resultados quantitativos confirmam que tratar a escolha do agarramento como uma variável dependente da tarefa melhora significativamente a confiabilidade da loco-manipulação.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.09864/figure5.webp" alt="Taxas de sucesso comparando a melhor política PPOi, PPOg com seleção aleatória e Grasp-TAGS. O Grasp-TAGS supera todos os métodos em todos os objetos avaliados." loading="lazy">
+          <figcaption>
+            Taxas de sucesso comparando a melhor política PPOi, PPOg com seleção aleatória e Grasp-TAGS. O Grasp-TAGS supera todos os métodos em todos os objetos avaliados.
+            <span class="source">Figura 5 do paper · Tu et al., arXiv:2611.09864</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Análise de Resultados e Limitações</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Os dados mostram que o Grasp-TAGS não apenas aumenta a taxa de sucesso, mas também reduz os erros de posicionamento e orientação final.</span> <span class="s" data-s="b8-p0-s1">Para a cadeira-1, o erro angular foi reduzido de 0,2407 rad (PPOg + Random) para 0,0712 rad (Grasp-TAGS).</span> <span class="s" data-s="b8-p0-s2">Isso sugere que a seleção de agarramento consciente da tarefa é particularmente importante para tarefas que requerem alinhamento preciso.</span></p><p><span class="s" data-s="b8-p1-s0">Apesar dos resultados promissores em simulação, há limitações a serem consideradas.</span> <span class="s" data-s="b8-p1-s1">O trabalho foi conduzido inteiramente em ambiente simulado.</span> <span class="s" data-s="b8-p1-s2">A transferência para o mundo real pode ser desafiadora devido a diferenças na dinâmica, atrito e incertezas sensoriais.</span> <span class="s" data-s="b8-p1-s3">Os autores mencionam que o trabalho futuro incluirá a avaliação em objetos domésticos adicionais e a implantação real na plataforma SPOT.</span></p><p><span class="s" data-s="b8-p2-s0">Outra limitação implícita é a dependência da qualidade da política PPO unificada treinada.</span> <span class="s" data-s="b8-p2-s1">Se a política não aprender adequadamente a generalizar entre as configurações de agarramento, o crítico pode fornecer estimativas de utilidade imprecisas.</span> <span class="s" data-s="b8-p2-s2">Além disso, o número de candidatos de agarramento a serem avaliados pode crescer com a complexidade do objeto, embora a rede leve minimize esse custo.</span></p><p><span class="s" data-s="b8-p3-s0">O framework assume que o objetivo final (pose do objeto) é conhecido e estático durante a seleção do agarramento.</span> <span class="s" data-s="b8-p3-s1">Se o objetivo mudar dinamicamente, a rede de utilidade precisaria ser reavaliada.</span> <span class="s" data-s="b8-p3-s2">Isso é consistente com tarefas de rearrumação onde o destino é predefinido, mas pode não se aplicar a cenários de interação mais fluidos e reativos.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b9-t">Melhoria Significativa</span></h3>
+          <p><span class="s" data-s="b9-c-s0">O Grasp-TAGS alcançou uma taxa de sucesso média de 89,84% comparado a 79,87% para as melhores políticas de agarramento único, uma melhoria de 9,97 pontos percentuais.</span> <span class="s" data-s="b9-c-s1">Isso demonstra o valor de considerar a tarefa downstream na escolha inicial do agarramento.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b10-h">Conclusão</span></h2>
+<p><span class="s" data-s="b10-p0-s0">O Grasp-TAGS apresenta uma abordagem eficaz para a seleção de agarramento em loco-manipulação de objetos grandes.</span> <span class="s" data-s="b10-p0-s1">Ao treinar uma política PPO unificada e destilar seu crítico, os autores criam um seletor de agarramento leve que prevê a utilidade downstream com base apenas na configuração inicial e no objetivo.</span></p><p><span class="s" data-s="b10-p1-s0">Os resultados em simulação mostram que essa abordagem supera políticas com agarramento fixo ou aleatório, melhorando a taxa de sucesso e reduzindo erros de alinhamento.</span> <span class="s" data-s="b10-p1-s1">O framework elimina a necessidade de modelos dinâmicos precisos ou estimativas de propriedades físicas no momento da seleção, tornando-o mais prático para implementação.</span></p><p><span class="s" data-s="b10-p2-s0">Este trabalho destaca a importância de tratar a escolha do agarramento como uma decisão dependente da tarefa, em vez de um pré-requisito fixo.</span> <span class="s" data-s="b10-p2-s1">Ao selecionar o agarramento com maior utilidade prevista antes do contato, o robô pode evitar configurações iniciais que levam a falhas, aumentando a confiabilidade da loco-manipulação.</span></p><p><span class="s" data-s="b10-p3-s0">O trabalho futuro se concentrará na validação em objetos domésticos reais e na implantação em robôs físicos, como o SPOT.</span> <span class="s" data-s="b10-p3-s1">Isso será crucial para demonstrar a robustez do método em ambientes não estruturados e com incertezas dinâmicas reais.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Agarramentos geometricamente estáveis não garantem sucesso; a escolha depende da tarefa.</span></li><li><span class="s" data-s="k1">Grasp-TAGS treina um único PPO unificado e destila seu crítico para prever utilidade.</span></li><li><span class="s" data-s="k2">A seleção ocorre antes do contato físico, eliminando a necessidade de modelos dinâmicos precisos.</span></li><li><span class="s" data-s="k3">Resultados em simulação mostram aumento de ~10% na taxa de sucesso versus políticas fixas.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.09864" rel="noopener">Grasp-TAGS: Task-Aware Grasp Selection via Critic Distillation for Prehensile Loco-Manipulation</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.09864" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

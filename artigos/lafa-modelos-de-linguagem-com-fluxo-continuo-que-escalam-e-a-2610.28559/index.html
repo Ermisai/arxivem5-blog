@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lafa: Modelos de Linguagem com Fluxo Contínuo que Escalam e Aceleram a Geração — arXiv em 5</title>
+<meta name="description" content="O paper apresenta o Lafa, um modelo de linguagem de 8B parâmetros baseado em fluxo contínuo que adapta modelos autoregressivos pré-treinados para permitir geração paralela, atingindo 2.54x de throughput com qualidade comparável.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Lafa: Modelos de Linguagem com Fluxo Contínuo que Escalam e Aceleram a Geração">
+<meta property="og:description" content="O paper apresenta o Lafa, um modelo de linguagem de 8B parâmetros baseado em fluxo contínuo que adapta modelos autoregressivos pré-treinados para permitir geração paralela, atingindo 2.54x de throughput com qualidade comparável.">
+<meta property="og:image" content="../../assets/papers/2610.28559/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>LLMs</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.28559" rel="noopener">arXiv:2610.28559</a>
+    </div>
+    <h1><span class="s" data-s="t">Lafa: Modelos de Linguagem com Fluxo Contínuo que Escalam e Aceleram a Geração</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">O paper apresenta o Lafa, um modelo de linguagem de 8B parâmetros baseado em fluxo contínuo que adapta modelos autoregressivos pré-treinados para permitir geração paralela, atingindo 2.54x de throughput com qualidade comparável.</span></p>
+    <p class="byline">
+      <span>Chavan et al.</span>
+      <span>5 min de leitura</span>
+<span>20/10/2026</span>    </p>
+    <div class="listen" data-article="2610.28559" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=nfpkPnELX-g" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Gargalo da Geração Sequencial</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Os grandes modelos de linguagem (LLMs) atuais são predominantemente treinados como modelos autoregressivos (AR).</span> <span class="s" data-s="b0-p0-s1">Isso significa que eles predizem o próximo token com base no texto precedente.</span> <span class="s" data-s="b0-p0-s2">Embora essa abordagem seja eficiente para treinamento, graças à paralelização da arquitetura Transformer e ao uso de teacher forcing, a geração de texto é inerentemente sequencial.</span> <span class="s" data-s="b0-p0-s3">O modelo produz um token por forward pass, o que cria um gargalo significativo de latência durante a inferência, especialmente para sequências longas.</span></p>        <h2><span class="s" data-s="b1-h">Alternativas para Geração Paralela</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Para acelerar a inferência, pesquisas anteriores exploraram a geração paralela.</span> <span class="s" data-s="b1-p0-s1">Abordagens como Multi-Token Prediction (MTP), modelos de difusão discretos e modelos de linguagem baseados em fluxo contínuo buscam superar a limitação sequencial.</span> <span class="s" data-s="b1-p0-s2">Os modelos de difusão discretos tentam denoisar tokens diretamente, mas operam em espaços discretos, limitando o uso de técnicas avançadas de controle e aceleração desenvolvidas para imagens e vídeo.</span> <span class="s" data-s="b1-p0-s3">Já os modelos de fluxo contínuo operam em um espaço contínuo, permitindo integração numérica para gerar múltiplos tokens simultaneamente.</span></p>        <h2><span class="s" data-s="b2-h">O Desafio de Escalar Modelos de Fluxo</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Apesar do potencial, os modelos de fluxo de linguagem existentes foram demonstrados principalmente em escalas pequenas e tarefas simples.</span> <span class="s" data-s="b2-p0-s1">Tentativas anteriores de escalonamento identificaram desafios de ineficiência no treinamento.</span> <span class="s" data-s="b2-p0-s2">Técnicas eficazes para construir modelos de fluxo de linguagem performáticos na escala de bilhões de parâmetros ainda não estavam bem estabelecidas.</span> <span class="s" data-s="b2-p0-s3">Este trabalho apresenta o Lafa (Large flow language model), um modelo rápido e de alta performance escalado para 8B parâmetros de maneira eficiente em dados.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.28559/figure2.webp" alt="Visão geral do Lafa: o modelo aprende um denoiser de bloco que também realiza previsão AR no prefixo. O fluxo pode ser destilado em um mapa de fluxo para geração em um passo, e a combinação com AR permite decodificação autosspeculativa." loading="lazy">
+          <figcaption>
+            Visão geral do Lafa: o modelo aprende um denoiser de bloco que também realiza previsão AR no prefixo. O fluxo pode ser destilado em um mapa de fluxo para geração em um passo, e a combinação com AR permite decodificação autosspeculativa.
+            <span class="source">Figura 2 do paper · Chavan et al., arXiv:2610.28559</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b4-h">Arquitetura Blockwise Flow</span></h2>
+<p><span class="s" data-s="b4-p0-s0">O Lafa é um modelo de fluxo em blocos.</span> <span class="s" data-s="b4-p0-s1">A arquitetura combina atenção causal no prefixo do texto com fluxo bidirecional, mas enviesado da esquerda para a direita, dentro de cada bloco.</span> <span class="s" data-s="b4-p0-s2">Este design traz a arquitetura e o viés indutivo do Lafa para perto dos modelos AR, permitindo treinamento eficiente através da adaptação de modelos pré-treinados.</span> <span class="s" data-s="b4-p0-s3">A direção esquerda-direita do texto é respeitada, mas dentro de cada bloco, o fluxo assíncrono permite paralelismo.</span></p>        <h2><span class="s" data-s="b5-h">Treinamento Eficiente com Adaptação AR</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os autores treinam o Lafa em escalas de 0.5B, 7B e 8B.</span> <span class="s" data-s="b5-p0-s1">Para isso, adaptam checkpoints pré-treinados de modelos AR (Qwen2.5 e Qwen3).</span> <span class="s" data-s="b5-p0-s2">O treinamento utiliza menos de 30B de tokens, o que é significativamente mais eficiente do que os orçamentos de treinamento relatados para modelos de difusão anteriores em escalas comparáveis.</span> <span class="s" data-s="b5-p0-s3">O Lafa aprende um denoiser de bloco para o fluxo, junto com previsão AR no prefixo.</span> <span class="s" data-s="b5-p0-s4">Esse treinamento conjunto preserva ou até melhora as capacidades AR pré-treinadas através de um efeito de previsão de múltiplos tokens.</span></p>        <h2><span class="s" data-s="b6-h">Decodificação de Fluxo e Flow Maps</span></h2>
+<p><span class="s" data-s="b6-p0-s0">A inferência rápida é habilitada pelo prefix caching e pela decodificação de fluxo em bloco.</span> <span class="s" data-s="b6-p0-s1">A decodificação de fluxo integra um fluxo contínuo do ruído às representações de tokens.</span> <span class="s" data-s="b6-p0-s2">Os autores avaliam diferentes tamanhos de bloco (B=4, 8, 16) e passos de integração de Euler.</span> <span class="s" data-s="b6-p0-s3">Com passos suficientes, a precisão da decodificação de fluxo se aproxima ou supera a do modelo AR SFT.</span> <span class="s" data-s="b6-p0-s4">Além disso, o fluxo pode ser destilado em um &#39;flow map&#39;, permitindo geração em um ou poucos passos com precisão melhorada, embora ainda haja uma lacuna de qualidade em relação à decodificação de fluxo com mais passos de integração.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b7-t">A Inovação da Decodificação Autosspeculativa</span></h3>
+          <p><span class="s" data-s="b7-c-s0">O treinamento conjunto preserva a capacidade de previsão AR.</span> <span class="s" data-s="b7-c-s1">Os autores exploram isso criando um esquema de decodificação autosspeculativa: o modelo gera rascunhos baseados no fluxo e os verifica autoregressivamente dentro do mesmo modelo.</span> <span class="s" data-s="b7-c-s2">Isso evita a necessidade de modelos separados para drafting e verification, otimizando o throughput.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b8-h">Decodificação Autosspeculativa Interna</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Um dos pontos fortes do Lafa é a decodificação autosspeculativa.</span> <span class="s" data-s="b8-p0-s1">Como o treinamento de fluxo preserva as capacidades AR, o modelo pode usar seu próprio predictor AR para verificar rascunhos gerados pelo fluxo.</span> <span class="s" data-s="b8-p0-s2">O processo funciona da esquerda para a direita: o fluxo gera um rascunho de múltiplos tokens, e o componente AR verifica cada token.</span> <span class="s" data-s="b8-p0-s3">Se verificado, o token é aceito; caso contrário, é regenerado.</span> <span class="s" data-s="b8-p0-s4">Isso combina a velocidade da geração paralela do fluxo com a precisão da verificação autoregressiva.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.28559/figure8.webp" alt="Comparação de throughput (tokens por segundo) versus precisão para modelos de 7-8B parâmetros. O Lafa 7B atinge 2.54x o throughput do modelo AR SFT base com qualidade similar, superando métodos MTP e de difusão." loading="lazy">
+          <figcaption>
+            Comparação de throughput (tokens por segundo) versus precisão para modelos de 7-8B parâmetros. O Lafa 7B atinge 2.54x o throughput do modelo AR SFT base com qualidade similar, superando métodos MTP e de difusão.
+            <span class="source">Figura 8 do paper · Chavan et al., arXiv:2610.28559</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">Resultados de Performance</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Os experimentos avaliam o Lafa em tarefas de instrução, raciocínio e codificação.</span> <span class="s" data-s="b10-p0-s1">Em escalas de 0.5B e 7B, o Lafa é comparado a métodos MTP, block-parallel decoding e difusão discreta.</span> <span class="s" data-s="b10-p0-s2">Os resultados mostram que o Lafa atinge qualidade comparável ou superior aos modelos AR SFT.</span> <span class="s" data-s="b10-p0-s3">Na decodificação autosspeculativa, o Lafa 7B alcança 2.54x o throughput do modelo AR SFT base, superando métodos de previsão de múltiplos tokens e difusão discreta.</span> <span class="s" data-s="b10-p0-s4">A eficiência é mantida mesmo com a verificação AR adicional.</span></p>        <h2><span class="s" data-s="b11-h">Análise de Escala e Acurácia</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Os autores analisam a precisão em diferentes configurações de bloco e passos de integração.</span> <span class="s" data-s="b11-p0-s1">Para o Lafa 7B, a decodificação de fluxo com bloco de tamanho 4 e passos suficientes de Euler supera a acurácia do AR SFT.</span> <span class="s" data-s="b11-p0-s2">A destilação para flow maps melhora a geração em um e dois passos, com ganhos maiores em 7B.</span> <span class="s" data-s="b11-p0-s3">No entanto, uma lacuna de qualidade permanece em relação à decodificação de fluxo com mais passos de integração, indicando que a destilação ainda pode ser aprimorada.</span></p>        <h2><span class="s" data-s="b12-h">Limitações e Direções Futuras</span></h2>
+<p><span class="s" data-s="b12-p0-s0">Apesar dos avanços, o paper reconhece limitações.</span> <span class="s" data-s="b12-p0-s1">A destilação do flow map para geração em um passo ainda não incorpora totalmente o auto-condicionamento e a guia de prefixo, o que limita a precisão em regimes de poucos passos.</span> <span class="s" data-s="b12-p0-s2">Além disso, a comparação com baselines em escalas maiores (8B) usa checkpoints liberados por outros grupos, o que pode introduzir viés devido a diferentes conjuntos de dados e orçamentos de treinamento.</span> <span class="s" data-s="b12-p0-s3">Os autores deixam para trabalhos futuros a melhoria da destilação do flow map e a incorporação de técnicas avançadas de guia.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.28559/table2.webp" alt="Tabela comparando precisão e throughput (TPF) na decodificação autosspeculativa. O Lafa mostra ganhos consistentes em throughput mantendo ou melhorando a precisão em diferentes escalas." loading="lazy">
+          <figcaption>
+            Tabela comparando precisão e throughput (TPF) na decodificação autosspeculativa. O Lafa mostra ganhos consistentes em throughput mantendo ou melhorando a precisão em diferentes escalas.
+            <span class="source">Tabela 2 do paper · Chavan et al., arXiv:2610.28559</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b14-h">Conclusão</span></h2>
+<p><span class="s" data-s="b14-p0-s0">O Lafa demonstra que fluxos contínuos podem servir como uma base escalável para modelagem de linguagem.</span> <span class="s" data-s="b14-p0-s1">Ao adaptar modelos AR pré-treinados com menos de 30B tokens, o Lafa alcança 8B parâmetros com eficiência.</span> <span class="s" data-s="b14-p0-s2">A combinação de geração causal entre blocos e fluxo assíncrono dentro dos blocos permite paralelismo sem perder a capacidade de caching de prefixo.</span> <span class="s" data-s="b14-p0-s3">A decodificação autosspeculativa interna oferece um ganho prático de velocidade, provando que é possível equilibrar qualidade e throughput em modelos de linguagem de grande escala.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Lafa usa fluxo contínuo em blocos para gerar tokens em paralelo, superando o gargalo sequencial dos modelos autoregressivos tradicionais.</span></li><li><span class="s" data-s="k1">A adaptação de modelos pré-treinados exige menos de 30B tokens, sendo mais eficiente que métodos de difusão discreta anteriores.</span></li><li><span class="s" data-s="k2">A decodificação autosspeculativa interna permite verificar rascunhos gerados pelo fluxo usando o próprio modelo, acelerando a inferência em 2.54x.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.28559" rel="noopener">Large Flow Language Models</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.28559" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

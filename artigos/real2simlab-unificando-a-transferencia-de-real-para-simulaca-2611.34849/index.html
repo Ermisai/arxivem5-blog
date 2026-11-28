@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Real2SimLab: Unificando a Transferência de Real para Simulação — arXiv em 5</title>
+<meta name="description" content="Um novo framework que padroniza a avaliação de agentes de código na geração de simulações a partir de vídeos, reduzindo a complexidade de integração de benchmarks e prevenindo vazamento de dados.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Real2SimLab: Unificando a Transferência de Real para Simulação">
+<meta property="og:description" content="Um novo framework que padroniza a avaliação de agentes de código na geração de simulações a partir de vídeos, reduzindo a complexidade de integração de benchmarks e prevenindo vazamento de dados.">
+<meta property="og:image" content="../../assets/papers/2611.34849/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Robótica</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.34849" rel="noopener">arXiv:2611.34849</a>
+    </div>
+    <h1><span class="s" data-s="t">Real2SimLab: Unificando a Transferência de Real para Simulação</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um novo framework que padroniza a avaliação de agentes de código na geração de simulações a partir de vídeos, reduzindo a complexidade de integração de benchmarks e prevenindo vazamento de dados.</span></p>
+    <p class="byline">
+      <span>Zhang et al.</span>
+      <span>4 min de leitura</span>
+<span>25/11/2026</span>    </p>
+    <div class="listen" data-article="2611.34849" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=ADUTjT_1MSQ" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Fragmentação em Simulações Geradas</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A transferência de real para simulação (Real-to-Simulation Transfer) é um campo estabelecido que busca construir ambientes simulados a partir de observações do mundo real, como vídeos ou varreduras 3D.</span> <span class="s" data-s="b0-p0-s1">Tradicionalmente, isso exigia pipelines dedicados para cada tipo de cena ou objeto.</span> <span class="s" data-s="b0-p0-s2">No entanto, com o avanço de modelos de linguagem e agentes de codificação, surgiu um novo paradigma: pedir a um agente que escreva um programa de simulação diretamente a partir de um vídeo.</span></p><p><span class="s" data-s="b0-p1-s0">Apesar do potencial, a área sofre com uma fragmentação crítica.</span> <span class="s" data-s="b0-p1-s1">Cada benchmark existente define seus próprios formatos de entrada, entregáveis esperados e pipelines de pontuação.</span> <span class="s" data-s="b0-p1-s2">Isso cria um problema de escalabilidade exponencial.</span> <span class="s" data-s="b0-p1-s3">Para avaliar N métodos diferentes em M benchmarks distintos, são necessárias N vezes M integrações específicas.</span> <span class="s" data-s="b0-p1-s4">Cada par método-benchmark exige um adaptador personalizado, tornando a comparação de resultados entre trabalhos de pesquisa difícil e custosa.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.34849/figure1.webp" alt="Visão geral do fluxo: um agente de codificação recebe um vídeo real e gera um programa que simula o evento, permitindo renderização sob novas perspectivas." loading="lazy">
+          <figcaption>
+            Visão geral do fluxo: um agente de codificação recebe um vídeo real e gera um programa que simula o evento, permitindo renderização sob novas perspectivas.
+            <span class="source">Figura 1 do paper · Zhang et al., arXiv:2611.34849</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">A Proposta: Real2SimLab</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Para resolver essa ineficiência, os autores apresentam o Real2SimLab, uma plataforma unificada para transferência de real para simulação.</span> <span class="s" data-s="b2-p0-s1">A ideia central é simples, mas impactante: usar o programa gerado pelo agente como a interface comum entre os métodos e os benchmarks.</span> <span class="s" data-s="b2-p0-s2">Em vez de adaptar o método para cada benchmark ou vice-versa, a plataforma normaliza o formato da tarefa e executa o código entregue pelo agente, utilizando o avaliador oficial de cada benchmark para pontuar o resultado.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.34849/figure2.webp" alt="Comparação da complexidade de integração: sem plataforma, são necessárias N×M integrações; com Real2SimLab, apenas N+M integrações são necessárias." loading="lazy">
+          <figcaption>
+            Comparação da complexidade de integração: sem plataforma, são necessárias N×M integrações; com Real2SimLab, apenas N+M integrações são necessárias.
+            <span class="source">Figura 2 do paper · Zhang et al., arXiv:2611.34849</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b4-h">Arquitetura Técnica e Redução de Complexidade</span></h2>
+<p><span class="s" data-s="b4-p0-s0">A arquitetura do Real2SimLab opera através de dois tipos de adaptadores.</span> <span class="s" data-s="b4-p0-s1">De um lado, existem adaptadores específicos de método, que conectam cada agente (como Codex, Claude Code ou Gemini) à plataforma.</span> <span class="s" data-s="b4-p0-s2">Esses adaptadores passam a tarefa visível para o agente e coletam o programa de código que ele produz.</span> <span class="s" data-s="b4-p0-s3">Do outro lado, existem adaptadores específicos de benchmark, que convertem os dados brutos de cada benchmark (como Physics-IQ, Video2World, PhysCodeGym, IRIS, 4DCodeBench e outros) em tarefas em um formato compartilhado.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.34849/figure4.webp" alt="Detalhes da arquitetura: adaptadores de método e benchmark convergem para um formato de tarefa único, executando o código em um sandbox seguro." loading="lazy">
+          <figcaption>
+            Detalhes da arquitetura: adaptadores de método e benchmark convergem para um formato de tarefa único, executando o código em um sandbox seguro.
+            <span class="source">Figura 4 do paper · Zhang et al., arXiv:2611.34849</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b6-h">Execução e Pontuação Padronizada</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Uma vez que o agente gera o código, o Real2SimLab o executa em um ambiente controlado (sandbox) para produzir a saída da simulação, seja ela uma sequência de frames, uma cena 3D ou um script de ação.</span> <span class="s" data-s="b6-p0-s1">Em seguida, a plataforma utiliza o código de pontuação original e oficial de cada benchmark para avaliar essa saída.</span> <span class="s" data-s="b6-p0-s2">Isso garante que a métrica de desempenho seja consistente com a definição original do benchmark, permitindo comparações justas entre diferentes métodos que foram treinados ou ajustados para tarefas diferentes.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b7-t">Redução de N×M para N+M</span></h3>
+          <p><span class="s" data-s="b7-c-s0">A principal vantagem técnica é a redução linear da complexidade de integração.</span> <span class="s" data-s="b7-c-s1">Avaliar 10 métodos em 5 benchmarks requer apenas 15 integrações (10 para conectar os métodos + 5 para conectar os benchmarks) em vez de 50 integrações individuais.</span> <span class="s" data-s="b7-c-s2">Isso facilita a avaliação abrangente de novos agentes.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b8-h">Pipeline de Dados de Treino e Prevenção de Vazamento</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Além da avaliação, o Real2SimLab oferece um pipeline robusto para a criação de dados de treinamento com anotações de recompensa (reward annotations).</span> <span class="s" data-s="b8-p0-s1">Um problema comum em aprendizado por reforço e fine-tuning de agentes é a contaminação de dados, onde o modelo vê dados de teste durante o treinamento.</span> <span class="s" data-s="b8-p0-s2">Para evitar isso, o pipeline compara os frames de cada gravação de treinamento com os frames das tarefas de avaliação de todos os benchmarks.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.34849/figure6.webp" alt="Pipeline de dados de treino: verificação rigorosa de sobreposição para remover gravações que aparecem em tarefas de avaliação, incluindo cópias re-encodadas." loading="lazy">
+          <figcaption>
+            Pipeline de dados de treino: verificação rigorosa de sobreposição para remover gravações que aparecem em tarefas de avaliação, incluindo cópias re-encodadas.
+            <span class="source">Figura 6 do paper · Zhang et al., arXiv:2611.34849</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">Filtragem Rigorosa de Dados</span></h2>
+<p><span class="s" data-s="b10-p0-s0">O sistema não apenas procura por correspondências exatas, mas também identifica cópias que foram re-encodadas, redimensionadas ou cortadas.</span> <span class="s" data-s="b10-p0-s1">Apenas as gravações que não aparecem em nenhuma tarefa de avaliação são mantidas para o treinamento.</span> <span class="s" data-s="b10-p0-s2">Para cada gravação filtrada, o pipeline gera um programa usando um método e calcula sua recompensa usando o mesmo código de avaliação do Real2SimLab.</span> <span class="s" data-s="b10-p0-s3">Isso cria um conjunto de dados limpo e pronto para fine-tuning offline de agentes.</span></p>        <h2><span class="s" data-s="b11-h">Avaliação e Suporte Atual</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Até o momento, o Real2SimLab suporta a avaliação de 47 agentes de codificação e 5 métodos não baseados em agentes em 6 benchmarks diferentes.</span> <span class="s" data-s="b11-p0-s1">Essa abrangência permite uma análise detalhada do estado da arte.</span> <span class="s" data-s="b11-p0-s2">A plataforma também inclui o Awesome-Real2Sim, um mapeamento de pesquisa com quase 300 artigos sobre transferência de real para simulação, ajudando pesquisadores a escolherem baselines e benchmarks adequados.</span></p>        <h2><span class="s" data-s="b12-h">Limitações e Escopo</span></h2>
+<p><span class="s" data-s="b12-p0-s0">É importante notar que o Real2SimLab não treina modelos por si só; ele serve como infraestrutura de avaliação e preparação de dados.</span> <span class="s" data-s="b12-p0-s1">O foco está na padronização e na reprodutibilidade.</span> <span class="s" data-s="b12-p0-s2">Além disso, a eficácia da plataforma depende da qualidade dos adaptadores de benchmark, que devem preservar a fidelidade dos avaliadores originais.</span> <span class="s" data-s="b12-p0-s3">O campo ainda carece de benchmarks que avaliem a generalização física profunda, focando mais na reprodução visual e de ações imediatas.</span></p>        <h2><span class="s" data-s="b13-h">Conclusão</span></h2>
+<p><span class="s" data-s="b13-p0-s0">O Real2SimLab representa um passo significativo na maturação do campo de simulação gerada por agentes.</span> <span class="s" data-s="b13-p0-s1">Ao unificar a interface entre métodos e benchmarks, ele reduz barreiras técnicas e incentiva a comparação rigorosa.</span> <span class="s" data-s="b13-p0-s2">A disponibilização do código e do mapeamento de pesquisa abre caminho para colaborações futuras na comunidade Real2SimHub, promovendo o desenvolvimento de simulações mais precisas e reutilizáveis a partir de observações reais.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Real2SimLab unifica a avaliação de agentes de código em simulações, reduzindo a complexidade de integração de benchmarks de N×M para N+M.</span></li><li><span class="s" data-s="k1">A plataforma usa o programa gerado pelo agente como interface comum, executando-o e pontuando-o com os avaliadores oficiais de cada benchmark.</span></li><li><span class="s" data-s="k2">Um pipeline robusto filtra dados de treinamento para evitar vazamento, identificando até cópias re-encodadas ou modificadas de gravações de teste.</span></li><li><span class="s" data-s="k3">O projeto suporta 47 agentes e 6 benchmarks, além de fornecer um mapeamento de 300 artigos para orientar pesquisas futuras.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.34849" rel="noopener">Real2SimLab: A Unified Platform for Real-to-Simulation Transfer</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.34849" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

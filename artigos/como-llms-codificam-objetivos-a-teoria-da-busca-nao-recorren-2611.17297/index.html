@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Como LLMs codificam objetivos: a teoria da busca não-recorrente — arXiv em 5</title>
+<meta name="description" content="Um estudo de interpretabilidade revela que LLMs não mantêm estados de memória para metas longas, mas reavaliam o progresso a cada passo usando cabeças de atenção específicas.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Como LLMs codificam objetivos: a teoria da busca não-recorrente">
+<meta property="og:description" content="Um estudo de interpretabilidade revela que LLMs não mantêm estados de memória para metas longas, mas reavaliam o progresso a cada passo usando cabeças de atenção específicas.">
+<meta property="og:image" content="../../assets/papers/2611.17297/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>LLMs</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.17297" rel="noopener">arXiv:2611.17297</a>
+    </div>
+    <h1><span class="s" data-s="t">Como LLMs codificam objetivos: a teoria da busca não-recorrente</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um estudo de interpretabilidade revela que LLMs não mantêm estados de memória para metas longas, mas reavaliam o progresso a cada passo usando cabeças de atenção específicas.</span></p>
+    <p class="byline">
+      <span>Sharma et al.</span>
+      <span>7 min de leitura</span>
+<span>12/11/2026</span>    </p>
+    <div class="listen" data-article="2611.17297" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=e1h_LNdOfqg" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">A ilusão da intenção em redes profundas</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Quando observamos um modelo de linguagem grande (LLM) gerando um código complexo, como uma função de ordenação, é natural atribuir-lhe uma intenção: &#34;ele quer dividir o array&#34;, &#34;ele quer mesclar os resultados&#34;.</span> <span class="s" data-s="b0-p0-s1">Essa atribuição de estados mentais, chamada de postura intencional, é útil para prever comportamentos, mas levanta uma questão técnica crucial: existe algum mecanismo neural interno que corresponda a esse &#34;estado de meta&#34;?</span> <span class="s" data-s="b0-p0-s2">Ou o modelo está apenas completando padrões estatísticos sem qualquer representação explícita de planejamento?</span></p><p><span class="s" data-s="b0-p1-s0">O paper &#34;Goal Encoding in LLMs&#34;, de pesquisadores de universidades como Northeastern, Oxford e Parallax, investiga exatamente essa lacuna.</span> <span class="s" data-s="b0-p1-s1">Eles não perguntam se o LLM se comporta como se tivesse objetivos, mas se esses objetivos são codificados de forma explícita e causal em seus pesos.</span> <span class="s" data-s="b0-p1-s2">A definição operacional de &#34;meta&#34; usada no estudo exige três propriedades: pré-compromisso (a meta aparece antes da ação), plasticidade (a mesma meta pode ser realizada de formas diferentes dependendo do ambiente) e persistência (a meta guia a execução ao longo do tempo).</span></p><p><span class="s" data-s="b0-p2-s0">O desafio central é que os Transformers, a arquitetura base dos LLMs atuais, não possuem memória recorrente.</span> <span class="s" data-s="b0-p2-s1">Cada token é processado em uma passagem única, e a informação deve fluir através das camadas da rede.</span> <span class="s" data-s="b0-p2-s2">Para tarefas longas, isso cria um gargalo: o modelo não tem uma &#34;memória de trabalho&#34; explícita para segurar uma meta enquanto gera centenas de tokens.</span> <span class="s" data-s="b0-p2-s3">Este paper propõe que os LLMs resolvem esse problema de uma maneira contraintuitiva, sem manter um estado persistente, mas recalculando-o repetidamente.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.17297/figure1.webp" alt="Ilustração do processo de busca não-recorrente: o modelo reavalia o sub-objetivo e o progresso a cada passo, em vez de manter um estado fixo." loading="lazy">
+          <figcaption>
+            Ilustração do processo de busca não-recorrente: o modelo reavalia o sub-objetivo e o progresso a cada passo, em vez de manter um estado fixo.
+            <span class="source">Figura 1 do paper · Sharma et al., arXiv:2611.17297</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">O experimento de codificação multi-etapa</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Para testar essas hipóteses, os autores criaram um ambiente controlado onde LLMs devem implementar algoritmos de programação passo a passo, como o Merge Sort.</span> <span class="s" data-s="b2-p0-s1">Esse cenário é ideal porque decomponível em sub-objetivos claros: primeiro dividir o array, depois ordenar cada metade e, finalmente, mesclar os resultados.</span> <span class="s" data-s="b2-p0-s2">Cada sub-objetivo representa um ponto onde o modelo poderia, teoricamente, formar e manter uma intenção.</span></p><p><span class="s" data-s="b2-p1-s0">A abordagem metodológica foca em localizar onde, dentro da rede neural, a informação sobre o &#34;próximo sub-objetivo&#34; reside.</span> <span class="s" data-s="b2-p1-s1">Os autores não assumem que a informação está espalhada uniformemente.</span> <span class="s" data-s="b2-p1-s2">Em vez disso, eles investigam se um conjunto específico de cabeças de atenção (attention heads) — unidades que calculam a relevância relativa entre tokens — carrega essa informação.</span> <span class="s" data-s="b2-p1-s3">Se existirem metas neurais, elas deveriam estar acessíveis e decodificáveis a partir desses componentes específicos.</span></p><p><span class="s" data-s="b2-p2-s0">O experimento envolve três verificações principais.</span> <span class="s" data-s="b2-p2-s1">Primeiro, verificar se a codificação do sub-objetivo surge antes da ação começar (pré-compromisso).</span> <span class="s" data-s="b2-p2-s2">Segundo, testar se essa codificação é plástica: se injetarmos a mesma representação neural em um contexto diferente, o modelo realiza a mesma operação lógica, mas usando tokens adequados ao novo ambiente (por exemplo, mudando de Python para C++).</span> <span class="s" data-s="b2-p2-s3">Terceiro, verificar a persistência: a representação guia o modelo durante toda a execução do sub-objetivo, mesmo que o modelo não tenha memória de longo prazo explícita.</span></p>        <h2><span class="s" data-s="b3-h">Localizando e decodificando a meta</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Os autores identificaram que a codificação do sub-objetivo está concentrada em um conjunto esparsa de cabeças de atenção.</span> <span class="s" data-s="b3-p0-s1">Ao extrair as saídas dessas cabeças em pontos específicos do contexto (chamados de &#34;pivot tokens&#34;), eles conseguem agregar essas informações em um único vetor vetorial.</span> <span class="s" data-s="b3-p0-s2">Este vetor não é apenas um resumo vago; ele carrega informação estruturada sobre o que o modelo está tentando fazer.</span></p><p><span class="s" data-s="b3-p1-s0">Para provar que esse vetor representa realmente um objetivo, os autores realizaram um processo de decodificação.</span> <span class="s" data-s="b3-p1-s1">Eles usaram prompts específicos para perguntar ao modelo o que ele estava fazendo naquele momento, usando apenas a informação contida no vetor extraído das cabeças de atenção.</span> <span class="s" data-s="b3-p1-s2">O resultado foi impressionante: o modelo verbalizou corretamente intenções como &#34;estou verificando se uma palavra é um palíndromo&#34; ou &#34;estou dividindo o array na metade&#34;.</span> <span class="s" data-s="b3-p1-s3">Isso demonstra que a informação sobre a meta está presente e acessível neuralmente, independentemente de o modelo ter explicitamente declarado essa intenção no prompt original.</span></p><p><span class="s" data-s="b3-p2-s0">A Figura 2 do paper ilustra esse processo de extração e decodificação.</span> <span class="s" data-s="b3-p2-s1">Mostra como, a partir de um token pivô, as saídas das cabeças selecionadas são agregadas e usadas para inferir a intenção do modelo.</span> <span class="s" data-s="b3-p2-s2">A precisão dessa inferência serve como métrica de fidelidade: quanto mais preciso for o texto gerado a partir do vetor neural, mais forte é a evidência de que aquele vetor codifica a meta.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.17297/figure2.webp" alt="Extração da codificação de sub-objetivo: agregação das saídas de cabeças de atenção específicas para formar um vetor vetorial que pode ser verbalizado." loading="lazy">
+          <figcaption>
+            Extração da codificação de sub-objetivo: agregação das saídas de cabeças de atenção específicas para formar um vetor vetorial que pode ser verbalizado.
+            <span class="source">Figura 2 do paper · Sharma et al., arXiv:2611.17297</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Intervenções causais e plasticidade</span></h2>
+<p><span class="s" data-s="b5-p0-s0">A correlação não é causalidade.</span> <span class="s" data-s="b5-p0-s1">Para provar que essas cabeças de atenção são realmente responsáveis pela direção da ação, os autores realizaram intervenções causais.</span> <span class="s" data-s="b5-p0-s2">Eles injetaram o vetor de meta extraído de um contexto (fonte) em outro contexto (alvo) que não continha informações sobre essa meta.</span> <span class="s" data-s="b5-p0-s3">Se o modelo alvo começar a agir de acordo com a meta injetada, isso prova que a codificação neural é o gatilho causal da ação.</span></p><p><span class="s" data-s="b5-p1-s0">Dois tipos de intervenção foram testados: aditiva e substituição.</span> <span class="s" data-s="b5-p1-s1">Na intervenção aditiva, o vetor de meta é somado às ativações de várias camadas do modelo alvo.</span> <span class="s" data-s="b5-p1-s2">Na substituição, as contribuições das cabeças de atenção no modelo alvo são substituídas pelas contribuições do modelo fonte.</span> <span class="s" data-s="b5-p1-s3">Os resultados mostraram que essas intervenções são eficazes: o modelo direcionado segue a meta injetada, mesmo que isso signifique ignorar o contexto original ou mudar de linguagem de programação.</span></p><p><span class="s" data-s="b5-p2-s0">A plasticidade foi demonstrada ao transplantar a codificação de um sub-objetivo em Python para um ambiente de C++.</span> <span class="s" data-s="b5-p2-s1">O modelo realizou a mesma operação lógica (ex: divisão de array), mas gerou tokens sintaticamente corretos para C++.</span> <span class="s" data-s="b5-p2-s2">Isso confirma que a representação neural é abstrata o suficiente para ser independente da sintaxe específica, suportando a definição de meta como um estado funcional flexível.</span></p>        <h2><span class="s" data-s="b6-h">A hipótese da Busca Não-Recurrente (NRGS)</span></h2>
+<p><span class="s" data-s="b6-p0-s0">A descoberta mais intrigante do paper é como os LLMs mantêm a persistência da meta sem memória recorrente.</span> <span class="s" data-s="b6-p0-s1">Um Transformer puro perde informação sobre tokens antigos à medida que avança, pois cada camada tem uma capacidade limitada de transportar informação.</span> <span class="s" data-s="b6-p0-s2">Como o modelo sabe que ainda precisa &#34;ordenar a metade direita&#34; depois de gerar 50 linhas de código?</span></p><p><span class="s" data-s="b6-p1-s0">Os autores propõem a hipótese de Busca Não-Recurrente (Non-Recurrent Goal-Seeking, NRGS).</span> <span class="s" data-s="b6-p1-s1">Segundo essa teoria, o modelo não mantém a meta em um estado latente.</span> <span class="s" data-s="b6-p1-s2">Em vez disso, a cada passo de geração, o modelo releia a especificação da tarefa (o prompt original) e o progresso visível no contexto crescente (o código já gerado).</span> <span class="s" data-s="b6-p1-s3">Ele compara esses dois inputs para determinar o que resta a fazer.</span></p><p><span class="s" data-s="b6-p2-s0">Isso significa que a &#34;persistência&#34; da meta é uma ilusão criada por recomputação constante.</span> <span class="s" data-s="b6-p2-s1">O modelo recalcula, a cada token, qual é o sub-objetivo atual, baseando-se na leitura contínua do contexto.</span> <span class="s" data-s="b6-p2-s2">Essa abordagem é computacionalmente custosa, mas funcional dentro da arquitetura Transformer.</span> <span class="s" data-s="b6-p2-s3">Ela explica por que o modelo pode lidar com tarefas longas sem um mecanismo de memória explícito: ele externaliza a memória para o contexto e o prompt, reprocessando-os repetidamente.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.17297/figure12.webp" alt="Comparação da eficácia: as cabeças de objetivo superam métodos padrão de extração de informação, como o uso do estado residual completo." loading="lazy">
+          <figcaption>
+            Comparação da eficácia: as cabeças de objetivo superam métodos padrão de extração de informação, como o uso do estado residual completo.
+            <span class="source">Figura 12 do paper · Sharma et al., arXiv:2611.17297</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Resultados e limitações do estudo</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Os resultados quantitativos suportam fortemente a hipótese NRGS.</span> <span class="s" data-s="b8-p0-s1">As intervenções causais mostraram que, ao controlar o que as cabeças de objetivo &#34;veem&#34; no contexto, os autores puderam redirecionar as ações do modelo.</span> <span class="s" data-s="b8-p0-s2">Isso confirma que a leitura do contexto pelas cabeças de meta é o mecanismo central de tomada de decisão.</span></p><p><span class="s" data-s="b8-p1-s0">Além disso, a Figura 12 mostra que a extração de informação via cabeças de objetivo é superior a métodos padrão, como o uso dos estados residuais completos ou de outras cabeças de atenção não especializadas.</span> <span class="s" data-s="b8-p1-s1">Isso sugere que a codificação de metas é um fenômeno localizado e específico, não um efeito colateral geral do processamento de linguagem.</span></p><p><span class="s" data-s="b8-p2-s0">No entanto, o estudo tem limitações claras.</span> <span class="s" data-s="b8-p2-s1">Ele foi conduzido em um ambiente controlado de geração de código.</span> <span class="s" data-s="b8-p2-s2">Embora a plasticidade tenha sido testada entre linguagens, não está claro se o mesmo mecanismo se aplica a tarefas de raciocínio lógico ou conversacional livre.</span> <span class="s" data-s="b8-p2-s3">Além disso, a eficiência computacional da estratégia NRGS é questionável: recalcar o progresso a cada passo exige atenção sobre todo o contexto histórico, o que pode se tornar inviável em tarefas extremamente longas.</span></p><p><span class="s" data-s="b8-p3-s0">Outra ressalva importante é a generalização.</span> <span class="s" data-s="b8-p3-s1">O paper sugere que os LLMs reutilizam o mesmo mecanismo para perseguição de metas em diversas situações, mas a evidência direta vem principalmente de tarefas algorítmicas.</span> <span class="s" data-s="b8-p3-s2">A extensão para comportamentos mais complexos, como planejamento estratégico em ambientes simulados, permanece como uma área aberta para pesquisa futura.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.17297/figure22.webp" alt="Transferibilidade da codificação: o vetor de objetivo funciona em diferentes direções de linguagem, demonstrando a plasticidade da representação neural." loading="lazy">
+          <figcaption>
+            Transferibilidade da codificação: o vetor de objetivo funciona em diferentes direções de linguagem, demonstrando a plasticidade da representação neural.
+            <span class="source">Figura 22 do paper · Sharma et al., arXiv:2611.17297</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">Conclusão: O que aprendemos sobre a mente da máquina</span></h2>
+<p><span class="s" data-s="b10-p0-s0">O paper &#34;Goal Encoding in LLMs&#34; oferece uma contribuição significativa para a interpretabilidade de modelos de linguagem.</span> <span class="s" data-s="b10-p0-s1">Ele desmistifica a noção de que LLMs possuem uma &#34;memória de trabalho&#34; humana ou um estado de intenção persistente.</span> <span class="s" data-s="b10-p0-s2">Em vez disso, revela um mecanismo elegante e robusto: a recomputação contínua baseada em leitura atenta do contexto.</span></p><p><span class="s" data-s="b10-p1-s0">A identificação de um conjunto esparsa de cabeças de atenção responsáveis por codificar sub-objetivos abre novas possibilidades para o controle e a correção de LLMs.</span> <span class="s" data-s="b10-p1-s1">Se podemos identificar e manipular causalmente essas metas, podemos corrigir desvios de comportamento de forma mais precisa, intervindo apenas nos componentes neurais relevantes, em vez de reajustar o modelo inteiro.</span></p><p><span class="s" data-s="b10-p2-s0">Para desenvolvedores e cientistas de dados, a lição principal é que a aparente inteligência e planejamento dos LLMs emergem de processos locais e repetitivos, não de uma arquitetura de memória global.</span> <span class="s" data-s="b10-p2-s1">Compreender esses mecanismos internos é essencial para construir sistemas mais confiáveis, previsíveis e alinhados com as intenções humanas, especialmente em tarefas que exigem raciocínio multi-etapa complexo.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">LLMs localizam sub-objetivos em um conjunto esparsa de cabeças de atenção, não na memória residual global.</span></li><li><span class="s" data-s="k1">O modelo usa uma estratégia de &#39;busca não-recorrente&#39;: releitura constante da meta e do contexto para decidir o próximo token.</span></li><li><span class="s" data-s="k2">Intervenções causais provam que essas cabeças dirigem a ação; transplantar a codificação altera o comportamento do modelo.</span></li><li><span class="s" data-s="k3">A persistência do objetivo é ilusória: o modelo reconstrói a intenção repetidamente, contornando a limitação de profundidade do transformer.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.17297" rel="noopener">Goal Encoding in LLMs</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.17297" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

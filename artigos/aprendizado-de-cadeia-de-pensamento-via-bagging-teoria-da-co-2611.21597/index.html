@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aprendizado de Cadeia de Pensamento via Bagging: Teoria da Complexidade de Amostra — arXiv em 5</title>
+<meta name="description" content="Este paper estabelece a complexidade de amostra ótima para aprender geradores autoregressivos com supervisão de Chain-of-Thought, demonstrando que o bagging de preditores consistentes elimina a dependência do comprimento do raciocínio.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Aprendizado de Cadeia de Pensamento via Bagging: Teoria da Complexidade de Amostra">
+<meta property="og:description" content="Este paper estabelece a complexidade de amostra ótima para aprender geradores autoregressivos com supervisão de Chain-of-Thought, demonstrando que o bagging de preditores consistentes elimina a dependência do comprimento do raciocínio.">
+<meta property="og:image" content="../../assets/papers/2611.21597/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>LLMs</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.21597" rel="noopener">arXiv:2611.21597</a>
+    </div>
+    <h1><span class="s" data-s="t">Aprendizado de Cadeia de Pensamento via Bagging: Teoria da Complexidade de Amostra</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Este paper estabelece a complexidade de amostra ótima para aprender geradores autoregressivos com supervisão de Chain-of-Thought, demonstrando que o bagging de preditores consistentes elimina a dependência do comprimento do raciocínio.</span></p>
+    <p class="byline">
+      <span>Altabaa et al.</span>
+      <span>7 min de leitura</span>
+<span>16/11/2026</span>    </p>
+    <div class="listen" data-article="2611.21597" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=aXdYEtDu7dw" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema Fundamental da Autocomplete de Raciocínio</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Os modelos de linguagem grandes (LLMs) revolucionaram a inteligência artificial, mas seu mecanismo central permanece surpreendentemente simples: um único preditor de próximo token é aplicado repetidamente.</span> <span class="s" data-s="b0-p0-s1">A cada passo, o token gerado é adicionado ao contexto para a próxima previsão.</span> <span class="s" data-s="b0-p0-s2">O sucesso empírico desses modelos aumenta drasticamente quando eles não respondem imediatamente, mas geram primeiro uma sequência de passos intermediários, conhecida como Chain-of-Thought (CoT), a partir da qual a resposta final segue logicamente.</span> <span class="s" data-s="b0-p0-s3">Treinar modelos nesses demonstrations de raciocínio passo-a-passo tornou-se um ingrediente central nos pipelines modernos de treinamento.</span> <span class="s" data-s="b0-p0-s4">No entanto, o progresso empírico por si só não responde a perguntas teóricas fundamentais: quantos demonstrations são necessários para aprender a raciocinar corretamente?</span> <span class="s" data-s="b0-p0-s5">Um processo de raciocínio mais longo torna o aprendizado mais difícil?</span> <span class="s" data-s="b0-p0-s6">E quais algoritmos fazem o melhor uso dos dados disponíveis?</span></p>        <h2><span class="s" data-s="b1-h">Um Modelo de Aprendizado Autoregressivo no Regime PAC</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Para responder a essas questões, os autores adotam um framework de aprendizado PAC (Probably Approximately Correct) para aprendizado autoregressivo, introduzido elegantemente por Joshi et al.</span> <span class="s" data-s="b1-p0-s1">Neste modelo, um modelo de linguagem é abstraído como um gerador de próximo token autoregressivo f, que mapeia sequências de tokens Sigma_star para o próximo token em Sigma.</span> <span class="s" data-s="b1-p0-s2">Dado um prompt x, o gerador produz o primeiro token f^(1)(x) = f(x), depois o segundo f^(2)(x) = f(x concatenado com f^(1)(x)), e assim por diante.</span> <span class="s" data-s="b1-p0-s3">Após T passos, o modelo produziu uma cadeia de pensamento f^(1:T)(x), cujo último token é interpretado como a resposta.</span> <span class="s" data-s="b1-p0-s4">O mesmo gerador é usado em cada passo, refletindo exatamente como um modelo de linguagem aplica os mesmos pesos a cada prefixo.</span></p>        <h2><span class="s" data-s="b2-h">Supervisão End-to-End vs. Supervisão Chain-of-Thought</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Duas formas de supervisão surgem naturalmente neste contexto.</span> <span class="s" data-s="b2-p0-s1">Na supervisão end-to-end, o aprendiz observa prompts com suas respostas finais, mas o raciocínio que as produziu permanece oculto.</span> <span class="s" data-s="b2-p0-s2">Este paper foca na supervisão Chain-of-Thought, onde o aprendiz observa toda a cadeia de pensamento completa.</span> <span class="s" data-s="b2-p0-s3">Seja P uma distribuição sobre prompts e cadeias de pensamento realizáveis por algum f_star na classe F, no sentido de que a probabilidade de o gerador verdadeiro produzir a cadeia observada é 1.</span> <span class="s" data-s="b2-p0-s4">O aprendiz observa n amostras i.i.d. e retorna um preditor f_hat, que é então executado autoregressivamente.</span></p>        <h2><span class="s" data-s="b3-h">A Métrica de Risco CoT e a Dependência do Comprimento</span></h2>
+<p><span class="s" data-s="b3-p0-s0">A performance do preditor f_hat é medida pelo risco CoT.</span> <span class="s" data-s="b3-p0-s1">Diferente do risco end-to-end, que apenas verifica se a última palavra está correta, o risco CoT exige que o preditor reproduza toda a cadeia de pensamento.</span> <span class="s" data-s="b3-p0-s2">Um único token incorreto em qualquer passo t em [T] torna a saída incorreta.</span> <span class="s" data-s="b3-p0-s3">A definição formal é a probabilidade de existir algum passo t onde f_hat^(t)(x) não é igual a y_t.</span> <span class="s" data-s="b3-p0-s4">O desafio teórico reside em entender como a complexidade de amostra necessária para atingir uma precisão epsilon com confiança 1-minus_delta escala com o comprimento da cadeia T. Trabalhos anteriores mostraram bounds que dependiam de T, levantando a questão de se essa dependência era necessária ou um artefato do algoritmo.</span></p>        <h2><span class="s" data-s="b4-h">A Ideia Central: Bagging de Preditores Consistentes</span></h2>
+<p><span class="s" data-s="b4-p0-s0">O paper apresenta um algoritmo simples baseado em bagging (bootstrap aggregating).</span> <span class="s" data-s="b4-p0-s1">A ideia é treinar múltiplos geradores de tokens em amostras bootstrap dos dados de treinamento.</span> <span class="s" data-s="b4-p0-s2">Cada gerador individual é treinado para ser CoT-consistente, ou seja, para reproduzir fielmente as cadeias de pensamento observadas em sua amostra específica.</span> <span class="s" data-s="b4-p0-s3">Em seguida, o algoritmo de saída é uma votação majoritária desses geradores.</span> <span class="s" data-s="b4-p0-s4">Para conjuntos de tokens binários, este método alcança a complexidade de amostra ótima de O((d_VC mais log(1/delta))/epsilon), onde d_VC é a dimensão de VC da classe F. O ponto crucial é que esta complexidade é independente do comprimento da cadeia de pensamento T.</span></p>        <h2><span class="s" data-s="b5-h">Generalização para Conjuntos de Tokens Arbitrários</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Para conjuntos de tokens finitos Sigma (não binários), a dimensão de VC é substituída por uma análoga multiclasse, chamada dimensão Graph d_G.</span> <span class="s" data-s="b5-p0-s1">A complexidade de amostra resultante é ótima até um fator de log(|Sigma|).</span> <span class="s" data-s="b5-p0-s2">O número de geradores na ensemble de votação majoritária é O(log(T/delta)).</span> <span class="s" data-s="b5-p0-s3">Isso significa que, embora o comprimento da cadeia T influencie o tamanho da ensemble, ele não degrada a eficiência da amostra de treinamento necessária para aprender a função base.</span> <span class="s" data-s="b5-p0-s4">Os autores mostram ainda que a ensemble pode ser destilada em um único gerador em F, ao custo de n log(nT) prompts não rotulados adicionais.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.21597/table1.webp" alt="Tabela 1 compara a complexidade de amostra do método Bagging CoT com trabalhos anteriores. Note a ausência de dependência de T na complexidade do nosso método, atingindo otimalidade para conjuntos arbitrários de tokens." loading="lazy">
+          <figcaption>
+            Tabela 1 compara a complexidade de amostra do método Bagging CoT com trabalhos anteriores. Note a ausência de dependência de T na complexidade do nosso método, atingindo otimalidade para conjuntos arbitrários de tokens.
+            <span class="source">Tabela 1 do paper · Altabaa et al., arXiv:2611.21597</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Comparação com o Estado da Arte</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Para contextualizar a contribuição, observe a Tabela 1 do paper.</span> <span class="s" data-s="b7-p0-s1">Trabalhos anteriores, como o de Joshi et al., apresentavam complexidades que dependiam de termos como log(2T) ou dimensões duais.</span> <span class="s" data-s="b7-p0-s2">O método de sample-compression de Hanneke et al. também apresentava dependências complexas.</span> <span class="s" data-s="b7-p0-s3">Em contraste, o método de conversão online-to-batch de DMM26 e o de hipergráficos one-inclusion de L26 já alcançavam complexidades independentes de T para cenários arbitrários.</span> <span class="s" data-s="b7-p0-s4">Este paper alinha-se a esses resultados de otimalidade, mas o faz através de um algoritmo construtivo e simples baseado em bagging, que é facilmente implementável e teoricamente sólido.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b8-t">Por que a independência de T importa?</span></h3>
+          <p><span class="s" data-s="b8-c-s0">Em aplicações práticas, cadeias de pensamento longas são desejadas para raciocínios complexos.</span> <span class="s" data-s="b8-c-s1">Se a complexidade de amostra crescesse com T, precisaríamos exponencialmente mais dados para treinar modelos que raciocinam por mais passos.</span> <span class="s" data-s="b8-c-s2">A independência de T implica que a dificuldade de aprender a estrutura do raciocínio não aumenta com a profundidade da cadeia, desde que a classe de funções subjacente tenha complexidade finita.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b9-h">Mecanismo Detalhado: Como o Bagging Funciona Aqui</span></h2>
+<p><span class="s" data-s="b9-p0-s0">O algoritmo opera da seguinte forma: dado um conjunto de treinamento S de tamanho n, geramos M amostras bootstrap S_1, ..., S_M de S. Para cada amostra S_m, treinamos um preditor f_hat_m que minimiza o erro empírico de consistência CoT.</span> <span class="s" data-s="b9-p0-s1">Ou seja, f_hat_m é escolhido para prever corretamente todos os tokens em todas as posições das cadeias de pensamento presentes em S_m.</span> <span class="s" data-s="b9-p0-s2">A previsão final para um novo prompt é obtida pela votação majoritária dos tokens previstos por cada f_hat_m em cada passo autoregressivo.</span> <span class="s" data-s="b9-p0-s3">A consistência CoT é uma condição forte: exige que o modelo não erre nenhum token na sequência.</span></p>        <h2><span class="s" data-s="b10-h">Análise Teórica e Dimensões de Complexidade</span></h2>
+<p><span class="s" data-s="b10-p0-s0">A prova de otimalidade depende de propriedades estatísticas da votação majoritária aplicada a preditores consistentes.</span> <span class="s" data-s="b10-p0-s1">Para o caso binário, a dimensão de VC d_VC governa a taxa de convergência.</span> <span class="s" data-s="b10-p0-s2">Para o caso multiclasse, a dimensão Graph d_G generaliza a VC.</span> <span class="s" data-s="b10-p0-s3">A dimensão Graph mede a complexidade da classe de funções considerando a capacidade de shatter sequências de tokens em múltiplas classes.</span> <span class="s" data-s="b10-p0-s4">O fator log(|Sigma|) surge da union bound sobre o vocabulário ao garantir que a votação majoritária seja correta para todos os tokens possíveis.</span> <span class="s" data-s="b10-p0-s5">O resultado é robusto e não assume distribuição específica sobre os prompts, apenas a realizabilidade.</span></p>        <h2><span class="s" data-s="b11-h">Destilação da Ensemble</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Uma vantagem prática é a possibilidade de destilação.</span> <span class="s" data-s="b11-p0-s1">A ensemble de M = O(log(T/delta)) geradores pode ser compactada em um único gerador f_tilde em F. Isso é feito usando prompts adicionais não rotulados.</span> <span class="s" data-s="b11-p0-s2">A complexidade de amostra para a destilação é n log(nT), onde n é o tamanho do conjunto de treinamento original.</span> <span class="s" data-s="b11-p0-s3">Isso significa que, se tivermos acesso a dados não rotulados abundantes, podemos obter um modelo único eficiente, sem perder as garantias de precisão da ensemble, exceto pelo custo adicional de dados não rotulados.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b12-t">Limitação: Realizabilidade</span></h3>
+          <p><span class="s" data-s="b12-c-s0">A teoria assume realizabilidade estrita: existe um f_star em F que gera exatamente as cadeias de pensamento observadas.</span> <span class="s" data-s="b12-c-s1">Na prática, dados de LLMs são ruidosos e a classe F pode não conter a função verdadeira.</span> <span class="s" data-s="b12-c-s2">O paper foca no regime PAC realizable; a extensão para o regime agnóstico (com ruído) requer análise adicional e pode introduzir dependências de T ou fatores de regularização.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b13-h">Implicações para o Treinamento de LLMs</span></h2>
+<p><span class="s" data-s="b13-p0-s0">Este resultado teórico valida o uso de métodos de ensemble ou agregação no treinamento de modelos de raciocínio.</span> <span class="s" data-s="b13-p0-s1">Ele sugere que a complexidade intrínseca do aprendizado de cadeias de pensamento é determinada pela complexidade da classe de funções do modelo (medida por d_VC ou d_G) e não pelo comprimento da cadeia.</span> <span class="s" data-s="b13-p0-s2">Isso é encorajador para o desenvolvimento de modelos que realizam raciocínios longos e complexos, pois não há uma penalidade de comprimento fundamental na amostra necessária para aprender a estrutura.</span></p>        <h2><span class="s" data-s="b14-h">O que o Paper Não Mostra</span></h2>
+<p><span class="s" data-s="b14-p0-s0">É importante notar o escopo limitado.</span> <span class="s" data-s="b14-p0-s1">O paper não fornece experimentos empíricos em LLMs reais; é puramente teórico.</span> <span class="s" data-s="b14-p0-s2">Não aborda a eficiência computacional do treinamento da ensemble ou da destilação em larga escala.</span> <span class="s" data-s="b14-p0-s3">Não explora a generalização para cenários onde a supervisão CoT é parcial ou ausente em alguns passos.</span> <span class="s" data-s="b14-p0-s4">Além disso, a complexidade de amostra ótima é assintótica; para tamanhos de dados finitos e classes de funções muito grandes, os fatores constantes e logarítmicos podem ser significativos.</span></p>        <h2><span class="s" data-s="b15-h">Conclusão</span></h2>
+<p><span class="s" data-s="b15-p0-s0">Em resumo, Optimal Autoregressive Chain-of-Thought Learning via Bagging estabelece uma base teórica sólida para o aprendizado de modelos de raciocínio passo-a-passo.</span> <span class="s" data-s="b15-p0-s1">Ao mostrar que a complexidade de amostra é ótima e independente do comprimento da cadeia, os autores desmistificam uma preocupação comum sobre a escalabilidade do treinamento CoT.</span> <span class="s" data-s="b15-p0-s2">O algoritmo de bagging proposto é simples, eficaz e teoricamente justificado, oferecendo um caminho claro para a análise futura de métodos de aprendizado autoregressivo.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">O aprendizado de cadeias de pensamento (CoT) pode atingir complexidade de amostra ótima independente do comprimento da cadeia T.</span></li><li><span class="s" data-s="k1">O algoritmo de bagging de preditores CoT-consistentes alcança essa otimalidade para classes com dimensão VC ou Graph finita.</span></li><li><span class="s" data-s="k2">Um fator logarítmico do vocabulário |Sigma| aparece no caso multiclasse, mas não há penalidade direta por raciocínios longos.</span></li><li><span class="s" data-s="k3">A ensemble resultante pode ser destilada em um único modelo usando dados não rotulados, mantendo as garantias teóricas.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.21597" rel="noopener">Optimal Autoregressive Chain-of-Thought Learning via Bagging</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.21597" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

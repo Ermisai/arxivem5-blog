@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SwarmEvolve: Busca evolutiva rápida com agentes latentes e KV caches — arXiv em 5</title>
+<meta name="description" content="O SwarmEvolve substitui o raciocínio textual lento de LLMs por raciocínio em espaço latente, permitindo que centenas de agentes colaborem em minutos para descobrir programas matemáticos complexos com custo computacional reduzido.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SwarmEvolve: Busca evolutiva rápida com agentes latentes e KV caches">
+<meta property="og:description" content="O SwarmEvolve substitui o raciocínio textual lento de LLMs por raciocínio em espaço latente, permitindo que centenas de agentes colaborem em minutos para descobrir programas matemáticos complexos com custo computacional reduzido.">
+<meta property="og:image" content="../../assets/papers/2611.08483/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Agentes</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.08483" rel="noopener">arXiv:2611.08483</a>
+    </div>
+    <h1><span class="s" data-s="t">SwarmEvolve: Busca evolutiva rápida com agentes latentes e KV caches</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">O SwarmEvolve substitui o raciocínio textual lento de LLMs por raciocínio em espaço latente, permitindo que centenas de agentes colaborem em minutos para descobrir programas matemáticos complexos com custo computacional reduzido.</span></p>
+    <p class="byline">
+      <span>Jiang et al.</span>
+      <span>7 min de leitura</span>
+<span>05/11/2026</span>    </p>
+    <div class="listen" data-article="2611.08483" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=FFNVbrRJbdo" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O gargalo da busca evolutiva com LLMs</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Muitos problemas em matemática e computação científica podem ser formulados como uma busca por um bom programa.</span> <span class="s" data-s="b0-p0-s1">Exemplos clássicos incluem regressão simbólica, otimização de constantes em desigualdades e a construção de solucionadores robustos para equações diferenciais.</span> <span class="s" data-s="b0-p0-s2">A abordagem tradicional para essa busca é a computação evolutiva, que melhora iterativamente programas candidatos através de variação, cruzamento e seleção.</span> <span class="s" data-s="b0-p0-s3">Recentemente, Modelos de Linguagem de Grande Escala (LLMs) têm sido utilizados como operadores de mutação e cruzamento nesses processos.</span> <span class="s" data-s="b0-p0-s4">Frameworks como FunSearch e AlphaEvolve demonstraram progresso significativo, encontrando novas construções de conjuntos de cap e algoritmos eficientes para multiplicação de matrizes.</span></p><p><span class="s" data-s="b0-p1-s0">Apesar do sucesso, esses frameworks enfrentam um gargalo crítico: lentidão e alto custo.</span> <span class="s" data-s="b0-p1-s1">Cada agente de LLM gera uma longa cadeia de pensamento textual em cada rodada de refinamento.</span> <span class="s" data-s="b0-p1-s2">Para manter a diversidade da população e explorar o espaço de soluções adequadamente, o processo deve repetir essa geração muitas vezes.</span> <span class="s" data-s="b0-p1-s3">O contexto do LLM cresce constantemente com o arquivo de soluções, o feedback do avaliador e as mensagens textuais entre agentes.</span> <span class="s" data-s="b0-p1-s4">Isso torna inviável escalar para centenas de agentes ou usar modelos maiores sem um orçamento de computação proibitivo.</span> <span class="s" data-s="b0-p1-s5">A pergunta central que os autores levantam é se enxames de agentes de baixo custo podem tornar a busca evolutiva mais rápida e eficaz.</span></p>        <h2><span class="s" data-s="b1-h">A proposta: Raciocínio em espaço latente</span></h2>
+<p><span class="s" data-s="b1-p0-s0">O SwarmEvolve é um framework de busca evolutiva que supera o gargalo textual ao operar inteiramente no espaço latente.</span> <span class="s" data-s="b1-p0-s1">Em vez de gerar tokens de texto, os agentes raciocinam usando vetores contínuos.</span> <span class="s" data-s="b1-p0-s2">A comunicação entre agentes ocorre através da troca de KV caches (chaves e valores), que são os estados internos da atenção do modelo.</span> <span class="s" data-s="b1-p0-s3">Essa abordagem se baseia em trabalhos anteriores sobre raciocínio latente e comunicação latente, onde LLMs trocam embeddings de tokens ou ativações internas sem decodificação para texto.</span></p><p><span class="s" data-s="b1-p1-s0">A vantagem principal é a eficiência.</span> <span class="s" data-s="b1-p1-s1">O raciocínio em espaço latente é muito mais barato computacionalmente do que a geração de texto.</span> <span class="s" data-s="b1-p1-s2">Isso permite que o SwarmEvolve execute centenas de agentes em cada rodada evolutiva.</span> <span class="s" data-s="b1-p1-s3">Os agentes são organizados em enxames distintos, e cada enxame tem um foco específico, como implementar uma construção da literatura ou usar um método de livro didático.</span> <span class="s" data-s="b1-p1-s4">Essa estrutura permite uma exploração massiva do espaço de design em paralelo, algo impraticável com métodos baseados em texto que exigem geração sequencial e verbose.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.08483/figure2.webp" alt="Diagrama do fluxo de SwarmEvolve: 10 enxames de agentes latentes refinam e exploram programas sem gerar texto, trocando apenas KV caches." loading="lazy">
+          <figcaption>
+            Diagrama do fluxo de SwarmEvolve: 10 enxames de agentes latentes refinam e exploram programas sem gerar texto, trocando apenas KV caches.
+            <span class="source">Figura 2 do paper · Jiang et al., arXiv:2611.08483</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Mecanismo: Como os agentes colaboram</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O funcionamento do SwarmEvolve pode ser dividido em etapas claras.</span> <span class="s" data-s="b3-p0-s1">Em cada rodada, o framework lança múltiplos enxames de agentes latentes.</span> <span class="s" data-s="b3-p0-s2">Cada enxame seleciona programas pais de um arquivo de archive e recebe um prompt de foco para refinar, hibridizar, explorar ou começar do zero.</span> <span class="s" data-s="b3-p0-s3">Dentro de cada enxame, os agentes realizam 40 passos de raciocínio latente.</span> <span class="s" data-s="b3-p0-s4">Esses passos atualizam os estados ocultos dos agentes sem produzir saída textual, permitindo que eles processem informações complexas de forma rápida.</span></p><p><span class="s" data-s="b3-p1-s0">Para garantir que o enxame não converja prematuramente para soluções similares, um filtro de novidade é aplicado.</span> <span class="s" data-s="b3-p1-s1">Este filtro mantém apenas os agentes cujas trajetórias de raciocínio latente estão mais distantes entre si, medido pela distância cosseno dos vetores de estado oculto.</span> <span class="s" data-s="b3-p1-s2">Isso assegura que diferentes perspectivas sejam preservadas.</span> <span class="s" data-s="b3-p1-s3">Em seguida, um agente resumo (summarizer) para cada enxame recebe os KV caches combinados de todos os agentes mantidos.</span> <span class="s" data-s="b3-p1-s4">O resumo então decodifica essas informações latentes para gerar um novo programa candidato.</span></p>        <h2><span class="s" data-s="b4-h">Cruzamento natural no espaço latente</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Uma característica distintiva do SwarmEvolve é como o cruzamento de ideias ocorre.</span> <span class="s" data-s="b4-p0-s1">Em métodos tradicionais, o cruzamento é muitas vezes uma operação sintática sobre o código ou texto.</span> <span class="s" data-s="b4-p0-s2">No SwarmEvolve, o cruzamento acontece naturalmente no espaço latente.</span> <span class="s" data-s="b4-p0-s3">Ao receber os KV caches de múltiplos agentes, o agente resumo integra as informações de diferentes perspectivas.</span> <span class="s" data-s="b4-p0-s4">Os agentes de cada enxame ocupam regiões distintas no espaço latente, o que significa que eles estão explorando aspectos diferentes do problema.</span> <span class="s" data-s="b4-p0-s5">A combinação desses estados permite que o resumo sintetize soluções que combinam o melhor de cada agente, sem a perda de informação que poderia ocorrer na tradução para texto e de volta.</span></p><p><span class="s" data-s="b4-p1-s0">Essa arquitetura também permite que o sistema escale horizontalmente.</span> <span class="s" data-s="b4-p1-s1">Como a comunicação é baseada em troca de caches e não em geração de texto, o overhead de comunicação é mínimo.</span> <span class="s" data-s="b4-p1-s2">Isso contrasta com frameworks que usam debates multiagente ou memória compartilhada textual, onde o contexto cresce exponencialmente e degrada a qualidade do raciocínio devido ao limite de tokens e ao ruído informativo.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.08483/figure5.webp" alt="Projeção dos estados ocultos dos agentes mostra que cada enxame ocupa regiões distintas no espaço latente, garantindo diversidade nas explorações." loading="lazy">
+          <figcaption>
+            Projeção dos estados ocultos dos agentes mostra que cada enxame ocupa regiões distintas no espaço latente, garantindo diversidade nas explorações.
+            <span class="source">Figura 5 do paper · Jiang et al., arXiv:2611.08483</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b6-h">Avaliação experimental e resultados</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Os autores avaliaram o SwarmEvolve em 21 problemas de cinco domínios: empacotamento, geometria, análise, combinatória e computação científica.</span> <span class="s" data-s="b6-p0-s1">Dezesseis problemas vieram do benchmark do AlphaEvolve, enquanto cinco foram desenhados para testar sistemas lineares esparsos, autovalores de matrizes não normais e equações diferenciais parciais (Burgers, conveção-difusão e Helmholtz).</span> <span class="s" data-s="b6-p0-s2">A comparação foi feita contra três frameworks state-of-the-art: OpenEvolve, ShinkaEvolve e CodeEvolve.</span> <span class="s" data-s="b6-p0-s3">Cada framework foi executado por 60 minutos em uma única GPU, avaliando oito programas em paralelo.</span></p><p><span class="s" data-s="b6-p1-s0">Os resultados mostram que o SwarmEvolve alcança a maior pontuação média com todos os modelos testados (Qwen3 8B, 14B e 32B-FP8).</span> <span class="s" data-s="b6-p1-s1">Notavelmente, o SwarmEvolve com o modelo menor Qwen3 8B superou todos os baselines rodando o modelo maior Qwen3 32B-FP8.</span> <span class="s" data-s="b6-p1-s2">Em termos de velocidade, o SwarmEvolve atingiu as melhores pontuações em uma mediana de apenas 3 a 8 minutos.</span> <span class="s" data-s="b6-p1-s3">Em contraste, os frameworks baseados em texto levaram 60 minutos para atingir scores similares.</span> <span class="s" data-s="b6-p1-s4">Em vários problemas, o SwarmEvolve com Qwen3 8B melhorou as soluções que o AlphaEvolve encontrou usando modelos de fronteira.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.08483/figure1.webp" alt="SwarmEvolve gera mais programas e atinge melhores pontações em menos tempo. A mediana para atingir o score final é de 3-8 minutos." loading="lazy">
+          <figcaption>
+            SwarmEvolve gera mais programas e atinge melhores pontações em menos tempo. A mediana para atingir o score final é de 3-8 minutos.
+            <span class="source">Figura 1 do paper · Jiang et al., arXiv:2611.08483</span>
+          </figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="../../assets/papers/2611.08483/figure4.webp" alt="SwarmEvolve atinge o nível de desempenho dos rivais em minutos, não em horas. Gráfico mostra o tempo necessário para igualar o score de 60 min dos baselines." loading="lazy">
+          <figcaption>
+            SwarmEvolve atinge o nível de desempenho dos rivais em minutos, não em horas. Gráfico mostra o tempo necessário para igualar o score de 60 min dos baselines.
+            <span class="source">Figura 4 do paper · Jiang et al., arXiv:2611.08483</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Análise de ablação e escalabilidade</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Os autores realizaram análises de ablação para entender as contribuições de cada componente.</span> <span class="s" data-s="b9-p0-s1">Quando o raciocínio latente foi substituído por raciocínio textual, as pontuações caíram significativamente, mesmo quando os agentes tinham um orçamento maior de tokens de texto.</span> <span class="s" data-s="b9-p0-s2">Isso confirma que a eficiência não vem apenas de economizar tokens, mas da natureza do raciocínio em vetores contínuos, que permite uma exploração mais densa do espaço de soluções.</span> <span class="s" data-s="b9-p0-s3">Além disso, aumentar o número de agentes em um enxame melhorou o desempenho inicial da busca, explorando mais do espaço de design nas primeiras rodadas.</span> <span class="s" data-s="b9-p0-s4">Isso é crucial para problemas onde cada avaliação é cara, como simulações científicas.</span></p><p><span class="s" data-s="b9-p1-s0">O scaling do número de agentes também mostrou que, embora enxames maiores ofereçam uma vantagem inicial, no final da busca todos os tamanhos de enxame convergem para scores similares.</span> <span class="s" data-s="b9-p1-s1">Isso sugere que a diversidade inicial é o fator crítico para o sucesso rápido do SwarmEvolve.</span> <span class="s" data-s="b9-p1-s2">A escalabilidade do método também foi discutida: embora a memória para os KV caches cresça linearmente com o número de agentes, passos de raciocínio e camadas, a arquitetura permite que centenas de agentes rodem em uma única GPU moderna, algo que seria impossível com geração textual.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b10-t">Custo Computacional Reduzido</span></h3>
+          <p><span class="s" data-s="b10-c-s0">O SwarmEvolve demonstrou que é possível superar resultados de modelos frontais usando modelos menores (8B) devido à eficiência da busca.</span> <span class="s" data-s="b10-c-s1">Uma única GPU com 8 núcleos de CPU foi suficiente para rodar centenas de agentes em paralelo, reduzindo o tempo de 60 minutos para 3-8 minutos.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b11-h">Limitações e trabalho futuro</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Apesar dos avanços, o SwarmEvolve possui limitações importantes.</span> <span class="s" data-s="b11-p0-s1">Primeiro, todos os agentes latentes e resumos devem compartilhar o mesmo modelo de LLM.</span> <span class="s" data-s="b11-p0-s2">Isso ocorre porque um resumo só pode ler diretamente os KV caches de seus agentes se eles provierem do mesmo modelo.</span> <span class="s" data-s="b11-p0-s3">Traduções aprendidas entre KV caches de diferentes modelos poderiam estender o framework para enxames heterogêneos, mas isso ainda é uma área de pesquisa aberta.</span> <span class="s" data-s="b11-p0-s4">Segundo, a implementação atual requer LLMs com atenção padrão.</span> <span class="s" data-s="b11-p0-s5">Modelos com atenção linear, espaços de estado ou híbridos comprimem o passado em um estado de tamanho fixo, o que exigiria novos métodos para mesclar os estados de vários agentes.</span></p>        <h2><span class="s" data-s="b12-h">Considerações finais</span></h2>
+<p><span class="s" data-s="b12-p0-s0">O SwarmEvolve demonstra que a busca evolutiva pode ser rápida, barata e poderosa simultaneamente.</span> <span class="s" data-s="b12-p0-s1">Ao pular a etapa lenta de escrita de texto, os agentes latentes permitem que uma única GPU execute centenas de agentes em cada rodada.</span> <span class="s" data-s="b12-p0-s2">Isso resulta em uma exploração muito maior do espaço de design no mesmo tempo, levando a programas melhores mais cedo na execução.</span> <span class="s" data-s="b12-p0-s3">O trabalho abre caminho para aplicações em matemática, onde enxames podem buscar novas construções e estratégias de prova, e em computação científica, para melhorar solucionadores de EDPs e métodos numéricos.</span> <span class="s" data-s="b12-p0-s4">A principal conclusão é que a descoberta científica impulsionada por IA não precisa necessariamente de modelos frontais ou grandes orçamentos de computação; enxames de pequenos agentes latentes podem tornar esse tipo de busca acessível e amplamente disponível.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Agentes latentes raciocinam sem gerar texto, trocando apenas KV caches, o que reduz drasticamente o tempo de inferência.</span></li><li><span class="s" data-s="k1">Enxames de agentes exploram o espaço de soluções em paralelo, mantendo diversidade via filtragem por distância latente.</span></li><li><span class="s" data-s="k2">O framework atinge scores superiores em 21 problemas científicos em 3-8 minutos, contra 60 minutos de métodos baseados em texto.</span></li><li><span class="s" data-s="k3">Limitações incluem dependência de atenção padrão e crescimento linear da memória com o número de agentes.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.08483" rel="noopener">SwarmEvolve: Latent Agent Swarms for Evolutionary Discovery and Optimization</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.08483" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

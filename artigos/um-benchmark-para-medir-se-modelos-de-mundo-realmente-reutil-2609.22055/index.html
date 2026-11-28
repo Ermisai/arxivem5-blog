@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Um benchmark para medir se modelos de mundo realmente reutilizam conhecimento — ou apenas esquecem rápido — arXiv em 5</title>
+<meta name="description" content="Pesquisadores de Oxford criam tarefas composicionais em manipulação robótica para separar duas habilidades que costumam se confundir: aprender rápido e reaproveitar o que já foi aprendido, mostrando que nenhum método atual resolve ambas ao mesmo tempo.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Um benchmark para medir se modelos de mundo realmente reutilizam conhecimento — ou apenas esquecem rápido">
+<meta property="og:description" content="Pesquisadores de Oxford criam tarefas composicionais em manipulação robótica para separar duas habilidades que costumam se confundir: aprender rápido e reaproveitar o que já foi aprendido, mostrando que nenhum método atual resolve ambas ao mesmo tempo.">
+<meta property="og:image" content="../../assets/papers/2609.22055/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Aprendizado por reforço</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2609.22055" rel="noopener">arXiv:2609.22055</a>
+    </div>
+    <h1><span class="s" data-s="t">Um benchmark para medir se modelos de mundo realmente reutilizam conhecimento — ou apenas esquecem rápido</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Pesquisadores de Oxford criam tarefas composicionais em manipulação robótica para separar duas habilidades que costumam se confundir: aprender rápido e reaproveitar o que já foi aprendido, mostrando que nenhum método atual resolve ambas ao mesmo tempo.</span></p>
+    <p class="byline">
+      <span>Zhou et al.</span>
+      <span>10 min de leitura</span>
+<span>18/09/2026</span>    </p>
+    <div class="listen" data-article="2609.22055" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema: aprender rápido não é o mesmo que reutilizar conhecimento</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Quando um agente de aprendizado por reforço enfrenta uma sequência de tarefas, ele precisa de duas coisas: aprender as novas interações rapidamente e não esquecer o que já domina.</span> <span class="s" data-s="b0-p0-s1">Modelos de mundo — redes que preveem como o ambiente evolui — são candidatos naturais para esse tipo de aprendizado contínuo, porque a dinâmica aprendida persiste entre tarefas.</span> <span class="s" data-s="b0-p0-s2">Mas há um problema: a velocidade com que um modelo se adapta a uma nova tarefa mistura duas habilidades distintas.</span></p><p><span class="s" data-s="b0-p1-s0">A primeira é a capacidade bruta de aprender interações inéditas.</span> <span class="s" data-s="b0-p1-s1">A segunda é a habilidade de reutilizar mecanismos que o modelo já conhece.</span> <span class="s" data-s="b0-p1-s2">Benchmarks existentes de aprendizado contínuo em manipulação robótica medem apenas a adaptação total, sem separar essas duas dimensões.</span> <span class="s" data-s="b0-p1-s3">Toda tarefa nova traz conteúdo inédito junto com objetos e ações que já apareceram antes, e fica impossível saber o quanto da performance vem de reuso e o quanto vem de aprendizado do zero.</span></p><p><span class="s" data-s="b0-p2-s0">O grupo de Haoyu Zhou, Joe Watson, Anson Lei e Ingmar Posner, do Applied Artificial Intelligence Lab da Universidade de Oxford, propõe um benchmark que isola a reutilização.</span> <span class="s" data-s="b0-p2-s1">A ideia central é simples: cada sequência de tarefas termina com uma tarefa composta, que recombina primitivas já vistas.</span> <span class="s" data-s="b0-p2-s2">Se o modelo realmente aprendeu mecanismos reutilizáveis, ele deveria resolver a composição com pouco esforço adicional.</span> <span class="s" data-s="b0-p2-s3">Se ele apenas memorizou cada tarefa isoladamente, a composição será tão difícil quanto uma tarefa completamente nova.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.22055/figure1.webp" alt="O benchmark tem três eixos de composição: ação (mesma percepção, ação diferente), percepção (mesma ação, percepção diferente) e composição completa (ambos mudam). Cada sequência termina com uma tarefa que recombina as primitivas anteriores." loading="lazy">
+          <figcaption>
+            O benchmark tem três eixos de composição: ação (mesma percepção, ação diferente), percepção (mesma ação, percepção diferente) e composição completa (ambos mudam). Cada sequência termina com uma tarefa que recombina as primitivas anteriores.
+            <span class="source">Figura 1 do paper · Zhou et al., arXiv:2609.22055</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">Três eixos de composição: ação, percepção e composição completa</span></h2>
+<p><span class="s" data-s="b2-p0-s0">O benchmark é dividido em três suites de tarefas, cada uma focando um tipo de composição.</span> <span class="s" data-s="b2-p0-s1">Na action-composition suite, as tarefas primitivas compartilham a mesma cena visual, mas envolvem ações diferentes sobre objetos distintos.</span> <span class="s" data-s="b2-p0-s2">A tarefa final combina essas ações em sequência.</span> <span class="s" data-s="b2-p0-s3">Na perception-composition suite, a ação permanece a mesma — por exemplo, empurrar um objeto — mas a aparência visual muda entre as primitivas.</span> <span class="s" data-s="b2-p0-s4">A tarefa composta exige que o modelo execute a ação em um contexto visual novo, mas estruturalmente similar.</span></p><p><span class="s" data-s="b2-p1-s0">A full-composition suite é a mais desafiadora: tanto a percepção quanto a ação mudam entre as primitivas, e a tarefa final recombina ambas.</span> <span class="s" data-s="b2-p1-s1">Essa estrutura permite identificar onde o reuso falha.</span> <span class="s" data-s="b2-p1-s2">Se um modelo vai bem na composição de ação mas mal na de percepção, isso sugere que ele reutiliza melhor políticas motoras do que representações visuais, ou vice-versa.</span></p><p><span class="s" data-s="b2-p2-s0">Cada suite contém seis tarefas: cinco primitivas e uma composta.</span> <span class="s" data-s="b2-p2-s1">O modelo é treinado nas primitivas em sequência, e então avaliado na tarefa composta sem treinamento adicional substancial.</span> <span class="s" data-s="b2-p2-s2">A métrica de forward transfer mede o desempenho na composição; a de backward transfer mede quanto o modelo esqueceu das primitivas anteriores.</span> <span class="s" data-s="b2-p2-s3">O ideal é alto forward transfer — reutilização eficiente — e backward transfer próximo de zero — sem esquecimento.</span></p>        <h2><span class="s" data-s="b3-h">Separando o que deve ser contínuo do que pode ser reinicializado</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Modelos de mundo têm uma estrutura interna que mistura componentes reutilizáveis e específicos de cada tarefa.</span> <span class="s" data-s="b3-p0-s1">O encoder transforma observações em representações latentes; o modelo de dinâmica prevê como o latente evolui dada uma ação; e as cabeças de saída — reward head, value head, policy head — produzem sinais para treinar o agente.</span> <span class="s" data-s="b3-p0-s2">A questão é: o que deve ser aprendido continuamente e o que pode ser reinicializado a cada tarefa?</span></p><p><span class="s" data-s="b3-p1-s0">Os autores propõem uma separação clara.</span> <span class="s" data-s="b3-p1-s1">O modelo de dinâmica — o backbone — é task-agnostic: ele captura como o mundo físico funciona, independentemente da recompensa ou objetivo específico.</span> <span class="s" data-s="b3-p1-s2">Esse componente deve ser treinado continuamente, acumulando conhecimento sobre mecanismos reutilizáveis.</span> <span class="s" data-s="b3-p1-s3">Já as cabeças de saída são task-specific: elas mapeiam o estado latente para sinais de recompensa ou valor que dependem do objetivo atual.</span> <span class="s" data-s="b3-p1-s4">Essas cabeças podem ser reinicializadas a cada nova tarefa sem perda, porque não carregam conhecimento transferível.</span></p><p><span class="s" data-s="b3-p2-s0">Essa separação permite aplicar métodos de aprendizado contínuo apenas ao backbone, onde o esquecimento realmente importa.</span> <span class="s" data-s="b3-p2-s1">Métodos como Experience Replay — que retreina periodicamente em amostras antigas — ou Elastic Weight Consolidation — que penaliza mudanças em pesos importantes para tarefas passadas — são aplicados só à dinâmica.</span> <span class="s" data-s="b3-p2-s2">As cabeças são retreinadas do zero, evitando que restrições de continual learning atrapalhem a adaptação rápida a novos objetivos.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.22055/figure2.webp" alt="A arquitetura separa o backbone agnóstico à tarefa (encoder e modelo de dinâmica) das cabeças específicas (reward, value, policy). Apenas o backbone é treinado continuamente; as cabeças são reinicializadas a cada tarefa." loading="lazy">
+          <figcaption>
+            A arquitetura separa o backbone agnóstico à tarefa (encoder e modelo de dinâmica) das cabeças específicas (reward, value, policy). Apenas o backbone é treinado continuamente; as cabeças são reinicializadas a cada tarefa.
+            <span class="source">Figura 2 do paper · Zhou et al., arXiv:2609.22055</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Modelos avaliados: monolíticos e modulares</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os autores testam dois backbones monolíticos de ponta: DreamerV3 e TD-MPC2.</span> <span class="s" data-s="b5-p0-s1">Ambos são modelos de mundo que aprendem dinâmica latente e treinam políticas por model-based reinforcement learning.</span> <span class="s" data-s="b5-p0-s2">Sobre esses backbones, aplicam quatro métodos de aprendizado contínuo: Fine-tuning simples (sem proteção contra esquecimento), Experience Replay (ER), Elastic Weight Consolidation (EWC) e uma combinação de ambos (ER+EWC).</span></p><p><span class="s" data-s="b5-p1-s0">Além dos monolíticos, avaliam um modelo modular chamado Piecewise World Model (PWM).</span> <span class="s" data-s="b5-p1-s1">Em vez de uma única rede de dinâmica, o PWM usa uma mistura de experts: cada expert é uma rede pequena que captura um mecanismo específico, e um router aprende a combinar os experts conforme a situação.</span> <span class="s" data-s="b5-p1-s2">A ideia é que experts treinados em tarefas anteriores possam ser reutilizados diretamente na composição, sem retreinamento.</span></p><p><span class="s" data-s="b5-p2-s0">Todos os modelos são treinados online, interagindo com o ambiente em simulação.</span> <span class="s" data-s="b5-p2-s1">Cada tarefa recebe um orçamento fixo de passos de ambiente; ao final, o modelo é avaliado em closed-loop — executando a política aprendida — e em open-loop — prevendo trajetórias latentes sem executar ações.</span> <span class="s" data-s="b5-p2-s2">As métricas de forward transfer (FWT) e backward transfer (BWT) resumem reuso e esquecimento, respectivamente.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b6-t">Forward e backward transfer</span></h3>
+          <p><span class="s" data-s="b6-c-s0">Forward transfer mede o retorno na tarefa composta, normalizado pelo retorno de um modelo treinado apenas nessa tarefa.</span> <span class="s" data-s="b6-c-s1">Valores altos indicam reuso eficiente.</span> <span class="s" data-s="b6-c-s2">Backward transfer mede a queda de desempenho nas tarefas primitivas após treinar nas subsequentes.</span> <span class="s" data-s="b6-c-s3">Valores próximos de zero indicam ausência de esquecimento.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b7-h">Resultados: nenhum método resolve reuso e esquecimento ao mesmo tempo</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Os resultados mostram um trade-off claro.</span> <span class="s" data-s="b7-p0-s1">Fine-tuning puro atinge o maior forward transfer — o modelo se adapta rapidamente à composição — mas sofre backward transfer fortemente negativo: ele esquece as primitivas.</span> <span class="s" data-s="b7-p0-s2">Experience Replay inverte o cenário: backward transfer próximo de zero, mas forward transfer baixo.</span> <span class="s" data-s="b7-p0-s3">O modelo retém o que aprendeu, mas não reutiliza bem.</span> <span class="s" data-s="b7-p0-s4">EWC sozinho fica no meio-termo, com desempenho mediano em ambas as métricas.</span> <span class="s" data-s="b7-p0-s5">A combinação ER+EWC melhora ligeiramente, mas não resolve o problema.</span></p><p><span class="s" data-s="b7-p1-s0">O modelo modular PWM equilibra melhor as duas dimensões.</span> <span class="s" data-s="b7-p1-s1">Ele atinge backward transfer próximo de zero — quase sem esquecimento — e forward transfer comparável aos monolíticos com ER+EWC.</span> <span class="s" data-s="b7-p1-s2">Mas há um detalhe crucial: o encoder do PWM foi pré-treinado em demonstrações de todas as tarefas, incluindo a composição, e depois congelado.</span> <span class="s" data-s="b7-p1-s3">Isso significa que o modelo já tinha acesso a features visuais de todas as situações antes do treinamento contínuo começar.</span></p><p><span class="s" data-s="b7-p2-s0">Quando o encoder não é pré-treinado e deve ser aprendido online junto com a dinâmica, o PWM perde a vantagem.</span> <span class="s" data-s="b7-p2-s1">Seu desempenho cai ao nível dos monolíticos, sugerindo que a modularidade sozinha não basta: é preciso que o encoder forneça representações estáveis e suficientemente gerais desde o início.</span> <span class="s" data-s="b7-p2-s2">Sem isso, o router não consegue identificar quais experts reutilizar, e o modelo se comporta como um monolítico fragmentado.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.22055/figure3.webp" alt="Desempenho de aprendizado contínuo nas seis suites de tarefas. PWM (modular) equilibra reuso e esquecimento melhor que monolíticos com métodos convencionais, mas apenas com encoder pré-treinado. Sem pré-treinamento, fica no mesmo nível." loading="lazy">
+          <figcaption>
+            Desempenho de aprendizado contínuo nas seis suites de tarefas. PWM (modular) equilibra reuso e esquecimento melhor que monolíticos com métodos convencionais, mas apenas com encoder pré-treinado. Sem pré-treinamento, fica no mesmo nível.
+            <span class="source">Figura 3 do paper · Zhou et al., arXiv:2609.22055</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">A dificuldade aumenta de ação para percepção</span></h2>
+<p><span class="s" data-s="b9-p0-s0">A composição de ação é a mais fácil: todos os métodos atingem forward transfer razoável, e o esquecimento é moderado.</span> <span class="s" data-s="b9-p0-s1">Isso faz sentido: combinar ações diferentes sobre objetos visualmente similares é uma forma de generalização que modelos de mundo lidam relativamente bem, porque a estrutura visual permanece constante.</span></p><p><span class="s" data-s="b9-p1-s0">A composição de percepção é mais difícil.</span> <span class="s" data-s="b9-p1-s1">O forward transfer cai para todos os métodos, e o backward transfer piora.</span> <span class="s" data-s="b9-p1-s2">Aqui, o modelo precisa reconhecer que a mesma ação — empurrar, por exemplo — funciona em contextos visuais diferentes.</span> <span class="s" data-s="b9-p1-s3">Se o encoder não aprendeu features invariantes à aparência, o modelo trata cada contexto como uma tarefa completamente nova.</span></p><p><span class="s" data-s="b9-p2-s0">A composição completa é a mais desafiadora.</span> <span class="s" data-s="b9-p2-s1">Forward transfer cai ainda mais, e o esquecimento se acentua.</span> <span class="s" data-s="b9-p2-s2">Combinar mudanças de ação e percepção simultaneamente exige que o modelo tenha aprendido representações compositivas — features visuais reutilizáveis e políticas motoras modulares.</span> <span class="s" data-s="b9-p2-s3">Nenhum método avaliado consegue isso sem privilégios de pré-treinamento.</span></p>        <h2><span class="s" data-s="b10-h">Ablação: experts antigos retêm desempenho substancial</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Para entender o que o PWM realmente aprendeu, os autores fazem uma ablação na tarefa composta.</span> <span class="s" data-s="b10-p0-s1">Eles avaliam o modelo ativando apenas os experts treinados nas primitivas (prior experts), apenas os experts novos treinados na composição (new experts), ou todos uniformemente (uniform routing), comparando com o modelo completo que aprendeu o routing ideal.</span></p><p><span class="s" data-s="b10-p1-s0">Os resultados são reveladores.</span> <span class="s" data-s="b10-p1-s1">Ativando apenas os experts antigos, o modelo retém desempenho substancial na composição — tanto em closed-loop return quanto em fidelidade de predição open-loop.</span> <span class="s" data-s="b10-p1-s2">Isso confirma que os experts capturam mecanismos reutilizáveis: eles não foram treinados na composição, mas suas dinâmicas se aplicam a ela.</span> <span class="s" data-s="b10-p1-s3">Ativar apenas os experts novos ou todos uniformemente resulta em desempenho pior, sugerindo que o router aprendido realmente identifica quais experts são relevantes.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.22055/figure5.webp" alt="Ablação mostra que experts treinados apenas nas primitivas retêm desempenho substancial na tarefa composta, confirmando que capturam mecanismos reutilizáveis. Experts novos sozinhos ou routing uniforme performam pior." loading="lazy">
+          <figcaption>
+            Ablação mostra que experts treinados apenas nas primitivas retêm desempenho substancial na tarefa composta, confirmando que capturam mecanismos reutilizáveis. Experts novos sozinhos ou routing uniforme performam pior.
+            <span class="source">Figura 5 do paper · Zhou et al., arXiv:2609.22055</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b12-h">Limitações: simulação, orçamento fixo e encoders privilegiados</span></h2>
+<p><span class="s" data-s="b12-p0-s0">O benchmark tem limitações claras.</span> <span class="s" data-s="b12-p0-s1">Todos os experimentos são em simulação, porque model-based RL online exige entre 100 mil e 1 milhão de passos de ambiente por tarefa.</span> <span class="s" data-s="b12-p0-s2">Repetir isso em hardware real, para seis suites, múltiplos backbones, métodos e seeds, seria inviável.</span> <span class="s" data-s="b12-p0-s3">Além disso, o protocolo depende de recompensas densas, retornos normalizados por oráculos e resets automáticos — affordances de simulador que não existem no mundo real.</span></p><p><span class="s" data-s="b12-p1-s0">Os autores também não controlam o orçamento de parâmetros ou de computação entre os modelos.</span> <span class="s" data-s="b12-p1-s1">O PWM tem múltiplos experts, cada um pequeno, mas o número total de parâmetros não é igualado aos monolíticos.</span> <span class="s" data-s="b12-p1-s2">Isso dificulta saber se a vantagem do PWM vem da modularidade ou simplesmente de mais capacidade.</span></p><p><span class="s" data-s="b12-p2-s0">A limitação mais importante é o encoder pré-treinado.</span> <span class="s" data-s="b12-p2-s1">O PWM só supera os monolíticos quando o encoder já viu todas as tarefas, incluindo a composição, antes do treinamento contínuo.</span> <span class="s" data-s="b12-p2-s2">Isso é um privilégio forte: o modelo tem acesso a features visuais de situações futuras, algo que não aconteceria em um cenário realista de aprendizado contínuo.</span> <span class="s" data-s="b12-p2-s3">Sem esse privilégio, a modularidade não basta.</span></p><p><span class="s" data-s="b12-p3-s0">Os autores reconhecem essas limitações e apontam que portar o protocolo para hardware depende de backbones pré-treinados offline e detecção aprendida de sucesso, deixando isso para trabalho futuro.</span> <span class="s" data-s="b12-p3-s1">O benchmark, como está, é uma ferramenta de diagnóstico, não uma solução pronta.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b13-t">Encoder pré-treinado: privilégio ou necessidade?</span></h3>
+          <p><span class="s" data-s="b13-c-s0">O PWM só equilibra reuso e esquecimento quando o encoder é pré-treinado em todas as tarefas e congelado.</span> <span class="s" data-s="b13-c-s1">Isso revela que modularidade na dinâmica não basta: é preciso features visuais estáveis e gerais.</span> <span class="s" data-s="b13-c-s2">Encoders pré-treinados em larga escala, como DINOv2, podem ser a saída.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b14-h">O que fica em aberto: combinar experts e features gerais</span></h2>
+<p><span class="s" data-s="b14-p0-s0">Os resultados deixam claro que nenhum método atual resolve aprendizado contínuo composicional em modelos de mundo.</span> <span class="s" data-s="b14-p0-s1">Métodos convencionais trocam reuso por esquecimento ou vice-versa.</span> <span class="s" data-s="b14-p0-s2">Modularidade explícita melhora o equilíbrio, mas depende de encoders privilegiados.</span> <span class="s" data-s="b14-p0-s3">O caminho adiante, segundo os autores, passa por duas direções.</span></p><p><span class="s" data-s="b14-p1-s0">Primeira: aprender a combinar experts de forma mais eficiente.</span> <span class="s" data-s="b14-p1-s1">O router do PWM é treinado junto com os experts, mas talvez seja possível meta-aprender um router que identifique mecanismos reutilizáveis sem retreinamento.</span> <span class="s" data-s="b14-p1-s2">Ou usar atenção sobre experts, permitindo combinações mais flexíveis do que uma mistura ponderada.</span></p><p><span class="s" data-s="b14-p2-s0">Segunda: usar features visuais pré-treinadas em larga escala, como as do DINOv2, que já aparecem em trabalhos recentes como o DINO-WM.</span> <span class="s" data-s="b14-p2-s1">Essas features são treinadas em milhões de imagens naturais e capturam estrutura visual geral, independente de tarefas específicas.</span> <span class="s" data-s="b14-p2-s2">Um backbone totalmente task-agnostic — com encoder pré-treinado congelado e dinâmica modular — pode ser a chave para reutilizar sem esquecer.</span></p><p><span class="s" data-s="b14-p3-s0">O benchmark proposto não resolve o problema, mas o torna mensurável.</span> <span class="s" data-s="b14-p3-s1">Ele separa reuso de velocidade bruta de aprendizado, localiza onde o reuso falha ao longo de ação e percepção, e fornece um protocolo consistente para avaliar modelos de mundo em aprendizado contínuo.</span> <span class="s" data-s="b14-p3-s2">É uma ferramenta de diagnóstico, e os diagnósticos mostram que ainda há muito trabalho pela frente.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Benchmarks anteriores misturavam velocidade de aprendizado e reuso de conhecimento; este separa ambos com tarefas composicionais que recombina primitivas já vistas.</span></li><li><span class="s" data-s="k1">Métodos convencionais de aprendizado contínuo trocam reuso por esquecimento: fine-tuning esquece rápido, experience replay não reutiliza bem.</span></li><li><span class="s" data-s="k2">Modelos modulares equilibram melhor, mas só com encoders pré-treinados em todas as tarefas — um privilégio que não existe em cenários realistas.</span></li><li><span class="s" data-s="k3">Composição de percepção é mais difícil que de ação: modelos precisam de features visuais invariantes, algo que nenhum método atual aprende online de forma robusta.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2609.22055" rel="noopener">Benchmarking World Models for Continual Learning on Compositional Tasks</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2609.22055" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

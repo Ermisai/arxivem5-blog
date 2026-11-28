@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>vid2vid-long: Consistência temporal em tradução de vídeo via correspondências explícitas — arXiv em 5</title>
+<meta name="description" content="Um mecanismo de memória baseado em correspondências de patches que permite a tradução de vídeo para vídeo em tempo real, mantendo consistência de longo alcance sem expandir a janela de contexto do modelo.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vid2vid-long: Consistência temporal em tradução de vídeo via correspondências explícitas">
+<meta property="og:description" content="Um mecanismo de memória baseado em correspondências de patches que permite a tradução de vídeo para vídeo em tempo real, mantendo consistência de longo alcance sem expandir a janela de contexto do modelo.">
+<meta property="og:image" content="../../assets/papers/2611.17298/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Vídeo</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.17298" rel="noopener">arXiv:2611.17298</a>
+    </div>
+    <h1><span class="s" data-s="t">vid2vid-long: Consistência temporal em tradução de vídeo via correspondências explícitas</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um mecanismo de memória baseado em correspondências de patches que permite a tradução de vídeo para vídeo em tempo real, mantendo consistência de longo alcance sem expandir a janela de contexto do modelo.</span></p>
+    <p class="byline">
+      <span>Parmar et al.</span>
+      <span>9 min de leitura</span>
+<span>12/11/2026</span>    </p>
+    <div class="listen" data-article="2611.17298" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O dilema da consistência de longo alcance em tradução de vídeo</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A tradução de vídeo para vídeo (video-to-video) em tempo real é um requisito crítico para aplicações interativas como streaming, jogos e realidade aumentada.</span> <span class="s" data-s="b0-p0-s1">Avanços recentes em modelos de difusão de larga escala, seguidos pela destilação em modelos autoregressivos de poucos passos, permitiram gerar vídeos de alta qualidade a velocidades interativas.</span> <span class="s" data-s="b0-p0-s2">No entanto, a geração autoregressiva depende de um histórico de quadros passados para garantir a continuidade temporal.</span> <span class="s" data-s="b0-p0-s3">O desafio fundamental reside em como manter esse histórico de forma eficiente.</span></p><p><span class="s" data-s="b0-p1-s0">Manter todas as saídas passivas causa um crescimento linear na memória e quadrático no tempo de execução em relação ao comprimento da sequência, o que é proibitivo para aplicações em tempo real.</span> <span class="s" data-s="b0-p1-s1">Para contornar isso, muitos métodos recorrem a uma janela deslizante de comprimento fixo.</span> <span class="s" data-s="b0-p1-s2">Embora isso garanta um custo computacional constante por quadro, ele sacrifica fundamentalmente a consistência de longo alcance: assim que um objeto sai dessa janela, frequentemente após apenas alguns segundos, o modelo &#39;esquece&#39; seu conteúdo.</span></p><p><span class="s" data-s="b0-p2-s0">Trabalhos anteriores tentaram preencher essa lacuna de várias maneiras.</span> <span class="s" data-s="b0-p2-s1">Alguns usam &#39;attention sinks&#39; (pontos de atenção) para reter heuristicamente os quadros iniciais como uma âncora global, mas isso não resolve o problema de conteúdo novo que aparece mais tarde.</span> <span class="s" data-s="b0-p2-s2">Outros utilizam modelos com estados ocultos aprendidos, como Mamba, que comprimem o histórico em gargalos de tamanho fixo, mas frequentemente sacrificam o poder expressivo dos transformers.</span> <span class="s" data-s="b0-p2-s3">Métodos baseados em pose ou representações mundiais explícitas (como nuvens de pontos 3D) lutam para modelar cenas dinâmicas e exigem entradas privilegiadas difíceis de obter.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.17298/figure1.webp" alt="Consistência de longo alcance sem janelas de contexto longas. A tradução autoregressiva padrão esquece o conteúdo quando ele sai da janela de contexto. O método proposto recupera explicitamente saídas passadas correspondentes quando as entradas se repetem." loading="lazy">
+          <figcaption>
+            Consistência de longo alcance sem janelas de contexto longas. A tradução autoregressiva padrão esquece o conteúdo quando ele sai da janela de contexto. O método proposto recupera explicitamente saídas passadas correspondentes quando as entradas se repetem.
+            <span class="source">Figura 1 do paper · Parmar et al., arXiv:2611.17298</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">A ideia central: usar a entrada como índice de memória</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Este paper introduz o vid2vid-long, um mecanismo de memória baseado em correspondências que permite consistência de longo prazo enquanto preserva o desempenho em tempo real.</span> <span class="s" data-s="b2-p0-s1">A observação fundamental é que a tradução de vídeo para vídeo fornece uma referência cruzada explícita entre quadros: as regiões que correspondem no vídeo de entrada devem corresponder no vídeo de saída.</span></p><p><span class="s" data-s="b2-p1-s0">Em vez de confiar apenas na proximidade temporal (ou seja, apenas nos quadros mais recentes), o método utiliza correspondências explícitas no espaço de entrada para identificar o histórico relevante em qualquer ponto do passado.</span> <span class="s" data-s="b2-p1-s1">Se duas regiões correspondem no vídeo de entrada, suas saídas geradas devem ser idênticas.</span> <span class="s" data-s="b2-p1-s2">O espaço de entrada serve, portanto, como um índice para recuperar conteúdo gerado anteriormente, permitindo que a consistência seja imposta sem acesso a todo o histórico de saídas.</span></p><p><span class="s" data-s="b2-p2-s0">Concretamente, o sistema calcula correspondências em nível de patch (pequenas regiões da imagem) no vídeo de entrada e as usa para indexar uma representação global comprimida das saídas anteriores.</span> <span class="s" data-s="b2-p2-s1">Essa representação cresce apenas quando conteúdo novo aparece, em vez de crescer com o comprimento do vídeo, resultando em um crescimento de memória sub-linear na prática.</span> <span class="s" data-s="b2-p2-s2">A abordagem é complementar a estruturas de destilação autoregressiva existentes.</span></p>        <h2><span class="s" data-s="b3-h">Arquitetura e mecanismo de memória comprimida</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O método se baseia em modelos de fluxo (flow-matching) pré-treinados para tradução de vídeo, especificamente o VACE, que opera no espaço latente de um VAE (Variational Autoencoder).</span> <span class="s" data-s="b3-p0-s1">O bloco de entrada de pixels é codificado em latentes, que são então particionados em patches não sobrepostos, gerando uma sequência de tokens.</span> <span class="s" data-s="b3-p0-s2">Enquanto modelos bidirecionais geram o vídeo inteiro de uma vez, o que é computacionalmente caro, métodos autoregressivos geram blocos temporais condicionalmente nos blocos anteriores.</span></p><p><span class="s" data-s="b3-p1-s0">Para habilitar a geração de longo alcance, o vid2vid-long substitui a atenção causal padrão por um mecanismo de memória explícita.</span> <span class="s" data-s="b3-p1-s1">Em vez de manter um cache KV (Key-Value) causal de tamanho fixo, o sistema calcula a similaridade entre os patches da entrada atual e os patches de entrada já vistos.</span> <span class="s" data-s="b3-p1-s2">Os patches de entrada atuam como chaves (keys) e os patches de saída correspondentes gerados anteriormente atuam como valores (values).</span></p><p><span class="s" data-s="b3-p2-s0">Quando o modelo processa um novo bloco de quadros, ele recupera os patches de saída anteriores cujas entradas correspondentes são mais similares à entrada atual.</span> <span class="s" data-s="b3-p2-s1">Isso permite que o modelo &#39;lembre&#39; de como gerou uma cena específica no passado, mesmo que essa cena tenha ocorrido há muito tempo, desde que a entrada atual corresponda visualmente à entrada daquele momento.</span> <span class="s" data-s="b3-p2-s2">A memória é preenchida com pares de correspondência entrada-saída das gerações anteriores.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.17298/figure2.webp" alt="Tradução de vídeo baseada em correspondências. A memória é preenchida com pares de correspondência entrada-saída. Para traduzir consistentemente o próximo bloco, o sistema recupera os patches de saída cuja entrada correspondente é mais similar à entrada atual." loading="lazy">
+          <figcaption>
+            Tradução de vídeo baseada em correspondências. A memória é preenchida com pares de correspondência entrada-saída. Para traduzir consistentemente o próximo bloco, o sistema recupera os patches de saída cuja entrada correspondente é mais similar à entrada atual.
+            <span class="source">Figura 2 do paper · Parmar et al., arXiv:2611.17298</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Integração com o Transformer via atenção cruzada</span></h2>
+<p><span class="s" data-s="b5-p0-s0">A recuperação de patches históricos não é apenas armazenada; ela é usada para condicionar o modelo de geração.</span> <span class="s" data-s="b5-p0-s1">Para isso, os autores inserem uma nova camada de atenção cruzada (cross-attention) no transformer padrão.</span> <span class="s" data-s="b5-p0-s2">Essa camada de &#39;correspondência cross-attention&#39; é colocada entre as camadas de autoatenção (self-attention) e a atenção cruzada de texto (text cross-attention), se houver.</span></p><p><span class="s" data-s="b5-p1-s0">Nesta nova camada, os tokens do quadro atual atuam como queries (consultas).</span> <span class="s" data-s="b5-p1-s1">As chaves e valores são os patches de saída recuperados da memória histórica.</span> <span class="s" data-s="b5-p1-s2">Isso permite que cada token no quadro atual &#39;olhe&#39; para os patches relevantes do passado que correspondem às suas características visuais na entrada.</span> <span class="s" data-s="b5-p1-s3">Essa integração é leve e pode ser aplicada a diferentes backbones autoregressivos, como Self-Forcing, LongLive e Rolling Forcing.</span></p><p><span class="s" data-s="b5-p2-s0">A estratégia de treinamento utiliza o AdamW com um tamanho de lote de 64.</span> <span class="s" data-s="b5-p2-s1">Para a recuperação de correspondências, são usados os recursos latentes do codificador VAE como chaves.</span> <span class="s" data-s="b5-p2-s2">O sistema recupera k=3 vizinhos mais próximos, com um limiar de história de τh = 0.75 e um limiar de memória de τm = 0.75.</span> <span class="s" data-s="b5-p2-s3">Esses limiares ajudam a filtrar recuperações irrelevantes ou de baixa qualidade, garantindo que apenas correspondências fortes sejam utilizadas para condicionar a geração.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.17298/figure6.webp" alt="Arquitetura da rede. Uma camada de atenção cruzada de correspondência é inserida entre a autoatenção e a atenção cruzada de texto. Isso permite que os tokens recuperem explicitamente patches históricos relevantes." loading="lazy">
+          <figcaption>
+            Arquitetura da rede. Uma camada de atenção cruzada de correspondência é inserida entre a autoatenção e a atenção cruzada de texto. Isso permite que os tokens recuperem explicitamente patches históricos relevantes.
+            <span class="source">Figura 6 do paper · Parmar et al., arXiv:2611.17298</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Avaliação e resultados quantitativos</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Os autores avaliaram o método na tradução de profundidade para vídeo, focando na consistência de longo alcance em vídeos longos.</span> <span class="s" data-s="b7-p0-s1">O mecanismo é agnóstico à modalidade de condicionamento, mas os experimentos principais usam o VACE 1.3B como modelo estudante e o VACE 14B como professor.</span> <span class="s" data-s="b7-p0-s2">A avaliação foi realizada em dois benchmarks: o VACE-Benchmark, que contém sequências de vídeo do mundo real diversas, e o DL3DV, um conjunto de dados 3D com poses de câmera calibradas que permite avaliar revisitas controladas de viewpoints.</span></p><p><span class="s" data-s="b7-p1-s0">A qualidade do vídeo foi medida usando métricas V-Bench, incluindo consistência do sujeito, consistência do fundo, flickering temporal, suavidade de movimento, qualidade estética e qualidade de imagem.</span> <span class="s" data-s="b7-p1-s1">A consistência de longo alcance foi avaliada usando protocolos de revisita controlada.</span> <span class="s" data-s="b7-p1-s2">No VACE-Benchmark, sequências longas sintéticas foram construídas intercalando dois clipes distintos (A→B→A→B), e a consistência foi medida entre as ocorrências repetidas do mesmo clipe usando métricas de similaridade como LPIPS, DreamSim e CLIP.</span></p><p><span class="s" data-s="b7-p2-s0">No DL3DV, modelos de 3D Gaussian Splatting foram usados para renderizar revisitas exatas de pose, medindo a consistência entre a primeira visita e a revisita.</span> <span class="s" data-s="b7-p2-s1">Os resultados mostraram que a incorporação do mecanismo de correspondência melhorou substancialmente a consistência de longo alcance em todos os cenários testados, enquanto mantinha a velocidade de inferência em tempo real e a alta qualidade visual.</span> <span class="s" data-s="b7-p2-s2">O método superou abordagens anteriores que dependiam apenas de janelas deslizantes ou attention sinks.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b8-t">Superação de métodos alternativos</span></h3>
+          <p><span class="s" data-s="b8-c-s0">O vid2vid-long supera estratégias como aumentar o cache KV, reter keyframes, pooling global, attention sinks e FramePack.</span> <span class="s" data-s="b8-c-s1">Enquanto essas abordagens sofrem com perda de detalhes ou degradação de qualidade sob revisitas de longo alcance, o método de correspondência permite reutilização precisa de conteúdo histórico.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b9-h">Comparação com mecanismos alternativos de memória</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Um ponto crucial do paper é a comparação com outras estratégias para estender o contexto temporal além da janela deslizante padrão.</span> <span class="s" data-s="b9-p0-s1">Os autores testaram aumentar o tamanho do cache KV, reter cada N-ésimo keyframe, manter um cache KV global com média-pooling, usar Attention Sinks e empregar compressão via FramePack.</span></p><p><span class="s" data-s="b9-p1-s0">Enquanto essas abordagens fornecem melhorias parciais, elas sofrem com perda de detalhes ou degradação de qualidade sob revisitas de longo alcance.</span> <span class="s" data-s="b9-p1-s1">Por exemplo, o aumento do cache KV aumenta a latência e o uso de memória, violando o requisito de tempo real.</span> <span class="s" data-s="b9-p1-s2">O pooling global perde detalhes espaciais finos.</span> <span class="s" data-s="b9-p1-s3">O método proposto, baseado em correspondências, permite a reutilização precisa de conteúdo histórico e preserva a consistência sobre horizontes temporais longos sem essas desvantagens significativas.</span></p><p><span class="s" data-s="b9-p2-s0">A tabela 4 ilustra quantitativamente essa superioridade, mostrando que o método recupera com precisão a aparência e a estrutura de objetos que reaparecem no vídeo, enquanto os outros métodos introduzem artefatos ou inconsistências visuais.</span></p>        <h2><span class="s" data-s="b10-h">Limitações e escopo</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Apesar dos resultados promissores, é importante notar o escopo das experiências.</span> <span class="s" data-s="b10-p0-s1">A avaliação foca principalmente em tradução de profundidade para vídeo.</span> <span class="s" data-s="b10-p0-s2">Embora o mecanismo seja descrito como agnóstico à modalidade, a validação extensiva foi feita nesse contexto.</span> <span class="s" data-s="b10-p0-s3">A eficácia em outros tipos de condicionamento, como texto ou controle de pose, pode variar e requer mais investigação.</span></p><p><span class="s" data-s="b10-p1-s0">Além disso, o método depende da qualidade das correspondências calculadas no espaço latente.</span> <span class="s" data-s="b10-p1-s1">Se a entrada for extremamente ruidosa ou se houver mudanças drásticas de iluminação ou oclusão que não sejam refletidas de forma clara nos latentes do VAE, a recuperação de patches históricos pode ser imprecisa.</span> <span class="s" data-s="b10-p1-s2">O uso de limiares (τh e τm) ajuda a mitigar isso, mas introduz hiperparâmetros que precisam ser ajustados.</span></p><p><span class="s" data-s="b10-p2-s0">Outra consideração é a complexidade de implementação.</span> <span class="s" data-s="b10-p2-s1">A inserção de uma camada de atenção cruzada adicional e o processo de recuperação de vizinhos mais próximos adicionam alguma sobrecarga computacional em relação a um modelo autoregressivo puro com janela fixa.</span> <span class="s" data-s="b10-p2-s2">No entanto, os autores afirmam que essa sobrecarga é mínima e não compromete a inferência em tempo real, especialmente quando comparada aos custos de manter janelas de contexto muito maiores.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b11-t">Por que isso importa para desenvolvedores?</span></h3>
+          <p><span class="s" data-s="b11-c-s0">Para quem constrói aplicações de vídeo interativo, o vid2vid-long oferece um caminho viável para gerar vídeos longos sem a explosão de memória dos transformers bidirecionais ou a perda de consistência dos modelos autoregressivos com janela curta.</span> <span class="s" data-s="b11-c-s1">A ideia de usar a entrada como índice de memória é elegante e computacionalmente eficiente.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b12-h">Conclusão</span></h2>
+<p><span class="s" data-s="b12-p0-s0">O paper apresenta uma solução robusta para um dos problemas mais persistentes na geração de vídeo autoregressiva: a consistência de longo alcance.</span> <span class="s" data-s="b12-p0-s1">Ao explorar a correspondência explícita entre entradas e saídas, o vid2vid-long permite que os modelos &#39;lembrem&#39; de conteúdo passado de forma seletiva e eficiente.</span></p><p><span class="s" data-s="b12-p1-s0">Os resultados mostram melhorias significativas na qualidade visual e consistência temporal em benchmarks padrão, mantendo a velocidade necessária para aplicações interativas.</span> <span class="s" data-s="b12-p1-s1">A abordagem é modular e pode ser integrada a diversos backbones existentes, tornando-a uma contribuição prática para a comunidade de visão computacional e geração de conteúdo.</span></p><p><span class="s" data-s="b12-p2-s0">Embora não seja uma revolução teórica, a simplicidade e eficácia do mecanismo de correspondências o tornam uma ferramenta valiosa para qualquer pipeline de tradução de vídeo que precise lidar com sequências longas.</span> <span class="s" data-s="b12-p2-s1">O trabalho abre caminho para futuras investigações sobre como melhorar a recuperação de correspondências em cenários mais complexos e dinâmicos.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Métodos autoregressivos atuais perdem consistência ao longo do tempo devido a janelas de contexto limitadas.</span></li><li><span class="s" data-s="k1">O vid2vid-long usa a entrada como índice para recuperar saídas anteriores, garantindo que regiões correspondentes sejam geradas de forma idêntica.</span></li><li><span class="s" data-s="k2">A abordagem é agnóstica ao backbone, melhorando modelos como Self-Forcing e LongLive sem sacrificar velocidade.</span></li><li><span class="s" data-s="k3">A memória cresce apenas com conteúdo novo, mantendo o uso de recursos sub-linear na prática.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.17298" rel="noopener">Consistent Video-to-Video Translation via Explicit Correspondences</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.17298" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

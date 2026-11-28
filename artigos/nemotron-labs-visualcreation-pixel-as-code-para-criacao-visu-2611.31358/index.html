@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nemotron-Labs-VisualCreation: Pixel as Code para Criação Visual Agêntica — arXiv em 5</title>
+<meta name="description" content="Um framework da NVIDIA que une geração de imagens raster com código estruturado (SVG, HTML) através de uma interface agêntica, permitindo controle preciso e editabilidade em artefatos visuais complexos.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Nemotron-Labs-VisualCreation: Pixel as Code para Criação Visual Agêntica">
+<meta property="og:description" content="Um framework da NVIDIA que une geração de imagens raster com código estruturado (SVG, HTML) através de uma interface agêntica, permitindo controle preciso e editabilidade em artefatos visuais complexos.">
+<meta property="og:image" content="../../assets/papers/2611.31358/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Imagem</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.31358" rel="noopener">arXiv:2611.31358</a>
+    </div>
+    <h1><span class="s" data-s="t">Nemotron-Labs-VisualCreation: Pixel as Code para Criação Visual Agêntica</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um framework da NVIDIA que une geração de imagens raster com código estruturado (SVG, HTML) através de uma interface agêntica, permitindo controle preciso e editabilidade em artefatos visuais complexos.</span></p>
+    <p class="byline">
+      <span>Chen et al.</span>
+      <span>6 min de leitura</span>
+<span>23/11/2026</span>    </p>
+    <div class="listen" data-article="2611.31358" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=YsCfyU7ivLQ" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Desafio da Criação Visual Híbrida</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A criação visual moderna não se limita à geração de imagens fotorealistas.</span> <span class="s" data-s="b0-p0-s1">Quando um usuário solicita um infográfico, um site ou um slide, ele exige tanto expressão artística quanto controle preciso sobre texto, layout e estrutura.</span> <span class="s" data-s="b0-p0-s2">Sistemas tradicionais de geração de imagens (diffusion models ou autoregressivos) produzem pixels brutos, o que torna difícil editar texto específico ou alterar a geometria de um gráfico sem regenerar tudo do zero.</span></p><p><span class="s" data-s="b0-p1-s0">Este paper introduz o Nemotron-Labs-VisualCreation, um framework agêntico que tenta resolver essa lacuna.</span> <span class="s" data-s="b0-p1-s1">A ideia central é tratar tanto imagens raster quanto artefatos estruturados (como SVG, HTML/CSS e código de plotagem) como representações que podem ser geradas, renderizadas e inspecionadas por um agente.</span> <span class="s" data-s="b0-p1-s2">Isso permite que o sistema não apenas crie uma imagem, mas entregue um arquivo editável quando necessário.</span></p><p><span class="s" data-s="b0-p2-s0">O framework é construído sobre a premissa de que a síntese expressiva e o controle explícito devem ser coordenados através de uma interface comum.</span> <span class="s" data-s="b0-p2-s1">Em vez de escolher entre um gerador de imagens e um gerador de código, o sistema integra ambos, permitindo artefatos híbridos que combinam ativos visuais gerados com representações explícitas editáveis.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.31358/figure1.webp" alt="Ilustração do conceito Pixel as Code: tokens visuais aprendidos para raster e programas explícitos para artefatos editáveis, conectados por renderizadores que permitem inspeção visual pelo agente." loading="lazy">
+          <figcaption>
+            Ilustração do conceito Pixel as Code: tokens visuais aprendidos para raster e programas explícitos para artefatos editáveis, conectados por renderizadores que permitem inspeção visual pelo agente.
+            <span class="source">Figura 1 do paper · Chen et al., arXiv:2611.31358</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">A Interface Pixel as Code</span></h2>
+<p><span class="s" data-s="b2-p0-s0">O núcleo do framework é a interface &#39;Pixel as Code&#39;.</span> <span class="s" data-s="b2-p0-s1">Ela define um fluxo comum: gerar uma representação, renderizá-la para saída visual e inspecionar o resultado.</span> <span class="s" data-s="b2-p0-s2">Para imagens raster, a representação consiste em tokens visuais discretos aprendidos, que são decodificados em pixels.</span> <span class="s" data-s="b2-p0-s3">Para artefatos estruturados, a representação são programas explícitos (código) que expõem conteúdo, geometria e layout.</span></p><p><span class="s" data-s="b2-p1-s0">Essa distinção é crucial.</span> <span class="s" data-s="b2-p1-s1">Tokens visuais capturam a aparência raster, enquanto programas explícitos permitem edição direta através de seus backends de renderização.</span> <span class="s" data-s="b2-p1-s2">Artefatos híbridos combinam as duas abordagens, como embutir uma imagem gerada dentro de uma página HTML editável.</span> <span class="s" data-s="b2-p1-s3">Isso resolve o problema de controle fino: o texto e a estrutura são mantidos como código, enquanto o fundo ou elementos gráficos complexos são gerados como pixels.</span></p><p><span class="s" data-s="b2-p2-s0">O sistema utiliza um &#39;harness&#39; nativo da Nemotron que coordena o planejamento semântico, a geração de candidatos raster e a seleção visual.</span> <span class="s" data-s="b2-p2-s1">Para solicitações estruturadas e híbridas, o sistema estabelece um &#39;contrato de layout&#39; e produz representações editáveis.</span> <span class="s" data-s="b2-p2-s2">Em artefatos baseados em navegador, auditorias visuais atribuem falhas a &#39;proprietários causais&#39;, permitindo reparos direcionados e seleção de checkpoints.</span></p>        <h2><span class="s" data-s="b3-h">Componentes do Sistema</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Para suportar essa interface, os autores desenvolveram três componentes principais.</span> <span class="s" data-s="b3-p0-s1">Primeiro, o Nemotron-Labs-Image-Tokenizer, que converte imagens em tokens visuais discretos.</span> <span class="s" data-s="b3-p0-s2">Segundo, o Nemotron-Labs-Image-30B-A3B, um gerador raster autoregressivo nativo da Nemotron.</span> <span class="s" data-s="b3-p0-s3">Terceiro, a família de modelos Nemotron-Labs-VisionCode, especializada na geração de código estruturado e marcação.</span></p><p><span class="s" data-s="b3-p1-s0">O tokenizador é treinado para representar raster images de forma eficiente.</span> <span class="s" data-s="b3-p1-s1">O gerador de imagem é adaptado a partir do Nemotron 3 Nano através de mid-training multietapa e reforço (reinforcement learning).</span> <span class="s" data-s="b3-p1-s2">Os modelos VisionCode são variantes especializadas para gerar SVG, HTML e outros formatos de código.</span> <span class="s" data-s="b3-p1-s3">Essa separação permite que cada componente seja otimizado para sua tarefa específica, mas coordenados pelo mesmo agente.</span></p>        <h2><span class="s" data-s="b4-h">Qualidade e Eficiência do Tokenizador</span></h2>
+<p><span class="s" data-s="b4-p0-s0">A avaliação começa com a qualidade de reconstrução do tokenizador.</span> <span class="s" data-s="b4-p0-s1">Eles testaram em aproximadamente 178K imagens de seis domínios visuais: fotografias naturais, documentos, gráficos, capturas de tela de UI, rostos e imagens geradas ou editadas.</span> <span class="s" data-s="b4-p0-s2">O metric principal foi o PSNR (Peak Signal-to-Noise Ratio), além de SSIM, LPIPS e GMSD.</span></p><p><span class="s" data-s="b4-p1-s0">Os resultados mostram uma melhoria significativa em relação ao Emu3.5 IBQ.</span> <span class="s" data-s="b4-p1-s1">O PSNR aumentou de 26.08 dB para 29.57 dB, uma melhoria de 3.49 dB.</span> <span class="s" data-s="b4-p1-s2">O SSIM subiu de 0.781 para 0.834, enquanto o LPIPS diminuiu em aproximadamente 17% e o GMSD em 32%.</span> <span class="s" data-s="b4-p1-s3">Todas as seis domínios mostraram melhorias nessas métricas de fidelidade, com ganhos de PSNR de 4.63–5.35 dB em documentos, gráficos e capturas de tela de UI.</span> <span class="s" data-s="b4-p1-s4">Isso é particularmente relevante para renderizadores usados em artefatos que contêm texto e layouts estruturados.</span></p><p><span class="s" data-s="b4-p2-s0">Além da fidelidade, a eficiência é crítica.</span> <span class="s" data-s="b4-p2-s1">Em testes em GPUs NVIDIA A100 com batch size 1, o novo tokenizador codifica uma imagem em 41.30 ms e a decodifica em 37.10 ms.</span> <span class="s" data-s="b4-p2-s2">Em comparação, o Emu3.5 leva 294.53 ms para codificar e 405.46 ms para decodificar.</span> <span class="s" data-s="b4-p2-s3">Isso resulta em speedups de 7.13x na codificação e 10.93x na decodificação.</span> <span class="s" data-s="b4-p2-s4">Essa eficiência permite que o agente itere rapidamente entre geração e inspeção visual.</span></p>        <h2><span class="s" data-s="b5-h">Geração de Código Visual</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os modelos Nemotron-Labs-VisionCode foram avaliados em tarefas de geração de código visual, incluindo Chart2Code, MMSVG (image-to-SVG e text-to-SVG), Design2Code e Image2Struct.</span> <span class="s" data-s="b5-p0-s1">Um dos modelos VisionCode (120B) superou o Kimi K3.1 Pro no agregado equilibrado entre tarefas, usando menos parâmetros totais e ativos.</span></p><p><span class="s" data-s="b5-p1-s0">Essa capacidade de gerar código editável é o que diferencia o framework de geradores de imagem puramente raster.</span> <span class="s" data-s="b5-p1-s1">Ao produzir SVG ou HTML, o sistema entrega não apenas uma imagem, mas um arquivo que pode ser aberto e modificado em editores de código ou navegadores.</span> <span class="s" data-s="b5-p1-s2">Isso é essencial para aplicações profissionais onde a editabilidade é tão importante quanto a qualidade visual.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.31358/figure4.webp" alt="Exemplos de artefatos editáveis criados pelo sistema: páginas web, interfaces móveis, ícones vetoriais, slides, figuras científicas e gráficos, combinando ativos visuais gerados com representações explícitas." loading="lazy">
+          <figcaption>
+            Exemplos de artefatos editáveis criados pelo sistema: páginas web, interfaces móveis, ícones vetoriais, slides, figuras científicas e gráficos, combinando ativos visuais gerados com representações explícitas.
+            <span class="source">Figura 4 do paper · Chen et al., arXiv:2611.31358</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Avaliação do Sistema Agêntico</span></h2>
+<p><span class="s" data-s="b7-p0-s0">A avaliação de sistema mede o desempenho do framework completo, incluindo o agente que coordena a geração e o reparo.</span> <span class="s" data-s="b7-p0-s1">No benchmark GenEval2 Soft-TIFA GM, a configuração nativa da Nemotron elevou a pontuação de 31.71 para 52.56, usando o mesmo gerador raster.</span> <span class="s" data-s="b7-p0-s2">No WISE Verified, a pontuação subiu de 46.30 para 88.60.</span></p><p><span class="s" data-s="b7-p1-s0">Esses ganhos demonstram que a interface agêntica e o reparo direcionado fazem uma diferença significativa.</span> <span class="s" data-s="b7-p1-s1">O agente não apenas gera uma imagem, mas inspeciona o resultado renderizado, identifica falhas (como texto incorreto ou layout quebrado) e aplica reparos específicos.</span> <span class="s" data-s="b7-p1-s2">Isso é especialmente útil para artefatos híbridos, onde componentes podem ser ajustados independentemente.</span></p>        <h2><span class="s" data-s="b8-h">Comparação com Soluções Comerciais</span></h2>
+<p><span class="s" data-s="b8-p0-s0">O framework foi comparado com soluções comerciais como GPT Image 2 e Nano Banana Pro em benchmarks disponíveis.</span> <span class="s" data-s="b8-p0-s1">Com a melhor configuração, o Nemotron-Labs-VisualCreation alcançou desempenho competitivo em maioria das métricas.</span> <span class="s" data-s="b8-p0-s2">No BizGenEval, que avalia design visual comercial, o sistema mostrou pontuações robustas, embora os resultados do gerador raster standalone não tenham sido reportados isoladamente.</span></p><p><span class="s" data-s="b8-p1-s0">É importante notar que as comparações de sistema medem o workflow completo, enquanto os testes de codificação standalone avaliam as variantes treinadas separadamente do harness Dual Coder.</span> <span class="s" data-s="b8-p1-s1">Isso significa que os ganhos do sistema vêm tanto da qualidade dos modelos base quanto da eficácia da coordenação agêntica.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b9-t">Limitações e Escopo</span></h3>
+          <p><span class="s" data-s="b9-c-s0">O paper não reporta resultados para geração condicionada a texto e imagem simultaneamente, nem para geração multi-referência.</span> <span class="s" data-s="b9-c-s1">As melhorias na qualidade perceptual (MUSIQ, CLIP-IQA) foram ligeiramente inferiores às do Emu3.5, indicando que ganhos em fidelidade de reconstrução não se traduzem necessariamente em qualidade subjetiva superior.</span> <span class="s" data-s="b9-c-s2">Além disso, a avaliação foca em domínios visuais específicos, e generalizações para outras tarefas podem variar.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b10-h">Conclusão</span></h2>
+<p><span class="s" data-s="b10-p0-s0">O Nemotron-Labs-VisualCreation apresenta uma abordagem unificada para criação visual, combinando síntese raster e criação estruturada editável através da interface Pixel as Code.</span> <span class="s" data-s="b10-p0-s1">O tokenizador de imagem melhora a fidelidade de reconstrução e a eficiência de codificação/decodificação, enquanto os modelos VisionCode estabelecem novos estados da arte em geração de código visual.</span></p><p><span class="s" data-s="b10-p1-s0">O framework mostra que a coordenação agêntica, com inspeção visual e reparo direcionado, pode elevar significativamente o desempenho em tarefas complexas de criação visual.</span> <span class="s" data-s="b10-p1-s1">Ao entregar artefatos editáveis, o sistema atende a necessidades profissionais que vão além da geração de imagens estáticas.</span> <span class="s" data-s="b10-p1-s2">Trabalhos futuros podem isolar capacidades individuais do agente e explorar edição condicionada a texto e imagem.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">O framework &#39;Pixel as Code&#39; unifica tokens visuais aprendidos e programas explícitos em uma única interface de geração e renderização.</span></li><li><span class="s" data-s="k1">O tokenizador de imagem melhora a reconstrução PSNR em 3.49 dB sobre o Emu3.5 e é até 10.93x mais rápido na decodificação.</span></li><li><span class="s" data-s="k2">O modelo VisionCode supera o Kimi K3.1 Pro em tarefas de código visual, usando menos parâmetros ativos.</span></li><li><span class="s" data-s="k3">O sistema agêntico permite reparo direcionado e seleção de candidatos baseada em feedback visual renderizado.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.31358" rel="noopener">Nemotron-Labs-VisualCreation: Pixel as Code for Agentic Visual Creation</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.31358" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

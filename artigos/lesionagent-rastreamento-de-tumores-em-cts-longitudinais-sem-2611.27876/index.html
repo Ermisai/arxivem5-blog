@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LesionAgent: Rastreamento de Tumores em CTs Longitudinais sem Treinamento Específico — arXiv em 5</title>
+<meta name="description" content="Um agente LLM que orquestra modelos 3D pré-treinados para avaliar a resposta ao tratamento oncológico em tomografias sequenciais, eliminando a necessidade de fine-tuning e reduzindo erros de progressão falsa.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LesionAgent: Rastreamento de Tumores em CTs Longitudinais sem Treinamento Específico">
+<meta property="og:description" content="Um agente LLM que orquestra modelos 3D pré-treinados para avaliar a resposta ao tratamento oncológico em tomografias sequenciais, eliminando a necessidade de fine-tuning e reduzindo erros de progressão falsa.">
+<meta property="og:image" content="../../assets/papers/2611.27876/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Agentes</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.27876" rel="noopener">arXiv:2611.27876</a>
+    </div>
+    <h1><span class="s" data-s="t">LesionAgent: Rastreamento de Tumores em CTs Longitudinais sem Treinamento Específico</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um agente LLM que orquestra modelos 3D pré-treinados para avaliar a resposta ao tratamento oncológico em tomografias sequenciais, eliminando a necessidade de fine-tuning e reduzindo erros de progressão falsa.</span></p>
+    <p class="byline">
+      <span>Rokuss et al.</span>
+      <span>6 min de leitura</span>
+<span>20/11/2026</span>    </p>
+    <div class="listen" data-article="2611.27876" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=y2sD_7w_ptc" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Leitura Longitudinal</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A gestão do câncer depende criticamente da avaliação periódica da resposta ao tratamento.</span> <span class="s" data-s="b0-p0-s1">A cada poucos meses, tomografias computadorizadas (CTs) são realizadas para determinar se a doença está respondendo, estável ou progredindo.</span> <span class="s" data-s="b0-p0-s2">Essa decisão ditona continuidade, modificação ou troca da terapia.</span> <span class="s" data-s="b0-p0-s3">No entanto, a leitura clínica é manual, lenta e sujeita a variabilidade interobservador.</span> <span class="s" data-s="b0-p0-s4">Dois radiologistas concordam nos mesmos lesões-alvo em apenas 41% dos pacientes e frequentemente discordam sobre a resposta final.</span></p><p><span class="s" data-s="b0-p1-s0">Os modelos de fundação 3D atuais resolvem etapas perceptivas isoladas: detecção, segmentação, registro e rastreamento.</span> <span class="s" data-s="b0-p1-s1">Contudo, nenhum deles executa a avaliação completa de resposta.</span> <span class="s" data-s="b0-p1-s2">Isso exige composição de modelos, captura de falhas e decisões lógicas que nenhum modelo é treinado para fazer.</span> <span class="s" data-s="b0-p1-s3">Aprender isso de ponta a ponta exigiria anotações longitudinais em escala, que não existem para a maioria dos cânceres.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.27876/figure1.webp" alt="Fluxo clínico e arquitetura do LesionAgent. O agente avalia a resposta ao tratamento ao longo do tempo, interpretando múltiplos CTs e aplicando regras clínicas rigorosas, sem treinamento específico." loading="lazy">
+          <figcaption>
+            Fluxo clínico e arquitetura do LesionAgent. O agente avalia a resposta ao tratamento ao longo do tempo, interpretando múltiplos CTs e aplicando regras clínicas rigorosas, sem treinamento específico.
+            <span class="source">Figura 1 do paper · Rokuss et al., arXiv:2611.27876</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">A Abordagem Agêntica</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Os autores propõem o LesionAgent, um agente baseado em LLM que realiza a leitura end-to-end sem treinamento específico para a tarefa.</span> <span class="s" data-s="b2-p0-s1">Em vez de treinar um modelo único, o agente opera modelos 3D congelados como ferramentas.</span> <span class="s" data-s="b2-p0-s2">Ele atua no espaço 3D através de vistas rotuladas com coordenadas, mantém um registro de cada lesão em todas as visitas e verifica cada saída do modelo antes de aceitá-la.</span></p><p><span class="s" data-s="b2-p1-s0">O pipeline começa na linha de base (day 0), onde um modelo detectável por texto propõe candidatos a lesões.</span> <span class="s" data-s="b2-p1-s1">O agente aceita ou rejeita cada um em vistas renderizadas.</span> <span class="s" data-s="b2-p1-s2">As lesões aceitas entram em um registro que mantém a máscara em cada visita.</span> <span class="s" data-s="b2-p1-s3">Em cada follow-up, o registro leva as lesões para o novo scan, onde um modelo longitudinal as segmenta.</span> <span class="s" data-s="b2-p1-s4">Se nada for encontrado, o agente inspecciona a posição registrada e registra a lesão como ausente.</span></p>        <h2><span class="s" data-s="b3-h">Detalhes do Pipeline</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O diferencial do LesionAgent está na verificação em loop.</span> <span class="s" data-s="b3-p0-s1">O agente não confia cegamente nas máscaras dos modelos.</span> <span class="s" data-s="b3-p0-s2">Ele usa renderizações rotuladas com coordenadas de voxel para que o LLM possa converter uma posição vista em uma chamada de ferramenta 3D, como um clique para ressegmentar uma lesão que foi perdida.</span> <span class="s" data-s="b3-p0-s3">Isso captura falhas de percepção que poderiam inverter a resposta clínica.</span></p><p><span class="s" data-s="b3-p1-s0">Outro componente crucial é o motor de diretriz determinístico.</span> <span class="s" data-s="b3-p1-s1">O LLM nunca calcula números ou categorias de resposta.</span> <span class="s" data-s="b3-p1-s2">Ele delega a medição das lesões nas máscaras e a aplicação das regras RECIST (Response Evaluation Criteria in Solid Tumors) a um motor externo.</span> <span class="s" data-s="b3-p1-s3">Isso elimina a alucinação numérica, um risco comum em LLMs, e garante que a avaliação seja baseada estritamente nas normas clínicas.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.27876/figure2.webp" alt="Pipeline de 5 etapas do LesionAgent: detectar, verificar, rastrear, medir e avaliar. O LLM chama modelos 3D congelados, verifica saídas em vistas rotuladas e usa um motor determinístico para aplicar regras RECIST." loading="lazy">
+          <figcaption>
+            Pipeline de 5 etapas do LesionAgent: detectar, verificar, rastrear, medir e avaliar. O LLM chama modelos 3D congelados, verifica saídas em vistas rotuladas e usa um motor determinístico para aplicar regras RECIST.
+            <span class="source">Figura 2 do paper · Rokuss et al., arXiv:2611.27876</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">A Importância da Arquitetura (Harness)</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Um dos achados mais significativos do paper é que a arquitetura do agente, e não a qualidade do LLM base, é o fator determinante.</span> <span class="s" data-s="b5-p0-s1">Para demonstrar isso, os autores compararam o LesionAgent com o Claude Code, que tem acesso a um shell e pode escrever e executar código Python arbitrário, mas não possui a lógica estruturada do agente.</span></p><p><span class="s" data-s="b5-p1-s0">Com os mesmos modelos 3D e o mesmo LLM (Claude Opus 5.5), o Claude Code alcançou um F1 de detecção de 41%, enquanto o LesionAgent alcançou 78%.</span> <span class="s" data-s="b5-p1-s1">Para modelos open-source, como o Qwen3.8-27B, a diferença foi ainda mais dramática: o modelo básico atingiu 6% de F1, enquanto o LesionAgent elevou esse número para 73%.</span> <span class="s" data-s="b5-p1-s2">Isso prova que a orquestração rigorosa, a verificação em loop e o motor determinístico são essenciais para tarefas clínicas complexas.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b6-t">Impacto da Arquitetura</span></h3>
+          <p><span class="s" data-s="b6-c-s0">O LesionAgent mostra que a estrutura do agente é mais importante que a capacidade do modelo base.</span> <span class="s" data-s="b6-c-s1">Com a mesma infraestrutura de modelos 3D, a arquitetura do LesionAgent elevou o F1 de detecção de 6% (Qwen3.8) para 73%, e de 41% (Claude Code) para 78%.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b7-h">Resultados em Conjuntos de Dados Públicos</span></h2>
+<p><span class="s" data-s="b7-p0-s0">A avaliação foi realizada em quatro conjuntos de dados longitudinais públicos: HCUCH, TumorMap-Lung, PanTrack e NCI-MATCH.</span> <span class="s" data-s="b7-p0-s1">O LesionAgent foi avaliado em configurações interativas (com um clique por lesão de referência) e automáticas (apenas imagens).</span> <span class="s" data-s="b7-p0-s2">Em todas as métricas, incluindo F1 de detecção, precisão de rastreamento (Track), erro de eixo longo (LD) e precisão de resposta (Resp), o LesionAgent superou ou igualou os melhores métodos automáticos e interativos.</span></p><p><span class="s" data-s="b7-p1-s0">No conjunto HCUCH, o LesionAgent (Opus 5.5) alcançou 78% de F1 e 95% de precisão de resposta na configuração automática.</span> <span class="s" data-s="b7-p1-s1">No TumorMap, atingiu 62% de F1 e 79% de precisão de resposta.</span> <span class="s" data-s="b7-p1-s2">Esses resultados foram obtidos sem treinamento específico no DeepLesion, um benchmark comum para rastreamento de lesões.</span> <span class="s" data-s="b7-p1-s3">O LesionAgent recuperou 89,0% das lesões do DeepLesion, superando rastreadores treinados especificamente nesse benchmark (87,4%).</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.27876/table2.webp" alt="Avaliação end-to-end do LesionAgent. O agente supera métodos automáticos e interativos em múltiplos conjuntos de dados, com destaque para a precisão de resposta (Resp) e F1 de detecção (F1)." loading="lazy">
+          <figcaption>
+            Avaliação end-to-end do LesionAgent. O agente supera métodos automáticos e interativos em múltiplos conjuntos de dados, com destaque para a precisão de resposta (Resp) e F1 de detecção (F1).
+            <span class="source">Tabela 2 do paper · Rokuss et al., arXiv:2611.27876</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Validação Clínica e Comparação com Radiologistas</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Além dos benchmarks públicos, o LesionAgent foi testado em CTs de follow-up clínico.</span> <span class="s" data-s="b9-p0-s1">O sistema concordou com a resposta dos radiologistas em 20 dos 23 follow-ups, incluindo todas as mudanças na resposta (continuar, mudar ou interromper terapia).</span> <span class="s" data-s="b9-p0-s2">Isso demonstra a robustez do agente em cenários reais, onde as variações anatômicas e de contraste são mais complexas.</span></p><p><span class="s" data-s="b9-p1-s0">Em comparação com pipelines automáticos que encadeiam modelos fixos, o LesionAgent reduziu drasticamente os falsos positivos de progressão.</span> <span class="s" data-s="b9-p1-s1">Onde um pipeline fixo chamava progressão em 33 dos 56 follow-ups, o LesionAgent fez isso apenas duas vezes.</span> <span class="s" data-s="b9-p1-s2">Isso é crucial, pois falsos positivos podem levar à interrupção prematura de terapias eficazes.</span></p>        <h2><span class="s" data-s="b10-h">Limitações e Escopo</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Apesar dos resultados promissores, o paper reconhece limitações.</span> <span class="s" data-s="b10-p0-s1">O LesionAgent depende da qualidade dos modelos 3D congelados usados como ferramentas.</span> <span class="s" data-s="b10-p0-s2">Se esses modelos falharem consistentemente em certos tipos de tecido ou lesões, o agente pode não ser capaz de corrigir o erro, mesmo com verificação em loop.</span> <span class="s" data-s="b10-p0-s3">Além disso, a abordagem requer múltiplas chamadas de API e processamento computacional, o que pode impactar a latência em tempo real.</span></p><p><span class="s" data-s="b10-p1-s0">O estudo focou em cânceres sólidos avaliados pelo RECIST 1.1.</span> <span class="s" data-s="b10-p1-s1">A generalização para outros tipos de câncer ou critérios de avaliação diferentes requereria a substituição do motor determinístico, mas a arquitetura do agente permaneceria válida.</span> <span class="s" data-s="b10-p1-s2">Também não houve treinamento em DeepLesion, o que limita a comparação direta com modelos treinados especificamente para esse benchmark, embora o LesionAgent tenha superado a maioria deles.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b11-t">Falsos Positivos Reduzidos</span></h3>
+          <p><span class="s" data-s="b11-c-s0">O LesionAgent reduziu drasticamente os falsos positivos de progressão.</span> <span class="s" data-s="b11-c-s1">Onde pipelines fixos erraram em 33 de 56 follow-ups, o agente acertou ou manteve a estabilidade, evitando mudanças de terapia desnecessárias.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b12-h">Conclusão</span></h2>
+<p><span class="s" data-s="b12-p0-s0">LesionAgent demonstra que agentes LLM podem realizar tarefas clínicas complexas e longitudinais sem treinamento específico, desde que orquestrem modelos de fundação de forma rigorosa.</span> <span class="s" data-s="b12-p0-s1">A combinação de verificação em loop, registro persistente de lesões e um motor de diretriz determinístico permite que o agente supere métodos automatizados e até agentes de código livre.</span></p><p><span class="s" data-s="b12-p1-s0">O código e a aplicação de leitura napari estão disponíveis no GitHub, permitindo que a comunidade teste e estenda a abordagem.</span> <span class="s" data-s="b12-p1-s1">Este trabalho abre caminho para sistemas de apoio à decisão mais robustos, onde a IA atua como um assistente confiável, verificando e compondo percepções em vez de apenas gerar respostas.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.27876/table3.webp" alt="Ablações no HCUCH. A remoção de componentes do LesionAgent (como verificação ou motor de diretriz) degrada significativamente o desempenho, comprovando a importância da arquitetura completa." loading="lazy">
+          <figcaption>
+            Ablações no HCUCH. A remoção de componentes do LesionAgent (como verificação ou motor de diretriz) degrada significativamente o desempenho, comprovando a importância da arquitetura completa.
+            <span class="source">Tabela 3 do paper · Rokuss et al., arXiv:2611.27876</span>
+          </figcaption>
+        </figure>
+
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">LesionAgent usa um LLM como orquestrador de ferramentas 3D congeladas, sem treinamento específico para a tarefa.</span></li><li><span class="s" data-s="k1">O sistema supera pipelines automáticos e até Claude Code ao isolar a lógica de decisão do modelo base.</span></li><li><span class="s" data-s="k2">Um motor determinístico aplica as regras RECIST, garantindo que números e categorias não sejam alucinados pelo LLM.</span></li><li><span class="s" data-s="k3">A arquitetura (harness) é o fator crítico, elevando a precisão de detecção de 6% para 73% com modelos open-source.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.27876" rel="noopener">LesionAgent: Training-Free Agentic Tumor Tracking and Response Assessment in Longitudinal CT</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.27876" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

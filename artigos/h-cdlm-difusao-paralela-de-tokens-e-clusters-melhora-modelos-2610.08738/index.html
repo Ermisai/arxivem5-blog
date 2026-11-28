@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>H-CDLM: difusão paralela de tokens e clusters melhora modelos de linguagem não-autoregressivos — arXiv em 5</title>
+<meta name="description" content="Pesquisadores da École Polytechnique e Athena RC propõem difundir simultaneamente tokens e agrupamentos semânticos para melhorar modelos de difusão contínua, alcançando ganhos de até 24 pontos em perplexidade generativa com overhead mínimo.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="H-CDLM: difusão paralela de tokens e clusters melhora modelos de linguagem não-autoregressivos">
+<meta property="og:description" content="Pesquisadores da École Polytechnique e Athena RC propõem difundir simultaneamente tokens e agrupamentos semânticos para melhorar modelos de difusão contínua, alcançando ganhos de até 24 pontos em perplexidade generativa com overhead mínimo.">
+<meta property="og:image" content="../../assets/papers/2610.08738/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>LLMs</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.08738" rel="noopener">arXiv:2610.08738</a>
+    </div>
+    <h1><span class="s" data-s="t">H-CDLM: difusão paralela de tokens e clusters melhora modelos de linguagem não-autoregressivos</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Pesquisadores da École Polytechnique e Athena RC propõem difundir simultaneamente tokens e agrupamentos semânticos para melhorar modelos de difusão contínua, alcançando ganhos de até 24 pontos em perplexidade generativa com overhead mínimo.</span></p>
+    <p class="byline">
+      <span>Ollu et al.</span>
+      <span>10 min de leitura</span>
+<span>06/10/2026</span>    </p>
+    <div class="listen" data-article="2610.08738" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=fhbsVZ2w2WA" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema da difusão contínua em texto</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Modelos autoregressivos dominam a geração de linguagem natural porque são simples: preveem o próximo token, da esquerda para a direita.</span> <span class="s" data-s="b0-p0-s1">Mas essa sequencialidade impede paralelização e pode prejudicar tarefas que não seguem ordem estrita.</span> <span class="s" data-s="b0-p0-s2">Modelos de difusão para linguagem (DLMs) prometem geração paralela, removendo ruído de sequências inteiras ao mesmo tempo.</span> <span class="s" data-s="b0-p0-s3">O desafio é que difusão foi pensada para dados contínuos como imagens, não para símbolos discretos como palavras.</span></p><p><span class="s" data-s="b0-p1-s0">Trabalhos recentes fecharam parte dessa lacuna.</span> <span class="s" data-s="b0-p1-s1">Abordagens discretas como MDLM usam máscaras e processos de corrupção adaptados a tokens.</span> <span class="s" data-s="b0-p1-s2">Já formulações contínuas, que representam tokens em espaços vetoriais densos, enfrentam um espaço de design maior: qual representação usar, que tipo de ruído aplicar, como calibrar os schedules.</span> <span class="s" data-s="b0-p1-s3">Trabalhos como CoBit e FLM avançaram ao escolher cuidadosamente representações contínuas de tokens e schedules de ruído adaptativos, mas ainda ficam atrás de autoregressivos em várias métricas.</span></p><p><span class="s" data-s="b0-p2-s0">Este paper propõe H-CDLM (Hierarchical Continuous Diffusion Language Models), um framework que melhora modelos de difusão contínua ao difundir simultaneamente múltiplas modalidades: os tokens originais e representações mais grosseiras desses tokens.</span> <span class="s" data-s="b0-p2-s1">A ideia vem de duas literaturas independentes: difusão conjunta de múltiplas modalidades em imagens (pixels e features DINO) e difusão hierárquica discreta em texto, onde prever categorias semânticas antes dos tokens melhora a qualidade.</span></p>        <h2><span class="s" data-s="b1-h">A intuição: clusters como âncoras semânticas</span></h2>
+<p><span class="s" data-s="b1-p0-s0">A proposta central é simples: além de difundir os tokens, difunda também uma sequência de clusters que agrupa tokens semanticamente similares.</span> <span class="s" data-s="b1-p0-s1">Os autores obtêm esses clusters aplicando k-means++ sobre embeddings pré-treinados de tokens.</span> <span class="s" data-s="b1-p0-s2">Cada token é mapeado deterministicamente para um cluster, gerando uma segunda sequência de símbolos, de mesmo comprimento que a original.</span></p><p><span class="s" data-s="b1-p1-s0">Por que isso ajuda?</span> <span class="s" data-s="b1-p1-s1">Sob ruído alto, recuperar o embedding exato de um token é difícil.</span> <span class="s" data-s="b1-p1-s2">Mas identificar a região do espaço de embeddings onde ele está — ou seja, seu cluster — continua viável.</span> <span class="s" data-s="b1-p1-s3">Os clusters funcionam como âncoras semânticas: indicam qual região do vocabulário é plausível, sem comprometer-se com um token específico.</span> <span class="s" data-s="b1-p1-s4">Isso estreita o espaço de busca durante a remoção de ruído.</span></p><p><span class="s" data-s="b1-p2-s0">Crucialmente, as duas modalidades são removidas de ruído em paralelo, permitindo fluxo bidirecional de informação: previsões grosseiras de clusters guiam a recuperação de tokens sob ruído alto, enquanto previsões detalhadas de tokens refinam simultaneamente as estimativas de clusters.</span> <span class="s" data-s="b1-p2-s1">Ao final da geração, apenas a modalidade de tokens é mantida; os clusters são descartados, o que é válido porque são função determinística dos tokens.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.08738/figure2.webp" alt="Arquitetura do H-CDLM: um mapa Γ agrupa tokens em clusters via k-means; ambas as sequências são codificadas e concatenadas no eixo de canais, depois difundidas com níveis de ruído independentes σ₁ e σ₂." loading="lazy">
+          <figcaption>
+            Arquitetura do H-CDLM: um mapa Γ agrupa tokens em clusters via k-means; ambas as sequências são codificadas e concatenadas no eixo de canais, depois difundidas com níveis de ruído independentes σ₁ e σ₂.
+            <span class="source">Figura 2 do paper · Ollu et al., arXiv:2610.08738</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Como funciona o processo de difusão hierárquica</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O framework define um processo de difusão conjunta sobre k modalidades.</span> <span class="s" data-s="b3-p0-s1">Neste trabalho, k=2: tokens (j=1) e clusters (j=2).</span> <span class="s" data-s="b3-p0-s2">Cada modalidade opera sobre seu próprio vocabulário: V₁ é o vocabulário de tokens original, V₂ é o conjunto de clusters.</span> <span class="s" data-s="b3-p0-s3">As representações contínuas x = {x₁, x₂} são concatenadas ao longo do eixo de canais, formando x ∈ ℝ^(L×d), onde d = d₁ + d₂.</span> <span class="s" data-s="b3-p0-s4">Isso não aumenta o comprimento da sequência, apenas a dimensão de cada posição.</span></p><p><span class="s" data-s="b3-p1-s0">O processo forward adiciona ruído gaussiano independente a cada modalidade: xₛ = x₀ + Σε, onde Σ é uma matriz diagonal em blocos que aplica níveis de ruído σ₁ e σ₂ a cada modalidade.</span> <span class="s" data-s="b3-p1-s1">O denoiser Dθ produz uma estimativa limpa para cada modalidade.</span> <span class="s" data-s="b3-p1-s2">Durante o treinamento, minimiza-se uma perda MSE ponderada que soma os erros de reconstrução de ambas as modalidades, com pesos λⱼ ajustáveis.</span></p><p><span class="s" data-s="b3-p2-s0">A construção dos clusters é direta: aplica-se k-means++ sobre embeddings pré-treinados (LangFlow para LM1B/OWT, S-FLM para TinyGSM).</span> <span class="s" data-s="b3-p2-s1">O número de clusters n é um hiperparâmetro; os autores testam n=16, 32, 64.</span> <span class="s" data-s="b3-p2-s2">Cada cluster é então codificado continuamente usando o mesmo mecanismo do modelo base: sequências de bits para CoBit, vetores one-hot para FLM.</span> <span class="s" data-s="b3-p2-s3">Essa escolha visa simplicidade e integração direta.</span></p>        <h2><span class="s" data-s="b4-h">Schedules e samplers por modalidade</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Uma vantagem chave da difusão conjunta é poder ajustar independentemente o schedule de ruído e o sampler de cada modalidade.</span> <span class="s" data-s="b4-p0-s1">Os autores estendem o conceito de information-uniform schedules — que distribuem o ruído de forma a manter constante a informação por step — para o caso multimodal.</span> <span class="s" data-s="b4-p0-s2">Cada modalidade pode ter sua própria distribuição de ruído π(σⱼ).</span></p><p><span class="s" data-s="b4-p1-s0">Na prática, isso significa que tokens e clusters podem ser corrompidos e limpos em taxas diferentes.</span> <span class="s" data-s="b4-p1-s1">Por exemplo, pode-se aplicar mais ruído aos clusters no início, forçando o modelo a aprender estrutura semântica grosseira primeiro, enquanto tokens recebem ruído mais moderado.</span> <span class="s" data-s="b4-p1-s2">Essa flexibilidade permite otimizar a interação entre modalidades ao longo da trajetória de denoising.</span></p><p><span class="s" data-s="b4-p2-s0">Durante a amostragem, parâmetros como churn (quantidade de ruído estocástico reinjetado) e número de avaliações de função (NFE) também podem ser ajustados por modalidade.</span> <span class="s" data-s="b4-p2-s1">Os autores exploram essa liberdade em ablations, mostrando que per-modality churn melhora ainda mais a qualidade, especialmente quando combinado com ruído global mais alto.</span></p>        <h2><span class="s" data-s="b5-h">Aplicação ao CoBit: H-CoBit</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os autores aplicam o framework ao CoBit, um modelo de difusão contínua estado-da-arte que representa tokens como sequências de bits para reduzir o tamanho da cabeça de saída.</span> <span class="s" data-s="b5-p0-s1">O modelo resultante, H-CoBit, adiciona apenas ~1% de parâmetros (134.6M vs 133M no LM1B) e overhead computacional mínimo (+4.2% no pior caso).</span></p><p><span class="s" data-s="b5-p1-s0">H-CoBit é treinado em três benchmarks: LM1B (sequências de 128 tokens, vocabulário de 30.522), OpenWebText/OWT (1024 tokens, vocabulário de 50.257) e TinyGSM (512 tokens, vocabulário de 49.153).</span> <span class="s" data-s="b5-p1-s1">Todos os hiperparâmetros de treinamento são mantidos iguais ao CoBit base, exceto os pesos de perda por modalidade λ₂, que são ajustados por dataset.</span></p><p><span class="s" data-s="b5-p2-s0">A avaliação segue protocolos estabelecidos: fronteiras de perplexidade generativa (GenPPL) versus entropia, MAUVE para qualidade de distribuição, e acurácia no GSM8K para raciocínio matemático.</span> <span class="s" data-s="b5-p2-s1">Todos os modelos são varridos sobre NFE e parâmetros de amostragem, especialmente churn, essencial para o desempenho do CoBit.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.08738/figure1.webp" alt="H-CoBit alcança melhor qualidade com menos computação: até 2.6× mais rápido que CoBit para atingir a mesma GenPPL, com ganhos de até 29% em perplexidade quando otimizado." loading="lazy">
+          <figcaption>
+            H-CoBit alcança melhor qualidade com menos computação: até 2.6× mais rápido que CoBit para atingir a mesma GenPPL, com ganhos de até 29% em perplexidade quando otimizado.
+            <span class="source">Figura 1 do paper · Ollu et al., arXiv:2610.08738</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Resultados: ganhos grandes em perplexidade e eficiência</span></h2>
+<p><span class="s" data-s="b7-p0-s0">No LM1B, H-CoBit atinge GenPPL de 49.4 na entropia do dataset, melhorando 24.2 pontos sobre o CoBit base — e faz isso com apenas 60% dos passos de treinamento (600k vs 1M).</span> <span class="s" data-s="b7-p0-s1">No OWT, com 750k passos pareados, H-CoBit alcança GenPPL de 50.4, superando CoBit por 20.7 pontos.</span> <span class="s" data-s="b7-p0-s2">Esses ganhos colocam H-CoBit à frente até de modelos de difusão discretos de tamanho comparável.</span></p><p><span class="s" data-s="b7-p1-s0">A métrica MAUVE, que mede quão próxima a distribuição gerada está dos dados reais, também melhora: de 0.861 para 0.903 no LM1B, e de 0.530 para 0.580 no OWT.</span> <span class="s" data-s="b7-p1-s1">Esses números indicam que H-CoBit não apenas gera texto com menor perplexidade, mas distribui probabilidade de forma mais fiel aos dados de treinamento.</span></p><p><span class="s" data-s="b7-p2-s0">Em eficiência computacional, H-CoBit é até 2.6× mais rápido que CoBit para atingir a mesma qualidade.</span> <span class="s" data-s="b7-p2-s1">Isso acontece porque a informação hierárquica permite convergência mais rápida durante a amostragem, reduzindo o número de avaliações de função necessárias.</span> <span class="s" data-s="b7-p2-s2">O overhead de parâmetros e computação por step é negligível, tornando o ganho essencialmente gratuito.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.08738/figure4.webp" alt="Fronteiras de GenPPL vs entropia em LM1B e OWT: H-CoBit (curva laranja) domina CoBit (azul) em toda a fronteira de Pareto, deslocando-a para a direita (melhor qualidade para mesma diversidade)." loading="lazy">
+          <figcaption>
+            Fronteiras de GenPPL vs entropia em LM1B e OWT: H-CoBit (curva laranja) domina CoBit (azul) em toda a fronteira de Pareto, deslocando-a para a direita (melhor qualidade para mesma diversidade).
+            <span class="source">Figura 4 do paper · Ollu et al., arXiv:2610.08738</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Raciocínio matemático: superando modelos contínuos</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Os autores também avaliam H-CoBit no GSM8K, um conjunto de 1.319 problemas de raciocínio matemático de nível escolar.</span> <span class="s" data-s="b9-p0-s1">Modelos de difusão historicamente têm dificuldade nessa tarefa, que requer seguir cadeias lógicas e manter coerência numérica.</span></p><p><span class="s" data-s="b9-p1-s0">H-CoBit alcança 27.4% de acurácia, superando todos os modelos de difusão contínua e flow matching anteriores.</span> <span class="s" data-s="b9-p1-s1">CoBit base fica em 23.3%.</span> <span class="s" data-s="b9-p1-s2">Embora ainda atrás de modelos de difusão discretos como SEDD (30.2%) e MDLM (31.4%), H-CoBit reduz significativamente a lacuna, mostrando que representações hierárquicas ajudam não apenas em qualidade de distribuição, mas também em tarefas de raciocínio estruturado.</span></p><p><span class="s" data-s="b9-p2-s0">Vale notar que H-CoBit atinge +2.1 pontos sobre CoBit usando metade do NFE, e +4 pontos com NFE pareado.</span> <span class="s" data-s="b9-p2-s1">Isso sugere que a informação de clusters facilita a recuperação de estruturas lógicas sob ruído, um benefício particularmente valioso em sequências que exigem precisão simbólica.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.08738/table2.webp" alt="Acurácia no GSM8K com budget de treinamento pareado: H-CoBit (27.4%) supera todos os modelos contínuos, incluindo flow matching, e reduz a distância para DLMs discretos." loading="lazy">
+          <figcaption>
+            Acurácia no GSM8K com budget de treinamento pareado: H-CoBit (27.4%) supera todos os modelos contínuos, incluindo flow matching, e reduz a distância para DLMs discretos.
+            <span class="source">Tabela 2 do paper · Ollu et al., arXiv:2610.08738</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b11-h">Ablations: o que importa no design</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Os autores conduzem ablations sistemáticas no LM1B (100k passos por limitação de compute).</span> <span class="s" data-s="b11-p0-s1">Primeiro, testam o número de clusters: n=16, 32, 64.</span> <span class="s" data-s="b11-p0-s2">Curiosamente, n=16 funciona melhor, sugerindo que granularidade muito fina dilui o sinal semântico grosseiro que torna os clusters úteis.</span> <span class="s" data-s="b11-p0-s3">Com n=64, os clusters se aproximam demais dos tokens individuais, perdendo a vantagem hierárquica.</span></p><p><span class="s" data-s="b11-p1-s0">Segundo, exploram o peso de perda λ₂ para a modalidade de clusters.</span> <span class="s" data-s="b11-p1-s1">Valores muito baixos (λ₂=0.01) subutilizam os clusters; muito altos (λ₂=1) forçam o modelo a priorizar clusters em detrimento de tokens.</span> <span class="s" data-s="b11-p1-s2">O ótimo varia por dataset: λ₂=4/15 no LM1B, λ₂=0.1 no OWT.</span> <span class="s" data-s="b11-p1-s3">Isso reflete diferenças na estrutura dos dados e sugere que ajustar λ₂ é importante para maximizar ganhos.</span></p><p><span class="s" data-s="b11-p2-s0">Terceiro, comparam schedules de ruído information-uniform por modalidade versus schedules globais.</span> <span class="s" data-s="b11-p2-s1">Schedules per-modality melhoram consistentemente, validando a intuição de que tokens e clusters devem ser corrompidos em taxas diferentes.</span> <span class="s" data-s="b11-p2-s2">Finalmente, testam per-modality churn: adicionar ruído estocástico independente a cada modalidade durante a amostragem traz ganhos adicionais, especialmente com ruído global mais alto (snoise=1.05).</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b12-t">Overhead mínimo, ganhos máximos</span></h3>
+          <p><span class="s" data-s="b12-c-s0">H-CoBit adiciona apenas 1% de parâmetros e 4.2% de computação no pior caso, mas melhora GenPPL em até 24 pontos e acelera amostragem em até 2.6×.</span> <span class="s" data-s="b12-c-s1">A chave é que clusters são determinísticos e baratos de codificar, então o custo extra é quase zero enquanto o ganho de informação é grande.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b13-h">Generalização: aplicando H-CDLM ao FLM</span></h2>
+<p><span class="s" data-s="b13-p0-s0">Para testar se o framework generaliza além do CoBit, os autores aplicam H-CDLM ao FLM (Flow Matching Language Model), um modelo de flow matching contínuo que usa uma abordagem diferente de difusão.</span> <span class="s" data-s="b13-p0-s1">Flow matching interpola deterministicamente entre ruído e dados, em vez de usar processos estocásticos.</span></p><p><span class="s" data-s="b13-p1-s0">O modelo resultante, H-FLM, também mostra ganhos consistentes.</span> <span class="s" data-s="b13-p1-s1">No LM1B, H-FLM melhora sobre FLM base em todas as métricas, embora os ganhos sejam menores que no CoBit (o paper não detalha números exatos de H-FLM, mas afirma &#39;consistent gains&#39;).</span> <span class="s" data-s="b13-p1-s2">Isso demonstra que a ideia de difusão hierárquica não depende de detalhes arquiteturais específicos do CoBit, mas é uma estratégia geral aplicável a diferentes paradigmas de geração contínua.</span></p><p><span class="s" data-s="b13-p2-s0">A portabilidade do framework é importante: sugere que qualquer modelo de difusão ou flow contínuo pode potencialmente se beneficiar de modalidades hierárquicas.</span> <span class="s" data-s="b13-p2-s1">A implementação requer apenas definir um mapeamento de tokens para clusters, codificar os clusters no espaço contínuo do modelo, e concatenar as modalidades.</span> <span class="s" data-s="b13-p2-s2">O resto do pipeline permanece intocado.</span></p>        <h2><span class="s" data-s="b14-h">Limitações e trabalho futuro</span></h2>
+<p><span class="s" data-s="b14-p0-s0">O paper é honesto sobre suas limitações.</span> <span class="s" data-s="b14-p0-s1">Primeiro, os experimentos se restringem a k=2 modalidades (tokens e um nível de clusters).</span> <span class="s" data-s="b14-p0-s2">Hierarquias mais profundas (k&gt;2) são mencionadas como possibilidade, mas não exploradas.</span> <span class="s" data-s="b14-p0-s3">Não está claro se adicionar mais níveis continuaria trazendo ganhos ou apenas aumentaria complexidade sem benefício.</span></p><p><span class="s" data-s="b14-p1-s0">Segundo, a construção de clusters é simples: k-means sobre embeddings pré-treinados.</span> <span class="s" data-s="b14-p1-s1">Métodos mais sofisticados — clustering hierárquico, embeddings contextualizados, agrupamentos aprendidos end-to-end — podem funcionar melhor, mas não foram testados.</span> <span class="s" data-s="b14-p1-s2">A escolha de k-means visa simplicidade e reprodutibilidade, não necessariamente desempenho ótimo.</span></p><p><span class="s" data-s="b14-p2-s0">Terceiro, os modelos ainda ficam atrás de autoregressivos em tarefas de raciocínio.</span> <span class="s" data-s="b14-p2-s1">No GSM8K, mesmo H-CoBit (27.4%) está longe de transformers autoregressivos de tamanho similar, que frequentemente superam 40%.</span> <span class="s" data-s="b14-p2-s2">Isso sugere que difusão contínua, mesmo hierárquica, ainda enfrenta desafios fundamentais em tarefas que exigem dependências de longo alcance e precisão simbólica.</span></p><p><span class="s" data-s="b14-p3-s0">Quarto, os experimentos cobrem apenas três datasets (LM1B, OWT, TinyGSM) e um tamanho de modelo (~135M parâmetros).</span> <span class="s" data-s="b14-p3-s1">Não sabemos se os ganhos escalam para modelos maiores ou domínios mais diversos.</span> <span class="s" data-s="b14-p3-s2">Finalmente, o paper não explora outras representações contínuas de clusters além de bits (CoBit) e one-hot (FLM).</span> <span class="s" data-s="b14-p3-s3">Embeddings densos aprendidos ou representações multimodais podem oferecer vantagens adicionais.</span></p>        <h2><span class="s" data-s="b15-h">Contexto: onde isso se encaixa</span></h2>
+<p><span class="s" data-s="b15-p0-s0">H-CDLM conecta três linhas de pesquisa.</span> <span class="s" data-s="b15-p0-s1">Primeiro, modelos de difusão para linguagem, que buscam alternativas não-autoregressivas desde trabalhos como MDLM e D3PM.</span> <span class="s" data-s="b15-p0-s2">Segundo, difusão contínua em texto, recentemente impulsionada por CoBit, FLM e LangFlow, que escolhem cuidadosamente representações e schedules.</span> <span class="s" data-s="b15-p0-s3">Terceiro, difusão hierárquica e multimodal, explorada em imagens (pixels + features DINO) e em texto discreto (prever categorias antes de tokens).</span></p><p><span class="s" data-s="b15-p1-s0">A contribuição é mostrar que essas ideias se combinam: difundir simultaneamente tokens e clusters em espaços contínuos, com schedules e samplers independentes, melhora consistentemente a qualidade.</span> <span class="s" data-s="b15-p1-s1">O framework é geral, aplicável a diferentes modelos base, e adiciona custo mínimo.</span> <span class="s" data-s="b15-p1-s2">Isso abre caminho para representações ainda mais ricas: subpalavras, sentenças, estruturas sintáticas — qualquer hierarquia que capture regularidades dos dados.</span></p><p><span class="s" data-s="b15-p2-s0">Os autores também reconhecem riscos éticos: modelos generativos melhores podem facilitar desinformação.</span> <span class="s" data-s="b15-p2-s1">Melhorias em realismo, como as obtidas aqui, aumentam esse risco.</span> <span class="s" data-s="b15-p2-s2">O paper inclui declarações de uso de IA (ferramentas generativas para código e edição de texto, mas não para ideias ou análise) e compromisso de disponibilizar código e checkpoints publicamente.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b16-t">O que fica em aberto</span></h3>
+          <p><span class="s" data-s="b16-c-s0">Hierarquias mais profundas (k&gt;3), clusters aprendidos end-to-end, escala para modelos grandes (&gt;1B parâmetros), e aplicação a domínios além de texto genérico (código, diálogos, tradução) são direções naturais que o paper não explora.</span> <span class="s" data-s="b16-c-s1">A lacuna com autoregressivos em raciocínio também permanece.</span></p>
+        </aside>
+
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">H-CDLM difunde tokens e clusters simultaneamente, usando clusters como âncoras semânticas que facilitam denoising sob ruído alto, com overhead de apenas 1% em parâmetros.</span></li><li><span class="s" data-s="k1">H-CoBit melhora GenPPL em até 24 pontos no LM1B e 20 pontos no OWT, alcança 27.4% no GSM8K (superando todos os modelos contínuos), e é até 2.6× mais rápido que o baseline.</span></li><li><span class="s" data-s="k2">O framework generaliza: aplicado ao FLM (flow matching), também traz ganhos consistentes, mostrando que difusão hierárquica funciona em diferentes paradigmas de geração contínua.</span></li><li><span class="s" data-s="k3">Limitações incluem escopo restrito a k=2 modalidades, clusters via k-means simples, modelos pequenos (~135M parâmetros), e lacuna persistente com autoregressivos em raciocínio.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.08738" rel="noopener">Denoising Hierarchical Representations: Joint Continuous Diffusion for Language Modeling</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.08738" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

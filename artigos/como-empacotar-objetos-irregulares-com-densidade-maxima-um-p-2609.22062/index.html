@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Como empacotar objetos irregulares com densidade máxima: um pipeline que trata gripper e objeto como corpo único — arXiv em 5</title>
+<meta name="description" content="Pesquisadores da Worcester Polytechnic Institute apresentam um sistema robótico completo que empacota objetos de forma arbitrária em contêineres, alcançando 95,6% de utilização de espaço ao otimizar posicionamento considerando a geometria do gripper junto com o objeto.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Como empacotar objetos irregulares com densidade máxima: um pipeline que trata gripper e objeto como corpo único">
+<meta property="og:description" content="Pesquisadores da Worcester Polytechnic Institute apresentam um sistema robótico completo que empacota objetos de forma arbitrária em contêineres, alcançando 95,6% de utilização de espaço ao otimizar posicionamento considerando a geometria do gripper junto com o objeto.">
+<meta property="og:image" content="../../assets/papers/2609.22062/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Robótica</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2609.22062" rel="noopener">arXiv:2609.22062</a>
+    </div>
+    <h1><span class="s" data-s="t">Como empacotar objetos irregulares com densidade máxima: um pipeline que trata gripper e objeto como corpo único</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Pesquisadores da Worcester Polytechnic Institute apresentam um sistema robótico completo que empacota objetos de forma arbitrária em contêineres, alcançando 95,6% de utilização de espaço ao otimizar posicionamento considerando a geometria do gripper junto com o objeto.</span></p>
+    <p class="byline">
+      <span>Qin et al.</span>
+      <span>12 min de leitura</span>
+<span>18/09/2026</span>    </p>
+    <div class="listen" data-article="2609.22062" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=-gsNP4B9x8g" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema do empacotamento denso</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Empacotamento denso de objetos em contêineres é uma tarefa cotidiana em armazéns e centros de distribuição, onde a eficiência depende diretamente de quanto cada caixa consegue carregar.</span> <span class="s" data-s="b0-p0-s1">As formulações clássicas desse problema — bin packing, pallet loading — assumem que os itens são caixas regulares com dimensões conhecidas.</span> <span class="s" data-s="b0-p0-s2">Mas operações logísticas modernas cada vez mais precisam empacotar itens irregulares: garrafas, utensílios domésticos, peças de geometria arbitrária.</span></p><p><span class="s" data-s="b0-p1-s0">Trabalhos recentes em empacotamento de objetos irregulares avançaram bastante, especialmente em simulação.</span> <span class="s" data-s="b0-p1-s1">Métodos baseados em aprendizado por reforço, otimização de heightmap e campos de distância assinados (SDF) reportam densidades impressionantes.</span> <span class="s" data-s="b0-p1-s2">O problema é que esses métodos tratam o objeto como um corpo rígido isolado, com modelos de contato idealizados, e a geometria do gripper — a garra que segura o objeto — raramente entra como parte do objetivo de otimização contínua.</span></p><p><span class="s" data-s="b0-p2-s0">A hipótese dos autores é simples e poderosa: em configurações densas, o gripper tem tanta ou mais chance de colidir com o ambiente do que o próprio objeto.</span> <span class="s" data-s="b0-p2-s1">Um posicionamento que encaixa o objeto perfeitamente pode ser inalcançável porque o gripper bate na borda do contêiner ou em objetos já empacotados.</span> <span class="s" data-s="b0-p2-s2">Além disso, drift de percepção acumula ao longo de uma sequência executada em malha aberta, e pequenos erros laterais que seriam inofensivos no espaço livre fazem o objeto travar quando encaixado em uma folga apertada.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.22062/figure1.webp" alt="Pipeline completo do sistema: percepção detecta o próximo objeto e escaneia o contêiner, planejamento compõe objeto e gripper e busca posicionamentos com CMA-ES, execução pega, desce com monitoramento de força/torque e consolida antes de repetir o ciclo." loading="lazy">
+          <figcaption>
+            Pipeline completo do sistema: percepção detecta o próximo objeto e escaneia o contêiner, planejamento compõe objeto e gripper e busca posicionamentos com CMA-ES, execução pega, desce com monitoramento de força/torque e consolida antes de repetir o ciclo.
+            <span class="source">Figura 1 do paper · Qin et al., arXiv:2609.22062</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">A ideia central: corpo composto e otimização em cinco graus de liberdade</span></h2>
+<p><span class="s" data-s="b2-p0-s0">A contribuição central do paper é tratar o objeto e o gripper segurando-o como um único corpo composto durante a otimização de posicionamento.</span> <span class="s" data-s="b2-p0-s1">O sistema representa esse corpo composto como uma união de nuvens de pontos: PO é a nuvem do objeto no seu próprio frame, PG é a nuvem do gripper, rigidamente anexada através de uma garra pré-registrada.</span> <span class="s" data-s="b2-p0-s2">A união PO ∪ PG forma o corpo composto.</span></p><p><span class="s" data-s="b2-p1-s0">A otimização busca sobre cinco graus de liberdade: posição horizontal (x, y), rotação em três eixos (θ₁, θ₂, θ₃).</span> <span class="s" data-s="b2-p1-s1">A coordenada vertical z é fixada analiticamente para cada candidato: o sistema indexa um heightmap da configuração atual do contêiner com resolução de células de 5 mm e calcula z como o ponto de suporte mais alto abaixo do objeto, subtraindo o ponto mais baixo do objeto após rotação.</span> <span class="s" data-s="b2-p1-s2">Essa operação — z*(x, y, θ) = max(h(i,j)) - min(Rp)z — garante que o objeto repousa sobre a superfície sem flutuar nem interpenetrar, sem custo extra de busca.</span></p><p><span class="s" data-s="b2-p2-s0">Para avaliar rapidamente distâncias e penetrações entre o corpo composto e a configuração atual do contêiner, cada nuvem é representada como uma árvore hierárquica de esferas (hierarchical sphere tree).</span> <span class="s" data-s="b2-p2-s1">A árvore é construída por divisão binária recursiva baseada em PCA, com uma esfera delimitadora de Ritter em cada nó, parando quando uma folha contém dez pontos.</span> <span class="s" data-s="b2-p2-s2">Os centros e raios das folhas do corpo composto em movimento são transformados pela pose candidata e testados contra as folhas da árvore do contêiner em paralelo, como operações tensoriais na GPU.</span></p>        <h2><span class="s" data-s="b3-h">Objetivo multi-termo: qualidade de empacotamento e viabilidade de execução</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Cada candidato x é pontuado por uma soma ponderada de oito termos.</span> <span class="s" data-s="b3-p0-s1">Os primeiros cinco descrevem qualidade de empacotamento e são avaliados apenas na árvore de esferas do objeto SO, porque descrevem a configuração que permanece após o gripper se retrair.</span> <span class="s" data-s="b3-p0-s2">Os três últimos representam termos de viabilidade, avaliados no corpo composto SO ∪ SG ou apenas em SG, porque o gripper deve ser levado em conta enquanto segura o objeto.</span></p><p><span class="s" data-s="b3-p1-s0">Os termos de qualidade incluem: volume da caixa delimitadora alinhada aos eixos, recompensando posicionamentos que comprimem em uma caixa envolvente pequena; distância do centroide, puxando o novo objeto para perto do centroide da configuração existente; penalidade de empacotamento, que penaliza penetrações entre o objeto e a configuração; altura do centroide, favorecendo camadas baixas; e distância frontal, incentivando colocação próxima à parede frontal do contêiner.</span></p><p><span class="s" data-s="b3-p2-s0">Os termos de viabilidade incluem: penalidade de colisão, que penaliza penetrações do corpo composto (objeto + gripper) com a configuração; penalidade de limite, que penaliza violações das paredes do contêiner; e penalidade de orientação, que mantém o gripper próximo à sua orientação nominal para evitar singularidades cinemáticas.</span> <span class="s" data-s="b3-p2-s1">Essa formulação multi-termo permite balancear densidade de empacotamento com alcançabilidade prática.</span></p><p><span class="s" data-s="b3-p3-s0">A busca é conduzida por CMA-ES (Covariance Matrix Adaptation Evolution Strategy), um otimizador livre de gradiente que amostra populações de candidatos de uma distribuição gaussiana multivariada, avalia-os em lote na GPU e adapta a covariância da distribuição com base nos melhores candidatos.</span> <span class="s" data-s="b3-p3-s1">O sistema roda até 200 gerações ou até convergência, com tamanho de população de 100.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b4-t">Por que CMA-ES e não gradiente descendente?</span></h3>
+          <p><span class="s" data-s="b4-c-s0">A operação que fixa z analiticamente — max sobre células discretas do heightmap — não é diferenciável.</span> <span class="s" data-s="b4-c-s1">CMA-ES não requer gradientes, então a descontinuidade é benigna.</span> <span class="s" data-s="b4-c-s2">Além disso, o método elimina posicionamentos flutuantes fisicamente impossíveis sem custo extra de busca, uma vantagem prática importante.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b5-h">Execução com monitoramento de força e push de consolidação</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Após a otimização produzir uma pose candidata, o sistema executa o posicionamento em três etapas.</span> <span class="s" data-s="b5-p0-s1">Primeiro, o robô pega o objeto na área de preparação usando a garra pré-registrada.</span> <span class="s" data-s="b5-p0-s2">Segundo, move-se para a pose horizontal (x, y, θ) planejada e desce verticalmente enquanto monitora força/torque a 100 Hz através de um sensor ATI no pulso.</span> <span class="s" data-s="b5-p0-s3">A descida para no primeiro contato, absorvendo pequenas discrepâncias entre o heightmap discretizado e a superfície real.</span></p><p><span class="s" data-s="b5-p1-s0">Terceiro — e esta é uma contribuição importante — o sistema executa um push de consolidação após liberar o objeto.</span> <span class="s" data-s="b5-p1-s1">A otimização ciente do gripper deixa folga lateral intencional para garantir que o gripper possa se retrair sem colidir.</span> <span class="s" data-s="b5-p1-s2">O push de consolidação fecha essa folga residual: após liberar, o gripper empurra o objeto lateralmente em direção à parede frontal do contêiner até detectar resistência de força.</span> <span class="s" data-s="b5-p1-s3">Isso recupera a densidade que o planejamento ciente do gripper deixa para trás.</span></p><p><span class="s" data-s="b5-p2-s0">Após cada posicionamento, o contêiner é re-percebido.</span> <span class="s" data-s="b5-p2-s1">Duas câmeras RealSense montadas em lados opostos do workspace capturam profundidade, as medições são médias de dez capturas, as poses das câmeras relativas à base do robô são estimadas a partir de um marcador ArUco fixo usando SQPnP, e as estimativas repetidas são médias em SE(3).</span> <span class="s" data-s="b5-p2-s2">A mesa é removida por ajuste de plano RANSAC, os pontos restantes são agrupados com DBSCAN para isolar o próximo objeto alvo, e o cluster é correspondido à biblioteca CAD por ICP ponto-a-ponto pontuado por distância Chamfer.</span> <span class="s" data-s="b5-p2-s3">Essa re-percepção entre posicionamentos impede que drift acumule ao longo da sequência.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.22062/figure2.webp" alt="Setup experimental: robô Franka Panda de 7 graus de liberdade, sensor de força/torque ATI no pulso, gripper soft paralelo fin-ray impresso em 3D, duas câmeras de profundidade RealSense, contêiner de 6×12×4 polegadas, e conjunto de sete objetos irregulares impressos em 3D." loading="lazy">
+          <figcaption>
+            Setup experimental: robô Franka Panda de 7 graus de liberdade, sensor de força/torque ATI no pulso, gripper soft paralelo fin-ray impresso em 3D, duas câmeras de profundidade RealSense, contêiner de 6×12×4 polegadas, e conjunto de sete objetos irregulares impressos em 3D.
+            <span class="source">Figura 2 do paper · Qin et al., arXiv:2609.22062</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Experimentos: três sequências fixas e um conjunto YCB</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Os autores testaram o sistema completo em um braço Franka Emika Panda real com um conjunto de sete réplicas impressas em 3D de objetos domésticos e de armazém irregulares: um suporte plano que ancora a camada base, dois vasos altos e esbeltos com tolerância apertada de ângulo de aproximação, dois objetos em forma de pato com geometria curva, e dois objetos em forma de L cujo perfil côncavo recompensa orientação cuidadosa.</span> <span class="s" data-s="b7-p0-s1">Cada entrada vem com uma malha CAD, uma nuvem de pontos de superfície amostrada e uma única garra antipodal pré-registrada no frame do objeto.</span></p><p><span class="s" data-s="b7-p1-s0">Para isolar a contribuição da regra de sequenciamento, o sistema foi avaliado em três ordenações fixas do conjunto de objetos, cada uma repetida por cinco tentativas.</span> <span class="s" data-s="b7-p1-s1">A sequência Otimizada segue a regra de ordenação maior-primeiro, sk = max(dim(Pk)) · VAABB(Pk), que favorece pegar objetos planos grandes para que a camada base seja formada primeiro.</span> <span class="s" data-s="b7-p1-s2">As sequências Random 1 e Random 2 são ordenações aleatórias que expõem quanta densidade o otimizador consegue alcançar sem o benefício da regra de sequenciamento.</span></p><p><span class="s" data-s="b7-p2-s0">Para testar generalização além desse conjunto, os autores avaliaram adicionalmente a abordagem em um subconjunto de oito objetos YCB: banana, caixa de gelatina, caneca, laranja, pera, lata de carne enlatada, caixa de pudim e lata de sopa de tomate.</span> <span class="s" data-s="b7-p2-s1">Esses objetos abrangem uma faixa comparável de complexidade de forma, de prismas simples a geometria curva e assimétrica.</span> <span class="s" data-s="b7-p2-s2">O conjunto YCB foi executado em uma sequência fixa por cinco tentativas.</span></p>        <h2><span class="s" data-s="b8-h">Resultados: 95,6% de utilização de espaço e 19 de 20 tentativas completas</span></h2>
+<p><span class="s" data-s="b8-p0-s0">O sistema completou 19 das 20 tentativas de ponta a ponta.</span> <span class="s" data-s="b8-p0-s1">A única falha ocorreu na sequência Random 1, onde um objeto em forma de L foi comprometido cedo e pousou em uma orientação desfavorável que bloqueou posicionamentos subsequentes.</span> <span class="s" data-s="b8-p0-s2">A sequência Otimizada alcançou 95,6% de utilização de espaço em média, empacotando todos os sete objetos em todas as cinco tentativas.</span> <span class="s" data-s="b8-p0-s3">As sequências Random 1 e Random 2 alcançaram 89,2% e 91,4%, respectivamente, com uma tentativa de Random 1 empacotando apenas cinco objetos.</span></p><p><span class="s" data-s="b8-p1-s0">O conjunto YCB alcançou 92,8% de utilização de espaço em média, empacotando todos os oito objetos em todas as cinco tentativas.</span> <span class="s" data-s="b8-p1-s1">Isso demonstra que o método generaliza além do conjunto de treinamento impresso em 3D para objetos do mundo real com geometria e propriedades de superfície diferentes.</span></p><p><span class="s" data-s="b8-p2-s0">Os autores compararam contra um baseline de minimização de heightmap, representativo de trabalho anterior em empacotamento de objetos irregulares.</span> <span class="s" data-s="b8-p2-s1">O baseline foi testado em duas resoluções de grade: 5 mm (mesma que o método proposto) e 2,5 mm (mais fina).</span> <span class="s" data-s="b8-p2-s2">Na resolução de 5 mm, o baseline alcançou 88,3% de utilização de espaço, significativamente abaixo dos 95,6% do método proposto.</span> <span class="s" data-s="b8-p2-s3">Na resolução de 2,5 mm, o baseline alcançou 91,7%, ainda abaixo, mas com custo computacional 4× maior (32 segundos por posicionamento vs. 8 segundos).</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.22062/figure3.webp" alt="Três resultados finais de empacotamento (de cinco) para cada sequência. A sequência Otimizada produz configurações visivelmente mais planas e apertadas, enquanto as ordenações aleatórias deixam cavidades residuais maiores conforme objetos pequenos são comprometidos cedo." loading="lazy">
+          <figcaption>
+            Três resultados finais de empacotamento (de cinco) para cada sequência. A sequência Otimizada produz configurações visivelmente mais planas e apertadas, enquanto as ordenações aleatórias deixam cavidades residuais maiores conforme objetos pequenos são comprometidos cedo.
+            <span class="source">Figura 3 do paper · Qin et al., arXiv:2609.22062</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">Estudos de ablação: o que cada componente contribui</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Para isolar a contribuição de cada componente, os autores conduziram três variantes de ablação na sequência Otimizada, cada uma por cinco tentativas.</span> <span class="s" data-s="b10-p0-s1">A primeira variante, &#39;Sem gripper&#39;, remove a otimização ciente do gripper: apenas SO é usado no objetivo, e o push de consolidação é desabilitado.</span> <span class="s" data-s="b10-p0-s2">A segunda, &#39;Sem push&#39;, mantém a otimização ciente do gripper mas desabilita o push de consolidação.</span> <span class="s" data-s="b10-p0-s3">A terceira, &#39;Prisma&#39;, substitui a representação de árvore de esferas por caixas delimitadoras alinhadas aos eixos (AABBs), simulando objetos de forma prismática.</span></p><p><span class="s" data-s="b10-p1-s0">A variante &#39;Sem gripper&#39; completou apenas três de cinco tentativas, com duas falhas de colisão durante a aproximação — o gripper bateu em objetos já empacotados porque o planejador não considerou sua geometria.</span> <span class="s" data-s="b10-p1-s1">As três tentativas bem-sucedidas alcançaram 94,8% de utilização de espaço, comparável ao sistema completo (95,6%), indicando que a otimização ciente do gripper governa se um posicionamento é alcançável, não quão denso ele é.</span></p><p><span class="s" data-s="b10-p2-s0">A variante &#39;Sem push&#39; completou todas as cinco tentativas mas alcançou apenas 88,7% de utilização de espaço, uma queda de 6,9 pontos percentuais.</span> <span class="s" data-s="b10-p2-s1">Isso confirma que o push de consolidação recupera a folga que o planejamento ciente do gripper deixa para trás, e é essencial para densidade máxima.</span> <span class="s" data-s="b10-p2-s2">A variante &#39;Prisma&#39; também completou todas as cinco tentativas mas alcançou apenas 87,2% de utilização, mostrando que representação de objeto não-prismática é necessária para alcançar alta densidade de empacotamento para formas não-compactas.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.22062/figure6.webp" alt="Comparação de utilização de espaço e objetos empacotados. As três barras da esquerda correspondem aos testes de empacotamento sequencial (Otimizada, Random 1, Random 2). As três barras da direita correspondem às variantes de ablação na sequência Otimizada. Barras mostram a média sobre cinco tentativas por configuração." loading="lazy">
+          <figcaption>
+            Comparação de utilização de espaço e objetos empacotados. As três barras da esquerda correspondem aos testes de empacotamento sequencial (Otimizada, Random 1, Random 2). As três barras da direita correspondem às variantes de ablação na sequência Otimizada. Barras mostram a média sobre cinco tentativas por configuração.
+            <span class="source">Figura 6 do paper · Qin et al., arXiv:2609.22062</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b12-h">Custo computacional: 8 segundos por posicionamento</span></h2>
+<p><span class="s" data-s="b12-p0-s0">O custo computacional médio por posicionamento foi de 8,2 segundos na sequência Otimizada, dos quais 6,8 segundos foram gastos na otimização CMA-ES (incluindo construção de árvore de esferas e avaliação de objetivo em lote na GPU), 0,9 segundo em planejamento de movimento com MoveIt, e 0,5 segundo em percepção e correspondência de objeto.</span> <span class="s" data-s="b12-p0-s1">Esse custo é competitivo com o baseline de heightmap na resolução de 5 mm (7,1 segundos) e significativamente mais rápido que o baseline na resolução de 2,5 mm (32 segundos).</span></p><p><span class="s" data-s="b12-p1-s0">A representação de árvore de esferas e a avaliação em lote na GPU são cruciais para manter o custo baixo.</span> <span class="s" data-s="b12-p1-s1">Cada geração do CMA-ES avalia 100 candidatos em paralelo, e a estrutura hierárquica permite poda precoce de testes de colisão quando esferas delimitadoras de nível superior não se intersectam.</span> <span class="s" data-s="b12-p1-s2">O custo de construção da árvore de esferas é amortizado ao longo de 200 gerações de avaliações.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b13-t">Limitação: garra pré-registrada</span></h3>
+          <p><span class="s" data-s="b13-c-s0">O sistema assume uma garra antipodal pré-registrada no frame de cada objeto.</span> <span class="s" data-s="b13-c-s1">Isso simplifica a composição do corpo composto mas limita a aplicação a objetos novos sem CAD ou anotação de garra.</span> <span class="s" data-s="b13-c-s2">Extensões futuras incluem levantar essa suposição em direção a empacotamento de objetos novos com planejamento de garra online.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b14-h">O que o paper não mostra</span></h2>
+<p><span class="s" data-s="b14-p0-s0">O sistema foi testado em um conjunto relativamente pequeno de objetos: sete objetos impressos em 3D e oito objetos YCB.</span> <span class="s" data-s="b14-p0-s1">Embora esses conjuntos abranjam variação de forma importante (plano, curvo, côncavo, prismático, assimétrico), eles não cobrem toda a diversidade de objetos encontrados em operações de armazém do mundo real — objetos deformáveis, objetos com partes articuladas, objetos muito pequenos ou muito grandes, ou objetos com propriedades de superfície extremas (muito escorregadios, muito ásperos).</span></p><p><span class="s" data-s="b14-p1-s0">O sistema também não aborda re-estimação de poses de objetos já colocados para refinar o estado do contêiner.</span> <span class="s" data-s="b14-p1-s1">A re-percepção entre posicionamentos captura a configuração atual, mas se um objeto colocado se deslocar ligeiramente após o gripper se retrair, esse deslocamento não é detectado até o próximo ciclo de percepção.</span> <span class="s" data-s="b14-p1-s2">Isso pode acumular pequenos erros ao longo de uma sequência longa.</span></p><p><span class="s" data-s="b14-p2-s0">A regra de sequenciamento maior-primeiro é uma heurística simples que funciona bem para o conjunto testado, mas não é ótima em geral.</span> <span class="s" data-s="b14-p2-s1">Para conjuntos de objetos com distribuições de forma diferentes, outras regras de sequenciamento ou até mesmo planejamento de sequência aprendido podem ser necessários.</span> <span class="s" data-s="b14-p2-s2">O paper não explora esse espaço de design.</span></p><p><span class="s" data-s="b14-p3-s0">Finalmente, o sistema não lida com incerteza de garra ou objetos que podem escorregar durante o transporte.</span> <span class="s" data-s="b14-p3-s1">O monitoramento de força detecta contato durante a descida, mas não detecta escorregamento durante o transporte horizontal.</span> <span class="s" data-s="b14-p3-s2">Para objetos muito leves ou muito pesados, ou para garras com força de preensão inadequada, falhas de escorregamento podem ocorrer.</span></p>        <h2><span class="s" data-s="b15-h">Por que isso importa</span></h2>
+<p><span class="s" data-s="b15-p0-s0">Este trabalho fecha uma lacuna importante entre planejamento de empacotamento de alta densidade em simulação e execução robótica confiável no mundo real.</span> <span class="s" data-s="b15-p0-s1">A ideia central — tratar objeto e gripper como um corpo composto durante a otimização — é conceitualmente simples mas praticamente poderosa.</span> <span class="s" data-s="b15-p0-s2">Ela muda a pergunta de &#39;onde o objeto cabe?&#39; para &#39;onde o objeto-segurado-pelo-gripper cabe?&#39;, e essa mudança de perspectiva é o que permite ao sistema alcançar 95,6% de utilização de espaço com 95% de taxa de sucesso de ponta a ponta.</span></p><p><span class="s" data-s="b15-p1-s0">A combinação de otimização ciente do gripper, descida monitorada por força e push de consolidação forma um pipeline completo que absorve as três principais fontes de lacuna entre simulação e execução: colisões de tempo de aproximação ignoradas pelo planejador, drift de percepção acumulado ao longo de uma sequência em malha aberta, e erros laterais pequenos que fazem o objeto travar em folgas apertadas.</span> <span class="s" data-s="b15-p1-s1">Cada componente aborda uma fonte específica de falha, e a ablação mostra que todos os três são necessários para desempenho máximo.</span></p><p><span class="s" data-s="b15-p2-s0">O trabalho também demonstra que representação de geometria importa.</span> <span class="s" data-s="b15-p2-s1">A variante de ablação &#39;Prisma&#39; mostra que aproximar objetos irregulares por caixas delimitadoras alinhadas aos eixos custa 8,4 pontos percentuais de utilização de espaço.</span> <span class="s" data-s="b15-p2-s2">Para objetos com geometria côncava ou curva, a representação de árvore de esferas captura a forma real de uma maneira que caixas delimitadoras não conseguem, e essa fidelidade geométrica se traduz diretamente em densidade de empacotamento mais alta.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Sistema trata objeto e gripper como corpo único durante otimização, evitando colisões de aproximação que planejadores tradicionais ignoram.</span></li><li><span class="s" data-s="k1">Push de consolidação após liberação recupera folga lateral que planejamento ciente do gripper deixa, essencial para densidade máxima (6,9 pontos percentuais).</span></li><li><span class="s" data-s="k2">95,6% de utilização de espaço em objetos irregulares reais, completando 19 de 20 tentativas, superando baseline de heightmap em densidade e custo computacional.</span></li><li><span class="s" data-s="k3">Re-percepção entre posicionamentos impede acúmulo de drift; representação de árvore de esferas supera caixas delimitadoras em 8,4 pontos percentuais.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2609.22062" rel="noopener">Gripper-Aware Automatic Dense Packing of Irregular Objects</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2609.22062" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

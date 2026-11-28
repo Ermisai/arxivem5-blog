@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MemPilot: como agentes de LLM decidem em tempo real o que lembrar e quanto gastar nisso — arXiv em 5</title>
+<meta name="description" content="Um framework que orquestra memória de agentes sob demanda, escolhendo entre recuperar informação pré-processada ou curar histórico multimodal na hora, balanceando qualidade, custo e latência via aprendizado por reforço.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MemPilot: como agentes de LLM decidem em tempo real o que lembrar e quanto gastar nisso">
+<meta property="og:description" content="Um framework que orquestra memória de agentes sob demanda, escolhendo entre recuperar informação pré-processada ou curar histórico multimodal na hora, balanceando qualidade, custo e latência via aprendizado por reforço.">
+<meta property="og:image" content="../../assets/papers/2610.06830/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Agentes</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.06830" rel="noopener">arXiv:2610.06830</a>
+    </div>
+    <h1><span class="s" data-s="t">MemPilot: como agentes de LLM decidem em tempo real o que lembrar e quanto gastar nisso</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um framework que orquestra memória de agentes sob demanda, escolhendo entre recuperar informação pré-processada ou curar histórico multimodal na hora, balanceando qualidade, custo e latência via aprendizado por reforço.</span></p>
+    <p class="byline">
+      <span>Zhang et al.</span>
+      <span>8 min de leitura</span>
+<span>05/10/2026</span>    </p>
+    <div class="listen" data-article="2610.06830" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema: memória cara demais ou vaga demais</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Agentes baseados em modelos de linguagem precisam de memória para interações longas.</span> <span class="s" data-s="b0-p0-s1">A abordagem tradicional é processar todo o histórico de interação antes de qualquer consulta chegar — o que chamamos de memória query-agnostic.</span> <span class="s" data-s="b0-p0-s2">Isso tem dois problemas: primeiro, você gasta recursos processando informação que talvez nunca seja usada; segundo, você descarta detalhes que podem ser essenciais para uma pergunta específica que ainda não conhece.</span></p><p><span class="s" data-s="b0-p1-s0">Trabalhos recentes começaram a mover o processamento de memória para o momento da consulta (runtime), mas tipicamente fixam operações ou pipelines rígidos.</span> <span class="s" data-s="b0-p1-s1">O que falta é controle flexível: adaptar o quanto de computação você aloca conforme a dificuldade da pergunta, o orçamento disponível e a latência aceitável.</span> <span class="s" data-s="b0-p1-s2">MemPilot ataca exatamente esse ponto, orquestrando memória sob demanda com trade-offs explícitos entre desempenho, custo monetário e tempo de resposta.</span></p>        <h2><span class="s" data-s="b1-h">A ideia: duas visões de memória e uma política que escolhe</span></h2>
+<p><span class="s" data-s="b1-p0-s0">MemPilot mantém duas representações complementares do histórico de interação.</span> <span class="s" data-s="b1-p0-s1">A primeira é um banco de memória query-agnostic (M), construído por qualquer sistema de memória existente — pode ser embeddings semânticos, resumos, o que você já usa.</span> <span class="s" data-s="b1-p0-s2">A segunda é o histórico bruto multimodal (H), segmentado em chunks de tokens fixos, preservando texto e imagens originais.</span></p><p><span class="s" data-s="b1-p1-s0">Quando chega uma consulta, um orquestrador — uma política de LLM treinada via aprendizado por reforço — decide iterativamente entre duas ações: Retrieve, que busca no banco comprimido, ou Curate, que delega a curadoria do histórico bruto para modelos heterogêneos (LLMs ou VLMs).</span> <span class="s" data-s="b1-p1-s1">A cada passo, a política controla quantas evidências processar, qual estratégia de curadoria usar, qual modelo invocar e se deve acessar informação visual.</span></p><p><span class="s" data-s="b1-p2-s0">Essa formulação expõe graus de liberdade que pipelines fixos não têm.</span> <span class="s" data-s="b1-p2-s1">A política pode gastar mais em perguntas difíceis, usar modelos baratos quando possível, e pular imagens se o texto bastar.</span> <span class="s" data-s="b1-p2-s2">O resultado é alocação adaptativa de computação em tempo real.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.06830/figure1.webp" alt="A política orquestradora escolhe iterativamente entre recuperar memória comprimida ou curar histórico multimodal, controlando quantidade de evidências, estratégia, modelo e acesso visual. Painel direito mostra modelagem de recompensas com objetivos separados." loading="lazy">
+          <figcaption>
+            A política orquestradora escolhe iterativamente entre recuperar memória comprimida ou curar histórico multimodal, controlando quantidade de evidências, estratégia, modelo e acesso visual. Painel direito mostra modelagem de recompensas com objetivos separados.
+            <span class="source">Figura 1 do paper · Zhang et al., arXiv:2610.06830</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Como funciona: decisão multi-passo e controle fatorado</span></h2>
+<p><span class="s" data-s="b3-p0-s0">A cada passo t, o orquestrador observa a consulta e as evidências já acumuladas, depois emite uma ação estruturada: tipo (Retrieve ou Curate) e argumentos.</span> <span class="s" data-s="b3-p0-s1">Para Retrieve, os argumentos incluem quantas evidências buscar (k) e a query de busca semântica (r).</span> <span class="s" data-s="b3-p0-s2">Para Curate, os argumentos incluem k, r, qual instrução de curadoria usar (i), qual modelo invocar (m) e se acessar conteúdo visual (v).</span></p><p><span class="s" data-s="b3-p1-s0">Essa fatoração é importante.</span> <span class="s" data-s="b3-p1-s1">Em vez de escolher entre &#39;pipeline A&#39; ou &#39;pipeline B&#39;, a política compõe ações granulares.</span> <span class="s" data-s="b3-p1-s2">Se a consulta menciona cores, a política pode ativar acesso visual; se o histórico é longo, pode aumentar k; se o orçamento é apertado, pode escolher um LLM menor.</span> <span class="s" data-s="b3-p1-s3">Cada decisão influencia custo, latência e qualidade de forma diferente.</span></p><p><span class="s" data-s="b3-p2-s0">O processo continua por até T_max passos ou até a política decidir parar.</span> <span class="s" data-s="b3-p2-s1">As evidências acumuladas são então passadas para o LLM final gerar a resposta.</span> <span class="s" data-s="b3-p2-s2">A política não gera a resposta, apenas orquestra a memória que alimenta o gerador.</span></p>        <h2><span class="s" data-s="b4-h">Otimização multi-objetivo: desacoplamento de vantagens</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Treinar a política exige balancear três objetivos que competem: qualidade da resposta (Q), custo monetário (C) e latência (L).</span> <span class="s" data-s="b4-p0-s1">MemPilot usa aprendizado por reforço com uma técnica chamada objective-wise advantage decoupling.</span> <span class="s" data-s="b4-p0-s2">A ideia é estimar a vantagem (advantage) de cada objetivo separadamente, depois agregá-las com pesos λ_Q, λ_C, λ_L que refletem a preferência do usuário.</span></p><p><span class="s" data-s="b4-p1-s0">Isso resolve um problema comum em RL multi-objetivo: objetivos com escalas diferentes (acurácia em [0,1], custo em centavos, latência em segundos) podem dominar o gradiente.</span> <span class="s" data-s="b4-p1-s1">Ao normalizar cada vantagem separadamente antes de agregar, MemPilot garante que a política aprenda a negociar entre objetivos de forma controlada.</span></p><p><span class="s" data-s="b4-p2-s0">Além disso, o sistema usa prefix-based marginal utility estimation para atribuir crédito fino a cada passo.</span> <span class="s" data-s="b4-p2-s1">A cada passo t, o sistema sonda a utilidade da resposta parcial (usando as evidências acumuladas até aquele momento) e calcula a utilidade marginal Δu_t como a diferença entre antes e depois do passo.</span> <span class="s" data-s="b4-p2-s2">Isso permite recompensar passos que realmente melhoraram a resposta, em vez de distribuir crédito uniformemente.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b5-t">Por que utilidade marginal importa</span></h3>
+          <p><span class="s" data-s="b5-c-s0">Sem estimativa de utilidade marginal, todos os passos de uma trajetória recebem o mesmo crédito pelo resultado final.</span> <span class="s" data-s="b5-c-s1">Na prática, alguns passos trazem evidências cruciais e outros são redundantes.</span> <span class="s" data-s="b5-c-s2">Estimar Δu_t permite que a política aprenda quais decisões realmente movem a agulha, refinando a atribuição de crédito e acelerando o aprendizado.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b6-h">Experimentos: cinco benchmarks multimodais</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Os autores avaliaram MemPilot em cinco benchmarks de agentes com memória multimodal, cobrindo tarefas de resposta a perguntas sobre históricos longos com texto e imagens.</span> <span class="s" data-s="b6-p0-s1">Os baselines incluem sistemas que processam tudo antecipadamente, métodos que adaptam memória em runtime mas com pipelines fixos, e abordagens que otimizam apenas subconjuntos dos objetivos (custo ou latência, mas não ambos).</span></p><p><span class="s" data-s="b6-p1-s0">MemPilot foi treinado sob diferentes preferências de otimização, variando os pesos λ. Para cada configuração, o sistema produziu um ponto operacional na fronteira de Pareto entre qualidade, custo e latência.</span> <span class="s" data-s="b6-p1-s1">A comparação mostra que MemPilot domina os baselines: para qualquer nível de qualidade, MemPilot atinge menor custo e latência, ou para qualquer orçamento, atinge maior qualidade.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.06830/figure2.webp" alt="Fronteiras de Pareto macro-averaged sobre cinco benchmarks. MemPilot (linha sólida) domina baselines em todos os trade-offs, oferecendo maior qualidade para o mesmo custo/latência ou menor custo/latência para a mesma qualidade." loading="lazy">
+          <figcaption>
+            Fronteiras de Pareto macro-averaged sobre cinco benchmarks. MemPilot (linha sólida) domina baselines em todos os trade-offs, oferecendo maior qualidade para o mesmo custo/latência ou menor custo/latência para a mesma qualidade.
+            <span class="source">Figura 2 do paper · Zhang et al., arXiv:2610.06830</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Alocação adaptativa de recursos</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Uma análise interessante é como MemPilot aloca recursos sob diferentes preferências.</span> <span class="s" data-s="b8-p0-s1">Quando otimizado para qualidade, o sistema usa mais evidências, invoca modelos maiores e acessa conteúdo visual com mais frequência.</span> <span class="s" data-s="b8-p0-s2">Quando otimizado para custo, reduz o número de evidências, prefere LLMs menores e evita VLMs (que são mais caros).</span> <span class="s" data-s="b8-p0-s3">Quando otimizado para latência, o sistema favorece modelos rápidos e pode até reduzir evidências para cortar tempo de processamento.</span></p><p><span class="s" data-s="b8-p1-s0">Essa adaptação não é hard-coded: emerge do treinamento por reforço.</span> <span class="s" data-s="b8-p1-s1">A política aprende que VLMs são caros mas úteis quando a consulta envolve informação visual, que modelos grandes valem a pena para perguntas complexas, e que recuperar memória comprimida é rápido mas pode perder detalhes.</span> <span class="s" data-s="b8-p1-s2">O resultado é alocação query-specific: perguntas fáceis recebem processamento leve, perguntas difíceis recebem mais recursos.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.06830/figure3.webp" alt="Alocação de recursos sob diferentes preferências. Painéis mostram como o sistema ajusta uso de modelos, quantidade de evidências e acesso visual conforme pesos de custo e latência aumentam. Valores médios sobre cinco benchmarks." loading="lazy">
+          <figcaption>
+            Alocação de recursos sob diferentes preferências. Painéis mostram como o sistema ajusta uso de modelos, quantidade de evidências e acesso visual conforme pesos de custo e latência aumentam. Valores médios sobre cinco benchmarks.
+            <span class="source">Figura 3 do paper · Zhang et al., arXiv:2610.06830</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">Ablação: o que realmente importa</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Os autores conduziram estudos de ablação removendo componentes do sistema.</span> <span class="s" data-s="b10-p0-s1">Remover a capacidade de delegar curadoria a LLMs/VLMs heterogêneos degrada significativamente o desempenho: sem essa flexibilidade, o sistema não consegue adaptar qualidade e custo à dificuldade da consulta.</span> <span class="s" data-s="b10-p0-s2">Remover a estimativa de utilidade marginal também prejudica, especialmente em trajetórias longas, onde atribuição de crédito imprecisa leva a políticas subótimas.</span></p><p><span class="s" data-s="b10-p1-s0">Outro achado: o desacoplamento de vantagens objetivo-wise é essencial para trade-offs controlados.</span> <span class="s" data-s="b10-p1-s1">Sem ele, a política tende a otimizar apenas o objetivo dominante (geralmente qualidade), ignorando custo e latência.</span> <span class="s" data-s="b10-p1-s2">Com desacoplamento, a política aprende a negociar de forma explícita, produzindo fronteiras de Pareto mais amplas.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.06830/table2.webp" alt="Ablação média sobre cinco benchmarks. Cada componente (delegação heterogênea, utilidade marginal, desacoplamento de vantagens) contribui significativamente para o desempenho, especialmente na capacidade de atingir trade-offs favoráveis." loading="lazy">
+          <figcaption>
+            Ablação média sobre cinco benchmarks. Cada componente (delegação heterogênea, utilidade marginal, desacoplamento de vantagens) contribui significativamente para o desempenho, especialmente na capacidade de atingir trade-offs favoráveis.
+            <span class="source">Tabela 2 do paper · Zhang et al., arXiv:2610.06830</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b12-h">Limitações e o que fica em aberto</span></h2>
+<p><span class="s" data-s="b12-p0-s0">MemPilot assume que você já tem um banco de memória query-agnostic construído — o framework não propõe um novo método de construção de memória, apenas orquestra o uso dela.</span> <span class="s" data-s="b12-p0-s1">Se sua memória pré-construída for ruim, MemPilot não vai consertar isso, apenas decidir quando usá-la ou ignorá-la.</span> <span class="s" data-s="b12-p0-s2">Isso é uma escolha de design (compatibilidade com sistemas existentes), mas significa que a qualidade final depende de ambos os componentes.</span></p><p><span class="s" data-s="b12-p1-s0">O treinamento por reforço exige um conjunto de consultas e históricos representativos.</span> <span class="s" data-s="b12-p1-s1">Se a distribuição de teste for muito diferente da distribuição de treino, a política pode não generalizar bem.</span> <span class="s" data-s="b12-p1-s2">Os experimentos cobrem cinco benchmarks, mas todos são tarefas de QA sobre históricos multimodais — não está claro como MemPilot se comporta em outros tipos de interação (diálogo aberto, planejamento, etc).</span></p><p><span class="s" data-s="b12-p2-s0">Outra questão: o sistema otimiza custo monetário e latência como proxies, mas não modela explicitamente trade-offs de privacidade (curar localmente vs. delegar para APIs externas) ou consumo de energia.</span> <span class="s" data-s="b12-p2-s1">Esses são objetivos relevantes em cenários reais, mas ficam fora do escopo do paper.</span></p><p><span class="s" data-s="b12-p3-s0">Finalmente, o overhead de executar a política orquestradora em si não é discutido em detalhe.</span> <span class="s" data-s="b12-p3-s1">A política é um LLM que roda a cada passo — isso adiciona latência e custo.</span> <span class="s" data-s="b12-p3-s2">O paper não reporta quanto desse overhead é absorvido pelos ganhos de eficiência, o que seria útil para avaliar a viabilidade prática em aplicações de baixa latência.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b13-t">Compatibilidade com sistemas existentes</span></h3>
+          <p><span class="s" data-s="b13-c-s0">MemPilot não substitui seu sistema de memória atual, ele o complementa.</span> <span class="s" data-s="b13-c-s1">Você pode usar embeddings, grafos de conhecimento, resumos hierárquicos — o que você já tem — como banco query-agnostic, e MemPilot decide quando confiar nele ou quando curar o histórico bruto na hora.</span> <span class="s" data-s="b13-c-s2">Isso facilita adoção incremental.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b14-h">Por que isso importa</span></h2>
+<p><span class="s" data-s="b14-p0-s0">MemPilot é relevante porque expõe um espaço de design que a maioria dos sistemas de memória ignora: trade-offs explícitos entre qualidade, custo e latência, controlados em tempo real.</span> <span class="s" data-s="b14-p0-s1">Sistemas de produção raramente podem otimizar apenas para acurácia — eles têm orçamentos, SLAs de latência e usuários com expectativas variadas.</span> <span class="s" data-s="b14-p0-s2">MemPilot mostra que é possível treinar uma política que negocia esses objetivos de forma adaptativa, sem hard-coding regras para cada cenário.</span></p><p><span class="s" data-s="b14-p1-s0">A abordagem também é modular.</span> <span class="s" data-s="b14-p1-s1">Você pode trocar o banco de memória, adicionar novos modelos ao pool heterogêneo, ou ajustar as preferências de otimização sem redesenhar o sistema.</span> <span class="s" data-s="b14-p1-s2">Isso é valioso em ambientes onde requisitos mudam — por exemplo, reduzir custo durante picos de tráfego, ou aumentar qualidade para usuários premium.</span></p><p><span class="s" data-s="b14-p2-s0">Do ponto de vista de pesquisa, o paper contribui técnicas de RL multi-objetivo que podem ser úteis além de memória de agentes: objective-wise advantage decoupling e prefix-based marginal utility são métodos gerais para treinar políticas que controlam trade-offs em processos de decisão sequenciais.</span> <span class="s" data-s="b14-p2-s1">Isso pode inspirar trabalhos em outras áreas onde você precisa balancear múltiplos objetivos em tempo real.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">MemPilot orquestra memória de agentes sob demanda, escolhendo entre recuperar informação pré-processada ou curar histórico multimodal em runtime, com controle fino sobre evidências, modelos e acesso visual.</span></li><li><span class="s" data-s="k1">O sistema usa RL multi-objetivo com desacoplamento de vantagens e estimativa de utilidade marginal para aprender políticas que negociam qualidade, custo e latência de forma adaptativa.</span></li><li><span class="s" data-s="k2">Experimentos em cinco benchmarks mostram fronteiras de Pareto superiores aos baselines: maior qualidade para o mesmo custo/latência, ou menor custo/latência para a mesma qualidade.</span></li><li><span class="s" data-s="k3">Limitações incluem dependência de memória pré-construída, generalização para distribuições de teste diferentes, e falta de análise sobre overhead da própria política orquestradora.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.06830" rel="noopener">MemPilot: Orchestrating On-Demand Multimodal Memory Curation for LLM Agents</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.06830" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

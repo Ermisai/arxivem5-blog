@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CLIFT: como transformar feedback caro de um juiz em um verificador reutilizável para agentes web — arXiv em 5</title>
+<meta name="description" content="Pesquisadores da Salesforce AI Research propõem um método que converte avaliações custosas de modelos de linguagem em um banco de perguntas certificado, usado tanto no treinamento quanto na seleção de trajetórias em tempo de teste — sem chamar o juiz novamente.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CLIFT: como transformar feedback caro de um juiz em um verificador reutilizável para agentes web">
+<meta property="og:description" content="Pesquisadores da Salesforce AI Research propõem um método que converte avaliações custosas de modelos de linguagem em um banco de perguntas certificado, usado tanto no treinamento quanto na seleção de trajetórias em tempo de teste — sem chamar o juiz novamente.">
+<meta property="og:image" content="../../assets/papers/2610.06829/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Agentes</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.06829" rel="noopener">arXiv:2610.06829</a>
+    </div>
+    <h1><span class="s" data-s="t">CLIFT: como transformar feedback caro de um juiz em um verificador reutilizável para agentes web</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Pesquisadores da Salesforce AI Research propõem um método que converte avaliações custosas de modelos de linguagem em um banco de perguntas certificado, usado tanto no treinamento quanto na seleção de trajetórias em tempo de teste — sem chamar o juiz novamente.</span></p>
+    <p class="byline">
+      <span>Zhang et al.</span>
+      <span>11 min de leitura</span>
+<span>05/10/2026</span>    </p>
+    <div class="listen" data-article="2610.06829" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema: feedback denso é caro, feedback binário é esparso demais</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Agentes web de código aberto já conseguem executar tarefas realistas em navegadores: clicar em botões, preencher formulários, navegar entre páginas.</span> <span class="s" data-s="b0-p0-s1">Mas treinar esses agentes com aprendizado por reforço ainda esbarra em um dilema de supervisão.</span> <span class="s" data-s="b0-p0-s2">De um lado, você pode usar um sinal binário de sucesso — a tarefa foi concluída ou não.</span> <span class="s" data-s="b0-p0-s3">Esse sinal é fácil de obter, mas esparso demais para atribuir crédito: quando todos os rollouts de um grupo GRPO recebem o mesmo resultado final, a estimativa de vantagem colapsa e o gradiente perde força.</span></p><p><span class="s" data-s="b0-p1-s0">Do outro lado, você pode chamar um modelo de linguagem de fronteira como juiz, pedindo que ele avalie cada passo da trajetória.</span> <span class="s" data-s="b0-p1-s1">Isso gera feedback denso, mas é caro durante o treinamento e não pode ser assumido disponível na hora do deploy.</span> <span class="s" data-s="b0-p1-s2">Benchmarks de agentes web refletem essa tensão: WebArena Infinity usa verificadores programáticos por aplicação, VisualWebArena usa checagens de URL e DOM baseadas em resultado, e suítes de web ao vivo como Online Mind2Web dependem de juízes LLM ruidosos.</span></p><p><span class="s" data-s="b0-p2-s0">O paper CLIFT, da Salesforce AI Research, pergunta: e se o feedback do juiz pudesse ser transformado em um verificador reutilizável que o agente carrega consigo?</span> <span class="s" data-s="b0-p2-s1">Em vez de treinar um modelo de recompensa de processo separado ou aplicar best-of-N pós-hoc, CLIFT mantém um banco de perguntas de verificação em linguagem natural sobre o comportamento do agente e certifica quais perguntas são confiáveis em quais estados de URL.</span> <span class="s" data-s="b0-p2-s2">Esse mesmo banco é usado em dois lugares: durante o treinamento, para densificar a recompensa por passo; e em tempo de teste, para selecionar trajetórias sem chamar o juiz externo.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.06829/table1.webp" alt="CLIFT é o único método que combina feedback denso por passo, ancoragem em estados de URL, certificação de confiança, escalamento em tempo de teste sem juiz e transferência do banco de perguntas entre modelos e benchmarks." loading="lazy">
+          <figcaption>
+            CLIFT é o único método que combina feedback denso por passo, ancoragem em estados de URL, certificação de confiança, escalamento em tempo de teste sem juiz e transferência do banco de perguntas entre modelos e benchmarks.
+            <span class="source">Tabela 1 do paper · Zhang et al., arXiv:2610.06829</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">A ideia central: perguntas certificadas como interface entre juiz e agente</span></h2>
+<p><span class="s" data-s="b2-p0-s0">A intuição de CLIFT é simples: em vez de descartar o feedback do juiz após o treinamento, converta-o em um artefato durável.</span> <span class="s" data-s="b2-p0-s1">Esse artefato é um banco de perguntas de verificação em linguagem natural, cada uma associada a um escopo de URL, uma polaridade (YES indica progresso ou falha?) e um peso de confiança.</span> <span class="s" data-s="b2-p0-s2">Durante o treinamento, o agente responde essas perguntas sobre seus próprios rollouts.</span> <span class="s" data-s="b2-p0-s3">Um Compositional Conformal Certifier (CCC) mantém apenas os sinais de perguntas cuja evidência condicional à URL concorda com o juiz de treinamento, atribui pesos de confiança através de lift consciente de polaridade, e mistura o score do verificador resultante nas recompensas por passo de forma que nunca subtraia da linha de base do juiz.</span></p><p><span class="s" data-s="b2-p1-s0">Em tempo de teste, o mesmo banco certificado é congelado e reutilizado como evidência estruturada para Conformal Trajectory Selection (CTS): o agente amostra um rollout ganancioso e uma ou mais tentativas diversas, o auto-verificador resume cada traço de URL, e uma regra conservadora de voto majoritário escolhe se deve trocar a trajetória atual sem chamar nenhum juiz externo.</span> <span class="s" data-s="b2-p1-s1">Esse mecanismo único suporta três cenários: treinar um modelo aberto, transferir o banco para um modelo fechado mais forte, e recalibrar o banco para avaliação zero-shot em web ao vivo.</span></p>        <h2><span class="s" data-s="b3-h">Como funciona: certificação conformal de perguntas por URL</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O coração de CLIFT é o Compositional Conformal Certifier.</span> <span class="s" data-s="b3-p0-s1">Cada pergunta de verificação carrega um escopo de URL e um sinal de polaridade indicando se YES é evidência de progresso ou de falha.</span> <span class="s" data-s="b3-p0-s2">Um rastreador conformal adaptativo Mondrian estima se aquela pergunta separa rollouts de alto e baixo score do juiz na granularidade de URL relevante.</span> <span class="s" data-s="b3-p0-s3">Perguntas certificadas recebem pesos de confiança assinados.</span></p><p><span class="s" data-s="b3-p1-s0">Durante o treinamento, isso produz uma recompensa de verificador que só pode adicionar evidência em cima da linha de base do juiz, prevenindo o colapso de recompensa que aflige misturas lineares ingênuas.</span> <span class="s" data-s="b3-p1-s1">Durante o escalamento em tempo de teste, a mesma evidência assinada é congelada e apresentada a um seletor comparativo sobre duas trajetórias completas.</span> <span class="s" data-s="b3-p1-s2">Em ambos os casos, o banco de perguntas é uma interface compacta entre feedback caro do juiz e os próprios rollouts do agente.</span></p><p><span class="s" data-s="b3-p2-s0">O método é uma variante da família GRPO de gradiente de política, mas muda como rollouts são pontuados e reutilizados.</span> <span class="s" data-s="b3-p2-s1">Em vez de transmitir uma recompensa escalar de trajetória, CLIFT pontua cada URL visitada com perguntas de verificação e herda o score de URL para as ações tomadas ali.</span> <span class="s" data-s="b3-p2-s2">Isso permite vantagens estratificadas por URL: quando o agente visita a mesma página em múltiplos rollouts, a estimativa de vantagem compara ações dentro daquele estrato de URL, em vez de colapsar para zero quando todos os rollouts terminam com o mesmo resultado final.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.06829/figure2.webp" alt="Durante o treinamento, rollouts são pontuados por juiz e auto-verificador. O CCC certifica pesos por URL. Em tempo de teste, o banco congelado suporta seleção de trajetória sem juiz externo." loading="lazy">
+          <figcaption>
+            Durante o treinamento, rollouts são pontuados por juiz e auto-verificador. O CCC certifica pesos por URL. Em tempo de teste, o banco congelado suporta seleção de trajetória sem juiz externo.
+            <span class="source">Figura 2 do paper · Zhang et al., arXiv:2610.06829</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Três cenários de avaliação, um único banco de perguntas</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os autores avaliam CLIFT em três benchmarks complementares, cada um testando uma propriedade diferente do banco certificado.</span> <span class="s" data-s="b5-p0-s1">No WebArena Infinity (WAI), onde verificadores programáticos fornecem supervisão densa de treinamento, CLIFT melhora um agente Gemma-4 treinável e alcança o score público mais forte de 9 aplicações de que os autores têm conhecimento.</span> <span class="s" data-s="b5-p0-s2">O ponto aqui é tanto o treinamento quanto o CTS no mesmo backbone aberto.</span></p><p><span class="s" data-s="b5-p1-s0">No VisualWebArena (VWA), onde a avaliação é mais baseada em resultado, os autores usam o banco criado durante o treinamento do Gemma-4 como um verificador em tempo de teste para GPT-5.5, mostrando que o conhecimento de verificação aprendido transfere para um backbone fechado mais forte e alcança desempenho estado-da-arte sob o harness canônico.</span> <span class="s" data-s="b5-p1-s1">Isso demonstra que o banco não é específico do modelo: ele captura padrões de verificação que generalizam.</span></p><p><span class="s" data-s="b5-p2-s0">No Online Mind2Web (OM2W), os autores empurram a transferência ainda mais longe: nenhum agente é treinado em OM2W; em vez disso, o banco de perguntas certificado é traduzido e recalibrado, depois usado pelo CTS para melhorar o escalamento em tempo de teste na web ao vivo.</span> <span class="s" data-s="b5-p2-s1">Essas três histórias suportam a mesma afirmação: verificação conformal auto-supervisionada é útil tanto como sinal de treinamento quanto como sinal de escalamento em tempo de teste reutilizável e livre de juiz.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b6-t">O banco é o artefato durável</span></h3>
+          <p><span class="s" data-s="b6-c-s0">Um score de trajetória é consumido uma vez; um banco certificado pode ser inspecionado, recalibrado e reutilizado.</span> <span class="s" data-s="b6-c-s1">Cada pergunta certificada carrega um escopo de URL, um sinal de polaridade e um peso de confiança derivado de lift observado, com proveniência de volta à justificativa do juiz que a introduziu.</span> <span class="s" data-s="b6-c-s2">Isso torna o banco pequeno o suficiente para embarcar com o agente, auditável quando um resultado parece estranho, e recuperável: quando o lift de uma pergunta colapsa em uma nova distribuição, o certificador retém confiança em vez de amplificar ruído.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b7-h">Resultados: estado-da-arte em WAI, transferência em VWA, zero-shot em OM2W</span></h2>
+<p><span class="s" data-s="b7-p0-s0">No WebArena Infinity, CLIFT com Conformal Trajectory Selection (K=3 rollouts por tarefa) atinge 74,6% de taxa de sucesso no conjunto de comparação público de 9 aplicações.</span> <span class="s" data-s="b7-p0-s1">Esse resultado supera modelos anteriores e representa o melhor desempenho de código aberto reportado no paper.</span> <span class="s" data-s="b7-p0-s2">O ganho vem tanto do treinamento com recompensas densificadas quanto da seleção conservadora de trajetórias em tempo de teste.</span></p><p><span class="s" data-s="b7-p1-s0">No VisualWebArena, o banco de perguntas treinado com Gemma-4 é transferido para GPT-5.5 em tempo de teste.</span> <span class="s" data-s="b7-p1-s1">Com CTS, o agente alcança 53,7% de taxa de sucesso média ponderada por tamanho de ambiente, atingindo desempenho estado-da-arte sob o harness canônico.</span> <span class="s" data-s="b7-p1-s2">Isso mostra que o banco captura conhecimento de verificação independente do backbone: um modelo mais forte pode reutilizar as perguntas certificadas sem retraining.</span></p><p><span class="s" data-s="b7-p2-s0">No Online Mind2Web, os autores não treinam um agente no benchmark.</span> <span class="s" data-s="b7-p2-s1">Em vez disso, traduzem o banco de perguntas certificado e o recalibram para o domínio de web ao vivo.</span> <span class="s" data-s="b7-p2-s2">O CTS melhora um agente de web ao vivo em avaliação zero-shot, demonstrando que o banco pode ser adaptado para novos domínios sem fine-tuning de política.</span> <span class="s" data-s="b7-p2-s3">Juntos, esses resultados posicionam verificação conformal auto-supervisionada como uma forma de transformar feedback caro de juiz em um sinal de treinamento reutilizável e um sinal de escalamento em tempo de teste livre de juiz.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.06829/table3.webp" alt="No WebArena Infinity, CLIFT+CTS com backbone Gemma-4 alcança 74,6% de sucesso no conjunto público de 9 aplicações, superando métodos anteriores. K=3 indica três rollouts por tarefa, com uma trajetória selecionada pelo CTS." loading="lazy">
+          <figcaption>
+            No WebArena Infinity, CLIFT+CTS com backbone Gemma-4 alcança 74,6% de sucesso no conjunto público de 9 aplicações, superando métodos anteriores. K=3 indica três rollouts por tarefa, com uma trajetória selecionada pelo CTS.
+            <span class="source">Tabela 3 do paper · Zhang et al., arXiv:2610.06829</span>
+          </figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="../../assets/papers/2610.06829/table4.webp" alt="No VisualWebArena, o banco de perguntas treinado com modelo aberto transfere para GPT-5.5 e atinge 53,7% de sucesso médio. CTS com K rollouts por tarefa emite uma trajetória selecionada, mostrando que o banco generaliza entre backbones." loading="lazy">
+          <figcaption>
+            No VisualWebArena, o banco de perguntas treinado com modelo aberto transfere para GPT-5.5 e atinge 53,7% de sucesso médio. CTS com K rollouts por tarefa emite uma trajetória selecionada, mostrando que o banco generaliza entre backbones.
+            <span class="source">Tabela 4 do paper · Zhang et al., arXiv:2610.06829</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">Por que certificação conformal, e não apenas mais perguntas?</span></h2>
+<p><span class="s" data-s="b10-p0-s0">A tentação óbvia seria simplesmente fazer o agente responder muitas perguntas de verificação e usar as respostas como recompensa.</span> <span class="s" data-s="b10-p0-s1">O problema é que nem todas as perguntas são informativas em todos os contextos.</span> <span class="s" data-s="b10-p0-s2">Uma pergunta como &#39;o agente clicou no botão correto?&#39; pode ser útil em uma página de checkout, mas ruidosa em uma página de busca onde múltiplos cliques são válidos.</span> <span class="s" data-s="b10-p0-s3">Sem certificação, você acaba amplificando ruído e colapsando a recompensa.</span></p><p><span class="s" data-s="b10-p1-s0">A certificação conformal resolve isso estimando, para cada pergunta e escopo de URL, se aquela pergunta realmente separa rollouts bons de ruins segundo o juiz.</span> <span class="s" data-s="b10-p1-s1">O rastreador Mondrian adaptativo mantém estatísticas por camada de URL e só atribui peso de confiança a perguntas cujo lift observado supera um limiar calibrado.</span> <span class="s" data-s="b10-p1-s2">Isso torna o banco auto-corretivo: perguntas que param de funcionar em uma nova distribuição perdem peso automaticamente, em vez de poluir o sinal.</span></p><p><span class="s" data-s="b10-p2-s0">A polaridade assinada é igualmente importante.</span> <span class="s" data-s="b10-p2-s1">Uma pergunta pode indicar progresso (YES é bom) ou detecção de erro (YES é ruim).</span> <span class="s" data-s="b10-p2-s2">CLIFT rastreia a polaridade e usa lift assinado: perguntas positivas adicionam recompensa quando respondidas YES, perguntas negativas adicionam recompensa quando respondidas NO. Isso permite que o banco capture tanto objetivos de progresso quanto armadilhas a evitar, sem confundir os dois.</span></p>        <h2><span class="s" data-s="b11-h">Conformal Trajectory Selection: escalamento em tempo de teste sem juiz</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Em tempo de teste, CLIFT congela o banco certificado e o usa para Conformal Trajectory Selection.</span> <span class="s" data-s="b11-p0-s1">O agente amostra K trajetórias por tarefa: uma gananciosa e K-1 tentativas diversas.</span> <span class="s" data-s="b11-p0-s2">O auto-verificador resume cada traço de URL com as perguntas certificadas, produzindo um score de verificador por trajetória.</span> <span class="s" data-s="b11-p0-s3">Uma regra conservadora de voto majoritário decide se deve trocar a trajetória gananciosa por uma das tentativas diversas.</span></p><p><span class="s" data-s="b11-p1-s0">A regra é conservadora por design: só troca se a evidência do verificador for suficientemente forte.</span> <span class="s" data-s="b11-p1-s1">Isso evita trocar para uma trajetória pior por ruído.</span> <span class="s" data-s="b11-p1-s2">O CTS não chama nenhum juiz externo, tornando-o adequado para deploy em produção onde o juiz de fronteira não está disponível ou é caro demais para chamar em cada tarefa.</span></p><p><span class="s" data-s="b11-p2-s0">O ganho de CTS varia por benchmark.</span> <span class="s" data-s="b11-p2-s1">No WAI, onde o agente foi treinado com CLIFT, CTS adiciona alguns pontos percentuais sobre o rollout ganancioso sozinho.</span> <span class="s" data-s="b11-p2-s2">No VWA, onde o backbone é GPT-5.5 e não foi treinado com CLIFT, o ganho é maior porque o banco fornece conhecimento de verificação que o modelo não internalizou durante o treinamento.</span> <span class="s" data-s="b11-p2-s3">Isso sugere que CTS é especialmente valioso quando o banco e o backbone não foram co-treinados.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b12-t">Limitações e escopo dos experimentos</span></h3>
+          <p><span class="s" data-s="b12-c-s0">Os experimentos cobrem três benchmarks, mas todos são de agentes web.</span> <span class="s" data-s="b12-c-s1">Não está claro se o método generaliza para outros domínios de agentes (robótica, APIs, jogos).</span> <span class="s" data-s="b12-c-s2">O banco de perguntas é criado com ajuda do juiz de treinamento; a qualidade do banco depende da qualidade do juiz inicial.</span> <span class="s" data-s="b12-c-s3">O CTS requer múltiplos rollouts por tarefa, aumentando o custo de inferência.</span> <span class="s" data-s="b12-c-s4">E a calibração conformal assume que a distribuição de treinamento e teste compartilham estrutura suficiente; transferência para domínios muito diferentes pode exigir recalibração.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b13-h">O que fica em aberto</span></h2>
+<p><span class="s" data-s="b13-p0-s0">O paper demonstra que um banco de perguntas certificado pode ser reutilizado entre modelos e benchmarks, mas não explora até onde essa transferência pode ir.</span> <span class="s" data-s="b13-p0-s1">E se o benchmark de teste usar aplicações completamente diferentes?</span> <span class="s" data-s="b13-p0-s2">E se a estrutura de URL for radicalmente diferente?</span> <span class="s" data-s="b13-p0-s3">Os autores mostram recalibração em OM2W, mas não quantificam quanta sobreposição de domínio é necessária para que a transferência funcione.</span></p><p><span class="s" data-s="b13-p1-s0">Outra questão em aberto é a evolução do banco.</span> <span class="s" data-s="b13-p1-s1">O paper menciona que perguntas podem ser adicionadas durante o treinamento, mas não detalha como o banco cresce ou encolhe ao longo do tempo.</span> <span class="s" data-s="b13-p1-s2">Existe um risco de o banco crescer indefinidamente?</span> <span class="s" data-s="b13-p1-s3">Como você remove perguntas obsoletas?</span> <span class="s" data-s="b13-p1-s4">E como você atualiza o banco quando um juiz mais forte fica disponível, sem descartar o que juízes anteriores ensinaram?</span></p><p><span class="s" data-s="b13-p2-s0">Finalmente, o custo de inferência do CTS não é analisado em detalhe.</span> <span class="s" data-s="b13-p2-s1">Amostrar K trajetórias e avaliar cada uma com o banco de perguntas é mais barato do que chamar um juiz de fronteira, mas ainda é mais caro do que um rollout ganancioso único.</span> <span class="s" data-s="b13-p2-s2">O paper não fornece números de latência ou custo, tornando difícil avaliar o trade-off em cenários de produção.</span></p>        <h2><span class="s" data-s="b14-h">Por que isso importa</span></h2>
+<p><span class="s" data-s="b14-p0-s0">CLIFT mostra que feedback de juiz não precisa ser descartado após o treinamento.</span> <span class="s" data-s="b14-p0-s1">Convertendo esse feedback em um banco de perguntas certificado, você cria um artefato que pode ser inspecionado, auditado, transferido entre modelos e reutilizado em tempo de teste sem chamar o juiz novamente.</span> <span class="s" data-s="b14-p0-s2">Isso muda a economia de treinar agentes: em vez de pagar pelo juiz em cada passo de cada rollout de cada tarefa de teste, você paga uma vez durante o treinamento e depois carrega o banco com o agente.</span></p><p><span class="s" data-s="b14-p1-s0">A transferência entre backbones é especialmente interessante.</span> <span class="s" data-s="b14-p1-s1">O fato de que um banco treinado com Gemma-4 melhora GPT-5.5 no VWA sugere que o banco captura padrões de verificação que não são específicos do modelo.</span> <span class="s" data-s="b14-p1-s2">Isso abre a possibilidade de bancos de perguntas como artefatos compartilháveis: uma comunidade poderia manter um banco certificado para um domínio, e qualquer agente novo poderia reutilizá-lo para escalamento em tempo de teste.</span></p><p><span class="s" data-s="b14-p2-s0">Para desenvolvedores de agentes, CLIFT oferece uma alternativa ao dilema entre feedback binário esparso e juízes caros.</span> <span class="s" data-s="b14-p2-s1">Se você tem acesso a um juiz forte durante o desenvolvimento, pode usá-lo para criar um banco certificado e depois embarcar esse banco com o agente em produção.</span> <span class="s" data-s="b14-p2-s2">O banco não substitui completamente o juiz — você ainda precisa dele para criar o banco inicial — mas torna o juiz um custo de desenvolvimento, não um custo de inferência.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">CLIFT converte feedback caro de juiz em um banco de perguntas certificado, usado tanto para densificar recompensas no treinamento quanto para seleção de trajetórias em tempo de teste sem chamar o juiz.</span></li><li><span class="s" data-s="k1">O banco transfere entre modelos: perguntas certificadas com Gemma-4 melhoram GPT-5.5 no VisualWebArena, atingindo desempenho estado-da-arte sob o harness canônico.</span></li><li><span class="s" data-s="k2">Certificação conformal por URL impede que perguntas ruidosas poluam o sinal: apenas perguntas cujo lift observado concorda com o juiz recebem peso de confiança.</span></li><li><span class="s" data-s="k3">O método atinge 74,6% de sucesso no WebArena Infinity e melhora agentes em avaliação zero-shot no Online Mind2Web, mostrando que o banco é reutilizável entre benchmarks e domínios.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.06829" rel="noopener">CLIFT: Conformal Self-Verification for Web Agent Training and Test-Time Scaling</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.06829" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

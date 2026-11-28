@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MERLIN: Melhorando a atenção linear multi-estado com momentos de segunda ordem — arXiv em 5</title>
+<meta name="description" content="O paper propõe MERLIN, um mecanismo de roteamento que usa média e variância da alinhamento de chaves para melhorar a agregação de contexto em modelos de atenção linear, superando métodos baseados apenas em posição ou média.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MERLIN: Melhorando a atenção linear multi-estado com momentos de segunda ordem">
+<meta property="og:description" content="O paper propõe MERLIN, um mecanismo de roteamento que usa média e variância da alinhamento de chaves para melhorar a agregação de contexto em modelos de atenção linear, superando métodos baseados apenas em posição ou média.">
+<meta property="og:image" content="../../assets/papers/2610.37645/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>LLMs</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.37645" rel="noopener">arXiv:2610.37645</a>
+    </div>
+    <h1><span class="s" data-s="t">MERLIN: Melhorando a atenção linear multi-estado com momentos de segunda ordem</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">O paper propõe MERLIN, um mecanismo de roteamento que usa média e variância da alinhamento de chaves para melhorar a agregação de contexto em modelos de atenção linear, superando métodos baseados apenas em posição ou média.</span></p>
+    <p class="byline">
+      <span>Hwang et al.</span>
+      <span>7 min de leitura</span>
+<span>27/10/2026</span>    </p>
+    <div class="listen" data-article="2610.37645" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=RHa7QSC5J1Q" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Escalabilidade na Atenção Linear</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A atenção padrão (self-attention) é o coração dos Transformers modernos, permitindo que modelos processem sequências longas capturando dependências globais.</span> <span class="s" data-s="b0-p0-s1">No entanto, sua complexidade quadrática em relação ao comprimento da sequência e o crescimento linear do cache de chaves e valores (KV cache) tornam a escalabilidade computacionalmente proibitiva para contextos muito longos.</span></p><p><span class="s" data-s="b0-p1-s0">Para contornar isso, surgiram as atenções lineares, que reformulam o cálculo para operar em complexidade sub-quadrática.</span> <span class="s" data-s="b0-p1-s1">Modelos como DeltaNet e Gated DeltaNet substituem o softmax por mecanismos recursivos que mantêm um único estado de memória fixo.</span> <span class="s" data-s="b0-p1-s2">Embora eficientes, esses estados únicos têm capacidade limitada, levando à perda de informação quando o contexto é comprimido excessivamente.</span></p><p><span class="s" data-s="b0-p2-s0">Recentemente, a Atenção Linear Multi-Estado (MSLA) foi introduzida para mitigar essa perda.</span> <span class="s" data-s="b0-p2-s1">A MSLA divide o contexto em segmentos e comprime cada um em seu próprio estado de memória.</span> <span class="s" data-s="b0-p2-s2">Isso permite maior capacidade de retenção de informação.</span> <span class="s" data-s="b0-p2-s3">No entanto, surge um novo desafio: como agregar eficientemente as saídas desses múltiplos estados para produzir a representação final do token?</span></p>        <h2><span class="s" data-s="b1-h">A Limitação da Agregação por Média e Posição</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Os métodos existentes de agregação na MSLA geralmente utilizam uma soma ponderada das saídas dos segmentos.</span> <span class="s" data-s="b1-p0-s1">Os pesos são derivados de duas abordagens principais: posição ou média de alinhamento.</span> <span class="s" data-s="b1-p0-s2">Métodos baseados em posição assumem que a relevância está ligada à recência, enquanto métodos baseados em média (primeiro momento) calculam a alinhamento médio entre a query e as chaves de cada segmento.</span></p><p><span class="s" data-s="b1-p1-s0">Essas abordagens têm falhas fundamentais.</span> <span class="s" data-s="b1-p1-s1">A posição ignora o conteúdo real, favorecendo indevidamente segmentos recentes.</span> <span class="s" data-s="b1-p1-s2">A média, por sua vez, é insensível à distribuição interna do alinhamento.</span> <span class="s" data-s="b1-p1-s3">Um segmento pode ter um alinhamento médio alto devido a poucas chaves extremamente relevantes, ou um alinhamento uniforme e baixo.</span> <span class="s" data-s="b1-p1-s4">A média não consegue distinguir entre esses casos, potencialmente dando peso excessivo a segmentos irrelevantes ou subestimando segmentos com picos de relevância concentrada.</span></p><p><span class="s" data-s="b1-p2-s0">Os autores argumentam que a variância do alinhamento (segundo momento) é crucial para capturar essa distribuição.</span> <span class="s" data-s="b1-p2-s1">Ignorar a variância significa perder informação sobre quão concentrada ou dispersa está a relevância dentro de cada segmento de memória.</span> <span class="s" data-s="b1-p2-s2">Para corrigir isso, o paper propõe o MERLIN (MomEnt Routing for multi-state LINear attention).</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.37645/figure2.webp" alt="Diagrama do MERLIN mostrando como usa momentos das chaves para calcular pesos de atenção mais precisos. O contexto é dividido em segmentos, cada um armazenando estados de memória e os primeiros e segundos momentos das chaves. A query lê as saídas e calcula a média e variância do alinhamento para ponderar a agregação." loading="lazy">
+          <figcaption>
+            Diagrama do MERLIN mostrando como usa momentos das chaves para calcular pesos de atenção mais precisos. O contexto é dividido em segmentos, cada um armazenando estados de memória e os primeiros e segundos momentos das chaves. A query lê as saídas e calcula a média e variância do alinhamento para ponderar a agregação.
+            <span class="source">Figura 2 do paper · Hwang et al., arXiv:2610.37645</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">O Mecanismo MERLIN: Roteamento por Momentos</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O MERLIN propõe uma maneira simples e geral de melhorar a agregação na MSLA.</span> <span class="s" data-s="b3-p0-s1">Em vez de usar apenas a posição ou a média simples, o MERLIN rastreia e utiliza os primeiros e segundos momentos de cada segmento de chaves.</span> <span class="s" data-s="b3-p0-s2">O primeiro momento corresponde à média das chaves do segmento, enquanto o segundo momento captura a média dos produtos externos (outer products) das chaves, que está diretamente relacionada à variância e à dispersão da informação.</span></p><p><span class="s" data-s="b3-p1-s0">Durante a inferência, quando uma query é processada, ela acessa os estados de memória dos segmentos.</span> <span class="s" data-s="b3-p1-s1">Para cada segmento, a query calcula o alinhamento médio e a variância em relação às chaves armazenadas.</span> <span class="s" data-s="b3-p1-s2">Esses dois valores são então usados para determinar o peso de agregação (λ) atribuído a esse segmento.</span> <span class="s" data-s="b3-p1-s3">Essa abordagem permite que o modelo seja mais &#39;consciente do conteúdo&#39; (content-aware), dando mais peso a segmentos que não apenas têm uma média alta, mas também uma estrutura de alinhamento forte e consistente.</span></p><p><span class="s" data-s="b3-p2-s0">Tecnicamente, o MERLIN mantém compactos os momentos das chaves.</span> <span class="s" data-s="b3-p2-s1">Isso evita a necessidade de armazenar todas as chaves originais, preservando a eficiência de memória da atenção linear.</span> <span class="s" data-s="b3-p2-s2">A agregação final é uma soma ponderada das saídas dos segmentos, onde os pesos refletem tanto a força média quanto a consistência do alinhamento com a query atual.</span></p>        <h2><span class="s" data-s="b4-h">Configuração Experimental e Treinamento</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Para validar o MERLIN, os autores realizaram experimentos em duas arquiteturas base: Gated DeltaNet-1.3B e Mamba-2-780M.</span> <span class="s" data-s="b4-p0-s1">Ambos os modelos foram convertidos de variantes de estado único para multi-estado através de um processo de mid-training (treinamento intermediário).</span> <span class="s" data-s="b4-p0-s2">O contexto foi dividido uniformemente em segmentos de 256 tokens, resultando em até 64 estados de memória para um contexto de 16K tokens.</span></p><p><span class="s" data-s="b4-p1-s0">O treinamento ocorreu em duas etapas.</span> <span class="s" data-s="b4-p1-s1">A primeira etapa utilizou 2 bilhões de tokens do dataset Long-Data-Collections (LDC), com 10% dos dados aumentados com tarefas artificiais de &#39;agulha no palheiro&#39; (needle-in-a-haystack) do RULER.</span> <span class="s" data-s="b4-p1-s2">Isso serviu para ensinar o modelo a ativar seu mecanismo de agregação multi-estado.</span> <span class="s" data-s="b4-p1-s3">A segunda etapa usou 60 milhões de tokens, combinando LDC regular com dados sintéticos do RULER HotpotQA e SQuADQA, focando em fortalecer a capacidade de raciocínio em contextos longos.</span></p><p><span class="s" data-s="b4-p2-s0">Os baselines comparados incluíam a agregação vanilla (sem roteamento específico), baseada em posição e baseada em média (Meanpool).</span> <span class="s" data-s="b4-p2-s1">A avaliação foi feita em benchmarks de contexto longo, incluindo RULER (para testes de recuperação precisa) e LongBench (para tarefas diversas de QA e sumarização).</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.37645/figure3.webp" alt="Gráfico mostrando que o MERLIN recupera informações corretamente em qualquer posição do contexto. Diferente do Vanilla, que é tendencioso à recência, o MERLIN mantém alta precisão de recuperação independentemente de onde o passageiro relevante esteja no contexto." loading="lazy">
+          <figcaption>
+            Gráfico mostrando que o MERLIN recupera informações corretamente em qualquer posição do contexto. Diferente do Vanilla, que é tendencioso à recência, o MERLIN mantém alta precisão de recuperação independentemente de onde o passageiro relevante esteja no contexto.
+            <span class="source">Figura 3 do paper · Hwang et al., arXiv:2610.37645</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b6-h">Resultados: Superação em Tarefas de Contexto Longo</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Os resultados demonstram que o MERLIN consistently supera os métodos de agregação existentes.</span> <span class="s" data-s="b6-p0-s1">No benchmark RULER Needle-in-a-Haystack, o MERLIN mostrou ganhos significativos: +8.3% para o Gated DeltaNet-1.3B e +7.0% para o Mamba-2-780M.</span> <span class="s" data-s="b6-p0-s2">Isso indica que o modelo é capaz de localizar informações específicas com muito mais precisão, reduzindo o viés de recência presente nos métodos baseados em posição.</span></p><p><span class="s" data-s="b6-p1-s0">No LongBench, que abrange múltiplas tarefas de contexto longo, o ganho foi ainda mais pronunciado.</span> <span class="s" data-s="b6-p1-s1">O MERLIN alcançou um aumento de +13.5% no desempenho médio para o Gated DeltaNet e +12.0% para o Mamba-2.</span> <span class="s" data-s="b6-p1-s2">Analisando tarefas específicas de QA multi-documento, os ganhos foram robustos, confirmando que a agregação baseada em momentos ajuda o modelo a integrar informações dispersas de forma mais eficaz.</span></p><p><span class="s" data-s="b6-p2-s0">Uma análise qualitativa mostra que o MERLIN atribui pesos de agregação significativamente maiores ao segmento que contém a resposta correta (ground truth) em comparação com os baselines.</span> <span class="s" data-s="b6-p2-s1">Enquanto métodos de posição falham em identificar o segmento relevante se ele não for o mais recente, e o Meanpool tem dificuldade em distinguir picos de relevância, o MERLIN consegue focar corretamente na informação essencial.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b7-t">Desempenho no LongBench</span></h3>
+          <p><span class="s" data-s="b7-c-s0">O MERLIN alcançou ganhos de +13.5% no Gated DeltaNet-1.3B e +12.0% no Mamba-2-780M no benchmark LongBench.</span> <span class="s" data-s="b7-c-s1">Em tarefas específicas de QA multi-documento, os resultados foram consistentemente superiores aos métodos baseados em posição ou média simples.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b8-h">Eficiência Computacional e de Memória</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Um dos objetivos centrais das atenções lineares é a eficiência.</span> <span class="s" data-s="b8-p0-s1">O MERLIN foi projetado para adicionar o mínimo de overhead possível.</span> <span class="s" data-s="b8-p0-s2">A complexidade de memória e computação permanece sub-linear.</span> <span class="s" data-s="b8-p0-s3">O armazenamento dos momentos das chaves é compacto; para o Gated DeltaNet-1.3B, o MERLIN adiciona apenas 66.3M de parâmetros, representando um aumento de 4.6% no tamanho total do modelo.</span></p><p><span class="s" data-s="b8-p1-s0">Para o Mamba-2-780M, o overhead é ainda menor, com 18.9M de parâmetros adicionais, ou 2.2% do total.</span> <span class="s" data-s="b8-p1-s1">Isso contrasta favoravelmente com métodos que poderiam exigir o armazenamento de mais estados ou estruturas mais complexas.</span> <span class="s" data-s="b8-p1-s2">O MERLIN mantém a velocidade de inferência alta, pois o cálculo dos momentos e dos pesos de agregação é computacionalmente leve em comparação com o custo de processar a sequência inteira.</span></p><p><span class="s" data-s="b8-p2-s0">Além disso, o MERLIN não requer mudanças na estrutura fundamental do modelo, sendo um mecanismo de roteamento plug-and-play para o componente de agregação da MSLA.</span> <span class="s" data-s="b8-p2-s1">Isso facilita sua adoção em outras arquiteturas que utilizem atenção linear multi-estado.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b9-t">Overhead de Memória</span></h3>
+          <p><span class="s" data-s="b9-c-s0">O MERLIN adiciona apenas 4.6% de parâmetros ao Gated DeltaNet-1.3B e 2.2% ao Mamba-2-780M.</span> <span class="s" data-s="b9-c-s1">Essa eficiência permite escalar o número de estados de memória sem custos computacionais proibitivos.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b10-h">Limitações e Escopo</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Apesar dos resultados promissores, o paper reconhece limitações importantes.</span> <span class="s" data-s="b10-p0-s1">Os experimentos foram conduzidos com dois backbones específicos (Gated DeltaNet e Mamba-2) e um comprimento de contexto de 16K tokens.</span> <span class="s" data-s="b10-p0-s2">Não foi testado em modelos maiores ou contextos ainda mais extensos, o que deixa em aberto como o MERLIN se comportaria em escalas de centenas de milhares de tokens.</span></p><p><span class="s" data-s="b10-p1-s0">Além disso, o estudo compara o MERLIN apenas contra baselines específicos (Vanilla, Position, Meanpool) com segmentação uniforme.</span> <span class="s" data-s="b10-p1-s1">Outros métodos de segmentação (separation) ou agregação mais avançados não foram incluídos na comparação direta.</span> <span class="s" data-s="b10-p1-s2">A generalização do MERLIN para outras arquiteturas de atenção linear ou para tarefas que não envolvam raciocínio de longo alcance também não foi totalmente explorada.</span></p><p><span class="s" data-s="b10-p2-s0">Os autores também notam que o treinamento dependeu de dados sintéticos aumentados para ativar o mecanismo de agregação.</span> <span class="s" data-s="b10-p2-s1">Isso sugere que o desempenho final pode ser sensível à qualidade e à quantidade dos dados de mid-training.</span> <span class="s" data-s="b10-p2-s2">Futuros trabalhos precisam investigar a robustez do MERLIN em cenários de treinamento mais diversificados e em escalas maiores.</span></p>        <h2><span class="s" data-s="b11-h">Conclusão</span></h2>
+<p><span class="s" data-s="b11-p0-s0">O MERLIN apresenta uma contribuição clara e prática para o campo de modelos de linguagem eficientes.</span> <span class="s" data-s="b11-p0-s1">Ao incorporar a variância do alinhamento na agregação de estados multi-estado, ele resolve uma lacuna importante nos métodos anteriores que dependiam apenas de média ou posição.</span></p><p><span class="s" data-s="b11-p1-s0">Os resultados mostram que pequenas mudanças na forma como o modelo &#39;olha&#39; para a informação armazenada podem gerar ganhos significativos de precisão, sem comprometer a eficiência computacional.</span> <span class="s" data-s="b11-p1-s1">Para desenvolvedores interessados em escalar modelos para contextos longos sem o custo proibitivo da atenção quadrática, o MERLIN oferece uma rota viável e bem fundamentada.</span></p><p><span class="s" data-s="b11-p2-s0">O paper não vende a solução como uma revolução completa, mas como um componente útil e generalizável.</span> <span class="s" data-s="b11-p2-s1">A ênfase na honestidade sobre as limitações de escala e escopo reforça a credibilidade dos resultados.</span> <span class="s" data-s="b11-p2-s2">À medida que a demanda por contextos longos cresce, mecanismos como o MERLIN serão essenciais para equilibrar capacidade e eficiência.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">MSLA divide o contexto em segmentos, mas a agregação anterior ignorava a variância do alinhamento entre query e chaves.</span></li><li><span class="s" data-s="k1">MERLIN armazena os primeiros e segundos momentos das chaves para calcular pesos de agregação mais precisos e conscientes do conteúdo.</span></li><li><span class="s" data-s="k2">Em benchmarks de contexto longo, MERLIN supera métodos base com ganhos de até 13.5% no LongBench e melhora a recuperação de informação.</span></li><li><span class="s" data-s="k3">O overhead de memória é mínimo (cerca de 4.6% no Gated DeltaNet), mantendo a eficiência computacional da atenção linear.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.37645" rel="noopener">Multi-State Linear Attention with Generalized Second-Order Routing</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.37645" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reforço com Crenças Verificáveis: Como Treinar Agentes para Agir com Evidência Suficiente — arXiv em 5</title>
+<meta name="description" content="Agentes de IA frequentemente cometem erros por preguiça, dando respostas antes de ter provas suficientes. Este paper propõe RLVB, um método de aprendizado por reforço que usa a incerteza interna do modelo como recompensa, forçando-o a agir apenas quando a evidência é clara.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Reforço com Crenças Verificáveis: Como Treinar Agentes para Agir com Evidência Suficiente">
+<meta property="og:description" content="Agentes de IA frequentemente cometem erros por preguiça, dando respostas antes de ter provas suficientes. Este paper propõe RLVB, um método de aprendizado por reforço que usa a incerteza interna do modelo como recompensa, forçando-o a agir apenas quando a evidência é clara.">
+<meta property="og:image" content="../../assets/papers/2611.32884/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Agentes</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.32884" rel="noopener">arXiv:2611.32884</a>
+    </div>
+    <h1><span class="s" data-s="t">Reforço com Crenças Verificáveis: Como Treinar Agentes para Agir com Evidência Suficiente</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Agentes de IA frequentemente cometem erros por preguiça, dando respostas antes de ter provas suficientes.</span> <span class="s" data-s="d-s1">Este paper propõe RLVB, um método de aprendizado por reforço que usa a incerteza interna do modelo como recompensa, forçando-o a agir apenas quando a evidência é clara.</span></p>
+    <p class="byline">
+      <span>Xuan et al.</span>
+      <span>9 min de leitura</span>
+<span>24/11/2026</span>    </p>
+    <div class="listen" data-article="2611.32884" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=oKCWS-GlwBc" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Prematuridade em Agentes de Longo Prazo</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Agentes de inteligência artificial projetados para tarefas de longo prazo — como jogos complexos, ambientes embarcados ou raciocínio lógico multi-turno — enfrentam um desafio fundamental: saber quando parar de buscar informações e quando agir.</span> <span class="s" data-s="b0-p0-s1">A literatura recente identifica um comportamento recorrente chamado &#34;preguiça&#34; (laziness).</span> <span class="s" data-s="b0-p0-s2">Em vez de continuar coletando evidências até que a resposta seja inequívoca, esses agentes frequentemente cometem-se a uma resposta antes de ter dados suficientes.</span> <span class="s" data-s="b0-p0-s3">O pior disso é que, muitas vezes, o agente explicitamente declara em sua linha de crença que ainda existem várias possibilidades possíveis, mas mesmo assim submete uma única resposta como se fosse a verdade.</span></p><p><span class="s" data-s="b0-p1-s0">Esse descompasso entre o que o agente sabe (sua crença) e o que ele faz (sua ação) é crítico.</span> <span class="s" data-s="b0-p1-s1">Em cenários reais, um usuário que recebe uma resposta não pode verificar facilmente como o agente chegou a ela.</span> <span class="s" data-s="b0-p1-s2">Se o agente acerta por sorte, ele não aprendeu a raciocinar corretamente.</span> <span class="s" data-s="b0-p1-s3">Se erra, a falha é de processo, não apenas de resultado.</span> <span class="s" data-s="b0-p1-s4">O aprendizado por reforço tradicional, que foca apenas na recompensa final (outcome reward), não consegue corrigir isso, pois uma aposta adivinhada correta recebe a mesma recompensa de uma resposta baseada em evidência sólida.</span></p><p><span class="s" data-s="b0-p2-s0">Neste artigo, analisamos o paper &#34;Lazy Agents Answer Against Their Own Beliefs: Reinforcement Learning with Verifiable Beliefs Teaches Them to Act on What They Believe&#34;, de Richmond Sin Jing Xuan, Peilin Feng, Wenbin Wang e Soujanya Poria, do DeCLaRe Lab da Nanyang Technological University.</span> <span class="s" data-s="b0-p2-s1">Os autores propõem uma nova abordagem chamada RLVB (Reinforcement Learning with Verifiable Beliefs), que visa ensinar o agente a agir exatamente de acordo com o que ele acredita ser possível, baseado nas evidências que possui.</span></p>        <h2><span class="s" data-s="b1-h">Por que o Aprendizado por Reforço Tradicional Falha Aqui?</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Para entender a contribuição do RLVB, precisamos dissecar por que métodos estabelecidos falham nesse contexto.</span> <span class="s" data-s="b1-p0-s1">O GRPO (Group Relative Policy Optimization) e o PPO (Proximal Policy Optimization), quando treinados apenas com recompensas de resultado (outcome rewards), enfrentam um problema de atribuição de crédito.</span> <span class="s" data-s="b1-p0-s2">Se o agente acerta a resposta final, toda a trajetória é recompensada.</span> <span class="s" data-s="b1-p0-s3">Isso incentiva a sorte.</span> <span class="s" data-s="b1-p0-s4">Se o agente erra, toda a trajetória é penalizada, mesmo que os passos intermediários tenham sido racionais.</span></p><p><span class="s" data-s="b1-p1-s0">Outra abordagem comum é usar um &#34;judge&#34; ou crítico baseado em LLM (Large Language Model) para fornecer recompensas de processo (process rewards).</span> <span class="s" data-s="b1-p1-s1">Nesse cenário, um modelo externo avalia cada passo do agente, dizendo se ele está no caminho certo.</span> <span class="s" data-s="b1-p1-s2">No entanto, isso introduz dependência externa e custo computacional adicional.</span> <span class="s" data-s="b1-p1-s3">Além disso, se o judge ver o estado verdadeiro oculto, ele pode recompensar o agente por afirmar coisas verdadeiras, mesmo que o agente não tenha evidência interna para sustentá-las.</span> <span class="s" data-s="b1-p1-s4">Isso não treina o agente a confiar em sua própria percepção, mas sim a mimetizar o conhecimento do judge.</span></p><p><span class="s" data-s="b1-p2-s0">O cerne do problema é que, durante o treinamento, o simulador conhece o estado verdadeiro (o local exato do objeto escondido, por exemplo), enquanto o agente treinado só vê janelas parciais ou observações ruidosas.</span> <span class="s" data-s="b1-p2-s1">Os autores argumentam que devemos usar essa informação privilegiada do simulador não para ensinar o agente o que é verdade, mas para calcular a incerteza exata que o agente deveria ter.</span> <span class="s" data-s="b1-p2-s2">É aí que entra o conceito de posterior verificável.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.32884/table36.webp" alt="Tabela 36 do paper ilustra o efeito de um &#39;check&#39; no harness. Mesmo forçando o agente a revisar sua primeira resposta, a precisão não melhora significativamente porque o agente ainda não aprendeu a buscar evidência suficiente antes de agir. O RLVB resolve isso treinando o processo, não apenas corrigindo o resultado." loading="lazy">
+          <figcaption>
+            Tabela 36 do paper ilustra o efeito de um &#39;check&#39; no harness. Mesmo forçando o agente a revisar sua primeira resposta, a precisão não melhora significativamente porque o agente ainda não aprendeu a buscar evidência suficiente antes de agir. O RLVB resolve isso treinando o processo, não apenas corrigindo o resultado.
+            <span class="source">Tabela 36 do paper · Xuan et al., arXiv:2611.32884</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">A Ideia Central: Recompensar a Busca de Evidência</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O RLVB propõe um mecanismo de recompensa de processo que não depende de um judge externo, mas sim do cálculo matemático do posterior exato das ações do agente.</span> <span class="s" data-s="b3-p0-s1">Em tarefas onde o simulador pode enumerar todos os estados possíveis (como nos benchmarks visuais propostos), é possível calcular, a cada passo t, qual é a distribuição de probabilidade exata sobre a resposta correta, dada toda a história de observações do agente até aquele momento.</span></p><p><span class="s" data-s="b3-p1-s0">Chamamos isso de posterior exato, denotado por b_t.</span> <span class="s" data-s="b3-p1-s1">Se o agente levantou duas copas e nenhuma tinha o objeto, o posterior exato diz que o objeto está nas duas copas restantes com probabilidade igual.</span> <span class="s" data-s="b3-p1-s2">O conjunto de respostas ainda possíveis, B*_t, contém todas as hipóteses não eliminadas pelas evidências.</span> <span class="s" data-s="b3-p1-s3">O RLVB usa esse posterior para definir duas recompensas principais a cada turno:</span></p><p><span class="s" data-s="b3-p2-s0">1.</span> <span class="s" data-s="b3-p2-s1">Recompensa por Buscar Evidência: Se o conjunto de respostas possíveis B*_t ainda tiver mais de um elemento, o agente deve realizar uma ação de busca (como levantar outra copa ou mover a janela de visão).</span> <span class="s" data-s="b3-p2-s2">Se ele fizer isso, recebe uma recompensa positiva.</span> <span class="s" data-s="b3-p2-s3">Se ele tentar responder com uma única opção, recebe uma penalidade.</span></p><p><span class="s" data-s="b3-p3-s0">2.</span> <span class="s" data-s="b3-p3-s1">Recompensa por Compromisso (Commit): Se o conjunto B*_t tiver apenas um elemento (ou seja, a evidência eliminou todas as outras opções), o agente deve submeter essa resposta.</span> <span class="s" data-s="b3-p3-s2">Se ele fizer isso, recebe uma recompensa.</span> <span class="s" data-s="b3-p3-s3">Se ele continuar buscando quando já sabe a resposta, recebe uma penalidade.</span></p>        <h2><span class="s" data-s="b4-h">Como o RLVB Funciona na Prática</span></h2>
+<p><span class="s" data-s="b4-p0-s0">O agente é um modelo de visão e linguagem (VLM) que, a cada turno, gera um pensamento interno (reasoning), uma linha de crença (belief line) e uma ação.</span> <span class="s" data-s="b4-p0-s1">A linha de crença é onde o agente lista explicitamente quais respostas ainda são possíveis.</span> <span class="s" data-s="b4-p0-s2">O RLVB ignora o conteúdo textual dessa linha para calcular a recompensa; ele olha apenas para a ação tomada e a compara com o posterior exato calculado pelo simulador.</span></p><p><span class="s" data-s="b4-p1-s0">Durante o treinamento, o simulador atua como um &#34;professor&#34; (teacher).</span> <span class="s" data-s="b4-p1-s1">Para cada história de observações h_t, o professor calcula a política ótima π*, que seria agir de acordo com o posterior exato.</span> <span class="s" data-s="b4-p1-s2">O RLVB então amostra várias ações do agente atual e compara o quão perto elas estão da política do professor.</span> <span class="s" data-s="b4-p1-s3">Se o agente, sabendo que há duas opções possíveis, decide levantar uma terceira copa (ação de busca), ele está alinhado com a incerteza e recebe crédito.</span> <span class="s" data-s="b4-p1-s4">Se ele chuta uma opção, ele está agindo contra sua própria incerteza verificável e é penalizado.</span></p><p><span class="s" data-s="b4-p2-s0">Diferente do PPO com judge, o RLVB nunca lê a linha de crença do agente para dar recompensa.</span> <span class="s" data-s="b4-p2-s1">Ele não se importa se o agente disse &#34;não sei&#34; ou &#34;sei&#34;.</span> <span class="s" data-s="b4-p2-s2">Ele se importa se a ação corresponde ao estado de informação objetivo.</span> <span class="s" data-s="b4-p2-s3">Isso força o agente a aprender que a ação correta é determinada pela evidência acumulada, e não por um palpite.</span> <span class="s" data-s="b4-p2-s4">O treinamento é feito via gradiente de política (policy gradient), atualizando os adaptadores LoRA do modelo base.</span></p>        <h2><span class="s" data-s="b5-h">Benchmarks e Configuração Experimental</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os autores avaliaram o RLVB em três benchmarks distintos, focados em tarefas visuais onde a resposta está escondida e deve ser descoberta:</span></p><p><span class="s" data-s="b5-p1-s0">1.</span> <span class="s" data-s="b5-p1-s1">HiddenGames: Um conjunto de sete tarefas de benchmarks existentes (como MineSweeper, MiniGrid, Sokoban) renderizadas em ambientes 3D.</span> <span class="s" data-s="b5-p1-s2">O teste foi feito em jogos com sementes e mapas nunca vistos durante o treinamento.</span></p><p><span class="s" data-s="b5-p2-s0">2.</span> <span class="s" data-s="b5-p2-s1">Pro-Worlds: Um benchmark novo proposto pelos autores.</span> <span class="s" data-s="b5-p2-s2">Nele, o agente vê um mundo grande através de uma pequena janela móvel.</span> <span class="s" data-s="b5-p2-s3">Ele deve mover a janela para coletar evidências visuais e decidir quando tem informação suficiente para responder.</span> <span class="s" data-s="b5-p2-s4">Isso testa a capacidade de retenção e combinação de evidências visuais.</span></p><p><span class="s" data-s="b5-p3-s0">3.</span> <span class="s" data-s="b5-p3-s1">RoboQuest: Tarefas de manipulação robótica simulada em cozinhas, onde o agente deve encontrar objetos ou realizar interações físicas.</span> <span class="s" data-s="b5-p3-s2">Este benchmark é mais desafiador porque não possui um posterior exato trivial, servindo como teste de transferência para ambientes mais complexos.</span></p><p><span class="s" data-s="b5-p4-s0">Os modelos base utilizados foram Qwen3-VL-4B-Thinking, Qwen3-VL-8B-Thinking e Qwen3.5-4B.</span> <span class="s" data-s="b5-p4-s1">Os autores compararam o RLVB contra o modelo base (sem treinamento), o modelo base com linha de crença, SFT (Supervised Fine-Tuning), GRPO, PPO com recompensa de resultado e PPO com recompensa de processo de um judge LLM.</span></p>        <h2><span class="s" data-s="b6-h">Resultados: O RLVB Supera os Baselines</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Os resultados mostram que o RLVB melhora o modelo base em todas as nove configurações testadas, com um ganho médio de precisão de 17,1%.</span> <span class="s" data-s="b6-p0-s1">Em contraste, métodos que usam apenas recompensa de resultado (GRPO e PPO) caíram abaixo do modelo base em média, demonstrando que a recompensa final sozinha é insuficiente ou até prejudicial para tarefas de busca de evidência, possivelmente por incentivar atalhos perigosos.</span></p><p><span class="s" data-s="b6-p1-s0">O RLVB também superou o PPO treinado com um judge LLM em 9,3% em média, apesar de usar 1,6 vezes menos horas de GPU.</span> <span class="s" data-s="b6-p1-s1">Isso destaca a eficiência do método: ao usar o posterior exato do simulador, eles evitam o custo computacional e a instabilidade de treinar com judges externos.</span></p><p><span class="s" data-s="b6-p2-s0">Um dado crucial para entender o sucesso do RLVB não é apenas a precisão final, mas a qualidade do processo.</span> <span class="s" data-s="b6-p2-s1">O paper mede a taxa de episódios onde o agente responde com evidência suficiente.</span> <span class="s" data-s="b6-p2-s2">O modelo base faz isso em apenas 8%, 0,4% e 36% dos episódios nos três benchmarks.</span> <span class="s" data-s="b6-p2-s3">O agente treinado com RLVB alcança 51%, 12% e 74%.</span> <span class="s" data-s="b6-p2-s4">Isso significa que o ganho de precisão vem do fato de o agente estar respondendo muito mais frequentemente quando realmente sabe a resposta.</span></p><p><span class="s" data-s="b6-p3-s0">Além disso, o RLVB corrigiu o problema da &#34;preguiça&#34;.</span> <span class="s" data-s="b6-p3-s1">O agente treinado comete-se a uma resposta prematura (quando a evidência ainda aponta para várias opções) em apenas 0,1% a 2,2% dos turns relevantes.</span> <span class="s" data-s="b6-p3-s2">O modelo base comete esse erro em 3% a 68% dos turns.</span> <span class="s" data-s="b6-p3-s3">Isso prova que o agente aprendeu a alinhar sua ação com sua própria incerteza verificável.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b7-t">A Linha de Crença não é a Fonte da Recompensa</span></h3>
+          <p><span class="s" data-s="b7-c-s0">É importante notar que o RLVB não recompensa o agente por escrever uma linha de crença &#39;correta&#39;.</span> <span class="s" data-s="b7-c-s1">Ele recompensa a ação tomada.</span> <span class="s" data-s="b7-c-s2">No entanto, o resultado é que o agente passa a escrever linhas de crença mais precisas, porque precisa delas para guiar suas ações de busca.</span> <span class="s" data-s="b7-c-s3">O método ensina o agente a agir sobre o que ele acredita, não a dizer o que o simulador quer ouvir.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b8-h">Limitações e Trabalho Futuro</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Apesar dos resultados promissores, os autores destacam limitações importantes.</span> <span class="s" data-s="b8-p0-s1">Primeiro, o RLVB depende da existência de um posterior exato calculável pelo simulador.</span> <span class="s" data-s="b8-p0-s2">Isso funciona bem em ambientes discretos e fechados como os usados nos benchmarks, mas pode ser difícil de aplicar em tarefas abertas ou contínuas onde o estado não é totalmente observável ou enumerável.</span></p><p><span class="s" data-s="b8-p1-s0">Segundo, o agente treinado ainda não é perfeito.</span> <span class="s" data-s="b8-p1-s1">Embora ele pare de adivinhar cedo, seus passos individuais não são necessariamente mais informativos que os do modelo base.</span> <span class="s" data-s="b8-p1-s2">Ou seja, o agente aprendeu a timing (quando parar), mas ainda pode interpretar mal as observações individuais.</span> <span class="s" data-s="b8-p1-s3">O paper sugere que extensões futuras devem focar em melhorar a escolha da próxima ação (não apenas o timing) e em treinar o agente para ler observações corretamente uma vez que a evidência seja suficiente.</span></p><p><span class="s" data-s="b8-p2-s0">Outra limitação é a transferência.</span> <span class="s" data-s="b8-p2-s1">O RLVB foi treinado em tarefas com posterior exato, mas testado também no RoboQuest, que não tem essa propriedade.</span> <span class="s" data-s="b8-p2-s2">Embora tenha havido melhoria, o ganho é menor, indicando que a generalização para ambientes sem verificação exata de crença é um problema em aberto.</span></p><p><span class="s" data-s="b8-p3-s0">Finalmente, o paper não resolve o problema de agentes que operam em ambientes onde o próprio agente não tem acesso ao posterior exato durante o teste.</span> <span class="s" data-s="b8-p3-s1">A abordagem atual é um método de treinamento que usa informação privilegiada do simulador para ensinar o agente a ser metacognitivo.</span> <span class="s" data-s="b8-p3-s2">Para deploy em cenários reais sem simulador, seria necessário aprender a estimar esse posterior, o que é um passo natural para a próxima fase de pesquisa.</span></p>        <h2><span class="s" data-s="b9-h">Conclusão</span></h2>
+<p><span class="s" data-s="b9-p0-s0">O paper &#34;Lazy Agents Answer Against Their Own Beliefs&#34; oferece uma correção elegante a um problema fundamental em agentes autônomos: a desconexão entre conhecimento e ação.</span> <span class="s" data-s="b9-p0-s1">Ao introduzir o RLVB, os autores mostram que é possível treinar modelos de visão e linguagem para serem honestos com sua própria incerteza, sem depender de judges externos ou recompensas esparsas.</span></p><p><span class="s" data-s="b9-p1-s0">A mensagem central é clara: se você quer um agente que não seja preguiçoso, não basta premiá-lo por acertar.</span> <span class="s" data-s="b9-p1-s1">Você precisa premiá-lo por continuar buscando até que a evidência seja irrefutável.</span> <span class="s" data-s="b9-p1-s2">O RLVB faz exatamente isso, usando a matemática do posterior exato como bússola de treinamento.</span> <span class="s" data-s="b9-p1-s3">Para desenvolvedores e pesquisadores de IA, isso representa um passo significativo em direção a agentes mais confiáveis, onde a precisão é um subproduto de um processo de raciocínio robusto e verificável.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">O problema da &#39;preguiça&#39; em agentes longos: eles adivinham antes de ter evidência, mesmo quando sabem que há incerteza.</span></li><li><span class="s" data-s="k1">RLVB usa o posterior exato do simulador para recompensar passos de busca de evidência, não apenas o resultado final.</span></li><li><span class="s" data-s="k2">O método supera PPO e GRPO em nove configurações, melhorando a precisão em 17,1% em média sem precisar de judges externos.</span></li><li><span class="s" data-s="k3">O agente treinado age consistentemente com suas próprias crenças, reduzindo drasticamente a taxa de respostas prematuras.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.32884" rel="noopener">Lazy Agents Answer Against Their Own Beliefs: Reinforcement Learning with Verifiable Beliefs Teaches Them to Act on What They Believe</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.32884" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

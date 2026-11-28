@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Otimização Guiada por Similaridade para Detecção de Simetria Aproximada em Redes — arXiv em 5</title>
+<meta name="description" content="Este paper compara algoritmos de otimização (SA, GA, TS, BASIN) para encontrar simetrias aproximadas em grafos, avaliando se usar centralidade de nós como guia melhora ou piora os resultados.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Otimização Guiada por Similaridade para Detecção de Simetria Aproximada em Redes">
+<meta property="og:description" content="Este paper compara algoritmos de otimização (SA, GA, TS, BASIN) para encontrar simetrias aproximadas em grafos, avaliando se usar centralidade de nós como guia melhora ou piora os resultados.">
+<meta property="og:image" content="../../assets/papers/2611.16555/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Redes neurais</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.16555" rel="noopener">arXiv:2611.16555</a>
+    </div>
+    <h1><span class="s" data-s="t">Otimização Guiada por Similaridade para Detecção de Simetria Aproximada em Redes</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Este paper compara algoritmos de otimização (SA, GA, TS, BASIN) para encontrar simetrias aproximadas em grafos, avaliando se usar centralidade de nós como guia melhora ou piora os resultados.</span></p>
+    <p class="byline">
+      <span>Hartman et al.</span>
+      <span>6 min de leitura</span>
+<span>12/11/2026</span>    </p>
+    <div class="listen" data-article="2611.16555" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=G1PQC_1HTbc" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Rigidez da Simetria Exata</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Em teoria de grafos, a simetria é tradicionalmente definida por automorfismos: permutações exatas dos vértices que preservam todas as arestas.</span> <span class="s" data-s="b0-p0-s1">Embora elegante, essa definição é frágil.</span> <span class="s" data-s="b0-p0-s2">Em redes reais, como conectomas cerebrais ou redes sociais, pequenas perturbações ou ruídos podem destruir completamente a simetria exata, mesmo que uma estrutura quase-simétrica significativa permaneça.</span></p><p><span class="s" data-s="b0-p1-s0">Para contornar isso, pesquisadores propuseram a detecção de simetria aproximada.</span> <span class="s" data-s="b0-p1-s1">Em vez de exigir invariância total, o objetivo é encontrar uma permutação de vértices que minimize o número de desajustes nas arestas.</span> <span class="s" data-s="b0-p1-s2">Isso transforma o problema em uma tarefa de otimização sobre o espaço de permutações.</span> <span class="s" data-s="b0-p1-s3">O desafio é que esse espaço cresce fatorialmente com o número de nós, tornando a busca exata inviável para grafos grandes.</span></p><p><span class="s" data-s="b0-p2-s0">Além disso, ao procurar simetria em um único grafo (auto-simetria), existe uma solução trivial e sem informação: a identidade, onde cada nó mapeia para si mesmo.</span> <span class="s" data-s="b0-p2-s1">O problema precisa ser especificado para evitar essa solução óbvia, geralmente normalizando a função objetivo para penalizar pontos fixos ou exigir correspondências não triviais.</span></p>        <h2><span class="s" data-s="b1-h">A Hipótese da Similaridade Estrutural</span></h2>
+<p><span class="s" data-s="b1-p0-s0">A ideia central deste trabalho é que a informação de similaridade entre nós pode guiar a busca otimizada.</span> <span class="s" data-s="b1-p0-s1">A premissa é intuitiva: em uma simetria estrutural, vértices mapeados para si mesmos tendem a ter características estruturais semelhantes, como grau ou centralidade.</span> <span class="s" data-s="b1-p0-s2">Se dois nós têm perfis estruturais similares, é mais provável que sejam correspondências válidas em uma simetria aproximada.</span></p><p><span class="s" data-s="b1-p1-s0">Os autores testam se incorporar essa similaridade, medida por medidas de centralidade, nos algoritmos de otimização melhora a capacidade de encontrar permutações de baixa energia (baixo número de desajustes de arestas).</span> <span class="s" data-s="b1-p1-s1">Eles adaptam seis algoritmos clássicos — Simulated Annealing (SA), Algoritmos Genéticos (GA), Tabu Search (TS), Particle Swarm Optimization (PSO), Differential Evolution (DE) e Quadratic Symmetry Approximator (QSA) — para incluir essa guia.</span></p><p><span class="s" data-s="b1-p2-s0">Além desses, eles introduzem o BASIN (Bilinear Approximate Symmetry Inference), um método contínuo que aprende embeddings de nós e forma uma matriz de atribuição suave via embeddings bilineares, projetando o resultado final para uma permutação discreta.</span> <span class="s" data-s="b1-p2-s1">O BASIN não usa uma guia explícita de similaridade pré-definida, mas aprende a similaridade dos dados.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.16555/figure1.webp" alt="Boxplots mostrando a distribuição dos escores de simetria aproximada S&#39;(A,P) para grafos ER. As caixas comesturadas representam variantes guiadas por similaridade, enquanto as vazias são as versões não guiadas. Note que o ganho varia drasticamente entre algoritmos e densidades de arestas." loading="lazy">
+          <figcaption>
+            Boxplots mostrando a distribuição dos escores de simetria aproximada S&#39;(A,P) para grafos ER. As caixas comesturadas representam variantes guiadas por similaridade, enquanto as vazias são as versões não guiadas. Note que o ganho varia drasticamente entre algoritmos e densidades de arestas.
+            <span class="source">Figura 1 do paper · Hartman et al., arXiv:2611.16555</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Metodologia: Algoritmos e Guias</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Para cada algoritmo, os autores criaram uma versão &#39;guiada&#39; (SG).</span> <span class="s" data-s="b3-p0-s1">No caso do Simulated Annealing, por exemplo, em vez de propor trocas aleatórias entre vértices, a proposta de troca é enviesada para ocorrer entre vértices com valores de centralidade semelhantes.</span> <span class="s" data-s="b3-p0-s2">Isso reduz o espaço de busca efetivo, focando em correspondências estruturalmente plausíveis.</span></p><p><span class="s" data-s="b3-p1-s0">Para o Tabu Search (SGTS) e Algoritmos Genéticos (SGGA), a guia influencia a seleção de vizinhos ou a mutação.</span> <span class="s" data-s="b3-p1-s1">O QSA, que relaxa o problema de permutação para uma matriz estocástica dupla, serve como baseline contínuo.</span> <span class="s" data-s="b3-p1-s2">O BASIN é treinado para minimizar a discrepância estrutural enquanto aprende representações vetoriais dos nós.</span></p><p><span class="s" data-s="b3-p2-s0">A avaliação usa um pipeline unificado em quatro famílias de grafos sintéticos (Erdős-Rényi, Barabási-Albert, Lateral Random Model com arestas remapeadas e Modular Mirror Model com órbitas plantadas), conectomas cerebrais estruturais e três redes empíricas com grupos de automorfismo conhecidos.</span> <span class="s" data-s="b3-p2-s1">A métrica principal é S&#39;(A,P), uma pontuação normalizada que penaliza desajustes de arestas e pontos fixos.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b4-t">A Armadilha da Centralidade Uniforme</span></h3>
+          <p><span class="s" data-s="b4-c-s0">A guia de similaridade assume heterogeneidade nas centralidades dos nós.</span> <span class="s" data-s="b4-c-s1">Em grafos regulares ou altamente simétricos, muitos nós podem ter a mesma centralidade, tornando a guia ineficaz ou aleatória.</span> <span class="s" data-s="b4-c-s2">O paper destaca que a similaridade estrutural é um viés útil, não uma lei física.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b5-h">Resultados: Quando a Guia Ajuda?</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os resultados mostram que o uso de similaridade não é universalmente benéfico.</span> <span class="s" data-s="b5-p0-s1">No Modular Mirror Model (MMM), onde há uma órbita plantada (uma simetria conhecida que os algoritmos não guiados frequentemente perdem devido a perturbações), a guia de similaridade foi decisiva.</span> <span class="s" data-s="b5-p0-s2">Variantes guiadas de SA, GA, QSA e PSO recuperaram a simetria plantada em mais de 85% dos reinícios, enquanto as versões não guiadas falharam em mais de 60% dos casos.</span></p><p><span class="s" data-s="b5-p1-s0">No entanto, em grafos Erdős-Rényi (ER) e Barabási-Albert (BA), que não possuem uma órbita plantada clara, o comportamento foi misto.</span> <span class="s" data-s="b5-p1-s1">O SGGA (Genético Guiado) e o SGPSO melhoraram consistentemente em todas as famílias de grafos testadas.</span> <span class="s" data-s="b5-p1-s2">O SGDE (Differential Evolution Guiado) foi pior em BA, mas melhor em ER e LRM.</span></p><p><span class="s" data-s="b5-p2-s0">Surpreendentemente, o SGTS (Tabu Search Guiado) foi significativamente pior em muitas condições de ER e LRM.</span> <span class="s" data-s="b5-p2-s1">Isso sugere que, em grafos sem estrutura de órbita forte, a guia de centralidade pode introduzir viéses prejudiciais, levando o algoritmo a regiões subótimas do espaço de busca que parecem estruturalmente plausíveis, mas não são as melhores soluções para a minimização de arestas.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.16555/figure4.webp" alt="Diagrama de ablação da guia. Cada ponto representa uma condição experimental. Valores positivos indicam que a guia melhorou o desempenho (menor S&#39;(A,P)). O gráfico confirma que o ganho é altamente dependente da família do grafo e do algoritmo." loading="lazy">
+          <figcaption>
+            Diagrama de ablação da guia. Cada ponto representa uma condição experimental. Valores positivos indicam que a guia melhorou o desempenho (menor S&#39;(A,P)). O gráfico confirma que o ganho é altamente dependente da família do grafo e do algoritmo.
+            <span class="source">Figura 4 do paper · Hartman et al., arXiv:2611.16555</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Comparação de Algoritmos: O Vencedor</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Ao comparar os algoritmos puros, o Tabu Search (TS) emergiu como o mais robusto.</span> <span class="s" data-s="b7-p0-s1">Sua versão guiada, SGTS, obteve a mediana mais baixa de escores S&#39;(A,P) entre todas as variantes guiadas em 44 condições sintéticas.</span> <span class="s" data-s="b7-p0-s2">O TS explora o espaço de permutações de forma eficiente, evitando mínimos locais através de sua lista tabu, e a guia de similaridade, embora não sempre estatisticamente superior, raramente piora o desempenho em comparação com o TS não guiado.</span></p><p><span class="s" data-s="b7-p1-s0">Entre os métodos contínuos, o BASIN superou o QSA na maioria das condições de grafos LRM remapeados.</span> <span class="s" data-s="b7-p1-s1">A capacidade do BASIN de aprender embeddings bilineares permite uma relaxação mais flexível do problema, escapando de mínimos locais que afetam métodos baseados apenas em trocas discretas, como o SA.</span></p><p><span class="s" data-s="b7-p2-s0">O Algoritmo Genético (GA) mostrou-se competente, especialmente quando guiado, mantendo diversidade populacional que ajuda a explorar diferentes regiões do espaço de simetria.</span> <span class="s" data-s="b7-p2-s1">O PSO também teve desempenho sólido, beneficiando-se da guia em diversos cenários.</span></p>        <h2><span class="s" data-s="b8-h">Redes Empíricas e Conectomas</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Nos conectomas cerebrais estruturais, não há uma &#39;resposta correta&#39; única de automorfismo, pois o cérebro humano possui assimetrias anatômicas e funcionais.</span> <span class="s" data-s="b8-p0-s1">O objetivo aqui é explorar o espaço de simetrias aproximadas.</span> <span class="s" data-s="b8-p0-s2">A guia de similaridade reduziu a variabilidade das soluções: em vez de retornar mapas diferentes a cada reinício, os algoritmos guiados convergiram para soluções mais consistentes.</span></p><p><span class="s" data-s="b8-p1-s0">Isso pode ser uma vantagem ou desvantagem.</span> <span class="s" data-s="b8-p1-s1">Se buscamos uma única representação de homologia hemisférica, a guia ajuda.</span> <span class="s" data-s="b8-p1-s2">Se estudamos a distribuição de simetrias aproximadas como uma propriedade intrínseca da rede cerebral, a guia pode estar ocultando a diversidade de mapeamentos possíveis.</span> <span class="s" data-s="b8-p1-s3">No grafo JAZZ, onde um automorfismo exato existe, a guia ajudou o GA, mas piorou o SA.</span></p><p><span class="s" data-s="b8-p2-s0">Em redes empíricas como PDZ e NETSCIENCE, onde nenhum mapeamento atinge um automorfismo perfeito, as versões guiadas de GA, TS e PSO produziram mapas mais próximos dos subgrupos de autômatos conhecidos (como subgrupos de gêmeos) do que as versões não guiadas.</span> <span class="s" data-s="b8-p2-s1">Isso valida a utilidade da guia em redes do mundo real com estrutura parcial.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.16555/figure8.webp" alt="Diagrama de diferença crítica (Friedman/Nemenyi) nas condições mais difíceis. O SGTS está no topo do ranking, indicando o melhor desempenho médio. O BASIN se destaca em cenários específicos de grafos laterais." loading="lazy">
+          <figcaption>
+            Diagrama de diferença crítica (Friedman/Nemenyi) nas condições mais difíceis. O SGTS está no topo do ranking, indicando o melhor desempenho médio. O BASIN se destaca em cenários específicos de grafos laterais.
+            <span class="source">Figura 8 do paper · Hartman et al., arXiv:2611.16555</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">Limitações e Conclusões</span></h2>
+<p><span class="s" data-s="b10-p0-s0">O paper deixa claro que a similaridade de nós não é uma panaceia.</span> <span class="s" data-s="b10-p0-s1">Ela é decisiva apenas quando há uma estrutura forte (como uma órbita plantada) que os algoritmos não guiados falham em encontrar.</span> <span class="s" data-s="b10-p0-s2">Em grafos aleatórios ou com sinal estrutural fraco, a guia pode ser neutra ou prejudicial, dependendo do algoritmo.</span></p><p><span class="s" data-s="b10-p1-s0">A principal contribuição é a comparação unificada que desmistifica a eficácia da guia.</span> <span class="s" data-s="b10-p1-s1">Para aplicações práticas, o Tabu Search guiado (SGTS) é a recomendação principal para equilíbrio entre qualidade e robustez.</span> <span class="s" data-s="b10-p1-s2">Para problemas onde a relaxação contínria é necessária ou desejada, o BASIN é superior ao QSA.</span></p><p><span class="s" data-s="b10-p2-s0">Estudos futuros devem investigar guias de similaridade baseadas em métricas além da centralidade, como coeficiente de clustering ou entre-closing, para ver se capturam melhor a estrutura local em grafos heterogêneos.</span> <span class="s" data-s="b10-p2-s1">Além disso, a adaptação dinâmica da força da guia durante a otimização pode ser uma linha promissora para evitar os viéses observados em grafos ER.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b11-t">Takeaway para Engenheiros</span></h3>
+          <p><span class="s" data-s="b11-c-s0">Se você está implementando detecção de simetria aproximada, não assuma que adicionar heurísticas de similaridade sempre ajuda.</span> <span class="s" data-s="b11-c-s1">Teste a variante guiada e não guiada.</span> <span class="s" data-s="b11-c-s2">O Tabu Search é o baseline mais forte; use o BASIN se precisar de relaxação contínua.</span></p>
+        </aside>
+
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">A guia de similaridade baseada em centralidade melhora significativamente a recuperação de simetrias plantadas, mas pode prejudicar o desempenho em grafos aleatórios (ER/BA) dependendo do algoritmo.</span></li><li><span class="s" data-s="k1">O Tabu Search Guiado (SGTS) apresentou o melhor desempenho geral, com a menor mediana de erro em 44 condições sintéticas, superando variantes guiadas de SA, GA e PSO.</span></li><li><span class="s" data-s="k2">O BASIN, um método de embeddings bilineares contínuos, superou o QSA em grafos com desvios complexos de simetria, oferecendo uma alternativa robusta para relaxações de permutação.</span></li><li><span class="s" data-s="k3">Em redes empíricas e conectomas, a guia reduz a variabilidade das soluções, o que é útil para consistência, mas pode mascarar a diversidade de simetrias aproximadas inerentes à rede.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.16555" rel="noopener">Similarity-Guided Optimization Strategies for Approximate Network Symmetry Detection</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.16555" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

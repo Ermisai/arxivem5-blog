@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Valores humanos em agentes de IA: o que os usuários do OpenClaw realmente se importam ao delegar trabalho — arXiv em 5</title>
+<meta name="description" content="Análise de 73 mil posts no Reddit mostra que usuários de agentes autônomos de IA se preocupam menos com o que o agente entrega e mais com as condições que conseguem configurar antes de cada execução — custo, acesso, supervisão.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Valores humanos em agentes de IA: o que os usuários do OpenClaw realmente se importam ao delegar trabalho">
+<meta property="og:description" content="Análise de 73 mil posts no Reddit mostra que usuários de agentes autônomos de IA se preocupam menos com o que o agente entrega e mais com as condições que conseguem configurar antes de cada execução — custo, acesso, supervisão.">
+<meta property="og:image" content="../../assets/papers/2609.22067/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Agentes</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2609.22067" rel="noopener">arXiv:2609.22067</a>
+    </div>
+    <h1><span class="s" data-s="t">Valores humanos em agentes de IA: o que os usuários do OpenClaw realmente se importam ao delegar trabalho</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Análise de 73 mil posts no Reddit mostra que usuários de agentes autônomos de IA se preocupam menos com o que o agente entrega e mais com as condições que conseguem configurar antes de cada execução — custo, acesso, supervisão.</span></p>
+    <p class="byline">
+      <span>Ma et al.</span>
+      <span>10 min de leitura</span>
+<span>18/09/2026</span>    </p>
+    <div class="listen" data-article="2609.22067" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=xO_qhZQ0lD8" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema: avaliar agentes pela tarefa, ignorar o que importa para quem usa</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Agentes de IA autônomos — sistemas baseados em LLMs que executam tarefas inteiras sem supervisão constante — estão cada vez mais presentes no trabalho real de desenvolvedores e cientistas de dados.</span> <span class="s" data-s="b0-p0-s1">Diferente de um assistente conversacional que devolve um patch para você revisar, um agente lê o repositório, edita arquivos, roda testes e faz commit sob suas credenciais, tudo em uma única execução que os autores chamam de run.</span></p><p><span class="s" data-s="b0-p1-s0">O OpenClaw, agente open-source lançado em novembro de 2025 que roda no computador do usuário e opera através de apps de chat como WhatsApp, acumulou mais de 370 mil estrelas no GitHub até agosto de 2026.</span> <span class="s" data-s="b0-p1-s1">Mas as avaliações técnicas desses agentes medem se a tarefa foi completada, não se o sistema respeita o que os usuários consideram importante — seus valores humanos.</span></p><p><span class="s" data-s="b0-p2-s0">Este paper usa Value Sensitive Design (VSD), framework que define valor como aquilo que uma pessoa ou grupo considera importante na vida, para analisar 73.093 posts em primeira pessoa no Reddit sobre uso do OpenClaw.</span> <span class="s" data-s="b0-p2-s1">A pergunta central: quais valores humanos os usuários invocam quando delegam trabalho a um agente, e a que aspectos do agente esses valores se conectam?</span></p>        <h2><span class="s" data-s="b1-h">A ideia: mapear valores, aspectos do agente e resultados em posts reais</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Os autores coletaram 1,1 milhão de posts e comentários do Reddit entre janeiro e abril de 2026 usando as palavras-chave &#39;openclaw&#39;, &#39;clawdbot&#39; e &#39;moltbot&#39;.</span> <span class="s" data-s="b1-p0-s1">Primeiro, filtraram apenas relatos em primeira pessoa de quem usou ou tentou usar o agente, descartando observações de segunda mão.</span> <span class="s" data-s="b1-p0-s2">Isso deixou 187.479 posts.</span></p><p><span class="s" data-s="b1-p1-s0">Depois, aplicaram um esquema de codificação assistido por LLM que extraiu, para cada post, quatro dimensões: (1) o valor humano em jogo, (2) o aspecto do agente envolvido, (3) se o valor foi atendido ou não, e (4) o resultado para o usuário (efetividade, custo ou supervisão).</span> <span class="s" data-s="b1-p1-s1">Só posts com as três primeiras dimensões válidas entraram na análise final, totalizando 73.093 posts.</span></p><p><span class="s" data-s="b1-p2-s0">A taxonomia de valores partiu de 12 dos 13 valores de Friedman et al. (cortesia foi excluída por ser sobre polidez interpessoal) e adicionou nove valores indutivamente, como controle humano significativo, confiabilidade e integridade contextual.</span> <span class="s" data-s="b1-p2-s1">No total, 21 valores foram identificados e agrupados em seis famílias: Operação Autônoma, Operação Confiável, Operação Acessível, Alcance Limitado, Revisabilidade e Acesso Equitativo.</span></p><p><span class="s" data-s="b1-p3-s0">Os 18 aspectos do agente vieram de decomposições técnicas de arquitetura de agentes (memória, planejamento, ações) e de literatura de HCI sobre supervisão e recuperação.</span> <span class="s" data-s="b1-p3-s1">Exemplos: núcleo do modelo, ferramentas externas, regras de parada, credenciais, custos de execução.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.22067/figure1.webp" alt="Os 21 valores humanos identificados nos 73.093 posts, agrupados em seis famílias. Barras sólidas mostram valores individuais; barras sombreadas mostram o total de cada grupo. Operação Confiável e Operação Autônoma dominam." loading="lazy">
+          <figcaption>
+            Os 21 valores humanos identificados nos 73.093 posts, agrupados em seis famílias. Barras sólidas mostram valores individuais; barras sombreadas mostram o total de cada grupo. Operação Confiável e Operação Autônoma dominam.
+            <span class="source">Figura 1 do paper · Ma et al., arXiv:2609.22067</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Validação humana e análise estatística</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Validação humana foi feita em três etapas.</span> <span class="s" data-s="b3-p0-s1">Na triagem de relevância (Stage 1), dois anotadores humanos revisaram 400 posts e concordaram com o LLM em 92% dos casos (kappa=0,88).</span> <span class="s" data-s="b3-p0-s2">Na codificação de valores (Stage 2), quatro anotadores revisaram 400 posts: concordância de 83,5% no valor humano, 78,8% no aspecto do agente, 87,8% no atendimento do valor.</span></p><p><span class="s" data-s="b3-p1-s0">A análise combinou métodos quantitativos e qualitativos.</span> <span class="s" data-s="b3-p1-s1">Primeiro, os autores calcularam a distribuição de aspectos do agente em cada grupo de valores e compararam com a distribuição esperada no corpus inteiro.</span> <span class="s" data-s="b3-p1-s2">Aspectos sobre-representados em um grupo revelam onde aquele valor se concentra.</span></p><p><span class="s" data-s="b3-p2-s0">Depois, mediram a taxa de atendimento (met rate) — a proporção de posts em que o valor foi satisfeito — por grupo de valores e por resultado do usuário.</span> <span class="s" data-s="b3-p2-s1">Intervalos de confiança vieram de bootstrap com 2.000 reamostragens.</span> <span class="s" data-s="b3-p2-s2">Por fim, leitura qualitativa de posts exemplares ilustrou os padrões quantitativos.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b4-t">O que é uma &#39;run&#39; de um agente?</span></h3>
+          <p><span class="s" data-s="b4-c-s0">Os autores definem run como o trecho de trabalho delegado que vai da instrução do usuário até o resultado que ele lê depois, sem checkpoints intermediários.</span> <span class="s" data-s="b4-c-s1">Durante uma run, o agente age sozinho — lê arquivos, gasta créditos, comete código — e o usuário só retoma controle no final.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b5-h">Resultado 1: valores nas condições que o usuário configura, não no output</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Em quatro dos seis grupos de valores, os posts se concentraram em aspectos do agente que o usuário configura antes da execução, não em aspectos que o agente exerce sozinho.</span> <span class="s" data-s="b5-p0-s1">Operação Acessível discutiu custos de execução (61% acima da média do corpus).</span> <span class="s" data-s="b5-p0-s2">Alcance Limitado discutiu credenciais e ferramentas externas (38% e 23% acima).</span> <span class="s" data-s="b5-p0-s3">Revisabilidade discutiu regras de parada e logs (35% e 22% acima).</span> <span class="s" data-s="b5-p0-s4">Acesso Equitativo discutiu instalação e hospedagem (53% e 30% acima).</span></p><p><span class="s" data-s="b5-p1-s0">Operação Confiável e Operação Autônoma discutiram frequentemente o núcleo do modelo, mas esse aspecto era o mais discutido no corpus inteiro (21,8% dos posts), então não caracterizava exclusivamente esses grupos.</span> <span class="s" data-s="b5-p1-s1">O padrão geral: valores não se ligam ao que o agente produz, mas às fronteiras configuráveis que o usuário estabelece ao redor da execução.</span></p><p><span class="s" data-s="b5-p2-s0">Os autores chamam essas fronteiras de condições de operação (operating conditions): o modelo e o host, o arranjo de recursos, o alcance concedido, o portão de aprovação e registro, a instalação inicial.</span> <span class="s" data-s="b5-p2-s1">Uma condição não é uma categoria codificada, mas o que o usuário pode ajustar em cada aspecto do agente.</span> <span class="s" data-s="b5-p2-s2">Você escolhe qual modelo roda, mas não como ele raciocina; você define uma regra de parada, mas não o plano que o agente forma.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.22067/figure2.webp" alt="Distribuição de aspectos do agente em cada grupo de valores. Cada coluna soma 100%. Células laranjas indicam sobre-representação; azuis, sub-representação. Note como Operação Acessível se concentra em custos, Alcance Limitado em credenciais." loading="lazy">
+          <figcaption>
+            Distribuição de aspectos do agente em cada grupo de valores. Cada coluna soma 100%. Células laranjas indicam sobre-representação; azuis, sub-representação. Note como Operação Acessível se concentra em custos, Alcance Limitado em credenciais.
+            <span class="source">Figura 2 do paper · Ma et al., arXiv:2609.22067</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Resultado 2: valores atendidos na entrega, não atendidos na supervisão</span></h2>
+<p><span class="s" data-s="b7-p0-s0">A taxa de atendimento de valores variou drasticamente entre os grupos.</span> <span class="s" data-s="b7-p0-s1">Em cinco dos seis grupos, valores foram majoritariamente atendidos quando os posts descreviam o que o agente entregou (resultado de efetividade): Operação Autônoma 71% atendida, Operação Confiável 68%, Operação Acessível 66%, Alcance Limitado 63%, Acesso Equitativo 58%.</span></p><p><span class="s" data-s="b7-p1-s0">Mas em todos os seis grupos, valores foram majoritariamente não atendidos quando os posts descreviam o usuário supervisionando o agente (resultado de supervisão): Operação Autônoma 71% não atendida, Operação Confiável 65%, Operação Acessível 60%, Alcance Limitado 58%, Revisabilidade 54%, Acesso Equitativo 52%.</span></p><p><span class="s" data-s="b7-p2-s0">Revisabilidade foi o único grupo sem maioria de valores atendidos em nenhum resultado: 50% atendida em efetividade, 46% em custo, 46% em supervisão.</span> <span class="s" data-s="b7-p2-s1">Isso reflete a dificuldade de inspecionar o que aconteceu durante uma run: usuários queriam logs detalhados, mas o agente não fornecia, ou fornecia em formato ilegível.</span></p><p><span class="s" data-s="b7-p3-s0">Custos (gastar créditos, tempo, dados) apareceram principalmente em Operação Acessível (42% dos posts desse grupo mencionaram custo) e Revisabilidade (31%).</span> <span class="s" data-s="b7-p3-s1">Em ambos, a maioria dos posts sobre custo reportou valores não atendidos: 58% em Operação Acessível, 54% em Revisabilidade.</span> <span class="s" data-s="b7-p3-s2">Usuários relataram runs que esgotaram saldo de API, consumiram horas de GPU ou apagaram trabalho irrecuperável.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.22067/figure5.webp" alt="Taxa de atendimento de valores por grupo e resultado do usuário. Azul indica maioria atendida, vermelho maioria não atendida. Supervisão é majoritariamente vermelha em todos os grupos; efetividade é majoritariamente azul em cinco de seis." loading="lazy">
+          <figcaption>
+            Taxa de atendimento de valores por grupo e resultado do usuário. Azul indica maioria atendida, vermelho maioria não atendida. Supervisão é majoritariamente vermelha em todos os grupos; efetividade é majoritariamente azul em cinco de seis.
+            <span class="source">Figura 5 do paper · Ma et al., arXiv:2609.22067</span>
+          </figcaption>
+        </figure>
+        <aside class="callout">
+          <h3><span class="s" data-s="b9-t">Delegação sensível a valores</span></h3>
+          <p><span class="s" data-s="b9-c-s0">Os autores nomeiam o padrão de value-sensitive delegation: a relação entre um valor humano e a condição de operação que o carrega, junto com o momento em que o usuário ainda pode mudar essa condição.</span> <span class="s" data-s="b9-c-s1">Proteger um valor depende de quando sua condição pode ser ajustada.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b10-h">Resultado 3: quando a condição se move durante a run, o valor vira custo</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Em quatro grupos de valores, a condição pode ser fixada antes da run começar: você escolhe o modelo, define quais credenciais conceder, decide o que instalar.</span> <span class="s" data-s="b10-p0-s1">Mas em Operação Acessível e Revisabilidade, a condição se move enquanto a run está em andamento.</span></p><p><span class="s" data-s="b10-p1-s0">Em Operação Acessível, usuários fixaram orçamentos de API antes da run, mas o agente gastou além do limite ou não parou quando deveria.</span> <span class="s" data-s="b10-p1-s1">Um usuário relatou: &#39;Eu configurei um limite de $20, mas o agente continuou chamando a API até esgotar $47 porque não checava o saldo entre as chamadas.&#39; O valor (affordability, acessibilidade financeira) virou custo porque a condição (quanto gastar) não pôde ser mantida fixa.</span></p><p><span class="s" data-s="b10-p2-s0">Em Revisabilidade, usuários ativaram logs e regras de aprovação antes da run, mas o agente não registrou passos intermediários ou pediu aprovação tarde demais.</span> <span class="s" data-s="b10-p2-s1">Um usuário escreveu: &#39;Eu habilitei o modo de aprovação, mas o agente só me perguntou depois de já ter deletado três arquivos.&#39; A condição (quando revisar) se moveu para depois do dano.</span></p><p><span class="s" data-s="b10-p3-s0">Nos outros quatro grupos, a condição permanece estável: o modelo não muda no meio da run, o alcance concedido não se expande sozinho, a instalação não se refaz.</span> <span class="s" data-s="b10-p3-s1">Nesses grupos, valores foram majoritariamente atendidos quando o agente entregou o resultado.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2609.22067/figure4.webp" alt="Diferença entre atendimento observado e esperado de valores em cada grupo. Operação Autônoma supera a expectativa (+7 pontos); Revisabilidade fica abaixo (-8 pontos). Intervalos de confiança de 95% por bootstrap." loading="lazy">
+          <figcaption>
+            Diferença entre atendimento observado e esperado de valores em cada grupo. Operação Autônoma supera a expectativa (+7 pontos); Revisabilidade fica abaixo (-8 pontos). Intervalos de confiança de 95% por bootstrap.
+            <span class="source">Figura 4 do paper · Ma et al., arXiv:2609.22067</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b12-h">O que os usuários ganham e perdem ao delegar</span></h2>
+<p><span class="s" data-s="b12-p0-s0">Operação Autônoma foi o grupo com maior taxa de atendimento (68% no geral) e o único com atendimento significativamente acima do esperado (+7 pontos percentuais).</span> <span class="s" data-s="b12-p0-s1">Usuários relataram que o agente completou tarefas complexas sem intervenção: &#39;Ele refatorou 30 arquivos, rodou testes, corrigiu falhas e fez commit, tudo enquanto eu dormia.&#39;</span></p><p><span class="s" data-s="b12-p1-s0">Mas o aspecto mais discutido em Operação Autônoma foi o núcleo do modelo (32% dos posts), enquanto a condição que usuários ajustaram foi o alcance concedido (credenciais, arquivos, serviços).</span> <span class="s" data-s="b12-p1-s1">O que os usuários discutiram e o que puderam mudar não coincidiram: eles queriam modelos mais capazes, mas só podiam restringir o que o modelo tocava.</span></p><p><span class="s" data-s="b12-p2-s0">Operação Confiável teve 63% de atendimento geral, mas 65% de não atendimento em supervisão.</span> <span class="s" data-s="b12-p2-s1">Usuários relataram que o agente falhou silenciosamente, produziu outputs inconsistentes ou não explicou por que parou.</span> <span class="s" data-s="b12-p2-s2">&#39;Ele disse que terminou, mas metade dos testes ainda falhava e não havia log do que foi tentado.&#39;</span></p><p><span class="s" data-s="b12-p3-s0">Revisabilidade teve a menor taxa de atendimento (49%) e foi o único grupo sem maioria atendida em nenhum resultado.</span> <span class="s" data-s="b12-p3-s1">Usuários queriam auditar o que aconteceu, mas o agente não fornecia rastreabilidade suficiente.</span> <span class="s" data-s="b12-p3-s2">&#39;Eu precisava saber quais APIs ele chamou e com quais parâmetros, mas o log só dizia completed step 7.&#39;</span></p>        <h2><span class="s" data-s="b13-h">Implicações para o design de agentes</span></h2>
+<p><span class="s" data-s="b13-p0-s0">Os autores argumentam que suportar valores humanos exige atenção não só ao que o agente realiza, mas às condições que os usuários estabelecem ao redor da delegação.</span> <span class="s" data-s="b13-p0-s1">Três implicações de design emergem.</span></p><p><span class="s" data-s="b13-p1-s0">Primeira: tornar as condições de operação explícitas e ajustáveis.</span> <span class="s" data-s="b13-p1-s1">Usuários precisam ver e modificar limites de custo, alcance, aprovação e registro antes e durante a run.</span> <span class="s" data-s="b13-p1-s2">Isso significa interfaces que exponham essas condições como cidadãs de primeira classe, não como configurações avançadas enterradas em menus.</span></p><p><span class="s" data-s="b13-p2-s0">Segunda: garantir que condições fixadas antes da run permaneçam fixas durante ela.</span> <span class="s" data-s="b13-p2-s1">Se um usuário define um orçamento de API, o agente deve parar ao atingi-lo, não continuar e reportar o estouro depois.</span> <span class="s" data-s="b13-p2-s2">Se um usuário ativa aprovação, o agente deve pedir permissão antes de ações irreversíveis, não depois.</span></p><p><span class="s" data-s="b13-p3-s0">Terceira: fornecer rastreabilidade suficiente para que usuários possam auditar o que aconteceu.</span> <span class="s" data-s="b13-p3-s1">Logs devem registrar não só que uma etapa foi completada, mas quais ferramentas foram chamadas, com quais argumentos, e quais resultados retornaram.</span> <span class="s" data-s="b13-p3-s2">Isso é especialmente crítico para Revisabilidade, o grupo com menor atendimento de valores.</span></p>        <h2><span class="s" data-s="b14-h">Limitações e o que fica em aberto</span></h2>
+<p><span class="s" data-s="b14-p0-s0">O estudo analisa apenas posts públicos no Reddit sobre um único agente, o OpenClaw, em um período de três meses.</span> <span class="s" data-s="b14-p0-s1">Usuários que postam no Reddit podem não representar todos os usuários de agentes de IA, e o OpenClaw, por ser open-source e rodar localmente, pode atrair um público mais técnico que agentes comerciais em nuvem.</span></p><p><span class="s" data-s="b14-p1-s0">A codificação foi assistida por LLM, com validação humana em amostras.</span> <span class="s" data-s="b14-p1-s1">Embora a concordância tenha sido alta (83,5% no valor humano), erros de classificação podem ter ocorrido nos 73 mil posts restantes.</span> <span class="s" data-s="b14-p1-s2">Os autores não reportam qual LLM foi usado nem como os prompts foram ajustados, o que dificulta reprodução.</span></p><p><span class="s" data-s="b14-p2-s0">O paper não mede se os valores identificados são os mais importantes para os usuários, apenas quais aparecem nos posts.</span> <span class="s" data-s="b14-p2-s1">Valores que usuários consideram fundamentais mas que o agente sempre atende (ou sempre viola) podem estar sub-representados, porque não motivam posts.</span> <span class="s" data-s="b14-p2-s2">Estudos futuros poderiam combinar análise de posts com entrevistas ou surveys.</span></p><p><span class="s" data-s="b14-p3-s0">Finalmente, o conceito de value-sensitive delegation é proposto mas não testado experimentalmente.</span> <span class="s" data-s="b14-p3-s1">O paper mostra correlação entre condições configuráveis e atendimento de valores, mas não demonstra causalidade.</span> <span class="s" data-s="b14-p3-s2">Experimentos controlados poderiam manipular quando e como usuários ajustam condições e medir o impacto no atendimento de valores.</span></p>        <h2><span class="s" data-s="b15-h">Por que isso importa</span></h2>
+<p><span class="s" data-s="b15-p0-s0">Agentes autônomos de IA estão deixando de ser protótipos de laboratório para se tornarem ferramentas de trabalho real.</span> <span class="s" data-s="b15-p0-s1">Benchmarks técnicos medem se o agente completa a tarefa, mas não capturam se ele respeita o que os usuários valorizam — custo, controle, transparência, recuperação.</span></p><p><span class="s" data-s="b15-p1-s0">Este paper mostra que esses valores não se ligam principalmente ao output do agente, mas às condições que o usuário pode configurar ao redor da execução.</span> <span class="s" data-s="b15-p1-s1">E mostra que, quando essas condições se movem durante a run, valores viram custos: orçamentos estourados, arquivos deletados, aprovações pedidas tarde demais.</span></p><p><span class="s" data-s="b15-p2-s0">A contribuição central é conceitual: value-sensitive delegation nomeia a relação entre um valor humano, a condição de operação que o carrega, e o momento em que o usuário ainda pode mudá-la.</span> <span class="s" data-s="b15-p2-s1">Para que agentes respeitem valores humanos, designers precisam tornar essas condições explícitas, estáveis e auditáveis — não só entregar a tarefa completa.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Análise de 73 mil posts no Reddit mostra que valores humanos em agentes de IA se concentram nas condições que o usuário configura (custo, alcance, supervisão), não no output final.</span></li><li><span class="s" data-s="k1">Valores são atendidos quando o agente entrega resultados (68% em Operação Autônoma), mas não atendidos quando o usuário precisa supervisionar (71% não atendida em Operação Autônoma).</span></li><li><span class="s" data-s="k2">Quando condições de operação se movem durante a execução (orçamento, aprovação), valores viram custos: APIs esgotadas, arquivos deletados, aprovações pedidas tarde demais.</span></li><li><span class="s" data-s="k3">Implicação de design: suportar valores humanos exige tornar condições de operação explícitas, estáveis durante a run e auditáveis depois — não só completar a tarefa.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2609.22067" rel="noopener">Value-Sensitive Delegation in Everyday AI Agent Use: Evidence from OpenClaw</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2609.22067" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

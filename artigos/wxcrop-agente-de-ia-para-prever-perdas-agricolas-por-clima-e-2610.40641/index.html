@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WxCrop: Agente de IA para prever perdas agrícolas por clima extremo — arXiv em 5</title>
+<meta name="description" content="Um sistema que cruza dados meteorológicos, estágios de crescimento e seguros para estimar perdas em tempo real, indo além dos avisos climáticos tradicionais.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="WxCrop: Agente de IA para prever perdas agrícolas por clima extremo">
+<meta property="og:description" content="Um sistema que cruza dados meteorológicos, estágios de crescimento e seguros para estimar perdas em tempo real, indo além dos avisos climáticos tradicionais.">
+<meta property="og:image" content="../../assets/papers/2610.40641/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Agentes</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.40641" rel="noopener">arXiv:2610.40641</a>
+    </div>
+    <h1><span class="s" data-s="t">WxCrop: Agente de IA para prever perdas agrícolas por clima extremo</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um sistema que cruza dados meteorológicos, estágios de crescimento e seguros para estimar perdas em tempo real, indo além dos avisos climáticos tradicionais.</span></p>
+    <p class="byline">
+      <span>Yu et al.</span>
+      <span>6 min de leitura</span>
+<span>29/10/2026</span>    </p>
+    <div class="listen" data-article="2610.40641" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=hCmjNgbFk0s" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema da desconexão entre previsão e impacto</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A agricultura global perde cerca de US$ 3,26 trilhões entre 1991 e 2023 devido a desastres, sendo quase US$ 2,9 trilhões atribuídos a riscos climáticos.</span> <span class="s" data-s="b0-p0-s1">Apesar de os avisos de clima extremo serem feitos dias antes, eles não traduzem o impacto direto na produção.</span> <span class="s" data-s="b0-p0-s2">Um alerta de furacão diz onde o vento vai soprar, mas não quanto da safra de laranja ou tomate estará em risco naquela data específica.</span></p><p><span class="s" data-s="b0-p1-s0">O obstáculo principal não é a falta de dados, mas sua fragmentação.</span> <span class="s" data-s="b0-p1-s1">Registros de reanálise climática, mapas de culturas datados, calendários de plantio e décadas de registros de perdas seguradas existem em escalas, formatos e datas diferentes.</span> <span class="s" data-s="b0-p1-s2">Unir essas informações para um campo específico em um dia específico exige um especialista e tempo que não existe durante uma crise.</span></p><p><span class="s" data-s="b0-p2-s0">Ferramentas existentes olham para o passado.</span> <span class="s" data-s="b0-p2-s1">O Índice de Intensidade Combinada de Furacões (Hurricane Composite Intensity Index), usado pela UF/IFAS, soma níveis de vento, chuva e inundação.</span> <span class="s" data-s="b0-p2-s2">Essa forma aditiva não captura a interação entre fatores que podem causar danos maiores.</span> <span class="s" data-s="b0-p2-s3">Além disso, os relatórios oficiais chegam semanas ou meses após o evento, tarde demais para decisões de resposta imediata ou para orientar agricultores antes da chegada da tempestade.</span></p>        <h2><span class="s" data-s="b1-h">Apresentando o WxCrop: do clima à conta</span></h2>
+<p><span class="s" data-s="b1-p0-s0">O paper apresenta o WxCrop, o primeiro agente que julga perigos agrícolas a partir de índices climaticamente interpretáveis e combina informações meteorológicas e agrícolas para prever perdas de forma confiável.</span> <span class="s" data-s="b1-p0-s1">Diferente de modelos puramente estatísticos, o WxCrop é construído sobre uma base causal e física, permitindo que cada número seja rastreado até sua fonte original.</span></p><p><span class="s" data-s="b1-p1-s0">O sistema foi demonstrado na Flórida, focando em furacões, geadas e calor seco.</span> <span class="s" data-s="b1-p1-s1">A metodologia utiliza registros de seguros para calibrar o modelo de perdas, mas o procedimento é extensível a outros perigos e regiões.</span> <span class="s" data-s="b1-p1-s2">A premissa é transformar uma data e um perigo em uma resposta rastreável: camadas meteorológicas, culturas sob elas, um índice de perigo e a perda esperada como fração do valor da safra.</span></p>        <h2><span class="s" data-s="b2-h">Como funciona: a arquitetura em três etapas</span></h2>
+<p><span class="s" data-s="b2-p0-s0">O WxCrop resolve um evento de perigo em três passos claros.</span> <span class="s" data-s="b2-p0-s1">Primeiro, ele coloca o clima e as culturas no mesmo mapa.</span> <span class="s" data-s="b2-p0-s2">O usuário seleciona o perigo (ex: furacão) e o sistema oferece as camadas meteorológicas relevantes, selecionadas através de análise causal das perdas seguradas.</span> <span class="s" data-s="b2-p0-s3">Para furacões, são vento e chuva de sete dias.</span> <span class="s" data-s="b2-p0-s4">O sistema carrega os dados sob demanda de arquivos públicos, respeitando a grade nativa ou valores por condado.</span></p><p><span class="s" data-s="b2-p1-s0">Uma inovação técnica importante está na seleção da fonte de vento.</span> <span class="s" data-s="b2-p1-s1">Em dias de ciclone tropical, o WxCrop usa o campo de vento reconstruído a partir do HURDAT2 (National Hurricane Center best track), pois análises em grade suavizam o núcleo dos ciclones e subestimam os ventos.</span> <span class="s" data-s="b2-p1-s2">Em outros dias, usa rajadas máximas diárias.</span> <span class="s" data-s="b2-p1-s3">Isso garante que a intensidade real do evento seja capturada, não uma média suavizada.</span></p><p><span class="s" data-s="b2-p2-s0">O segundo passo é computar um índice de perigo que identifica o evento.</span> <span class="s" data-s="b2-p2-s1">Em vez de somar fatores, o índice é composto e escolhido por análise causal.</span> <span class="s" data-s="b2-p2-s2">Para furacões, combina vento e chuva; para geadas, frio e céus limpos; para calor seco, déficit e calor.</span> <span class="s" data-s="b2-p2-s3">A classificação desse índice depende de quão frequentemente tal clima foi seguido por perdas seguradas registradas.</span></p>        <h2><span class="s" data-s="b3-h">Mapeando a vulnerabilidade agrícola</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Sob as camadas meteorológicas, o sistema posiciona as culturas.</span> <span class="s" data-s="b3-p0-s1">Utiliza o inventário FSAID (Florida Statewide Agricultural Irrigation Demand), que mapeia parcelas agrícolas por classe de cultura.</span> <span class="s" data-s="b3-p0-s2">O sistema calcula a vulnerabilidade de cada parcela na data selecionada.</span> <span class="s" data-s="b3-p0-s3">Para culturas anuais, a vulnerabilidade é o progresso sazonal, limitada ao custo fixo já investido no plantio.</span> <span class="s" data-s="b3-p0-s4">Para culturas perenes, como citros, calcula-se o progresso do fruto desde a floração até a maturidade.</span></p><p><span class="s" data-s="b3-p1-s0">Essa granularidade permite que o sistema responda perguntas específicas.</span> <span class="s" data-s="b3-p1-s1">Um agricultor pode perguntar qual a perda esperada para sua propriedade de tomate.</span> <span class="s" data-s="b3-p1-s2">O sistema cruza a data do evento com o estágio de crescimento daquela cultura específica e aplica o modelo de perdas calibrado.</span> <span class="s" data-s="b3-p1-s3">O resultado é uma fração do valor esperado da safra que está em risco, não apenas uma classificação genérica de dano.</span></p>        <h2><span class="s" data-s="b4-h">Calibragem com dados de seguros e inversão de modelos</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Um dos pilares do WxCrop é a inversão da estrutura de dedutíveis dos seguros agrícolas.</span> <span class="s" data-s="b4-p0-s1">Os modelos de perda não usam apenas coeficientes brutos; eles recuperam a fração de dano a partir do pagamento registrado.</span> <span class="s" data-s="b4-p0-s2">O método encontra, para cada condado, commodity e mês, o dano que teria produzido o pagamento registrado sob os dedutíveis vigentes.</span> <span class="s" data-s="b4-p0-s3">Isso corrige a viés natural dos dados de seguros, que só registram perdas acima de um certo limiar.</span></p><p><span class="s" data-s="b4-p1-s0">Cada grupo de culturas tem sua própria suscetibilidade a cada um dos três perigos estudados.</span> <span class="s" data-s="b4-p1-s1">O modelo de perda é ajustado em unidades de condado x grupo de culturas x mês.</span> <span class="s" data-s="b4-p1-s2">As oito culturas principais na Flórida (citros, vegetais, outras frutas, cana-de-açúcar, algodão, amendoim, grãos/oleaginosas e tabaco) agregam 32 commodities seguradas.</span> <span class="s" data-s="b4-p1-s3">Isso permite uma granularidade fina sem perder a robustez estatística.</span></p>        <h2><span class="s" data-s="b5-h">Resultados: validação rigorosa</span></h2>
+<p><span class="s" data-s="b5-p0-s0">A confiabilidade do WxCrop foi testada através de três verificações principais.</span> <span class="s" data-s="b5-p0-s1">Primeiro, o índice de furacões detecta dias de ciclone registrados com uma AUC (Area Under the Curve) de 0,98.</span> <span class="s" data-s="b5-p0-s2">Isso indica que o índice consegue distinguir com alta precisão os dias de impacto real dos dias normais.</span></p><p><span class="s" data-s="b5-p1-s0">Segundo, as perdas registradas em anos não vistos durante o treinamento foram reproduzidas com um erro inferior a 2%.</span> <span class="s" data-s="b5-p1-s1">Isso mostra que o modelo não apenas memorizou dados, mas generalizou bem para eventos passados que não usou na calibração.</span> <span class="s" data-s="b5-p1-s2">Terceiro, rankings de condados baseados nas previsões do WxCrop foram confirmados por registros independentes de produção, com uma correlação de posto de 0,63.</span></p>        <h2><span class="s" data-s="b6-h">O agente como ferramenta de decisão</span></h2>
+<p><span class="s" data-s="b6-p0-s0">O WxCrop opera como um assistente agêntico.</span> <span class="s" data-s="b6-p0-s1">O usuário faz perguntas em linguagem natural sobre a perda de cada grupo de culturas como fração do valor esperado da temporada.</span> <span class="s" data-s="b6-p0-s2">O sistema não apenas responde, mas fornece a fonte de cada número.</span> <span class="s" data-s="b6-p0-s3">Isso permite que governos, produtores e cientistas respondam a desastres agrícolas rapidamente, com transparência.</span></p><p><span class="s" data-s="b6-p1-s0">Para especialistas, é possível abrir qualquer camada e encontrar os registros originais por trás dela.</span> <span class="s" data-s="b6-p1-s1">Para gestores de emergência ou produtores, o sistema oferece orientações direcionais: quais culturas proteger primeiro, a quais condados enviar inspetores.</span> <span class="s" data-s="b6-p1-s2">A interface traduz dados complexos em ações práticas, reduzindo o tempo entre o evento e a resposta.</span></p>        <h2><span class="s" data-s="b7-h">Limitações e escopo do estudo</span></h2>
+<p><span class="s" data-s="b7-p0-s0">É crucial notar que a demonstração do WxCrop foi realizada especificamente na Flórida.</span> <span class="s" data-s="b7-p0-s1">Embora os autores afirmem que o fluxo de trabalho se aplica a qualquer lugar do mundo, isso requer a substituição das fontes de dados pelas da região desejada e o reajuste do modelo para lá.</span> <span class="s" data-s="b7-p0-s2">A validade do modelo atual está restrita aos 67 condados da Flórida entre 2004 e 2024, período em que os registros de perdas seguradas, o arquivo de furacões e os arquivos meteorológicos em grade se sobrepõem.</span></p>        <h2><span class="s" data-s="b8-h">Dados meteorológicos e requisitos de extensão</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Para estender o WxCrop a outra região, um conjunto de dados meteorológico de substituição deve atender a critérios específicos.</span> <span class="s" data-s="b8-p0-s1">Deve ser diário, pois o índice é computado diariamente e o modelo de perda usa o valor máximo em 30 dias.</span> <span class="s" data-s="b8-p0-s2">Deve ser em grade mais fina que o condado, pois médias de condado ou reanálises de 28 km suavizam o núcleo da tempestade e bolsões de ar frio.</span> <span class="s" data-s="b8-p0-s3">Deve ser contínuo sobre o período dos registros de perda e equipado com uma contraparte de previsão.</span></p>        <h2><span class="s" data-s="b9-h">Integração de previsões futuras</span></h2>
+<p><span class="s" data-s="b9-p0-s0">O WxCrop não se limita a analisar eventos passados.</span> <span class="s" data-s="b9-p0-s1">Para perigos futuros, os mesmos índices são executados com entradas de previsão de sete dias, utilizando o National Blend of Models para vento, chuva, temperatura e nuvens.</span> <span class="s" data-s="b9-p0-s2">Quando o National Hurricane Center emite advisórios para uma tempestade, sua trajetória prevista e raios de vento substituem os dados de blend, permitindo que o sistema estime perdas antes mesmo do evento acontecer.</span></p>        <h2><span class="s" data-s="b10-h">Conclusão: um novo padrão para resiliência agrícola</span></h2>
+<p><span class="s" data-s="b10-p0-s0">O WxCrop representa uma evolução na forma como integramos ciência do clima e agricultura.</span> <span class="s" data-s="b10-p0-s1">Ao unir índices compostos, modelos de perda calibrados com dados reais de seguros e uma interface agêntica, o sistema preenche a lacuna entre o aviso meteorológico e a decisão agrícola.</span> <span class="s" data-s="b10-p0-s2">Ele não substitui o conhecimento humano, mas o potencializa, fornecendo respostas rastreáveis e precisas no momento em que são mais necessárias: antes e durante a crise.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">O WxCrop usa análise causal para selecionar índices climáticos e modelos de perdas calibrados com dados de seguros.</span></li><li><span class="s" data-s="k1">O sistema opera em três etapas: mapeamento, índice de perigo e estimativa de perda por cultura.</span></li><li><span class="s" data-s="k2">Validado na Flórida, o modelo reproduz perdas reais com erro inferior a 2% e tem alta correlação com registros independentes.</span></li><li><span class="s" data-s="k3">A abordagem é agêntica: o usuário faz perguntas e o agente retorna números rastreáveis às fontes de dados originais.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.40641" rel="noopener">From extreme weather to agricultural consequences with agentic AI</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.40641" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

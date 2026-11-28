@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lei Unificada para Tarefas Visuais: WSMs e a Hipótese do Snapshot do Mundo — arXiv em 5</title>
+<meta name="description" content="Este paper propõe que todas as tarefas de visão computacional podem ser unificadas sob um único framework de geração, utilizando um formato de imagem multi-canal chamado World Snapshot Graphics (.wsg) e a arquitetura TunnelingNet.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Lei Unificada para Tarefas Visuais: WSMs e a Hipótese do Snapshot do Mundo">
+<meta property="og:description" content="Este paper propõe que todas as tarefas de visão computacional podem ser unificadas sob um único framework de geração, utilizando um formato de imagem multi-canal chamado World Snapshot Graphics (.wsg) e a arquitetura TunnelingNet.">
+<meta property="og:image" content="../../assets/papers/2611.24917/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Imagem</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.24917" rel="noopener">arXiv:2611.24917</a>
+    </div>
+    <h1><span class="s" data-s="t">Lei Unificada para Tarefas Visuais: WSMs e a Hipótese do Snapshot do Mundo</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Este paper propõe que todas as tarefas de visão computacional podem ser unificadas sob um único framework de geração, utilizando um formato de imagem multi-canal chamado World Snapshot Graphics (.wsg) e a arquitetura TunnelingNet.</span></p>
+    <p class="byline">
+      <span>Fang et al.</span>
+      <span>9 min de leitura</span>
+<span>18/11/2026</span>    </p>
+    <div class="listen" data-article="2611.24917" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=k2_6KnhK-SA" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Desafio da Unificação em Visão Computacional</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A visão computacional (CV) tem historicamente evoluído através de modelos especializados para tarefas específicas: detecção de objetos, segmentação semântica, estimativa de profundidade, entre outras.</span> <span class="s" data-s="b0-p0-s1">Embora modelos de linguagem grandes (LLMs) tenham demonstrado uma unificação impressionante em Processamento de Linguagem Natural (NLP), replicando esse sucesso em visão tem sido um desafio persistente.</span> <span class="s" data-s="b0-p0-s2">A expectativa atual é que exista um &#39;modelo de mundo&#39; capaz de generalizar para quase todas as tarefas visuais, similar ao papel dos LLMs no NLP.</span></p><p><span class="s" data-s="b0-p1-s0">No entanto, a transferência direta de ideias como &#39;prever o próximo token&#39; para o domínio visual enfrenta obstáculos fundamentais.</span> <span class="s" data-s="b0-p1-s1">Dados visuais não podem ser resumidos facilmente em um formato simples de pergunta e resposta, e as tarefas de CV aparecem em formas extremamente diversas.</span> <span class="s" data-s="b0-p1-s2">Além disso, treinar modelos separados para cada variação de tarefa se torna computacionalmente proibitivo à medida que o número de capacidades desejadas cresce.</span></p><p><span class="s" data-s="b0-p2-s0">Este paper, intitulado &#39;Unified Law for Visual Tasks (The Four Laws of Computer Vision)&#39;, propõe uma mudança de paradigma.</span> <span class="s" data-s="b0-p2-s1">Os autores argumentam que a unificação real em CV não vem de adaptar prompts de texto, mas de reformular todas as tarefas visuais como problemas de geração.</span> <span class="s" data-s="b0-p2-s2">A hipótese central é que, se todas as informações do mundo podem ser codificadas em uma imagem, então o processamento de imagens é, essencialmente, o processamento do mundo.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.24917/figure1.webp" alt="Ilustra a &#39;Lei Unificada&#39;: a ideia de achatar o mundo em um espaço bidimensional onde o processamento de imagem se torna processamento do mundo, unificando geração, estimativa e controle sob o mesmo teto de geração." loading="lazy">
+          <figcaption>
+            Ilustra a &#39;Lei Unificada&#39;: a ideia de achatar o mundo em um espaço bidimensional onde o processamento de imagem se torna processamento do mundo, unificando geração, estimativa e controle sob o mesmo teto de geração.
+            <span class="source">Figura 1 do paper · Fang et al., arXiv:2611.24917</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">A Hipótese do World Snapshot e o Formato .wsg</span></h2>
+<p><span class="s" data-s="b2-p0-s0">O ponto de partida teórico do paper é o que os autores chamam de &#39;Lei Unificada&#39;: a geração anterior focava principalmente em RGB como um caso especial de geração visual.</span> <span class="s" data-s="b2-p0-s1">Eles propõem que, se toda a informação do mundo for codificada em uma imagem, essa imagem se torna um &#39;World Snapshot&#39; (Instantâneo do Mundo).</span> <span class="s" data-s="b2-p0-s2">Inspirados no princípio holográfico da física, que sugere que um espaço de dimensão n+1 pode ser codificado em um espaço de dimensão n, os autores hipotetizam que uma imagem rica em informação pode aproximar um quadro do mundo.</span></p><p><span class="s" data-s="b2-p1-s0">Para validar essa hipótese, os autores introduzem um novo formato de dados de imagem chamado World Snapshot Graphics (.wsg).</span> <span class="s" data-s="b2-p1-s1">Diferente de uma imagem RGB padrão, que possui 3 canais (Vermelho, Verde, Azul), o formato .wsg suporta até 256 canais.</span> <span class="s" data-s="b2-p1-s2">Cada canal adicional armazena atributos específicos do mundo, como estrutura espacial, poses humanas e animais, física (como gravidade e peso relativo), áudio, semântica, profundidade relativa, métrica, normais de superfície, curvatura, opacidade, densidade e IDs de objetos.</span></p><p><span class="s" data-s="b2-p2-s0">Essa densidade de informação é crucial.</span> <span class="s" data-s="b2-p2-s1">Ao colocar todos esses atributos em canais distintos de uma única imagem, os autores criam uma representação onde a geração de imagem não é apenas a criação de pixels coloridos, mas a geração de um estado completo do mundo.</span> <span class="s" data-s="b2-p2-s2">Isso permite que tarefas tradicionalmente vistas como distintas — como estimar a profundidade de uma cena ou segmentar um humano — sejam tratadas como a geração de canais específicos dentro desse snapshot unificado.</span></p>        <h2><span class="s" data-s="b3-h">As Quatro Leis e a Reformulação das Tarefas</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Os autores categorizam todas as tarefas visuais em quatro grandes famílias, derivadas das relações direcionais fundamentais quando RGB, texto e atributos não-RGB do mundo servem como condições ou alvos.</span> <span class="s" data-s="b3-p0-s1">Essas quatro categorias, ou &#39;Leis&#39;, são: Geração (criar uma nova imagem/snapshot a partir de condições), Estimativa (prever atributos do mundo a partir de uma imagem), Controle Condicional (usar uma imagem como guia para modificar outra geração) e Reconstrução (recuperar a estrutura original).</span></p><p><span class="s" data-s="b3-p1-s0">A inovação conceitual aqui é tratar todas essas quatro categorias como formas de geração.</span> <span class="s" data-s="b3-p1-s1">Em vez de treinar quatro modelos separados para cada categoria, o World Snapshot Model (WSM) é treinado para gerar o snapshot completo.</span> <span class="s" data-s="b3-p1-s2">Se a tarefa é estimativa, o modelo gera os canais correspondentes ao atributo desejado.</span> <span class="s" data-s="b3-p1-s3">Se é controle, ele usa a imagem de entrada como condição para gerar um novo snapshot modificado.</span> <span class="s" data-s="b3-p1-s4">Isso simplifica drasticamente a arquitetura do sistema, eliminando a necessidade de módulos especializados para cada tipo de tarefa.</span></p><p><span class="s" data-s="b3-p2-s0">Essa abordagem é denominada &#39;Broad Vision&#39; (Visão Ampla), em contraste com a &#39;Narrow Vision&#39; (Visão Estreita) do passado, que focava em gerar apenas RGB ou estimar poucos atributos isoladamente.</span> <span class="s" data-s="b3-p2-s1">Ao expandir o escopo para todos os atributos do mundo, os autores buscam criar um modelo único que possa realizar centenas de tarefas com uma única arquitetura de backbone, similar à forma como os LLMs unificaram tarefas de NLP.</span></p>        <h2><span class="s" data-s="b4-h">TunnelingNet: A Arquitetura para Escalabilidade</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Um dos maiores desafios ao tentar unificar milhares de tarefas é a eficiência de treinamento e a escala de parâmetros.</span> <span class="s" data-s="b4-p0-s1">Métodos existentes para expandir capacidades de modelos pré-treinados, como ControlNet, LoRA (Low-Rank Adaptation), MoE (Mixture of Experts), IP-Adapter e IC-Control, têm limitações.</span> <span class="s" data-s="b4-p0-s2">O LoRA, por exemplo, pode adquirir novas capacidades em horas ou dias, mas torna-se insuficiente quando se enfrenta milhares de tarefas distintas, exigindo um número excessivo de parâmetros ou um custo computacional proibitivo.</span></p><p><span class="s" data-s="b4-p1-s0">Para resolver isso, os autores propõem o TunnelingNet.</span> <span class="s" data-s="b4-p1-s1">A ideia central é atribuir cada modalidade (cada canal ou tipo de informação no .wsg) a um fluxo de aprendizado separado, mas conectado através de um &#39;túnel&#39; compartilhado.</span> <span class="s" data-s="b4-p1-s2">Em vez de modificar toda a rede para cada nova tarefa, o TunnelingNet permite que o modelo roteie condições específicas para os fluxos apropriados.</span> <span class="s" data-s="b4-p1-s3">Isso cria uma arquitetura esparsa e modular, onde a capacidade do modelo expande em ordens de magnitude enquanto o crescimento do número de parâmetros é mínimo.</span></p><p><span class="s" data-s="b4-p2-s0">O TunnelingNet utiliza uma técnica chamada &#39;Deep Tunneling Learning&#39;.</span> <span class="s" data-s="b4-p2-s1">Durante o treinamento, o modelo aprende a navegar por esses túneis para gerar os canais corretos.</span> <span class="s" data-s="b4-p2-s2">Se a entrada é uma imagem RGB e o alvo é a estimativa de profundidade, o modelo gera o canal de profundidade do snapshot.</span> <span class="s" data-s="b4-p2-s3">Se a entrada é um texto e o alvo é uma imagem RGB, ele gera o canal RGB.</span> <span class="s" data-s="b4-p2-s4">Essa flexibilidade permite que um único conjunto de pesos seja reutilizado para inúmeras combinações de entrada e saída.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.24917/figure69.webp" alt="Comparação tutorial de seis paradigmas para estender capacidades visuais, mostrando como o TunnelingNet/WSM se diferencia de ControlNet, LoRA, MoE e outros ao organizar condições e túneis de aprendizado." loading="lazy">
+          <figcaption>
+            Comparação tutorial de seis paradigmas para estender capacidades visuais, mostrando como o TunnelingNet/WSM se diferencia de ControlNet, LoRA, MoE e outros ao organizar condições e túneis de aprendizado.
+            <span class="source">Figura 69 do paper · Fang et al., arXiv:2611.24917</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b6-h">Validação Empírica: Mais de 1.000 Tarefas</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Para validar a &#39;Lei Unificada&#39;, os autores treinaram e avaliaram o WSM em mais de 1.000 tarefas visuais distintas, definidas por mapeamentos únicos de entrada e saída.</span> <span class="s" data-s="b6-p0-s1">Isso inclui tarefas clássicas como segmentação semântica, estimativa de profundidade relativa e métrica, detecção de bordas, normais de superfície, poses 2D e 3D, fluxo óptico, entre muitas outras listadas no paper.</span></p><p><span class="s" data-s="b6-p1-s0">Os resultados quantitativos mostram que o WSM consegue realizar essas tarefas com uma precisão competitiva ou superior a métodos especializados.</span> <span class="s" data-s="b6-p1-s1">O paper apresenta uma &#39;Análise de Matriz Cross-Modal&#39;, demonstrando a capacidade do modelo de converter entre diferentes representações visuais.</span> <span class="s" data-s="b6-p1-s2">Por exemplo, o modelo pode converter uma imagem de normais de superfície em uma imagem de bordas, ou estimar a profundidade relativa a partir de uma imagem RGB, tudo sem re-treinamento específico para cada par de tarefas.</span></p><p><span class="s" data-s="b6-p2-s0">Uma métrica importante apresentada é a &#39;Calibração de Correspondência Previsão-Alvo&#39;.</span> <span class="s" data-s="b6-p2-s1">Os autores verificam se as previsões do modelo correspondem realmente aos alvos físicos ou semânticos esperados, e não apenas a padrões superficiais.</span> <span class="s" data-s="b6-p2-s2">Os resultados indicam que o WSM aprendeu genuinamente as relações subjacentes entre os atributos do mundo, em vez de memorizar correlações espúrias nos dados de treinamento.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.24917/figure16.webp" alt="Comparação qualitativa para Interfaces A e B no conjunto de avaliação pós-lançamento, mostrando a qualidade da estimativa de profundidade relativa em comparação com outros métodos." loading="lazy">
+          <figcaption>
+            Comparação qualitativa para Interfaces A e B no conjunto de avaliação pós-lançamento, mostrando a qualidade da estimativa de profundidade relativa em comparação com outros métodos.
+            <span class="source">Figura 16 do paper · Fang et al., arXiv:2611.24917</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Resultados Qualitativos e Conversão de Representações</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Além das métricas quantitativas, o paper apresenta uma extensa avaliação qualitativa.</span> <span class="s" data-s="b8-p0-s1">Os autores demonstram a capacidade do WSM de realizar &#39;conversão de representação&#39;.</span> <span class="s" data-s="b8-p0-s2">Na Figura 17, por exemplo, mostra-se a conversão de normais de superfície para bordas, profundidade relativa para normais, e bordas para segmentação humana.</span> <span class="s" data-s="b8-p0-s3">Essas conversões são realizadas de forma coerente, mantendo a consistência geométrica e semântica da cena.</span></p><p><span class="s" data-s="b8-p1-s0">Os resultados também destacam a eficiência do modelo em tarefas de geração condicional.</span> <span class="s" data-s="b8-p1-s1">Quando fornecido com um esboço ou uma pose humana, o WSM pode gerar uma imagem RGB realista que respeita essas condições, assim como modelos de geração de imagem tradicionais, mas sem a necessidade de um ControlNet dedicado ou de um LoRA específico para aquela tarefa.</span></p><p><span class="s" data-s="b8-p2-s0">Os autores também avaliam o modelo em tarefas de &#39;Inverse Rendering&#39; (Renderização Inversa), onde o objetivo é recuperar propriedades de materiais e iluminação a partir de imagens.</span> <span class="s" data-s="b8-p2-s1">O WSM demonstra capacidade de estimar cores base, opacidade e densidade, integrando essas informações no formato .wsg de forma consistente.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.24917/figure17.webp" alt="Comparação qualitativa para a Interface C, demonstrando a conversão entre diferentes representações visuais (Normal para Edge, Relative Depth para Normal, Edge para Human Segmentation) pelo WSM." loading="lazy">
+          <figcaption>
+            Comparação qualitativa para a Interface C, demonstrando a conversão entre diferentes representações visuais (Normal para Edge, Relative Depth para Normal, Edge para Human Segmentation) pelo WSM.
+            <span class="source">Figura 17 do paper · Fang et al., arXiv:2611.24917</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">Limitações e Escopo</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Apesar dos resultados promissores, o paper reconhece limitações importantes.</span> <span class="s" data-s="b10-p0-s1">Primeiro, o formato .wsg é uma abstração teórica e prática.</span> <span class="s" data-s="b10-p0-s2">Embora o paper defina o formato, a coleta de dados reais que contenham todos esses 256 canais para um grande conjunto de imagens é um desafio significativo.</span> <span class="s" data-s="b10-p0-s3">Muitos dos dados utilizados foram sintéticos ou gerados através de pipelines de conversão, o que pode introduzir vieses ou erros de anotação.</span></p><p><span class="s" data-s="b10-p1-s0">Segundo, a &#39;Lei Unificada&#39; não cobre todas as tarefas visuais possíveis.</span> <span class="s" data-s="b10-p1-s1">O paper identifica tarefas que não se encaixam no framework, como reconhecimento de íris, detecção de anomalias supervisionadas, recuperação de objetos 3D baseada em linguagem, e tarefas temporais complexas como síntese de visualização temporal.</span> <span class="s" data-s="b10-p1-s2">Essas tarefas requerem estruturas de dados diferentes (como grafos, texturas temporais ou embeddings de linguagem) que não são facilmente mapeadas para o formato de imagem densa do .wsg.</span></p><p><span class="s" data-s="b10-p2-s0">Além disso, a eficiência computacional do TunnelingNet em inferência não é detalhada em profundidade.</span> <span class="s" data-s="b10-p2-s1">Embora o treinamento seja mais eficiente em termos de parâmetros, a inferência de um modelo tão amplo pode ser custosa, dependendo de como os túneis são ativados.</span> <span class="s" data-s="b10-p2-s2">O paper foca principalmente na capacidade de unificação e na validade da hipótese, deixando a otimização para aplicações em tempo real como trabalho futuro.</span></p>        <h2><span class="s" data-s="b11-h">Conclusão: Um Passo Rumo ao Modelo de Mundo?</span></h2>
+<p><span class="s" data-s="b11-p0-s0">O paper &#39;Unified Law for Visual Tasks&#39; oferece uma contribuição significativa para a discussão sobre a unificação em visão computacional.</span> <span class="s" data-s="b11-p0-s1">Ao propor que todas as tarefas visuais podem ser reformuladas como geração de um &#39;World Snapshot&#39;, os autores desafiam a noção tradicional de modelos especializados.</span> <span class="s" data-s="b11-p0-s2">A introdução do formato .wsg e da arquitetura TunnelingNet fornece um framework concreto para testar essa hipótese.</span></p><p><span class="s" data-s="b11-p1-s0">Os resultados de mais de 1.000 tarefas validam a viabilidade da abordagem, mostrando que um único modelo pode aprender a interagir com uma vasta gama de atributos do mundo.</span> <span class="s" data-s="b11-p1-s1">No entanto, a unificação total ainda está longe.</span> <span class="s" data-s="b11-p1-s2">Tarefas que envolvem linguagem complexa, raciocínio temporal ou estruturas não-imagem permanecem fora do escopo atual.</span></p><p><span class="s" data-s="b11-p2-s0">Para a comunidade de ciência de dados e tecnologia, o paper destaca a importância de pensar em representações de dados mais ricas e unificadas.</span> <span class="s" data-s="b11-p2-s1">A ideia de que &#39;processamento de imagem é processamento de mundo&#39; pode inspirar novas abordagens para integrar visão, linguagem e física em modelos multimodais mais coesos.</span> <span class="s" data-s="b11-p2-s2">Embora o WSM não seja uma revolução imediata, ele estabelece um terreno fértil para a próxima geração de modelos de visão computacional.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">O paper introduz o conceito de World Snapshot Graphics (.wsg), um formato de imagem com até 256 canais que codifica informações físicas, semânticas e estruturais.</span></li><li><span class="s" data-s="k1">A arquitetura TunnelingNet permite treinar um modelo único para mais de 1.000 tarefas visuais distintas, tratando estimativas e controle como geração.</span></li><li><span class="s" data-s="k2">Os autores validam a &#39;Lei Unificada&#39; através de 1.000 mapeamentos de entrada-saída, demonstrando que a visão pode ser tratada como processamento de mundo.</span></li><li><span class="s" data-s="k3">O método busca evitar o aumento exponencial de parâmetros, escalando capacidades visuais de forma mais eficiente que LoRA ou ControlNet.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.24917" rel="noopener">Unified Law for Visual Tasks (The Four Laws of Computer Vision)</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.24917" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

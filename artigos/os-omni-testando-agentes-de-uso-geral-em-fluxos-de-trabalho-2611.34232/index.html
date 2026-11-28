@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OS-Omni: Testando agentes de uso geral em fluxos de trabalho longos e multiplataforma — arXiv em 5</title>
+<meta name="description" content="O OS-Omni é um benchmark que avalia se agentes de IA conseguem executar tarefas complexas que atravessam desktops, web e dispositivos móveis, medindo a capacidade real de manter contexto e estado persistente.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OS-Omni: Testando agentes de uso geral em fluxos de trabalho longos e multiplataforma">
+<meta property="og:description" content="O OS-Omni é um benchmark que avalia se agentes de IA conseguem executar tarefas complexas que atravessam desktops, web e dispositivos móveis, medindo a capacidade real de manter contexto e estado persistente.">
+<meta property="og:image" content="../../assets/papers/2611.34232/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Agentes</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.34232" rel="noopener">arXiv:2611.34232</a>
+    </div>
+    <h1><span class="s" data-s="t">OS-Omni: Testando agentes de uso geral em fluxos de trabalho longos e multiplataforma</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">O OS-Omni é um benchmark que avalia se agentes de IA conseguem executar tarefas complexas que atravessam desktops, web e dispositivos móveis, medindo a capacidade real de manter contexto e estado persistente.</span></p>
+    <p class="byline">
+      <span>Shen et al.</span>
+      <span>6 min de leitura</span>
+<span>25/11/2026</span>    </p>
+    <div class="listen" data-article="2611.34232" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=JILGWQ4MW1c" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema da fragmentação de plataformas</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Agentes de uso de computador estão evoluindo rapidamente.</span> <span class="s" data-s="b0-p0-s1">Eles não precisam mais apenas clicar em botões isolados; o objetivo real é completar metas de usuários que envolvem múltiplas etapas e aplicações.</span> <span class="s" data-s="b0-p0-s2">No entanto, a maioria dos benchmarks existentes testa esses agentes em ambientes isolados: apenas web, apenas mobile ou apenas desktop.</span> <span class="s" data-s="b0-p0-s3">Isso cria uma ilusão de competência.</span> <span class="s" data-s="b0-p0-s4">Um agente pode ser excelente em navegar em um site, mas falhar completamente ao precisar transferir dados para um aplicativo de planilhas no desktop ou sincronizar isso com um calendário no celular.</span></p><p><span class="s" data-s="b0-p1-s0">O paper OS-Omni, da OS-Omni Team, questiona se um único agente generalista consegue executar fluxos de trabalho de longo prazo (long-horizon workflows) que atravessam diferentes sistemas operacionais e mantêm estados persistentes de aplicativos.</span> <span class="s" data-s="b0-p1-s1">A ideia central é simples, mas desafiadora: simular o uso real de um computador, onde o usuário alterna entre janelas, dispositivos e serviços, e o agente deve rastrear essas mudanças sem perder o contexto.</span></p><p><span class="s" data-s="b0-p2-s0">Os autores argumentam que a avaliação baseada apenas em superfícies de software únicas não captura a complexidade real.</span> <span class="s" data-s="b0-p2-s1">Por exemplo, atualizar um calendário em um desktop envolve diálogos tradicionais, enquanto no celular pode exigir rodas de seleção (picker wheels) e teclados virtuais.</span> <span class="s" data-s="b0-p2-s2">Estender a duração da tarefa aumenta a carga sobre a memória do agente, que precisa coordenar ações parciais e verificar resultados finais consistentes.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.34232/figure1.webp" alt="Visão geral do framework OS-Omni, mostrando como o agente interage com desktops e dispositivos móveis simultaneamente, executando ações e recebendo observações em um ambiente unificado." loading="lazy">
+          <figcaption>
+            Visão geral do framework OS-Omni, mostrando como o agente interage com desktops e dispositivos móveis simultaneamente, executando ações e recebendo observações em um ambiente unificado.
+            <span class="source">Figura 1 do paper · Shen et al., arXiv:2611.34232</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">Como o OS-Omni funciona</span></h2>
+<p><span class="s" data-s="b2-p0-s0">O OS-Omni é um benchmark vivo e executável, lançado em ondas versionadas.</span> <span class="s" data-s="b2-p0-s1">A primeira versão (v1) contém 300 tarefas: 48 por plataforma (Windows, Ubuntu, macOS, iOS, Android e Web) e 12 fluxos de trabalho cross-platform que combinam um desktop com um telefone Android.</span> <span class="s" data-s="b2-p0-s2">O ambiente é projetado para ser reprodutível, com inicialização controlada e adaptadores específicos para cada plataforma.</span></p><p><span class="s" data-s="b2-p1-s0">A infraestrutura do OS-Omni permite que o agente receba instruções e observe o estado atual do sistema em cada passo.</span> <span class="s" data-s="b2-p1-s1">As ações são validadas e executadas pelo controlador da plataforma.</span> <span class="s" data-s="b2-p1-s2">Para tarefas que cruzam plataformas, o setup é unificado: um desktop (Ubuntu ou Windows) exibe um dispositivo Android companion através do scrcpy.</span> <span class="s" data-s="b2-p1-s3">O agente interage com ambos usando mouse e teclado, sem necessidade de endpoints separados ou transferências mediadas por host.</span></p><p><span class="s" data-s="b2-p2-s0">Um ponto crucial é o protocolo de avaliação.</span> <span class="s" data-s="b2-p2-s1">O sucesso não é medido pela similaridade da trajetória do agente com a de um humano, mas pelo estado final do ambiente.</span> <span class="s" data-s="b2-p2-s2">Se o agente cumpre a meta, o sistema verifica se o estado final (sT) corresponde ao esperado pela função avaliadora (g).</span> <span class="s" data-s="b2-p2-s3">Isso significa que o agente pode tomar caminhos diferentes, desde que o resultado final — como um item no carrinho, uma entrada no calendário ou um arquivo exportado — esteja correto e persistente.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b3-t">Estado Final vs. Trajetória</span></h3>
+          <p><span class="s" data-s="b3-c-s0">Diferente de benchmarks que penalizam o agente por não seguir o &#39;caminho óbvio&#39;, o OS-Omni só se importa com o resultado.</span> <span class="s" data-s="b3-c-s1">Se o agente atualiza o calendário de forma diferente, mas o evento aparece corretamente no final, ele é considerado bem-sucedido.</span> <span class="s" data-s="b3-c-s2">Isso testa a robustez funcional, não a imitação de comportamento.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b4-h">Complexidade e escala das tarefas</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Para entender a dificuldade, comparem os números.</span> <span class="s" data-s="b4-p0-s1">Tarefas no OSWorld, um benchmark anterior focado em desktop, exigem em média 15 passos de interação e 111 segundos.</span> <span class="s" data-s="b4-p0-s2">No OS-Omni, os usuários humanos levam em média 67,54 passos de interação e 200,97 segundos para completar as tarefas.</span> <span class="s" data-s="b4-p0-s3">Isso não é apenas uma questão de ter mais plataformas; é uma questão de profundidade.</span> <span class="s" data-s="b4-p0-s4">As tarefas exigem que o agente rastreie registros parcialmente atualizados, adapte-se a convenções de UI diferentes e comprometa mudanças que sobrevivam a inspeções rigorosas.</span></p><p><span class="s" data-s="b4-p1-s0">Os fluxos de trabalho cross-platform são particularmente desafiadores.</span> <span class="s" data-s="b4-p1-s1">Eles exigem que o agente mantenha contexto entre aplicações.</span> <span class="s" data-s="b4-p1-s2">Por exemplo, uma tarefa pode envolver comparar suprimentos em um serviço de compras, adicionar itens ao carrinho, atualizar uma planilha de orçamento no desktop, criar entradas de calendário no celular e enviar uma mensagem com detalhes anexados.</span> <span class="s" data-s="b4-p1-s3">Nenhuma dessas etapas é isoladamente complexa, mas o conjunto exige coordenação e consistência de estado.</span></p><p><span class="s" data-s="b4-p2-s0">O ambiente inclui aplicativos de estado persistente controlados, como contas, carrinhos, orçamentos, calendários e mensagens.</span> <span class="s" data-s="b4-p2-s1">Isso evita que o agente dependa de serviços externos instáveis ou de interfaces web que mudam frequentemente.</span> <span class="s" data-s="b4-p2-s2">A consistência do estado é vital: se o agente esquece de salvar uma alteração ou usa dados obsoletos de uma janela anterior, a tarefa falha.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.34232/table1.webp" alt="Tabela de resultados principais mostrando a taxa de sucesso dos agentes (Claude e GPT) versus humanos em diferentes plataformas. O agente de ponta supera humanos no Linux, mas tem lacunas grandes em iOS e macOS." loading="lazy">
+          <figcaption>
+            Tabela de resultados principais mostrando a taxa de sucesso dos agentes (Claude e GPT) versus humanos em diferentes plataformas. O agente de ponta supera humanos no Linux, mas tem lacunas grandes em iOS e macOS.
+            <span class="source">Tabela 1 do paper · Shen et al., arXiv:2611.34232</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b6-h">Resultados: A lacuna entre agentes e humanos</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Os resultados do OS-Omni v1 revelam disparidades significativas.</span> <span class="s" data-s="b6-p0-s1">O melhor agente avaliado, Claude Opus 5.5, alcançou uma taxa de sucesso média de 68,5%, ficando 8,8 pontos abaixo da referência humana de 77,3%.</span> <span class="s" data-s="b6-p0-s2">No entanto, essa média esconde falhas estruturais em certas plataformas.</span> <span class="s" data-s="b6-p0-s3">Modelos de fronteira superam humanos no Linux, mas ficam para trás por mais de 25 pontos no iOS e macOS.</span></p><p><span class="s" data-s="b6-p1-s0">Essa assimetria sugere que os agentes atuais não são robustos o suficiente para lidar com as nuances de diferentes ecossistemas.</span> <span class="s" data-s="b6-p1-s1">O Linux, com suas interfaces mais padronizadas e acessíveis via linha de comando ou ferramentas de automação tradicionais, pode ser mais previsível para agentes baseados em texto ou código.</span> <span class="s" data-s="b6-p1-s2">Já iOS e macOS, com suas convenções de UI mais complexas e restrições de sandbox, apresentam barreiras maiores.</span></p><p><span class="s" data-s="b6-p2-s0">Os autores destacam que o problema não é apenas a percepção visual, mas a manutenção de estado.</span> <span class="s" data-s="b6-p2-s1">Em fluxos longos, os agentes tendem a &#39;esquecer&#39; estados anteriores ou a falhar em atualizar corretamente os registros compartilhados entre aplicativos.</span> <span class="s" data-s="b6-p2-s2">Isso é crítico para tarefas que exigem consistência, como atualizar um orçamento enquanto se adiciona itens a um carrinho.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.34232/figure3.webp" alt="Comparação de cobertura de plataformas e aplicativos entre OS-Omni e benchmarks existentes. O OS-Omni oferece maior diversidade de plataformas e aplicativos, permitindo avaliação mais abrangente." loading="lazy">
+          <figcaption>
+            Comparação de cobertura de plataformas e aplicativos entre OS-Omni e benchmarks existentes. O OS-Omni oferece maior diversidade de plataformas e aplicativos, permitindo avaliação mais abrangente.
+            <span class="source">Figura 3 do paper · Shen et al., arXiv:2611.34232</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Limitações e o que falta</span></h2>
+<p><span class="s" data-s="b8-p0-s0">O OS-Omni não é perfeito.</span> <span class="s" data-s="b8-p0-s1">A primeira versão foca em 12 fluxos cross-platform, o que é um começo, mas ainda é um subconjunto limitado de tarefas reais.</span> <span class="s" data-s="b8-p0-s2">Além disso, a avaliação depende de verificadores finais programáticos, que podem não capturar nuances semânticas ou contextuais que um humano perceberia.</span> <span class="s" data-s="b8-p0-s3">Se a função avaliadora for mal definida, o agente pode &#39;enganar&#39; o sistema sem realmente cumprir a intenção do usuário.</span></p><p><span class="s" data-s="b8-p1-s0">Outra limitação é a dependência de aplicativos de estado persistente controlados.</span> <span class="s" data-s="b8-p1-s1">Embora isso garanta reprodutibilidade, não reflete totalmente a imprevisibilidade da web real, onde APIs mudam e interfaces se adaptam.</span> <span class="s" data-s="b8-p1-s2">Agentes treinados ou avaliados apenas nesse ambiente podem não generalizar bem para a web aberta.</span></p><p><span class="s" data-s="b8-p2-s0">Os autores também notam que a análise qualitativa revela erros comuns, como falhas em parsing de ações ou perda de contexto visual em telas complexas.</span> <span class="s" data-s="b8-p2-s1">Isso indica que, embora os modelos de linguagem visual (VLM) estejam avançando, a integração com o sistema operacional ainda é frágil.</span> <span class="s" data-s="b8-p2-s2">A lacuna entre agentes e humanos permanece grande, especialmente em tarefas que exigem raciocínio de longo prazo e adaptação a novas interfaces.</span></p>        <h2><span class="s" data-s="b9-h">Conclusão: O caminho para agentes generalistas</span></h2>
+<p><span class="s" data-s="b9-p0-s0">O OS-Omni estabelece um novo padrão para avaliar agentes de uso de computador.</span> <span class="s" data-s="b9-p0-s1">Ao focar em fluxos de trabalho longos e multiplataforma, ele expõe as fraquezas atuais dos modelos em manter estado e consistência.</span> <span class="s" data-s="b9-p0-s2">Os resultados mostram que, embora os agentes estejam melhorando, eles ainda estão longe de ser generalistas robustos.</span></p><p><span class="s" data-s="b9-p1-s0">Para avançar, a pesquisa precisa focar em melhorar a memória de longo prazo, a adaptação a novas interfaces e a verificação de estado em tempo real.</span> <span class="s" data-s="b9-p1-s1">O benchmark fornece a infraestrutura para isso, permitindo que pesquisadores testem novas abordagens em um ambiente controlado, mas realista.</span> <span class="s" data-s="b9-p1-s2">O OS-Omni não é o fim da linha, mas um marco necessário para entender o que ainda falta para que agentes de IA sejam verdadeiramente úteis no dia a dia.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">O benchmark expõe agentes a 6 plataformas e fluxos que exigem transição entre elas, revelando falhas graves em manter estado consistente.</span></li><li><span class="s" data-s="k1">Agentes de ponta superam humanos no Linux, mas falham por mais de 25 pontos no iOS e macOS, mostrando viés de plataforma.</span></li><li><span class="s" data-s="k2">A avaliação foca no estado final do sistema, não na trajetória, exigindo que o agente deixe o software em um estado verificável.</span></li><li><span class="s" data-s="k3">Tarefas exigem em média 67 passos de interação, muito acima dos benchmarks anteriores, testando memória de longo prazo.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.34232" rel="noopener">OS-Omni: Benchmarking Generalist Computer-Using Agents on Long-Horizon Workflows Across Platforms</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.34232" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

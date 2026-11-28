@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RL em Diffusion Transformers é apenas Steering de Ativação — arXiv em 5</title>
+<meta name="description" content="Um estudo revela que o ganho de qualidade pós-treinamento por Reinforcement Learning em Diffusion Transformers pode ser replicado quase inteiramente por vetores de ativação fixos, sem ajustar pesos do modelo.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RL em Diffusion Transformers é apenas Steering de Ativação">
+<meta property="og:description" content="Um estudo revela que o ganho de qualidade pós-treinamento por Reinforcement Learning em Diffusion Transformers pode ser replicado quase inteiramente por vetores de ativação fixos, sem ajustar pesos do modelo.">
+<meta property="og:image" content="../../assets/papers/2611.26627/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Aprendizado por reforço</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.26627" rel="noopener">arXiv:2611.26627</a>
+    </div>
+    <h1><span class="s" data-s="t">RL em Diffusion Transformers é apenas Steering de Ativação</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um estudo revela que o ganho de qualidade pós-treinamento por Reinforcement Learning em Diffusion Transformers pode ser replicado quase inteiramente por vetores de ativação fixos, sem ajustar pesos do modelo.</span></p>
+    <p class="byline">
+      <span>Meral et al.</span>
+      <span>8 min de leitura</span>
+<span>19/11/2026</span>    </p>
+    <div class="listen" data-article="2611.26627" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=c63dki6W4FM" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Mito da Complexidade Dependente de Entrada</span></h2>
+<p><span class="s" data-s="b0-p0-s0">O pós-treinamento por Reinforcement Learning (RL) tem se mostrado essencial para melhorar a qualidade visual, a renderização de texto e a precisão composicional em Diffusion Transformers (DiTs).</span> <span class="s" data-s="b0-p0-s1">Modelos como SD3.5-M e FLUX.1-dev alcançam resultados impressionantes ao serem ajustados com algoritmos como Flow-GRPO, otimizando recompensas baseadas em preferência humana ou precisão de texto (OCR).</span> <span class="s" data-s="b0-p0-s2">A suposição padrão na comunidade de IA generativa é que, como tarefas como escrever palavras corretas ou compor múltiplos objetos dependem fortemente do prompt, o modelo precisa aprender transformações complexas e dependentes da entrada para alcançar esse nível de sofisticação.</span></p><p><span class="s" data-s="b0-p1-s0">Essa intuição leva à prática comum de atualizar os pesos do modelo, seja através de fine-tuning completo ou adaptadores eficientes como LoRA (Low-Rank Adaptation).</span> <span class="s" data-s="b0-p1-s1">Ao modificar os pesos, a rede cria uma nova função de ativação que responde de maneira única a cada prompt, cada token e cada seed de amostragem.</span> <span class="s" data-s="b0-p1-s2">Parece natural: se o texto a ser renderizado muda, a correção interna do modelo também deveria mudar.</span></p><p><span class="s" data-s="b0-p2-s0">No entanto, esta hipótese de que a melhoria requer necessariamente mudanças dependentes de entrada é questionada neste trabalho.</span> <span class="s" data-s="b0-p2-s1">Os autores propõem um experimento de isolamento radical: e se a maior parte do ganho de RL pudesse ser explicada por um deslocamento de ativação independente da entrada?</span> <span class="s" data-s="b0-p2-s2">Em vez de ajustar milhões de parâmetros de pesos, eles testam se um conjunto fixo de vetores de steering, somados às saídas dos blocos do modelo congelado, pode replicar os benefícios do RL.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.26627/figure2.webp" alt="Comparação entre o ajuste por RL (que altera pesos e cria deslocamentos diferentes por token) e o steering de ativação (que soma o mesmo vetor fixo a todos os tokens, independentemente do prompt)." loading="lazy">
+          <figcaption>
+            Comparação entre o ajuste por RL (que altera pesos e cria deslocamentos diferentes por token) e o steering de ativação (que soma o mesmo vetor fixo a todos os tokens, independentemente do prompt).
+            <span class="source">Figura 2 do paper · Meral et al., arXiv:2611.26627</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">O Mecanismo de Steering de Ativação</span></h2>
+<p><span class="s" data-s="b2-p0-s0">A técnica central deste estudo é o &#39;Activation Steering&#39;.</span> <span class="s" data-s="b2-p0-s1">Em vez de modificar a matriz de pesos W de uma camada linear, os autores adicionam um vetor constante s à saída de cada bloco do transformer.</span> <span class="s" data-s="b2-p0-s2">Matematicamente, se a saída original do bloco l para o token i é h, a saída dirigida é h + s. O ponto crucial é que s não depende do token i, nem do prompt de entrada, nem da seed de ruído.</span> <span class="s" data-s="b2-p0-s3">Ele é uma constante aprendida ou ajustada para aquele bloco específico.</span></p><p><span class="s" data-s="b2-p1-s0">Para maximizar a eficiência, os vetores de steering são parametrizados de forma esparsa.</span> <span class="s" data-s="b2-p1-s1">Eles variam apenas com o bloco do modelo, a passagem de orientação (conditional ou unconditional no Classifier-Free Guidance) e um &#39;step bin&#39; que divide o processo de sampling em duas fases: etapas iniciais (t ≥ 0.75) e etapas finais (t &lt; 0.75).</span> <span class="s" data-s="b2-p1-s2">Essa estrutura reduz drasticamente o número de parâmetros.</span> <span class="s" data-s="b2-p1-s3">No modelo SD3.5-M, o conjunto completo de vetores de steering possui apenas 0.29 milhões de parâmetros.</span></p><p><span class="s" data-s="b2-p2-s0">Em contraste, um adaptador LoRA de rank-32, que é o padrão para pós-treinamento eficiente em muitos pipelines, possui 18.8 milhões de parâmetros no mesmo modelo.</span> <span class="s" data-s="b2-p2-s1">Isso significa que os vetores de steering usam 65 vezes menos parâmetros que o LoRA.</span> <span class="s" data-s="b2-p2-s2">Apesar dessa simplicidade extrema, a hipótese é que eles capturam a essência da correção que o RL tenta impor ao modelo.</span></p>        <h2><span class="s" data-s="b3-h">Como os Vetores São Ajustados</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Os autores não treinam esses vetores com recompensas complexas.</span> <span class="s" data-s="b3-p0-s1">Em vez disso, eles usam uma técnica de &#39;velocity matching&#39;.</span> <span class="s" data-s="b3-p0-s2">Eles pegam checkpoints públicos de modelos já ajustados por RL e comparam as previsões de velocidade (velocity predictions) desses modelos com as do modelo base congelado.</span> <span class="s" data-s="b3-p0-s3">Para cada bloco, passo de sampling e passagem de orientação, eles calculam a diferença média nas ativações que o modelo RL-tuned produz em relação ao base.</span></p><p><span class="s" data-s="b3-p1-s0">Essa diferença média é usada como o vetor de steering s. Não há otimização de recompensa envolvida neste ajuste; é puramente uma correspondência estatística das saídas.</span> <span class="s" data-s="b3-p1-s1">Curiosamente, apenas calcular a diferença média (mean-difference) não é suficiente para recuperar todo o ganho.</span> <span class="s" data-s="b3-p1-s2">Os autores ajustam os vetores diretamente para minimizar a diferença nas previsões de velocidade finais, garantindo que o modelo steered imite o comportamento do modelo RL-tuned o mais fielmente possível.</span></p><p><span class="s" data-s="b3-p2-s0">É importante notar que os vetores são compartilhados entre todos os tokens.</span> <span class="s" data-s="b3-p2-s1">Isso parece contraintuitivo para tarefas como renderização de texto, onde a correção necessária para a letra &#39;A&#39; pode ser diferente da letra &#39;B&#39;.</span> <span class="s" data-s="b3-p2-s2">A pergunta que motiva o estudo é: será que o modelo base, mesmo congelado, já possui a capacidade de transformar esse deslocamento constante em uma resposta específica ao prompt, através de suas camadas internas?</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.26627/table1.webp" alt="Tabela mostrando que os vetores de steering recuperam entre 90.0% e 96.3% do ganho de recompensa em seis modelos de imagem e mais de 100% em modelos de vídeo, comparado ao ajuste RL completo." loading="lazy">
+          <figcaption>
+            Tabela mostrando que os vetores de steering recuperam entre 90.0% e 96.3% do ganho de recompensa em seis modelos de imagem e mais de 100% em modelos de vídeo, comparado ao ajuste RL completo.
+            <span class="source">Tabela 1 do paper · Meral et al., arXiv:2611.26627</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Resultados: Quase Tudo Pode Ser Explicado</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os resultados são surpreendentes na sua eficácia.</span> <span class="s" data-s="b5-p0-s1">Ao aplicar os vetores de steering fixos ao modelo base SD3.5-M, os autores recuperam entre 90.0% e 96.3% do ganho de recompensa obtido por seis modelos de imagem ajustados por RL.</span> <span class="s" data-s="b5-p0-s2">Esses modelos variam em algoritmos de RL, tipos de recompensa (PickScore, HPSv2.1, OCR, GenEval) e métodos de ajuste (LoRA ou full fine-tuning).</span> <span class="s" data-s="b5-p0-s3">O mesmo padrão se repete em geração de vídeo: em dois modelos RL-tuned, o steering recuperou 89.8% e 111.9% do ganho, respectivamente.</span></p><p><span class="s" data-s="b5-p1-s0">Isso significa que a maior parte do que consideramos &#39;inteligência&#39; adicionada pelo pós-treinamento não reside em novas conexões sinápticas complexas, mas em uma reorientação global das ativações.</span> <span class="s" data-s="b5-p1-s1">O modelo base, quando &#39;empurrado&#39; pelos vetores certos, consegue acessar representações que já estavam lá, mas que não eram acessíveis ou suficientemente fortes sem essa correção.</span></p><p><span class="s" data-s="b5-p2-s0">Para validar se isso é um artefato do ajuste por correspondência de velocidade, os autores realizaram um experimento de RL direto.</span> <span class="s" data-s="b5-p2-s1">Eles congelaram todos os pesos do SD3.5-M e treinaram apenas os vetores de steering usando Flow-GRPO, começando com vetores zerados.</span> <span class="s" data-s="b5-p2-s2">O modelo treinado apenas com steering superou o modelo ajustado por pesos em recompensa de OCR e PickScore, alcançando 104.6% e 103.6% do ganho, respectivamente.</span> <span class="s" data-s="b5-p2-s3">Isso prova que o RL pode aprender a corrigir o modelo apenas através desses vetores constantes.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.26627/figure5.webp" alt="Comparação visual das imagens geradas pelo modelo base, pelo modelo com steering de ativação e pelo modelo ajustado por RL. As imagens são visualmente indistinguíveis em qualidade e fidelidade ao prompt." loading="lazy">
+          <figcaption>
+            Comparação visual das imagens geradas pelo modelo base, pelo modelo com steering de ativação e pelo modelo ajustado por RL. As imagens são visualmente indistinguíveis em qualidade e fidelidade ao prompt.
+            <span class="source">Figura 5 do paper · Meral et al., arXiv:2611.26627</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">O Segredo está na Atenção Conjunta</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Se os vetores são iguais para todos os prompts, como o modelo consegue renderizar textos diferentes corretamente?</span> <span class="s" data-s="b7-p0-s1">A resposta está na arquitetura do Diffusion Transformer.</span> <span class="s" data-s="b7-p0-s2">Dentro dos blocos, as camadas de atenção e normalização misturam as ativações.</span> <span class="s" data-s="b7-p0-s3">O vetor de steering constante é somado às saídas dos blocos, mas ele interage com as representações dependentes do prompt que fluem através do modelo.</span></p><p><span class="s" data-s="b7-p1-s0">Os autores rastreiam como esse efeito chega à imagem final.</span> <span class="s" data-s="b7-p1-s1">Eles descobrem que o ganho depende criticamente da &#39;joint attention&#39;, onde tokens de imagem e tokens de texto atendem uns aos outros.</span> <span class="s" data-s="b7-p1-s2">Quando eles substituem os tokens de texto usados na atenção pelos tokens do modelo base não-steered (mantendo tudo o mais igual), a maioria dos ganhos de OCR e PickScore desaparece.</span></p><p><span class="s" data-s="b7-p2-s0">Isso indica que o vetor de steering atua como um sinal de controle que é interpretado diferentemente dependendo do contexto textual.</span> <span class="s" data-s="b7-p2-s1">O modelo base já sabe como desenhar a palavra &#39;gato&#39;; o que o RL faz é ajustar o vetor de steering para garantir que, quando o prompt contém &#39;gato&#39;, a atenção conjunta amplifique as características visuais corretas e suprima ruídos.</span> <span class="s" data-s="b7-p2-s2">A complexidade não está na correção, mas na interpretação da correção pelo contexto.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.26627/figure8.webp" alt="Exemplos visuais onde o modelo treinado apenas com vetores de steering via RL produz imagens de qualidade comparável aos modelos com pesos ajustados, validando a eficácia da abordagem." loading="lazy">
+          <figcaption>
+            Exemplos visuais onde o modelo treinado apenas com vetores de steering via RL produz imagens de qualidade comparável aos modelos com pesos ajustados, validando a eficácia da abordagem.
+            <span class="source">Figura 8 do paper · Meral et al., arXiv:2611.26627</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Limitações e Implicações</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Apesar dos resultados robustos, é importante destacar o escopo deste estudo.</span> <span class="s" data-s="b9-p0-s1">A pesquisa foca em modelos que usam gradientes de política (policy-gradient) para pós-treinamento.</span> <span class="s" data-s="b9-p0-s2">Métodos alternativos, como otimização de preferência direta (DPO) ou backpropagation de recompensa, não foram testados.</span> <span class="s" data-s="b9-p0-s3">Não sabemos se esses métodos também resultam em ganhos explicáveis por steering de ativação ou se eles realmente aprendem transformações dependentes de entrada mais complexas.</span></p><p><span class="s" data-s="b9-p1-s0">Além disso, o estudo não descarta a possibilidade de que transformações dependentes de entrada sejam úteis em algum nível.</span> <span class="s" data-s="b9-p1-s1">Talvez os métodos atuais de RL não sejam capazes de aprender essas transformações complexas de forma eficiente, e o steering seja apenas a solução mais fácil que o otimizador encontra.</span> <span class="s" data-s="b9-p1-s2">No entanto, a eficiência de parâmetros é inegável: 0.29M vs 18.8M é uma diferença operacional significativa para deploy em recursos limitados.</span></p><p><span class="s" data-s="b9-p2-s0">Os vetores de steering também mostram boa transferência.</span> <span class="s" data-s="b9-p2-s1">Eles funcionam em diferentes resoluções (512px a 1024px) e em diferentes números de passos de sampling, desde que a estrutura de step bins seja mantida.</span> <span class="s" data-s="b9-p2-s2">Isso sugere que a correção é uma propriedade fundamental da dinâmica do modelo base, e não um ajuste fino para uma configuração específica de inferência.</span></p>        <h2><span class="s" data-s="b10-h">Conclusão: Redescobrindo o Modelo Base</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Este paper desafia a narrativa de que o pós-treinamento por RL é principalmente sobre ensinar o modelo a fazer coisas novas.</span> <span class="s" data-s="b10-p0-s1">Em vez disso, ele sugere que o RL atua principalmente como um mecanismo de direcionamento, guiando o modelo base para acessar capacidades que já existem em sua representação latente.</span> <span class="s" data-s="b10-p0-s2">A &#39;inteligência&#39; adicionada não é nova; é apenas mais acessível.</span></p><p><span class="s" data-s="b10-p1-s0">Para desenvolvedores e pesquisadores, isso tem implicações práticas imediatas.</span> <span class="s" data-s="b10-p1-s1">Em vez de treinar LoRAs pesados ou fazer fine-tuning completo, pode ser mais eficiente e robusto treinar um conjunto pequeno de vetores de steering.</span> <span class="s" data-s="b10-p1-s2">Isso reduz o risco de &#39;catastrophic forgetting&#39;, simplifica o pipeline de deploy e oferece uma interpretabilidade maior sobre o que está acontecendo nas camadas intermediárias do modelo.</span></p><p><span class="s" data-s="b10-p2-s0">A mensagem final é clara: antes de assumir que um modelo precisa de ajustes complexos e dependentes de entrada para melhorar, verifique se um simples deslocamento constante não é suficiente para liberar seu potencial já existente.</span> <span class="s" data-s="b10-p2-s1">A complexidade pode ser uma ilusão criada pela forma como interpretamos as saídas do modelo, não pela complexidade dos pesos necessários para produzi-las.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Vetores de steering fixos recuperam 90-96% do ganho de recompensa de modelos ajustados por RL, com 65x menos parâmetros.</span></li><li><span class="s" data-s="k1">A melhoria não vem de novas transformações dependentes de entrada, mas de reorientar o que o modelo base já sabe fazer.</span></li><li><span class="s" data-s="k2">O ganho ocorre principalmente nas etapas iniciais do sampling e via atenção conjunta entre tokens de texto e imagem.</span></li><li><span class="s" data-s="k3">Treinar apenas esses vetores com RL supera o ajuste de pesos completo em métricas de OCR e preferência humana.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.26627" rel="noopener">RL Post-Training in Diffusion Transformers Is Activation Steering</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.26627" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

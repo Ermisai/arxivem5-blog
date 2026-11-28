@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Colapso Estático em Modelos de Mundo JEPA: Regularização Guiada por Movimento — arXiv em 5</title>
+<meta name="description" content="Modelos de mundo baseados em JEPA frequentemente ignoram mudanças dinâmicas em favor de fundos estáticos. Este paper identifica o &#39;colapso estático&#39; e propõe uma regularização contrastiva guiada por fluxo óptico para melhorar o planejamento em ambientes com distrações visuais.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Colapso Estático em Modelos de Mundo JEPA: Regularização Guiada por Movimento">
+<meta property="og:description" content="Modelos de mundo baseados em JEPA frequentemente ignoram mudanças dinâmicas em favor de fundos estáticos. Este paper identifica o &#39;colapso estático&#39; e propõe uma regularização contrastiva guiada por fluxo óptico para melhorar o planejamento em ambientes com distrações visuais.">
+<meta property="og:image" content="../../assets/papers/2611.06901/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Vídeo</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.06901" rel="noopener">arXiv:2611.06901</a>
+    </div>
+    <h1><span class="s" data-s="t">Colapso Estático em Modelos de Mundo JEPA: Regularização Guiada por Movimento</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Modelos de mundo baseados em JEPA frequentemente ignoram mudanças dinâmicas em favor de fundos estáticos.</span> <span class="s" data-s="d-s1">Este paper identifica o &#39;colapso estático&#39; e propõe uma regularização contrastiva guiada por fluxo óptico para melhorar o planejamento em ambientes com distrações visuais.</span></p>
+    <p class="byline">
+      <span>Chen et al.</span>
+      <span>6 min de leitura</span>
+<span>04/11/2026</span>    </p>
+    <div class="listen" data-article="2611.06901" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=6oxFwlbj1DQ" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema Oculto nos Modelos de Mundo Latentes</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Os modelos de mundo (world models) têm se destacado como uma ferramenta fundamental para robótica e direção autônoma.</span> <span class="s" data-s="b0-p0-s1">Ao aprender a dinâmica do ambiente para prever as consequências de ações, eles permitem que agentes planejem comportamentos através de experiências imaginadas.</span> <span class="s" data-s="b0-p0-s2">No entanto, aprender representações que capturem informações críticas de estado sem serem sobrecarregadas por detalhes visuais de alta dimensão é um desafio persistente.</span> <span class="s" data-s="b0-p0-s3">As Arquiteturas Preditivas de Embedding Conjunto (JEPA, na sigla em inglês) surgem como uma solução promissora ao prever representações alvo a partir do contexto, ignorando completamente a reconstrução em nível de pixels.</span> <span class="s" data-s="b0-p0-s4">Isso permite que um codificador mapeie observações para estados latentes enquanto um preditor estima embeddings futuros baseados no histórico de observações e ações.</span></p>        <h2><span class="s" data-s="b1-h">A Vulnerabilidade do Colapso de Representação</span></h2>
+<p><span class="s" data-s="b1-p0-s0">A abolição da reconstrução de pixels introduz uma vulnerabilidade crítica: o colapso de representação.</span> <span class="s" data-s="b1-p0-s1">Sem um objetivo bem constrito, o modelo pode mapear trivialmente todas as observações para um embedding constante.</span> <span class="s" data-s="b1-p0-s2">Esforços consideráveis foram dedicados a aprender representações que não colapsem em modelos preditivos.</span> <span class="s" data-s="b1-p0-s3">Abordagens iniciais focaram em restringir atualizações do codificador, seja através de codificadores alvo de média móvel ou congelando grandes codificadores visuais pré-treinados.</span> <span class="s" data-s="b1-p0-s4">Embora estabilizem os alvos de previsão, esses métodos não forçam explicitamente as representações a distinguir entre diferentes resultados de ação.</span></p>        <h2><span class="s" data-s="b2-h">Identificando o Colapso Estático</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Os autores deste paper identificam um modo de falha específico chamado &#39;colapso estático&#39;.</span> <span class="s" data-s="b2-p0-s1">Neste cenário, o codificador preserva conteúdo estático específico de cada episódio (como o fundo da cena) enquanto suprime mudanças relevantes para a manipulação.</span> <span class="s" data-s="b2-p0-s2">Como o conteúdo estático é temporalmente previsível, mas diverso entre episódios, essa falha pode persistir mesmo na presença de regularizadores de distribuição, como o SIGReg.</span> <span class="s" data-s="b2-p0-s3">Um estudo controlado no benchmark OGBench-Cube demonstrou que a introdução de fundos aleatórios degrada substancialmente o desempenho de planejamento, embora a tarefa de manipulação subjacente permaneça inalterada.</span> <span class="s" data-s="b2-p0-s4">Isso revela que o modelo está aprendendo a distinguir episódios pelo fundo, e não pelo estado do objeto sendo manipulado.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.06901/figure1.webp" alt="Visualização do colapso estático e da solução proposta. À esquerda, o modelo LeWM falha no cenário com fundo aleatório (Cube-RB), agrupando estados distintos no espaço latente. À direita, a regularização proposta preserva a variação de estado dentro do episódio." loading="lazy">
+          <figcaption>
+            Visualização do colapso estático e da solução proposta. À esquerda, o modelo LeWM falha no cenário com fundo aleatório (Cube-RB), agrupando estados distintos no espaço latente. À direita, a regularização proposta preserva a variação de estado dentro do episódio.
+            <span class="source">Figura 1 do paper · Chen et al., arXiv:2611.06901</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b4-h">A Solução: Regularização Contrastiva Guiada por Movimento</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Para resolver o problema do colapso estático, os autores propõem a regularização contrastiva guiada por movimento.</span> <span class="s" data-s="b4-p0-s1">A ideia central é comparar as transições latentes previstas com transições para observações candidatas do mesmo episódio.</span> <span class="s" data-s="b4-p0-s2">Isso reduz a utilidade da identidade do fundo estático para distinguir os resultados das ações.</span> <span class="s" data-s="b4-p0-s3">Em vez de tratar apenas o próximo frame como positivo e todos os outros como negativos, o método utiliza similaridades de fluxo óptico para fornecer alvos contrastivos suaves.</span> <span class="s" data-s="b4-p0-s4">Candidatos com movimento similar recebem supervisão similar, permitindo que o modelo foque na dinâmica real da cena.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.06901/figure2.webp" alt="Diagrama da aprendizagem contrastiva guiada por movimento. O modelo codifica a observação atual, prevê o próximo estado latente e usa fluxo óptico para comparar com candidatos do mesmo episódio, distinguindo o que importa do fundo." loading="lazy">
+          <figcaption>
+            Diagrama da aprendizagem contrastiva guiada por movimento. O modelo codifica a observação atual, prevê o próximo estado latente e usa fluxo óptico para comparar com candidatos do mesmo episódio, distinguindo o que importa do fundo.
+            <span class="source">Figura 2 do paper · Chen et al., arXiv:2611.06901</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b6-h">Como Funciona o Mecanismo</span></h2>
+<p><span class="s" data-s="b6-p0-s0">O objetivo de treinamento retém a perda de previsão latente e a regularização SIGReg do modelo base LeWM, adicionando a nova perda contrastiva.</span> <span class="s" data-s="b6-p0-s1">A função de perda total é uma combinação linear dessas componentes.</span> <span class="s" data-s="b6-p0-s2">Para cada transição de treinamento, o modelo amostra N observações candidatas adicionais do mesmo episódio.</span> <span class="s" data-s="b6-p0-s3">O fluxo óptico é computado entre as observações, e as similaridades de fluxo são usadas para ponderar os alvos contrastivos.</span> <span class="s" data-s="b6-p0-s4">Isso permite que o modelo aprenda que transições com padrões de movimento semelhantes devem ter embeddings latentes semelhantes, independentemente do fundo estático que as cerca.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b7-t">Detalhe Técnico: Fluxo Óptico como Guia</span></h3>
+          <p><span class="s" data-s="b7-c-s0">O fluxo óptico (optical flow) estima o movimento de pixels entre frames consecutivos.</span> <span class="s" data-s="b7-c-s1">Ao usá-lo para guiar a perda contrastiva, o modelo é incentivado a ignorar variações espaciais estáticas (fundo) e focar nas variações temporais dinâmicas (objetos em movimento).</span> <span class="s" data-s="b7-c-s2">O parâmetro de temperatura do fluxo (τf) controla a suavidade dessa supervisão.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b8-h">Avaliação e Resultados</span></h2>
+<p><span class="s" data-s="b8-p0-s0">A avaliação foi realizada em seis configurações de controle visual.</span> <span class="s" data-s="b8-p0-s1">O par controlado introduzido no estudo, Cube e Cube-RB (Cube com fundos aleatórios), isola o efeito da variação de fundo específica de episódio.</span> <span class="s" data-s="b8-p0-s2">Além disso, o benchmark LIBERO-Object foi usado para avaliar se os benefícios se estendem a cenas com múltiplos objetos sem substituição sintética de fundo.</span> <span class="s" data-s="b8-p0-s3">Os resultados mostram que o método melhora o sucesso no planejamento sobre o LeWM de 52% para 78% no OGBench-Cube com fundos aleatórios e de 14% para 54% no LIBERO-Object.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.06901/table1.webp" alt="Tabela comparativa de taxas de sucesso no planejamento. O método proposto supera o LeWM significativamente em cenários com fundos aleatórios (Cube-RB) e no LIBERO-Object, mantendo desempenho competitivo em outros benchmarks." loading="lazy">
+          <figcaption>
+            Tabela comparativa de taxas de sucesso no planejamento. O método proposto supera o LeWM significativamente em cenários com fundos aleatórios (Cube-RB) e no LIBERO-Object, mantendo desempenho competitivo em outros benchmarks.
+            <span class="source">Tabela 1 do paper · Chen et al., arXiv:2611.06901</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">Manutenção de Desempenho em Ambientes Simples</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Um aspecto crucial da proposta é que ela não degrada o desempenho em ambientes visualmente mais simples.</span> <span class="s" data-s="b10-p0-s1">O método mantém desempenho comparável em quatro outros benchmarks visuais, incluindo Push-T, 2-Rooms e Reacher.</span> <span class="s" data-s="b10-p0-s2">Isso indica que a regularização adicional não introduz ruído desnecessário ou instabilidade em tarefas onde o colapso estático não é um problema dominante.</span> <span class="s" data-s="b10-p0-s3">A análise de espaço latente mostra que, comparado ao LeWM, as reconstruções a partir dos embeddings congelados do método proposto preservam mais claramente o robô e os objetos manipulados nos conjuntos de dados desafiadores.</span></p>        <h2><span class="s" data-s="b11-h">Análise de Custo Computacional</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Além da precisão, o custo computacional foi medido.</span> <span class="s" data-s="b11-p0-s1">O pico de memória GPU e o tempo de planejamento para uma trajetória foram registrados.</span> <span class="s" data-s="b11-p0-s2">O método proposto compartilha a mesma arquitetura e configurações de otimização do LeWM, diferindo apenas na adição do objetivo contrastivo.</span> <span class="s" data-s="b11-p0-s3">Os resultados mostram que o overhead computacional é mínimo, com tempos de planejamento e uso de memória comparáveis aos baselines mais fortes.</span> <span class="s" data-s="b11-p0-s4">Isso sugere que a abordagem é viável para implementação em sistemas de controle em tempo real, onde a eficiência é tão importante quanto a precisão.</span></p>        <h2><span class="s" data-s="b12-h">Limitações e Trabalho Futuro</span></h2>
+<p><span class="s" data-s="b12-p0-s0">Como o LeWM, o método depende de cobertura suficiente de ações e permanece sensível a mudanças nas representações de ação e aparência visual, incluindo alterações no motor de renderização do LIBERO.</span> <span class="s" data-s="b12-p0-s1">Além disso, o método assume fundos estáticos; movimento no fundo pode distorcer as similaridades de fluxo óptico usadas para supervisão.</span> <span class="s" data-s="b12-p0-s2">Trabalhos futuros devem melhorar a transferência entre ações e aparências, isolar o movimento relevante para a tarefa em cenas dinâmicas e estender o planejamento para horizontes mais longos.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b13-t">Limitação Crítica: Fundos Dinâmicos</span></h3>
+          <p><span class="s" data-s="b13-c-s0">Se o fundo da cena se mover (ex: pessoas passando, vegetação ao vento), o fluxo óptico capturará esse movimento, potencialmente confundindo o modelo.</span> <span class="s" data-s="b13-c-s1">A supervisão contrastiva assume que o movimento relevante está associado à manipulação do objeto, o que pode não ser verdade em ambientes não controlados.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b14-h">Conclusão</span></h2>
+<p><span class="s" data-s="b14-p0-s0">Os autores identificaram o colapso estático em modelos de mundo JEPA, onde as representações preservam conteúdo estático específico de episódio enquanto suprimem mudanças relevantes para a manipulação.</span> <span class="s" data-s="b14-p0-s1">Eles introduziram a regularização contrastiva guiada por movimento, que usa fluxo óptico para orientar comparações entre observações do mesmo episódio.</span> <span class="s" data-s="b14-p0-s2">Combinada com previsão latente e SIGReg, a abordagem melhora o sucesso no planejamento em cenários com distrações visuais significativas, oferecendo uma solução robusta e eficiente para aprendizado de mundo latente.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">O colapso estático ocorre quando o modelo aprende a prever fundos fixos em vez de estados de manipulação, falhando em ambientes com variações de fundo.</span></li><li><span class="s" data-s="k1">A regularização contrastiva usa fluxo óptico para alinhar transições latentes, distinguindo o que se move do que é estático.</span></li><li><span class="s" data-s="k2">O método aumenta o sucesso no planejamento de 52% para 78% no OGBench-Cube com fundos aleatórios, mantendo desempenho em benchmarks mais simples.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.06901" rel="noopener">Motion-guided Contrastive Regularization For Latent World Models</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.06901" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

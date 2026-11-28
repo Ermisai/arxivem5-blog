@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Generalização Clínica em DL para Alzheimer: Revisão de Adaptação e Generalização de Domínio — arXiv em 5</title>
+<meta name="description" content="Uma revisão sistemática sobre como técnicas de Domain Adaptation (DA) e Domain Generalization (DG) melhoram a robustez de modelos de IA na detecção de Alzheimer entre diferentes datasets e modalidades.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Generalização Clínica em DL para Alzheimer: Revisão de Adaptação e Generalização de Domínio">
+<meta property="og:description" content="Uma revisão sistemática sobre como técnicas de Domain Adaptation (DA) e Domain Generalization (DG) melhoram a robustez de modelos de IA na detecção de Alzheimer entre diferentes datasets e modalidades.">
+<meta property="og:image" content="../../assets/papers/2611.08188/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Saúde</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.08188" rel="noopener">arXiv:2611.08188</a>
+    </div>
+    <h1><span class="s" data-s="t">Generalização Clínica em DL para Alzheimer: Revisão de Adaptação e Generalização de Domínio</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Uma revisão sistemática sobre como técnicas de Domain Adaptation (DA) e Domain Generalization (DG) melhoram a robustez de modelos de IA na detecção de Alzheimer entre diferentes datasets e modalidades.</span></p>
+    <p class="byline">
+      <span>Huang et al.</span>
+      <span>5 min de leitura</span>
+<span>05/11/2026</span>    </p>
+    <div class="listen" data-article="2611.08188" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=iTK4d4BXnjU" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Generalização em IA Médica</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A detecção de Alzheimer (AD) por meio de aprendizado de máquina (ML) tem avançado rapidamente, mas esbarra em um obstáculo clássico da ciência de dados: a falha na generalização.</span> <span class="s" data-s="b0-p0-s1">Modelos treinados em um dataset (fonte) frequentemente performam mal quando aplicados a dados de outra fonte (alvo), devido ao que chamamos de &#39;domain shift&#39;.</span> <span class="s" data-s="b0-p0-s2">Isso ocorre porque as distribuições de dados mudam entre hospitais, dispositivos ou populações.</span></p><p><span class="s" data-s="b0-p1-s0">Um estudo recente, &#39;Improving the Clinical Generalizability of Machine Learning-Based Alzheimer’s Disease Detection Across Domains and Modalities: A Comprehensive Review&#39;, conduzido por pesquisadores da University of Alberta, Hebei University e Saskatchewan Polytechnic, mapeia como as técnicas de Domain Adaptation (DA) e Domain Generalization (DG) tentam resolver isso.</span> <span class="s" data-s="b0-p1-s1">O foco não é apenas aumentar a acurácia em benchmarks fechados, mas garantir que os sistemas sejam clinicamente confiáveis em cenários reais.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.08188/figure1.webp" alt="Framework de generalização clínica. As seis dimensões organizam as fontes de domain shift que os estudos revisados abordam (ou ignoram), mostrando que a maioria foca apenas em aspectos técnicos e geográficos." loading="lazy">
+          <figcaption>
+            Framework de generalização clínica. As seis dimensões organizam as fontes de domain shift que os estudos revisados abordam (ou ignoram), mostrando que a maioria foca apenas em aspectos técnicos e geográficos.
+            <span class="source">Figura 1 do paper · Huang et al., arXiv:2611.08188</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">O Que é Domain Adaptation e Generalização?</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Para entender a contribuição deste paper, é preciso distinguir duas estratégias.</span> <span class="s" data-s="b2-p0-s1">A Domain Adaptation (DA) assume que temos dados do domínio alvo (mesmo que sem rótulos) e tenta alinhar a distribuição dos dados de treino com a do alvo.</span> <span class="s" data-s="b2-p0-s2">Já a Domain Generalization (DG) tenta aprender representações que sejam invariantes ao domínio, permitindo que o modelo funcione em dados nunca vistos, sem nenhum acesso ao domínio alvo durante o treino.</span></p><p><span class="s" data-s="b2-p1-s0">O paper organiza a revisão em torno de seis dimensões de variabilidade clínica.</span> <span class="s" data-s="b2-p1-s1">Essas dimensões vão desde a origem dos dados (site/geográfico) até características dos pacientes (idade, sexo) e a modalidade de coleta.</span> <span class="s" data-s="b2-p1-s2">A maioria dos estudos revisados avalia apenas a generalização técnica (cross-dataset) e, com menos frequência, a generalização clínica real (cross-site com populações diferentes).</span></p>        <h2><span class="s" data-s="b3-h">Modalidades: O Dominio da Neuroimagem e o Despertar de Novas Vozes</span></h2>
+<p><span class="s" data-s="b3-p0-s0">A revisão abrange múltiplas modalidades: neuroimagem (MRI e PET), EEG, eye-tracking (ET), fala e multimodalidade.</span> <span class="s" data-s="b3-p0-s1">Como mostra a Figura 4, a neuroimagem ainda domina a pesquisa.</span> <span class="s" data-s="b3-p0-s2">Estudos com MRI mostram ganhos consistentes de 5% a 22% na acurácia do domínio alvo ao usar DA.</span> <span class="s" data-s="b3-p0-s3">Modelos como 3D CNNs, ResNets e ViTs são adaptados para lidar com variações na aquisição de imagens entre scanners de diferentes hospitais.</span></p><p><span class="s" data-s="b3-p1-s0">No entanto, o paper destaca um movimento crescente para modalidades mais acessíveis.</span> <span class="s" data-s="b3-p1-s1">O EEG, por exemplo, oferece alta resolução temporal e baixo custo.</span> <span class="s" data-s="b3-p1-s2">Estudos com EEG usam DA adversarial e fusão de características temporais/espectrais para classificar AD versus controles saudáveis, alcançando acurácias superiores a 90% em datasets cruzados.</span> <span class="s" data-s="b3-p1-s3">Da mesma forma, a análise de fala, impulsionada por LLMs, identifica mudanças sutis na coerência linguística e padrões acústicos, oferecendo uma via não invasiva para triagem precoce.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.08188/figure3.webp" alt="Visão geral do pipeline. Mostra como dados brutos de diferentes modalidades são processados por algoritmos de IA, mapeando as abordagens de DA/DG aplicadas em cada etapa para detectar Alzheimer." loading="lazy">
+          <figcaption>
+            Visão geral do pipeline. Mostra como dados brutos de diferentes modalidades são processados por algoritmos de IA, mapeando as abordagens de DA/DG aplicadas em cada etapa para detectar Alzheimer.
+            <span class="source">Figura 3 do paper · Huang et al., arXiv:2611.08188</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Mecanismos: Como os Modelos se Adaptam?</span></h2>
+<p><span class="s" data-s="b5-p0-s0">A Tabela 3 sintetiza as estratégias técnicas.</span> <span class="s" data-s="b5-p0-s1">As abordagens adversariais são as mais comuns em neuroimagem.</span> <span class="s" data-s="b5-p0-s2">Elas adicionam um &#39;domínio discriminador&#39; ao modelo que tenta prever a origem dos dados.</span> <span class="s" data-s="b5-p0-s3">O objetivo é treinar o extrator de características para enganar esse discriminador, forçando-o a aprender atributos invariantes ao domínio.</span> <span class="s" data-s="b5-p0-s4">O problema?</span> <span class="s" data-s="b5-p0-s5">Esses métodos podem ser instáveis e, ao remover variações de domínio, podem também apagar sinais clínicos relevantes.</span></p><p><span class="s" data-s="b5-p1-s0">Já os métodos baseados em discrepância (discrepancy-based) medem a diferença entre as distribuições das fontes e do alvo (usando métricas como MMD - Maximum Mean Discrepancy) e minimizam essa distância.</span> <span class="s" data-s="b5-p1-s1">São mais estáveis e transparentes, mas podem não preservar bem os limites entre as classes clínicas.</span> <span class="s" data-s="b5-p1-s2">Além disso, há um crescimento no uso de auto-treinamento (self-training) e aprendizado por poucos exemplos (few-shot), úteis quando há pouca ou nenhuma etiqueta no domínio alvo.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b6-t">O Risco da Vazação de Dados</span></h3>
+          <p><span class="s" data-s="b6-c-s0">Um ponto crítico levantado pela revisão é o controle de vazação de dados (data leakage).</span> <span class="s" data-s="b6-c-s1">Muitos estudos não reportam adequadamente se a separação entre treino e teste foi feita por sujeito ou apenas por amostra.</span> <span class="s" data-s="b6-c-s2">Se um sujeito aparece em ambos os conjuntos, a avaliação da generalização é artificialmente inflada.</span> <span class="s" data-s="b6-c-s3">O paper enfatiza que a validação deve ser rigorosamente por sujeito.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b7-h">Resultados: Ganhos Reais e Limitações Técnicas</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Os resultados mostram que DA/DG realmente melhora a robustez.</span> <span class="s" data-s="b7-p0-s1">Em MRI, modelos adaptados superam baselines em até 22% em cenários de domínio alvo desconhecido.</span> <span class="s" data-s="b7-p0-s2">No EEG, a pré-treinamento auto-supervisionado em grandes datasets públicos, seguido de fine-tuning, melhorou o F1-score em até 9.86%.</span> <span class="s" data-s="b7-p0-s3">No entanto, esses ganhos técnicos não se traduzem automaticamente em utilidade clínica.</span></p><p><span class="s" data-s="b7-p1-s0">O paper nota que a maioria dos estudos foca em classificação binária (Controle Saudável vs. Alzheimer) ou trinária (CN, MCI, AD).</span> <span class="s" data-s="b7-p1-s1">A detecção de MCI (Déficit Cognitivo Leve) é crucial, pois é a janela para intervenção, mas é mais difícil devido à sobreposição de sintomas.</span> <span class="s" data-s="b7-p1-s2">Estudos que abordam MCI mostram ganhos menores e maior variabilidade, indicando que a tarefa é muito mais complexa do que separar doentes de saudáveis.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.08188/table3.webp" alt="Síntese de estratégias. Tabela que classifica as abordagens de DA/DG em alinhamento adversarial, baseado em discrepância, auto-treinamento e híbridos, mostrando quais afetam diretamente o domain shift." loading="lazy">
+          <figcaption>
+            Síntese de estratégias. Tabela que classifica as abordagens de DA/DG em alinhamento adversarial, baseado em discrepância, auto-treinamento e híbridos, mostrando quais afetam diretamente o domain shift.
+            <span class="source">Tabela 3 do paper · Huang et al., arXiv:2611.08188</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">O Gap entre o Lab e o Consultório</span></h2>
+<p><span class="s" data-s="b9-p0-s0">A conclusão mais honesta do paper é que ainda estamos longe da implantação clínica rotineira.</span> <span class="s" data-s="b9-p0-s1">As limitações incluem: 1) Falta de validação externa em populações representativas; 2) Baixa interpretabilidade dos modelos de deep learning; 3) Complexidade computacional que dificulta o uso em tempo real; e 4) Preocupações com privacidade no compartilhamento de dados entre instituições.</span></p><p><span class="s" data-s="b9-p1-s0">Além disso, a maioria dos sistemas ignora a incerteza.</span> <span class="s" data-s="b9-p1-s1">Um modelo que diz &#39;Alzheimer&#39; com 95% de confiança, mas com base em artefatos de domínio (ex: ruído de um scanner específico), é perigoso.</span> <span class="s" data-s="b9-p1-s2">O paper argumenta que sistemas de suporte à decisão devem reportar intervalos de confiança e desempenho por subgrupos (idade, gênero, etnia) para evitar viés algorítmico.</span></p>        <h2><span class="s" data-s="b10-h">Caminhos Futuros: Transparência e Multimodalidade</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Para avançar, os autores propõem prioridades claras.</span> <span class="s" data-s="b10-p0-s1">Primeiro, padronização de benchmarks multi-site e multimodal.</span> <span class="s" data-s="b10-p0-s2">Segundo, relatórios transparentes que incluam a definição do domínio, o tipo de shift, a disponibilidade de dados alvo e o protocolo de validação.</span> <span class="s" data-s="b10-p0-s3">Terceiro, desenvolvimento de métodos de adaptação leves e preservadores de privacidade.</span></p><p><span class="s" data-s="b10-p1-s0">A multimodalidade é vista como promissora, mas desafiadora.</span> <span class="s" data-s="b10-p1-s1">Combinar MRI, EEG e fala pode capturar aspectos complementares da doença, mas exige lidar com dados faltantes (modalidades ausentes em alguns pacientes) e viés específico de cada modalidade.</span> <span class="s" data-s="b10-p1-s2">O futuro não está em um modelo único, mas em sistemas híbridos que possam se adaptar a diferentes contextos clínicos sem perder a precisão diagnóstica.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b11-t">Aviso Importante</span></h3>
+          <p><span class="s" data-s="b11-c-s0">Este paper é uma revisão, não um novo modelo.</span> <span class="s" data-s="b11-c-s1">Ele sintetiza o estado da arte, mas não apresenta um algoritmo inédito.</span> <span class="s" data-s="b11-c-s2">Seu valor está em mapear o campo, identificar armadilhas metodológicas e definir o que precisa ser feito para que a IA saia dos artigos e entre nas clínicas.</span></p>
+        </aside>
+
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">A neuroimagem (MRI/PET) domina a literatura, mas EEG, voz e eye-tracking ganham força como alternativas não invasivas.</span></li><li><span class="s" data-s="k1">Métodos adversariais são poderosos, mas instáveis; métodos baseados em discrepância são mais estáveis e interpretáveis.</span></li><li><span class="s" data-s="k2">A maior lacuna não é técnica, mas clínica: falta validação externa rigorosa, transparência e integração em fluxos de trabalho reais.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.08188" rel="noopener">Improving the Clinical Generalizability of Machine Learning-Based Alzheimer&#39;s Disease Detection Across Domains and Modalities: A Comprehensive Review</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.08188" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

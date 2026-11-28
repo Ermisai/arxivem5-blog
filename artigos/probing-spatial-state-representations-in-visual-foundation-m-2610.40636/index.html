@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Probing Spatial State Representations in Visual Foundation Models: O que os embeddings realmente sabem sobre o mundo — arXiv em 5</title>
+<meta name="description" content="Um estudo rigoroso testa se modelos visuais de fundação mantêm um estado espacial persistente, prevêem mudanças ou guiam ações, descobrindo que alta acurácia em leitura de cena não garante essas capacidades avançadas.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Probing Spatial State Representations in Visual Foundation Models: O que os embeddings realmente sabem sobre o mundo">
+<meta property="og:description" content="Um estudo rigoroso testa se modelos visuais de fundação mantêm um estado espacial persistente, prevêem mudanças ou guiam ações, descobrindo que alta acurácia em leitura de cena não garante essas capacidades avançadas.">
+<meta property="og:image" content="../../assets/papers/2610.40636/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Imagem</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.40636" rel="noopener">arXiv:2610.40636</a>
+    </div>
+    <h1><span class="s" data-s="t">Probing Spatial State Representations in Visual Foundation Models: O que os embeddings realmente sabem sobre o mundo</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um estudo rigoroso testa se modelos visuais de fundação mantêm um estado espacial persistente, prevêem mudanças ou guiam ações, descobrindo que alta acurácia em leitura de cena não garante essas capacidades avançadas.</span></p>
+    <p class="byline">
+      <span>Yin et al.</span>
+      <span>10 min de leitura</span>
+<span>29/10/2026</span>    </p>
+    <div class="listen" data-article="2610.40636" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=CO8acie4JsA" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema da representação espacial em modelos visuais</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Um observador vê apenas uma parte do mundo ao seu redor, mas precisa manter o rastro do que está além da visão atual.</span> <span class="s" data-s="b0-p0-s1">A percepção espacial, portanto, envolve mais do que reconhecer imagens individuais: exige um estado espacial persistente que seja atualizado sob movimento próprio (ego-motion) e usado para guiar ações.</span> <span class="s" data-s="b0-p0-s2">Essa é a base da cognição biológica, onde humanos e animais não experimentam o mundo como uma sequência de imagens retinianas independentes, mas mantêm informações sobre o espaço circundante, rastreiam objetos que saíram do campo de visão e atualizam sua própria localização.</span></p><p><span class="s" data-s="b0-p1-s0">Modelos visuais de fundação (Visual Foundation Models - VFMs) têm demonstrado capacidades impressionantes em reconhecimento de objetos e segmentação.</span> <span class="s" data-s="b0-p1-s1">No entanto, surge uma pergunta fundamental: esses modelos fornecem representações que suportam um estado espacial funcional?</span> <span class="s" data-s="b0-p1-s2">Ou seja, eles codificam informações que persistem além da observação imediata, são atualizadas preditivamente e podem ser usadas para ações direcionadas a objetivos?</span> <span class="s" data-s="b0-p1-s3">Este paper, intitulado &#34;Probing Spatial State Representations in Visual Foundation Models&#34;, investiga exatamente essa lacuna.</span></p><p><span class="s" data-s="b0-p2-s0">Os autores, de instituições como New York University, Nanyang Technological University e outras, propõem uma avaliação baseada em quatro níveis de capacidade espacial.</span> <span class="s" data-s="b0-p2-s1">Em vez de assumir que os modelos internalizam mapas 3D explícitos ou grafos de cena, eles caracterizam a utilidade funcional da representação através de tarefas específicas.</span> <span class="s" data-s="b0-p2-s2">O objetivo não é vender o paper como uma revolução, mas sim expor honestamente o que esses modelos sabem e, mais importante, o que eles não sabem sobre o espaço físico que observam.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.40636/figure1.webp" alt="Ilustração do conceito de como um agente constrói uma representação espacial interna a partir de visões parciais em movimento. Mostra os quatro níveis: L1 (estrutura espacial), L2 (persistência de objetos), L3 (atualização preditiva) e L4 (acionabilidade)." loading="lazy">
+          <figcaption>
+            Ilustração do conceito de como um agente constrói uma representação espacial interna a partir de visões parciais em movimento. Mostra os quatro níveis: L1 (estrutura espacial), L2 (persistência de objetos), L3 (atualização preditiva) e L4 (acionabilidade).
+            <span class="source">Figura 1 do paper · Yin et al., arXiv:2610.40636</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">Definindo os quatro níveis de capacidade espacial</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Para medir se um modelo possui um &#34;estado espacial&#34;, os autores definem quatro níveis de capacidade, ordenados pela complexidade do que cada um exige além da observação atual.</span> <span class="s" data-s="b2-p0-s1">O primeiro nível, L1, é a Estrutura Espacial.</span> <span class="s" data-s="b2-p0-s2">Ele avalia a capacidade de recuperar a organização espacial da cena observada através de geometria métrica (como profundidade e pose da câmera), identidade de instância (reconhecer o mesmo objeto em diferentes vistas) e consistência de vista.</span> <span class="s" data-s="b2-p0-s3">Este nível é fundamentalmente sobre ler a cena visível no momento presente.</span></p><p><span class="s" data-s="b2-p1-s0">O segundo nível, L2, é a Persistência de Objetos.</span> <span class="s" data-s="b2-p1-s1">Aqui, o teste exige que o modelo retenha a localização relativa de um objeto previamente observado após ele ter saído do campo de visão.</span> <span class="s" data-s="b2-p1-s2">Isso vai além da leitura da cena atual; requer que o modelo mantenha informações de visões anteriores e as relacione com a nova posição da câmera.</span> <span class="s" data-s="b2-p1-s3">É um teste direto de memória espacial e rastreamento de objetos ocultos.</span></p><p><span class="s" data-s="b2-p2-s0">O terceiro nível, L3, é a Atualização Espacial Preditiva.</span> <span class="s" data-s="b2-p2-s1">Este nível exige que o modelo antecipe as mudanças no estado relativo ao observador sob movimento próprio.</span> <span class="s" data-s="b2-p2-s2">Os autores avaliam isso através de duas abordagens: previsão direta (prever o que será visto após uma ação) e integração de caminho (path integration, estimar a nova posição baseada no movimento).</span> <span class="s" data-s="b2-p2-s3">Isso testa se a representação evolui de forma preditiva e não apenas reativa.</span></p><p><span class="s" data-s="b2-p3-s0">O quarto e último nível, L4, é a Acionabilidade (Actionability).</span> <span class="s" data-s="b2-p3-s1">Este nível exige o uso do estado representado e de um objetivo específico para prever uma ação que faça progresso em direção a esse objetivo.</span> <span class="s" data-s="b2-p3-s2">É o nível mais alto, pois relaciona a representação espacial com a tomada de decisão e a interação com o ambiente.</span> <span class="s" data-s="b2-p3-s3">Os autores enfatizam que esses níveis são ordenados pelo que cada um demanda além da observação atual: L1 lê a cena visível; L2 requer retenção de visões anteriores; L3 requer antecipação; e L4 requer relação com objetivos e ações.</span></p>        <h2><span class="s" data-s="b3-h">Metodologia: Probing com features congeladas</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Para avaliar essas capacidades, os autores utilizam uma abordagem de &#34;probing&#34; (sondagem) com features congeladas.</span> <span class="s" data-s="b3-p0-s1">Eles selecionam dez representações de diferentes famílias de modelos, incluindo Fast3R, DINOv2, VideoMAE, V-JEPA2, Qwen2.5-VL, Wan, CogVideoX, MiniMax-H3 e Aether.</span> <span class="s" data-s="b3-p0-s2">Esses modelos são avaliados em um cenário de streaming egocêntrico, onde o observador recebe evidências visuais passadas e atuais em ambientes internos estáticos, sem acesso a informações futuras.</span></p><p><span class="s" data-s="b3-p1-s0">Os probes são treinados para extrair informações específicas das features dos modelos em diferentes camadas da rede.</span> <span class="s" data-s="b3-p1-s1">Para L1, os probes leem a estrutura da cena.</span> <span class="s" data-s="b3-p1-s2">Para L2, eles recebem as features do prefixo (histórico visual) e um query de objeto para localizar onde ele estaria.</span> <span class="s" data-s="b3-p1-s3">Para L3, os probes avaliam a previsão direta e a integração de caminho.</span> <span class="s" data-s="b3-p1-s4">Para L4, os probes tentam prever ações condicionadas a objetivos.</span> <span class="s" data-s="b3-p1-s5">Os autores agregam os resultados sobre diferentes prefixos e camadas, sem selecionar a melhor camada ou prefixo artificialmente, para obter uma visão robusta do desempenho.</span></p><p><span class="s" data-s="b3-p2-s0">Um ponto crucial da metodologia é o uso de controles pareados (matched controls).</span> <span class="s" data-s="b3-p2-s1">Para separar a acurácia da leitura da confiabilidade no uso da história visual e do movimento, os autores comparam o desempenho dos probes contra baselines que não usam informação temporal ou motora adequada.</span> <span class="s" data-s="b3-p2-s2">Isso permite distinguir se um modelo está realmente usando a história espacial ou apenas fazendo chutes baseados na cena atual.</span> <span class="s" data-s="b3-p2-s3">Além disso, eles avaliam a transferência de leitores treinados em features reais para features previstas, testando a robustez da representação preditiva.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.40636/figure3.webp" alt="Detalhamento dos quatro níveis de capacidade espacial testados. Mostra os inputs e targets de cada probe: apenas features do prefixo para L1, mais uma query de objeto para L2, movimentos ego e feature futura isolada para L3, ou um frame de objetivo e ação para L4." loading="lazy">
+          <figcaption>
+            Detalhamento dos quatro níveis de capacidade espacial testados. Mostra os inputs e targets de cada probe: apenas features do prefixo para L1, mais uma query de objeto para L2, movimentos ego e feature futura isolada para L3, ou um frame de objetivo e ação para L4.
+            <span class="source">Figura 3 do paper · Yin et al., arXiv:2610.40636</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Resultados: Leitura de cena vs. Persistência e Previsão</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os resultados principais, resumidos na Tabela 2 do paper, revelam perfis de capacidade distintos entre os modelos.</span> <span class="s" data-s="b5-p0-s1">Uma descoberta chave é que a precisão na leitura da cena visível não determina a persistência de objetos.</span> <span class="s" data-s="b5-p0-s2">Por exemplo, o Fast3R alcança o menor erro de persistência de objetos (32.79 graus), seguido pelo VideoMAE (36.45 graus).</span> <span class="s" data-s="b5-p0-s3">No entanto, o VideoMAE localiza muito mais precisamente do que o DINOv2 (65.38 graus) e o Qwen2.5-VL (68.59 graus), embora ambos superem o VideoMAE em profundidade, identidade de instância e consistência de vista.</span></p><p><span class="s" data-s="b5-p1-s0">Isso significa que um modelo pode ser excelente em reconhecer o que está na frente dele, mas falhar em rastrear objetos que saíram de vista.</span> <span class="s" data-s="b5-p1-s1">A persistência de objetos revela diferenças que a leitura da cena sozinha não capturaria.</span> <span class="s" data-s="b5-p1-s2">Os autores mostram que a persistência está alinhada com a leitura da pose da câmera.</span> <span class="s" data-s="b5-p1-s3">As três representações mais precisas na localização de objetos ausentes (Fast3R, VideoMAE, V-JEPA2) são exatamente as três com a maior AUC@30 na leitura de pose da câmera.</span> <span class="s" data-s="b5-p1-s4">A correlação de rank entre persistência e leitura de pose é alta (rho = 0.76), enquanto é baixa para profundidade, identidade e consistência (rho &lt;= 0.43).</span></p><p><span class="s" data-s="b5-p2-s0">Isso sugere que localizar um objeto que saiu da vista requer relacionar a câmera atual com pontos de vista anteriores.</span> <span class="s" data-s="b5-p2-s1">Uma representação que expõe a pose da câmera fornece o ingrediente necessário para a persistência.</span> <span class="s" data-s="b5-p2-s2">Varreduras de camada corroboram isso: nos backbones multi-camadas, o bloco onde a persistência atinge o pico é o mesmo onde a geometria métrica atinge o pico.</span> <span class="s" data-s="b5-p2-s3">Portanto, a persistência depende de ingredientes que estão presentes na representação da pose, não apenas na aparência visual.</span></p>        <h2><span class="s" data-s="b6-h">Resultados: Previsão e a falha da transferência</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Na tarefa de previsão espacial (L3), os modelos apresentam ordenações diferentes.</span> <span class="s" data-s="b6-p0-s1">O DINOv2 lidera na previsão direta (R@1 0.2373), enquanto o V-JEPA2 lidera na integração de caminho (0.1588).</span> <span class="s" data-s="b6-p0-s2">O Qwen2.5-VL fica em segundo lugar na previsão direta, mas sua ordem se inverte na integração de caminho em comparação com o DINOv2.</span> <span class="s" data-s="b6-p0-s3">Isso mostra que previsão direta e integração de caminho, embora correlacionadas entre si (rho = 0.93), não estão relacionadas à ordenação de persistência (|rho| &lt; 0.1).</span></p><p><span class="s" data-s="b6-p1-s0">Os autores também investigam se a previsão nativa do modelo preserva a estrutura espacial recuperável.</span> <span class="s" data-s="b6-p1-s1">Eles descobrem que a previsão nativa mantém uma estrutura espacial recuperável, mas um leitor de espaço treinado em features reais não se transfere para features previstas sem alterações.</span> <span class="s" data-s="b6-p1-s2">Isso indica que a distribuição das features previstas é diferente das features reais, mesmo que a informação subjacente esteja presente.</span> <span class="s" data-s="b6-p1-s3">Leitores precisam ser re-treinados ou adaptados para operar sobre previsões.</span></p><p><span class="s" data-s="b6-p2-s0">Além disso, os controles de ação mostram que o ganho do preditor direto sobre controles sem ação ou com ação embaralhada é acima de zero para oito modelos, mas pequeno para CogVideoX, Fast3R e Wan.</span> <span class="s" data-s="b6-p2-s1">O MiniMax-H3 excede apenas o controle sem ação, e a previsão direta do Aether não é distinguível do acaso.</span> <span class="s" data-s="b6-p2-s2">Isso sugere que, para alguns modelos, a previsão de futuro pode ser apenas uma extrapolação estatística fraca, não uma verdadeira modelagem causal do espaço.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.40636/figure6.webp" alt="Gráficos comparando o desempenho de diferentes modelos nas tarefas de persistência e previsão. Mostra os ranks percentuais normalizados por profundidade do backbone, destacando como as capacidades variam entre os níveis L2 e L3." loading="lazy">
+          <figcaption>
+            Gráficos comparando o desempenho de diferentes modelos nas tarefas de persistência e previsão. Mostra os ranks percentuais normalizados por profundidade do backbone, destacando como as capacidades variam entre os níveis L2 e L3.
+            <span class="source">Figura 6 do paper · Yin et al., arXiv:2610.40636</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Resultados: Acionabilidade e o problema do objetivo</span></h2>
+<p><span class="s" data-s="b8-p0-s0">O nível L4, Acionabilidade, revela limitações significativas.</span> <span class="s" data-s="b8-p0-s1">A seleção de candidatos baseada em objetivo não estabelece uma utilidade contínua confiável para a ação.</span> <span class="s" data-s="b8-p0-s2">Os autores testam se o modelo pode usar o estado representado e um objetivo especificado para prever uma ação que faça progresso.</span> <span class="s" data-s="b8-p0-s3">Embora as ações previstas respondam a mudanças no objetivo, fornecer o objetivo correto não melhora consistentemente o progresso em direção a ele.</span></p><p><span class="s" data-s="b8-p1-s0">Isso é um achado importante: ter uma representação espacial precisa não garante que o modelo saiba como usá-la para agir.</span> <span class="s" data-s="b8-p1-s1">A ponte entre representação e ação é frágil.</span> <span class="s" data-s="b8-p1-s2">Os autores notam que famílias de representação não determinam o sucesso na acionabilidade, sugerindo que a capacidade de ação pode depender de fatores além da qualidade da feature visual, como a arquitetura de decisão ou o treinamento específico para controle.</span></p><p><span class="s" data-s="b8-p2-s0">Os autores concluem que, em todos os quatro níveis, a persistência de objetos e a acionabilidade se apoiam na leitura da pose da câmera, enquanto a previsão de features se apoia na leitura da cena visível.</span> <span class="s" data-s="b8-p2-s1">Isso destaca que diferentes capacidades espaciais dependem de ingredientes diferentes na representação.</span> <span class="s" data-s="b8-p2-s2">Não existe um &#34;super-modelo&#34; que domine todas as tarefas; cada modelo tem um perfil de força e fraqueza específico.</span></p>        <h2><span class="s" data-s="b9-h">Limitações e implicações</span></h2>
+<p><span class="s" data-s="b9-p0-s0">O paper tem limitações claras.</span> <span class="s" data-s="b9-p0-s1">O estudo é focado em ambientes internos estáticos, o que pode não generalizar para cenários dinâmicos ou externos.</span> <span class="s" data-s="b9-p0-s2">Além disso, a avaliação de acionabilidade é limitada pela dificuldade de definir e medir &#34;progresso&#34; em tarefas complexas.</span> <span class="s" data-s="b9-p0-s3">Os autores não prescrevem uma arquitetura específica, mas caracterizam a utilidade funcional, o que é uma força metodológica, mas também limita a capacidade de sugerir melhorias arquiteturais diretas.</span></p><p><span class="s" data-s="b9-p1-s0">Outra limitação é que os probes são treinados offline, o que pode não refletir o desempenho do modelo em um loop fechado de interação.</span> <span class="s" data-s="b9-p1-s1">No entanto, a abordagem de probing é valiosa porque permite isolar e analisar as representações internas sem o ruído do treinamento de ponta a ponta.</span> <span class="s" data-s="b9-p1-s2">Os autores destacam que a avaliação de representações espaciais deve considerar não apenas o que pode ser decodificado, mas se a informação é mantida além da observação, atualizada preditivamente e usada para ação.</span></p><p><span class="s" data-s="b9-p2-s0">Os resultados sugerem que, para aplicações que requerem navegação ou interação robusta, apenas a acurácia na leitura da cena não é suficiente.</span> <span class="s" data-s="b9-p2-s1">É necessário avaliar explicitamente a persistência e a capacidade de previsão.</span> <span class="s" data-s="b9-p2-s2">A correlação entre persistência e leitura de pose indica que modelos que melhoram a estimativa de câmera podem ter benefícios diretos para rastreamento de objetos.</span> <span class="s" data-s="b9-p2-s3">Por outro lado, a falha na transferência de leitores para features previstas sugere que a previsão de futuro em modelos de fundação pode precisar de ajustes específicos para ser útil em tarefas de planejamento.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b10-t">Ponto de Atenção: Correlação não é Causalidade</span></h3>
+          <p><span class="s" data-s="b10-c-s0">A alta correlação entre persistência de objetos e leitura de pose da câmera (rho = 0.76) não implica que a pose cause a persistência.</span> <span class="s" data-s="b10-c-s1">É possível que ambos sejam subprodutos de uma representação mais rica de geometria 3D subjacente.</span> <span class="s" data-s="b10-c-s2">No entanto, a evidência sugere que a informação de pose é um ingrediente crítico para o rastreamento de objetos ocultos.</span></p>
+        </aside>
+        <aside class="callout">
+          <h3><span class="s" data-s="b11-t">Insight sobre Previsão</span></h3>
+          <p><span class="s" data-s="b11-c-s0">A previsão nativa de modelos como DINOv2 e V-JEPA2 mantém estrutura espacial, mas a distribuição das features muda.</span> <span class="s" data-s="b11-c-s1">Isso explica por que modelos de previsão não transferem bem para downstream tasks sem re-treinamento: o espaço latente previsto é diferente do espaço latente observado, mesmo contendo informação válida.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b12-h">Conclusão</span></h2>
+<p><span class="s" data-s="b12-p0-s0">Este paper oferece uma análise honesta e detalhada das capacidades espaciais dos modelos visuais de fundação.</span> <span class="s" data-s="b12-p0-s1">Ele desmistifica a noção de que bons resultados em reconhecimento de imagens implicam bons resultados em navegação ou interação.</span> <span class="s" data-s="b12-p0-s2">Ao decompor a percepção espacial em quatro níveis, os autores mostram que essas capacidades são dissociáveis e dependem de diferentes aspectos da representação.</span></p><p><span class="s" data-s="b12-p1-s0">A mensagem principal é que a avaliação de VFMs para tarefas espaciais deve ser multifacetada.</span> <span class="s" data-s="b12-p1-s1">Leitores de cena, persistência, previsão e ação devem ser avaliados separadamente.</span> <span class="s" data-s="b12-p1-s2">Para pesquisadores e engenheiros que desejam usar esses modelos em robótica ou realidade aumentada, o paper serve como um guia realista sobre o que esperar e onde as lacunas de desempenho ainda existem.</span> <span class="s" data-s="b12-p1-s3">A persistência e a acionabilidade são áreas que ainda precisam de avanços significativos, além da simples melhoria da acurácia na leitura da cena.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Acurácia na leitura da cena visível não garante persistência de objetos ou previsão futura; são capacidades dissociadas.</span></li><li><span class="s" data-s="k1">Persistência de objetos correlaciona-se fortemente com a capacidade de ler a pose da câmera, não apenas com a geometria métrica.</span></li><li><span class="s" data-s="k2">Modelos nativos de previsão de futuro mantêm estrutura espacial recuperável, mas leitores treinados em features reais não transferem diretamente para features previstas.</span></li><li><span class="s" data-s="k3">A seleção de ações baseada em objetivos não estabelece utilidade contínua confiável; fornecer o objetivo correto não melhora progressos de forma consistente.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.40636" rel="noopener">Probing Spatial State Representations in Visual Foundation Models</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.40636" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

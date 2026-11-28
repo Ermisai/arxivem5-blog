@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MusicRWKV: Eficiência em Representação Musical com Arquitetura Recorrente — arXiv em 5</title>
+<meta name="description" content="O paper apresenta o MusicRWKV, um modelo multimodal que substitui Transformers por RWKV para processar áudio e metadados, reduzindo complexidade computacional e mantendo performance em tarefas de MIR.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MusicRWKV: Eficiência em Representação Musical com Arquitetura Recorrente">
+<meta property="og:description" content="O paper apresenta o MusicRWKV, um modelo multimodal que substitui Transformers por RWKV para processar áudio e metadados, reduzindo complexidade computacional e mantendo performance em tarefas de MIR.">
+<meta property="og:image" content="../../assets/papers/2611.16718/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Áudio</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.16718" rel="noopener">arXiv:2611.16718</a>
+    </div>
+    <h1><span class="s" data-s="t">MusicRWKV: Eficiência em Representação Musical com Arquitetura Recorrente</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">O paper apresenta o MusicRWKV, um modelo multimodal que substitui Transformers por RWKV para processar áudio e metadados, reduzindo complexidade computacional e mantendo performance em tarefas de MIR.</span></p>
+    <p class="byline">
+      <span>Tan</span>
+      <span>6 min de leitura</span>
+<span>12/11/2026</span>    </p>
+    <div class="listen" data-article="2611.16718" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=LqAz4uISdWg" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema dos Transformers em Áudio Longo</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A aprendizagem de representação musical tem se tornado um pilar fundamental na Recuperação de Informação Musical (MIR).</span> <span class="s" data-s="b0-p0-s1">Modelos fundacionais recentes, como MERT, MusicFM e MuQ, demonstraram capacidade generalista impressionante em tarefas como classificação de gênero, estimativa de tonalidade e reconhecimento de emoções.</span> <span class="s" data-s="b0-p0-s2">No entanto, esses modelos dependem predominantemente de arquiteturas Transformer.</span> <span class="s" data-s="b0-p0-s3">Embora eficazes, os Transformers sofrem com complexidade quadrática de atenção e consumo de memória linear crescente devido ao cache de chaves e valores (KV cache).</span> <span class="s" data-s="b0-p0-s4">Para gravações musicais longas, onde o tokenizador pode gerar sequências de dezenas de milhares de tokens, isso se torna um gargalo significativo de memória e computação, tanto no treinamento quanto na inferência.</span></p><p><span class="s" data-s="b0-p1-s0">Em resposta a essa limitação, arquiteturas baseadas em espaços de estado e redes recorrentes ganharam destaque por oferecerem complexidade de inferência linear.</span> <span class="s" data-s="b0-p1-s1">O RWKV é um exemplo proeminente, combinando a paralelização do treinamento do Transformer com a eficiência de memória da rede recorrente.</span> <span class="s" data-s="b0-p1-s2">Apesar de seu sucesso em geração de música simbólica (via MIDI-RWKV), seu potencial para aprendizado de representação de áudio auto-supervisionado permaneceu inexplorado.</span> <span class="s" data-s="b0-p1-s3">Este paper preenche essa lacuna propondo o MusicRWKV, um framework multimodal que busca equilibrar eficiência e riqueza de representação.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.16718/figure1.webp" alt="Arquitetura geral do MusicRWKV. Fluxo de dados mostrando a compressão invertível de waveform e espectrograma, processamento por branches RWKV específicos, modulação FiLM para fusão multimodal e objetivos de auto-supervisão." loading="lazy">
+          <figcaption>
+            Arquitetura geral do MusicRWKV. Fluxo de dados mostrando a compressão invertível de waveform e espectrograma, processamento por branches RWKV específicos, modulação FiLM para fusão multimodal e objetivos de auto-supervisão.
+            <span class="source">Figura 1 do paper · Tan, arXiv:2611.16718</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">Arquitetura Multimodal e Compressão Invertível</span></h2>
+<p><span class="s" data-s="b2-p0-s0">O MusicRWKV é desenhado para modelar três modalidades complementares: waveform (forma de onda), espectrograma e metadados semânticos.</span> <span class="s" data-s="b2-p0-s1">O fluxo de dados começa com a tokenização.</span> <span class="s" data-s="b2-p0-s2">O waveform é convertido em tokens discretos usando o tokenizador Jukebox, preservando estruturas temporais finas.</span> <span class="s" data-s="b2-p0-s3">O espectrograma utiliza o tokenizador MuQ Mel-RVQ, focado em características timbrais e harmônicas.</span> <span class="s" data-s="b2-p0-s4">Metadados (artista, gênero, letras) são convertidos em tokens textuais.</span> <span class="s" data-s="b2-p0-s5">Uma inovação chave é o módulo de compressão invertível aplicado ao waveform e ao espectrograma.</span> <span class="s" data-s="b2-p0-s6">Este módulo reduz o comprimento da sequência antes de entrar no encoder RWKV, diminuindo a carga computacional, mas preserva a capacidade de reconstrução dos dados originais.</span> <span class="s" data-s="b2-p0-s7">Metadados não são comprimidos, sendo enviados diretamente.</span></p><p><span class="s" data-s="b2-p1-s0">Cada modalidade é processada por branches RWKV independentes.</span> <span class="s" data-s="b2-p1-s1">Como o RWKV não possui um mecanismo nativo de atenção cruzada (cross-attention) para fusão multimodal, os autores empregam uma estratégia de condicionamento FiLM (Feature-wise Linear Modulation).</span> <span class="s" data-s="b2-p1-s2">O FiLM ajusta as representações de cada modalidade com base nas características das outras, permitindo interação multimodal sem o custo computacional elevado de mecanismos de atenção entre modalidades.</span> <span class="s" data-s="b2-p1-s3">As representações moduladas são então fundidas em um espaço de representação único, otimizado por objetivos de auto-supervisão multimodal.</span></p>        <h2><span class="s" data-s="b3-h">Integração Neural-Simbólica com Soft ROSA</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Além da fusão multimodal básica, o paper investiga a integração do Soft ROSA como um mecanismo de recuperação diferenciável.</span> <span class="s" data-s="b3-p0-s1">O Soft ROSA atua como um mecanismo de seleção de especialistas sem roteamento explícito, onde um subconjunto de candidatos relevantes é enfatizado seletivamente.</span> <span class="s" data-s="b3-p0-s2">Isso introduz interações neural-simbólicas estruturadas, agregando representações históricas de candidatos.</span> <span class="s" data-s="b3-p0-s3">O objetivo é melhorar a capacidade do modelo de capturar dependências de longo alcance e relações semânticas complexas através de uma recuperação eficiente de informações relevantes armazenadas nas camadas anteriores do modelo.</span></p><p><span class="s" data-s="b3-p1-s0">A análise de telemetria camada por camada revelou uma transição progressiva no comportamento do Soft ROSA: das camadas mais profundas para as mais rasas, observa-se uma mudança de recuperação distribuída para recuperação seletiva.</span> <span class="s" data-s="b3-p1-s1">Isso sugere que o modelo aprende a refinar a relevância da informação recuperada à medida que a representação se torna mais abstrata e semântica.</span> <span class="s" data-s="b3-p1-s2">O módulo Soft ROSA é opcional e foi avaliado em um estudo de ablação controlado para isolar seu impacto no desempenho de pré-treinamento.</span></p>        <h2><span class="s" data-s="b4-h">Configuração Experimental e Pré-treinamento</span></h2>
+<p><span class="s" data-s="b4-p0-s0">O modelo foi pré-treinado em aproximadamente 25.000 gravações musicais completas de acesso público, com cobertura equilibrada de gêneros.</span> <span class="s" data-s="b4-p0-s1">O corpus foi particionado em 80% para treino e 20% para validação, com estratificação por gênero.</span> <span class="s" data-s="b4-p0-s2">Para evitar vazamento de dados, gravações que se sobreponham a benchmarks downstream foram excluídas.</span> <span class="s" data-s="b4-p0-s3">O modelo base possui 883 milhões de parâmetros, com dimensão oculta de 1024.</span> <span class="s" data-s="b4-p0-s4">A arquitetura consiste em 6 camadas RWKV para waveform, 6 para espectrograma, 6 para metadados e 4 camadas de fusão.</span> <span class="s" data-s="b4-p0-s5">O stride de compressão foi definido como 10, reduzindo significativamente o número de tokens processados.</span></p><p><span class="s" data-s="b4-p1-s0">Os objetivos de auto-supervisão incluem a previsão de waveform, espectrograma e metadados, complementados por um termo de regularização de reconstrução leve.</span> <span class="s" data-s="b4-p1-s1">Para tarefas downstream, o backbone MusicRWKV é reutilizado, mas os modelos são treinados do zero (from scratch) com cabeçalhos de saída específicos para cada tarefa, sem carregar os pesos pré-treinados diretamente para fine-tuning.</span> <span class="s" data-s="b4-p1-s2">Isso testa a capacidade do backbone de fornecer uma estrutura arquitetural robusta, em vez de apenas memorização de dados.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.16718/table3.webp" alt="Tabela 3: Comparação de desempenho em benchmarks gerais de MIR. O MusicRWKV mostra resultados competitivos em tarefas como MTT, GTZAN, GiantSteps Key, EMO, NSynth e VocalSet." loading="lazy">
+          <figcaption>
+            Tabela 3: Comparação de desempenho em benchmarks gerais de MIR. O MusicRWKV mostra resultados competitivos em tarefas como MTT, GTZAN, GiantSteps Key, EMO, NSynth e VocalSet.
+            <span class="source">Tabela 3 do paper · Tan, arXiv:2611.16718</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b6-h">Resultados em Tarefas de MIR</span></h2>
+<p><span class="s" data-s="b6-p0-s0">A avaliação foi conduzida em uma coleção diversificada de benchmarks de MIR, cobrindo desde compreensão semântica de alto nível até predição de atributos acústicos de baixo nível.</span> <span class="s" data-s="b6-p0-s1">As tarefas incluíram: MagnaTagATune (MTT) para tagging automático, GTZAN para classificação de gênero, GiantSteps Key para estimativa de tonalidade, EMO para reconhecimento de emoção, NSynth para classificação de instrumento e pitch, e VocalSet para análise de voz cantada (identificação de cantor e técnica vocal).</span></p><p><span class="s" data-s="b6-p1-s0">Os resultados demonstram que a arquitetura baseada em RWKV pode ser adaptada efetivamente a tarefas heterogêneas de compreensão musical.</span> <span class="s" data-s="b6-p1-s1">Embora o paper não detalhe métricas absolutas de precisão em todos os benchmarks na seção de resumo, a tabela de comparação indica que o MusicRWKV é competitivo em relação a modelos fundacionais existentes.</span> <span class="s" data-s="b6-p1-s2">A capacidade de lidar com sequências longas sem o gargalo de memória do KV cache dos Transformers é um diferencial operacional significativo, permitindo o processamento de gravações completas com maior eficiência.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.16718/table5.webp" alt="Tabela 5: Estudo de ablação do módulo Soft ROSA. A inclusão do módulo melhora o desempenho de validação no pré-treinamento, validando a eficácia da recuperação diferenciável." loading="lazy">
+          <figcaption>
+            Tabela 5: Estudo de ablação do módulo Soft ROSA. A inclusão do módulo melhora o desempenho de validação no pré-treinamento, validando a eficácia da recuperação diferenciável.
+            <span class="source">Tabela 5 do paper · Tan, arXiv:2611.16718</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Ablação e Impacto do Soft ROSA</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Um estudo de ablação controlado foi realizado para avaliar o impacto do módulo Soft ROSA.</span> <span class="s" data-s="b8-p0-s1">Os resultados mostram que a incorporação do Soft ROSA melhora o desempenho de validação durante o pré-treinamento.</span> <span class="s" data-s="b8-p0-s2">Isso confirma que o mecanismo de recuperação diferenciável agrega valor à representação aprendida, permitindo que o modelo utilize informações contextuais de forma mais eficaz.</span> <span class="s" data-s="b8-p0-s3">A análise de telemetria camada por camada forneceu insights sobre como o modelo utiliza esse mecanismo: camadas iniciais tendem a uma recuperação mais distribuída, enquanto camadas mais profundas adotam uma recuperação mais seletiva, alinhando-se com a hierarquia de abstração musical.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b9-t">Limitações e Escopo</span></h3>
+          <p><span class="s" data-s="b9-c-s0">O paper reconhece limitações importantes.</span> <span class="s" data-s="b9-c-s1">O módulo Soft ROSA adiciona overhead computacional e de memória, o que pode limitar a escalabilidade para contextos extremamente longos.</span> <span class="s" data-s="b9-c-s2">Além disso, o estudo de pré-treinamento avalia apenas uma configuração grande e não explora sistematicamente o comportamento de escala (scaling laws) em modelos menores.</span> <span class="s" data-s="b9-c-s3">Finalmente, a representação multimodal unificada pode não ser ideal para todas as tarefas de MIR, indicando a necessidade de seleção adaptativa de modalidades no futuro.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b10-h">Conclusão e Direções Futuras</span></h2>
+<p><span class="s" data-s="b10-p0-s0">O MusicRWKV apresenta uma alternativa viável e eficiente aos modelos baseados em Transformers para aprendizado de representação musical.</span> <span class="s" data-s="b10-p0-s1">Ao combinar a eficiência de inferência linear do RWKV com uma estratégia multimodal via FiLM e recuperação neural-simbólica via Soft ROSA, o framework oferece um caminho promissor para entender música com recursos computacionais reduzidos.</span> <span class="s" data-s="b10-p0-s2">As direções futuras incluem o desenvolvimento de mecanismos de recuperação mais eficientes, estratégias de pré-treinamento em maior escala e métodos de seleção adaptativa de modalidades para otimizar o desempenho em tarefas específicas de MIR.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">MusicRWKV substitui Transformers por RWKV, reduzindo complexidade de memória e permitindo processamento eficiente de áudios longos.</span></li><li><span class="s" data-s="k1">A fusão multimodal (waveform, espectrograma, metadados) é feita via FiLM, evitando o custo de atenção cruzada.</span></li><li><span class="s" data-s="k2">O módulo Soft ROSA melhora o pré-treinamento ao introduzir recuperação diferenciável, com comportamento seletivo nas camadas profundas.</span></li><li><span class="s" data-s="k3">O modelo é competitivo em benchmarks de MIR, mas o overhead do Soft ROSA e a falta de estudo de escala são limitações atuais.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.16718" rel="noopener">MusicRWKV: A Multimodal RWKV Framework for Music Representation Learning</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.16718" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

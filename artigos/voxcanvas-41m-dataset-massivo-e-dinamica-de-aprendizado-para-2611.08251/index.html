@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VoxCanvas-41M: Dataset massivo e dinâmica de aprendizado para edição de fala por instrução — arXiv em 5</title>
+<meta name="description" content="Os autores apresentam um pipeline escalável para gerar 41 milhões de pares de edição de fala bilíngue e analisam como modelos aprendem a editar conteúdo versus paralinguística.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VoxCanvas-41M: Dataset massivo e dinâmica de aprendizado para edição de fala por instrução">
+<meta property="og:description" content="Os autores apresentam um pipeline escalável para gerar 41 milhões de pares de edição de fala bilíngue e analisam como modelos aprendem a editar conteúdo versus paralinguística.">
+<meta property="og:image" content="../../assets/papers/2611.08251/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Áudio</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.08251" rel="noopener">arXiv:2611.08251</a>
+    </div>
+    <h1><span class="s" data-s="t">VoxCanvas-41M: Dataset massivo e dinâmica de aprendizado para edição de fala por instrução</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Os autores apresentam um pipeline escalável para gerar 41 milhões de pares de edição de fala bilíngue e analisam como modelos aprendem a editar conteúdo versus paralinguística.</span></p>
+    <p class="byline">
+      <span>Niu et al.</span>
+      <span>10 min de leitura</span>
+<span>05/11/2026</span>    </p>
+    <div class="listen" data-article="2611.08251" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=8fwnyIysL6M" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O gargalo de dados na edição de fala por instrução</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A edição de fala (speech editing) visa modificar trechos específicos de um áudio mantendo a identidade da voz, a prosódia e o ambiente acústico das regiões não editadas.</span> <span class="s" data-s="b0-p0-s1">Diferente da síntese de fala (TTS), que gera áudio do zero, a edição permite correções pós-produção, dublagem e ajustes finos sem regenerar todo o material.</span> <span class="s" data-s="b0-p0-s2">Recentemente, surgiram duas abordagens principais: métodos baseados em preenchimento de lacunas (infilling) e métodos baseados em instrução (instruction-based).</span> <span class="s" data-s="b0-p0-s3">Os primeiros mascaram trechos aleatórios do áudio e tentam prever o conteúdo mascarado usando o contexto circundante.</span> <span class="s" data-s="b0-p0-s4">Embora não exijam dados de edição pareados para treinamento, eles dependem de ferramentas externas de reconhecimento automático de fala (ASR) e alinhamento forçado para identificar exatamente onde cortar e o que reescrever durante a inferência.</span></p><p><span class="s" data-s="b0-p1-s0">Os métodos baseados em instrução, por outro lado, aceitam comandos em linguagem natural (como &#39;troque segunda por terça&#39;) e editam o áudio sem precisar do texto editado ou dos limites temporais exatos.</span> <span class="s" data-s="b0-p1-s1">Isso oferece flexibilidade, permitindo combinar múltiplos tipos de edição em um único comando.</span> <span class="s" data-s="b0-p1-s2">No entanto, essa abordagem sofre de um problema crítico: a escassez de grandes conjuntos de dados de alta qualidade e pareados (áudio original, áudio editado e instrução).</span> <span class="s" data-s="b0-p1-s3">A maioria dos modelos state-of-the-art, como Step-Audio-EditX e AuK, treina com dados proprietários internos, impossibilitando a reprodução e comparação justa entre pesquisas.</span></p><p><span class="s" data-s="b0-p2-s0">Neste contexto, o paper apresenta o VoxCanvas-41M, um dataset bilíngue massivo contendo aproximadamente 41 milhões de pares de edição de fala.</span> <span class="s" data-s="b0-p2-s1">O objetivo não é apenas fornecer dados, mas também investigar a dinâmica de aprendizado desses modelos.</span> <span class="s" data-s="b0-p2-s2">Os autores buscam responder perguntas fundamentais: como os modelos adquirem capacidades de edição?</span> <span class="s" data-s="b0-p2-s3">Qual a relação entre geração de fala e edição?</span> <span class="s" data-s="b0-p2-s4">Como diferentes operações (inserção, deleção, substituição) convergem durante o treinamento?</span> <span class="s" data-s="b0-p2-s5">A resposta a essas questões é crucial para entender se a edição é apenas uma especialização da TTS ou uma habilidade distinta que emerge sob certas condições de dados.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.08251/figure1.webp" alt="Pipeline de construção do dataset: colaboração humano-LLM, ASR, TTS e controle de qualidade." loading="lazy">
+          <figcaption>
+            Pipeline de construção do dataset: colaboração humano-LLM, ASR, TTS e controle de qualidade.
+            <span class="source">Figura 1 do paper · Niu et al., arXiv:2611.08251</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">Construção do VoxCanvas-41M: Um pipeline escalável</span></h2>
+<p><span class="s" data-s="b2-p0-s0">A construção de datasets de edição de fala é inerentemente cara e complexa.</span> <span class="s" data-s="b2-p0-s1">Anotação manual é inviável para escalas de milhões de amostras, enquanto pipelines baseados apenas em regras frequentemente produzem artefatos ou instruções inconsistentes.</span> <span class="s" data-s="b2-p0-s2">Para superar isso, os autores propõem um pipeline híbrido que combina automação em larga escala com validação humana e lógica de LLMs (Large Language Models).</span> <span class="s" data-s="b2-p0-s3">O processo inicia com a coleta de áudio de fontes open-source e a geração de transcrições via ASR.</span> <span class="s" data-s="b2-p0-s4">Em seguida, utiliza-se uma colaboração entre humanos e LLMs para gerar instruções de edição naturais e textos editados correspondentes.</span></p><p><span class="s" data-s="b2-p1-s0">O pipeline cobre duas categorias principais de edição: edição de conteúdo e edição paralinguística.</span> <span class="s" data-s="b2-p1-s1">A edição de conteúdo inclui substituição de palavras, inserção e deleção de spans únicos ou múltiplos, e edição baseada em referência de localização (ex: &#39;delete o segundo &#34;red&#34;&#39;).</span> <span class="s" data-s="b2-p1-s2">A edição paralinguística lida com eventos não verbais, como risos, suspiros e toses, cobrindo 39 classes diferentes.</span> <span class="s" data-s="b2-p1-s3">Os autores enfatizam que, ao contrário de datasets anteriores que apenas cortam e colam áudios existentes, o VoxCanvas-41M gera pares onde a instrução é natural e o áudio editado é sintetizado ou manipulado com precisão, garantindo consistência acústica.</span></p><p><span class="s" data-s="b2-p2-s0">Um componente crítico do pipeline é o controle de qualidade.</span> <span class="s" data-s="b2-p2-s1">Após a geração inicial dos pares, passa-se por uma etapa de filtragem multi-modelo e verificação humana pontual.</span> <span class="s" data-s="b2-p2-s2">Isso é necessário porque erros no texto editado ou na instrução podem levar a falhas na edição.</span> <span class="s" data-s="b2-p2-s3">O uso de TTS (Text-to-Speech) para resintetizar partes editadas permite criar pares onde o áudio original e o editado são alinhar perfeitamente, algo difícil de alcançar apenas com manipulação direta de ondas sonoras.</span> <span class="s" data-s="b2-p2-s4">Essa abordagem híbrida permite a escala de 41 milhões de pares, um salto significativo em relação aos ~2.1M pares do GigaEdit-L, que é limitado a inglês e edição de conteúdo básica.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.08251/table1.webp" alt="Tipos de edição suportados (conteúdo e paralinguístico) e a escala de 41 milhões de pares." loading="lazy">
+          <figcaption>
+            Tipos de edição suportados (conteúdo e paralinguístico) e a escala de 41 milhões de pares.
+            <span class="source">Tabela 1 do paper · Niu et al., arXiv:2611.08251</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b4-h">Arquitetura do modelo e treinamento</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Para validar a eficácia do dataset, os autores treinam o VoxCanvas-Edit, um modelo baseado na arquitetura AuK.</span> <span class="s" data-s="b4-p0-s1">O AuK é um modelo generativo que utiliza um encoder congelado Qwen2.5-Omni para extrair características semânticas do áudio fonte e da instrução de edição.</span> <span class="s" data-s="b4-p0-s2">Essas características são combinadas com latentes de áudio codificados por um VAE (Variational Autoencoder) em um transformer de correspondência de fluxo (flow-matching transformer).</span> <span class="s" data-s="b4-p0-s3">O modelo prediz a velocidade do fluxo para gerar os latentes do áudio editado, que são então decodificados de volta para o domínio do áudio.</span></p><p><span class="s" data-s="b4-p1-s0">O treinamento do VoxCanvas-Edit foi realizado com LoRA (Low-Rank Adaptation), uma técnica de fine-tuning eficiente que atualiza apenas uma pequena fração dos parâmetros do modelo (cerca de 20 milhões de parâmetros treináveis, contra centenas de milhões no backbone).</span> <span class="s" data-s="b4-p1-s1">Isso demonstra que é possível adaptar modelos de geração de fala para edição de alta qualidade sem o custo computacional massivo de treinar do zero.</span> <span class="s" data-s="b4-p1-s2">O modelo foi treinado por uma epoch completa com um batch size total de 2.24M frames, utilizando o otimizador AdamW.</span> <span class="s" data-s="b4-p1-s3">A escolha de usar LoRA é estratégica, pois permite a experimentação rápida com diferentes estratégias de dados e análise de ablação, mantendo a estabilidade do conhecimento prévio do modelo base.</span></p><p><span class="s" data-s="b4-p2-s0">É importante notar que o VoxCanvas-Edit não é apenas um modelo final, mas uma ferramenta de investigação.</span> <span class="s" data-s="b4-p2-s1">Ao fine-tunar o AuK no VoxCanvas-41M, os autores podem isolar o efeito do dataset na performance de edição.</span> <span class="s" data-s="b4-p2-s2">O modelo serve como baseline para comparar contra versões fine-tuned em datasets menores ou menos diversificados, como o GigaEdit-L.</span> <span class="s" data-s="b4-p2-s3">Essa abordagem permite quantificar o ganho marginal trazido pela escala e pela diversidade do VoxCanvas-41M, fornecendo evidências empíricas para a necessidade de dados bilíngues e paralinguísticos na edição de fala.</span></p>        <h2><span class="s" data-s="b5-h">Resultados: Performance em benchmarks bilíngues</span></h2>
+<p><span class="s" data-s="b5-p0-s0">A avaliação do VoxCanvas-Edit foi conduzida em dois benchmarks principais: SpeechEditBench e Ming-Freeform-Audio-Edit.</span> <span class="s" data-s="b5-p0-s1">O SpeechEditBench avalia a precisão da edição (ACC) em subsets de conteúdo (chinês e inglês) e paralinguístico.</span> <span class="s" data-s="b5-p0-s2">Os resultados mostram que o VoxCanvas-Edit supera significativamente o baseline AuK não ajustado e o AuK fine-tuned no GigaEdit-L.</span> <span class="s" data-s="b5-p0-s3">No subset de conteúdo em inglês, o VoxCanvas-Edit alcançou 96.78% de ACC, contra 93.78% do AuK original.</span> <span class="s" data-s="b5-p0-s4">No chinês, o ganho foi ainda mais pronunciado, indo de 88.32% para 93.66%, destacando a importância do treinamento bilíngue, já que o GigaEdit-L contém apenas dados em inglês.</span></p><p><span class="s" data-s="b5-p1-s0">No Ming-Freeform-Audio-Edit, a métrica principal é a Taxa de Erro de Palavras (WER) para edições semânticas.</span> <span class="s" data-s="b5-p1-s1">O VoxCanvas-Edit reduziu consistentemente o WER em comparação ao baseline.</span> <span class="s" data-s="b5-p1-s2">Por exemplo, no subset inglês (Full), o WER caiu de 4.11 para 3.77.</span> <span class="s" data-s="b5-p1-s3">Além disso, a similaridade de voz (SIM) foi mantida ou ligeiramente melhorada, indicando que a edição não compromete a identidade do locutor.</span> <span class="s" data-s="b5-p1-s4">Para edições paralinguísticas, o VoxCanvas-Edit também mostrou melhorias na ACC, embora o ganho seja menor (54.50% vs 53.25% do baseline).</span> <span class="s" data-s="b5-p1-s5">Isso sugere que, embora o dataset ajude, a edição de eventos não verbais permanece um desafio mais complexo, possivelmente devido à sua natureza menos estruturada linguisticamente.</span></p><p><span class="s" data-s="b5-p2-s0">Um ponto interessante nos resultados é a comparação com o GigaEdit-L.</span> <span class="s" data-s="b5-p2-s1">Embora o GigaEdit-L seja um dataset grande, sua falta de diversidade paralinguística e de instruções naturais limita sua eficácia.</span> <span class="s" data-s="b5-p2-s2">O VoxCanvas-Edit, treinado no VoxCanvas-41M, demonstrou melhor generalização, especialmente em cenários de edição multi-span e localização.</span> <span class="s" data-s="b5-p2-s3">Isso reforça a tese de que a qualidade e a natureza das instruções (linguagem natural vs. regras rígidas) são tão importantes quanto a quantidade de dados.</span> <span class="s" data-s="b5-p2-s4">Os autores destacam que a melhoria no chinês é particularmente relevante, dada a escassez de datasets de edição de fala nessa língua.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.08251/table2.webp" alt="Desempenho superior do VoxCanvas-Edit em benchmarks de edição de fala bilíngue." loading="lazy">
+          <figcaption>
+            Desempenho superior do VoxCanvas-Edit em benchmarks de edição de fala bilíngue.
+            <span class="source">Tabela 2 do paper · Niu et al., arXiv:2611.08251</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Dinâmica de aprendizado: O que o modelo aprende e quando?</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Além dos resultados de performance, o paper oferece uma análise profunda da dinâmica de aprendizado.</span> <span class="s" data-s="b7-p0-s1">Os autores investigam como diferentes operações de edição convergem durante o treinamento.</span> <span class="s" data-s="b7-p0-s2">Através de experimentos de ablação e monitoramento de métricas ao longo das epochs, eles descobriram que a deleção de conteúdo converge mais rapidamente do que a inserção.</span> <span class="s" data-s="b7-p0-s3">Isso pode ser intuitivo: deletar é uma operação mais &#39;negativa&#39; e local, enquanto inserir requer que o modelo aprenda a gerar novos fonemas e manter a continuidade prosódica em um ponto específico, o que é mais complexo.</span></p><p><span class="s" data-s="b7-p1-s0">A análise também revelou interações assimétricas entre tarefas.</span> <span class="s" data-s="b7-p1-s1">Por exemplo, o treinamento conjunto de edição de conteúdo e paralinguística não é neutro.</span> <span class="s" data-s="b7-p1-s2">Os autores observaram que incorporar tarefas de Text-to-Speech (TTS) no treinamento acelera a aquisição de habilidades de edição.</span> <span class="s" data-s="b7-p1-s3">Isso sugere que a TTS fornece uma base robusta de geração de fala, que o modelo então adapta para edição.</span> <span class="s" data-s="b7-p1-s4">Sem a TTS, o modelo pode ter dificuldades em manter a qualidade acústica durante edições complexas.</span> <span class="s" data-s="b7-p1-s5">Essa descoberta tem implicações práticas: modelos de edição podem se beneficiar de pré-treinamento ou treinamento multi-tarefa que inclua TTS, mesmo que o objetivo final seja apenas edição.</span></p><p><span class="s" data-s="b7-p2-s0">Outra descoberta importante foi a diferença de aprendizado entre edição de conteúdo e paralinguística.</span> <span class="s" data-s="b7-p2-s1">Como mostrado na Figura 12, o modelo aprende edição de conteúdo (inserção e deleção) significativamente mais rápido do que a edição paralinguística.</span> <span class="s" data-s="b7-p2-s2">A curva de aprendizado para risos e suspiros é mais plana e atinge um platô mais baixo inicialmente.</span> <span class="s" data-s="b7-p2-s3">Isso indica que a representação de eventos não verbais no espaço latente do modelo é menos distinta ou mais difícil de mapear para instruções linguísticas do que fonemas e palavras.</span> <span class="s" data-s="b7-p2-s4">Os autores sugerem que isso pode ser devido à variabilidade acústica dos eventos paralinguísticos, que são menos padronizados do que a fala articulada.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.08251/figure12.webp" alt="Dinâmica de aprendizado: o modelo aprende edição de conteúdo mais rápido que paralinguística." loading="lazy">
+          <figcaption>
+            Dinâmica de aprendizado: o modelo aprende edição de conteúdo mais rápido que paralinguística.
+            <span class="source">Figura 12 do paper · Niu et al., arXiv:2611.08251</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Limitações e direções futuras</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Apesar dos avanços, o paper reconhece várias limitações.</span> <span class="s" data-s="b9-p0-s1">Primeiro, o VoxCanvas-41M não inclui edição multi-turno explícita.</span> <span class="s" data-s="b9-p0-s2">Edição multi-turno permite que o usuário refine o áudio iterativamente (ex: &#39;agora deixe mais rápido&#39;).</span> <span class="s" data-s="b9-p0-s3">Os autores argumentam que, para edição de conteúdo, múltiplas instruções podem ser consolidadas em uma única instrução de multi-span.</span> <span class="s" data-s="b9-p0-s4">No entanto, para casos onde a edição depende do histórico (como reverter uma mudança anterior), essa abordagem falha.</span> <span class="s" data-s="b9-p0-s5">Eles propõem que o uso de um LLM planejador para converter pedidos multi-turno em instruções únicas de single-turn é uma solução viável, mas não foi implementada no dataset atual.</span></p><p><span class="s" data-s="b9-p1-s0">Segundo, a cobertura de edição paralinguística é limitada a eventos não verbais básicos (risos, toses).</span> <span class="s" data-s="b9-p1-s1">Edição de emoção e estilo de fala, que são cruciais para aplicações como dublagem expressiva, não estão incluídas.</span> <span class="s" data-s="b9-p1-s2">Terceiro, a qualidade do dataset depende da precisão do ASR e da geração de instruções por LLMs.</span> <span class="s" data-s="b9-p1-s3">Erros nesse pipeline podem introduzir ruídos no dataset, embora as etapas de filtragem mitiguem esse problema.</span> <span class="s" data-s="b9-p1-s4">Os autores admitem que a escalabilidade do pipeline pode encontrar gargalos se a complexidade das instruções aumentar significativamente.</span></p><p><span class="s" data-s="b9-p2-s0">Finalmente, a análise de dinâmica de aprendizado foi conduzida em um modelo de tamanho médio (278M parâmetros treináveis no backbone).</span> <span class="s" data-s="b9-p2-s1">É possível que padrões observados mudem em modelos maiores, como os com bilhões de parâmetros.</span> <span class="s" data-s="b9-p2-s2">Os autores recomendam que futuras pesquisas explorem a escalabilidade dessas dinâmicas em modelos de larga escala.</span> <span class="s" data-s="b9-p2-s3">Além disso, a generalização do VoxCanvas-Edit para línguas além de chinês e inglês permanece uma questão em aberto, embora o pipeline proposto seja teoricamente extensível.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b10-t">Insight Crítico: TTS como acelerador de edição</span></h3>
+          <p><span class="s" data-s="b10-c-s0">O paper demonstra que treinar modelos de edição de fala junto com tarefas de Text-to-Speech (TTS) acelera significativamente a convergência.</span> <span class="s" data-s="b10-c-s1">Isso sugere que a capacidade de gerar fala coerente é um pré-requisito fundamental para editar fala com qualidade, e não apenas uma habilidade paralela.</span> <span class="s" data-s="b10-c-s2">Modelos que aprendem a &#39;falar&#39; bem tendem a editar melhor.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b11-h">Conclusão</span></h2>
+<p><span class="s" data-s="b11-p0-s0">O VoxCanvas-41M representa um passo significativo na democratização da pesquisa em edição de fala por instrução.</span> <span class="s" data-s="b11-p0-s1">Ao fornecer um dataset bilíngue massivo e um pipeline escalável, os autores removem uma das principais barreiras para o desenvolvimento de modelos robustos.</span> <span class="s" data-s="b11-p0-s2">A análise de dinâmica de aprendizado adiciona uma camada valiosa de compreensão teórica, mostrando que a edição não é uma habilidade monolítica, mas um conjunto de competências que emergem em ritmos diferentes e são influenciadas por outras tarefas de fala.</span></p><p><span class="s" data-s="b11-p1-s0">Para desenvolvedores e cientistas de dados, o takeaway principal é a importância da qualidade e diversidade dos dados de treinamento, especialmente para línguas não-inglesas e tarefas paralinguísticas.</span> <span class="s" data-s="b11-p1-s1">O pipeline aberto e os demos disponíveis permitem que a comunidade valide e estenda esses resultados.</span> <span class="s" data-s="b11-p1-s2">Embora não seja uma revolução instantânea na qualidade da edição, o VoxCanvas-41M estabelece um novo padrão de referência e fornece as ferramentas necessárias para investigar os fundamentos do aprendizado de edição de fala em larga escala.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">VoxCanvas-41M é o maior dataset público de edição de fala por instrução, com 41M pares bilíngues (chinês/inglês).</span></li><li><span class="s" data-s="k1">O pipeline combina LLMs, ASR e filtragem humana para gerar pares de áudio-texto com precisão.</span></li><li><span class="s" data-s="k2">Modelos aprendem deleção mais rápido que inserção; TTS acelera a aquisição de habilidades de edição.</span></li><li><span class="s" data-s="k3">Limitações incluem falta de edição multi-turno explícita e controle fino de emoção no dataset atual.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.08251" rel="noopener">VoxCanvas-41M: A Large-Scale Bilingual Dataset for Instruction-Based Speech Editing and Its Learning Dynamics</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.08251" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

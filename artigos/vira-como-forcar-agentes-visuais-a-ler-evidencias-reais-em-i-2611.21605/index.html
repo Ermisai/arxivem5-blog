@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ViRA: Como forçar agentes visuais a ler evidências reais em imagens ultra-HD — arXiv em 5</title>
+<meta name="description" content="Um novo método de reforço por contraste que impede modelos de adivinhar respostas baseadas em senso comum, exigindo leitura real de detalhes minúsculos em imagens de dezenas de megapixels.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ViRA: Como forçar agentes visuais a ler evidências reais em imagens ultra-HD">
+<meta property="og:description" content="Um novo método de reforço por contraste que impede modelos de adivinhar respostas baseadas em senso comum, exigindo leitura real de detalhes minúsculos em imagens de dezenas de megapixels.">
+<meta property="og:image" content="../../assets/papers/2611.21605/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Agentes</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.21605" rel="noopener">arXiv:2611.21605</a>
+    </div>
+    <h1><span class="s" data-s="t">ViRA: Como forçar agentes visuais a ler evidências reais em imagens ultra-HD</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um novo método de reforço por contraste que impede modelos de adivinhar respostas baseadas em senso comum, exigindo leitura real de detalhes minúsculos em imagens de dezenas de megapixels.</span></p>
+    <p class="byline">
+      <span>Lin et al.</span>
+      <span>8 min de leitura</span>
+<span>16/11/2026</span>    </p>
+    <div class="listen" data-article="2611.21605" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=k1_xD6X-QGE" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema do &#39;acerto vazio&#39; em alta resolução</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A resolução das câmeras modernas cresceu exponencialmente, produzindo fotos de 21 a 120 megapixels (MP).</span> <span class="s" data-s="b0-p0-s1">No entanto, a informação crucial para responder a perguntas sobre essas imagens muitas vezes reside em detalhes de apenas algumas dezenas de pixels.</span> <span class="s" data-s="b0-p0-s2">Um exemplo clássico é identificar o objeto que uma pessoa segura a metros de distância.</span> <span class="s" data-s="b0-p0-s3">Modelos de visão e linguagem (VLMs) tradicionais têm limites rígidos de entrada.</span> <span class="s" data-s="b0-p0-s4">Para processar uma foto de 45 MP, um modelo como o Qwen3.5 precisaria de cerca de 44.000 tokens, o que excede a capacidade de memória e processamento padrão.</span></p><p><span class="s" data-s="b0-p1-s0">Para contornar isso, os sistemas atuais comprimem a imagem, reduzindo a resolução global.</span> <span class="s" data-s="b0-p1-s1">O problema é que o detalhe importante encolhe junto com o resto da foto, tornando-se ilegível.</span> <span class="s" data-s="b0-p1-s2">Em uma redução de 45 MP para 3,8 MP (o limite do Claude Haiku 5.5), um objeto de 50 pixels torna-se apenas 15 pixels.</span> <span class="s" data-s="b0-p1-s3">Para recuperar esses detalhes, surgiram os &#39;agentes visuais&#39;, que não olham a foto inteira de uma vez, mas sim fazem zoom em regiões específicas que consideram relevantes.</span></p><p><span class="s" data-s="b0-p2-s0">Aqui reside a falha crítica: a capacidade de fazer zoom não garante que o modelo leu a evidência.</span> <span class="s" data-s="b0-p2-s1">Em muitos casos, o modelo acerta a resposta usando senso comum, não leitura visual.</span> <span class="s" data-s="b0-p2-s2">Por exemplo, se uma pessoa levanta um objeto pequeno na direção da câmera, o modelo pode assumir, por probabilidade estatística, que é um smartphone, mesmo sem ler o que está escrito ou a forma exata do objeto.</span> <span class="s" data-s="b0-p2-s3">Se a pergunta for alterada para que a resposta correta seja &#39;calculadora&#39; ou &#39;controle remoto&#39;, o modelo que usa senso comum ainda responderá &#39;smartphone&#39;, acertando por engano em uma versão, mas falhando na lógica de leitura.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.21605/figure1.webp" alt="Exemplo de conjunto de contraste: três versões de uma foto de 45 MP diferem apenas no objeto segurado pela mulher. O modelo deve ler o objeto em cada versão para acertar todas." loading="lazy">
+          <figcaption>
+            Exemplo de conjunto de contraste: três versões de uma foto de 45 MP diferem apenas no objeto segurado pela mulher. O modelo deve ler o objeto em cada versão para acertar todas.
+            <span class="source">Figura 1 do paper · Lin et al., arXiv:2611.21605</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">Por que o Reinforcement Learning tradicional falha</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Os agentes visuais atuais são treinados usando Reinforcement Learning (RL) na resposta final, frequentemente com algoritmos como o Group Relative Policy Optimization (GRPO).</span> <span class="s" data-s="b2-p0-s1">O problema fundamental dessa abordagem é que, em uma única imagem, um palpite correto (guess) recebe a mesma recompensa de uma leitura correta (reading).</span> <span class="s" data-s="b2-p0-s2">Se o modelo adivinha &#39;smartphone&#39; e está certo, ele é recompensado.</span> <span class="s" data-s="b2-p0-s3">Se ele faz zoom, lê &#39;smartphone&#39; e está certo, também é recompensado.</span></p><p><span class="s" data-s="b2-p1-s0">Como o palpite é computacionalmente mais barato (não requer zoom) e estatisticamente provável, o modelo aprende uma &#39;atalho&#39; (shortcut).</span> <span class="s" data-s="b2-p1-s1">Ele para de usar a ferramenta de zoom ou ignora o que vê nela, confiando apenas no prior do modelo de linguagem.</span> <span class="s" data-s="b2-p1-s2">Métodos recentes tentam recompensar o ato de chamar a ferramenta de zoom ou cobrir a região de evidência, mas isso incentiva o modelo a &#39;fingir&#39; que olhou, sem necessariamente processar a informação visual.</span> <span class="s" data-s="b2-p1-s3">O modelo pode chamar o zoom, olhar para a região, mas ainda assim responder baseado no contexto geral ou no senso comum, como visto em casos onde o modelo afirma que a imagem ampliada confirma algo que não está lá.</span></p><p><span class="s" data-s="b2-p2-s0">Para distinguir entre &#39;ler&#39; e &#39;adivinhar&#39;, precisamos de um cenário onde o senso comum leve a respostas erradas.</span> <span class="s" data-s="b2-p2-s1">Isso só é possível se houver variação na evidência visual enquanto a pergunta permanece a mesma.</span> <span class="s" data-s="b2-p2-s2">É aqui que entra a proposta do paper: usar conjuntos de contraste (contrast sets) para treinar o agente.</span></p>        <h2><span class="s" data-s="b3-h">A ideia central: Conjuntos de Contraste e CrossRPO</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O paper propõe o Cross-Input Relative Policy Optimization (CrossRPO).</span> <span class="s" data-s="b3-p0-s1">A ideia é criar conjuntos de contraste: grupos de imagens que são idênticas exceto por uma pequena região que contém a evidência da resposta.</span> <span class="s" data-s="b3-p0-s2">Nessas regiões, um pequeno objeto é editado ou fotografado de forma diferente, alterando a resposta correta para a mesma pergunta.</span></p><p><span class="s" data-s="b3-p1-s0">Considere o exemplo da Figura 1a: três versões de uma foto de rua de 45 MP.</span> <span class="s" data-s="b3-p1-s1">Em todas, uma mulher levanta a mão.</span> <span class="s" data-s="b3-p1-s2">Na versão A, ela segura um smartphone; na B, uma calculadora; na C, um controle remoto.</span> <span class="s" data-s="b3-p1-s3">A pergunta é &#39;O que ela está segurando?&#39;.</span> <span class="s" data-s="b3-p1-s4">Um modelo que usa senso comum responderá &#39;smartphone&#39; para todas as três.</span> <span class="s" data-s="b3-p1-s5">Isso significa que ele acerta apenas uma das três versões do conjunto.</span> <span class="s" data-s="b3-p1-s6">Para acertar o conjunto inteiro (set accuracy), o modelo é obrigado a ler a evidência visual em cada versão específica.</span></p><p><span class="s" data-s="b3-p2-s0">O algoritmo CrossRPO treina o agente recompensando-o apenas se ele acertar todas as versões do conjunto.</span> <span class="s" data-s="b3-p2-s1">Se ele falhar em uma única versão, a recompensa total é zero ou drasticamente reduzida.</span> <span class="s" data-s="b3-p2-s2">Isso elimina a possibilidade de ganhar pontos apenas adivinhando.</span> <span class="s" data-s="b3-p2-s3">O modelo aprende que a estratégia de &#39;palpite global&#39; é insustentável, forçando-o a desenvolver a habilidade de zoom preciso e leitura de texto ou detalhes visuais minúsculos.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.21605/figure3.webp" alt="Comparação entre GRPO e CrossRPO: o CrossRPO compara rollouts entre diferentes versões de um conjunto, multiplicando a vantagem por um peso derivado das recompensas cruzadas." loading="lazy">
+          <figcaption>
+            Comparação entre GRPO e CrossRPO: o CrossRPO compara rollouts entre diferentes versões de um conjunto, multiplicando a vantagem por um peso derivado das recompensas cruzadas.
+            <span class="source">Figura 3 do paper · Lin et al., arXiv:2611.21605</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Como o CrossRPO funciona matematicamente</span></h2>
+<p><span class="s" data-s="b5-p0-s0">O núcleo do método é a função de perda e a estimativa de vantagem.</span> <span class="s" data-s="b5-p0-s1">No GRPO padrão, a vantagem é calculada comparando as ações do modelo em diferentes rollouts da mesma imagem.</span> <span class="s" data-s="b5-p0-s2">Isso não separa leitura de palpite.</span> <span class="s" data-s="b5-p0-s3">O CrossRPO introduz um termo &#39;joint&#39; (conjunto) que compara as performances em todas as combinações de versões dentro de um conjunto de contraste.</span></p><p><span class="s" data-s="b5-p1-s0">A fórmula do CrossRPO inclui um parâmetro lambda (λ) que balanceia a recompensa padrão (baseada na versão individual) e a recompensa cruzada (baseada no conjunto inteiro).</span> <span class="s" data-s="b5-p1-s1">A vantagem é calculada de forma não enviesada, usando uma abordagem &#39;leave-one-out&#39; dentro de cada versão e combinando estatísticas de todo o batch.</span> <span class="s" data-s="b5-p1-s2">Isso reduz a variância da estimativa de gradiente, permitindo um treinamento mais estável mesmo com conjuntos pequenos.</span></p><p><span class="s" data-s="b5-p2-s0">Uma propriedade teórica importante provada no paper é que, para um conjunto de K versões, a probabilidade de um modelo &#39;cego&#39; (que não lê a evidência) acertar todas as versões cai exponencialmente com K. Para K=3, a chance é limitada a 1/3 se as respostas forem diferentes.</span> <span class="s" data-s="b5-p2-s1">O CrossRPO explora isso: ele penaliza fortemente qualquer política que não se ajuste à variação específica de cada versão.</span> <span class="s" data-s="b5-p2-s2">O modelo é forçado a aprender uma função de política que mapeia a evidência visual específica para a resposta correta, em vez de mapear o contexto geral para a resposta mais provável.</span></p>        <h2><span class="s" data-s="b6-h">Construção dos Dados: ViRA-Train e ViRA-Bench</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Para treinar e avaliar o modelo, os autores criaram dois conjuntos de dados principais.</span> <span class="s" data-s="b6-p0-s1">O ViRA-Train consiste em 9.261 conjuntos de contraste gerados por edição de imagens reais de 21 a 120 MP.</span> <span class="s" data-s="b6-p0-s2">Eles editam um pequeno objeto na cena, alterando a resposta correta.</span> <span class="s" data-s="b6-p0-s3">Isso permite um grande volume de dados de treinamento variados.</span></p><p><span class="s" data-s="b6-p1-s0">Para avaliação, criaram o ViRA-Bench, que também usa imagens editadas, mas com um protocolo rigoroso para garantir que o modelo não use artefatos da edição (como bordas estranhas ou diferenças de iluminação) como atalho.</span> <span class="s" data-s="b6-p1-s1">Além disso, criaram o ViRA-Bench-Real, um conjunto menor (78 conjuntos) de imagens fotografadas realmente, onde objetos foram alterados fisicamente ou em cenários controlados.</span> <span class="s" data-s="b6-p1-s2">Isso serve para verificar se o modelo generaliza para mudanças reais, não apenas para edições digitais.</span></p><p><span class="s" data-s="b6-p2-s0">Cada conjunto de contraste tem de 2 a 3 versões.</span> <span class="s" data-s="b6-p2-s1">As perguntas incluem a localização aproximada do objeto para facilitar a busca inicial do agente, mas o teste final exige a leitura do conteúdo do objeto.</span> <span class="s" data-s="b6-p2-s2">O uso de imagens de alta resolução (até 120 MP) garante que o modelo seja testado em condições extremas de densidade de informação, onde o zoom é indispensável.</span></p>        <h2><span class="s" data-s="b7-h">Resultados: ViRA-9B e ViRA-27B</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Os autores treinaram duas versões do modelo Qwen: o ViRA-9B (baseado no Qwen3.5-9B) e o ViRA-27B (baseado no Qwen3.8-27B).</span> <span class="s" data-s="b7-p0-s1">O treinamento foi feito com apenas cerca de 3.500 itens do ViRA-Train para cada modelo, usando CrossRPO com λ=0.5.</span> <span class="s" data-s="b7-p0-s2">Os resultados são impressionantes em termos de eficiência e precisão.</span></p><p><span class="s" data-s="b7-p1-s0">No ViRA-Bench, na resolução máxima, o ViRA-9B alcançou 63,3% de precisão no conjunto (set accuracy), contra 59,3% do GRPO padrão.</span> <span class="s" data-s="b7-p1-s1">O ganho é ainda mais significativo quando comparado aos modelos base sem a técnica de contraste.</span> <span class="s" data-s="b7-p1-s2">O ViRA-27B foi ainda mais forte, superando modelos proprietários como o Claude Haiku 5.5 e o GPT-6-Luna (ambos no seu nível máximo de &#39;pensamento&#39;) na maioria dos benchmarks de alta resolução.</span></p><p><span class="s" data-s="b7-p2-s0">Uma métrica crucial é a eficiência de tokens.</span> <span class="s" data-s="b7-p2-s1">O ViRA-27B alcançou 71,5% de precisão no ViRA-Bench usando cerca de 409K tokens por conjunto, enquanto o Claude Haiku 5.5 precisou de 86K tokens para 63,3%.</span> <span class="s" data-s="b7-p2-s2">Isso sugere que o ViRA é mais robusto, embora use mais tokens para garantir a leitura correta.</span> <span class="s" data-s="b7-p2-s3">Em budgets de pixels menores (0.5 MP a 4 MP), o ViRA também lidera consistentemente, mostrando que a habilidade de zoom aprendida é transferível para diferentes restrições de resolução.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.21605/figure6.webp" alt="Precisão no conjunto vs. tokens usados: o ViRA-27B (preenchido) supera modelos proprietários como Claude Haiku 5.5 e GPT-6-Luna em precisão e eficiência em vários budgets de pixels." loading="lazy">
+          <figcaption>
+            Precisão no conjunto vs. tokens usados: o ViRA-27B (preenchido) supera modelos proprietários como Claude Haiku 5.5 e GPT-6-Luna em precisão e eficiência em vários budgets de pixels.
+            <span class="source">Figura 6 do paper · Lin et al., arXiv:2611.21605</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Limitações e Considerações Finais</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Apesar dos avanços, o paper admite limitações importantes.</span> <span class="s" data-s="b9-p0-s1">Primeiro, a dependência de conjuntos de contraste.</span> <span class="s" data-s="b9-p0-s2">Criar esses conjuntos é mais caro e complexo do que usar imagens únicas, pois requer edição de imagem ou fotografia repetida de cenas idênticas.</span> <span class="s" data-s="b9-p0-s3">Isso limita a escalabilidade da geração de dados de treinamento em larga escala.</span></p><p><span class="s" data-s="b9-p1-s0">Segundo, a qualidade dos dados de avaliação.</span> <span class="s" data-s="b9-p1-s1">O ViRA-Bench-Real, embora livre de artefatos de edição, é pequeno (78 conjuntos) e focado em objetos internos como placas e adesivos.</span> <span class="s" data-s="b9-p1-s2">Não cobre cenários externos complexos ou objetos variados.</span> <span class="s" data-s="b9-p1-s3">Além disso, as perguntas no benchmark indicam onde o objeto está, o que facilita a busca inicial.</span> <span class="s" data-s="b9-p1-s4">Um teste sem essa dica seria mais rigoroso.</span></p><p><span class="s" data-s="b9-p2-s0">Terceiro, o treinamento foi feito apenas em uma família de modelos (Qwen).</span> <span class="s" data-s="b9-p2-s1">Não está claro se o CrossRPO funciona igualmente bem em outras arquiteturas de VLMs.</span> <span class="s" data-s="b9-p2-s2">Também não há incentivos no reward para que o modelo faça zooms múltiplos ou caixas delimitadoras (bounding boxes) mais apertadas; o modelo tende a fazer um único zoom amplo.</span></p><p><span class="s" data-s="b9-p3-s0">Em resumo, o ViRA apresenta uma solução elegante para um problema fundamental em agentes visuais: a distinção entre correlação estatística e leitura causal de evidências.</span> <span class="s" data-s="b9-p3-s1">Ao forçar o modelo a lidar com variações locais em alta resolução, o CrossRPO quebra o hábito de &#39;palpite por senso comum&#39;.</span> <span class="s" data-s="b9-p3-s2">Embora dependa de dados sintéticos ou editados para treinamento, os resultados mostram que é possível treinar modelos abertos que competem com os melhores proprietários em tarefas de leitura visual fina, desde que o treinamento seja alinhado com a necessidade real de leitura.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Agentes visuais frequentemente acertam por senso comum sem ler a evidência; o ViRA resolve isso com conjuntos de contraste.</span></li><li><span class="s" data-s="k1">O CrossRPO recompensa a solução correta de todo um conjunto de imagens variantes, penalizando palpites únicos.</span></li><li><span class="s" data-s="k2">ViRA-27B supera Claude Haiku 5.5 e GPT-6-Luna em benchmarks de alta resolução com menos tokens.</span></li><li><span class="s" data-s="k3">O método funciona em imagens de 21 a 120 MP, mas depende de conjuntos de treinamento editados ou fotografados especificamente.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.21605" rel="noopener">ViRA: Toward Ultra-High-Resolution Visual Agents via Cross-Input Relative Policy Optimization</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.21605" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

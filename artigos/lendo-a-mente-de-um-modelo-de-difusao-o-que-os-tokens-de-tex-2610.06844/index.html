@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lendo a mente de um modelo de difusão: o que os tokens de texto escondem durante a geração de imagens — arXiv em 5</title>
+<meta name="description" content="Pesquisadores da Tel Aviv e Cornell criaram um método para interrogar em linguagem natural as representações internas de modelos multimodais de difusão, revelando que eles já &#39;sabem&#39; o que vão gerar muito antes da imagem ficar visível.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Lendo a mente de um modelo de difusão: o que os tokens de texto escondem durante a geração de imagens">
+<meta property="og:description" content="Pesquisadores da Tel Aviv e Cornell criaram um método para interrogar em linguagem natural as representações internas de modelos multimodais de difusão, revelando que eles já &#39;sabem&#39; o que vão gerar muito antes da imagem ficar visível.">
+<meta property="og:image" content="../../assets/papers/2610.06844/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Imagem</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.06844" rel="noopener">arXiv:2610.06844</a>
+    </div>
+    <h1><span class="s" data-s="t">Lendo a mente de um modelo de difusão: o que os tokens de texto escondem durante a geração de imagens</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Pesquisadores da Tel Aviv e Cornell criaram um método para interrogar em linguagem natural as representações internas de modelos multimodais de difusão, revelando que eles já &#39;sabem&#39; o que vão gerar muito antes da imagem ficar visível.</span></p>
+    <p class="byline">
+      <span>Dahary et al.</span>
+      <span>10 min de leitura</span>
+<span>05/10/2026</span>    </p>
+    <div class="listen" data-article="2610.06844" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema: o que acontece do lado do texto?</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Modelos de difusão multimodais (MM-DiTs) dominam hoje a geração de imagens e vídeos a partir de texto.</span> <span class="s" data-s="b0-p0-s1">Eles processam simultaneamente tokens visuais — que formam a imagem em evolução — e tokens de texto, que condicionam a geração.</span> <span class="s" data-s="b0-p0-s2">Enquanto os tokens visuais recebem supervisão explícita (o objetivo de denoising) e podem ser visualizados diretamente como imagens intermediárias, os tokens de texto seguem um caminho menos óbvio.</span></p><p><span class="s" data-s="b0-p1-s0">Nesses modelos, os tokens de texto não ficam fixos como vetores de condicionamento estáticos.</span> <span class="s" data-s="b0-p1-s1">A cada camada, eles são atualizados por atenção multimodal, absorvendo informação da representação visual em evolução.</span> <span class="s" data-s="b0-p1-s2">Trabalhos anteriores chamaram esses vetores atualizados de tokens contextuais.</span> <span class="s" data-s="b0-p1-s3">Embora essa troca cross-modal funcione bem na prática, ninguém sabe ao certo o que esses tokens contextuais codificam, nem como suas dinâmicas internas influenciam a imagem final.</span></p><p><span class="s" data-s="b0-p2-s0">Diferente dos tokens visuais, que têm correspondência espacial clara, os tokens contextuais não possuem estrutura explícita e não recebem supervisão dedicada.</span> <span class="s" data-s="b0-p2-s1">Isso os torna difíceis de interpretar.</span> <span class="s" data-s="b0-p2-s2">Resta em aberto: que informação visual eles carregam?</span> <span class="s" data-s="b0-p2-s3">Quando essa informação emerge?</span> <span class="s" data-s="b0-p2-s4">E, mais importante, ela pode ser lida e usada para melhorar a geração?</span></p>        <h2><span class="s" data-s="b1-h">A ideia: interrogar o modelo em linguagem natural</span></h2>
+<p><span class="s" data-s="b1-p0-s0">O paper propõe um framework para ler diretamente o espaço contextual de MM-DiTs através de perguntas em linguagem natural.</span> <span class="s" data-s="b1-p0-s1">Em vez de analisar mapas de atenção ou vetores brutos, os autores treinam uma rede leve — o Contextual Reader — que projeta tokens contextuais intermediários no espaço de entrada de um Large Language Model (LLM) congelado.</span></p><p><span class="s" data-s="b1-p1-s0">O truque é simples: o LLM recebe apenas os tokens contextuais projetados e uma pergunta sobre a imagem emergente.</span> <span class="s" data-s="b1-p1-s1">Como ele não tem acesso direto aos pixels, qualquer resposta correta precisa vir da informação codificada nos próprios tokens contextuais.</span> <span class="s" data-s="b1-p1-s2">Isso força a rede de projeção (chamada Bottleneck Network) a extrair a semântica visual interna do modelo diretamente da representação textual.</span></p><p><span class="s" data-s="b1-p2-s0">Com isso, os pesquisadores conseguem fazer perguntas como &#39;O que essa pessoa está fazendo?&#39; ou &#39;De que cor é o cabelo?&#39; e obter respostas em texto plano, decodificadas diretamente dos tokens contextuais em qualquer momento da geração.</span> <span class="s" data-s="b1-p2-s1">É como ler a intenção generativa do modelo antes mesmo de a imagem ficar clara.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.06844/figure2.webp" alt="Arquitetura do Contextual Reader: tokens contextuais de múltiplas camadas do MM-DiT congelado são agregados por uma rede treinável (Bottleneck) em um descritor compacto, que alimenta um LLM congelado junto com uma pergunta visual." loading="lazy">
+          <figcaption>
+            Arquitetura do Contextual Reader: tokens contextuais de múltiplas camadas do MM-DiT congelado são agregados por uma rede treinável (Bottleneck) em um descritor compacto, que alimenta um LLM congelado junto com uma pergunta visual.
+            <span class="source">Figura 2 do paper · Dahary et al., arXiv:2610.06844</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Como funciona o Contextual Reader</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O método opera em um timestep escolhido durante o denoising.</span> <span class="s" data-s="b3-p0-s1">Nesse momento, os tokens contextuais de várias camadas do MM-DiT (congelado) são agregados pela Bottleneck Network em um Contextual Descriptor compacto.</span> <span class="s" data-s="b3-p0-s2">Esse descritor é então concatenado com uma pergunta em linguagem natural e alimentado a um LLM congelado, que prediz a resposta.</span></p><p><span class="s" data-s="b3-p1-s0">O treinamento usa pares de (imagem, pergunta, resposta) gerados por um Vision-Language Model (VLM) teacher.</span> <span class="s" data-s="b3-p1-s1">Para cada imagem do dataset, o VLM responde perguntas sobre atributos visuais (cor, posição, ação, etc.).</span> <span class="s" data-s="b3-p1-s2">Durante o treinamento, o MM-DiT gera uma trajetória de denoising para essa imagem, e o Contextual Reader aprende a prever as mesmas respostas do VLM a partir dos tokens contextuais em diferentes timesteps.</span></p><p><span class="s" data-s="b3-p2-s0">Crucialmente, o MM-DiT e o LLM permanecem congelados.</span> <span class="s" data-s="b3-p2-s1">Apenas a Bottleneck Network é treinada, usando perda de linguagem padrão.</span> <span class="s" data-s="b3-p2-s2">Isso garante que o leitor aprenda a extrair informação já presente nos tokens contextuais, sem alterar o comportamento do gerador.</span> <span class="s" data-s="b3-p2-s3">O resultado é um probe interpretável: se o leitor consegue responder uma pergunta, é porque a informação está codificada nos tokens contextuais naquele momento da geração.</span></p>        <h2><span class="s" data-s="b4-h">O que os tokens contextuais revelam</span></h2>
+<p><span class="s" data-s="b4-p0-s0">A primeira descoberta é surpreendente: tokens contextuais codificam semântica rica da cena emergente muito cedo no denoising.</span> <span class="s" data-s="b4-p0-s1">Atributos específicos da geração — incluindo detalhes deixados vagos pelo prompt — já são acessíveis quando apenas 8% da trajetória foi percorrida, enquanto a predição visual ainda está ambígua.</span></p><p><span class="s" data-s="b4-p1-s0">Mais impressionante ainda: essa informação permanece decodificável mesmo quando o MM-DiT recebe um prompt vazio.</span> <span class="s" data-s="b4-p1-s1">A Figura 1 mostra seis gerações condicionadas em prompts diferentes (cozinhar, jogar tênis, andar de skate, dançar, tocar guitarra, andar a cavalo), mas o modelo recebe prompt vazio durante a inferência.</span> <span class="s" data-s="b4-p1-s2">Mesmo assim, o leitor identifica corretamente a atividade desde cedo, demonstrando que os tokens contextuais acumulam informação substancial da própria representação visual em evolução.</span></p><p><span class="s" data-s="b4-p2-s0">Conforme o denoising avança, a legibilidade dos tokens contextuais aumenta.</span> <span class="s" data-s="b4-p2-s1">O leitor recupera progressivamente detalhes mais finos sobre a imagem emergente.</span> <span class="s" data-s="b4-p2-s2">Isso sugere uma hierarquia temporal: semântica global aparece cedo, detalhes finos surgem depois.</span> <span class="s" data-s="b4-p2-s3">Importante: essa legibilidade varia entre diferentes gerações do mesmo prompt.</span> <span class="s" data-s="b4-p2-s4">Gerações com representações contextuais mais claras tendem a receber notas de preferência humana mais altas.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.06844/figure1.webp" alt="Seis gerações com prompts diferentes, mas o MM-DiT recebe prompt vazio. Mesmo assim, o Contextual Reader identifica corretamente a ação (texto abaixo de cada imagem) desde cedo no denoising, quando a predição visual ainda está borrada." loading="lazy">
+          <figcaption>
+            Seis gerações com prompts diferentes, mas o MM-DiT recebe prompt vazio. Mesmo assim, o Contextual Reader identifica corretamente a ação (texto abaixo de cada imagem) desde cedo no denoising, quando a predição visual ainda está borrada.
+            <span class="source">Figura 1 do paper · Dahary et al., arXiv:2610.06844</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b6-h">Lendo atributos não especificados no prompt</span></h2>
+<p><span class="s" data-s="b6-p0-s0">O paper mostra exemplos concretos de como o leitor revela decisões internas do modelo.</span> <span class="s" data-s="b6-p0-s1">Para prompts como &#39;A woman with a ponytail&#39;, o modelo precisa resolver atributos não especificados: cor do cabelo, tipo de fundo, roupa, etc. O Contextual Reader consegue identificar essas escolhas logo aos 8% da trajetória, comparando duas seeds aleatórias que resolvem os atributos de formas diferentes.</span></p><p><span class="s" data-s="b6-p1-s0">Por exemplo, em uma seed o leitor reporta &#39;blonde hair&#39; e &#39;blurred outdoor background&#39;, enquanto em outra seed reporta &#39;brown hair&#39; e &#39;indoor setting&#39;.</span> <span class="s" data-s="b6-p1-s1">Essas previsões aparecem muito antes de os detalhes ficarem visíveis na imagem intermediária.</span> <span class="s" data-s="b6-p1-s2">Isso confirma que o modelo já &#39;decidiu&#39; internamente o que vai gerar, mesmo que a evidência visual ainda não esteja clara.</span></p><p><span class="s" data-s="b6-p2-s0">Esse comportamento se mantém em modelos diferentes (os autores testam FLUX.2 e SD3) e em diferentes tipos de perguntas: sobre objetos, ações, cores, posições espaciais e relações entre elementos.</span> <span class="s" data-s="b6-p2-s1">A consistência sugere que tokens contextuais funcionam como uma representação global e semântica da intenção generativa, complementar à representação espacial dos tokens visuais.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.06844/figure3.webp" alt="Predições do leitor condicional em FLUX.2. Para cada prompt, duas seeds resolvem atributos não especificados de forma diferente. O leitor identifica essas diferenças (cabelo loiro vs. castanho, fundo externo vs. interno) aos 8% da geração, antes de ficarem visíveis." loading="lazy">
+          <figcaption>
+            Predições do leitor condicional em FLUX.2. Para cada prompt, duas seeds resolvem atributos não especificados de forma diferente. O leitor identifica essas diferenças (cabelo loiro vs. castanho, fundo externo vs. interno) aos 8% da geração, antes de ficarem visíveis.
+            <span class="source">Figura 3 do paper · Dahary et al., arXiv:2610.06844</span>
+          </figcaption>
+        </figure>
+        <aside class="callout">
+          <h3><span class="s" data-s="b8-t">Legibilidade correlaciona com qualidade</span></h3>
+          <p><span class="s" data-s="b8-c-s0">Os autores descobriram que gerações com tokens contextuais mais legíveis — medido pela acurácia do leitor em responder perguntas — tendem a receber notas de preferência humana mais altas.</span> <span class="s" data-s="b8-c-s1">Isso sugere que a clareza da representação contextual não é apenas algo que podemos medir, mas um indicador de qualidade generativa.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b9-h">Contextual Alignment: reforçando a representação interna</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Se tokens contextuais mais legíveis levam a melhores gerações, faz sentido treinar o modelo para produzir representações contextuais mais claras.</span> <span class="s" data-s="b9-p0-s1">Os autores propõem Contextual Alignment (CoAl), uma técnica de treinamento que reforça explicitamente a informação visual-semântica codificada nos tokens contextuais.</span></p><p><span class="s" data-s="b9-p1-s0">CoAl funciona adicionando uma perda auxiliar durante o treinamento do MM-DiT.</span> <span class="s" data-s="b9-p1-s1">Em cada passo, o Contextual Reader (pré-treinado e congelado) tenta responder perguntas sobre a imagem-alvo a partir dos tokens contextuais.</span> <span class="s" data-s="b9-p1-s2">A perda mede o quão bem o leitor consegue decodificar a informação correta.</span> <span class="s" data-s="b9-p1-s3">Essa perda é somada ao objetivo de denoising padrão, incentivando o modelo a manter representações contextuais ricas e legíveis ao longo da geração.</span></p><p><span class="s" data-s="b9-p2-s0">Crucialmente, CoAl não requer anotações humanas adicionais.</span> <span class="s" data-s="b9-p2-s1">As perguntas e respostas vêm do mesmo VLM teacher usado para treinar o leitor.</span> <span class="s" data-s="b9-p2-s2">E porque o leitor permanece congelado durante o treinamento do MM-DiT, a perda de alinhamento contextual atua como uma forma de regularização semântica, sem interferir diretamente no espaço visual.</span></p>        <h2><span class="s" data-s="b10-h">Experimentos: treinamento completo e fine-tuning</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Os autores testam CoAl em dois cenários.</span> <span class="s" data-s="b10-p0-s1">Primeiro, treinam um MM-DiT dual-stream do zero no MS-COCO 2014.</span> <span class="s" data-s="b10-p0-s2">Segundo, fazem fine-tuning do SD3 (um MM-DiT dual-stream pré-treinado) no Fine-T2I, um dataset curado com fotografias profissionais e prompts longos e detalhados.</span> <span class="s" data-s="b10-p0-s3">Isso testa se a supervisão contextual continua efetiva após pré-treinamento extenso, ao adaptar para nova distribuição.</span></p><p><span class="s" data-s="b10-p1-s0">No treinamento completo, CoAl é comparado contra REPA, HASTE e SRA — métodos que alinham tokens visuais com representações pré-treinadas (CLIP, DINOv2).</span> <span class="s" data-s="b10-p1-s1">Os autores testam se CoAl complementa esses métodos, comparando cada objetivo com e sem CoAl.</span> <span class="s" data-s="b10-p1-s2">As métricas incluem FID (distância de features Inception), CLIP similarity (alinhamento texto-imagem), HPS (Human Preference Score v2.1), e Precision/Recall com features DINOv2.</span></p><p><span class="s" data-s="b10-p2-s0">No fine-tuning, REPA e variantes não trazem ganhos sobre o objetivo de denoising vanilla (flow matching), então os autores comparam CoAl diretamente contra vanilla, incluindo REPA, HASTE e SRA para completude.</span> <span class="s" data-s="b10-p2-s1">Aqui, métricas como CLIP e HPS não são reportadas: elas foram treinadas em distribuições gerais e não refletem bem a distribuição-alvo do Fine-T2I (as próprias imagens ground-truth pontuam abaixo do modelo base nesses scores).</span> <span class="s" data-s="b10-p2-s2">Em vez disso, os autores medem FID, KID e Precision/Recall, que avaliam fit e cobertura da distribuição-alvo.</span></p>        <h2><span class="s" data-s="b11-h">Resultados quantitativos</span></h2>
+<p><span class="s" data-s="b11-p0-s0">No treinamento completo (Tabela 1a), CoAl melhora todos os três baselines de alinhamento visual em todas as métricas avaliadas.</span> <span class="s" data-s="b11-p0-s1">Por exemplo, REPA sozinho atinge FID 4.95, CLIP 24.20, HPS 21.38, Precision 0.591, Recall 0.338.</span> <span class="s" data-s="b11-p0-s2">Com CoAl, os números vão para FID 4.29, CLIP 24.40, HPS 21.60, Precision 0.628, Recall 0.407.</span> <span class="s" data-s="b11-p0-s3">Ganhos similares aparecem para HASTE e SRA, mostrando que alinhamento contextual complementa o alinhamento visual.</span></p><p><span class="s" data-s="b11-p1-s0">No fine-tuning (Tabela 1b), CoAl continua efetivo.</span> <span class="s" data-s="b11-p1-s1">O modelo base (SD3 sem fine-tuning) tem FID 19.30, Precision 0.993, Recall 0.939.</span> <span class="s" data-s="b11-p1-s2">Vanilla flow matching melhora para FID 17.18, Precision 0.993, Recall 0.966.</span> <span class="s" data-s="b11-p1-s3">REPA, HASTE e SRA ficam piores que vanilla (FID 17.45, 17.53, 17.48).</span> <span class="s" data-s="b11-p1-s4">CoAl atinge o melhor FID (16.75) e melhor Recall (0.969), mantendo Precision competitiva (0.993).</span></p><p><span class="s" data-s="b11-p2-s0">Esses números demonstram que supervisão semântica no espaço contextual é efetiva tanto ao treinar modelos novos quanto ao adaptar modelos pré-treinados.</span> <span class="s" data-s="b11-p2-s1">A melhoria em Recall é especialmente relevante: indica que CoAl aumenta a cobertura distribucional, gerando maior diversidade de amostras que correspondem à distribuição-alvo.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.06844/figure7.webp" alt="Comparação qualitativa no SD3-Medium fine-tunado em Fine-T2I. CoAl melhora qualidade geral, nitidez, anatomia, coerência composicional e aderência ao prompt em relação aos baselines (Vanilla, REPA, HASTE, SRA)." loading="lazy">
+          <figcaption>
+            Comparação qualitativa no SD3-Medium fine-tunado em Fine-T2I. CoAl melhora qualidade geral, nitidez, anatomia, coerência composicional e aderência ao prompt em relação aos baselines (Vanilla, REPA, HASTE, SRA).
+            <span class="source">Figura 7 do paper · Dahary et al., arXiv:2610.06844</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b13-h">Resultados qualitativos e o que melhorou</span></h2>
+<p><span class="s" data-s="b13-p0-s0">Além dos números, os autores apresentam comparações qualitativas.</span> <span class="s" data-s="b13-p0-s1">A Figura 7 mostra gerações do SD3-Medium fine-tunado em Fine-T2I, comparando CoAl contra Vanilla, REPA, HASTE e SRA, lado a lado com imagens de referência do dataset.</span></p><p><span class="s" data-s="b13-p1-s0">As melhorias aparecem em vários aspectos: qualidade geral e nitidez da imagem, anatomia de sujeitos (mãos, rostos), coerência composicional (objetos em posições plausíveis) e aderência ao prompt (detalhes mencionados no texto aparecem na imagem).</span> <span class="s" data-s="b13-p1-s1">Por exemplo, em um prompt descrevendo uma garrafa de vinho sendo despejada em uma taça sobre mesa de madeira, CoAl produz composição mais coerente e detalhes mais fiéis que os baselines.</span></p><p><span class="s" data-s="b13-p2-s0">Essas observações qualitativas reforçam a hipótese central: quando o modelo mantém uma representação contextual clara e legível, ele toma decisões generativas mais consistentes, resultando em imagens de maior qualidade e melhor alinhadas com a intenção do prompt.</span></p>        <h2><span class="s" data-s="b14-h">Limitações e o que fica em aberto</span></h2>
+<p><span class="s" data-s="b14-p0-s0">O paper não explora todos os aspectos dos tokens contextuais.</span> <span class="s" data-s="b14-p0-s1">Embora o leitor consiga decodificar informação semântica, o mecanismo exato de como essa informação se forma e evolui ao longo das camadas e timesteps permanece pouco compreendido.</span> <span class="s" data-s="b14-p0-s2">Os autores reconhecem que muito resta a ser entendido sobre o processo interno dos modelos generativos.</span></p><p><span class="s" data-s="b14-p1-s0">Os experimentos cobrem dois cenários (treinamento completo no MS-COCO e fine-tuning no Fine-T2I), mas não testam outros domínios (vídeo, 3D) ou arquiteturas muito diferentes.</span> <span class="s" data-s="b14-p1-s1">Também não está claro se o método escala para modelos ainda maiores ou se a legibilidade dos tokens contextuais se mantém em modelos treinados com objetivos diferentes (como modelos autoregressivos de tokens visuais).</span></p><p><span class="s" data-s="b14-p2-s0">Outra limitação: o Contextual Reader depende de um VLM teacher para gerar perguntas e respostas de treinamento.</span> <span class="s" data-s="b14-p2-s1">Se o teacher tiver vieses ou limitações, eles podem ser herdados pelo leitor.</span> <span class="s" data-s="b14-p2-s2">E embora CoAl melhore métricas de qualidade e preferência, o paper não investiga se há trade-offs em outros aspectos, como diversidade de estilos ou robustez a prompts adversariais.</span></p><p><span class="s" data-s="b14-p3-s0">Por fim, os autores apontam que a descoberta de que modelos &#39;sabem&#39; o que vão gerar muito antes de a imagem ficar visível levanta muitas questões novas.</span> <span class="s" data-s="b14-p3-s1">Como essas representações internas se formam?</span> <span class="s" data-s="b14-p3-s2">Por que algumas gerações têm tokens contextuais mais legíveis que outras?</span> <span class="s" data-s="b14-p3-s3">Estudar essas dinâmicas internas pode abrir novas oportunidades para controlar e melhorar modelos generativos, mas essas direções permanecem em grande parte inexploradas.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b15-t">Datasets e métricas dos experimentos</span></h3>
+          <p><span class="s" data-s="b15-c-s0">Treinamento completo: MS-COCO 2014, 40.192 amostras geradas para avaliação.</span> <span class="s" data-s="b15-c-s1">Fine-tuning: subset curado do Fine-T2I, 5.000 imagens de validação.</span> <span class="s" data-s="b15-c-s2">Métricas: FID e KID com InceptionV3 pool3, CLIP com vit-large-patch14, DINOv2 Precision/Recall com dinov2-base (k=5), HPS v2.1 oficial, VQAScore com clip-flant5-xxl.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b16-h">O que isso significa para quem trabalha com modelos generativos</span></h2>
+<p><span class="s" data-s="b16-p0-s0">Este trabalho traz duas contribuições práticas.</span> <span class="s" data-s="b16-p0-s1">Primeira: o Contextual Reader oferece uma ferramenta interpretável para inspecionar o que modelos multimodais de difusão &#39;pensam&#39; durante a geração.</span> <span class="s" data-s="b16-p0-s2">Isso pode ajudar a diagnosticar falhas (por que o modelo ignorou parte do prompt?), entender vieses (que atributos ele tende a escolher quando não especificados?) e guiar intervenções mais informadas.</span></p><p><span class="s" data-s="b16-p1-s0">Segunda: Contextual Alignment demonstra que reforçar a representação interna do modelo — não apenas os pixels de saída — pode melhorar qualidade e cobertura distribucional.</span> <span class="s" data-s="b16-p1-s1">Isso complementa métodos existentes de alinhamento visual e pode ser combinado com eles.</span> <span class="s" data-s="b16-p1-s2">Para quem faz fine-tuning de modelos pré-treinados em domínios específicos, CoAl oferece uma forma de injetar supervisão semântica sem anotações humanas adicionais.</span></p><p><span class="s" data-s="b16-p2-s0">Mais amplamente, o paper sugere que vale a pena olhar além dos tokens visuais ao estudar e melhorar modelos de difusão.</span> <span class="s" data-s="b16-p2-s1">Os tokens contextuais, embora não tenham supervisão explícita, carregam informação rica e estruturada sobre a intenção generativa.</span> <span class="s" data-s="b16-p2-s2">Entender e manipular essa representação pode ser uma alavanca poderosa para controlar o comportamento desses modelos.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Tokens contextuais (texto atualizado por atenção multimodal) codificam semântica rica da imagem emergente, acessível desde cedo na geração.</span></li><li><span class="s" data-s="k1">Um leitor leve projeta esses tokens para um LLM congelado, permitindo perguntas em linguagem natural sobre a imagem que ainda está sendo gerada.</span></li><li><span class="s" data-s="k2">Gerações com tokens mais legíveis recebem notas humanas maiores; alinhar essa representação melhora qualidade e cobertura distribucional.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.06844" rel="noopener">Learning to Read the Contextual Tokens in Diffusion Transformers</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.06844" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

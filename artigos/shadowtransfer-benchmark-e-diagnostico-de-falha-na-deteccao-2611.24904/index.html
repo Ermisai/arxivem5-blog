@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ShadowTransfer: Benchmark e Diagnóstico de Falha na Detecção de Sombras Aéreas — arXiv em 5</title>
+<meta name="description" content="Nenhum benchmark existia para medir como modelos de segmentação de sombras aéreas falham ao mudar de cidade. Este paper apresenta o ShadowTransfer, um protocolo rigoroso que expõe quedas de performance e propõe um diagnóstico estrutural para o problema.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ShadowTransfer: Benchmark e Diagnóstico de Falha na Detecção de Sombras Aéreas">
+<meta property="og:description" content="Nenhum benchmark existia para medir como modelos de segmentação de sombras aéreas falham ao mudar de cidade. Este paper apresenta o ShadowTransfer, um protocolo rigoroso que expõe quedas de performance e propõe um diagnóstico estrutural para o problema.">
+<meta property="og:image" content="../../assets/papers/2611.24904/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Imagem</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.24904" rel="noopener">arXiv:2611.24904</a>
+    </div>
+    <h1><span class="s" data-s="t">ShadowTransfer: Benchmark e Diagnóstico de Falha na Detecção de Sombras Aéreas</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Nenhum benchmark existia para medir como modelos de segmentação de sombras aéreas falham ao mudar de cidade.</span> <span class="s" data-s="d-s1">Este paper apresenta o ShadowTransfer, um protocolo rigoroso que expõe quedas de performance e propõe um diagnóstico estrutural para o problema.</span></p>
+    <p class="byline">
+      <span>Mittal et al.</span>
+      <span>9 min de leitura</span>
+<span>18/11/2026</span>    </p>
+    <div class="listen" data-article="2611.24904" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=n1z45kpR9J8" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Transferência Geográfica em Imagens Aéreas</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Modelos de segmentação densa em imagens aéreas de overhead são frequentemente treinados em uma região geográfica específica e implantados em outra.</span> <span class="s" data-s="b0-p0-s1">Essa prática é comum em pipelines que estimam irradiação solar, mapeiam ilhas de calor urbanas ou extraem contornos de edifícios.</span> <span class="s" data-s="b0-p0-s2">No entanto, a mudança geográfica introduz um desvio de distribuição que os modelos não generalizam bem, resultando em erros significativos.</span> <span class="s" data-s="b0-p0-s3">Embora esse seja um problema conhecido em outras áreas, como imagens médicas (diferenças entre scanners) ou classificação de cobertura do solo, faltava uma infraestrutura de avaliação padronizada para detecção de sombras em imagens aéreas.</span></p><p><span class="s" data-s="b0-p1-s0">Os datasets existentes não resolvem essa lacuna.</span> <span class="s" data-s="b0-p1-s1">O AISD, o maior conjunto de dados verificado por humanos, possui apenas 514 imagens e não define divisões de treino-teste por cidade.</span> <span class="s" data-s="b0-p1-s2">O S-EO escala para dezenas de milhares de imagens, mas utiliza rótulos gerados automaticamente com artefatos de alinhamento conhecidos.</span> <span class="s" data-s="b0-p1-s3">Outros benchmarks populares, como ISTD e SBU, focam em imagens em nível de rua, cuja geometria é incompatível com a perspectiva aérea.</span> <span class="s" data-s="b0-p1-s4">Sem um protocolo que separe cidades de treino e teste, não é possível medir, diagnosticar ou corrigir a falha de transferência geográfica.</span></p><p><span class="s" data-s="b0-p2-s0">Para preencher essa lacuna, os autores da Purdue University introduzem o ShadowTransfer.</span> <span class="s" data-s="b0-p2-s1">Este é o primeiro benchmark que combina rótulos verificados por humanos, múltiplas cidades, múltiplas resoluções nativas e um protocolo definido de transferência geográfica.</span> <span class="s" data-s="b0-p2-s2">O objetivo não é apenas fornecer dados, mas criar um instrumento de avaliação para responder à pergunta crítica de implantação: onde e como o modelo falhará quando a cidade mudar?</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.24904/figure1.webp" alt="O benchmark ShadowTransfer expõe o gap de performance. À esquerda, patches de três cidades (Chicago, Miami, Phoenix) em duas resoluções. À direita, a queda no mIoU ao segurar uma cidade para teste, mostrando que a transferência geográfica custa entre 3.5 e 7.8 pontos de mIoU dependendo da arquitetura." loading="lazy">
+          <figcaption>
+            O benchmark ShadowTransfer expõe o gap de performance. À esquerda, patches de três cidades (Chicago, Miami, Phoenix) em duas resoluções. À direita, a queda no mIoU ao segurar uma cidade para teste, mostrando que a transferência geográfica custa entre 3.5 e 7.8 pontos de mIoU dependendo da arquitetura.
+            <span class="source">Figura 1 do paper · Mittal et al., arXiv:2611.24904</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">A Estrutura do Benchmark ShadowTransfer</span></h2>
+<p><span class="s" data-s="b2-p0-s0">O dataset ShadowTransfer contém 4.500 máscaras de sombra verificadas por humanos, coletadas em três cidades dos EUA: Chicago, Miami e Phoenix.</span> <span class="s" data-s="b2-p0-s1">As imagens são provenientes do NAIP (National Agriculture Imagery Program) e estão disponíveis em duas resoluções nativas de sensor: 0.3 m/px e 0.6 m/px.</span> <span class="s" data-s="b2-p0-s2">Cada patch de teste é pareado entre as resoluções, compartilhando as mesmas coordenadas terrestres, o que permite analisar a transferência não apenas geográfica, mas também de resolução.</span></p><p><span class="s" data-s="b2-p1-s0">A anotação não foi feita de forma ingênua.</span> <span class="s" data-s="b2-p1-s1">Os autores desenvolveram um pipeline de três fases para equilibrar throughput e qualidade.</span> <span class="s" data-s="b2-p1-s2">Na Fase 1, sete anotadores treinados criam rótulos do zero para estabelecer a distribuição.</span> <span class="s" data-s="b2-p1-s3">Na Fase 2, um detector intermediário é treinado com esses rótulos para gerar sementes de predição, que os anotadores editam em vez de redesenhar do zero, acelerando o processo.</span> <span class="s" data-s="b2-p1-s4">Na Fase 3, ocorre um controle de qualidade retroativo que intersecta os segmentos anteriores com as previsões do modelo final, retornando discrepâncias para arbitragem.</span> <span class="s" data-s="b2-p1-s5">Para monitorar a deriva dos anotadores, cada lote de 100 imagens inclui cinco imagens &#39;gold&#39; com máscaras de referência congeladas, calculando-se o coeficiente Kappa de Cohen.</span></p><p><span class="s" data-s="b2-p2-s0">Cada segmento de sombra recebe uma de seis categorias de tipo, embora o benchmark principal avalie máscaras binárias (sombra vs. fundo).</span> <span class="s" data-s="b2-p2-s1">Metadados por patch, incluindo cidade, resolução, longitude/latitude e ID do tile fonte, são liberados junto com o benchmark.</span> <span class="s" data-s="b2-p2-s2">Essa riqueza de metadados permite diagnósticos finos sobre a distribuição dos dados, algo ausente em benchmarks anteriores que simplesmente listavam o número total de imagens.</span></p>        <h2><span class="s" data-s="b3-h">O Protocolo LOCO: Isolando o Desvio Geográfico</span></h2>
+<p><span class="s" data-s="b3-p0-s0">O coração da contribuição metodológica é o protocolo LOCO (Leave-One-City-Out).</span> <span class="s" data-s="b3-p0-s1">Para cada cidade de teste (holdout), o conjunto de treinamento é amostrado das duas outras cidades em uma proporção fixa de 50/50, resultando em 450 imagens de treino (225 por cidade de treino).</span> <span class="s" data-s="b3-p0-s2">O conjunto de validação vem das mesmas cidades de treino, e o conjunto de teste é o pool de 150 imagens da cidade holdout.</span></p><p><span class="s" data-s="b3-p1-s0">Essa estrutura permite calcular um &#39;limite superior intra-cidade&#39; (within-city upper bound).</span> <span class="s" data-s="b3-p1-s1">Esse limite é obtido treinando um modelo apenas com os dados da cidade de teste e avaliando nos dados de teste dessa mesma cidade.</span> <span class="s" data-s="b3-p1-s2">A diferença entre o desempenho LOCO e esse limite superior isola estritamente o impacto do desvio geográfico, removendo o efeito do tamanho do conjunto de treinamento.</span> <span class="s" data-s="b3-p1-s3">Se o modelo performasse bem no LOCO, a diferença seria pequena; a realidade, como veremos, é diferente.</span></p><p><span class="s" data-s="b3-p2-s0">O protocolo é aplicado em todas as três rotações de holdout e nas duas resoluções nativas, gerando seis células de teste para cada par (arquitetura, método).</span> <span class="s" data-s="b3-p2-s1">A métrica primária é o mIoU tolerante a bordas, que inclui uma banda de ±2 pixels de &#39;não se importa&#39; nas fronteiras.</span> <span class="s" data-s="b3-p2-s2">Isso é crucial porque as bordas das sombras são inerentemente imprecisas na anotação em resolução sub-pixel, e métricas rígidas penalizariam erros de alinhamento que não refletem falha semântica real.</span></p>        <h2><span class="s" data-s="b4-h">Diagnóstico: Onde e Como a Transferência Quebra</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Os autores não se limitam a medir a queda de performance; eles propõem um framework de três sondas para diagnosticar a natureza da falha.</span> <span class="s" data-s="b4-p0-s1">A primeira sonda investiga o espaço de features.</span> <span class="s" data-s="b4-p0-s2">A análise indica que o desvio geográfico opera no espaço de características extraídas, e não apenas na distribuição de histogramas de pixels.</span> <span class="s" data-s="b4-p0-s3">Isso significa que técnicas simples de equalização de histograma ou adaptação baseada apenas em estatísticas de pixel são insuficientes, pois não alinham a representação semântica profunda.</span></p><p><span class="s" data-s="b4-p1-s0">A segunda sonda examina a confiança das predições.</span> <span class="s" data-s="b4-p1-s1">Sob transferência geográfica (LOCO), observa-se um colapso de confiança nos pixels de sombra (foreground), enquanto a confiança no fundo (background) permanece intacta.</span> <span class="s" data-s="b4-p1-s2">Visualmente, isso se traduz em previsões &#39;lavadas&#39; ou sujas sobre as regiões de sombra verdadeira, em vez de alucinações de sombras onde não há.</span> <span class="s" data-s="b4-p1-s3">Métricas binárias como 0/1 podem subestimar esse problema em 2.3x, pois um pixel de sombra com probabilidade 0.4 é considerado erro, mas a sonda de confiança revela que o modelo ainda &#39;sabe&#39; que há algo lá, apenas com baixa certeza.</span></p><p><span class="s" data-s="b4-p2-s0">A terceira sonda testa a recuperabilidade através de componentes arquitetônicos específicos.</span> <span class="s" data-s="b4-p2-s1">Os autores descobrem que a recuperação depende da arquitetura: para o DINOv3, o problema está no decoder e pode ser corrigido ajustando-o; para o OGLANet, o problema está no encoder; para o MAMNet, ambos os componentes precisam de ajuste.</span> <span class="s" data-s="b4-p2-s2">Isso sugere que a falha não é monolítica, mas interage de forma diferente com a topologia da rede.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.24904/figure2.webp" alt="Falha e recuperação do SIB. Linhas mostram três arquiteturas em tiles LOCO. Colunas: input, ground-truth e probabilidade predita. No LOCO a confiança na sombra colapsa (tons escuros). O SIB recupera a confiança no foreground, mantendo o fundo escuro." loading="lazy">
+          <figcaption>
+            Falha e recuperação do SIB. Linhas mostram três arquiteturas em tiles LOCO. Colunas: input, ground-truth e probabilidade predita. No LOCO a confiança na sombra colapsa (tons escuros). O SIB recupera a confiança no foreground, mantendo o fundo escuro.
+            <span class="source">Figura 2 do paper · Mittal et al., arXiv:2611.24904</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b6-h">SIB: Uma Solução Plug-in Baseada no Diagnóstico</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Guiados por esses três diagnósticos, os autores propõem o Spectral Information Bottleneck (SIB), um módulo plug-in projetado para atacar cada ponto de falha identificado.</span> <span class="s" data-s="b6-p0-s1">O SIB não é uma nova arquitetura, mas um conjunto de componentes que podem ser inseridos em pipelines existentes.</span></p><p><span class="s" data-s="b6-p1-s0">O primeiro componente lida com a pré-processamento espectral.</span> <span class="s" data-s="b6-p1-s1">Para backbones CNN, ele usa FDA (Frequency Domain Adaptation) para alinhar estatísticas de frequência; para U-Nets, usa SAG (Skip-Attention Guidance) nos skips; e é bypassado para ViTs como o DINOv3, que já possuem mecanismos internos de atenção.</span> <span class="s" data-s="b6-p1-s2">O segundo componente é um Information Bottleneck espectral que comprime as features, removendo ruído específico da cidade de treino que não generaliza.</span> <span class="s" data-s="b6-p1-s3">O terceiro componente ajusta a confiança do decoder.</span></p><p><span class="s" data-s="b6-p2-s0">A arquitetura do SIB é modular.</span> <span class="s" data-s="b6-p2-s1">Por exemplo, no DINOv3, o foco está no bottleneck de conteúdo e na decomposição de Haar, enquanto no OGLANet o ganho vem principalmente da compressão de features no lugar da expansão tradicional.</span> <span class="s" data-s="b6-p2-s2">Essa especificidade arquitetônica reforça a conclusão do diagnóstico: não existe uma solução única para todos os modelos, mas sim ajustes direcionados aos gargalos de cada topologia.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.24904/figure4.webp" alt="Arquitetura do módulo SIB. Zonas coloridas agrupam componentes por função: pré-processamento adaptativo (FDA/SAG), bottleneck espectral e ajuste de confiança. O módulo é plug-in, contornando componentes desnecessários dependendo da backbone (ex: bypass para ViT)." loading="lazy">
+          <figcaption>
+            Arquitetura do módulo SIB. Zonas coloridas agrupam componentes por função: pré-processamento adaptativo (FDA/SAG), bottleneck espectral e ajuste de confiança. O módulo é plug-in, contornando componentes desnecessários dependendo da backbone (ex: bypass para ViT).
+            <span class="source">Figura 4 do paper · Mittal et al., arXiv:2611.24904</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Resultados: SIB Concorre com o Estado da Arte</span></h2>
+<p><span class="s" data-s="b8-p0-s0">A avaliação do SIB foi feita sobre as 9 células (3 arquiteturas x 3 cidades holdout) no benchmark de alta resolução.</span> <span class="s" data-s="b8-p0-s1">O SIB apresentou a menor lacuna média em relação ao limite superior intra-cidade entre os dez métodos avaliados, com uma queda de 6.42 mIoU (IC 95% [5.01, 7.96]).</span> <span class="s" data-s="b8-p0-s2">Isso o coloca no mesmo patamar do FDA, que obteve 6.47 mIoU de queda, com diferença estatisticamente insignificante (+0.05, [-0.42, +0.49]).</span></p><p><span class="s" data-s="b8-p1-s0">Em contraste, o treinamento vanilla (sem adaptação) teve quedas médias muito maiores, variando de 3.5 a 7.8 mIoU dependendo da arquitetura, com uma média geral de falha superior.</span> <span class="s" data-s="b8-p1-s1">Métodos de adaptação de domínio tradicionais, como SegDeSiC, IIM, MRFP+, FADA e ISW, mostraram desempenho inconsistente.</span> <span class="s" data-s="b8-p1-s2">Alguns ajudaram em pares arquitetura-cidade específicos, mas falharam catastróficamente em outros.</span> <span class="s" data-s="b8-p1-s3">Em média, seis dos oito métodos de adaptação degradaram mais que o vanilla, sugerindo que a adaptação ingênua pode piorar o alinhamento se o diagnóstico da falha for ignorado.</span></p><p><span class="s" data-s="b8-p2-s0">O SIB também reduziu o erro seletivo de sombra em todas as 9 células (delta médio = -0.199, p = 0.002), mantendo estabilidade para diferentes limiares de confiança.</span> <span class="s" data-s="b8-p2-s1">Isso indica que o SIB não apenas melhora a acurácia bruta, mas também a calibração da confiança do modelo, alinhando-se com a segunda sonda de diagnóstico que identificou o colapso de confiança.</span></p>        <h2><span class="s" data-s="b9-h">Limitações e Escopo</span></h2>
+<p><span class="s" data-s="b9-p0-s0">É crucial entender o que o paper NÃO cobre.</span> <span class="s" data-s="b9-p0-s1">O benchmark cobre apenas três cidades dos EUA (Chicago, Miami, Phoenix), imagens RGB do NAIP e uma única estação (outono).</span> <span class="s" data-s="b9-p0-s2">Isso limita a generalização para morfologias não-grid, sensores multiespectrais ou outras estações do ano.</span> <span class="s" data-s="b9-p0-s3">Além disso, apenas quatro arquiteturas foram testadas (DINOv3, MAMNet, OGLANet, CrossEarth), deixando arquiteturas recentes como SegFormer sem avaliação.</span></p><p><span class="s" data-s="b9-p1-s0">Os autores admitem que, embora caracterizem onde a falha ocorre e como ela distorce as previsões, eles não isolam um mecanismo causal completo que conecte todas as observações.</span> <span class="s" data-s="b9-p1-s1">Por exemplo, o locus do problema no decoder do DINOv3 não pode ser atribuído apenas à sua arquitetura ViT, pois nenhuma CNN nos testes alcançou a escala de pré-treinamento do DINOv3.</span> <span class="s" data-s="b9-p1-s2">A correlação entre arquitetura e ponto de falha pode ser um artefato da capacidade do modelo, não apenas da topologia.</span></p><p><span class="s" data-s="b9-p2-s0">Além disso, o SIB deixa uma lacuna significativa em todas as 9 células.</span> <span class="s" data-s="b9-p2-s1">Embora seja o melhor método avaliado, ele não elimina o gap geográfico.</span> <span class="s" data-s="b9-p2-s2">Em benchmarks externos como o S-EO, o SIB pode até performar pior que o vanilla em algumas células (1.57 mIoU abaixo), sugerindo que a adaptação é sensível à distribuição específica dos dados de destino.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.24904/figure3.webp" alt="Curvas de risco-cobertura para pixels foreground. O LOCO acumula maior risco (delta AURC positivo) em relação ao limite superior. O FDA e o SIB reduzem esse gap. O inset mostra que o gap foreground replica no benchmark INRIA de contornos de edifícios, sugerindo generalidade do fenômeno." loading="lazy">
+          <figcaption>
+            Curvas de risco-cobertura para pixels foreground. O LOCO acumula maior risco (delta AURC positivo) em relação ao limite superior. O FDA e o SIB reduzem esse gap. O inset mostra que o gap foreground replica no benchmark INRIA de contornos de edifícios, sugerindo generalidade do fenômeno.
+            <span class="source">Figura 3 do paper · Mittal et al., arXiv:2611.24904</span>
+          </figcaption>
+        </figure>
+        <aside class="callout">
+          <h3><span class="s" data-s="b11-t">O Gap Persiste Mesmo com Mais Dados</span></h3>
+          <p><span class="s" data-s="b11-c-s0">O aumento do tamanho do conjunto de treinamento de 225 para 900 imagens não elimina o gap de transferência geográfica.</span> <span class="s" data-s="b11-c-s1">Isso confirma que o problema não é falta de dados, mas sim um desvio de distribuição que requer adaptação estrutural ou de features, não apenas estatística.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b12-h">Conclusão e Impacto</span></h2>
+<p><span class="s" data-s="b12-p0-s0">O ShadowTransfer estabelece um novo padrão para avaliação de transferência geográfica em segmentação densa.</span> <span class="s" data-s="b12-p0-s1">Ao fornecer um protocolo LOCO rigoroso, um dataset anotado com alta qualidade e um framework de diagnóstico, os autores fornecem à comunidade uma ferramenta para medir o risco real de implantação de modelos de visão computacional em novas regiões.</span></p><p><span class="s" data-s="b12-p1-s0">A descoberta de que a falha opera no espaço de features e se manifesta como colapso de confiança assimétrico muda a forma como devemos abordar a adaptação de domínio.</span> <span class="s" data-s="b12-p1-s1">Em vez de aplicar técnicas genéricas de equalização, devemos diagnosticar o componente arquitetônico afetado.</span> <span class="s" data-s="b12-p1-s2">O SIB demonstra que módulos plug-in, desenhados com base nesse diagnóstico, podem recuperar parte significativa da performance perdida.</span></p><p><span class="s" data-s="b12-p2-s0">Os autores liberam o benchmark, os splits LOCO, o código de treinamento e os modelos treinados.</span> <span class="s" data-s="b12-p2-s1">Isso permite que a comunidade reproduza e estenda os resultados.</span> <span class="s" data-s="b12-p2-s2">O paper não vende o SIB como uma solução final, mas como um instrumento de avaliação e um ponto de partida para entender a robustez geográfica de modelos de visão computacional.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b13-t">Generalidade Além das Sombras</span></h3>
+          <p><span class="s" data-s="b13-c-s0">As descobertas do diagnóstico de falha replicam no benchmark INRIA de contornos de edifícios.</span> <span class="s" data-s="b13-c-s1">Isso sugere que o fenômeno de colapso de confiança e desvio de features é uma característica geral da transferência geográfica em segmentação densa, não um artefato específico da detecção de sombras.</span></p>
+        </aside>
+
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">O ShadowTransfer é o primeiro benchmark com rótulos humanos e protocolo LOCO para medir a queda de performance em detecção de sombras aéreas entre cidades.</span></li><li><span class="s" data-s="k1">A transferência geográfica falha no espaço de features, causando colapso de confiança nas sombras, não apenas erro de classificação.</span></li><li><span class="s" data-s="k2">Métodos genéricos de adaptação de domínio frequentemente falham; a recuperação depende de ajustar componentes específicos da arquitetura (encoder vs decoder).</span></li><li><span class="s" data-s="k3">O módulo SIB, baseado no diagnóstico, reduz o gap de performance para 6.42 mIoU, competindo com o melhor método existente (FDA).</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.24904" rel="noopener">ShadowTransfer: A Geographic Transfer Benchmark for Overhead Shadow Detection</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.24904" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

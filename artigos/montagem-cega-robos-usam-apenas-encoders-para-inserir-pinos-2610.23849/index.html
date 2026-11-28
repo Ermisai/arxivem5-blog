@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Montagem cega: robôs usam apenas encoders para inserir pinos e engrenagens — arXiv em 5</title>
+<meta name="description" content="Um paper do MIT mostra que políticas de reforço treinadas apenas com dados proprioceptivos (posição e velocidade das juntas) conseguem realizar montagem de precisão no mundo real, sem visão ou sensores de força.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Montagem cega: robôs usam apenas encoders para inserir pinos e engrenagens">
+<meta property="og:description" content="Um paper do MIT mostra que políticas de reforço treinadas apenas com dados proprioceptivos (posição e velocidade das juntas) conseguem realizar montagem de precisão no mundo real, sem visão ou sensores de força.">
+<meta property="og:image" content="../../assets/papers/2610.23849/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Robótica</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2610.23849" rel="noopener">arXiv:2610.23849</a>
+    </div>
+    <h1><span class="s" data-s="t">Montagem cega: robôs usam apenas encoders para inserir pinos e engrenagens</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um paper do MIT mostra que políticas de reforço treinadas apenas com dados proprioceptivos (posição e velocidade das juntas) conseguem realizar montagem de precisão no mundo real, sem visão ou sensores de força.</span></p>
+    <p class="byline">
+      <span>Bronars et al.</span>
+      <span>7 min de leitura</span>
+<span>16/10/2026</span>    </p>
+    <div class="listen" data-article="2610.23849" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=hj1Iajo5awI" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema da montagem precisa sem visão</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Robôs humanoides e quadrúpedes já exploram há anos a propriocepção para locomoção.</span> <span class="s" data-s="b0-p0-s1">Ao sentir as forças que atravessam seus membros, eles conseguem caminhar, correr e subir escadas sem depender de visão.</span> <span class="s" data-s="b0-p0-s2">No entanto, esses cenários envolvem contatos grandes e forceiros, onde as juntas se deformam de forma mensurável.</span> <span class="s" data-s="b0-p0-s3">A montagem de precisão, por outro lado, opera em um regime oposto: o robô precisa encontrar uma abertura com folga de milímetros, engrenar dentes de engrenagem ou rosquear uma porca, tudo através de contatos leves onde o efeito nas juntas é sutil e fácil de perder.</span></p><p><span class="s" data-s="b0-p1-s0">O paper &#39;Blind Precise Assembly: Proprioceptive Sim-to-Real Peg-in-Hole for Diverse Parts&#39;, dos autores Antonia Bronars, Younghyo Park, Kushal Kedia e Pulkit Agrawal, do Massachusetts Institute of Technology, investiga se os sensores internos de um robô são suficientes para tarefas de montagem complexas.</span> <span class="s" data-s="b0-p1-s1">A pergunta central é se a informação contida nos encoders das juntas, combinada com uma história recente de movimentos, carrega dados suficientes para guiar o robô até o alinhamento correto, sem necessidade de câmeras ou sensores de força externos.</span></p><p><span class="s" data-s="b0-p2-s0">Os autores treinam políticas de montagem &#39;cegas&#39; que observam apenas uma curta história de posições e velocidades das juntas, além de suas próprias ações anteriores.</span> <span class="s" data-s="b0-p2-s1">Não há informação visual, de força, torque ou tato.</span> <span class="s" data-s="b0-p2-s2">As poses das peças e da fixture (suporte) são desconhecidas, e a pegada (grasp) é randomizada significativamente.</span> <span class="s" data-s="b0-p2-s3">O robô deve, portanto, montar as peças exclusivamente através do contato, percebido apenas por sua própria propriocepção.</span></p><p><span class="s" data-s="b0-p3-s0">O treinamento é feito inteiramente em simulação, usando Reinforcement Learning (RL), sobre peças, pegadas e contatos randomizados.</span> <span class="s" data-s="b0-p3-s1">As políticas aprendem a realizar três tarefas distintas: inserção de pino (peg insertion), engrenamento de engrenagens (gear meshing) e rosqueamento de porcas (nut threading).</span> <span class="s" data-s="b0-p3-s2">O foco principal do paper é validar se essa abordagem funciona e como ela se compara a métodos visuais tradicionais.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.23849/figure1.webp" alt="Um robô insere pinos de diferentes formatos e tamanhos no mundo real usando apenas seus encoders de juntas e ações anteriores, sem nenhum sensor visual ou de força." loading="lazy">
+          <figcaption>
+            Um robô insere pinos de diferentes formatos e tamanhos no mundo real usando apenas seus encoders de juntas e ações anteriores, sem nenhum sensor visual ou de força.
+            <span class="source">Figura 1 do paper · Bronars et al., arXiv:2610.23849</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">Arquitetura e o gerador procedural mjfit</span></h2>
+<p><span class="s" data-s="b2-p0-s0">A arquitetura da política é projetada para extrair o estado de contato a partir de sinais ruidosos.</span> <span class="s" data-s="b2-p0-s1">O modelo recebe uma janela temporal de 30 observações (0.6 segundos) de posições e velocidades das juntas, a pose e o twist (rotação) do gripper calculados a partir delas, e a ação anterior.</span> <span class="s" data-s="b2-p0-s2">Uma Convolutional Temporal Network (TCN) comprime essa história em um vetor latente z_t.</span> <span class="s" data-s="b2-p0-s3">Um MLP (Multi-Layer Perceptron) mapeia esse latente e a observação atual para gerar os alvos de posição das juntas.</span> <span class="s" data-s="b2-p0-s4">Essa estrutura permite que a política construa uma representação interna do estado de contato, mesmo sem ver a peça.</span></p><p><span class="s" data-s="b2-p1-s0">Um dos maiores desafios técnicos para treinar esse tipo de política é a simulação precisa de contatos com folgas milimétricas.</span> <span class="s" data-s="b2-p1-s1">No MuJoCo, criar furos manualmente a partir de primitivas convexas não escala para formas aleatórias.</span> <span class="s" data-s="b2-p1-s2">Alternativas automáticas, como decomposição convexa ou colisão baseada em campos de distância assinada (SDF), são menos precisas e mais lentas nessas escalas de folga.</span> <span class="s" data-s="b2-p1-s3">Para resolver isso, os autores desenvolveram o mjfit, um gerador procedural que constrói pinos e furos a partir de contornos planares arbitrários, bem como roscas e engrenagens, usando prismas convexos exatos.</span> <span class="s" data-s="b2-p1-s4">Isso garante precisão física e velocidade de simulação necessárias para o treinamento em larga escala.</span></p><p><span class="s" data-s="b2-p2-s0">O treinamento exige milhares de assemblies diferentes, cada um simulado com sua folga intacta.</span> <span class="s" data-s="b2-p2-s1">A randomização é agressiva: a geometria das peças, as propriedades de contato, a pose da fixture e a pegada da peça são variadas a cada episódio.</span> <span class="s" data-s="b2-p2-s2">Isso força a política a aprender invariantes de contato que são robustos a variações geométricas, em vez de memorizar trajetórias específicas.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.23849/figure2.webp" alt="Exemplos das três tarefas de montagem estudadas: (a-c) inserção de pino, engrenagem e rosca, mostrando o estado inicial e o sucesso final. (d-f) Variações de geometria, como pinos com formato de estádio, conjuntos de engrenagens e porcas." loading="lazy">
+          <figcaption>
+            Exemplos das três tarefas de montagem estudadas: (a-c) inserção de pino, engrenagem e rosca, mostrando o estado inicial e o sucesso final. (d-f) Variações de geometria, como pinos com formato de estádio, conjuntos de engrenagens e porcas.
+            <span class="source">Figura 2 do paper · Bronars et al., arXiv:2610.23849</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b4-h">Resultados: Propriocepção é suficiente?</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Os experimentos confirmam que a propriocepção é suficiente para aprender tarefas de montagem precisa.</span> <span class="s" data-s="b4-p0-s1">Em geometrias dentro da distribuição de treinamento, todas as três tarefas atingem sucesso quase perfeito.</span> <span class="s" data-s="b4-p0-s2">A história das juntas carrega informação suficiente sobre o contato para encontrar aberturas, alinhar dentes e engatar rosca.</span> <span class="s" data-s="b4-p0-s3">No entanto, há um trade-off: as políticas cegas tendem a ser mais lentas que as políticas visuais.</span> <span class="s" data-s="b4-p0-s4">Como não veem a abertura, a política cega deve procurá-la através do contato, seguindo um caminho menos direto e assentando a peça mais tarde do que uma política que vê a posição exata.</span></p><p><span class="s" data-s="b4-p1-s0">Apesar da lentidão, a eficiência da busca reativa supera métodos baseados em scripts.</span> <span class="s" data-s="b4-p1-s1">Um baseline comum para montagem cega é a busca espiral, onde o robô move o pino em espiral para fora até que ele caia no furo.</span> <span class="s" data-s="b4-p1-s2">A política aprendida via RL viaja muito menos lateralmente do que esse padrão fixo.</span> <span class="s" data-s="b4-p1-s3">Ela usa a informação coletada pelo contato, como o pino pegando a borda da abertura, para ajustar sua trajetria em tempo real, tornando a busca mais eficiente do que um script cego.</span></p><p><span class="s" data-s="b4-p2-s0">Para entender se a política está realmente &#39;entendendo&#39; o contato ou apenas seguindo padrões, os autores analisaram o vetor latente z_t.</span> <span class="s" data-s="b4-p2-s1">Eles rotularam estados em sete modos de tarefa (levantado, ao lado da placa, buscando longe, buscando perto, parcialmente engatado, totalmente dentro, travado) e ajustaram um classificador linear simples para prever o modo a partir de z_t.</span> <span class="s" data-s="b4-p2-s2">O classificador separou os modos com alta acurácia (61-73%), muito acima do acaso (14%).</span> <span class="s" data-s="b4-p2-s3">Isso prova que o latente codifica informações relevantes para a tarefa e que a política depende dessas inferências para escolher ações.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.23849/figure7.webp" alt="Arquitetura da política: uma TCN comprime as últimas 30 observações proprioceptivas em um vetor latente z_t, que é combinado com a observação atual em um MLP para gerar os alvos de posição das juntas." loading="lazy">
+          <figcaption>
+            Arquitetura da política: uma TCN comprime as últimas 30 observações proprioceptivas em um vetor latente z_t, que é combinado com a observação atual em um MLP para gerar os alvos de posição das juntas.
+            <span class="source">Figura 7 do paper · Bronars et al., arXiv:2610.23849</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b6-h">Generalização: Cego vs. Visual</span></h2>
+<p><span class="s" data-s="b6-p0-s0">Um dos achados mais interessantes do paper é a capacidade de generalização.</span> <span class="s" data-s="b6-p0-s1">Políticas cegas generalizam melhor para formas e tamanhos de peças não vistos durante o treinamento do que políticas visuais.</span> <span class="s" data-s="b6-p0-s2">Isso ocorre porque uma política baseada em visão depende da aparência visual da peça, que pode mudar drasticamente com novas geometrias.</span> <span class="s" data-s="b6-p0-s3">Já uma política cega depende da peça apenas através de seus contatos físicos.</span> <span class="s" data-s="b6-p0-s4">Se o contato físico se mantém consistente (mesma folga, mesma rigidez), a política consegue se adaptar, mesmo que a peça pareça diferente visualmente.</span></p><p><span class="s" data-s="b6-p1-s0">Em comparações controladas na simulação, políticas visuais sofrem uma degradação maior quando expostas a novas geometrias, enquanto as políticas cegas mantêm um desempenho mais estável.</span> <span class="s" data-s="b6-p1-s1">Isso não significa que a visão seja inútil, mas destaca uma vantagem específica da propriocepção pura em cenários de alta aleatoriedade geométrica onde o calibração visual é cara ou difícil de manter.</span></p><p><span class="s" data-s="b6-p2-s0">Os autores também verificaram que a política cega não aprende padrões fechados (open-loop).</span> <span class="s" data-s="b6-p2-s1">Ao trocar o latente de um estado por outro de um modo diferente, a ação muda significativamente (1.3 a 3.0 vezes mais do que trocas dentro do mesmo modo).</span> <span class="s" data-s="b6-p2-s2">Isso confirma que a política reage dinamicamente ao estado inferido de contato, ajustando seu comportamento em tempo real conforme a peça se encaixa.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2610.23849/figure12.webp" alt="Resultados no mundo real: a política cega, sem fine-tuning, insere pinos de diferentes formas e tamanhos com 73% de sucesso em 237 ensaios, comparável ao desempenho em simulação." loading="lazy">
+          <figcaption>
+            Resultados no mundo real: a política cega, sem fine-tuning, insere pinos de diferentes formas e tamanhos com 73% de sucesso em 237 ensaios, comparável ao desempenho em simulação.
+            <span class="source">Figura 12 do paper · Bronars et al., arXiv:2610.23849</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Transferência Sim-to-Real e Limitações</span></h2>
+<p><span class="s" data-s="b8-p0-s0">A transferência para o mundo real foi realizada sem fine-tuning (ajuste fino).</span> <span class="s" data-s="b8-p0-s1">A política treinada em simulação foi implantada diretamente em um robô físico.</span> <span class="s" data-s="b8-p0-s2">Ela conseguiu inserir pinos de oito seções transversais diferentes, três deles fora da distribuição de treinamento, com folgas de 0.5 a 1.5 mm por lado.</span> <span class="s" data-s="b8-p0-s3">Em 237 ensaios, a taxa de sucesso foi de 73%.</span> <span class="s" data-s="b8-p0-s4">Os autores afirmam ser esta a primeira demonstração de tal feito para montagem precisa sem visão ou sensores de força externos.</span></p><p><span class="s" data-s="b8-p1-s0">Apesar do sucesso, há limitações claras.</span> <span class="s" data-s="b8-p1-s1">A taxa de sucesso de 73% não é perfeita, e a política é mais lenta que as alternativas visuais.</span> <span class="s" data-s="b8-p1-s2">Além disso, o método depende criticamente da qualidade da simulação e da precisão dos encoders.</span> <span class="s" data-s="b8-p1-s3">Ruídos excessivos nos sensores ou discrepâncias grandes entre simulação e realidade (sim-to-real gap) podem degradar o desempenho.</span> <span class="s" data-s="b8-p1-s4">O paper não aborda a robustez a desgaste mecânico ou variações térmicas que afetam as folgas.</span></p><p><span class="s" data-s="b8-p2-s0">Outra limitação é a complexidade do treinamento.</span> <span class="s" data-s="b8-p2-s1">São necessários milhares de assemblies procedurais gerados pelo mjfit, o que exige recursos computacionais significativos para a simulação paralela.</span> <span class="s" data-s="b8-p2-s2">Embora o mjfit seja mais rápido que métodos SDF, a escala de treinamento ainda é um barrier de entrada para implementações em larga escala sem infraestrutura dedicada.</span></p><p><span class="s" data-s="b8-p3-s0">Em resumo, o paper demonstra que a propriocepção é uma fonte de informação poderosa e subutilizada para montagem de precisão.</span> <span class="s" data-s="b8-p3-s1">Ao eliminar a dependência de visão, os robôs se tornam mais robustos a variações geométricas e menos dependentes de calibração complexa.</span> <span class="s" data-s="b8-p3-s2">Embora mais lentos, os agentes cegos aprendem comportamentos reativos e inteligentes que generalizam bem, oferecendo um caminho alternativo viável para a automação industrial em cenários de alta variabilidade.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Robôs podem realizar montagem de precisão usando apenas encoders de juntas, sem câmeras ou sensores de força/torque.</span></li><li><span class="s" data-s="k1">Políticas &#39;cegas&#39; generalizam melhor para peças não vistas durante o treinamento do que políticas baseadas em visão.</span></li><li><span class="s" data-s="k2">A inserção de pinos no mundo real atingiu 73% de sucesso em 237 ensaios, sem fine-tuning (ajuste fino).</span></li><li><span class="s" data-s="k3">Os autores lançaram um gerador procedural (mjfit) para criar geometrias precisas no MuJoCo, superando métodos convexos padrão.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2610.23849" rel="noopener">Blind Precise Assembly: Proprioceptive Sim-to-Real Peg-in-Hole for Diverse Parts</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2610.23849" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

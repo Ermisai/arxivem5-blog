@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Metal Sandbox: Agendamento de Comandos para Agentes de Código em Apple Silicon — arXiv em 5</title>
+<meta name="description" content="Este paper apresenta uma infraestrutura para isolar e agendar comandos de agentes de IA em Macs M4, reduzindo ociosidade da GPU e aumentando o throughput de geração de kernels Metal.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Metal Sandbox: Agendamento de Comandos para Agentes de Código em Apple Silicon">
+<meta property="og:description" content="Este paper apresenta uma infraestrutura para isolar e agendar comandos de agentes de IA em Macs M4, reduzindo ociosidade da GPU e aumentando o throughput de geração de kernels Metal.">
+<meta property="og:image" content="../../assets/papers/2611.17294/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Agentes</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.17294" rel="noopener">arXiv:2611.17294</a>
+    </div>
+    <h1><span class="s" data-s="t">Metal Sandbox: Agendamento de Comandos para Agentes de Código em Apple Silicon</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Este paper apresenta uma infraestrutura para isolar e agendar comandos de agentes de IA em Macs M4, reduzindo ociosidade da GPU e aumentando o throughput de geração de kernels Metal.</span></p>
+    <p class="byline">
+      <span>Wang et al.</span>
+      <span>7 min de leitura</span>
+<span>12/11/2026</span>    </p>
+    <div class="listen" data-article="2611.17294" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=713b2LwRi54" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Ineficiência em Sessões de Agentes</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A inferência eficiente em dispositivos (on-device) exige kernels que utilizem os aceleradores locais de forma efetiva.</span> <span class="s" data-s="b0-p0-s1">No ecossistema Apple, a API Metal e a linguagem de shading são fundamentais para aproveitar os chips da série M em Macs e da série A em iPhones.</span> <span class="s" data-s="b0-p0-s2">A memória unificada desses processadores facilita o fluxo de trabalho entre CPU e GPU, sendo essencial para frameworks como o MLX.</span> <span class="s" data-s="b0-p0-s3">Melhorar a capacidade dos modelos de linguagem de gerar kernels Metal eficientes é crucial para otimizar aplicações em dispositivos Apple.</span></p><p><span class="s" data-s="b0-p1-s0">Modelos de linguagem podem gerar e iterativamente melhorar kernels de GPU usando feedback de compiladores, correção e desempenho.</span> <span class="s" data-s="b0-p1-s1">Projetos como KernelBench e KernelGYM fornecem ambientes de avaliação e coleta de dados para essa tarefa.</span> <span class="s" data-s="b0-p1-s2">No entanto, o treinamento e a avaliação desses modelos requerem agentes interativos que preparam dependências, editam programas, compilam candidatos e obtêm feedback.</span> <span class="s" data-s="b0-p1-s3">Esses agentes alternam entre solicitações ao modelo, edição de código, preparação de CPU e execução de candidatos na GPU.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.17294/figure1.webp" alt="Gráfico de timeline mostrando que a GPU ativa representa apenas 2,32% do tempo total de uma sessão de agente, indicando alta ociosidade." loading="lazy">
+          <figcaption>
+            Gráfico de timeline mostrando que a GPU ativa representa apenas 2,32% do tempo total de uma sessão de agente, indicando alta ociosidade.
+            <span class="source">Figura 1 do paper · Wang et al., arXiv:2611.17294</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">Análise da Ociosidade da GPU</span></h2>
+<p><span class="s" data-s="b2-p0-s0">A observação crítica feita pelos autores é que a capacidade da GPU fica ociosa por grande parte do tempo de execução de um agente.</span> <span class="s" data-s="b2-p0-s1">Em uma sessão típica de geração de kernel Metal, registrada com Apple Instruments Metal System Trace, a atividade da GPU totalizou apenas 44,0 segundos em 31,6 minutos.</span> <span class="s" data-s="b2-p0-s2">Isso representa 2,32% do tempo total da sessão.</span> <span class="s" data-s="b2-p0-s3">A maior parte do tempo é gasta em fases que não envolvem execução direta na GPU, como solicitações ao modelo e preparação de arquivos.</span></p><p><span class="s" data-s="b2-p1-s0">Essa disparidade sugere que o gargalo não é a capacidade de computação da GPU, mas sim a coordenação entre as fases do agente e a execução.</span> <span class="s" data-s="b2-p1-s1">Se múltiplos agentes rodarem simultaneamente no mesmo hardware, as filas de comandos podem ficar desbalanceadas, levando a tempos de espera longos.</span> <span class="s" data-s="b2-p1-s2">A solução proposta deve permitir que comandos paralelos (como edição de texto) rodem livremente, enquanto comandos que usam a GPU sejam agendados de forma a maximizar o uso do acelerador.</span></p>        <h2><span class="s" data-s="b3-h">Metal Sandbox: Isolamento e Agendamento</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Metal Sandbox é a infraestrutura proposta para resolver esses problemas.</span> <span class="s" data-s="b3-p0-s1">Ela combina três componentes principais: acesso restrito a arquivos por instância, execução nativa de comandos e agendamento de comandos entre Macs interconectados.</span> <span class="s" data-s="b3-p0-s2">Cada agente mantém seu próprio espaço de trabalho e ambiente de desenvolvimento privado, isolado do host e de outros agentes.</span> <span class="s" data-s="b3-p0-s3">Isso é necessário porque agentes precisam de shell commands, compiladores e programas Metal sem acesso irrestrito aos arquivos do usuário host.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b4-t">Isolamento de Arquivos no macOS</span></h3>
+          <p><span class="s" data-s="b4-c-s0">Docker containers e VMs macOS fornecem sistemas de arquivos separados.</span> <span class="s" data-s="b4-c-s1">No entanto, Docker Desktop executa dentro de uma VM Linux, e seu suporte a GPU requer Windows com WSL 2.</span> <span class="s" data-s="b4-c-s2">VMs macOS oferecem um ambiente convidado, mas a isolação nativa do macOS entre sessões de agente é limitada.</span> <span class="s" data-s="b4-c-s3">Metal Sandbox contorna isso com permissões restritas por instância.</span></p>
+        </aside>
+        <figure class="figure">
+          <img src="../../assets/papers/2611.17294/figure2.webp" alt="Diagrama do sistema mostrando como comandos paralelos são executados imediatamente, enquanto comandos serializados entram em fila e podem migrar para outros nós." loading="lazy">
+          <figcaption>
+            Diagrama do sistema mostrando como comandos paralelos são executados imediatamente, enquanto comandos serializados entram em fila e podem migrar para outros nós.
+            <span class="source">Figura 2 do paper · Wang et al., arXiv:2611.17294</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b6-h">Mecanismo de Agendamento de Comandos</span></h2>
+<p><span class="s" data-s="b6-p0-s0">O núcleo do Metal Sandbox é o agendamento de comandos em nível de comando.</span> <span class="s" data-s="b6-p0-s1">Os comandos são classificados em duas categorias: paralelos e seriados.</span> <span class="s" data-s="b6-p0-s2">Comandos paralelos, como inspeção e edição de arquivos, não precisam da GPU e podem rodar concorrentemente sem esperar por nenhuma fila.</span> <span class="s" data-s="b6-p0-s3">Comandos seriados, que executam ou cronometram trabalho na GPU, entram em uma fila serial em cada Mac.</span> <span class="s" data-s="b6-p0-s4">Apenas um comando serial pode usar a GPU por nó a qualquer momento.</span></p>        <h2><span class="s" data-s="b7-h">Migração de Comandos entre Nós</span></h2>
+<p><span class="s" data-s="b7-p0-s0">A serialização por nó, por si só, não resolve o desbalanceamento de carga.</span> <span class="s" data-s="b7-p0-s1">Em clusters de Macs, alguns nós podem ter filas longas enquanto outros estão ociosos.</span> <span class="s" data-s="b7-p0-s2">Metal Sandbox permite que comandos seriados elegíveis migrem para Macs disponíveis.</span> <span class="s" data-s="b7-p0-s3">Isso ocorre através de um protocolo de reserva, reivindicação e confirmação.</span> <span class="s" data-s="b7-p0-s4">Se um comando está esperando na fila de um nó ocupado, ele pode ser movido para um nó livre, executado lá e retornar o resultado para o agente original.</span></p>        <h2><span class="s" data-s="b8-h">Integração com Harbor e Workflow</span></h2>
+<p><span class="s" data-s="b8-p0-s0">A infraestrutura se integra ao Harbor, que suporta tarefas de execução, verificação automática e coleta de trajetórias.</span> <span class="s" data-s="b8-p0-s1">Isso permite um workflow comum para agentes como Claude Code, Codex e mini-SWE-agent.</span> <span class="s" data-s="b8-p0-s2">O controlador gerencia as solicitações, e os nós executam os comandos.</span> <span class="s" data-s="b8-p0-s3">A integração facilita a coleta de dados para treinamento de modelos, já que as trajetórias de execução são registradas e verificadas numericamente.</span></p>        <h2><span class="s" data-s="b9-h">Configuração Experimental</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Os experimentos foram conduzidos em quatro Mac mini com processadores Apple M4, 32 GiB de memória por nó e macOS 27.0.1.</span> <span class="s" data-s="b9-p0-s1">Os nós são interconectados por uma switch de Ethernet gigabit.</span> <span class="s" data-s="b9-p0-s2">Dois owners (instâncias de controle) são preparados por nó.</span> <span class="s" data-s="b9-p0-s3">Workspaces compartilhados usam montagens SMB em caminhos absolutos correspondentes, e solicitações de controle usam CLI remoto via SSH.</span></p>        <h2><span class="s" data-s="b10-h">Cargas de Trabalho e Kernels Metal</span></h2>
+<p><span class="s" data-s="b10-p0-s0">As cargas de trabalho consistem em seis kernels Metal escritos à mão, incluindo operações de matriz e convolução.</span> <span class="s" data-s="b10-p0-s1">Os inputs são arrays determinísticos de float32.</span> <span class="s" data-s="b10-p0-s2">Um runner em Objective-C++ é compilado com -O2 antes dos batches medidos.</span> <span class="s" data-s="b10-p0-s3">Cada comando carrega e compila a fonte Metal, cria seu pipeline e buffers, e submete o kernel repetidamente.</span> <span class="s" data-s="b10-p0-s4">Após cada submissão, o sistema espera até a conclusão (waitUntilCompleted()) para ler timestamps de início e fim da GPU.</span></p>        <h2><span class="s" data-s="b11-h">Protocolo de Medição</span></h2>
+<p><span class="s" data-s="b11-p0-s0">Cinco submissões servem para aquecimento (warmup), seguidas por pelo menos trinta amostras de timestamp válidas.</span> <span class="s" data-s="b11-p0-s1">O loop repete submissões até que o tempo decorrido atinja um mínimo de dois ou seis segundos, incluindo encoding, submissão e espera.</span> <span class="s" data-s="b11-p0-s2">Os resultados são escritos para verificação de correza externa.</span> <span class="s" data-s="b11-p0-s3">O throughput é medido como o número de comandos completados dividido pelo tempo do batch, expresso em comandos por hora.</span></p>        <h2><span class="s" data-s="b12-h">Baselines e Design de Comparação</span></h2>
+<p><span class="s" data-s="b12-p0-s0">A comparação mantém constantes o controlador, implementações Metal, máquinas, cargas de trabalho, runner, armazenamento compartilhado e verificador numérico.</span> <span class="s" data-s="b12-p0-s1">Dois baselines são comparados: agendamento estático (comandos executam no nó proprietário, sem migração) e agendamento dinâmico (comandos seriados podem migrar para nós disponíveis).</span> <span class="s" data-s="b12-p0-s2">As submissões podem ser balanceadas (round-robin entre nós) ou concentradas (todos os comandos submetidos através de duas instâncias no nó de gerenciamento).</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.17294/figure5.webp" alt="Gráfico de barras mostrando a redução no tempo de batch e na espera de ferramentas com agendamento dinâmico em submissão concentrada." loading="lazy">
+          <figcaption>
+            Gráfico de barras mostrando a redução no tempo de batch e na espera de ferramentas com agendamento dinâmico em submissão concentrada.
+            <span class="source">Figura 5 do paper · Wang et al., arXiv:2611.17294</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b14-h">Resultados: Throughput e Escalabilidade</span></h2>
+<p><span class="s" data-s="b14-p0-s0">Os resultados mostram ganhos significativos de throughput.</span> <span class="s" data-s="b14-p0-s1">Em submissões balanceadas com 12 comandos por batch, a execução estática diminui o tempo de batch de 25,2 segundos (1 nó) para 6,62 segundos (4 nós).</span> <span class="s" data-s="b14-p0-s2">Com agendamento dinâmico, os tempos são 25,1, 12,8 e 6,61 segundos.</span> <span class="s" data-s="b14-p0-s3">Em batches balanceados, nenhum comando migra, pois a carga já está distribuída.</span> <span class="s" data-s="b14-p0-s4">O ganho vem da execução paralela nos nós disponíveis.</span></p>        <h2><span class="s" data-s="b15-h">Resultados: Submissão Concentrada</span></h2>
+<p><span class="s" data-s="b15-p0-s0">O ganho real da migração aparece em submissões concentradas, onde todos os comandos são submetidos através de um único nó.</span> <span class="s" data-s="b15-p0-s1">Nesse cenário, o agendamento dinâmico permite que comandos em espera migrem para os outros três nós ociosos.</span> <span class="s" data-s="b15-p0-s2">Isso resulta em um aumento de 1,68x a 2,05x no throughput de comandos sob demanda concentrada, comparado ao agendamento estático.</span> <span class="s" data-s="b15-p0-s3">A migração equilibra a carga e reduz drasticamente o tempo de espera na fila.</span></p>        <h2><span class="s" data-s="b16-h">Replay de Trajetórias de Agentes</span></h2>
+<p><span class="s" data-s="b16-p0-s0">Os autores também repliaram 16 trajetórias estáticas de agentes sob agendamento dinâmico.</span> <span class="s" data-s="b16-p0-s1">As trajetórias foram medidas em condições reais, capturando tempos de espera e execução.</span> <span class="s" data-s="b16-p0-s2">A simulação mostrou uma redução de 18,8% no tempo médio de espera de ferramentas e uma redução de 22,3% no tempo elapsed do batch.</span> <span class="s" data-s="b16-p0-s3">Isso assume durações de fase inalteradas, focando apenas no impacto do agendamento.</span></p>        <h2><span class="s" data-s="b17-h">Limitações e Escopo</span></h2>
+<p><span class="s" data-s="b17-p0-s0">O estudo se limita a quatro Mac mini M4.</span> <span class="s" data-s="b17-p0-s1">A escalabilidade para clusters maiores não é medida.</span> <span class="s" data-s="b17-p0-s2">As cargas de trabalho são kernels Metal específicos e determinísticos, o que pode não representar a variabilidade de cargas de trabalho de IA geral.</span> <span class="s" data-s="b17-p0-s3">A migração de comandos adiciona overhead de comunicação de rede, que foi minimizado mas não eliminado.</span> <span class="s" data-s="b17-p0-s4">O sistema é projetado para treinamento e avaliação de modelos geradores de kernels, não para inferência em produção.</span></p>        <h2><span class="s" data-s="b18-h">Conclusão</span></h2>
+<p><span class="s" data-s="b18-p0-s0">Metal Sandbox oferece uma infraestrutura robusta para treinar e avaliar modelos que geram kernels Apple Metal.</span> <span class="s" data-s="b18-p0-s1">Ao combinar isolamento de arquivos, execução nativa e agendamento dinâmico de comandos, ela maximiza o uso da GPU em clusters de Macs.</span> <span class="s" data-s="b18-p0-s2">Os resultados mostram ganhos de throughput e redução de espera, tornando o ciclo de desenvolvimento de kernels mais eficiente.</span> <span class="s" data-s="b18-p0-s3">O código-fonte do Metal Sandbox e do Harbor está disponível no GitHub.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">A GPU fica ociosa por mais de 97% do tempo em sessões individuais de agentes de código, criando um gargalo de coordenação.</span></li><li><span class="s" data-s="k1">O agendamento dinâmico permite a migração de comandos serializados entre Macs, equilibrando a carga e aumentando o throughput em até 2,05x.</span></li><li><span class="s" data-s="k2">O isolamento de arquivos por instância é crucial para permitir a execução segura e concorrente de múltiplos agentes em um mesmo hardware.</span></li><li><span class="s" data-s="k3">A integração com o Harbor facilita a coleta de trajetórias e verificação automática, essencial para o treinamento de modelos geradores de kernels.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.17294" rel="noopener">Metal Sandbox: Isolated Execution and Command Scheduling for GPU Coding Agents on Apple Silicon</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.17294" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

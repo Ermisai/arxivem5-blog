@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Motion Mamba 2.0: Controle Humanóide de Longo Prazo com Memória Persistente e Inferência Otimizada — arXiv em 5</title>
+<meta name="description" content="Este paper apresenta uma arquitetura híbrida que combina Mamba e atenção local para gerar movimento humanoide contínuo e controlável, resolvendo o problema de perda de contexto histórico e latência de inferência em tempo real.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Motion Mamba 2.0: Controle Humanóide de Longo Prazo com Memória Persistente e Inferência Otimizada">
+<meta property="og:description" content="Este paper apresenta uma arquitetura híbrida que combina Mamba e atenção local para gerar movimento humanoide contínuo e controlável, resolvendo o problema de perda de contexto histórico e latência de inferência em tempo real.">
+<meta property="og:image" content="../../assets/papers/2611.29897/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Robótica</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.29897" rel="noopener">arXiv:2611.29897</a>
+    </div>
+    <h1><span class="s" data-s="t">Motion Mamba 2.0: Controle Humanóide de Longo Prazo com Memória Persistente e Inferência Otimizada</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Este paper apresenta uma arquitetura híbrida que combina Mamba e atenção local para gerar movimento humanoide contínuo e controlável, resolvendo o problema de perda de contexto histórico e latência de inferência em tempo real.</span></p>
+    <p class="byline">
+      <span>Huang et al.</span>
+      <span>8 min de leitura</span>
+<span>23/11/2026</span>    </p>
+    <div class="listen" data-article="2611.29897" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=XsKZ6tl3i48" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Desafio do Contexto e da Latência em Controle Interativo</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Geração de movimento humanoide para robótica interativa exige mais do que síntese offline.</span> <span class="s" data-s="b0-p0-s1">Um sistema útil deve interpretar instruções de texto em mudança, acomodar restrições espaciais e continuar a partir do movimento já produzido, tudo isso em tempo real.</span> <span class="s" data-s="b0-p0-s2">Métodos autoregressivos tradicionais geram movimento janela por janela, mas enfrentam dois obstáculos fundamentais: a perda de contexto histórico e a sobrecarga computacional da inferência.</span></p><p><span class="s" data-s="b0-p1-s0">Em abordagens baseadas em difusão autoregressiva, o acesso ao histórico distante é limitado por caches de atenção de tamanho fixo.</span> <span class="s" data-s="b0-p1-s1">Isso força o modelo a esquecer eventos antigos, prejudicando a coerência em sequências longas.</span> <span class="s" data-s="b0-p1-s2">Alternativamente, manter um cache ilimitado aumenta exponencialmente o custo de armazenamento e computação.</span> <span class="s" data-s="b0-p1-s3">Além disso, o processo de denoising repetido para cada nova janela introduz uma latência significativa, inviabilizando o controle interativo responsivo.</span></p><p><span class="s" data-s="b0-p2-s0">Modelos de Espaço de Estado (SSMs), como o Mamba, oferecem uma alternativa ao armazenamento explícito de tokens históricos, resumindo a sequência em um estado recorrente compacto.</span> <span class="s" data-s="b0-p2-s1">No entanto, um estado comprimido e um cache de atenção expõem o histórico de maneiras diferentes: o primeiro carrega contexto evolutivo, enquanto o último permite recuperação direta.</span> <span class="s" data-s="b0-p2-s2">O desafio é integrar esses dois paradigmas para permitir controle espacial preciso e manutenção de contexto de longo prazo sem comprometer a velocidade.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.29897/figure1.webp" alt="Exemplo visual do robô Unitree G1 executando uma sequência longa de comandos de texto, demonstrando a capacidade do Motion Mamba 2.0 de gerar movimento contínuo guiado por texto para controle humanoide de longo prazo." loading="lazy">
+          <figcaption>
+            Exemplo visual do robô Unitree G1 executando uma sequência longa de comandos de texto, demonstrando a capacidade do Motion Mamba 2.0 de gerar movimento contínuo guiado por texto para controle humanoide de longo prazo.
+            <span class="source">Figura 1 do paper · Huang et al., arXiv:2611.29897</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">A Arquitetura Híbrida: Mamba, Atenção e Memória Persistente</span></h2>
+<p><span class="s" data-s="b2-p0-s0">O Motion Mamba 2.0 propõe uma arquitetura de difusão autoregressiva baseada em Mamba para o corpo raiz (root-body), integrando atenção local, estados recorrentes resumíveis e uma Memória de Conteúdo Persistente (PCM).</span> <span class="s" data-s="b2-p0-s1">A PCM é o componente central que resolve a tensão entre contexto global e controle local.</span> <span class="s" data-s="b2-p0-s2">Ela transforma o histórico de movimento comprimido nos estados recorrentes do Mamba, junto com mudanças de estado e características condicionadas por texto, em slots de conteúdo dinamicamente atualizados.</span></p><p><span class="s" data-s="b2-p1-s0">Esses slots de conteúdo são acessíveis à atenção local durante o processo de denoising.</span> <span class="s" data-s="b2-p1-s1">Isso permite que o modelo acesse informações históricas relevantes sem a penalidade computacional de processar toda a sequência de tokens.</span> <span class="s" data-s="b2-p1-s2">A arquitetura é dividida em dois estágios: uma rede raiz que prevê a trajetória global e um denoiser de difusão que gera a pose do corpo inteiro, condicionado pelas características locais da raiz.</span></p><p><span class="s" data-s="b2-p2-s0">O treinamento é realizado de forma conjunta, com o Mamba-3 e a PCM habilitados desde a inicialização.</span> <span class="s" data-s="b2-p2-s1">O codec de movimento G1 permanece congelado, enquanto as características de texto em cache fornecem o condicionamento.</span> <span class="s" data-s="b2-p2-s2">O objetivo de treinamento minimiza uma função de quatro termos, utilizando AdamW com um tamanho de lote global de 512, garantindo que o modelo aprenda a equilibrar a precisão espacial e a coerência temporal.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.29897/figure4.webp" alt="Diagrama da arquitetura híbrida Mamba-Atenção. O framework gera movimento autoregressivamente através de um denoiser de difusão de dois estágios, condicionado por texto, controles espaciais e histórico de movimento aceito." loading="lazy">
+          <figcaption>
+            Diagrama da arquitetura híbrida Mamba-Atenção. O framework gera movimento autoregressivamente através de um denoiser de difusão de dois estágios, condicionado por texto, controles espaciais e histórico de movimento aceito.
+            <span class="source">Figura 4 do paper · Huang et al., arXiv:2611.29897</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b4-h">Mecanismo de Inferência: Otimizações de Baixo Nível</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Além da inovação arquitetural, os autores desenvolvem um esquema de execução especializado para habilitar inferência eficiente.</span> <span class="s" data-s="b4-p0-s1">A latência de inferência é crítica para sistemas interativos, e o Motion Mamba 2.0 implementa três otimizações principais: replay de CUDA Graphs, kernels fundidos (fused kernels) e simplificação do fluxo de execução.</span> <span class="s" data-s="b4-p0-s2">Essas técnicas visam reduzir a sobrecarga do sistema sem alterar a lógica canônica de atualização do histórico.</span></p><p><span class="s" data-s="b4-p1-s0">O replay de CUDA Graphs permite capturar a sequência de operações do GPU e executá-las novamente com overhead mínimo, essencial para loops de inferência repetitivos.</span> <span class="s" data-s="b4-p1-s1">Os kernels fundidos combinam operações do Mamba (como transições A/DT) em etapas de pré-processamento, reduzindo a comunicação de memória.</span> <span class="s" data-s="b4-p1-s2">A simplificação do fluxo de execução remove etapas desnecessárias no pipeline de denoising.</span></p><p><span class="s" data-s="b4-p2-s0">Essas otimizações são projetadas para preservar os estados históricos comprometidos e os outputs gerados, garantindo que a aceleração não comprometa a fidelidade do modelo.</span> <span class="s" data-s="b4-p2-s1">A combinação dessas técnicas resulta em uma redução significativa da latência, tornando viável a execução em hardware de consumo, como a RTX 4090, para aplicações de controle em tempo real.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b5-t">Otimização de Inferência: 6x Mais Rápido</span></h3>
+          <p><span class="s" data-s="b5-c-s0">As otimizações de execução reduzem a latência mediana da janela completa de 1685.35 ms para 276.14 ms em uma RTX 4090, alcançando um speedup mediano de 6.138x.</span> <span class="s" data-s="b5-c-s1">Isso foi feito preservando idênticos outputs e estados comprometidos nos rollouts testados, demonstrando que eficiência e precisão não são mutuamente exclusivas nesta arquitetura.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b6-h">Avaliação: Qualidade, Arquitetura e Eficiência</span></h2>
+<p><span class="s" data-s="b6-p0-s0">A avaliação do Motion Mamba 2.0 abrange três perspectivas: qualidade de geração, eficácia arquitetural e eficiência de inferência.</span> <span class="s" data-s="b6-p0-s1">Nos benchmarks de horizonte curto e longo no HiPHI retargeted, o modelo demonstra controle terminal preciso em rollouts de até 39.52 segundos.</span> <span class="s" data-s="b6-p0-s2">Métricas como Root CE (Erro Quadrático Médio da Raiz) e End CE (Erro da Extremidade) mostram superioridade significativa em comparação com métodos anteriores como Go-to-Zero, DreamControl e MotionStreamer.</span></p><p><span class="s" data-s="b6-p1-s0">Em comparações de horizonte curto no BONES Seed e HumanML3D retargeted, o modelo mantém forte controle espacial e correspondência texto-movimento.</span> <span class="s" data-s="b6-p1-s1">As ablações arquitetônicas isolam as contribuições do modelamento recorrente e da PCM, confirmando que a memória persistente é crucial para estender o controle espacial sem degradar a qualidade do movimento.</span> <span class="s" data-s="b6-p1-s2">A ausência de PCM resulta em perda de contexto e precisão espacial reduzida.</span></p><p><span class="s" data-s="b6-p2-s0">Os resultados quantitativos destacam a capacidade do modelo de lidar com instruções complexas e mudanças de direção.</span> <span class="s" data-s="b6-p2-s1">Por exemplo, no HiPHI, o Motion Mamba 2.0 alcança um Root CE de 7.55 cm e End CE de 13.64 cm em 39.52 segundos, os menores valores entre os métodos avaliados.</span> <span class="s" data-s="b6-p2-s2">Isso indica uma alta fidelidade na execução de trajetórias longas e complexas, um requisito essencial para robótica humanoides interativos.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.29897/table7.webp" alt="Tabela mostrando a ablação dos componentes de otimização de inferência para a PCM. Flow, Fusion e Graph referem-se à simplificação do fluxo de execução, pré-processamento de kernels fundidos e replay de CUDA Graphs, respectivamente." loading="lazy">
+          <figcaption>
+            Tabela mostrando a ablação dos componentes de otimização de inferência para a PCM. Flow, Fusion e Graph referem-se à simplificação do fluxo de execução, pré-processamento de kernels fundidos e replay de CUDA Graphs, respectivamente.
+            <span class="source">Tabela 7 do paper · Huang et al., arXiv:2611.29897</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Validação no Mundo Real: Unitree G1</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Para validar a utilidade prática, os autores realizam extensas avaliações no robô humanoide Unitree G1.</span> <span class="s" data-s="b8-p0-s1">Os experimentos demonstram composição de ações guiadas por texto, movimento expressivo e locomoção interativa via teclado e mouse.</span> <span class="s" data-s="b8-p0-s2">O sistema integrado de geração e rastreamento (SONIC) permite que o robô execute sequências de comandos com alta precisão e estabilidade.</span></p><p><span class="s" data-s="b8-p1-s0">Nos testes de conclusão de tarefas, o sistema alcançou sucesso completo em 94 de 100 tentativas, sem quedas ou intervenções humanas.</span> <span class="s" data-s="b8-p1-s1">A latência de resposta para eventos espaciais foi medida em cerca de 351 ms (p50) para controle via teclado e 360 ms para mouse, permitindo uma interação fluida.</span> <span class="s" data-s="b8-p1-s2">O rastreamento de trajetória e a estabilidade da postura foram mantidos dentro de limites aceitáveis para operações práticas.</span></p><p><span class="s" data-s="b8-p2-s0">Os resultados qualitativos mostram o robô realizando movimentos como caminhar para frente, virar à esquerda, realizar artes marciais e interagir com o ambiente.</span> <span class="s" data-s="b8-p2-s1">A capacidade de alternar entre instruções de texto e controles espaciais sem perder o equilíbrio ou a coerência do movimento destaca a robustez do Motion Mamba 2.0 em cenários dinâmicos e imprevisíveis.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.29897/figure8.webp" alt="Resultados qualitativos reais no Unitree G1: (a) Composição de ações sequenciais; (b) Movimento expressivo; (c) Locomoção controlada por teclado; (d) Locomoção controlada por mouse. Cada painel mostra quadros do robô real, referências Viser e sequências de prompts." loading="lazy">
+          <figcaption>
+            Resultados qualitativos reais no Unitree G1: (a) Composição de ações sequenciais; (b) Movimento expressivo; (c) Locomoção controlada por teclado; (d) Locomoção controlada por mouse. Cada painel mostra quadros do robô real, referências Viser e sequências de prompts.
+            <span class="source">Figura 8 do paper · Huang et al., arXiv:2611.29897</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b10-h">Limitações e Escopo</span></h2>
+<p><span class="s" data-s="b10-p0-s0">Apesar dos avanços, o paper apresenta limitações inerentes ao escopo do estudo.</span> <span class="s" data-s="b10-p0-s1">A avaliação de inferência foi realizada em uma RTX 4090, um hardware de alto desempenho que pode não estar disponível em todos os dispositivos embarcados.</span> <span class="s" data-s="b10-p0-s2">A latência de 276 ms, embora significativa, ainda pode ser um gargalo para aplicações que exigem reações instantâneas em ambientes altamente dinâmicos.</span></p><p><span class="s" data-s="b10-p1-s0">Além disso, o modelo foi treinado e avaliado em um codec de movimento específico (G1), o que levanta questões sobre a generalização para outras topologias humanoides ou para avatares digitais com diferentes graus de liberdade.</span> <span class="s" data-s="b10-p1-s1">A dependência de um codec congelado limita a flexibilidade do sistema para adaptações rápidas a novas estruturas corporais sem re-treinamento.</span></p><p><span class="s" data-s="b10-p2-s0">Outra limitação é a complexidade da arquitetura híbrida.</span> <span class="s" data-s="b10-p2-s1">A integração de Mamba, atenção local e PCM requer uma implementação cuidadosa e otimizada, o que pode aumentar a barreira de entrada para pesquisadores e desenvolvedores.</span> <span class="s" data-s="b10-p2-s2">A ablação dos componentes de otimização mostra que cada parte contribui para a eficiência, mas a remoção de qualquer uma delas pode degradar significativamente o desempenho, tornando o sistema menos robusto a variações de implementação.</span></p>        <h2><span class="s" data-s="b11-h">Conclusão: Um Passo em Direção à Interatividade Real</span></h2>
+<p><span class="s" data-s="b11-p0-s0">O Motion Mamba 2.0 representa um avanço significativo na geração de movimento humanoide de longo prazo e controle interativo.</span> <span class="s" data-s="b11-p0-s1">Ao combinar a eficiência de modelamento temporal do Mamba com a precisão da atenção local e a memória persistente, o modelo supera as limitações de cache de atenção e latência de inferência.</span> <span class="s" data-s="b11-p0-s2">Os resultados no Unitree G1 demonstram a viabilidade prática da abordagem para aplicações robóticas reais.</span></p><p><span class="s" data-s="b11-p1-s0">Este paper não propõe uma revolução única, mas uma integração cuidadosa de técnicas existentes para resolver problemas específicos de contexto e latência.</span> <span class="s" data-s="b11-p1-s1">A contribuição principal reside na arquitetura híbrida e nas otimizações de inferência, que juntos permitem um controle responsivo e preciso.</span> <span class="s" data-s="b11-p1-s2">Para a comunidade de robótica e animação, isso abre caminho para sistemas mais interativos e adaptáveis.</span></p><p><span class="s" data-s="b11-p2-s0">Os autores concluem que a memória persistente e os estados recorrentes resumíveis são essenciais para estender o controle espacial sem comprometer a eficiência.</span> <span class="s" data-s="b11-p2-s1">O trabalho destaca a importância de considerar não apenas a qualidade do movimento gerado, mas também a infraestrutura de execução necessária para torná-lo utilizável em tempo real.</span> <span class="s" data-s="b11-p2-s2">O Motion Mamba 2.0 serve como um ponto de referência para futuras pesquisas em geração de movimento autoregressiva e controle robótico.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b12-t">Próximos Passos na Pesquisa</span></h3>
+          <p><span class="s" data-s="b12-c-s0">Embora o Motion Mamba 2.0 avance significativamente, a generalização para diferentes topologias humanoides e a redução da latência para dispositivos embarcados permanecem como desafios abertos.</span> <span class="s" data-s="b12-c-s1">A comunidade pode explorar a integração com outros modelos de linguagem para melhorar a compreensão de instruções complexas e a adaptação a ambientes não estruturados.</span></p>
+        </aside>
+
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Motion Mamba 2.0 usa uma arquitetura híbrida Mamba-Atenção com Memória Persistente (PCM) para manter contexto de longo prazo em geração de movimento humanoide.</span></li><li><span class="s" data-s="k1">O sistema atinge latência de inferência de 276 ms em RTX 4090, um speedup de 6.138x, permitindo controle interativo responsivo via texto e comandos espaciais.</span></li><li><span class="s" data-s="k2">Avaliações no robô Unitree G1 mostram 94% de sucesso em tarefas complexas, com alta precisão no rastreamento de trajetórias e estabilidade postural.</span></li><li><span class="s" data-s="k3">O paper destaca que eficiência e precisão são alcançáveis simultaneamente através de otimizações de baixo nível, como CUDA Graphs e kernels fundidos.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.29897" rel="noopener">Motion Mamba 2.0: Autoregressive Diffusion Mamba for Long-Horizon Humanoid Control</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.29897" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

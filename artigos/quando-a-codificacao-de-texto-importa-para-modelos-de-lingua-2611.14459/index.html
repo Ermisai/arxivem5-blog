@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quando a codificação de texto importa para modelos de linguagem? — arXiv em 5</title>
+<meta name="description" content="Este estudo investiga se a escolha da codificação de texto (como UTF-8) impacta o desempenho de modelos de linguagem. Ao comparar 16 esquemas em quatro idiomas, os autores descobrem que a densidade informacional dos caracteres determina se a compressão é benéfica ou irrelevante.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Quando a codificação de texto importa para modelos de linguagem?">
+<meta property="og:description" content="Este estudo investiga se a escolha da codificação de texto (como UTF-8) impacta o desempenho de modelos de linguagem. Ao comparar 16 esquemas em quatro idiomas, os autores descobrem que a densidade informacional dos caracteres determina se a compressão é benéfica ou irrelevante.">
+<meta property="og:image" content="../../assets/papers/2611.14459/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>LLMs</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.14459" rel="noopener">arXiv:2611.14459</a>
+    </div>
+    <h1><span class="s" data-s="t">Quando a codificação de texto importa para modelos de linguagem?</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Este estudo investiga se a escolha da codificação de texto (como UTF-8) impacta o desempenho de modelos de linguagem.</span> <span class="s" data-s="d-s1">Ao comparar 16 esquemas em quatro idiomas, os autores descobrem que a densidade informacional dos caracteres determina se a compressão é benéfica ou irrelevante.</span></p>
+    <p class="byline">
+      <span>Jang et al.</span>
+      <span>7 min de leitura</span>
+<span>10/11/2026</span>    </p>
+    <div class="listen" data-article="2611.14459" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=xVH-OID9ozE" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O problema do UTF-8 como padrão universal</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Desde que os modelos de linguagem baseados em subpalavras (subword tokenization), como BPE, mostraram limitações em lidar com vocabulários extensos e viés de injeção, houve um movimento crescente em direção à tokenização em nível de byte.</span> <span class="s" data-s="b0-p0-s1">A ideia é eliminar os vieses indutivos impostos pela divisão artificial de palavras, tratando o texto como uma sequência bruta de bytes.</span> <span class="s" data-s="b0-p0-s2">No entanto, enquanto a comunidade se concentra em como dividir o texto, o método subjacente de conversão de caracteres em bytes é frequentemente ignorado.</span> <span class="s" data-s="b0-p0-s3">O padrão de fato na computação moderna é o UTF-8, uma codificação de comprimento variável que pode representar todos os pontos de código Unicode usando de 1 a 4 bytes.</span></p><p><span class="s" data-s="b0-p1-s0">O uso do UTF-8 como entrada padrão para modelos de linguagem introduz ineficiências e inequidades entre idiomas.</span> <span class="s" data-s="b0-p1-s1">Como o UTF-8 é projetado para ser universal, ele não é otimizado para a estrutura específica de nenhum idioma em particular.</span> <span class="s" data-s="b0-p1-s2">Para línguas com sistemas de escrita complexos, o UTF-8 pode gerar sequências de bytes longas e pouco informativas, enquanto para outras, pode ser excessivamente verboso.</span> <span class="s" data-s="b0-p1-s3">Trabalhos recentes, como MYTE e SCRIPT, tentaram propor alternativas para melhorar a justiça entre idiomas, mas geralmente focaram em uma única dimensão ou idioma, deixando grande parte do espectro de como a codificação afeta o modelamento de linguagem inexplorado.</span></p><p><span class="s" data-s="b0-p2-s0">Este paper, intitulado &#34;When does text encoding matter for language modeling?&#34;, busca preencher essa lacuna.</span> <span class="s" data-s="b0-p2-s1">Os autores, da Northeastern University e EleutherAI, realizam uma comparação sistemática de 16 métodos de codificação diferentes.</span> <span class="s" data-s="b0-p2-s2">Eles não se limitam a comparar o UTF-8 contra uma alternativa; eles exploram uma gama que inclui codificações baseadas em Unicode, codificações específicas de idioma e esquemas personalizados.</span> <span class="s" data-s="b0-p2-s3">O objetivo é entender se a escolha da codificação impacta o desempenho do modelo e, se sim, sob quais condições linguísticas isso ocorre.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.14459/figure1.webp" alt="Comparação visual de como diferentes codificações representam caracteres de idiomas diversos. Note como o UTF-8 usa múltiplos bytes para caracteres asiáticos, enquanto codifica específicas como Jamo ou CuTF usam estruturas mais compactas." loading="lazy">
+          <figcaption>
+            Comparação visual de como diferentes codificações representam caracteres de idiomas diversos. Note como o UTF-8 usa múltiplos bytes para caracteres asiáticos, enquanto codifica específicas como Jamo ou CuTF usam estruturas mais compactas.
+            <span class="source">Figura 1 do paper · Jang et al., arXiv:2611.14459</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">Metodologia: O framework Aether e o desenho experimental</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Para realizar uma comparação justa, os autores precisavam isolar o efeito da codificação do script alvo, sem introduzir ruídos causados por caracteres fora do vocabulário (out-of-vocabulary).</span> <span class="s" data-s="b2-p0-s1">Em corpora monolíngues, é comum encontrar palavras estrangeiras, símbolos ou emojis que não pertencem ao script principal.</span> <span class="s" data-s="b2-p0-s2">Muitas codificações específicas de idioma não cobrem todo o espectro Unicode, o que levaria a inconsistências no tratamento desses caracteres residuais.</span> <span class="s" data-s="b2-p0-s3">Para resolver isso, os autores propõem o Aether Tokenizer (Alternative Encoding Tokenizers for Hybrid Encoding Representations).</span></p><p><span class="s" data-s="b2-p1-s0">O Aether é um esquema de codificação híbrida.</span> <span class="s" data-s="b2-p1-s1">Ele aplica uma codificação específica do script apenas aos caracteres do idioma alvo, enquanto utiliza o UTF-8 como um código de fallback para qualquer outro caractere.</span> <span class="s" data-s="b2-p1-s2">Isso permite que o modelo seja exposto a todo o universo Unicode, mas mantém a consistência na representação do idioma que está sendo estudado.</span> <span class="s" data-s="b2-p1-s3">O pré-processamento separa o texto alvo do restante usando expressões regulares, e os espaços de codificação são armazenados em inventários separados para evitar colisões.</span> <span class="s" data-s="b2-p1-s4">Essa abordagem garante que as diferenças de desempenho observadas sejam devidas à eficiência da codificação do script alvo, e não a falhas de cobertura.</span></p><p><span class="s" data-s="b2-p2-s0">Os experimentos foram conduzidos treinando modelos GPT2-base-sized (arquitetura Llama-3) do zero em quatro idiomas ortograficamente distintos: Chinês, Coreano, Tamil e Georgiano.</span> <span class="s" data-s="b2-p2-s1">Foram treinados 38 pares únicos de idioma-codificação.</span> <span class="s" data-s="b2-p2-s2">Para cada configuração, os modelos foram treinados por uma única epoch em corpora monolíngues de alta qualidade, limitados a aproximadamente 6 bilhões de caracteres (cerca de 15 bilhões de bytes UTF-8).</span> <span class="s" data-s="b2-p2-s3">Essa quantidade excede a recomendação de scaling laws para o tamanho do modelo, garantindo que o treinamento seja suficientemente robusto.</span></p><p><span class="s" data-s="b2-p3-s0">Um ponto crucial no desenho experimental é o controle de dados versus controle de computação.</span> <span class="s" data-s="b2-p3-s1">Em comparações de tokenizadores, é difícil ser justo tanto em termos de dados vistos quanto de FLOPs gastos.</span> <span class="s" data-s="b2-p3-s2">Os autores optaram por igualar a quantidade de dados vistos por cada modelo (uma epoch), em vez de igualar o custo computacional.</span> <span class="s" data-s="b2-p3-s3">Isso significa que modelos com tokenizadores menos compressivos (que geram mais tokens) terão mais passos de treinamento por epoch.</span> <span class="s" data-s="b2-p3-s4">Se os autores tivessem igualado os FLOPs, os tokenizadores mais compressivos teriam uma vantagem artificial, pois poderiam processar mais dados no mesmo tempo.</span> <span class="s" data-s="b2-p3-s5">Ao igualar os dados, a comparação foca na capacidade do modelo de aprender a estrutura linguística dada a mesma exposição informacional.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b3-t">Métrica de Avaliação: Macro NLL</span></h3>
+          <p><span class="s" data-s="b3-c-s0">Os autores propõem o uso de Macro Negative Log-Likelihood (Macro NLL) como métrica principal.</span> <span class="s" data-s="b3-c-s1">Métricas padrão de perplexidade são enviesadas por caracteres frequentes.</span> <span class="s" data-s="b3-c-s2">O Macro NLL agrega as probabilidades em nível de caractere e as média igualmente, independentemente da frequência, garantindo que a avaliação reflita a capacidade do modelo de representar todos os caracteres do script, não apenas os mais comuns.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b4-h">Resultados: A dicotomia entre densidade e insensibilidade</span></h2>
+<p><span class="s" data-s="b4-p0-s0">Os resultados revelam duas tendências distintas e quase opostas, dependendo do idioma.</span> <span class="s" data-s="b4-p0-s1">Para o Chinês e o Coreano, a compressão da codificação está fortemente correlacionada com o desempenho do modelo.</span> <span class="s" data-s="b4-p0-s2">Codificações mais compactas, que reduzem o número de tokens necessários para representar o texto, resultaram em menor erro de modelagem (Macro NLL).</span> <span class="s" data-s="b4-p0-s3">Para o Chinês, a correlação foi forte (r = 0.911), e para o Coreano, moderadamente forte (r = 0.689).</span> <span class="s" data-s="b4-p0-s4">Isso sugere que, nesses idiomas, permitir que o modelo reconstrua a informação em menos passos (menos tokens) é benéfico.</span></p><p><span class="s" data-s="b4-p1-s0">Em contraste, para o Tamil e o Georgiano, a escolha da codificação não teve impacto significativo no desempenho.</span> <span class="s" data-s="b4-p1-s1">A correlação entre compressão e desempenho foi estatisticamente insignificante para ambos os idiomas (r = -0.152 para Tamil e r = -0.376 para Georgiano).</span> <span class="s" data-s="b4-p1-s2">Mesmo quando as codificações variaram drasticamente em termos de taxa de compressão — com diferenças de até 8x para o Tamil e 7x para o Georgiano — o desempenho do modelo permaneceu dentro da variabilidade esperada entre sementes aleatórias.</span> <span class="s" data-s="b4-p1-s3">Isso indica que, para esses idiomas, a granularidade da codificação não é um fator limitante para o aprendizado.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.14459/figure3.webp" alt="Gráficos de dispersão mostrando a relação entre compressão (log de passos de treinamento) e desempenho (Macro-NLL). Note a forte tendência positiva para Chinês e Coreano, e a ausência de tendência para Tamil e Georgiano." loading="lazy">
+          <figcaption>
+            Gráficos de dispersão mostrando a relação entre compressão (log de passos de treinamento) e desempenho (Macro-NLL). Note a forte tendência positiva para Chinês e Coreano, e a ausência de tendência para Tamil e Georgiano.
+            <span class="source">Figura 3 do paper · Jang et al., arXiv:2611.14459</span>
+          </figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="../../assets/papers/2611.14459/figure4.webp" alt="Número de tokens gerados por diferentes codificações. Ilustra a variação de eficiência: codificações compactas geram menos tokens, enquanto outras geram sequências muito mais longas para o mesmo conteúdo." loading="lazy">
+          <figcaption>
+            Número de tokens gerados por diferentes codificações. Ilustra a variação de eficiência: codificações compactas geram menos tokens, enquanto outras geram sequências muito mais longas para o mesmo conteúdo.
+            <span class="source">Figura 4 do paper · Jang et al., arXiv:2611.14459</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Análise: Por que a densidade ortográfica importa?</span></h2>
+<p><span class="s" data-s="b7-p0-s0">A hipótese dos autores para explicar essa divergência reside na granularidade ortográfica e na densidade informacional dos caracteres.</span> <span class="s" data-s="b7-p0-s1">No Chinês, cada caractere tipicamente corresponde a um morfema, carregando uma quantidade significativa de informação linguística.</span> <span class="s" data-s="b7-p0-s2">No Coreano, cada caractere (syllable block) codifica uma sílaba completa.</span> <span class="s" data-s="b7-p0-s3">Em ambos os casos, o caractere é uma unidade densa de informação.</span> <span class="s" data-s="b7-p0-s4">Quando os caracteres são densos, reduzir o número de tokens necessários para representá-los permite que o modelo processe a informação de forma mais eficiente, possivelmente aproveitando melhor a capacidade de atenção do modelo.</span></p><p><span class="s" data-s="b7-p1-s0">Já no Tamil e no Georgiano, os caracteres correspondem a consoantes ou vogais individuais, que carregam pouca informação isoladamente.</span> <span class="s" data-s="b7-p1-s1">Uma palavra nesses idiomas é composta por uma sequência de muitos caracteres, cada um contribuindo minimamente para o significado final.</span> <span class="s" data-s="b7-p1-s2">Nesses cenários, a granularidade fina não penaliza o modelo.</span> <span class="s" data-s="b7-p1-s3">Seja o texto representado por poucos tokens densos ou muitos tokens esparsos, a informação total a ser aprendida é a mesma.</span> <span class="s" data-s="b7-p1-s4">A insensibilidade à codificação sugere que, para scripts alfabéticos ou abugidas com baixa densidade por caractere, a otimização agressiva da compressão pode não trazer ganhos de desempenho proporcionalmente.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b8-t">O papel da informação linguística</span></h3>
+          <p><span class="s" data-s="b8-c-s0">Para o Coreano, a codificação Jamo (que decompõe sílabas em jamos, unidades fonológicas menores) performou melhor que as codificações puramente compressivas.</span> <span class="s" data-s="b8-c-s1">Isso sugere que unidades sub-caractere linguisticamente significativas, quando combinadas com padrões de codificação de comprimento fixo, podem capturar fenômenos morfofonológicos que a compressão bruta ignora.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b9-h">Limitações e implicações</span></h2>
+<p><span class="s" data-s="b9-p0-s0">É importante notar as limitações deste estudo.</span> <span class="s" data-s="b9-p0-s1">Os experimentos foram realizados com modelos de tamanho base (GPT2-size) e em apenas quatro idiomas.</span> <span class="s" data-s="b9-p0-s2">Não está claro se os resultados se generalizam para modelos de escala muito maior ou para outros idiomas com estruturas ortográficas diferentes.</span> <span class="s" data-s="b9-p0-s3">Além disso, o foco em modelos de linguagem monolíngues pode não refletir totalmente o comportamento em modelos multilíngues, onde a interação entre scripts pode introduzir novos vieses.</span> <span class="s" data-s="b9-p0-s4">O uso de codificações híbridas (Aether) também introduz complexidade adicional no gerenciamento de vocabulário, já que a compressão muitas vezes vem acompanhada de um aumento no tamanho do vocabulário do tokenizer.</span></p><p><span class="s" data-s="b9-p1-s0">As implicações práticas são claras: a codificação de texto não deve ser um padrão universal imposto a todos os idiomas.</span> <span class="s" data-s="b9-p1-s1">Para idiomas com alta densidade informacional por caractere, investir em codificações compactas ou semanticamente ricas pode valer a pena.</span> <span class="s" data-s="b9-p1-s2">Para idiomas com baixa densidade, a simplicidade e a universalidade do UTF-8 podem ser suficientes, sem perda de desempenho.</span> <span class="s" data-s="b9-p1-s3">Os autores argumentam que a tokenização, assim como a arquitetura do modelo, deve ser uma decisão de design deliberada, considerando as propriedades linguísticas específicas do corpus alvo.</span> <span class="s" data-s="b9-p1-s4">Ignorar a codificação é ignorar uma camada fundamental de como a informação é estruturada para o modelo.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Para idiomas com caracteres densos (Chinês, Coreano), codificações mais compactas melhoram significativamente o desempenho do modelo.</span></li><li><span class="s" data-s="k1">Para idiomas com caracteres menos informativos isoladamente (Tamil, Georgiano), a escolha da codificação não altera o resultado.</span></li><li><span class="s" data-s="k2">A densidade ortográfica, e não apenas a compressão, é o fator chave que define a eficácia da tokenização byte-level.</span></li><li><span class="s" data-s="k3">A codificação deve ser tratada como uma decisão de design específica por idioma, e não um padrão universal fixo.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.14459" rel="noopener">When does text encoding matter for language modeling?</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.14459" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

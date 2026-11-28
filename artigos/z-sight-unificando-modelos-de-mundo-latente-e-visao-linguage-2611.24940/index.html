@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Z-sight: Unificando Modelos de Mundo Latente e Visão-Linguagem-Ação — arXiv em 5</title>
+<meta name="description" content="Z-sight prevê o futuro robótico diretamente no espaço de tokens visuais do VLM, eliminando a necessidade de geradores de vídeo pesados ou codificadores externos para controle de robôs humanoides.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Z-sight: Unificando Modelos de Mundo Latente e Visão-Linguagem-Ação">
+<meta property="og:description" content="Z-sight prevê o futuro robótico diretamente no espaço de tokens visuais do VLM, eliminando a necessidade de geradores de vídeo pesados ou codificadores externos para controle de robôs humanoides.">
+<meta property="og:image" content="../../assets/papers/2611.24940/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Robótica</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.24940" rel="noopener">arXiv:2611.24940</a>
+    </div>
+    <h1><span class="s" data-s="t">Z-sight: Unificando Modelos de Mundo Latente e Visão-Linguagem-Ação</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Z-sight prevê o futuro robótico diretamente no espaço de tokens visuais do VLM, eliminando a necessidade de geradores de vídeo pesados ou codificadores externos para controle de robôs humanoides.</span></p>
+    <p class="byline">
+      <span>Ye et al.</span>
+      <span>5 min de leitura</span>
+<span>18/11/2026</span>    </p>
+    <div class="listen" data-article="2611.24940" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=9uvyMH3_Xrc" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Dilema da Previsão em Robótica</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Os modelos Vision-Language-Action (VLA) têm se mostrado promissores para transferir conhecimento multimodal para o controle robótico.</span> <span class="s" data-s="b0-p0-s1">No entanto, eles geralmente mapeiam a observação atual diretamente para ações, sem uma compreensão explícita da dinâmica futura do ambiente.</span> <span class="s" data-s="b0-p0-s2">Por outro lado, os World Action Models (WAMs) tentam resolver isso gerando vídeos futuros junto com as ações.</span> <span class="s" data-s="b0-p0-s3">Embora eficaz, essa abordagem herda o custo computacional massivo dos geradores de vídeo baseados em difusão.</span></p>        <h2><span class="s" data-s="b1-h">A Limitação dos Métodos Latentes</span></h2>
+<p><span class="s" data-s="b1-p0-s0">Uma solução intermediária recente move a supervisão do futuro para o espaço latente, evitando a geração de pixels.</span> <span class="s" data-s="b1-p0-s1">Contudo, esses métodos frequentemente alinham características intermediárias do modelo de política com embeddings compactos ou dependem de codificadores de destino congelados.</span> <span class="s" data-s="b1-p0-s2">Isso cria uma desconexão: a previsão do futuro não ocorre no mesmo espaço de representação onde o VLM percebe o presente, limitando a coerência semântica e física da previsão.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.24940/figure1.webp" alt="Comparação visual das arquiteturas: (a) VLAs mapeiam observação para ação sem previsão; (b) WAMs geram vídeo futuro no espaço de pixels; (c) Z-sight prevê tokens visuais futuros no espaço nativo do VLM." loading="lazy">
+          <figcaption>
+            Comparação visual das arquiteturas: (a) VLAs mapeiam observação para ação sem previsão; (b) WAMs geram vídeo futuro no espaço de pixels; (c) Z-sight prevê tokens visuais futuros no espaço nativo do VLM.
+            <span class="source">Figura 1 do paper · Ye et al., arXiv:2611.24940</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">A Proposta: Z-sight</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Os autores do paper Z-sight, afiliados à Maven Robotics e à Universidade do Sul da Califórnia (USC), propõem uma arquitetura unificada que prevê o futuro diretamente no espaço de tokens visuais nativo do VLM.</span> <span class="s" data-s="b3-p0-s1">A ideia central é que a percepção e a previsão devem co-evoluir no mesmo espaço de representação.</span> <span class="s" data-s="b3-p0-s2">Em vez de sintetizar pixels ou usar um codificador externo, o Z-sight prediz os tokens espaciais que o codificador de visão produziria para as observações futuras.</span></p>        <h2><span class="s" data-s="b4-h">Arquitetura e Mecanismo</span></h2>
+<p><span class="s" data-s="b4-p0-s0">O núcleo do Z-sight é um Mixture-of-Transformers (MoT) que acopla três componentes: o backbone do VLM, um especialista de foresight (previsão) e um especialista de ação contínua.</span> <span class="s" data-s="b4-p0-s1">O VLM codifica a história de observações, o estado proprioceptivo e as instruções linguísticas em tokens visuais espaciais.</span> <span class="s" data-s="b4-p0-s2">Esses tokens formam o &#39;espaço nativo de representação&#39; do modelo.</span></p>        <h2><span class="s" data-s="b5-h">Previsão no Espaço Nativo</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Para prever o futuro, o especialista de foresight utiliza flow matching no espaço de tokens.</span> <span class="s" data-s="b5-p0-s1">Ele recebe tokens futuros ruidosos e tokens normalizados do frame atual.</span> <span class="s" data-s="b5-p0-s2">Diferente de métodos que usam um codificador alvo congelado, o Z-sight usa um professor EMA (Exponential Moving Average) que acompanha o codificador online.</span> <span class="s" data-s="b5-p0-s3">Isso garante que o alvo de previsão evolua junto com o modelo, mantendo o alinhamento semântico.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b6-t">Evitando Colapso de Representação</span></h3>
+          <p><span class="s" data-s="b6-c-s0">Para evitar que o modelo trivialize a tarefa de previsão (colapso), os autores usam stop-gradient nos alvos EMA.</span> <span class="s" data-s="b6-c-s1">Além disso, durante o treinamento intermediário, bloqueiam gradientes do codificador de visão de entrar no VLM, isolando o conhecimento pré-treinado enquanto o especialista de visão se adapta via supervisão de ação.</span></p>
+        </aside>
+        <figure class="figure">
+          <img src="../../assets/papers/2611.24940/figure2.webp" alt="Visão geral do treinamento em estágios e da arquitetura: o VLM processa a história de observações, enquanto os especialistas de foresight e ação denoizam tokens visuais e ações simultaneamente." loading="lazy">
+          <figcaption>
+            Visão geral do treinamento em estágios e da arquitetura: o VLM processa a história de observações, enquanto os especialistas de foresight e ação denoizam tokens visuais e ações simultaneamente.
+            <span class="source">Figura 2 do paper · Ye et al., arXiv:2611.24940</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Treinamento em Estágios</span></h2>
+<p><span class="s" data-s="b8-p0-s0">O treinamento ocorre em três fases.</span> <span class="s" data-s="b8-p0-s1">Primeiro, o VLM é pré-treinado em vídeos egocêntricos humanos.</span> <span class="s" data-s="b8-p0-s2">Em seguida, no mid-training, todos os streams (VLM, foresight, ação) são ajustados em dados mistos de robôs e humanos.</span> <span class="s" data-s="b8-p0-s3">Finalmente, no post-training, o modelo é adaptado para a embodiment alvo.</span> <span class="s" data-s="b8-p0-s4">Durante o mid-training, o VLM é ajustado para prever tokens de ação discretos (FAST), enquanto o especialista de visão se adapta via supervisão de ação, sem corromper o conhecimento linguístico do VLM.</span></p>        <h2><span class="s" data-s="b9-h">Inferência e Controle</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Durante a inferência, ambos os especialistas denoizam simultaneamente os tokens visuais futuros e as ações contínuas.</span> <span class="s" data-s="b9-p0-s1">O especialista de ação atende diretamente aos tokens visuais previstos, permitindo que ele leia a previsão em formação.</span> <span class="s" data-s="b9-p0-s2">Isso fornece ao controlador uma dinâmica latente online, informando a ação com base no que o modelo prevê que acontecerá, sem a necessidade de reconstrução de pixels ou encoders externos.</span></p>        <h2><span class="s" data-s="b10-h">Resultados no SIMPLE e Unitree G1</span></h2>
+<p><span class="s" data-s="b10-p0-s0">O Z-sight foi avaliado em benchmarks de simulação e robôs reais.</span> <span class="s" data-s="b10-p0-s1">No benchmark SIMPLE, que testa locomoção e manipulação de corpo inteiro de humanoides, o Z-sight atingiu 81.9% de sucesso, superando o GR00T N1.7 em 9.6 pontos e o Fast-WAM em 15.9 pontos.</span> <span class="s" data-s="b10-p0-s2">A vantagem foi consistente em todos os níveis de dificuldade (L0, L1, L2), demonstrando robustez em cenários com variações de iluminação, materiais e posições de alvo.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b11-t">Desempenho no Robô Real</span></h3>
+          <p><span class="s" data-s="b11-c-s0">No robô humanoide físico Unitree G1, o Z-sight alcançou 73.3% de sucesso em seis tarefas, superando o Fast-WAM (53.3%) e outros VLAs.</span> <span class="s" data-s="b11-c-s1">A vantagem foi mais pronunciada em tarefas multi-etapas, como transportar lixo e frutas, onde o Z-sight completou 7 de 10 tentativas, enquanto as baselines frequentemente travavam após o primeiro subobjetivo.</span></p>
+        </aside>
+        <figure class="figure">
+          <img src="../../assets/papers/2611.24940/figure5.webp" alt="Resultados no benchmark SIMPLE: taxas de sucesso por nível de dificuldade e média geral, mostrando a superioridade do Z-sight em todas as métricas comparadas aos baselines." loading="lazy">
+          <figcaption>
+            Resultados no benchmark SIMPLE: taxas de sucesso por nível de dificuldade e média geral, mostrando a superioridade do Z-sight em todas as métricas comparadas aos baselines.
+            <span class="source">Figura 5 do paper · Ye et al., arXiv:2611.24940</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b13-h">Análise de Ablação</span></h2>
+<p><span class="s" data-s="b13-p0-s0">Os autores realizaram experimentos de ablação para entender a contribuição de cada componente.</span> <span class="s" data-s="b13-p0-s1">A previsão futura no espaço nativo co-evolutivo mostrou-se superior ao alinhamento implícito de características ou ao uso de codificadores externos congelados.</span> <span class="s" data-s="b13-p0-s2">A intervenção de tempo de teste mostrou que o especialista de ação realmente depende do conteúdo e da incerteza da previsão de foresight para executar movimentos coordenados, especialmente em transições de contato.</span></p>        <h2><span class="s" data-s="b14-h">Eficiência Computacional</span></h2>
+<p><span class="s" data-s="b14-p0-s0">Um benefício chave do Z-sight é a eficiência.</span> <span class="s" data-s="b14-p0-s1">Ao operar no espaço de tokens latentes e não no espaço de pixels, o modelo evita o custo de geração de vídeo.</span> <span class="s" data-s="b14-p0-s2">A inferência ocorre a 110 ms por chunk de ação, permitindo controle de alta frequência.</span> <span class="s" data-s="b14-p0-s3">Isso torna o Z-sight viável para implementação em robôs reais com recursos computacionais limitados, ao contrário dos WAMs baseados em difusão de vídeo.</span></p>        <h2><span class="s" data-s="b15-h">Limitações e Trabalhos Futuros</span></h2>
+<p><span class="s" data-s="b15-p0-s0">Apesar dos resultados promissores, o paper reconhece limitações.</span> <span class="s" data-s="b15-p0-s1">Atualmente, a previsão de foresight é baseada apenas na observação, sem condicionamento a ações candidatas.</span> <span class="s" data-s="b15-p0-s2">Isso significa que o modelo não pode comparar explicitamente os resultados de diferentes ações no espaço latente, limitando a capacidade de planejamento de longo prazo no tempo de inferência.</span> <span class="s" data-s="b15-p0-s3">Futuros trabalhos podem explorar o condicionamento da previsão por ações para habilitar o planejamento no espaço de representação nativa.</span></p>        <h2><span class="s" data-s="b16-h">Conclusão</span></h2>
+<p><span class="s" data-s="b16-p0-s0">O Z-sight apresenta uma unificação eficaz entre modelos de mundo latente e VLAs.</span> <span class="s" data-s="b16-p0-s1">Ao predizer o futuro no mesmo espaço de representação onde o modelo percebe o presente, ele evita as armadilhas de custo computacional dos geradores de vídeo e a desconexão semântica de métodos latentes anteriores.</span> <span class="s" data-s="b16-p0-s2">Os resultados em robôs humanoides demonstram que essa abordagem pode melhorar significativamente a locomoção e manipulação de corpo inteiro, estabelecendo um novo caminho para a modelagem de mundo corporificada.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Z-sight prediz tokens visuais futuros e ações simultaneamente no espaço nativo do VLM, unificando percepção e previsão.</span></li><li><span class="s" data-s="k1">O modelo alcança 81.9% de sucesso no benchmark SIMPLE e 73.3% no robô real Unitree G1, superando baselines significativamente.</span></li><li><span class="s" data-s="k2">A arquitetura usa um MoT com especialista de foresight e ação, evitando colapso de representação via paradas de gradiente.</span></li><li><span class="s" data-s="k3">Limitações incluem a previsão baseada apenas na observação, sem condicionamento a ações candidatas para planejamento.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.24940" rel="noopener">$Z$-sight: Unifying Vision-Language-Action and Latent World Modeling</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.24940" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

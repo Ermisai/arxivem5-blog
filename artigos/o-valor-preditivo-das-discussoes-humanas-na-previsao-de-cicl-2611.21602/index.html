@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>O valor preditivo das discussões humanas na previsão de ciclones tropicais — arXiv em 5</title>
+<meta name="description" content="Este estudo quantifica quanto o texto escrito por meteorologistas do NHC melhora a previsão de intensidade de furacões quando combinado com dados numéricos e redes neurais multimodais.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="O valor preditivo das discussões humanas na previsão de ciclones tropicais">
+<meta property="og:description" content="Este estudo quantifica quanto o texto escrito por meteorologistas do NHC melhora a previsão de intensidade de furacões quando combinado com dados numéricos e redes neurais multimodais.">
+<meta property="og:image" content="../../assets/papers/2611.21602/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Linguagem</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.21602" rel="noopener">arXiv:2611.21602</a>
+    </div>
+    <h1><span class="s" data-s="t">O valor preditivo das discussões humanas na previsão de ciclones tropicais</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Este estudo quantifica quanto o texto escrito por meteorologistas do NHC melhora a previsão de intensidade de furacões quando combinado com dados numéricos e redes neurais multimodais.</span></p>
+    <p class="byline">
+      <span>Azizi et al.</span>
+      <span>8 min de leitura</span>
+<span>16/11/2026</span>    </p>
+    <div class="listen" data-article="2611.21602" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=RSqaMCv8TR0" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">A sinergia entre intuição humana e dados numéricos</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A previsão da intensidade de ciclones tropicais (furacões, tufões) é um dos problemas mais desafiadores da meteorologia operacional.</span> <span class="s" data-s="b0-p0-s1">Diferentemente da trajetória, que tem melhorado consistentemente, a previsão de quão forte um furacão se tornará depende de processos complexos e não lineares que interagem em múltiplas escalas.</span> <span class="s" data-s="b0-p0-s2">Modelos tradicionais, como o SHIPS (Statistical Hurricane Intensity Prediction Scheme), usam regressão linear sobre variáveis ambientais como temperatura do mar e cisalhamento do vento.</span> <span class="s" data-s="b0-p0-s3">Modelos dinâmicos, como o GFDL, tentam simular a física da atmosfera e do oceano.</span> <span class="s" data-s="b0-p0-s4">No entanto, nenhum desses sistemas captura perfeitamente a complexidade real.</span></p><p><span class="s" data-s="b0-p1-s0">Os meteorologistas do Centro Nacional de Furacões dos EUA (NHC) escrevem documentos chamados &#34;Tropical Cyclone Discussions&#34; para cada tempestade ativa.</span> <span class="s" data-s="b0-p1-s1">Esses textos não são apenas resumos; eles sintetizam observações, guiam a interpretação de modelos numéricos e expressam o julgamento especializado dos previsores sobre incertezas.</span> <span class="s" data-s="b0-p1-s2">Este paper, da Universidade de Lausana, investiga se esse texto contém informação preditiva útil que vai além dos dados numéricos já disponíveis.</span> <span class="s" data-s="b0-p1-s3">A hipótese central é que a linguagem natural carrega nuances sobre a estrutura da tempestade e a confiança do previsores que os números sozinhos perdem.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.21602/figure1.webp" alt="Visão geral do framework MultiCyclone. Meteorologistas sintetizam dados brutos e modelos para criar discussões textuais. O modelo proposto combina esses textos com campos de vento e preditores tabulares para prever mudanças de intensidade." loading="lazy">
+          <figcaption>
+            Visão geral do framework MultiCyclone. Meteorologistas sintetizam dados brutos e modelos para criar discussões textuais. O modelo proposto combina esses textos com campos de vento e preditores tabulares para prever mudanças de intensidade.
+            <span class="source">Figura 1 do paper · Azizi et al., arXiv:2611.21602</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">Uma abordagem multimodal: texto, números e imagens</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Os autores propõem o framework MultiCyclone, que integra três modalidades de dados: tabular, espacial (imagens/campos) e textual.</span> <span class="s" data-s="b2-p0-s1">Para os dados tabulares, utilizam os 13 preditores do SHIPS, que incluem varições de temperatura da superfície do mar, umidade relativa e cisalhamento do vento.</span> <span class="s" data-s="b2-p0-s2">Para a modalidade espacial, usam campos de vento de 10 metros do reanálise ERA5, processados por uma CNN (Rede Neural Convolucional) pré-treinada para prever o próximo quadro temporal, gerando embeddings fixos de 128 dimensões.</span> <span class="s" data-s="b2-p0-s3">Para a modalidade textual, processam as discussões do NHC usando um codificador de sentenças Qwen3, gerando embeddings de 768 dimensões.</span></p><p><span class="s" data-s="b2-p1-s0">A arquitetura de fusão é híbrida.</span> <span class="s" data-s="b2-p1-s1">Os preditores tabulares podem ser alimentados diretamente em um modelo XGBoost ou em uma rede neural.</span> <span class="s" data-s="b2-p1-s2">Os embeddings de imagem e texto são combinados com os dados tabulares usando concatenação ou atenção multi-head, dependendo do tempo de previsão (lead time).</span> <span class="s" data-s="b2-p1-s3">O objetivo final é prever a mudança na velocidade máxima sustentada do vento (Vmax) e na pressão central mínima (MSLP) para horizontes de 24, 48, 72, 96 e 120 horas.</span> <span class="s" data-s="b2-p1-s4">O estudo analisa 637 ciclones no Atlântico e no leste do Pacífico Norte entre 2002 e 2023.</span></p>        <h2><span class="s" data-s="b3-h">A ablação de modalidades: o que realmente importa?</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Para entender o valor real de cada fonte de dados, os autores realizam experimentos de ablação, removendo sistematicamente uma modalidade por vez.</span> <span class="s" data-s="b3-p0-s1">O resultado mais significativo ocorre na previsão de 24 horas.</span> <span class="s" data-s="b3-p0-s2">Quando apenas os preditores tabulares (SHIPS) são usados, o Mean Absolute Error (MAE) para a mudança de vento é de 10,13 nós.</span> <span class="s" data-s="b3-p0-s3">Ao adicionar as discussões textuais (modelo T+D), o erro cai para 9,46 nós, uma redução de 6,6%.</span> <span class="s" data-s="b3-p0-s4">O coeficiente de determinação (R²) para o vento aumenta de 0,44 para 0,53.</span> <span class="s" data-s="b3-p0-s5">Isso indica que o texto contém informação preditiva robusta e complementar aos dados ambientais estáticos.</span></p><p><span class="s" data-s="b3-p1-s0">Surpreendentemente, a adição dos campos de vento espacial (imagens ERA5) oferece ganhos mínimos para a previsão de intensidade a 24 horas.</span> <span class="s" data-s="b3-p1-s1">No modelo que já inclui texto e dados tabulares, adicionar as imagens reduz o MAE apenas de 9,46 para 9,45 nós, uma diferença dentro da variação natural do treinamento.</span> <span class="s" data-s="b3-p1-s2">Isso contrasta com estudos anteriores focados em previsão de trajetória, onde imagens satelitais são cruciais.</span> <span class="s" data-s="b3-p1-s3">Para intensidade, a síntese textual do meteorologista parece capturar informações estruturais que as imagens brutas, neste contexto específico de reanálise, não adicionam de forma significativa.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.21602/figure5.webp" alt="Arquitetura híbrida do modelo. Preditores SHIPS entram no XGBoost ou na rede neural. Embeddings de imagem (CNN) e texto (Qwen3) são combinados. O texto é crucial para capturar o julgamento do previsores sobre a evolução da tempestade." loading="lazy">
+          <figcaption>
+            Arquitetura híbrida do modelo. Preditores SHIPS entram no XGBoost ou na rede neural. Embeddings de imagem (CNN) e texto (Qwen3) são combinados. O texto é crucial para capturar o julgamento do previsores sobre a evolução da tempestade.
+            <span class="source">Figura 5 do paper · Azizi et al., arXiv:2611.21602</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Análise do sinal textual: o que os meteorologistas dizem?</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os autores investigaram quais partes do texto são mais importantes para a previsão.</span> <span class="s" data-s="b5-p0-s1">Usando atribuição por gradientes integrados e uma linha de base TF-IDF, descobriram que palavras relacionadas à intensidade e sua evolução, como &#34;intensify&#34; (intensificar), &#34;weaken&#34; (enfraquecer), &#34;eyewall&#34; (parede do olho) e &#34;category&#34; (categoria), têm alta importância para as previsões do modelo.</span> <span class="s" data-s="b5-p0-s2">Experimentos de perturbação de texto mostraram que mascarar frases contendo esse vocabulário específico reduz drasticamente o R² do modelo de texto puro (de 0,50 para 0,13 aproximadamente, dependendo da configuração).</span></p><p><span class="s" data-s="b5-p1-s0">Isso sugere que o modelo não está apenas aprendendo ruído estatístico, mas está capturando o conteúdo semântico das avaliações dos previsores.</span> <span class="s" data-s="b5-p1-s1">No entanto, os autores alertam que isso não prova causalidade direta.</span> <span class="s" data-s="b5-p1-s2">As discussões são escritas pelo menos três horas após o tempo válido dos outros dados de entrada (SHIPS e ERA5).</span> <span class="s" data-s="b5-p1-s3">Isso significa que o modelo pode estar aprendendo correlações temporais onde o texto reflete uma observação já ocorrida, em vez de uma previsão prospectiva pura.</span> <span class="s" data-s="b5-p1-s4">O texto atua como um mecanismo de correção e refinamento baseado no estado atual da tempestade, validado pela experiência humana.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b6-t">Limitação Operacional Crítica</span></h3>
+          <p><span class="s" data-s="b6-c-s0">Os resultados deste estudo são retrospectivos.</span> <span class="s" data-s="b6-c-s1">As discussões do NHC são publicadas após o tempo de validade dos dados numéricos usados no modelo.</span> <span class="s" data-s="b6-c-s2">Em um cenário operacional real, onde se precisa prever o futuro sem saber o que o previsores escreverá horas depois, esse ganho de performance pode não ser replicável da mesma forma.</span> <span class="s" data-s="b6-c-s3">O estudo mede o valor informativo do texto, não a viabilidade de usá-lo em tempo real.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b7-h">Incerteza e o desafio da intensificação rápida</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Uma parte crucial deste trabalho é a quantificação de incerteza.</span> <span class="s" data-s="b7-p0-s1">Previsões pontuais não são suficientes para a tomada de decisão em desastres.</span> <span class="s" data-s="b7-p0-s2">Os autores testaram vários métodos de calibração de intervalos de previsão, incluindo Bootstrap (resampling de tempestades inteiras), Adaptive Conformal Inference e EnbPI.</span> <span class="s" data-s="b7-p0-s3">O objetivo era atingir uma cobertura de 90% para os intervalos de previsão, ou seja, 90% das observações reais deveriam cair dentro da faixa prevista pelo modelo.</span></p><p><span class="s" data-s="b7-p1-s0">O resultado revela uma fraqueza significativa: durante episódios de intensificação rápida (rapid intensification), a cobertura cai abaixo do alvo de 90%.</span> <span class="s" data-s="b7-p1-s1">Casos extremos, como o furacão Ian e o furacão Otis, foram subestimados pelo modelo.</span> <span class="s" data-s="b7-p1-s2">A intensificação rápida é um fenômeno complexo e raro, difícil de capturar tanto para modelos físicos quanto para aprendizado de máquina.</span> <span class="s" data-s="b7-p1-s3">Embora o modelo T+D (Tabular + Discussion) tenha o melhor desempenho geral em termos de erro médio, ele ainda luta para quantificar corretamente a incerteza em cenários de alta volatilidade.</span> <span class="s" data-s="b7-p1-s4">Isso destaca a necessidade de modelos que aprendam melhor a cauda da distribuição de erros, não apenas a média.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.21602/table26.webp" alt="Tabela comparativa de previsões de 24 horas. O modelo com texto (T+D) apresenta menor MAE (Mean Absolute Error) em nós/hPa comparado ao modelo apenas tabular (T), demonstrando a adição de valor preditivo do texto." loading="lazy">
+          <figcaption>
+            Tabela comparativa de previsões de 24 horas. O modelo com texto (T+D) apresenta menor MAE (Mean Absolute Error) em nós/hPa comparado ao modelo apenas tabular (T), demonstrando a adição de valor preditivo do texto.
+            <span class="source">Tabela 26 do paper · Azizi et al., arXiv:2611.21602</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Comparação de arquiteturas: Neural vs. XGBoost vs. Temporal</span></h2>
+<p><span class="s" data-s="b9-p0-s0">O paper compara três famílias de modelos: redes neurais end-to-end, modelos híbridos (XGBoost para tabular + embeddings para texto/imagens) e modelos temporais (RNNs/GRUs que consideram sequências de tempo).</span> <span class="s" data-s="b9-p0-s1">Para previsões de 24 horas, as redes neurais que combinam dados tabulares e texto (T+D) tiveram o menor erro médio (MAE de 9,46 nós).</span> <span class="s" data-s="b9-p0-s2">Modelos híbridos XGBoost com texto tiveram desempenho muito próximo (9,49 nós).</span></p><p><span class="s" data-s="b9-p1-s0">Modelos temporais, que tentam capturar a evolução da tempestade ao longo de uma sequência de quadros, tiveram desempenho inferior nos testes principais, com MAE de 9,68 nós para o mesmo subconjunto de dados.</span> <span class="s" data-s="b9-p1-s1">Isso pode indicar que, para previsões de curto prazo (24h), a informação estática do momento atual, refinada pelo texto, é mais poderosa do que a inferência de tendências temporais complexas, especialmente quando os dados temporais são limitados ou ruidosos.</span> <span class="s" data-s="b9-p1-s2">A escolha da arquitetura depende do horizonte de previsão e da disponibilidade de dados sequenciais completos.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.21602/figure13.webp" alt="Visualização dos intervalos de previsão nominais de 90%. Marcadores verdes indicam casos onde a observação real caiu dentro do intervalo previsto; vermelhos indicam falhas. A calibração é feita resamplingando tempestades inteiras para lidar com a dependência temporal." loading="lazy">
+          <figcaption>
+            Visualização dos intervalos de previsão nominais de 90%. Marcadores verdes indicam casos onde a observação real caiu dentro do intervalo previsto; vermelhos indicam falhas. A calibração é feita resamplingando tempestades inteiras para lidar com a dependência temporal.
+            <span class="source">Figura 13 do paper · Azizi et al., arXiv:2611.21602</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b11-h">Limitações e escopo do estudo</span></h2>
+<p><span class="s" data-s="b11-p0-s0">É importante destacar as limitações do estudo.</span> <span class="s" data-s="b11-p0-s1">A análise se restringe aos bacias do Atlântico e leste do Pacífico Norte, entre 2002 e 2023.</span> <span class="s" data-s="b11-p0-s2">Isso pode limitar a generalização para outras bacias oceânicas ou períodos anteriores, onde a qualidade dos dados e a frequência de tempestades podem variar.</span> <span class="s" data-s="b11-p0-s3">Além disso, o estudo foca apenas na intensidade, não na trajetória.</span> <span class="s" data-s="b11-p0-s4">Os dados de reanálise (ERA5) diferem das análises em tempo real usadas operacionalmente, o que introduz viés retrospectivo.</span></p><p><span class="s" data-s="b11-p1-s0">Outra limitação é a resolução temporal de 6 horas, que pode perder episódios de intensificação rápida de curta duração.</span> <span class="s" data-s="b11-p1-s1">O estudo não incorpora outros produtos textuais do NHC, como os Advisories públicos, focando apenas nas discussões técnicas.</span> <span class="s" data-s="b11-p1-s2">Os autores enfatizam que os resultados não devem ser interpretados como uma recomendação para implementação operacional imediata, mas sim como uma prova de conceito de que o julgamento humano, quando codificado em texto, carrega sinal preditivo valioso que pode ser extraído por modelos multimodais.</span></p>        <h2><span class="s" data-s="b12-h">Conclusão: O futuro da previsão multimodal</span></h2>
+<p><span class="s" data-s="b12-p0-s0">Este paper demonstra que a linguagem natural dos meteorologistas não é apenas um subproduto da previsão, mas uma fonte rica de informação preditiva.</span> <span class="s" data-s="b12-p0-s1">Ao integrar textos de discussões do NHC com dados numéricos e imagens, é possível reduzir significativamente o erro de previsão de intensidade de furacões, especialmente em horizontes de curto prazo.</span> <span class="s" data-s="b12-p0-s2">No entanto, a integração multimodal não é uma solução mágica; ela requer arquiteturas cuidadosamente desenhadas e enfrenta desafios significativos na quantificação de incerteza durante eventos extremos.</span></p><p><span class="s" data-s="b12-p1-s0">O trabalho abre caminho para pesquisas futuras em aprendizado multimodal aplicado a ciências climáticas.</span> <span class="s" data-s="b12-p1-s1">A questão central deixa de ser &#34;dados vs. humanos&#34; e passa a ser &#34;como combinar dados estruturados, não estruturados e julgamento humano de forma robusta&#34;.</span> <span class="s" data-s="b12-p1-s2">Para cientistas de dados e meteorologistas, a lição é clara: o contexto textual, quando devidamente processado por modelos de linguagem e fusão de modalidades, pode fechar a lacuna entre a física numérica e a expertise humana, levando a previsões mais precisas e, potencialmente, a uma melhor proteção contra desastres naturais.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">O texto das discussões do NHC reduz o erro médio (MAE) de previsão de vento em 6,6% a 24 horas quando adicionado a preditores ambientais padrão.</span></li><li><span class="s" data-s="k1">Campos de vento espacial (ERA5) oferecem ganho marginal na previsão de intensidade a curto prazo, diferentemente de previsões de trajetória.</span></li><li><span class="s" data-s="k2">O modelo falha em capturar a intensificação rápida, com intervalos de confiança abaixo do alvo de 90% nesses casos extremos.</span></li><li><span class="s" data-s="k3">O estudo é retrospectivo e não operacional, pois as discussões são publicadas após o tempo válido dos outros dados de entrada.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.21602" rel="noopener">Quantifying the added value of human forecaster discussions for tropical cyclone intensity prediction</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.21602" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

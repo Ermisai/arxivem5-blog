@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Latent Lattice: Estado persistente por camada para melhorar LLMs — arXiv em 5</title>
+<meta name="description" content="Este paper introduz o Lattice of Latents, uma arquitetura que adiciona fluxos latentes horizontais por camada para complementar o fluxo residual vertical, melhorando a eficiência computacional em Transformers e modelos recorrentes.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Latent Lattice: Estado persistente por camada para melhorar LLMs">
+<meta property="og:description" content="Este paper introduz o Lattice of Latents, uma arquitetura que adiciona fluxos latentes horizontais por camada para complementar o fluxo residual vertical, melhorando a eficiência computacional em Transformers e modelos recorrentes.">
+<meta property="og:image" content="../../assets/papers/2611.21608/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>LLMs</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.21608" rel="noopener">arXiv:2611.21608</a>
+    </div>
+    <h1><span class="s" data-s="t">Latent Lattice: Estado persistente por camada para melhorar LLMs</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Este paper introduz o Lattice of Latents, uma arquitetura que adiciona fluxos latentes horizontais por camada para complementar o fluxo residual vertical, melhorando a eficiência computacional em Transformers e modelos recorrentes.</span></p>
+    <p class="byline">
+      <span>Duggal et al.</span>
+      <span>7 min de leitura</span>
+<span>16/11/2026</span>    </p>
+    <div class="listen" data-article="2611.21608" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=w_wRWGg-3vg" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">Introdução</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Os modelos de linguagem atuais (LLMs) evoluíram principalmente através de três eixos: aumentar a profundidade da rede, adicionar etapas de raciocínio latente (como Chain-of-Thought implícito) ou enriquecer as conexões residuais para melhorar o fluxo de informação.</span> <span class="s" data-s="b0-p0-s1">Em uma arquitetura Transformer padrão, cada token é processado por uma pilha de camadas ao longo de um único &#34;fluxo residual&#34; vertical.</span> <span class="s" data-s="b0-p0-s2">Esse fluxo único desempenha múltiplas funções simultaneamente: lê da memória via atenção, escreve na memória (KV-cache), atualiza-se via MLP e, no final, é decodificado.</span> <span class="s" data-s="b0-p0-s3">Trabalhos recentes tentam extrair mais desse fluxo, tornando-o mais rico ou profundo, mas raramente alteram a capacidade computacional ativa mantida pelo modelo entre tokens, exceto através da memória de sequência (KV-cache) que cresce linearmente com o contexto.</span></p><p><span class="s" data-s="b0-p1-s0">Este paper propõe um eixo complementar: aumentar a capacidade computacional através de estados latentes persistentes por camada.</span> <span class="s" data-s="b0-p1-s1">Os autores, do MIT CSAIL e Adobe, introduzem o &#34;Lattice of Latents&#34; (Lattice de Latentes).</span> <span class="s" data-s="b0-p1-s2">A ideia central é simples em conceito, mas distinta em implementação: além do fluxo vertical tradicional ($h^l_t$), cada camada $l$ mantém um estado horizontal ($r^l_t$) que evolui recorrentemente ao longo do tempo (entre tokens).</span> <span class="s" data-s="b0-p1-s3">Esses estados horizontais não substituem a memória de sequência; eles atuam como &#34;estados companheiros&#34; que condicionam a computação vertical, oferecendo uma forma diferente de escalar a capacidade do modelo sem aumentar proporcionalmente o tamanho do contexto ou a profundidade da rede.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.21608/figure1.webp" alt="Ilustração do Lattice of Latents. As setas azuis representam o fluxo residual vertical padrão através da profundidade da rede. As setas laranjas representam os latentes horizontais ($r^l_t$), que correm recorrentemente ao longo do tempo em cada camada, condicionando a computação vertical." loading="lazy">
+          <figcaption>
+            Ilustração do Lattice of Latents. As setas azuis representam o fluxo residual vertical padrão através da profundidade da rede. As setas laranjas representam os latentes horizontais ($r^l_t$), que correm recorrentemente ao longo do tempo em cada camada, condicionando a computação vertical.
+            <span class="source">Figura 1 do paper · Duggal et al., arXiv:2611.21608</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">Mecanismo do Lattice</span></h2>
+<p><span class="s" data-s="b2-p0-s0">Para entender a inovação, é crucial distinguir o Lattice de outras arquiteturas híbridas, como Transformers-SSM (State Space Models).</span> <span class="s" data-s="b2-p0-s1">Em SSMs, os estados recorrentes servem principalmente como memória interna para misturar sequências, muitas vezes substituindo ou reduzindo a necessidade de atenção global.</span> <span class="s" data-s="b2-p0-s2">No Lattice, os latentes horizontais não substituem a atenção; eles a complementam.</span> <span class="s" data-s="b2-p0-s3">Especificamente, o estado horizontal $r^l_t$ condiciona as queries de atenção, as escritas no KV-cache, a computação do MLP e, na camada superior, a decodificação final.</span> <span class="s" data-s="b2-p0-s4">Isso significa que o modelo mantém uma &#34;memória de estado&#34; leve e persistente por camada, que informa como processar o token atual, enquanto o KV-cache continua a armazenar o contexto histórico explícito.</span></p><p><span class="s" data-s="b2-p1-s0">O mecanismo de atualização horizontal é projetado para ser expressivo, mas compatível com treinamento paralelo por tokens.</span> <span class="s" data-s="b2-p1-s1">Os autores utilizam uma atualização afim inspirada no Mamba, onde $r^l_t$ é atualizado a partir de $r^l_{t-1}$ usando parâmetros aprendidos.</span> <span class="s" data-s="b2-p1-s2">Essa estrutura permite que o modelo aprenda a manter informações relevantes ao longo da sequência sem a sobrecarga computacional de operações sequenciais complexas durante o treinamento.</span> <span class="s" data-s="b2-p1-s3">O estado horizontal age como um modulador: ele ajusta dinamicamente como o fluxo vertical processa a informação, permitindo que o modelo &#34;lembre&#34; de padrões estruturais ou contextuais de longo alcance que o fluxo residual vertical puro pode perder ou diluir em camadas profundas.</span></p>        <h2><span class="s" data-s="b3-h">Resultados em Transformers</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Os autores avaliam o LLLM (Latent Lattice Language Model) em Transformers e em backbones recorrentes modernos, como Gated DeltaNet (GDN), Mamba-2 e híbridos GDN-Mamba-2.</span> <span class="s" data-s="b3-p0-s1">O treinamento foi realizado no conjunto FineWeb-Edu, com pré-treinamento de até 30 bilhões de tokens.</span> <span class="s" data-s="b3-p0-s2">Para a avaliação principal, focamos nos resultados após 20 bilhões de tokens, comparando modelos de 400M e 600M parâmetros.</span></p><p><span class="s" data-s="b3-p1-s0">No grupo de 400M parâmetros, o Transformer base (Base-24L, largura $d_{model}=1024$) atinge uma perplexidade de 15.41 no FineWeb-Edu.</span> <span class="s" data-s="b3-p1-s1">O LLLM correspondente (LLLM 945,256), que mantém aproximadamente o mesmo número de parâmetros (406.5M vs 406.7M) e custo computacional (0.72 GFLOP/token vs 0.71 GFLOP/token), reduz a perplexidade para 14.54.</span> <span class="s" data-s="b3-p1-s2">Isso representa uma melhoria de 5.6% em um único passo, um ganho significativo em escala de linguagem.</span> <span class="s" data-s="b3-p1-s3">Ao adicionar injeção de entrada e um fluxo de leitura vertical (input-injection + vstream), a perplexidade cai ainda mais para 14.40, superando o Transformer base em todos os conjuntos de dados out-of-distribution (Pile, LAMBADA, Nemotron-CC) com margens de 3% a 11%.</span></p><p><span class="s" data-s="b3-p2-s0">Um ponto interessante é a comparação com modelos maiores.</span> <span class="s" data-s="b3-p2-s1">O LLLM de 400M com injeção de entrada e vstream (405.6M parâmetros) atinge uma perplexidade de 14.40 no FineWeb-Edu, desempenho comparável ao Transformer Base-40L de 609M parâmetros (também 14.40), mas com 33% menos parâmetros e 35% menos computação forward estimada.</span> <span class="s" data-s="b3-p2-s2">Isso sugere que distribuir a capacidade entre fluxos verticais e horizontais é mais eficiente do que simplesmente aumentar a largura ou a profundidade do fluxo residual.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.21608/table1.webp" alt="Tabela de resultados de perplexidade. O LLLM de 400M supera o Transformer base de mesmo tamanho e compete com Transformers de 600M, demonstrando a eficiência da arquitetura Lattice." loading="lazy">
+          <figcaption>
+            Tabela de resultados de perplexidade. O LLLM de 400M supera o Transformer base de mesmo tamanho e compete com Transformers de 600M, demonstrando a eficiência da arquitetura Lattice.
+            <span class="source">Tabela 1 do paper · Duggal et al., arXiv:2611.21608</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Refinamento e Comparação</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os autores também exploram o refinamento Jacobi (Jacobi refinement), uma técnica onde o modelo executa múltiplas &#34;varreduras&#34; (sweeps) sobre o mesmo token durante a inferência para refinar o estado latente.</span> <span class="s" data-s="b5-p0-s1">Com três varreduras fixas (LLLM-410 J3), o modelo de 400M atinge uma perplexidade de 14.03 no FineWeb-Edu, o melhor resultado do grupo.</span> <span class="s" data-s="b5-p0-s2">No entanto, isso eleva o custo computacional para 1.85 GFLOP/token.</span> <span class="s" data-s="b5-p0-s3">Quando avaliado sequencialmente (sem varreduras), o custo volta a 0.72 GFLOP/token, mas a perplexidade sobe para 14.73.</span> <span class="s" data-s="b5-p0-s4">Isso indica que o refinamento traz ganhos, mas a versão &#34;rápida&#34; do Lattice já é competitiva com modelos maiores sem overhead de inferência.</span></p><p><span class="s" data-s="b5-p1-s0">No grupo de 600M parâmetros, o LLLM (1024,1024) atinge 13.70 de perplexidade no FineWeb-Edu, superando tanto Transformers com largura aumentada quanto o Base-40L de 609M parâmetros (14.40), apesar de terem custos computacionais similares (1.10 GFLOP/token).</span> <span class="s" data-s="b5-p1-s1">Esses resultados reforçam a tese central: alocar capacidade para latentes horizontais persistentes é uma estratégia de escalonamento complementar e eficaz, que funciona melhor do que gastar a mesma capacidade apenas em largura ou profundidade do fluxo residual.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b6-t">Composição com Melhorias Existentes</span></h3>
+          <p><span class="s" data-s="b6-c-s0">O Lattice não substitui outras otimizações de fluxo residual; ele as complementa.</span> <span class="s" data-s="b6-c-s1">Ao combinar o Lattice com hyper-connections e injeção de entrada (x0), a perplexidade cai de 14.22 (Transformer aprimorado sem Lattice) para 13.61.</span> <span class="s" data-s="b6-c-s2">Isso mostra que o estado horizontal captura informação que as melhorias verticais sozinhas não conseguem acessar completamente.</span></p>
+        </aside>
+        <figure class="figure">
+          <img src="../../assets/papers/2611.21608/figure14.webp" alt="Comparação com outras melhorias de fluxo residual. O Lattice (vermelho) reduz a perplexidade em todas as configurações, incluindo quando combinado com value residuals, hyper-connections e injeção de entrada, superando as abordagens tradicionais (cinza)." loading="lazy">
+          <figcaption>
+            Comparação com outras melhorias de fluxo residual. O Lattice (vermelho) reduz a perplexidade em todas as configurações, incluindo quando combinado com value residuals, hyper-connections e injeção de entrada, superando as abordagens tradicionais (cinza).
+            <span class="source">Figura 14 do paper · Duggal et al., arXiv:2611.21608</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Aplicação em Backbones Recorrentes</span></h2>
+<p><span class="s" data-s="b8-p0-s0">A versatilidade do Lattice é demonstrada ao aplicá-lo a backbones recorrentes.</span> <span class="s" data-s="b8-p0-s1">Em Gated DeltaNet (GDN) e Mamba-2, os latentes horizontais condicionam as operações nativas de memória (leitura, escrita e atualização).</span> <span class="s" data-s="b8-p0-s2">Após 10 bilhões de tokens, o Lattice melhora a perplexidade em todos os tamanhos de estado nativo testados.</span> <span class="s" data-s="b8-p0-s3">Mais impressionante, as variantes Lattice-GDN e Lattice-Triadic-GDN superam as bases puras que possuem 4x mais entradas de estado nativo.</span> <span class="s" data-s="b8-p0-s4">Isso sugere que o Lattice ajuda o modelo a usar sua memória interna de forma mais concentrada e alinhada, como evidenciado por análises de probing que mostram espectros de estado mais concentrados e maior alinhamento de queries com a direção principal da memória.</span></p><p><span class="s" data-s="b8-p1-s0">Além da perplexidade de linguagem, os ganhos se estendem a tarefas downstream.</span> <span class="s" data-s="b8-p1-s1">No grupo de 400M, o LLLM (945,256) melhora a média de acurácia em nove tarefas de zero-shot de 45.46 para 47.67 (+2.21 pontos) e em five-shot de 46.19 para 47.79 (+1.60 pontos).</span> <span class="s" data-s="b8-p1-s2">O refinamento Jacobi leva a média five-shot para 49.38.</span> <span class="s" data-s="b8-p1-s3">Esses resultados indicam que a melhoria não é apenas em prever o próximo token, mas em capturar estruturas de linguagem mais úteis para raciocínio e tarefas específicas.</span></p>        <h2><span class="s" data-s="b9-h">Limitações e Conclusão</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Apesar dos resultados promissores, o paper deixa algumas questões em aberto.</span> <span class="s" data-s="b9-p0-s1">A eficiência computacional do refinamento Jacobi é limitada durante a inferência sequencial, onde os ganhos diminuem.</span> <span class="s" data-s="b9-p0-s2">Além disso, o treinamento com um número aleatório de iterações Jacobi (como em PonderLM-2) poderia potencialmente fechar a lacuna entre a inferência rápida e a refinada, mas isso não foi explorado em profundidade neste trabalho.</span> <span class="s" data-s="b9-p0-s3">Outro aspecto é a escolha da arquitetura de atualização horizontal: os autores usam uma atualização afim simples, mas não exploram extensivamente mecanismos de atenção ou não-linearidades mais complexas para o fluxo horizontal.</span></p><p><span class="s" data-s="b9-p1-s0">O paper identifica o estado persistente por camada como um eixo promissor para o escalonamento de LLMs.</span> <span class="s" data-s="b9-p1-s1">Ao contrário de tentar fazer o fluxo residual vertical carregar todo o peso computacional, o Lattice distribui essa carga, usando estados horizontais leves para manter informação contextual e estrutural.</span> <span class="s" data-s="b9-p1-s2">Isso permite que modelos menores atinjam desempenho comparável a modelos maiores, ou que modelos do mesmo tamanho aprendam representações mais ricas.</span> <span class="s" data-s="b9-p1-s3">A abordagem é especialmente relevante para cenários onde o custo de memória de sequência (KV-cache) é um gargalo, pois o Lattice adiciona capacidade sem aumentar o tamanho do contexto, apenas mantendo um estado leve por camada que é atualizado a cada passo.</span></p><p><span class="s" data-s="b9-p2-s0">Em resumo, o Latent Lattice Language Model propõe uma mudança de perspectiva: em vez de apenas tornar o fluxo residual mais profundo ou rico, mantenha estados latentes horizontais que evoluem no tempo.</span> <span class="s" data-s="b9-p2-s1">Esses estados condicionam a atenção e a computação da camada, atuando como uma memória de estado persistente e leve.</span> <span class="s" data-s="b9-p2-s2">Os resultados mostram que essa estratégia é eficaz em Transformers e modelos recorrentes, oferecendo ganhos de perplexidade e desempenho downstream sem o custo linear de expansão do contexto.</span> <span class="s" data-s="b9-p2-s3">Para desenvolvedores e pesquisadores, o Lattice sugere que o futuro do escalonamento de LLMs pode passar não apenas por redes maiores, mas por arquiteturas que melhoram a qualidade e a persistência dos estados internos entre tokens.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">O Lattice of Latents adiciona um estado horizontal persistente por camada, complementando o fluxo residual vertical padrão dos Transformers.</span></li><li><span class="s" data-s="k1">Modelos LLLM de 400M parâmetros superam Transformers base de mesmo tamanho, reduzindo a perplexidade de 15.41 para 14.40 no FineWeb-Edu.</span></li><li><span class="s" data-s="k2">A abordagem é agnóstica à arquitetura: funciona em Transformers, Mamba-2 e GDN, muitas vezes superando bases com 4x mais memória nativa.</span></li><li><span class="s" data-s="k3">O método compõe-se com melhorias existentes no fluxo residual, como hyper-connections, atingindo os melhores resultados combinados.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.21608" rel="noopener">Latent Lattice Language Models</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.21608" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

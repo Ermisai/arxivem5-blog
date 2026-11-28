@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agentes de Código Superam Modelos de Vídeo no Raciocínio Visual Simbólico — arXiv em 5</title>
+<meta name="description" content="Um benchmark compara a geração direta de vídeos com a síntese de código para resolver tarefas visuais. Resultados mostram que agentes de código são significativamente mais precisos e confiáveis.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Agentes de Código Superam Modelos de Vídeo no Raciocínio Visual Simbólico">
+<meta property="og:description" content="Um benchmark compara a geração direta de vídeos com a síntese de código para resolver tarefas visuais. Resultados mostram que agentes de código são significativamente mais precisos e confiáveis.">
+<meta property="og:image" content="../../assets/papers/2611.34813/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Agentes</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.34813" rel="noopener">arXiv:2611.34813</a>
+    </div>
+    <h1><span class="s" data-s="t">Agentes de Código Superam Modelos de Vídeo no Raciocínio Visual Simbólico</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Um benchmark compara a geração direta de vídeos com a síntese de código para resolver tarefas visuais.</span> <span class="s" data-s="d-s1">Resultados mostram que agentes de código são significativamente mais precisos e confiáveis.</span></p>
+    <p class="byline">
+      <span>Luo et al.</span>
+      <span>7 min de leitura</span>
+<span>25/11/2026</span>    </p>
+    <div class="listen" data-article="2611.34813" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=o4FYQDRvVak" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema do Raciocínio Visual Nativo</span></h2>
+<p><span class="s" data-s="b0-p0-s0">Modelos de geração de vídeo têm avançado rapidamente, produzindo clipes fotorrealistas e coerentes temporalmente.</span> <span class="s" data-s="b0-p0-s1">Essa capacidade levou pesquisadores a questionar se esses modelos podem atuar como &#34;raciocinadores visuais&#34;.</span> <span class="s" data-s="b0-p0-s2">A ideia é que, ao invés de apenas renderizar descrições, o modelo produza vídeos que constituam soluções para tarefas estruturadas.</span> <span class="s" data-s="b0-p0-s3">O benchmark VBVR-Pro-Bench foi criado para testar essa hipótese, oferecendo um ambiente onde a resposta correta é uma função determinística da primeira imagem e de um prompt em linguagem natural.</span></p><p><span class="s" data-s="b0-p1-s0">O paradigma dominante assume que o raciocínio visual é mais nativo e confiável quando ocorre diretamente nos pixels do vídeo.</span> <span class="s" data-s="b0-p1-s1">O modelo &#34;denoiseia&#34; (remove ruído) a resposta visual, aprendendo implicitamente as regras da tarefa através da sua arquitetura generativa.</span> <span class="s" data-s="b0-p1-s2">No entanto, essa premissa não foi testada contra uma alternativa simbólica sob condições idênticas.</span> <span class="s" data-s="b0-p1-s3">Se a solução pode ser computada a partir da imagem inicial, por que não permitir que um agente de código a expresse explicitamente?</span></p><p><span class="s" data-s="b0-p2-s0">Este paper, intitulado &#34;Solve Vision with Code&#34;, propõe uma mudança de meio controlada.</span> <span class="s" data-s="b0-p2-s1">Em vez de gerar pixels, um agente de código recebe o mesmo input (imagem e prompt) e escreve um programa que renderiza o vídeo de resposta.</span> <span class="s" data-s="b0-p2-s2">O avaliador oficial, baseado em regras e visão computacional clássica, permanece inalterado.</span> <span class="s" data-s="b0-p2-s3">O objetivo é determinar se a síntese de programas é uma rota mais confiável para o raciocínio visual do que a geração direta de vídeo.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.34813/figure1.webp" alt="Comparação direta: um modelo de vídeo denoiseia o vídeo resposta diretamente, enquanto um agente de código escreve e executa um programa para renderizá-lo. Ambos usam o mesmo formato e avaliador oficial." loading="lazy">
+          <figcaption>
+            Comparação direta: um modelo de vídeo denoiseia o vídeo resposta diretamente, enquanto um agente de código escreve e executa um programa para renderizá-lo. Ambos usam o mesmo formato e avaliador oficial.
+            <span class="source">Figura 1 do paper · Luo et al., arXiv:2611.34813</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">Metodologia: O Protocolo de Avaliação</span></h2>
+<p><span class="s" data-s="b2-p0-s0">A avaliação ocorre no VBVR-Pro-Bench, que consiste em 500 instâncias divididas em 100 famílias de tarefas.</span> <span class="s" data-s="b2-p0-s1">Cada família tem cinco instâncias e é classificada em uma ou mais das cinco categorias cognitivas: Percepção, Abstração, Conhecimento, Transformação e Espacialidade.</span> <span class="s" data-s="b2-p0-s2">O input para todos os sistemas é uma imagem de 1024x1024 pixels e um prompt textual.</span> <span class="s" data-s="b2-p0-s3">A saída esperada é um vídeo que execute a tarefa descrita.</span></p><p><span class="s" data-s="b2-p1-s0">Para os agentes de código, o setup é rigoroso.</span> <span class="s" data-s="b2-p1-s1">Cada agente opera em um container de CPU isolado, com acesso apenas a bibliotecas padrão de imagem e ciência de dados em Python.</span> <span class="s" data-s="b2-p1-s2">Há um limite de tempo de 30 minutos por instância e apenas uma tentativa permitida.</span> <span class="s" data-s="b2-p1-s3">Se o agente não entregar um vídeo, a nota é zero.</span> <span class="s" data-s="b2-p1-s4">É proibido o uso de modelos generativos de imagem ou vídeo; o agente deve usar apenas o que pode ser computado a partir da imagem inicial e do prompt.</span></p><p><span class="s" data-s="b2-p2-s0">Foram testados três agentes de código fechados (Codex com gpt-6-astra, Claude Code com Fable 5.1 e Gemini CLI com Gemini 3.1 Pro) e 23 modelos de código de peso aberto (open-weight), como GLM-5 e Kimi K2.5.</span> <span class="s" data-s="b2-p2-s1">Os resultados dos modelos de vídeo foram retirados do leaderboard oficial do VBVR-Pro, sem re-execução, para garantir a comparabilidade.</span> <span class="s" data-s="b2-p2-s2">O melhor modelo de vídeo, treinado com Reinforcement Learning (RL) específico para o benchmark, serviu como baseline superior.</span></p>        <h2><span class="s" data-s="b3-h">Resultados: A Superioridade dos Agentes de Código</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Os resultados mostram uma vantagem clara e consistente para os agentes de código.</span> <span class="s" data-s="b3-p0-s1">O melhor agente, Codex, alcançou uma pontuação média de 0.923 nas 500 instâncias.</span> <span class="s" data-s="b3-p0-s2">Claude Code e Gemini CLI ficaram logo atrás, com 0.894 e 0.893, respectivamente.</span> <span class="s" data-s="b3-p0-s3">Esses valores superam significativamente o melhor modelo de vídeo, o VBVR-Pro-Wan2.2-I2V-A14B, que foi treinado com RL usando o próprio avaliador como recompensa.</span> <span class="s" data-s="b3-p0-s4">O modelo de vídeo alcançou 0.670, uma diferença de mais de 0.25 pontos.</span></p><p><span class="s" data-s="b3-p1-s0">Entre os modelos de código de peso aberto, o GLM-5 liderou com 0.572, superando todos os modelos de vídeo, exceto o otimizado com RL.</span> <span class="s" data-s="b3-p1-s1">Outros modelos, como Kimi K2.5 (0.557) e MiniMax M2.5 (0.451), também demonstraram capacidade competitiva.</span> <span class="s" data-s="b3-p1-s2">A baixa pontuação de muitos modelos open-weight não se deveu à falta de raciocínio, mas sim a falhas de entrega: muitos não invocaram ferramentas de código, pararam antes de executar ou exauriram o tempo limite, resultando em zero pontos.</span></p><p><span class="s" data-s="b3-p2-s0">É crucial notar que a quantidade de uso de ferramentas (tool use) não correlacionou diretamente com a pontuação final, além do mínimo necessário para gerar o vídeo.</span> <span class="s" data-s="b3-p2-s1">Os agentes fechados, embora tenham custos operacionais muito diferentes, tiveram desempenhos consistentemente altos.</span> <span class="s" data-s="b3-p2-s2">Isso sugere que a confiabilidade na síntese de código é uma propriedade robusta dos modelos de linguagem de ponta, não apenas um artefato de configuração específica.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.34813/table2.webp" alt="Ranking do VBVR-Pro-Bench. Agentes de código fechados ocupam o top 3. O melhor modelo de vídeo (treinado com RL) ficou em 4º lugar, atrás de todos os agentes testados." loading="lazy">
+          <figcaption>
+            Ranking do VBVR-Pro-Bench. Agentes de código fechados ocupam o top 3. O melhor modelo de vídeo (treinado com RL) ficou em 4º lugar, atrás de todos os agentes testados.
+            <span class="source">Tabela 2 do paper · Luo et al., arXiv:2611.34813</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b5-h">Análise de Categorias e Tipos de Programa</span></h2>
+<p><span class="s" data-s="b5-p0-s0">Os agentes de código lideraram em todas as cinco categorias cognitivas.</span> <span class="s" data-s="b5-p0-s1">A margem de vitória foi menor em Transformação e maior em Percepção.</span> <span class="s" data-s="b5-p0-s2">Essa distribuição revela nuances sobre como o raciocínio é executado.</span> <span class="s" data-s="b5-p0-s3">Os autores classificaram os programas gerados em duas categorias comportamentais: &#34;descritivos&#34; (depictive) e &#34;proposicionais&#34; (propositional).</span></p><p><span class="s" data-s="b5-p1-s0">Programas descritivos são aqueles que navegam pela imagem no momento da execução (run-time).</span> <span class="s" data-s="b5-p1-s1">Eles medem propriedades visuais, como larguras ou posições, e calculam a resposta dinamicamente.</span> <span class="s" data-s="b5-p1-s2">Isso se assemelha a uma simulação mental espacial.</span> <span class="s" data-s="b5-p1-s3">Já os programas proposicionais operam com valores codificados rigidamente (hard-coded).</span> <span class="s" data-s="b5-p1-s4">O agente identifica a resposta durante sua sessão de raciocínio e o programa apenas a renderiza, sem calcular nada novo.</span></p><p><span class="s" data-s="b5-p2-s0">A análise mostrou que tarefas de Percepção e Espacialidade tendem a gerar programas descritivos.</span> <span class="s" data-s="b5-p2-s1">O agente precisa &#34;olhar&#34; para a imagem para resolver o problema.</span> <span class="s" data-s="b5-p2-s2">Por outro lado, tarefas de Conhecimento e Abstração geram mais programas proposicionais.</span> <span class="s" data-s="b5-p2-s3">O agente infere a regra ou o fato durante o pensamento e o codifica como constante no script.</span> <span class="s" data-s="b5-p2-s4">Essa divisão sugere que o raciocínio visual não é monolítico; ele se adapta à natureza simbólica ou espacial da tarefa.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.34813/figure4.webp" alt="Exemplo de programas descritivos vs. proposicionais. Claude Code (descritivo) mede círculos na imagem. Codex (proposicional) já identificou a resposta e apenas a destaca no código." loading="lazy">
+          <figcaption>
+            Exemplo de programas descritivos vs. proposicionais. Claude Code (descritivo) mede círculos na imagem. Codex (proposicional) já identificou a resposta e apenas a destaca no código.
+            <span class="source">Figura 4 do paper · Luo et al., arXiv:2611.34813</span>
+          </figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="../../assets/papers/2611.34813/figure3.webp" alt="Distribuição de programas descritivos (azul) e proposicionais (vermelho) por categoria de tarefa. Tarefas visuais puras favorecem o raciocínio descritivo, enquanto abstração favorece o proposicional." loading="lazy">
+          <figcaption>
+            Distribuição de programas descritivos (azul) e proposicionais (vermelho) por categoria de tarefa. Tarefas visuais puras favorecem o raciocínio descritivo, enquanto abstração favorece o proposicional.
+            <span class="source">Figura 3 do paper · Luo et al., arXiv:2611.34813</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b8-h">Implicações para a Natureza do Raciocínio</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Os resultados desafiam a noção de que o raciocínio visual nativo (via pixels) é a única ou melhor rota para tarefas visuais.</span> <span class="s" data-s="b8-p0-s1">A síntese de código permite uma representação explícita e verificável da lógica.</span> <span class="s" data-s="b8-p0-s2">O fato de os agentes fechados superarem modelos de vídeo, mesmo aqueles treinados especificamente para o benchmark, indica que a capacidade de raciocínio simbólico e a navegação estruturada oferecem vantagens significativas.</span></p><p><span class="s" data-s="b8-p1-s0">A distinção entre programas descritivos e proposicionais oferece insights sobre como os agentes de código processam informações visuais.</span> <span class="s" data-s="b8-p1-s1">A existência de programas descritivos sugere que, mesmo com um backbone de linguagem, os agentes podem simular a manipulação de imagens analógicas através de operações simbólicas.</span> <span class="s" data-s="b8-p1-s2">Isso ressoa com teorias cognitivas humanas, onde a rotação mental e a física intuitiva são atribuídas à simulação visual, enquanto a aplicação de regras é descrita em termos discretos.</span></p><p><span class="s" data-s="b8-p2-s0">No entanto, os autores alertam que isso não estabelece um limite teórico para os modelos de vídeo.</span> <span class="s" data-s="b8-p2-s1">É possível que modelos de vídeo futuros, com arquiteturas ou treinamentos diferentes, alcancem ou superem os agentes de código.</span> <span class="s" data-s="b8-p2-s2">A conclusão atual descreve o estado da arte presente: para tarefas cujas soluções são funções determinísticas da imagem inicial, o código é uma ferramenta mais confiável do que a geração de pixels.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b9-t">Limitações do Benchmark e Comparação</span></h3>
+          <p><span class="s" data-s="b9-c-s0">Este estudo não avalia a criatividade ou a coerência temporal estética de vídeos longos.</span> <span class="s" data-s="b9-c-s1">O benchmark VBVR-Pro foca em tarefas de curta duração com ground truth simbólico.</span> <span class="s" data-s="b9-c-s2">Modelos de vídeo podem ainda ser superiores em tarefas que exigem narrativa complexa ou física não determinística, onde a verificação automática é difícil.</span> <span class="s" data-s="b9-c-s3">Além disso, a exclusão de modelos de vídeo sem RL específico pode inflacionar a vantagem dos agentes de código.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b10-h">Conclusão: Código como Meio de Raciocínio</span></h2>
+<p><span class="s" data-s="b10-p0-s0">O paper demonstra que, sob condições controladas, agentes de código são raciocinadores visuais mais fortes do que modelos de geração de vídeo.</span> <span class="s" data-s="b10-p0-s1">Ao escrever programas, os agentes explicitam a lógica da tarefa, evitando os erros implícitos da denoising de pixels.</span> <span class="s" data-s="b10-p0-s2">A capacidade de alternar entre raciocínio descritivo (navegando a imagem) e proposicional (codificando regras) torna a síntese de código uma abordagem versátil e robusta.</span></p><p><span class="s" data-s="b10-p1-s0">Para a comunidade de desenvolvedores e cientistas de dados, a mensagem é clara: quando a tarefa visual pode ser decomposta em passos lógicos ou medições, a abordagem de &#34;programar a resposta&#34; pode ser mais eficaz do que &#34;gerar a resposta&#34;.</span> <span class="s" data-s="b10-p1-s1">Isso abre caminho para sistemas híbridos que combinam a precisão simbólica do código com a flexibilidade visual dos modelos generativos, em vez de tratar o raciocínio visual como uma propriedade exclusiva da manipulação de pixels.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">Agentes de código fechados alcançam média de 0.92 no VBVR-Pro-Bench, superando o melhor modelo de vídeo em mais de 0.25 pontos.</span></li><li><span class="s" data-s="k1">A abordagem substitui a denoising de pixels pela escrita de programas que renderizam a resposta, mantendo o mesmo avaliador oficial.</span></li><li><span class="s" data-s="k2">Identifica-se uma divisão entre programas &#39;descritivos&#39; (navegam a imagem) e &#39;proposicionais&#39; (codificam a resposta), refletindo tipos de raciocínio.</span></li><li><span class="s" data-s="k3">Limitações incluem a natureza determinística das tarefas e a exclusão de modelos de vídeo que não usam RL específico do benchmark.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.34813" rel="noopener">Solve Vision with Code: Coding Agents Are Stronger Visual Reasoners Than Video Models</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.34813" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WeMM-Video: Arquitetura e Treino para Entendimento Omni-Modal de Vídeo — arXiv em 5</title>
+<meta name="description" content="Análise técnica do WeMM-Video, modelo open-source da Tencent que integra áudio e vídeo em um único pipeline de raciocínio, utilizando distilação e RL para reduzir alucinações.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="WeMM-Video: Arquitetura e Treino para Entendimento Omni-Modal de Vídeo">
+<meta property="og:description" content="Análise técnica do WeMM-Video, modelo open-source da Tencent que integra áudio e vídeo em um único pipeline de raciocínio, utilizando distilação e RL para reduzir alucinações.">
+<meta property="og:image" content="../../assets/papers/2611.26409/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>Vídeo</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.26409" rel="noopener">arXiv:2611.26409</a>
+    </div>
+    <h1><span class="s" data-s="t">WeMM-Video: Arquitetura e Treino para Entendimento Omni-Modal de Vídeo</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Análise técnica do WeMM-Video, modelo open-source da Tencent que integra áudio e vídeo em um único pipeline de raciocínio, utilizando distilação e RL para reduzir alucinações.</span></p>
+    <p class="byline">
+      <span>Tang et al.</span>
+      <span>6 min de leitura</span>
+<span>19/11/2026</span>    </p>
+    <div class="listen" data-article="2611.26409" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=uH7fByoUgJs" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Desafio da Percepção Omni-Modal</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A compreensão de vídeo, especialmente quando acompanhada de áudio, representa um dos maiores desafios atuais na inteligência multimodal.</span> <span class="s" data-s="b0-p0-s1">Modelos tradicionais frequentemente falham em alinhar pistas acústicas com eventos visuais correspondentes, sofrendo com alucinações cross-modal e ignorando dinâmicas temporais finas.</span> <span class="s" data-s="b0-p0-s2">O WeMM-Video, desenvolvido pela Tencent e Tsinghua University, busca preencher essa lacuna com uma família de modelos bilingues (chinês e inglês) que vão de 2B a 35B parâmetros, focando na percepção conjunta áudio-visual.</span></p><p><span class="s" data-s="b0-p1-s0">O problema central não é apenas reconhecer objetos ou sons isolados, mas capturar a evolução temporal contínua e sintetizar cues visuais e acústicos através de raciocínio deliberado.</span> <span class="s" data-s="b0-p1-s1">Modelos open-source existentes tendem a ser frágeis em cenários reais complexos.</span> <span class="s" data-s="b0-p1-s2">O WeMM-Video propõe uma abordagem unificada que trata texto, imagem, áudio e vídeo dentro de um paradigma de &#39;pensamento híbrido&#39;, permitindo respostas diretas ou raciocínio explícito passo a passo.</span></p><p><span class="s" data-s="b0-p2-s0">Este artigo explora os mecanismos internos do WeMM-Video, desde sua arquitetura de codificadores até o pipeline de treino em três etapas.</span> <span class="s" data-s="b0-p2-s1">Não se trata apenas de um modelo que gera legendas, mas de um sistema projetado para mitigar alucinações através de traces de raciocínio fundamentados nos dados visuais e acústicos.</span> <span class="s" data-s="b0-p2-s2">A proposta é oferecer uma base sólida para pesquisa open-source que rivalize com modelos proprietários fechados.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.26409/figure1.webp" alt="Exemplos de raciocínio omni-modal: o modelo identifica detalhes temporais específicos em vídeos com áudio, como preços e diálogos, demonstrando alinhamento preciso entre modalidades." loading="lazy">
+          <figcaption>
+            Exemplos de raciocínio omni-modal: o modelo identifica detalhes temporais específicos em vídeos com áudio, como preços e diálogos, demonstrando alinhamento preciso entre modalidades.
+            <span class="source">Figura 1 do paper · Tang et al., arXiv:2611.26409</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b2-h">Arquitetura: Unificando Áudio e Vídeo</span></h2>
+<p><span class="s" data-s="b2-p0-s0">A arquitetura do WeMM-Video baseia-se no design do video-SALMONN 2, recebendo entradas multimodais e produzindo saídas textuais autoregressivamente.</span> <span class="s" data-s="b2-p0-s1">Para as variantes de 2B, 4B e 9B, os backbones são derivados do Qwen3.5, enquanto a versão de 35B usa o Qwen3.6-35B-A3B.</span> <span class="s" data-s="b2-p0-s2">Os codificadores de áudio são inicializados a partir do Qwen2.5-Omni, preservando capacidades pré-treinadas de percepção acústica.</span> <span class="s" data-s="b2-p0-s3">A chave está na integração temporal fina entre as modalidades.</span></p><p><span class="s" data-s="b2-p1-s0">Para processamento visual, o modelo retém os codificadores nativos e mecanismos de projeção dos backbones, mantendo a compreensão prévia de imagens e vídeos.</span> <span class="s" data-s="b2-p1-s1">O módulo de áudio é dedicado e composto por um codificador baseado no Whisper, que extrai características acústicas de sinais amostrados a 16,000 Hz, segmentados em chunks de 30 segundos.</span> <span class="s" data-s="b2-p1-s2">Isso permite lidar com áudio contínuo sem perda significativa de contexto temporal.</span></p><p><span class="s" data-s="b2-p2-s0">Um componente crítico é o window-level Q-Former.</span> <span class="s" data-s="b2-p2-s1">Ele comprime as características extraídas pelo Whisper dentro de janelas temporais locais de 0.1 segundos.</span> <span class="s" data-s="b2-p2-s2">Cada janela é mapeada para um único token de áudio no espaço de entrada do LLM, resultando em 10 tokens de áudio por segundo.</span> <span class="s" data-s="b2-p2-s3">Essa granularidade é essencial para alinhar o áudio com a fluidez visual do vídeo.</span> <span class="s" data-s="b2-p2-s4">Para vídeos com áudio, tokens visuais e de áudio são intercalados em ordem cronológica, suplementados por timestamps textuais explícitos.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.26409/figure2.webp" alt="Diagrama da arquitetura: codificadores de visão e áudio alimentam tokens no LLM, com timestamps explícitos para alinhamento temporal entre modalidades." loading="lazy">
+          <figcaption>
+            Diagrama da arquitetura: codificadores de visão e áudio alimentam tokens no LLM, com timestamps explícitos para alinhamento temporal entre modalidades.
+            <span class="source">Figura 2 do paper · Tang et al., arXiv:2611.26409</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b4-h">Corpus de Treino: 1.2 Trilhões de Tokens</span></h2>
+<p><span class="s" data-s="b4-p0-s0">A robustez do WeMM-Video depende de um corpus multimodal massivo de aproximadamente 1.2T tokens.</span> <span class="s" data-s="b4-p0-s1">A distribuição modal é estratégica: dados joint audio-visual (áudio e vídeo juntos) constituem 45.4% do volume total, fornecendo supervisão temporal densa para modelar dinâmicas multimodais complexas.</span> <span class="s" data-s="b4-p0-s2">Dados visuais puros representam 28.4%, áudio puro 23.6% e texto apenas 2.6%.</span> <span class="s" data-s="b4-p0-s3">Essa ênfase em dados combinados é o que diferencia o modelo de abordagens que tratam modalidades de forma isolada.</span></p><p><span class="s" data-s="b4-p1-s0">Dentro das tarefas, a legenda (captioning) responde por 37.7% dos tokens.</span> <span class="s" data-s="b4-p1-s1">Os autores enfatizam dois tipos complementares de legendas: finas (focadas em ações e eventos densos, como esportes e dança) e joint audio-visual (descrevendo ações visuais, diálogos e sinais acústicos ao longo de uma linha do tempo contínua).</span> <span class="s" data-s="b4-p1-s2">Dados de filmes, séries curtas, entrevistas e lives de comércio são escalados para criar essa riqueza contextual.</span></p><p><span class="s" data-s="b4-p2-s0">Todo o dado de captioning passa por um pipeline rigoroso de pontuação automática de qualidade, deduplicação semântica e filtragem de toxicidade.</span> <span class="s" data-s="b4-p2-s1">Isso garante fidelidade perceptual e diversidade.</span> <span class="s" data-s="b4-p2-s2">A inclusão de corpus de áudio dedicado é necessária porque o modelo base não possui percepção acústica nativa.</span> <span class="s" data-s="b4-p2-s3">O treino visa construir e alinhar representações acústicas com o espaço de linguagem, permitindo que o modelo &#39;ouça&#39; e &#39;veja&#39; simultaneamente.</span></p>        <h2><span class="s" data-s="b5-h">Pipeline de Pós-Treinamento: OPD, MrDPO e RL</span></h2>
+<p><span class="s" data-s="b5-p0-s0">O pré-treinamento progressivo prepara o modelo para a percepção básica, mas o pós-treinamento em três etapas é crucial para o raciocínio e a estabilidade.</span> <span class="s" data-s="b5-p0-s1">A primeira etapa utiliza multi-teacher On-Policy Distillation (OPD).</span> <span class="s" data-s="b5-p0-s2">Isso envolve distilar conhecimento de modelos maiores ou mais especializados para melhorar a eficiência e a precisão das respostas, alinhando o comportamento do WeMM-Video com padrões de alta qualidade sem depender exclusivamente de dados brutos.</span></p><p><span class="s" data-s="b5-p1-s0">A segunda etapa emprega anti-repetition Multi-Round Direct Preference Optimization (MrDPO).</span> <span class="s" data-s="b5-p1-s1">O MrDPO é uma variação do DPO que otimiza preferências em múltiplas rodadas, com um foco específico em evitar repetições.</span> <span class="s" data-s="b5-p1-s2">Em tarefas de raciocínio longo, modelos tendem a entrar em loops ou repetir informações.</span> <span class="s" data-s="b5-p1-s3">O MrDPO penaliza explicitamente essas repetições, forçando o modelo a gerar traces de raciocínio mais coesos e informativos.</span></p><p><span class="s" data-s="b5-p2-s0">A terceira etapa é o Reinforcement Learning (RL) especialista.</span> <span class="s" data-s="b5-p2-s1">Diferente de um RL genérico, este é focado em capacidades específicas, como a capacidade de &#39;thinking&#39; (raciocínio).</span> <span class="s" data-s="b5-p2-s2">Isso ajuda o modelo a aprender quando e como usar o modo de raciocínio explícito para melhorar a performance em tarefas complexas, equilibrando latência e precisão.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b6-t">Modo Thinking vs. Instruct</span></h3>
+          <p><span class="s" data-s="b6-c-s0">O WeMM-Video suporta dois modos: &#39;instruct&#39; para respostas diretas e rápidas, e &#39;thinking&#39; para raciocínio passo a passo.</span> <span class="s" data-s="b6-c-s1">O modo thinking é crítico para reduzir alucinações em vídeos complexos, pois força o modelo a gerar evidências textuais antes de concluir.</span> <span class="s" data-s="b6-c-s2">Isso resulta em ganhos significativos de performance em benchmarks de raciocínio áudio-visual.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b7-h">Resultados: SOTA Open-Source</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Avaliações em mais de 120 benchmarks mostram que o WeMM-Video-35B-A3B estabelece um novo estado da arte open-source em compreensão de vídeo omni-modal.</span> <span class="s" data-s="b7-p0-s1">Ele supera modelos proprietários como Seed2.0-Mini-0428 e Qwen3.5-Omni-Flash em 16 de 17 benchmarks de compreensão áudio-visual geral.</span> <span class="s" data-s="b7-p0-s2">Embora ainda fique atrás do Gemini-3.0-Flash, a lacuna é significativamente menor do que a de outros concorrentes open-source.</span></p><p><span class="s" data-s="b7-p1-s0">O modo &#39;thinking&#39; demonstrou ser vital.</span> <span class="s" data-s="b7-p1-s1">Ao comparar o modo instruct com o thinking no modelo de 35B, houve ganhos substanciais em tarefas de compreensão e raciocínio complexo.</span> <span class="s" data-s="b7-p1-s2">Isso valida a hipótese de que o raciocínio explícito ajuda o modelo a alinhar melhor as pistas multimodais e evitar erros de inferência.</span> <span class="s" data-s="b7-p1-s3">Modelos menores, como o 9B, também superaram o Qwen3-Omni-30B-A3B-Instruct em muitas métricas, mostrando eficiência escalável.</span></p><p><span class="s" data-s="b7-p2-s0">Além do vídeo omni-modal, o WeMM-Video mantém capacidades competitivas em áudio, vídeo mudo, imagens e texto.</span> <span class="s" data-s="b7-p2-s1">Isso indica que a unificação não comprometeu as capacidades monomodais do modelo base.</span> <span class="s" data-s="b7-p2-s2">A família de modelos oferece opções para diferentes restrições de hardware, desde o compacto 2B até o robusto 35B, todos com bilinguismo nativo chinês-inglês.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.26409/table1.webp" alt="Tabela de resultados: WeMM-Video-35B-A3B lidera benchmarks de vídeo áudio-visual, superando modelos proprietários e estabelecendo novo SOTA open-source." loading="lazy">
+          <figcaption>
+            Tabela de resultados: WeMM-Video-35B-A3B lidera benchmarks de vídeo áudio-visual, superando modelos proprietários e estabelecendo novo SOTA open-source.
+            <span class="source">Tabela 1 do paper · Tang et al., arXiv:2611.26409</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b9-h">Limitações e Escopo</span></h2>
+<p><span class="s" data-s="b9-p0-s0">Apesar dos resultados impressionantes, o paper não aborda extensivamente as limitações computacionais do modo &#39;thinking&#39;.</span> <span class="s" data-s="b9-p0-s1">A latência aumentada devido ao raciocínio passo a passo pode ser um obstáculo para aplicações em tempo real estrito.</span> <span class="s" data-s="b9-p0-s2">Além disso, a dependência de dados de áudio de alta qualidade e bem alinhados significa que o desempenho pode degradar em cenários com ruído severo ou áudio mal sincronizado, um ponto que não foi detalhado nos benchmarks.</span></p><p><span class="s" data-s="b9-p1-s0">O corpus de treino, embora vasto, é focado em conteúdos digitais comuns (filmes, lives, esportes).</span> <span class="s" data-s="b9-p1-s1">A generalização para domínios muito específicos ou científicos, onde a precisão temporal e acústica é crítica, pode exigir ajustes finos adicionais.</span> <span class="s" data-s="b9-p1-s2">O paper foca na performance em benchmarks padrão, mas a robustez em cenários do mundo real, com ruído e variações de qualidade, permanece como uma área para validação futura pela comunidade.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">WeMM-Video unifica texto, imagem, áudio e vídeo em um LLM com modo &#39;thinking&#39; explícito para raciocínio passo a passo.</span></li><li><span class="s" data-s="k1">A arquitetura usa codificador Whisper e Q-Former para comprimir áudio em tokens temporais alinhados ao vídeo.</span></li><li><span class="s" data-s="k2">O treino envolve 1.2T de tokens e pipeline de pós-treinamento com OPD, MrDPO e RL especialista.</span></li><li><span class="s" data-s="k3">O modelo de 35B estabelece novo SOTA open-source, superando Qwen3-Omni-30B e接近 Gemini-3.0-Flash.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.26409" rel="noopener">WeMM-Video: Pushing the Frontiers of Open-Source Omni-Modal Video Understanding</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.26409" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>

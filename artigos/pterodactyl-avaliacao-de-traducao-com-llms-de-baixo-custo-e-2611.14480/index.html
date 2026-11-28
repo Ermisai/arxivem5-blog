@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pterodactyl: Avaliação de Tradução com LLMs de Baixo Custo e Análise ROC — arXiv em 5</title>
+<meta name="description" content="Este paper apresenta o Pterodactyl, um sistema para avaliação automática de qualidade de tradução (QE) que prioriza eficiência computacional e robustez, utilizando LLMs como juízes e otimização via curvas ROC para tarefas de triagem de dados.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Pterodactyl: Avaliação de Tradução com LLMs de Baixo Custo e Análise ROC">
+<meta property="og:description" content="Este paper apresenta o Pterodactyl, um sistema para avaliação automática de qualidade de tradução (QE) que prioriza eficiência computacional e robustez, utilizando LLMs como juízes e otimização via curvas ROC para tarefas de triagem de dados.">
+<meta property="og:image" content="../../assets/papers/2611.14480/cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap-wide">
+    <a class="wordmark" href="../../">arXiv <em>em 5</em></a>
+    <nav class="site-nav">
+      <a class="send-paper" href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a>
+      <a class="icon-link" href="https://instagram.com/arxivemcinco" rel="noopener" target="_blank"
+         aria-label="arXiv em 5 no Instagram" title="@arxivemcinco no Instagram">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" />
+          <circle cx="12" cy="12" r="4.2" />
+          <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+    </nav>
+  </div>
+</header>
+
+
+<article>
+  <header class="article-head wrap">
+    <a class="back" href="../../">← Todos os artigos</a>
+    <div class="article-meta">
+      <span class="chip"><span class="dot"></span>LLMs</span>
+      <a class="arxiv-id" href="https://arxiv.org/abs/2611.14480" rel="noopener">arXiv:2611.14480</a>
+    </div>
+    <h1><span class="s" data-s="t">Pterodactyl: Avaliação de Tradução com LLMs de Baixo Custo e Análise ROC</span></h1>
+    <p class="dek"><span class="s" data-s="d-s0">Este paper apresenta o Pterodactyl, um sistema para avaliação automática de qualidade de tradução (QE) que prioriza eficiência computacional e robustez, utilizando LLMs como juízes e otimização via curvas ROC para tarefas de triagem de dados.</span></p>
+    <p class="byline">
+      <span>Garland et al.</span>
+      <span>9 min de leitura</span>
+<span>10/11/2026</span>    </p>
+    <div class="listen" data-article="2611.14480" data-api="http://127.0.0.1:8001">
+      <button class="listen-read" type="button" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        Ouvir o artigo
+      </button>
+      <a class="listen-yt" href="https://www.youtube.com/watch?v=M_kiCO3t0y4" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#FF0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="M9.6 15.6 15.8 12 9.6 8.4z"/></svg>
+        Ouça no YouTube
+      </a>
+    </div>
+  </header>
+
+  <div class="article-body wrap">
+        <h2><span class="s" data-s="b0-h">O Problema da Avaliação de Tradução em Produção</span></h2>
+<p><span class="s" data-s="b0-p0-s0">A tradução automática neural (NMT) evoluiu rapidamente, mas avaliar a qualidade dessas traduções continua sendo um gargalo.</span> <span class="s" data-s="b0-p0-s1">Tradicionalmente, métricas como BLEU ou METEOR dependem de referências humanas, o que é caro e lento.</span> <span class="s" data-s="b0-p0-s2">Alternativas modernas, como o Quality Estimation (QE) sem referência, tentam prever a qualidade apenas com o texto fonte e a tradução.</span> <span class="s" data-s="b0-p0-s3">Nos últimos anos, a abordagem &#34;LLM-as-a-judge&#34; ganhou tração, onde grandes modelos de linguagem são usados para julgar a qualidade da tradução.</span> <span class="s" data-s="b0-p0-s4">No entanto, essa abordagem enfrenta dois obstáculos sérios para uso em produção: o custo computacional elevado e a complexidade de engenharia necessária para estabilizar o sistema.</span></p><p><span class="s" data-s="b0-p1-s0">Os autores deste paper, Evelyn Y. Garland e Carola F. Berger, do 1020 Group, em colaboração com Acta Language Services e CFB Scientific Translations, identificam que a maioria dos sistemas baseados em LLMs é desenvolvida sem uma rigorosa análise de trade-off entre custo e desempenho.</span> <span class="s" data-s="b0-p1-s1">O resultado é um sistema que pode ser preciso, mas inviável economicamente para rodar em milhões de segmentos de tradução.</span> <span class="s" data-s="b0-p1-s2">O objetivo do trabalho é demonstrar que é possível empurrar os limites da eficiência, criando um sistema que seja não apenas preciso, mas também ultra-leve, rápido e robusto a variações nos dados de treinamento e anotação.</span></p><p><span class="s" data-s="b0-p2-s0">O paper foca especificamente nas subtarefas 2 e 3 da tarefa compartilhada WMT26 sobre avaliação automática de qualidade.</span> <span class="s" data-s="b0-p2-s1">A subtarefa 2 envolve a previsão de pontuação de qualidade em nível de segmento, enquanto a subtarefa 3 foca na detecção binária de segmentos livres de erros.</span> <span class="s" data-s="b0-p2-s2">Estas tarefas são fundamentais para a triagem de dados: empresas precisam filtrar automaticamente traduções ruins ou identificar aquelas que estão prontas para publicação sem revisão humana.</span> <span class="s" data-s="b0-p2-s3">O sistema proposto, chamado Pterodactyl, é desenhado para atender a esses requisitos com um custo mínimo de tokens e tempo de inferência.</span></p>        <h2><span class="s" data-s="b1-h">A Premissa do Pterodactyl: LLM como Juiz e Análise ROC</span></h2>
+<p><span class="s" data-s="b1-p0-s0">O núcleo do Pterodactyl é a premissa de usar um LLM como um juiz automatizado.</span> <span class="s" data-s="b1-p0-s1">Em vez de treinar um modelo pequeno do zero (o que exigiria grandes datasets anotados), os autores utilizam a capacidade de raciocínio e linguagem natural dos LLMs comerciais para avaliar a qualidade.</span> <span class="s" data-s="b1-p0-s2">No entanto, diferentemente de abordagens ingênuas que simplesmente aplicam prompts genéricos, o Pterodactyl emprega uma metodologia rigorosa de engenharia de prompts e seleção de modelos guiada pela Análise da Curva ROC (Receiver Operating Characteristic).</span></p><p><span class="s" data-s="b1-p1-s0">A Análise ROC é uma ferramenta estatística que avalia o desempenho de um classificador binário em todos os limiares de classificação possíveis.</span> <span class="s" data-s="b1-p1-s1">Ela plota a Taxa de Verdadeiros Positivos (Sensibilidade) contra a Taxa de Falsos Positivos (1 - Especificidade).</span> <span class="s" data-s="b1-p1-s2">No contexto do Pterodactyl, a área sob a curva (AUC) serve como um critério de triagem eficiente.</span> <span class="s" data-s="b1-p1-s3">Os autores argumentam que, para tarefas de triagem e curadoria de dados, a capacidade do modelo de separar claramente traduções boas de ruins é mais importante do que a precisão absoluta em um único ponto de corte.</span> <span class="s" data-s="b1-p1-s4">Portanto, a ROC permite identificar quais combinações de modelo e prompt oferecem a melhor discriminação.</span></p><p><span class="s" data-s="b1-p2-s0">Esta abordagem unifica parcialmente a engenharia para as duas subtarefas.</span> <span class="s" data-s="b1-p2-s1">Se um par de modelo e prompt demonstra alta capacidade de discriminação na ROC, ele é considerado um forte candidato tanto para a previsão de scores (subtarefa 2) quanto para a detecção binária de erros (subtarefa 3).</span> <span class="s" data-s="b1-p2-s2">Isso simplifica o pipeline de desenvolvimento, evitando a necessidade de otimizar separadamente cada componente para cada tarefa específica, economizando tempo e recursos computacionais durante a fase de engenharia.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.14480/figure2.webp" alt="Curva ROC comparando o Pterodactyl com baselines CometKiwi22 e xCOMET-XL no dataset WMT25 en→zh, mostrando superioridade na discriminação de qualidade." loading="lazy">
+          <figcaption>
+            Curva ROC comparando o Pterodactyl com baselines CometKiwi22 e xCOMET-XL no dataset WMT25 en→zh, mostrando superioridade na discriminação de qualidade.
+            <span class="source">Figura 2 do paper · Garland et al., arXiv:2611.14480</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b3-h">Engenharia de Modelos e Prompts: Eficiência sobre Poder Bruto</span></h2>
+<p><span class="s" data-s="b3-p0-s0">Uma das descobertas centrais do paper é que modelos menores e mais antigos podem superar modelos de fronteira (mais novos e maiores) se a engenharia de prompts for adequada e a seleção for guiada por critérios de eficiência.</span> <span class="s" data-s="b3-p0-s1">Os autores testaram várias considerações durante o desenvolvimento.</span> <span class="s" data-s="b3-p0-s2">A primeira foi se modelos de fronteira, mais recentes e maiores, eram inerentemente melhores para QE.</span> <span class="s" data-s="b3-p0-s3">A resposta foi negativa em termos de custo-benefício: quando o desempenho era estatisticamente similar, eles optaram pelo modelo mais barato e rápido.</span></p><p><span class="s" data-s="b3-p1-s0">A segunda consideração foi se o aumento do raciocínio (por exemplo, usando técnicas de Chain-of-Thought ou modelos com maior capacidade de inferência) melhoraria a performance.</span> <span class="s" data-s="b3-p1-s1">Embora o raciocínio possa ajudar em tarefas complexas, para a triagem binária de qualidade de tradução, a sobrecarga computacional muitas vezes não justificava o ganho marginal, especialmente quando a curva ROC já indicava uma boa separação com modelos mais simples.</span> <span class="s" data-s="b3-p1-s2">O Pterodactyl é, portanto, um sistema &#34;fit-for-purpose&#34;: ele é ajustado para ser exatamente tão complexo quanto necessário para a tarefa, não mais.</span></p><p><span class="s" data-s="b3-p2-s0">O processo de seleção envolveu testar um pool de modelos comerciais disponíveis.</span> <span class="s" data-s="b3-p2-s1">Para cada modelo, os autores iteraram sobre diferentes configurações de prompt, buscando maximizar a AUC na ROC.</span> <span class="s" data-s="b3-p2-s2">Uma vez identificadas as combinações que ofereciam desempenho similar, o critério de desempate foi estritamente o custo em tokens e a latência.</span> <span class="s" data-s="b3-p2-s3">Isso resultou em um sistema que é altamente personalizável: equipes podem escolher o modelo base dependendo de suas restrições orçamentárias, sabendo que a estrutura do prompt e a lógica de avaliação foram otimizadas para aquele perfil de eficiência.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b4-t">Por que a ROC é crítica aqui?</span></h3>
+          <p><span class="s" data-s="b4-c-s0">A análise ROC é preferida sobre métricas de precisão fixas porque a qualidade da tradução é um espectro.</span> <span class="s" data-s="b4-c-s1">Um sistema de triagem precisa ser robusto a diferentes níveis de severidade de erro.</span> <span class="s" data-s="b4-c-s2">A ROC mostra como o modelo se comporta em todos os limiares de decisão, garantindo que ele não seja apenas preciso em um ponto arbitrário, mas consistente em separar classes.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b5-h">Desafios da Subtarefa 3: Robustez ao cESA</span></h2>
+<p><span class="s" data-s="b5-p0-s0">A subtarefa 3 do WMT26 introduz uma complexidade adicional: a detecção de segmentos livres de erros baseada em anotação contrastiva de spans de erro (cESA).</span> <span class="s" data-s="b5-p0-s1">O cESA é um método de anotação humana relativamente novo, onde os anotadores identificam não apenas erros, mas também spans corretos em contraste.</span> <span class="s" data-s="b5-p0-s2">Isso cria um padrão-ouro (gold standard) diferente das anotações tradicionais de spans de erro (ESA).</span> <span class="s" data-s="b5-p0-s3">Como não há grandes datasets de desenvolvimento para o cESA, os autores precisaram garantir que o Pterodactyl fosse robusto a variações no limiar de pontuação que separa a classe &#34;livre de erros&#34; da classe &#34;com erros&#34;.</span></p><p><span class="s" data-s="b5-p1-s0">Robustez, neste contexto, significa que o sistema não deve ser excessivamente sensível a pequenas mudanças no limiar de decisão ou a discrepâncias entre anotadores humanos.</span> <span class="s" data-s="b5-p1-s1">Anotações humanas nunca são perfeitamente consistentes; há sempre um grau de subjetividade.</span> <span class="s" data-s="b5-p1-s2">Se o sistema for otimizado para um limiar muito específico, ele pode falhar quando aplicado a dados reais com ruído.</span> <span class="s" data-s="b5-p1-s3">O Pterodactyl foi desenhado para manter um desempenho estável mesmo quando o padrão-ouro varia ligeiramente devido a essa discordância inter-annotator.</span></p><p><span class="s" data-s="b5-p2-s0">Os autores desenvolveram várias variantes do Pterodactyl especificamente adaptadas para a subtarefa 3.</span> <span class="s" data-s="b5-p2-s1">Essas variantes mantêm a estrutura básica de LLM-as-a-judge, mas ajustam os prompts e os critérios de avaliação para se alinhar melhor com a lógica do cESA.</span> <span class="s" data-s="b5-p2-s2">O foco não é apenas classificar corretamente, mas fazer isso de forma que a classificação seja confiável mesmo quando a fronteira entre &#34;erro&#34; e &#34;sem erro&#34; é sutil ou ambígua para humanos.</span></p>        <figure class="figure">
+          <img src="../../assets/papers/2611.14480/table1.webp" alt="Comparação dos sistemas Pterodactyl e Austriadactyl, mostrando o modelo base e o custo computacional em tokens para as tarefas do WMT26." loading="lazy">
+          <figcaption>
+            Comparação dos sistemas Pterodactyl e Austriadactyl, mostrando o modelo base e o custo computacional em tokens para as tarefas do WMT26.
+            <span class="source">Tabela 1 do paper · Garland et al., arXiv:2611.14480</span>
+          </figcaption>
+        </figure>
+        <h2><span class="s" data-s="b7-h">Resultados e Comparação com Baselines</span></h2>
+<p><span class="s" data-s="b7-p0-s0">Os resultados do Pterodactyl são apresentados em comparação com sistemas de referência estabelecidos, como CometKiwi22 e xCOMET-XL.</span> <span class="s" data-s="b7-p0-s1">O CometKiwi22 é um modelo de qualidade de tradução amplamente utilizado, baseado em transformers e treinado em grandes datasets multilingues.</span> <span class="s" data-s="b7-p0-s2">O xCOMET-XL é uma versão maior e mais recente do xCOMET, conhecido por sua alta precisão em métricas de qualidade.</span> <span class="s" data-s="b7-p0-s3">A Figura 2 do paper mostra a curva ROC do Pterodactyl comparada a esses baselines no dataset WMT25 de inglês para chinês (en→zh).</span></p><p><span class="s" data-s="b7-p1-s0">A análise da curva ROC revela que o Pterodactyl supera o CometKiwi22 e o xCOMET-XL em termos de capacidade de discriminação.</span> <span class="s" data-s="b7-p1-s1">Isso significa que, para qualquer taxa de falsos positivos, o Pterodactyl consegue alcançar uma taxa de verdadeiros positivos mais alta.</span> <span class="s" data-s="b7-p1-s2">Este resultado é particularmente significativo porque o Pterodactyl é baseado em um LLM de custo potencialmente menor (dependendo da configuração escolhida), enquanto os baselines são modelos dedicados de QE, que podem ser pesados e complexos de implantar.</span></p><p><span class="s" data-s="b7-p2-s0">A Tabela 1 detalha os custos computacionais envolvidos.</span> <span class="s" data-s="b7-p2-s1">Ela compara o Pterodactyl com outra variante chamada Austriadactyl, mostrando o número de tokens consumidos para pontuar os dados de teste oficiais do WMT26.</span> <span class="s" data-s="b7-p2-s2">Os dados indicam que o Pterodactyl consegue alcançar um desempenho competitivo com um consumo de tokens significativamente reduzido em comparação com o uso de LLMs de fronteira sem otimização.</span> <span class="s" data-s="b7-p2-s3">Isso valida a premissa central do paper: é possível obter alta qualidade de avaliação sem sacrificar a eficiência econômica.</span></p>        <h2><span class="s" data-s="b8-h">Limitações e Considerações Finais</span></h2>
+<p><span class="s" data-s="b8-p0-s0">Apesar dos resultados promissores, o paper reconhece algumas limitações.</span> <span class="s" data-s="b8-p0-s1">A abordagem LLM-as-a-judge depende intrinsecamente da qualidade do prompt e da estabilidade do modelo base.</span> <span class="s" data-s="b8-p0-s2">Se o LLM subjacente mudar ou se houver viés no prompt, o desempenho pode variar.</span> <span class="s" data-s="b8-p0-s3">Além disso, a metodologia foi otimizada para as tarefas específicas do WMT26.</span> <span class="s" data-s="b8-p0-s4">Embora a estrutura seja generalizável, a engenharia de prompts pode exigir recalibração para diferentes pares de idiomas ou domínios específicos (como médico ou jurídico), onde os critérios de erro podem ser mais rigorosos.</span></p><p><span class="s" data-s="b8-p1-s0">Outra limitação é a dependência da análise ROC como critério principal.</span> <span class="s" data-s="b8-p1-s1">Embora a ROC seja excelente para avaliar a discriminação binária, ela não captura diretamente a calibração de probabilidades.</span> <span class="s" data-s="b8-p1-s2">Para tarefas de previsão de score contínuo (subtarefa 2), a calibração é importante para que a pontuação predita corresponda à confiança real do modelo.</span> <span class="s" data-s="b8-p1-s3">O paper foca mais na separação de classes do que na precisão absoluta do score, o que é adequado para triagem, mas pode exigir ajustes finos para aplicações que dependem de métricas quantitativas precisas.</span></p><p><span class="s" data-s="b8-p2-s0">Finalmente, a abordagem propõe uma mudança de paradigma na engenharia de sistemas de QE: em vez de buscar o modelo mais poderoso disponível, busca-se a combinação mais eficiente que atenda aos requisitos de discriminação.</span> <span class="s" data-s="b8-p2-s1">Isso é particularmente relevante para empresas de tradução e desenvolvimento de IA que lidam com volumes massivos de dados.</span> <span class="s" data-s="b8-p2-s2">O Pterodactyl demonstra que, com uma engenharia cuidadosa e métricas de avaliação adequadas, é possível democratizar o acesso a ferramentas de alta qualidade de avaliação de tradução, reduzindo a barreira de entrada de custos computacionais elevados.</span></p>        <aside class="callout">
+          <h3><span class="s" data-s="b9-t">O que fica em aberto?</span></h3>
+          <p><span class="s" data-s="b9-c-s0">O paper não aborda a generalização do sistema para idiomas com recursos escassos ou pares de idiomas com alta divergência estrutural.</span> <span class="s" data-s="b9-c-s1">Além disso, a estabilidade a longo prazo dos LLMs como juízes, considerando atualizações frequentes de modelos, permanece uma área de pesquisa ativa.</span></p>
+        </aside>
+        <h2><span class="s" data-s="b10-h">Conclusão</span></h2>
+<p><span class="s" data-s="b10-p0-s0">O Pterodactyl representa uma contribuição prática e técnica significativa para o campo da avaliação automática de tradução.</span> <span class="s" data-s="b10-p0-s1">Ao combinar a flexibilidade dos LLMs com a rigorosidade da análise ROC e uma filosofia de otimização de custos, os autores do 1020 Group oferecem uma alternativa viável aos sistemas tradicionais de QE.</span> <span class="s" data-s="b10-p0-s2">O sistema não é apenas uma melhoria incremental, mas uma proposta de metodologia: a ideia de que a eficiência e a robustez devem ser tão valorizadas quanto a precisão bruta.</span></p><p><span class="s" data-s="b10-p1-s0">Para desenvolvedores e cientistas de dados que trabalham com processamento de linguagem natural, o paper serve como um estudo de caso sobre como avaliar e selecionar modelos de IA.</span> <span class="s" data-s="b10-p1-s1">A lição principal é que a métrica de avaliação deve estar alinhada com o objetivo do negócio.</span> <span class="s" data-s="b10-p1-s2">Para triagem de dados, a capacidade de discriminar bons de ruins (medida pela ROC) é mais valiosa do que a precisão em um único ponto.</span> <span class="s" data-s="b10-p1-s3">Ao focar nisso, e ao minimizar custos desnecessários, o Pterodactyl estabelece um novo padrão para sistemas de avaliação de tradução eficientes e escaláveis.</span></p>
+    <section class="takeaways">
+      <h2><span class="s" data-s="k-h">O que fica</span></h2>
+      <ul><li><span class="s" data-s="k0">O Pterodactyl usa LLMs como juízes, mas otimiza custo e latência selecionando modelos menores quando o desempenho é estatisticamente similar, guiado por curvas ROC.</span></li><li><span class="s" data-s="k1">O sistema é focado em duas tarefas do WMT26: previsão de pontuação de qualidade e detecção de segmentos sem erros, com alta adaptabilidade.</span></li><li><span class="s" data-s="k2">A metodologia evita otimização excessiva de componentes individuais, preferindo critérios de triagem compartilhados para manter a estabilidade do sistema.</span></li><li><span class="s" data-s="k3">Para a detecção de erros, o sistema é robusto a variações no limiar de classificação, crucial para anotações humanas recentes como o cESA.</span></li></ul>
+    </section>
+
+    <p class="paper-link">
+      Paper original: <a href="https://arxiv.org/abs/2611.14480" rel="noopener">Pterodactyl: Pushing the Limits of Efficient Automated Translation Evaluation</a>
+    </p>
+    <p class="back-bottom"><a href="../../">← Todos os artigos</a></p>
+
+    <section class="engage" data-article="2611.14480" data-api="http://127.0.0.1:8001">
+      <button class="like" type="button" aria-pressed="false">
+        <span class="heart" aria-hidden="true">♥</span>
+        <span class="like-label">Curtir</span>
+        <span class="like-count" hidden>0</span>
+      </button>
+
+      <h2 class="comments-title">Comentários</h2>
+      <p class="comments-empty" hidden>Nenhum comentário ainda. Seja o primeiro.</p>
+      <ol class="comments"></ol>
+
+      <form class="comment-form" novalidate>
+        <label class="sr-only" for="c-author">Seu nome</label>
+        <input id="c-author" name="author" placeholder="Seu nome" maxlength="40" required>
+        <label class="sr-only" for="c-body">Comentário</label>
+        <textarea id="c-body" name="body" rows="4" placeholder="O que você achou?" maxlength="2000" required></textarea>
+        <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+        <div class="form-row">
+          <button type="submit">Enviar</button>
+          <span class="form-note">Sem cadastro. Seu comentário aparece depois de aprovado.</span>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <script src="../../assets/engage.js" defer></script>
+    <script src="../../assets/reader.js" defer></script>
+  </div>
+</article>
+
+<div class="reader" hidden role="region" aria-label="Leitura em voz">
+  <div class="reader-inner">
+    <button class="reader-toggle" type="button" aria-label="Pausar">❚❚</button>
+    <div class="reader-info">
+      <span class="reader-status">Lendo</span>
+      <span class="reader-voice"></span>
+    </div>
+    <div class="reader-bar"><div class="reader-fill"></div></div>
+    <button class="reader-follow" type="button" hidden>Voltar à leitura</button>
+    <button class="reader-stop" type="button" aria-label="Parar a leitura">✕</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <p><strong>arXiv em 5</strong> — Um paper por dia, explicado de verdade — para ler e para ouvir.</p>
+    <p><a href="https://t.me/arxivemcinco_bot" rel="noopener" target="_blank">Envie seu paper</a> pelo Telegram e ele vira vídeo, carrossel e artigo aqui.</p>
+    <p>Os textos são produzidos com apoio de IA a partir dos papers originais e revisados antes da publicação. As figuras pertencem aos autores dos papers e são reproduzidas com crédito.</p>
+  </div>
+</footer>
+</body>
+</html>
